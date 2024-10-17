@@ -1,0 +1,15 @@
+{
+    "login": {
+      "title": "Connectez-vous à votre compte",
+      "welcome": "Bienvenue ! Sélectionnez une méthode pour continuer.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Entrez votre email",
+      "loginButton": "Se connecter",
+      "orContinueWith": "Ou continuez avec"
+    },
+    "footer": {
+      "rights": "© 2024 Hoox inc. Tous droits réservés",
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions d'utilisation"
+    }
+  }
