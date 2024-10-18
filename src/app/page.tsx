@@ -6,11 +6,18 @@ import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
 import { useTranslations } from "next-intl"
+import { signIn } from "next-auth/react"
 
 export default function Page() {
 
   const t = useTranslations('login');
   const tFooter = useTranslations('footer');
+
+  const handleSignInGoogle = async () => {
+    await signIn('google', {
+      redirectTo: '/dashboard',
+    })
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -25,7 +32,7 @@ export default function Page() {
           
           {/* Login options */}
           <div className="space-y-4 w-full max-w-sm">
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={handleSignInGoogle}>
               <IconGoogle className="h-4 w-4" />
               Google
             </Button>
