@@ -7,10 +7,7 @@ const connectMongo = async () => {
     );
   }
   return mongoose
-    .connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    .connect(process.env.MONGODB_URI)
     .catch((e) => console.error("Mongoose Client Error: " + e.message));
 };
 

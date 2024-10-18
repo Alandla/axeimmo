@@ -21,6 +21,28 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    options: {
+      lang: {
+        type: String,
+        default: "en",
+        validate: {
+          validator: (v: string) => ["en", "fr"].includes(v),
+          message: "Language must be either 'en' or 'fr'",
+        },
+      },
+    },
+    spaces: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Space",
+      },
+    ],
+    createdAt: {
+      type: Date,
+    },
+    updatedAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
@@ -31,4 +53,6 @@ const userSchema = new mongoose.Schema(
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
 
-export default mongoose.models.User || mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+export default User;
