@@ -7,6 +7,24 @@
       "loginButton": "Log in",
       "orContinueWith": "Or continue with"
     },
+    "sidebar": {
+      "createVideo": "Create a video",
+      "links": {
+        "title": "Dashboard",
+        "home": "Home",
+        "videos": "Videos",
+        "assets": "Assets"
+      },
+      "user": {
+        "settings": "Settings",
+        "logout": "Log out"
+      },
+      "teams": {
+        "settings": "Settings",
+        "spaces": "Spaces",
+        "joinSpaces": "Join a space"
+      }
+    },
     "footer": {
       "rights": "© 2024 Hoox inc. All rights reserved",
       "privacy": "Privacy Policy",

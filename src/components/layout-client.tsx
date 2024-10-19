@@ -1,14 +1,19 @@
 import config from "@/config";
+import { SessionProvider } from "next-auth/react";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 import NextTopLoader from "nextjs-toploader";
 
-const ClientLayout = ({ children }: { children: React.ReactNode }) => {
+const ClientLayout = async ({ children }: { children: React.ReactNode }) => {
+  const messages = await getMessages();
   return (
     <>
-        {/* Show a progress bar at the top when navigating between pages */}
-        <NextTopLoader color={config.colors.main} showSpinner={false} />
-
-        {/* Content inside app/page.js files  */}
-        {children}
+      <SessionProvider>
+        <NextIntlClientProvider messages={messages}>
+            <NextTopLoader color={config.colors.main} showSpinner={false} />
+            {children}
+        </NextIntlClientProvider>
+      </SessionProvider>
     </>
   );
 };

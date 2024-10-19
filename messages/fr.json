@@ -7,6 +7,24 @@
       "loginButton": "Se connecter",
       "orContinueWith": "Ou continuez avec"
     },
+    "sidebar": {
+      "createVideo": "Créer une vidéo",
+      "links": {
+        "title": "Tableau de bord",
+        "home": "Accueil",
+        "videos": "Vidéos",
+        "assets": "Médias"
+      },
+      "user": {
+        "settings": "Paramètres",
+        "logout": "Déconnexion"
+      },
+      "teams": {
+        "settings": "Paramètres",
+        "spaces": "Espaces",
+        "joinSpaces": "Rejoindre un espace"
+      }
+    },
     "footer": {
       "rights": "© 2024 Hoox inc. Tous droits réservés",
       "privacy": "Politique de confidentialité",

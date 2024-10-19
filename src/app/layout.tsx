@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import ClientLayout from "../components/layout-client";
 
 export const viewport = {
   // Will use the primary color of your theme to show a nice theme color in the URL bar of supported browsers
@@ -28,11 +29,7 @@ export const metadata: Metadata = {
   description: "Hoox application",
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
 
   const locale = await getLocale();
   const messages = await getMessages();
@@ -42,9 +39,9 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
+        <ClientLayout>
           {children}
-        </NextIntlClientProvider>
+        </ClientLayout>
       </body>
     </html>
   );
