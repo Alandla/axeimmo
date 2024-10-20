@@ -22,7 +22,7 @@ export function NavButtonVideo() {
           >
             <a href="#" className="flex items-center gap-2">
               <Sparkles className="h-4 w-4" />
-              <span className={cn("hidden md:inline", "group-data-[collapsible=icon]:hidden")}>
+              <span className={cn("inline", "group-data-[collapsible=icon]:hidden")}>
                 {t('createVideo')}
               </span>
             </a>

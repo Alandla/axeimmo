@@ -12,7 +12,6 @@ import {
 
 
 import { NavUser } from "@/src/components/nav-user"
-import { TeamSwitcher } from "@/src/components/team-switcher"
 import {
   Sidebar,
   SidebarContent,
@@ -24,6 +23,10 @@ import { NavMain } from "./nav-main"
 import { useSession } from "next-auth/react"
 import { useTranslations } from "next-intl"
 import { NavButtonVideo } from "./nav-button-video"
+import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
+import { getSpaces } from "../service/user"
+import { SimpleSpace } from "../types/space"
+import { SpaceSwitcher } from "./space-switcher"
 
 // This is sample data.
 const data = {
@@ -31,17 +34,26 @@ const data = {
     {
       name: "Acme Inc",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      planName: "Enterprise",
+      creditsPerMonth: 0,
+      credits: 0,
+      userRole: "owner",
     },
     {
       name: "Acme Corp.",
       logo: AudioWaveform,
-      plan: "Startup",
+      planName: "Startup",
+      creditsPerMonth: 0,
+      credits: 0,
+      userRole: "owner",
     },
     {
       name: "Evil Corp.",
       logo: Command,
-      plan: "Free",
+      planName: "Free",
+      creditsPerMonth: 0,
+      credits: 0,
+      userRole: "owner",
     },
   ],
 }
@@ -50,6 +62,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession()
 
   const t = useTranslations('sidebar')
+  const [spaces, setSpaces] = React.useState<SimpleSpace[]>([])
+  const { activeSpace, setActiveSpace } = useActiveSpaceStore()
+
+  React.useEffect(() => {
+    const fetchSpaces = async () => {
+      const userSpaces = await getSpaces()
+      if (userSpaces) {
+        setSpaces(userSpaces)
+        if (!activeSpace && userSpaces.length > 0) {
+          setActiveSpace(userSpaces[0])
+        }
+      }
+    }
+    fetchSpaces()
+  }, [])
 
   const links = [
     {
@@ -72,7 +99,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <SpaceSwitcher spaces={spaces} />
       </SidebarHeader>
       <SidebarContent>
         <NavButtonVideo />

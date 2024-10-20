@@ -5,7 +5,7 @@ const config = {
       },
       auth: {
         loginUrl: "/api/auth/signin",
-        callbackUrl: "/dashboard/projects",
+        callbackUrl: "/",
       }
 }
 

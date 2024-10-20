@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronsUpDown, Plus, Settings, Settings2 } from "lucide-react"
+import { Check, ChevronsUpDown, Plus, Settings2 } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -9,7 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu"
 import {
@@ -19,20 +18,20 @@ import {
   useSidebar,
 } from "@/src/components/ui/sidebar"
 import { useTranslations } from "next-intl"
+import { Skeleton } from "./ui/skeleton"
+import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
+import { SimpleSpace } from "../types/space"
 
-export function TeamSwitcher({
-  teams,
+export function SpaceSwitcher({
+  spaces
 }: {
-  teams: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
+  spaces: SimpleSpace[]
 }) {
   const t = useTranslations('sidebar')
 
   const { isMobile } = useSidebar()
-  const [activeTeam, setActiveTeam] = React.useState(teams[0])
+
+  const { activeSpace, setActiveSpace } = useActiveSpaceStore()
 
   return (
     <SidebarMenu>
@@ -44,13 +43,25 @@ export function TeamSwitcher({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <activeTeam.logo className="size-4" />
+                {activeSpace?.name && (
+                  activeSpace.name?.charAt(0) ?? ''
+                )}
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {activeTeam.name}
+                {!activeSpace?.name ? (
+                  <Skeleton className="h-4 w-20" />
+                ) : (
+                  activeSpace.name
+                )}
                 </span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate text-xs">
+                  {!activeSpace?.planName ? (
+                    <Skeleton className="h-3 w-10 mt-1" />
+                  ) : (
+                    activeSpace.planName.charAt(0).toUpperCase() + activeSpace.planName.slice(1).toLowerCase()
+                  )}
+                </span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -69,17 +80,17 @@ export function TeamSwitcher({
             <DropdownMenuLabel className="text-xs text-muted-foreground">
               {t('teams.spaces')}
             </DropdownMenuLabel>
-            {teams.map((team, index) => (
+            {spaces?.length > 0 && spaces.map((space, index) => (
               <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
+                key={space.name}
                 className="gap-2 p-2"
+                onClick={() => setActiveSpace(space)}
               >
                 <div className={`flex size-6 items-center justify-center rounded-sm border`}>
-                  <team.logo className="size-4 shrink-0" />
+                  {space.name?.charAt(0) ?? ''}
                 </div>
-                {team.name}
-                {team === activeTeam && (
+                {space.name}
+                {space === activeSpace && (
                   <div className="ml-auto text-xs tracking-widest opacity-60">
                     <Check className="size-4"/>
                   </div>

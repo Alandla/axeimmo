@@ -25,6 +25,16 @@
         "joinSpaces": "Join a space"
       }
     },
+    "space": {
+      "privateSpaceName": "My Private Space",
+      "privateSpaceNameWithUserName": "'s Private Space"
+    },
+    "errors": {
+      "unauthorized": "Unauthorized",
+      "fetchingUserSpaces": "Error fetching user spaces",
+      "userNotFound": "User not found",
+      "serverError": "Server error"
+    },
     "footer": {
       "rights": "© 2024 Hoox inc. All rights reserved",
       "privacy": "Privacy Policy",
