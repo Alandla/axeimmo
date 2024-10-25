@@ -15,3 +15,9 @@ export enum SubscriptionType {
   MONTHLY = "MONTHLY",
   ANNUAL = "ANNUAL",
 }
+
+export enum CreationStep {
+  START = "START",
+  SCRIPT = "SCRIPT",
+  VOICE = "VOICE",
+}

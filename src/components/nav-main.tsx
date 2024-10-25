@@ -10,6 +10,7 @@ import {
   useSidebar,
 } from "@/src/components/ui/sidebar"
 import { useTranslations } from "next-intl"
+import Link from "next/link"
 
 export function NavMain({
   items,
@@ -30,10 +31,10 @@ export function NavMain({
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild tooltip={item.name}>
-              <a href={item.url}>
+              <Link href={item.url}>
                 <item.icon />
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
