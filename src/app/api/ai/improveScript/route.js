@@ -1,5 +1,5 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
-import { streamText } from "ai";
+import { StreamData, streamText } from "ai";
 import { auth } from '@/src/lib/auth';
 import { NextResponse } from "next/server";
 
@@ -23,7 +23,7 @@ export async function POST(req) {
     const { prompt, messagesList } = params;
 
     const messages = messagesList.map(message => ({
-        role: message.sender === 'ai' ? 'system' : 'user',
+        role: message.sender === 'ai' ? 'assistant' : 'user',
         content: message.prompt
     }));
 
@@ -35,13 +35,18 @@ export async function POST(req) {
     console.log("messages: ", messages);
 
     try {
+        const data = new StreamData();
         
         const result = await streamText({
-            model: anthropic('claude-3-5-sonnet-20241022'),
-            messages
-          })
+          model: anthropic('claude-3-5-sonnet-20241022'),
+          onFinish: ({ usage }) => {
+              data.append({ usage });
+              data.close();
+          },
+          messages
+        })
 
-        return result.toTextStreamResponse();
+        return result.toDataStreamResponse({ data });
     } catch (error) {
         console.error('Error generating script', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

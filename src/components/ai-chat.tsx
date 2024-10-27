@@ -29,6 +29,7 @@ export function AiChat() {
   const [creationStep, setCreationStep] = useState<CreationStep>(CreationStep.START)
   const [messages, setMessages] = useState<Message[]>([])
   const [script, setScript] = useState<string>('')
+  const [totalCost, setTotalCost] = useState<number>(0)
   const { data: session } = useSession()
 
   const handleSendMessage = (message: string, duration: number) => {
@@ -92,6 +93,12 @@ export function AiChat() {
             }
             
             script = script.trim();
+            setTimeout(() => {
+              const textarea = document.querySelector(`textarea[data-message-id="${msg.id}"]`);
+              if (textarea) { // Ajout de cette vérification
+                adjustTextareaHeight(textarea as HTMLTextAreaElement);
+              }
+            }, 0);
             return { ...msg, content, script, prompt: chunk };
           }
           return { ...msg, content: chunk, prompt: chunk };
@@ -99,6 +106,11 @@ export function AiChat() {
 
         return msg;
       }));
+    }).then(({ cost }) => {
+      if (cost) {
+        setTotalCost(totalCost + cost);
+        console.log('Total cost:', totalCost + cost);
+      }
     });
   }
 
@@ -122,9 +134,11 @@ export function AiChat() {
     ));
   }
 
-  const adjustTextareaHeight = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    event.target.style.height = 'auto';
-    event.target.style.height = `${event.target.scrollHeight}px`;
+  const adjustTextareaHeight = (element: HTMLTextAreaElement | React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!element) return; // Ajout d'une protection supplémentaire
+    const target = 'target' in element ? element.target : element;
+    target.style.height = 'auto';
+    target.style.height = `${target.scrollHeight}px`;
   }
 
   const calculateDuration = (script: string): string => {
@@ -165,12 +179,12 @@ export function AiChat() {
                     <>
                       <div className="relative mt-2">
                         <Textarea
+                          data-message-id={message.id}
                           value={message.script}
                           onChange={(e) => {
                             handleScriptChange(message.id, e.target.value);
                             adjustTextareaHeight(e);
                           }}
-                          onInput={adjustTextareaHeight}
                           className="w-full pt-2 resize-none overflow-hidden"
                         />
                         <Pencil className="absolute bottom-2 right-2 h-4 w-4 text-gray-400" />
