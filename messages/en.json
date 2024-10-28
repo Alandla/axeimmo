@@ -1,4 +1,8 @@
 {
+    "common": {
+      "all-f": "All",
+      "all-m": "All"
+    },
     "login": {
       "title": "Log in to your account",
       "welcome": "Welcome back! Select a method to continue.",
@@ -45,6 +49,31 @@
           "2-minutes": "2 minutes",
           "5-minutes": "5 minutes"
         }
+      }
+    },
+    "voices": {
+      "search": "Search a voice..",
+      "listen": "Listen",
+      "pause": "Pause",
+      "tags": {
+        "narrator": "Narrator",
+        "documentary": "Documentary",
+        "advertising": "Advertising",
+        "voice-over": "Voice over",
+        "educational": "Educational",
+        "animation": "Animation",
+        "video-game": "Video game"
+      },
+      "gender": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "accent": {
+        "french": "French",
+        "quebecois": "Quebecois",
+        "spanish": "Spanish",
+        "japanese": "Japanese",
+        "english": "English"
       }
     },
     "space": {

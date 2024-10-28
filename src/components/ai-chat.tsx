@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useTranslations } from "next-intl"
 import { Check, Pencil, Clock } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
@@ -11,6 +11,8 @@ import { CreationStep } from '../types/enums'
 import { Textarea } from './ui/textarea'
 import { AiChatTab } from './ai-chat-tab'
 import { Button } from './ui/button'
+import { motion } from 'framer-motion'
+import { VoicesGridComponent } from './voices-grid'
 
 enum MessageType {
   TEXT = 'text',
@@ -33,6 +35,7 @@ export function AiChat() {
   const [totalCost, setTotalCost] = useState<number>(0)
   const { data: session } = useSession()
   const t = useTranslations('ai');
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const handleSendMessage = (message: string, duration: number) => {
     if (creationStep === CreationStep.START) {
@@ -48,8 +51,26 @@ export function AiChat() {
     setMessages([
       ...messages,
       { id: newMessageId, sender: 'user', type: MessageType.TEXT, content: message, script: '', prompt: '' },
-      { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.TEXT, content: 'Thinking...', script: '', prompt: '' }
+      { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.TEXT, content: t('thinking'), script: '', prompt: '' }
     ]);
+
+    if (process.env.NODE_ENV === 'development') {
+      setTimeout(() => {
+        setMessages(prevMessages => prevMessages.map(msg => {
+          if (msg.id === `${newMessageId}-ai`) {
+            return {
+              ...msg,
+              content: "Voici un script mockup pour le mode développement",
+              script: "Ceci est un exemple de script mockup.\nIl contient plusieurs lignes.\nPour tester le comportement de l'interface.",
+              prompt: message
+            };
+          }
+          return msg;
+        }));
+        setScript("Ceci est un exemple de script mockup.\nIl contient plusieurs lignes.\nPour tester le comportement de l'interface.");
+      }, 1000); // Simulation d'un délai réseau
+      return;
+    }
 
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const match = message.match(urlRegex);
@@ -150,6 +171,38 @@ export function AiChat() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 
+  const messageAnimation = {
+    user: {
+      initial: { opacity: 0, x: 20, y: 0 },
+      animate: { opacity: 1, x: 0, y: 0 },
+      transition: { 
+        duration: 0.2,
+        ease: "easeInOut"
+      }
+    },
+    ai: {
+      initial: { opacity: 0, x: -20, y: 0 },
+      animate: { opacity: 1, x: 0, y: 0 },
+      transition: { 
+        duration: 0.2,
+        delay: 0.1,
+        ease: "easeInOut"
+      }
+    }
+  }
+
+  // Ajouter cette fonction pour gérer le défilement
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  };
+
+  // Ajouter un useEffect pour surveiller les changements de messages
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-center items-center p-4">
@@ -165,9 +218,16 @@ export function AiChat() {
             </div>
           </div>
         ) : (
-          <div className="w-full max-w-5xl h-[calc(100vh-250px)] overflow-y-auto mb-4 bg-white rounded-lg p-4">
+          <div 
+            ref={messagesContainerRef}
+            className="w-full max-w-5xl h-[calc(100vh-200px)] overflow-y-auto mb-4 bg-white rounded-lg p-4 overflow-hidden"
+          >
             {messages.map((message) => (
-              <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
+              <motion.div
+                key={message.id}
+                {...messageAnimation[message.sender]}
+                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
+              >
                 {message.sender === 'ai' && (
                   <Avatar className="w-8 h-8 mr-2 flex-shrink-0">
                     <img src="/placeholder.svg?height=32&width=32" alt="AI Avatar" className="rounded-full" />
@@ -203,9 +263,7 @@ export function AiChat() {
                     </>
                   )}
                   {message.type === MessageType.VOICE && (
-                    <div className="flex justify-between items-center mt-2">
-                      Choix de la voix
-                    </div>
+                    <VoicesGridComponent />
                   )}
                 </div>
                 {message.sender === 'user' && (
@@ -214,7 +272,7 @@ export function AiChat() {
                     <AvatarFallback className="rounded-lg">{(session?.user?.name?.charAt(0) ?? '')}</AvatarFallback>
                   </Avatar>
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
         )}

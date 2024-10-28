@@ -1,4 +1,8 @@
 {
+    "common": {
+      "all-f": "Toutes",
+      "all-m": "Tous"
+    },
     "login": {
       "title": "Connectez-vous à votre compte",
       "welcome": "Bienvenue ! Sélectionnez une méthode pour continuer.",
@@ -45,6 +49,31 @@
           "2-minutes": "2 minutes",
           "5-minutes": "5 minutes"
         }
+      }
+    },
+    "voices": {
+      "search": "Rechercher une voix..",
+      "listen": "Écouter",
+      "pause": "Pause",
+      "tags": {
+        "narrator": "Narrateur",
+        "documentary": "Documentaire",
+        "advertising": "Publicité",
+        "voice-over": "Voix off",
+        "educational": "Éducatif",
+        "animation": "Animation",
+        "video-game": "Jeux vidéo"
+      },
+      "gender": {
+        "male": "Masculin",
+        "female": "Féminin"
+      },
+      "accent": {
+        "french": "Français",
+        "quebecois": "Québécois",
+        "spanish": "Espagnol",
+        "japanese": "Japonais",
+        "english": "Anglais"
       }
     },
     "space": {
