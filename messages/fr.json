@@ -25,6 +25,28 @@
         "joinSpaces": "Rejoindre un espace"
       }
     },
+    "ai": {
+      "hello": "Salut, ",
+      "title-1": "Comment veux-tu créer ta vidéo ?",
+      "title-2": "Commence par créer ta vidéo à partir d'une idée, d'un lien d'article de blog ou d'un fichier vidéo/audio",
+      "thinking": "En train de réfléchir...",
+      "next-step": "Passer à l'étape suivante",
+      "placeholder": {
+        "start": "Une vidéo qui parle de ...",
+        "edit-script": "Est-ce que tu pourrais modifier le script pour ..."
+      }
+    },
+    "select": {
+      "duration": {
+        "placeholder": "Durée de la vidéo",
+        "options": {
+          "30-seconds": "30 secondes",
+          "1-minute": "1 minute",
+          "2-minutes": "2 minutes",
+          "5-minutes": "5 minutes"
+        }
+      }
+    },
     "space": {
       "privateSpaceName": "Mon espace privé",
       "privateSpaceNameWithUserName": " espace privé"

@@ -4,6 +4,7 @@ import { Textarea } from "./ui/textarea";
 import SelectDuration from "./ui/select/select-duration";
 import { useState } from "react";
 import { CreationStep } from "../types/enums";
+import { useTranslations } from "next-intl";
 
 
 interface DurationOption {
@@ -14,6 +15,7 @@ interface DurationOption {
 export function AiChatTab({ sendMessage, creationStep }: { sendMessage: (message: string, duration: number) => void, creationStep: CreationStep }) {
     const [inputMessage, setInputMessage] = useState('');
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
+    const t = useTranslations('ai');
 
     const adjustTextareaHeight = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       event.target.style.height = 'auto';
@@ -31,7 +33,7 @@ export function AiChatTab({ sendMessage, creationStep }: { sendMessage: (message
             {creationStep === CreationStep.START ? (
               <>
                 <Textarea
-                  placeholder="Une vidéo qui parle de ..."
+                  placeholder={t('placeholder.start')}
                   value={inputMessage}
                   onChange={(e) => {
                     setInputMessage(e.target.value);
@@ -63,7 +65,7 @@ export function AiChatTab({ sendMessage, creationStep }: { sendMessage: (message
               <>
                 <div className="flex items-end">
                   <Textarea
-                    placeholder="Est-ce que tu pourrais modifier le script pour ..."
+                    placeholder={t('placeholder.edit-script')}
                     value={inputMessage}
                     onChange={(e) => {
                       setInputMessage(e.target.value);
@@ -87,8 +89,7 @@ export function AiChatTab({ sendMessage, creationStep }: { sendMessage: (message
             ) : creationStep === CreationStep.VOICE ? (
                 <>
                   <Button className="w-full">
-                    <Check />
-                    Passer à l'étape suivante
+                    <Check />{t('next-step')}
                   </Button>
                 </>
             ) : (

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useTranslations } from "next-intl"
 import { Check, Pencil, Clock } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { useSession } from 'next-auth/react'
@@ -31,6 +32,7 @@ export function AiChat() {
   const [script, setScript] = useState<string>('')
   const [totalCost, setTotalCost] = useState<number>(0)
   const { data: session } = useSession()
+  const t = useTranslations('ai');
 
   const handleSendMessage = (message: string, duration: number) => {
     if (creationStep === CreationStep.START) {
@@ -157,11 +159,9 @@ export function AiChat() {
               <Avatar className="w-24 h-24 mx-auto mb-4">
                 <img src="/placeholder.svg?height=96&width=96" alt="AI Avatar" className="rounded-full" />
               </Avatar>
-              <h1 className="text-2xl font-bold mb-2">Salut, {session?.user?.name}</h1>
-              <p className="text-xl mb-4">Comment tu veux créer ta vidéo ?</p>
-              <p className="text-sm text-gray-500">
-                Commences par créer ta vidéo à partir d'une idée, d'un lien d'article de blog ou d'un fichier vidéo/audio
-              </p>
+              <h1 className="text-2xl font-bold mb-2">{t('hello')}{session?.user?.name}</h1>
+              <p className="text-xl mb-4">{t('title-1')}</p>
+              <p className="text-sm text-gray-500">{t('title-2')}</p>
             </div>
           </div>
         ) : (
@@ -193,7 +193,7 @@ export function AiChat() {
                         <Button 
                           onClick={() => handleConfirmScript(message.id)}
                         >
-                          <Check/> Passer à l'étape suivante
+                          <Check/> {t('next-step')}
                         </Button>
                         <div className="flex text-sm items-center text-gray-500">
                           <span>{calculateDuration(message.script)}</span>
