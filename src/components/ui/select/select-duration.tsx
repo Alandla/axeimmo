@@ -23,21 +23,23 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, onChange }) => {
   ];
 
   return (
-    <Select
-      value={value ? JSON.stringify(value) : undefined}
-      onValueChange={(val) => onChange(JSON.parse(val))}
-    >
-      <SelectTrigger className="">
-        <SelectValue placeholder={t('placeholder')} />
-      </SelectTrigger>
-      <SelectContent>
-        {durationOptions.map((option) => (
-          <SelectItem key={option.value} value={JSON.stringify(option)}>
-            {option.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div>
+      <Select
+        value={value ? JSON.stringify(value) : undefined}
+        onValueChange={(val) => onChange(JSON.parse(val))}
+      >
+        <SelectTrigger className="mr-2">
+          <SelectValue placeholder={t('placeholder')} />
+        </SelectTrigger>
+        <SelectContent>
+          {durationOptions.map((option) => (
+            <SelectItem key={option.value} value={JSON.stringify(option)}>
+              {option.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 
