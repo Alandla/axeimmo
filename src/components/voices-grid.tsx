@@ -8,15 +8,7 @@ import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } fro
 import { Badge } from "@/src/components/ui/badge"
 import { Check } from "lucide-react"
 import { useTranslations } from 'next-intl'
-
-export type Voice = {
-  id: string
-  name: string
-  gender: 'male' | 'female'
-  accent: string
-  tags: string[]
-  previewUrl: string
-}
+import { Voice } from '../types/voice'
 
 const voices: Voice[] = [
   { id: '1', name: 'Jean', gender: 'male', accent: 'french', tags: ['narrator', 'documentary', 'educational'], previewUrl: 'https://example.com/jean.mp3' },
@@ -193,9 +185,7 @@ export function VoicesGridComponent() {
             key={voice.id}
             voice={voice}
             playingId={playingId}
-            selectedVoice={selectedVoice}
             onPreviewVoice={togglePlay}
-            onSelectVoice={toggleSelection}
           />
         ))}
       </div>

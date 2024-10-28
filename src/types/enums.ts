@@ -20,4 +20,5 @@ export enum CreationStep {
   START = "START",
   SCRIPT = "SCRIPT",
   VOICE = "VOICE",
+  AVATAR = "AVATAR",
 }

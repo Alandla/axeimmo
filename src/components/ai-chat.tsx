@@ -13,10 +13,12 @@ import { AiChatTab } from './ai-chat-tab'
 import { Button } from './ui/button'
 import { motion } from 'framer-motion'
 import { VoicesGridComponent } from './voices-grid'
+import { useCreationStore } from '../store/creationStore'
 
 enum MessageType {
   TEXT = 'text',
   VOICE = 'voice',
+  AVATAR = 'avatar',
 }
 
 interface Message {
@@ -29,10 +31,8 @@ interface Message {
 }
 
 export function AiChat() {
-  const [creationStep, setCreationStep] = useState<CreationStep>(CreationStep.START)
+  const { creationStep, setCreationStep, script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar } = useCreationStore()
   const [messages, setMessages] = useState<Message[]>([])
-  const [script, setScript] = useState<string>('')
-  const [totalCost, setTotalCost] = useState<number>(0)
   const { data: session } = useSession()
   const t = useTranslations('ai');
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -131,7 +131,7 @@ export function AiChat() {
       }));
     }).then(({ cost }) => {
       if (cost) {
-        setTotalCost(totalCost + cost);
+        addToTotalCost(cost);
         console.log('Total cost:', totalCost + cost);
       }
     });
@@ -142,13 +142,23 @@ export function AiChat() {
     if (message && message.script) {
       const newMessageId = Date.now().toString();
       setScript(message.script);
-      setCreationStep(CreationStep.VOICE);
+      setCreationStep(CreationStep.AVATAR);
       setMessages([
         ...messages,
         { id: newMessageId, sender: 'user', type: MessageType.TEXT, content: 'Utilise ce script pour la vidéo, on peut passer à l\'étape suivante.', script: '', prompt: '' },
-        { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.VOICE, content: 'Parfait ! Maintenant il faut choisir la voix pour ta vidéo, voici la liste des voix disponibles.', script: '', prompt: '' }
+        { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.AVATAR, content: 'Parfait ! Maintenant tu peux choisir un avatar pour incarner ta vidéo, ce n\'est pas obligatoire et tu peux passer à l\'étape suivante si tu n\'en as pas besoin.', script: '', prompt: '' }
       ]);
     }
+  }
+
+  const handleConfirmAvatar = () => {
+    const newMessageId = Date.now().toString();
+    setCreationStep(CreationStep.VOICE);
+    setMessages([
+      ...messages,
+      { id: newMessageId, sender: 'user', type: MessageType.TEXT, content: selectedAvatar ? 'Je choisis l\'avatar de Nicolas, passons à l\'étape suivante' : 'Je n\'ai pas besoin d\'avatar, passons à l\'étape suivante', script: '', prompt: '' },
+      { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.VOICE, content: 'Parfait ! Maintenant il faut choisir la voix pour ta vidéo, voici la liste des voix disponibles.', script: '', prompt: '' }
+    ]);
   }
 
   const handleScriptChange = (messageId: string, newScript: string) => {
@@ -265,6 +275,11 @@ export function AiChat() {
                   {message.type === MessageType.VOICE && (
                     <VoicesGridComponent />
                   )}
+                  {message.type === MessageType.AVATAR && (
+                    <div>
+                      <p>Avatar</p>
+                    </div>
+                  )}
                 </div>
                 {message.sender === 'user' && (
                   <Avatar className="h-8 w-8 ml-2 flex-shrink-0">
@@ -276,7 +291,7 @@ export function AiChat() {
             ))}
           </div>
         )}
-        <AiChatTab sendMessage={handleSendMessage} creationStep={creationStep} />
+        <AiChatTab sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} />
       </div>
     </div>
   )

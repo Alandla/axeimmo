@@ -18,6 +18,7 @@ import {
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Fragment } from "react"
+import { TooltipProvider } from "@/src/components/ui/tooltip"
 
 function generateBreadcrumbs(pathname: string) {
   const paths = pathname.split('/').filter(Boolean);
@@ -35,7 +36,8 @@ export default function LayoutPrivate({ children }: Readonly<{children: React.Re
     <>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset>
+        <TooltipProvider>
+          <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
             <div className="flex items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
@@ -62,8 +64,9 @@ export default function LayoutPrivate({ children }: Readonly<{children: React.Re
               </Breadcrumb>
             </div>
           </header>
-          {children}
-        </SidebarInset>
+            {children}
+          </SidebarInset>
+        </TooltipProvider>
       </SidebarProvider>
     </>
   );

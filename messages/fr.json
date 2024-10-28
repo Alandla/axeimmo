@@ -35,6 +35,14 @@
       "title-2": "Commence par créer ta vidéo à partir d'une idée, d'un lien d'article de blog ou d'un fichier vidéo/audio",
       "thinking": "En train de réfléchir...",
       "next-step": "Passer à l'étape suivante",
+      "select-voice-first": "Sélectionne une voix avant de continuer",
+      "no-avatar": "Je n'ai pas besoin d'avatar, étape suivante",
+      "select-to-start": {
+        "title": "Avant de commencer, tu dois ",
+        "need-prompt": "avoir un prompt ou un fichier",
+        "need-duration": "avoir selectionné une durée de vidéo",
+        "and": " et "
+      },
       "placeholder": {
         "start": "Une vidéo qui parle de ...",
         "edit-script": "Est-ce que tu pourrais modifier le script pour ..."

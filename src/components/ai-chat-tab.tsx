@@ -5,14 +5,16 @@ import SelectDuration from "./ui/select/select-duration";
 import { useState } from "react";
 import { CreationStep } from "../types/enums";
 import { useTranslations } from "next-intl";
-
+import { useCreationStore } from "../store/creationStore";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 interface DurationOption {
   name: string;
   value: number;
 }
   
-export function AiChatTab({ sendMessage, creationStep }: { sendMessage: (message: string, duration: number) => void, creationStep: CreationStep }) {
+export function AiChatTab({ sendMessage, handleConfirmAvatar }: { sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void }) {
+    const { creationStep, selectedVoice, selectedAvatar } = useCreationStore()
     const [inputMessage, setInputMessage] = useState('');
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
     const t = useTranslations('ai');
@@ -51,14 +53,25 @@ export function AiChatTab({ sendMessage, creationStep }: { sendMessage: (message
                       <Paperclip className="h-4 w-4" />
                     </Button>
                     <SelectDuration value={videoDuration} onChange={setVideoDuration} />
-                  </div>
-                  <Button 
-                    size="icon" 
-                    onClick={() => handleSendMessage(inputMessage, videoDuration?.value || 936)} 
-                    disabled={!inputMessage.trim() || !videoDuration}
-                  >
-                    <Send className="h-4 w-4" />
-                  </Button>
+                  </div>  
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <Button 
+                          size="icon" 
+                          onClick={() => handleSendMessage(inputMessage, videoDuration?.value || 936)} 
+                          disabled={!inputMessage.trim() || !videoDuration}
+                        >
+                          <Send className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TooltipTrigger>
+                    {(!inputMessage.trim() || !videoDuration) && 
+                      <TooltipContent>
+                        {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
+                      </TooltipContent>
+                    }
+                  </Tooltip>
                 </div>
               </>
             ) : creationStep === CreationStep.SCRIPT ? (
@@ -86,11 +99,34 @@ export function AiChatTab({ sendMessage, creationStep }: { sendMessage: (message
                   </Button>
                 </div>
               </>
+            ) : creationStep === CreationStep.AVATAR ? (
+                <>
+                  {selectedAvatar ? (
+                    <Button className="w-full" onClick={handleConfirmAvatar}>
+                      <Check />{t('next-step')}
+                    </Button>
+                  ) : (
+                    <Button className="w-full" onClick={handleConfirmAvatar}>
+                      <Check />{t('no-avatar')}
+                    </Button>
+                  )}
+                </>
             ) : creationStep === CreationStep.VOICE ? (
                 <>
-                  <Button className="w-full">
-                    <Check />{t('next-step')}
-                  </Button>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <Button className="w-full" disabled={!selectedVoice}>
+                          <Check />{t('next-step')}
+                        </Button>
+                      </div>
+                    </TooltipTrigger>
+                    {!selectedVoice && (
+                      <TooltipContent>
+                          {t('select-voice-first')}
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
                 </>
             ) : (
               <>

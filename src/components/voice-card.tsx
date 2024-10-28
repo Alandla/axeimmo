@@ -4,8 +4,10 @@ import { Play, Pause, Check } from 'lucide-react'
 import { Button } from "@/src/components/ui/button"
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
-import { accentFlags, Voice } from './voices-grid'
+import { accentFlags } from './voices-grid'
 import { useTranslations } from 'next-intl'
+import { Voice } from '../types/voice'
+import { useCreationStore } from '../store/creationStore'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -41,18 +43,19 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
   </svg>
 );
 
-export function VoiceCard({ voice, playingId, selectedVoice, onPreviewVoice, onSelectVoice }: { voice: Voice, playingId: string | null, selectedVoice: Voice | null, onPreviewVoice: (id: string, url: string) => void, onSelectVoice: (voice: Voice) => void }) {
+export function VoiceCard({ voice, playingId, onPreviewVoice }: { voice: Voice, playingId: string | null, onPreviewVoice: (id: string, url: string) => void }) {
+    const { selectedVoice, setSelectedVoice } = useCreationStore()
     const t = useTranslations('voices')
     const isSelected = selectedVoice?.id === voice.id;
 
   return (
     <Card 
       key={voice.id} 
-      className={`flex flex-col relative cursor-pointer ${isSelected ? 'border-primary border' : ''}`} 
-      onClick={() => onSelectVoice(voice)}
+      className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`} 
+      onClick={() => setSelectedVoice(voice)}
     >
       {isSelected && (
-        <div className="absolute top-4 right-2">
+        <div className="absolute top-4 right-2 transition-all duration-150">
           <Check className="h-5 w-5 text-primary" />
         </div>
       )}
