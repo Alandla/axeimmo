@@ -19,6 +19,7 @@ enum MessageType {
   TEXT = 'text',
   VOICE = 'voice',
   AVATAR = 'avatar',
+  GENERATION = 'generation',
 }
 
 interface Message {
@@ -161,6 +162,16 @@ export function AiChat() {
     ]);
   }
 
+  const handleStartGeneration = () => {
+    const newMessageId = Date.now().toString();
+    setCreationStep(CreationStep.GENERATION);
+    setMessages([
+      ...messages,
+      { id: newMessageId, sender: 'user', type: MessageType.TEXT, content: 'Je suis prêt à générer ma vidéo, passons à l\'étape suivante.', script: '', prompt: '' },
+      { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.GENERATION, content: 'Voici l\'avancer de la génération de la vidéo.', script: '', prompt: '' }
+    ]);
+  }
+
   const handleScriptChange = (messageId: string, newScript: string) => {
     setMessages(prevMessages => prevMessages.map(msg => 
       msg.id === messageId ? { ...msg, script: newScript } : msg
@@ -280,6 +291,11 @@ export function AiChat() {
                       <p>Avatar</p>
                     </div>
                   )}
+                  {message.type === MessageType.GENERATION && (
+                    <div>
+                      <p>Generation</p>
+                    </div>
+                  )}
                 </div>
                 {message.sender === 'user' && (
                   <Avatar className="h-8 w-8 ml-2 flex-shrink-0">
@@ -291,7 +307,7 @@ export function AiChat() {
             ))}
           </div>
         )}
-        <AiChatTab sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} />
+        <AiChatTab sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} handleStartGeneration={handleStartGeneration} />
       </div>
     </div>
   )

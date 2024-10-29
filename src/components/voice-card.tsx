@@ -4,7 +4,7 @@ import { Play, Pause, Check } from 'lucide-react'
 import { Button } from "@/src/components/ui/button"
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
-import { accentFlags } from './voices-grid'
+import { accentFlags } from '../config/voices.config'
 import { useTranslations } from 'next-intl'
 import { Voice } from '../types/voice'
 import { useCreationStore } from '../store/creationStore'
@@ -43,7 +43,7 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
   </svg>
 );
 
-export function VoiceCard({ voice, playingId, onPreviewVoice }: { voice: Voice, playingId: string | null, onPreviewVoice: (id: string, url: string) => void }) {
+export function VoiceCard({ voice, playingVoice, onPreviewVoice }: { voice: Voice, playingVoice: {voice: Voice | null, audio: HTMLAudioElement | null}, onPreviewVoice: (voice: Voice) => void }) {
     const { selectedVoice, setSelectedVoice } = useCreationStore()
     const t = useTranslations('voices')
     const isSelected = selectedVoice?.id === voice.id;
@@ -92,9 +92,9 @@ export function VoiceCard({ voice, playingId, onPreviewVoice }: { voice: Voice, 
           variant="outline"
           size="sm"
           className="w-full"
-          onClick={() => onPreviewVoice(voice.id, voice.previewUrl)}
+          onClick={() => onPreviewVoice(voice)}
         >
-          {playingId === voice.id ? (
+          {playingVoice.voice?.id === voice.id ? (
             <>
               <Pause className="h-4 w-4 mr-2" />
               {t('pause')}

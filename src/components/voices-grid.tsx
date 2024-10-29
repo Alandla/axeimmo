@@ -9,40 +9,18 @@ import { Badge } from "@/src/components/ui/badge"
 import { Check } from "lucide-react"
 import { useTranslations } from 'next-intl'
 import { Voice } from '../types/voice'
-
-const voices: Voice[] = [
-  { id: '1', name: 'Jean', gender: 'male', accent: 'french', tags: ['narrator', 'documentary', 'educational'], previewUrl: 'https://example.com/jean.mp3' },
-  { id: '2', name: 'Marie', gender: 'female', accent: 'quebecois', tags: ['advertising', 'voice-over'], previewUrl: 'https://example.com/marie.mp3' },
-  { id: '3', name: 'Carlos', gender: 'male', accent: 'spanish', tags: ['documentary', 'educational'], previewUrl: 'https://example.com/carlos.mp3' },
-  { id: '4', name: 'Yuki', gender: 'female', accent: 'japanese', tags: ['animation', 'video-game'], previewUrl: 'https://example.com/yuki.mp3' },
-  { id: '5', name: 'John', gender: 'male', accent: 'english', tags: ['narrator', 'documentary'], previewUrl: 'https://example.com/john.mp3' },
-  { id: '6', name: 'Jane', gender: 'female', accent: 'english', tags: ['narrator', 'documentary'], previewUrl: 'https://example.com/jane.mp3' },
-  { id: '7', name: 'John', gender: 'male', accent: 'english', tags: ['narrator', 'documentary'], previewUrl: 'https://example.com/john.mp3' },
-  { id: '8', name: 'Jane', gender: 'female', accent: 'english', tags: ['narrator', 'documentary'], previewUrl: 'https://example.com/jane.mp3' },
-  { id: '9', name: 'Jean', gender: 'male', accent: 'french', tags: ['narrator', 'documentary'], previewUrl: 'https://example.com/jean.mp3' },
-  { id: '10', name: 'Marie', gender: 'female', accent: 'quebecois', tags: ['advertising', 'voice-over'], previewUrl: 'https://example.com/marie.mp3' },
-  { id: '11', name: 'Carlos', gender: 'male', accent: 'spanish', tags: ['documentary', 'educational'], previewUrl: 'https://example.com/carlos.mp3' },
-]
-
-// Ajouter ce mapping après la déclaration des voices
-export const accentFlags: Record<string, string> = {
-  'french': '🇫🇷',
-  'quebecois': '🇨🇦',
-  'spanish': '🇪🇸',
-  'japanese': '🇯🇵',
-  'english': '🇬🇧',
-}
+import { accentFlags, voices } from '../config/voices.config'
 
 export function VoicesGridComponent() {
   const t = useTranslations('voices')
   const tCommon = useTranslations('common')
 
   const [playingId, setPlayingId] = useState<string | null>(null)
-  const [selectedVoice, setSelectedVoice] = useState<Voice | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedAccent, setSelectedAccent] = useState<string>('all')
   const [selectedGender, setSelectedGender] = useState<string>('all')
   const [currentPage, setCurrentPage] = useState(1)
+  const [playingVoice, setPlayingVoice] = useState<{ voice: Voice | null, audio: HTMLAudioElement | null }>({ voice: null, audio: null })
   const voicesPerPage = 6
   const [selectedTags, setSelectedTags] = useState<string[]>([])
 
@@ -64,16 +42,20 @@ export function VoicesGridComponent() {
   const currentVoices = filteredVoices.slice(indexOfFirstVoice, indexOfLastVoice)
   const totalPages = Math.ceil(filteredVoices.length / voicesPerPage)
 
-  const togglePlay = (id: string, url: string) => {
-    if (playingId === id) {
-      setPlayingId(null)
-      // Stop the audio
-    } else {
-      setPlayingId(id)
-      // Play the audio
-      const audio = new Audio(url)
-      audio.play()
-      audio.onended = () => setPlayingId(null)
+  const togglePlay = (voice: Voice) => {
+    if (voice.previewUrl) {
+      if (playingVoice.voice?.id === voice.id && playingVoice.audio) {
+        playingVoice.audio?.pause()
+        setPlayingVoice({voice: null, audio: null})
+      } else {
+        if (playingVoice.audio) {
+          playingVoice.audio.pause()
+        }
+        const audio = new Audio(voice.previewUrl)
+        setPlayingVoice({voice, audio})
+        audio.play()
+        audio.onended = () => setPlayingVoice({voice: null, audio: null})
+      }
     }
   }
 
@@ -84,16 +66,12 @@ export function VoicesGridComponent() {
     }
   }
 
-  const toggleSelection = (voice: Voice) => {
-    setSelectedVoice(voice)
-  }
-
   const toggleTag = (tag: string) => {
-    setSelectedTags(prev =>
-      prev.includes(tag)
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    )
+    const newTags = selectedTags.includes(tag)
+      ? selectedTags.filter(t => t !== tag)
+      : [...selectedTags, tag]
+    setSelectedTags(newTags)
+    handleFilters(filteredVoices)
   }
 
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -105,6 +83,26 @@ export function VoicesGridComponent() {
     }
   }
 
+  // Mettre à jour les gestionnaires d'événements des filtres
+  const handleFilters = (filteredResults: Voice[]) => {
+    if (currentPage !== 1 && currentPage * voicesPerPage > filteredResults.length) {
+      setCurrentPage(1)
+    }
+  }
+
+  // Mise à jour de la recherche
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+    const newFilteredVoices = voices.filter(voice => {
+      const matchesSearch = voice.name.toLowerCase().includes(query.toLowerCase())
+      const matchesAccent = selectedAccent === 'all' ? true : voice.accent === selectedAccent
+      const matchesGender = selectedGender === 'all' ? true : voice.gender === selectedGender
+      const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => voice.tags.includes(tag))
+      return matchesSearch && matchesAccent && matchesGender && matchesTags
+    })
+    handleFilters(newFilteredVoices)
+  }
+
   return (
     <div className="space-y-4 mt-4">
       <div>
@@ -112,10 +110,13 @@ export function VoicesGridComponent() {
         <Input
           placeholder={t('search')}
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
           className="max-w-xs"
         />
-        <Select value={selectedAccent} onValueChange={setSelectedAccent}>
+        <Select value={selectedAccent} onValueChange={(value) => {
+          setSelectedAccent(value)
+          handleFilters(filteredVoices)
+        }}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Accent" />
           </SelectTrigger>
@@ -130,7 +131,10 @@ export function VoicesGridComponent() {
             ))}
           </SelectContent>
         </Select>
-        <Select value={selectedGender} onValueChange={setSelectedGender}>
+        <Select value={selectedGender} onValueChange={(value) => {
+          setSelectedGender(value)
+          handleFilters(filteredVoices)
+        }}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Genre" />
           </SelectTrigger>
@@ -184,7 +188,7 @@ export function VoicesGridComponent() {
           <VoiceCard
             key={voice.id}
             voice={voice}
-            playingId={playingId}
+            playingVoice={playingVoice}
             onPreviewVoice={togglePlay}
           />
         ))}

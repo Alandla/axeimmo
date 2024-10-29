@@ -13,7 +13,7 @@ interface DurationOption {
   value: number;
 }
   
-export function AiChatTab({ sendMessage, handleConfirmAvatar }: { sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void }) {
+export function AiChatTab({ sendMessage, handleConfirmAvatar, handleStartGeneration }: { sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleStartGeneration: () => void }) {
     const { creationStep, selectedVoice, selectedAvatar } = useCreationStore()
     const [inputMessage, setInputMessage] = useState('');
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
@@ -31,109 +31,111 @@ export function AiChatTab({ sendMessage, handleConfirmAvatar }: { sendMessage: (
 
     return (
         <div className="w-full max-w-xl">
-          <div className="rounded-lg border p-2">
-            {creationStep === CreationStep.START ? (
-              <>
+          {creationStep === CreationStep.START ? (
+            <div className="rounded-lg border p-2">
+              <Textarea
+                placeholder={t('placeholder.start')}
+                value={inputMessage}
+                onChange={(e) => {
+                  setInputMessage(e.target.value);
+                  adjustTextareaHeight(e);
+                }}
+                onInput={adjustTextareaHeight}
+                className="w-full mb-2 border-none shadow-none focus:ring-0 resize-none"
+                rows={1}
+                variant="no-focus-border"
+                onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(inputMessage, videoDuration?.value || 936)}
+              />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Button variant="outline" size="icon">
+                    <Paperclip className="h-4 w-4" />
+                  </Button>
+                  <SelectDuration value={videoDuration} onChange={setVideoDuration} />
+                </div>  
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Button 
+                        size="icon" 
+                        onClick={() => handleSendMessage(inputMessage, videoDuration?.value || 936)} 
+                        disabled={!inputMessage.trim() || !videoDuration}
+                      >
+                        <Send className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  {(!inputMessage.trim() || !videoDuration) && 
+                    <TooltipContent>
+                      {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
+                    </TooltipContent>
+                  }
+                </Tooltip>
+              </div>
+            </div>
+          ) : creationStep === CreationStep.SCRIPT ? (
+            <div className="rounded-lg border p-2">
+              <div className="flex items-end">
                 <Textarea
-                  placeholder={t('placeholder.start')}
+                  placeholder={t('placeholder.edit-script')}
                   value={inputMessage}
                   onChange={(e) => {
                     setInputMessage(e.target.value);
                     adjustTextareaHeight(e);
                   }}
                   onInput={adjustTextareaHeight}
-                  className="w-full mb-2 border-none shadow-none focus:ring-0 resize-none"
+                  className="w-full border-none shadow-none focus:ring-0 resize-none"
                   rows={1}
                   variant="no-focus-border"
-                  onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(inputMessage, videoDuration?.value || 936)}
+                  onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(inputMessage, 0)}
                 />
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="icon">
-                      <Paperclip className="h-4 w-4" />
-                    </Button>
-                    <SelectDuration value={videoDuration} onChange={setVideoDuration} />
-                  </div>  
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <Button 
-                          size="icon" 
-                          onClick={() => handleSendMessage(inputMessage, videoDuration?.value || 936)} 
-                          disabled={!inputMessage.trim() || !videoDuration}
-                        >
-                          <Send className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TooltipTrigger>
-                    {(!inputMessage.trim() || !videoDuration) && 
-                      <TooltipContent>
-                        {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
-                      </TooltipContent>
-                    }
-                  </Tooltip>
-                </div>
-              </>
-            ) : creationStep === CreationStep.SCRIPT ? (
+                <Button 
+                  size="icon" 
+                  onClick={() => handleSendMessage(inputMessage, 0)} 
+                  disabled={!inputMessage.trim()}
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          ) : creationStep === CreationStep.AVATAR ? (
               <>
-                <div className="flex items-end">
-                  <Textarea
-                    placeholder={t('placeholder.edit-script')}
-                    value={inputMessage}
-                    onChange={(e) => {
-                      setInputMessage(e.target.value);
-                      adjustTextareaHeight(e);
-                    }}
-                    onInput={adjustTextareaHeight}
-                    className="w-full border-none shadow-none focus:ring-0 resize-none"
-                    rows={1}
-                    variant="no-focus-border"
-                    onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(inputMessage, 0)}
-                  />
-                  <Button 
-                    size="icon" 
-                    onClick={() => handleSendMessage(inputMessage, 0)} 
-                    disabled={!inputMessage.trim()}
-                  >
-                    <Send className="h-4 w-4" />
+                {selectedAvatar ? (
+                  <Button className="w-full" onClick={handleConfirmAvatar}>
+                    <Check />{t('next-step')}
                   </Button>
-                </div>
+                ) : (
+                  <Button className="w-full" onClick={handleConfirmAvatar}>
+                    <Check />{t('no-avatar')}
+                  </Button>
+                )}
               </>
-            ) : creationStep === CreationStep.AVATAR ? (
-                <>
-                  {selectedAvatar ? (
-                    <Button className="w-full" onClick={handleConfirmAvatar}>
-                      <Check />{t('next-step')}
-                    </Button>
-                  ) : (
-                    <Button className="w-full" onClick={handleConfirmAvatar}>
-                      <Check />{t('no-avatar')}
-                    </Button>
-                  )}
-                </>
-            ) : creationStep === CreationStep.VOICE ? (
-                <>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <Button className="w-full" disabled={!selectedVoice}>
-                          <Check />{t('next-step')}
-                        </Button>
-                      </div>
-                    </TooltipTrigger>
-                    {!selectedVoice && (
-                      <TooltipContent>
-                          {t('select-voice-first')}
-                      </TooltipContent>
-                    )}
-                  </Tooltip>
-                </>
-            ) : (
+          ) : creationStep === CreationStep.VOICE ? (
               <>
-                Default
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Button className="w-full" disabled={!selectedVoice} onClick={handleStartGeneration}>
+                        <Check />{t('start-generation')}
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  {!selectedVoice && (
+                    <TooltipContent>
+                        {t('select-voice-first')}
+                    </TooltipContent>
+                  )}
+                </Tooltip>
               </>
-            )}
-          </div>
-        </div>
+          ) : creationStep === CreationStep.GENERATION ? (
+            <>
+              
+            </>
+          ) : (
+            <>
+              Default
+            </>
+          )}
+      </div>
     )
 }

@@ -37,6 +37,7 @@
       "next-step": "Passer à l'étape suivante",
       "select-voice-first": "Sélectionne une voix avant de continuer",
       "no-avatar": "Je n'ai pas besoin d'avatar, étape suivante",
+      "start-generation": "Commencer la génération",
       "select-to-start": {
         "title": "Avant de commencer, tu dois ",
         "need-prompt": "avoir un prompt ou un fichier",
@@ -70,7 +71,20 @@
         "voice-over": "Voix off",
         "educational": "Éducatif",
         "animation": "Animation",
-        "video-game": "Jeux vidéo"
+        "video-game": "Jeux vidéo",
+        "news": "Actualités",
+        "narration": "Narration",
+        "meditation": "Méditation",
+        "characters": "Personnages",
+        "conversational": "Conversationnel",
+        "audiobook": "Livre audio",
+        "ASMR": "ASMR",
+        "social_media": "Réseaux sociaux",
+        "children_stories": "Histoires pour enfants",
+        "entertainment_tv": "Divertissement TV",
+        "informative_educational": "Informatif",
+        "story": "Histoire",
+        "characters_animation": "Personnages d'animation"
       },
       "gender": {
         "male": "Masculin",
@@ -81,7 +95,14 @@
         "quebecois": "Québécois",
         "spanish": "Espagnol",
         "japanese": "Japonais",
-        "english": "Anglais"
+        "english": "Anglais",
+        "american": "Américain",
+        "british": "Britannique",
+        "australian": "Australien",
+        "irish": "Irlandais",
+        "german": "Allemand",
+        "swedish": "Suédois",
+        "canadian": "Canadien"
       }
     },
     "space": {
