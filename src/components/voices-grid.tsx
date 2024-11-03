@@ -15,7 +15,6 @@ export function VoicesGridComponent() {
   const t = useTranslations('voices')
   const tCommon = useTranslations('common')
 
-  const [playingId, setPlayingId] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedAccent, setSelectedAccent] = useState<string>('all')
   const [selectedGender, setSelectedGender] = useState<string>('all')

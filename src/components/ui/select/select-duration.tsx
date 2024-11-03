@@ -9,10 +9,11 @@ interface DurationOption {
 
 interface SelectDurationProps {
   value: DurationOption | undefined;
+  disabled: boolean,
   onChange: (value: DurationOption) => void;
 }
 
-const SelectDuration: React.FC<SelectDurationProps> = ({ value, onChange }) => {
+const SelectDuration: React.FC<SelectDurationProps> = ({ value, disabled, onChange }) => {
   const t = useTranslations('select.duration');
 
   const durationOptions: DurationOption[] = [
@@ -27,6 +28,7 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, onChange }) => {
       <Select
         value={value ? JSON.stringify(value) : undefined}
         onValueChange={(val) => onChange(JSON.parse(val))}
+        disabled={disabled}
       >
         <SelectTrigger className="mr-2">
           <SelectValue placeholder={t('placeholder')} />

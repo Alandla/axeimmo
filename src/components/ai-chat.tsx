@@ -69,7 +69,7 @@ export function AiChat() {
           return msg;
         }));
         setScript("Ceci est un exemple de script mockup.\nIl contient plusieurs lignes.\nPour tester le comportement de l'interface.");
-      }, 1000); // Simulation d'un délai réseau
+      }, 300); // Simulation d'un délai réseau
       return;
     }
 

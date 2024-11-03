@@ -40,7 +40,7 @@
       "start-generation": "Commencer la génération",
       "select-to-start": {
         "title": "Avant de commencer, tu dois ",
-        "need-prompt": "avoir un prompt ou un fichier",
+        "need-prompt": "avoir un prompt ou un fichier voix/avatar",
         "need-duration": "avoir selectionné une durée de vidéo",
         "and": " et "
       },
@@ -119,5 +119,16 @@
       "rights": "© 2024 Hoox inc. Tous droits réservés",
       "privacy": "Politique de confidentialité",
       "terms": "Conditions d'utilisation"
+    },
+    "filePreview": {
+      "tooltip": {
+        "title": "Selectionne comment tu souhaites que ton fichier soit utilisé:",
+        "voiceTitle": "Voix",
+        "voice": "Le fichier deviendra la voix de votre vidéo, donc pas de génération de script ni de choix de voix.",
+        "avatarTitle": "Avatar",
+        "avatar": "Si la vidéo contient une personne qui parle, on ajoute du montage autour, donc pas de génération de script ni de choix de voix, ni de choix d'avatar.",
+        "mediaTitle": "Média",
+        "media": "Le fichier sera automatiquement ajouté à votre vidéo au bon moment."
+      }
     }
   }
