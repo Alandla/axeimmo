@@ -14,6 +14,7 @@ import { Button } from './ui/button'
 import { motion } from 'framer-motion'
 import { VoicesGridComponent } from './voices-grid'
 import { useCreationStore } from '../store/creationStore'
+import { AvatarGridComponent } from './avatar-grid'
 
 enum MessageType {
   TEXT = 'text',
@@ -187,14 +188,14 @@ export function AiChat() {
   const handleConfirmAvatar = () => {
     if (files.some(file => file.type === 'media')) {
       setCreationStep(CreationStep.MEDIA)
-      addMessageUser(selectedAvatar ? 'Je choisis l\'avatar de Nicolas, nous pouvons passer à l\'étape suivante.' : 'Je n\'ai pas besoin d\'avatar, nous pouvons passer à l\'étape suivante.')
+      addMessageUser(selectedAvatar ? `Je choisis l'avatar de ${selectedAvatar.name}, nous pouvons passer à l'étape suivante.` : 'Je n\'ai pas besoin d\'avatar, nous pouvons passer à l\'étape suivante.')
       addMessageAi(
         'Tu m\'as donné des fichiers medias que je vais intégrer directement dans le montage de la vidéo, pour ça je vais avoir besoin de ton aide, est-ce que tu pourrais me décrire les fichiers pour que je puisse facilement les placer aux bons moments dans ta vidéo ?',
         MessageType.MEDIA
         );
     } else {
       setCreationStep(CreationStep.GENERATION)
-      addMessageUser(selectedAvatar ? 'Je choisis l\'avatar de Nicolas, nous pouvons lancer la génération de ma vidéo.' : 'Je n\'ai pas besoin d\'avatar, nous pouvons lancer la génération de ma vidéo.')
+      addMessageUser(selectedAvatar ? `Je choisis l'avatar de ${selectedAvatar.name}, nous pouvons lancer la génération de ma vidéo.` : 'Je n\'ai pas besoin d\'avatar, nous pouvons lancer la génération de ma vidéo.')
       addMessageAi(
         'Voici l\'avancer de la génération de la vidéo.',
         MessageType.GENERATION
@@ -205,7 +206,7 @@ export function AiChat() {
   const handleConfirmMedia = () => {
     setCreationStep(CreationStep.GENERATION)
     addMessageUser(`Voici une description des fichiers, nous pouvons lancer la génération de la vidéo.`)
-    addMessageAi('Voici l\'avancer de la génération de la vidéo.', MessageType.GENERATION)
+    addMessageAi('Voici l\'avancée de la génération de la vidéo.', MessageType.GENERATION)
   }
 
   const addMessageUser = (userMessage: string) => {
@@ -339,9 +340,7 @@ export function AiChat() {
                     </>
                   )}
                   {message.type === MessageType.AVATAR && (
-                    <div>
-                      <p>Avatar</p>
-                    </div>
+                    <AvatarGridComponent />
                   )}
                   {message.type === MessageType.VOICE && (
                     <VoicesGridComponent />

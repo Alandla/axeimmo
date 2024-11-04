@@ -106,6 +106,24 @@
         "canadian": "Canadian"
       }
     },
+    "avatars": {
+      "search": "Search an avatar..",
+      "preview": "Preview",
+      "tags": {
+        "professional": "Professional",
+        "cossy": "Cossy",
+        "casual": "Casual"
+      },
+      "place": {
+        "bedroom": "Bedroom",
+        "office": "Office",
+        "sofa": "Sofa"
+      },
+      "gender": {
+        "male": "Male",
+        "female": "Female"
+      }
+    },
     "space": {
       "privateSpaceName": "My Private Space",
       "privateSpaceNameWithUserName": "'s Private Space"

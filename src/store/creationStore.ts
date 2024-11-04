@@ -2,13 +2,14 @@ import { create } from 'zustand'
 import { CreationStep } from '../types/enums'
 import { Voice } from '../types/voice'
 import { UploadedFile } from '../components/ai-chat-tab'
+import { Avatar, AvatarLook } from '../types/avatar'
 
 type CreationStore = {
   script: string
   files: UploadedFile[]
   totalCost: number
   creationStep: CreationStep
-  selectedAvatar: string | null
+  selectedAvatar: AvatarLook | null
   selectedVoice: Voice | null
   setScript: (script: string) => void
   setFiles: (files: UploadedFile[]) => void,
@@ -16,7 +17,7 @@ type CreationStore = {
   addToTotalCost: (cost: number) => void
   setCreationStep: (step: CreationStep) => void
   setSelectedVoice: (voice: Voice | null) => void
-  setSelectedAvatar: (avatar: string | null) => void
+  setSelectedAvatar: (avatar: AvatarLook | null) => void
 }
 
 export const useCreationStore = create<CreationStore>((set) => ({

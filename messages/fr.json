@@ -106,6 +106,24 @@
         "canadian": "Canadien"
       }
     },
+    "avatars": {
+      "search": "Rechercher un avatar..",
+      "preview": "Prévisualiser",
+      "tags": {
+        "professional": "Professionnel",
+        "cossy": "Cossy",
+        "casual": "Décontracté"
+      },
+      "place": {
+        "bedroom": "Chambre",
+        "office": "Bureau",
+        "sofa": "Canapé"
+      },
+      "gender": {
+        "male": "Masculin",
+        "female": "Féminin"
+      }
+    },
     "space": {
       "privateSpaceName": "Mon espace privé",
       "privateSpaceNameWithUserName": " espace privé"
