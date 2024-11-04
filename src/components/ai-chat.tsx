@@ -19,6 +19,7 @@ enum MessageType {
   TEXT = 'text',
   VOICE = 'voice',
   AVATAR = 'avatar',
+  MEDIA = 'media',
   GENERATION = 'generation',
 }
 
@@ -32,7 +33,7 @@ interface Message {
 }
 
 export function AiChat() {
-  const { creationStep, setCreationStep, script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar } = useCreationStore()
+  const { creationStep, setCreationStep, script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files } = useCreationStore()
   const [messages, setMessages] = useState<Message[]>([])
   const { data: session } = useSession()
   const t = useTranslations('ai');
@@ -40,6 +41,30 @@ export function AiChat() {
 
   const handleSendMessage = (message: string, duration: number) => {
     if (creationStep === CreationStep.START) {
+      if (files.length !== 0) {
+        if (files.some(file => file.type === 'voice')) {
+          setCreationStep(CreationStep.AVATAR)
+          addMessageAi(
+            'Tu m\'as envoyé un fichier audio, je vais l\'utiliser pour la vidéo. Maintenant tu peux choisir un avatar pour incarner ta vidéo, ce n\'est pas obligatoire et tu peux passer à l\'étape suivante si tu n\'en as pas besoin.',
+            MessageType.AVATAR
+          );
+          return;
+        } else if (files.some(file => file.type === 'avatar') && files.some(file => file.type === 'media')) {
+          setCreationStep(CreationStep.MEDIA)
+          addMessageAi(
+            'Tu m\'as envoyé des medias que je vais intégrer directement dans le montage de la vidéo, pour ça je vais avoir besoin de ton aide, est-ce que tu pourrais me décrire les fichiers pour que je puisse facilement les placer aux bons moments dans ta vidéo ?',
+            MessageType.MEDIA
+          );
+          return;
+        } else if (files.some(file => file.type === 'avatar')) {
+          setCreationStep(CreationStep.GENERATION)
+          addMessageAi(
+            'Tu m\'as envoyé un fichier avatar, je vais l\'utiliser en tant qu\'avatar et voix. Je n\'ai pas besoin de plus d\'informations donc j\'ai lancé la génération, tu peux voir l\'avancer de la génération :',
+            MessageType.GENERATION
+          );
+          return;
+        }
+      }
       setCreationStep(CreationStep.SCRIPT)
       handleAiChat(message, duration)
     } else if (creationStep === CreationStep.SCRIPT) {
@@ -48,17 +73,16 @@ export function AiChat() {
   }
 
   const handleAiChat = async (message: string, duration: number, improve: boolean = false) => {
-    const newMessageId = Date.now().toString();
-    setMessages([
-      ...messages,
-      { id: newMessageId, sender: 'user', type: MessageType.TEXT, content: message, script: '', prompt: '' },
-      { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.TEXT, content: t('thinking'), script: '', prompt: '' }
-    ]);
+    const messageUserId = addMessageUser(message)
+    const messageAiId = addMessageAi(
+      t('thinking'),
+      MessageType.TEXT
+    );
 
     if (process.env.NODE_ENV === 'development') {
       setTimeout(() => {
         setMessages(prevMessages => prevMessages.map(msg => {
-          if (msg.id === `${newMessageId}-ai`) {
+          if (msg.id === messageAiId) {
             return {
               ...msg,
               content: "Voici un script mockup pour le mode développement",
@@ -85,7 +109,7 @@ export function AiChat() {
     }
 
     setMessages(prevMessages => prevMessages.map(msg => 
-      msg.id === newMessageId ? { ...msg, prompt } : msg
+      msg.id === messageUserId ? { ...msg, prompt } : msg
     ));
 
     let stream;
@@ -96,7 +120,7 @@ export function AiChat() {
     }
 
     setMessages(prevMessages => prevMessages.map(msg => 
-      msg.id === `${newMessageId}-ai` ? { ...msg, content: ''} : msg
+      msg.id === messageAiId ? { ...msg, content: ''} : msg
     ));
 
     if (!stream) {
@@ -105,7 +129,7 @@ export function AiChat() {
 
     readStream(stream, (chunk: string) => {
       setMessages(prevMessages => prevMessages.map(msg => {
-        if (msg.id === `${newMessageId}-ai`) {
+        if (msg.id === messageAiId) {
           const scriptStartIndex = chunk.indexOf('```');
           if (scriptStartIndex !== -1) {
             const content = chunk.slice(0, scriptStartIndex).trim();
@@ -141,35 +165,66 @@ export function AiChat() {
   const handleConfirmScript = (messageId: string) => {
     const message = messages.find(msg => msg.id === messageId);
     if (message && message.script) {
-      const newMessageId = Date.now().toString();
       setScript(message.script);
-      setCreationStep(CreationStep.AVATAR);
-      setMessages([
-        ...messages,
-        { id: newMessageId, sender: 'user', type: MessageType.TEXT, content: 'Utilise ce script pour la vidéo, on peut passer à l\'étape suivante.', script: '', prompt: '' },
-        { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.AVATAR, content: 'Parfait ! Maintenant tu peux choisir un avatar pour incarner ta vidéo, ce n\'est pas obligatoire et tu peux passer à l\'étape suivante si tu n\'en as pas besoin.', script: '', prompt: '' }
-      ]);
+      setCreationStep(CreationStep.VOICE);
+      addMessageUser(`Utilise ce script pour la vidéo, on peut passer à l\'étape suivante.`)
+      addMessageAi(
+        'Parfait ! Maintenant il faut choisir la voix pour ta vidéo, voici la liste des voix disponibles.',
+        MessageType.VOICE
+      );
     }
   }
 
-  const handleConfirmAvatar = () => {
-    const newMessageId = Date.now().toString();
-    setCreationStep(CreationStep.VOICE);
-    setMessages([
-      ...messages,
-      { id: newMessageId, sender: 'user', type: MessageType.TEXT, content: selectedAvatar ? 'Je choisis l\'avatar de Nicolas, passons à l\'étape suivante' : 'Je n\'ai pas besoin d\'avatar, passons à l\'étape suivante', script: '', prompt: '' },
-      { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.VOICE, content: 'Parfait ! Maintenant il faut choisir la voix pour ta vidéo, voici la liste des voix disponibles.', script: '', prompt: '' }
-    ]);
+  const handleConfirmVoice = () => {
+    setCreationStep(CreationStep.AVATAR);
+    addMessageUser(`Je choisis la voix de ${selectedVoice?.name}, passons à l\'étape suivante`)
+    addMessageAi(
+      'Parfait ! Maintenant tu peux choisir un avatar pour incarner ta vidéo, ce n\'est pas obligatoire et tu peux passer à l\'étape suivante si tu n\'en as pas besoin.',
+      MessageType.AVATAR
+    );
   }
 
-  const handleStartGeneration = () => {
-    const newMessageId = Date.now().toString();
-    setCreationStep(CreationStep.GENERATION);
-    setMessages([
-      ...messages,
-      { id: newMessageId, sender: 'user', type: MessageType.TEXT, content: 'Je suis prêt à générer ma vidéo, passons à l\'étape suivante.', script: '', prompt: '' },
-      { id: `${newMessageId}-ai`, sender: 'ai', type: MessageType.GENERATION, content: 'Voici l\'avancer de la génération de la vidéo.', script: '', prompt: '' }
+  const handleConfirmAvatar = () => {
+    if (files.some(file => file.type === 'media')) {
+      setCreationStep(CreationStep.MEDIA)
+      addMessageUser(selectedAvatar ? 'Je choisis l\'avatar de Nicolas, nous pouvons passer à l\'étape suivante.' : 'Je n\'ai pas besoin d\'avatar, nous pouvons passer à l\'étape suivante.')
+      addMessageAi(
+        'Tu m\'as donné des fichiers medias que je vais intégrer directement dans le montage de la vidéo, pour ça je vais avoir besoin de ton aide, est-ce que tu pourrais me décrire les fichiers pour que je puisse facilement les placer aux bons moments dans ta vidéo ?',
+        MessageType.MEDIA
+        );
+    } else {
+      setCreationStep(CreationStep.GENERATION)
+      addMessageUser(selectedAvatar ? 'Je choisis l\'avatar de Nicolas, nous pouvons lancer la génération de ma vidéo.' : 'Je n\'ai pas besoin d\'avatar, nous pouvons lancer la génération de ma vidéo.')
+      addMessageAi(
+        'Voici l\'avancer de la génération de la vidéo.',
+        MessageType.GENERATION
+      );
+    }
+  }
+
+  const handleConfirmMedia = () => {
+    setCreationStep(CreationStep.GENERATION)
+    addMessageUser(`Voici une description des fichiers, nous pouvons lancer la génération de la vidéo.`)
+    addMessageAi('Voici l\'avancer de la génération de la vidéo.', MessageType.GENERATION)
+  }
+
+  const addMessageUser = (userMessage: string) => {
+    const messageId = Date.now().toString();
+    setMessages(prevMessages => [
+      ...prevMessages,
+      { id: messageId, sender: 'user', type: MessageType.TEXT, content: userMessage, script: '', prompt: '' },
     ]);
+    return messageId;
+  }
+
+  const addMessageAi = (aiMessage: string, type: MessageType) => {
+    const newMessageId = Date.now().toString();
+    const messageId = `${newMessageId}-ai`;
+    setMessages(prevMessages => [
+      ...prevMessages,
+      { id: messageId, sender: 'ai', type: type, content: aiMessage, script: '', prompt: '' }
+    ]);
+    return messageId;
   }
 
   const handleScriptChange = (messageId: string, newScript: string) => {
@@ -283,12 +338,17 @@ export function AiChat() {
                       </div>
                     </>
                   )}
-                  {message.type === MessageType.VOICE && (
-                    <VoicesGridComponent />
-                  )}
                   {message.type === MessageType.AVATAR && (
                     <div>
                       <p>Avatar</p>
+                    </div>
+                  )}
+                  {message.type === MessageType.VOICE && (
+                    <VoicesGridComponent />
+                  )}
+                  {message.type === MessageType.MEDIA && (
+                    <div>
+                      <p>Media</p>
                     </div>
                   )}
                   {message.type === MessageType.GENERATION && (
@@ -307,7 +367,7 @@ export function AiChat() {
             ))}
           </div>
         )}
-        <AiChatTab sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} handleStartGeneration={handleStartGeneration} />
+        <AiChatTab sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} handleConfirmVoice={handleConfirmVoice} handleConfirmMedia={handleConfirmMedia} />
       </div>
     </div>
   )

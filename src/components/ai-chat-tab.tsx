@@ -19,7 +19,7 @@ export interface UploadedFile {
   type: "voice" | "avatar" | "media";
 }
 
-export function AiChatTab({ sendMessage, handleConfirmAvatar, handleStartGeneration }: { sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleStartGeneration: () => void }) {
+export function AiChatTab({ sendMessage, handleConfirmAvatar, handleConfirmVoice, handleConfirmMedia }: { sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleConfirmVoice: () => void, handleConfirmMedia: () => void }) {
     const { creationStep, files, selectedVoice, selectedAvatar, setFiles } = useCreationStore()
     const [inputMessage, setInputMessage] = useState('')
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
@@ -210,25 +210,13 @@ export function AiChatTab({ sendMessage, handleConfirmAvatar, handleStartGenerat
                 </Button>
               </div>
             </div>
-          ) : creationStep === CreationStep.AVATAR ? (
-              <>
-                {selectedAvatar ? (
-                  <Button className="w-full" onClick={handleConfirmAvatar}>
-                    <Check />{t('next-step')}
-                  </Button>
-                ) : (
-                  <Button className="w-full" onClick={handleConfirmAvatar}>
-                    <Check />{t('no-avatar')}
-                  </Button>
-                )}
-              </>
           ) : creationStep === CreationStep.VOICE ? (
               <>
                 <Tooltip delayDuration={0}>
                   <TooltipTrigger asChild>
                     <div>
-                      <Button className="w-full" disabled={!selectedVoice} onClick={handleStartGeneration}>
-                        <Check />{t('start-generation')}
+                      <Button className="w-full" disabled={!selectedVoice} onClick={handleConfirmVoice}>
+                        <Check />{t('next-step')}
                       </Button>
                     </div>
                   </TooltipTrigger>
@@ -239,6 +227,35 @@ export function AiChatTab({ sendMessage, handleConfirmAvatar, handleStartGenerat
                   )}
                 </Tooltip>
               </>
+          ) : creationStep === CreationStep.AVATAR ? (
+            <>
+              {selectedAvatar ? (
+                <Button className="w-full" onClick={handleConfirmAvatar}>
+                  <Check />{files.some(file => file.type === 'media') ? t('next-step') : t('start-generation')}
+                </Button>
+              ) : (
+                <Button className="w-full" onClick={handleConfirmAvatar}>
+                  <Check />{files.some(file => file.type === 'media') ? t('no-avatar') : t('no-avatar-generation')}
+                </Button>
+              )}
+            </>
+          ) : creationStep === CreationStep.MEDIA ? (
+            <>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <div>
+                    <Button className="w-full" disabled={!selectedVoice} onClick={handleConfirmMedia}>
+                      <Check />{t('start-generation')}
+                    </Button>
+                  </div>
+                </TooltipTrigger>
+                {!selectedVoice && (
+                  <TooltipContent>
+                      {t('select-voice-first')}
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </>
           ) : creationStep === CreationStep.GENERATION ? (
             <>
               

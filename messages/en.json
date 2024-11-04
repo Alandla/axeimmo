@@ -37,6 +37,7 @@
       "next-step": "Go to the next step",
       "select-voice-first": "Select a voice before continuing",
       "no-avatar": "I don't need an avatar, next step",
+      "no-avatar-generation": "I don't need an avatar, start generation",
       "start-generation": "Start generation",
       "select-to-start": {
         "title": "Before starting, you must ",
