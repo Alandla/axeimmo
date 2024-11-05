@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { CreationStep } from '../types/enums'
 import { Voice } from '../types/voice'
-import { UploadedFile } from '../components/ai-chat-tab'
-import { Avatar, AvatarLook } from '../types/avatar'
+import { AvatarLook } from '../types/avatar'
+import { UploadedFile } from '../types/files'
 
 type CreationStore = {
   script: string

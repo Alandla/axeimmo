@@ -2,6 +2,7 @@ import { File, Info, MicVocal, User, X, AudioLines } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
 
 interface FilePreviewProps {
   file: File;
@@ -12,6 +13,16 @@ interface FilePreviewProps {
 
 export function FilePreview({ file, type, onTypeChange, onRemove }: FilePreviewProps) {
   const t = useTranslations("filePreview.tooltip");
+  const [mediaUrl, setMediaUrl] = useState<string>("");
+
+  useEffect(() => {
+    const url = URL.createObjectURL(file);
+    setMediaUrl(url);
+    
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [file]);
 
   const getAvailableTypes = () => {
     const fileType = file.type.split('/')[0];
@@ -35,9 +46,9 @@ export function FilePreview({ file, type, onTypeChange, onRemove }: FilePreviewP
       case 'audio':
         return <AudioLines className="w-8 h-8 text-gray-500" />;
       case 'image':
-        return <img src={URL.createObjectURL(file)} alt={file.name} className="w-full h-full object-cover rounded" />;
+        return <img src={mediaUrl} alt={file.name} className="w-full h-full object-cover rounded" />;
       case 'video':
-        return <video src={URL.createObjectURL(file)} className="w-full h-full object-cover rounded" />;
+        return <video src={mediaUrl} className="w-full h-full object-cover rounded" />;
       default:
         return <File className="w-8 h-8 text-gray-500" />;
     }

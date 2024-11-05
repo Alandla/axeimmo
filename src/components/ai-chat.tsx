@@ -15,6 +15,7 @@ import { motion } from 'framer-motion'
 import { VoicesGridComponent } from './voices-grid'
 import { useCreationStore } from '../store/creationStore'
 import { AvatarGridComponent } from './avatar-grid'
+import { MediaLabel } from './media-label'
 
 enum MessageType {
   TEXT = 'text',
@@ -346,9 +347,7 @@ export function AiChat() {
                     <VoicesGridComponent />
                   )}
                   {message.type === MessageType.MEDIA && (
-                    <div>
-                      <p>Media</p>
-                    </div>
+                    <MediaLabel />
                   )}
                   {message.type === MessageType.GENERATION && (
                     <div>

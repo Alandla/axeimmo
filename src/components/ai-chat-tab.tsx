@@ -8,15 +8,11 @@ import { useTranslations } from "next-intl";
 import { useCreationStore } from "../store/creationStore";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { FilePreview } from "./file-preview";
+import { UploadedFile } from "../types/files";
 
 interface DurationOption {
   name: string;
   value: number;
-}
-
-export interface UploadedFile {
-  file: File;
-  type: "voice" | "avatar" | "media";
 }
 
 export function AiChatTab({ sendMessage, handleConfirmAvatar, handleConfirmVoice, handleConfirmMedia }: { sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleConfirmVoice: () => void, handleConfirmMedia: () => void }) {
@@ -47,7 +43,8 @@ export function AiChatTab({ sendMessage, handleConfirmAvatar, handleConfirmVoice
         }
         return {
           file,
-          type
+          type,
+          label: ''
         };
       });
       setFiles([...files, ...updatedFiles]);
@@ -244,14 +241,18 @@ export function AiChatTab({ sendMessage, handleConfirmAvatar, handleConfirmVoice
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
                   <div>
-                    <Button className="w-full" disabled={!selectedVoice} onClick={handleConfirmMedia}>
+                    <Button 
+                      className="w-full" 
+                      disabled={files.some(file => !file.label)} 
+                      onClick={handleConfirmMedia}
+                    >
                       <Check />{t('start-generation')}
                     </Button>
                   </div>
                 </TooltipTrigger>
-                {!selectedVoice && (
+                {files.some(file => !file.label) && (
                   <TooltipContent>
-                      {t('select-voice-first')}
+                    {t('label-all-files')}
                   </TooltipContent>
                 )}
               </Tooltip>
