@@ -22,7 +22,7 @@ import { useSession } from "next-auth/react"
 import { useTranslations } from "next-intl"
 import { NavButtonVideo } from "./nav-button-video"
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
-import { getSpaces } from "../service/user"
+import { getSpaces } from "../service/user.service"
 import { SpaceSwitcher } from "./space-switcher"
 import { SimpleSpace } from "../types/space"
 

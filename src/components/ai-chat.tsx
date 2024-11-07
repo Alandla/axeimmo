@@ -16,6 +16,9 @@ import { VoicesGridComponent } from './voices-grid'
 import { useCreationStore } from '../store/creationStore'
 import { AvatarGridComponent } from './avatar-grid'
 import { MediaLabel } from './media-label'
+import { Steps, StepState } from '../types/step'
+import { GenerationProgress } from './generation-progress'
+import { startGeneration } from '../service/generation.service'
 
 enum MessageType {
   TEXT = 'text',
@@ -35,7 +38,7 @@ interface Message {
 }
 
 export function AiChat() {
-  const { creationStep, setCreationStep, script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files } = useCreationStore()
+  const { creationStep, setCreationStep, script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files, addStep } = useCreationStore()
   const [messages, setMessages] = useState<Message[]>([])
   const { data: session } = useSession()
   const t = useTranslations('ai');
@@ -44,7 +47,9 @@ export function AiChat() {
   const handleSendMessage = (message: string, duration: number) => {
     if (creationStep === CreationStep.START) {
       if (files.length !== 0) {
+        addStep({ id: 0, name: Steps.MEDIA_UPLOAD, state: StepState.PENDING, progress: 0 })
         if (files.some(file => file.type === 'voice')) {
+          addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.AVATAR)
           addMessageAi(
             'Tu m\'as envoyé un fichier audio, je vais l\'utiliser pour la vidéo. Maintenant tu peux choisir un avatar pour incarner ta vidéo, ce n\'est pas obligatoire et tu peux passer à l\'étape suivante si tu n\'en as pas besoin.',
@@ -178,6 +183,8 @@ export function AiChat() {
   }
 
   const handleConfirmVoice = () => {
+    addStep({ id: 2, name: Steps.VOICE_GENERATION, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.AVATAR);
     addMessageUser(`Je choisis la voix de ${selectedVoice?.name}, passons à l\'étape suivante`)
     addMessageAi(
@@ -187,27 +194,34 @@ export function AiChat() {
   }
 
   const handleConfirmAvatar = () => {
+    if (selectedAvatar) {
+      addStep({ id: 4, name: Steps.AVATAR_GENERATION, state: StepState.PENDING, progress: 0 })
+    }
     if (files.some(file => file.type === 'media')) {
       setCreationStep(CreationStep.MEDIA)
       addMessageUser(selectedAvatar ? `Je choisis l'avatar de ${selectedAvatar.name}, nous pouvons passer à l'étape suivante.` : 'Je n\'ai pas besoin d\'avatar, nous pouvons passer à l\'étape suivante.')
       addMessageAi(
         'Tu m\'as donné des fichiers medias que je vais intégrer directement dans le montage de la vidéo, pour ça je vais avoir besoin de ton aide, est-ce que tu pourrais me décrire les fichiers pour que je puisse facilement les placer aux bons moments dans ta vidéo ?',
         MessageType.MEDIA
-        );
+      );
     } else {
+      addStep({ id: 5, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
       setCreationStep(CreationStep.GENERATION)
       addMessageUser(selectedAvatar ? `Je choisis l'avatar de ${selectedAvatar.name}, nous pouvons lancer la génération de ma vidéo.` : 'Je n\'ai pas besoin d\'avatar, nous pouvons lancer la génération de ma vidéo.')
       addMessageAi(
         'Voici l\'avancer de la génération de la vidéo.',
         MessageType.GENERATION
       );
+      startGeneration()
     }
   }
 
   const handleConfirmMedia = () => {
+    addStep({ id: 5, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.GENERATION)
     addMessageUser(`Voici une description des fichiers, nous pouvons lancer la génération de la vidéo.`)
     addMessageAi('Voici l\'avancée de la génération de la vidéo.', MessageType.GENERATION)
+    startGeneration()
   }
 
   const addMessageUser = (userMessage: string) => {
@@ -350,9 +364,7 @@ export function AiChat() {
                     <MediaLabel />
                   )}
                   {message.type === MessageType.GENERATION && (
-                    <div>
-                      <p>Generation</p>
-                    </div>
+                    <GenerationProgress />
                   )}
                 </div>
                 {message.sender === 'user' && (

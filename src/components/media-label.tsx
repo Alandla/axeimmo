@@ -22,22 +22,25 @@ export function MediaLabel() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const { files, setFiles } = useCreationStore()
   
-  const [mediaUrls, setMediaUrls] = useState<string[]>([])
-
-  // Créer un ref pour chaque textarea
-  const textareaRefs = useMemo(() => 
-    Array(files.length).fill(null).map(() => React.createRef<HTMLTextAreaElement>()),
-    [files.length]
+  const mediaFiles = useMemo(() => 
+    files.filter(file => file.type === "media"),
+    [files]
   )
 
-  // Créer un tableau d'identifiants uniques pour les fichiers
+  const [mediaUrls, setMediaUrls] = useState<string[]>([])
+
+  const textareaRefs = useMemo(() => 
+    Array(mediaFiles.length).fill(null).map(() => React.createRef<HTMLTextAreaElement>()),
+    [mediaFiles.length]
+  )
+
   const fileIds = useMemo(() => 
-    files.map(file => file.file.name + file.file.size), 
-    [files.map(f => f.file.name + f.file.size).join(',')]
+    mediaFiles.map(file => file.file.name + file.file.size), 
+    [mediaFiles.map(f => f.file.name + f.file.size).join(',')]
   )
 
   useEffect(() => {
-    const urls = files.map(file => URL.createObjectURL(file.file))
+    const urls = mediaFiles.map(file => URL.createObjectURL(file.file))
     setMediaUrls(urls)
 
     return () => {
@@ -46,7 +49,7 @@ export function MediaLabel() {
   }, [fileIds])
 
   const handleNext = () => {
-    if (currentIndex + 2 < files.length) {
+    if (currentIndex + 2 < mediaFiles.length) {
       setCurrentIndex(prev => prev + 1)
     }
   }
@@ -58,23 +61,24 @@ export function MediaLabel() {
   }
 
   const handleLabelChange = (index: number, label: string) => {
-    const updatedFiles = files.map((file, idx) => {
-      if (idx === index) {
-        return { ...file, label }
+    const updatedFiles = files.map(file => {
+      const mediaFileAtIndex = mediaFiles[index];
+      if (file === mediaFileAtIndex) {
+        return { ...file, label };
       }
-      return file
-    })
-    setFiles(updatedFiles)
+      return file;
+    });
+    setFiles(updatedFiles);
   }
 
   const handleTabPress = () => {
-    if (currentIndex + 1 < files.length) {
+    if (currentIndex + 1 < mediaFiles.length) {
       handleNext()
       textareaRefs[currentIndex + 1]?.current?.focus()
     }
   }
 
-  if (files.length === 0) {
+  if (mediaFiles.length === 0) {
     return (
       <div className="text-center p-4">
         Aucun fichier média n'a été téléchargé
@@ -99,7 +103,7 @@ export function MediaLabel() {
           className="flex gap-4 transition-transform duration-300"
           style={{ transform: `translateX(-${currentIndex * 53}%)` }}
         >
-          {files.map((file, idx) => (
+          {mediaFiles.map((file, idx) => (
             <div key={idx} className="w-1/2 flex-shrink-0">
               <MediaLabelCard
                 mediaUrl={mediaUrls[idx]}
@@ -127,8 +131,8 @@ export function MediaLabel() {
           <PaginationItem>
             <PaginationNext 
               onClick={handleNext}
-              isActive={currentIndex + 2 < files.length}
-              className={`${currentIndex + 2 < files.length ? 'cursor-pointer' : 'opacity-50'}`}
+              isActive={currentIndex + 2 < mediaFiles.length}
+              className={`${currentIndex + 2 < mediaFiles.length ? 'cursor-pointer' : 'opacity-50'}`}
             />
           </PaginationItem>
         </PaginationContent>

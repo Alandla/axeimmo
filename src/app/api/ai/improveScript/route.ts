@@ -1,7 +1,7 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { StreamData, streamText } from "ai";
 import { auth } from '@/src/lib/auth';
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const anthropic = createAnthropic({
     apiKey: process.env.ANTHROPIC_API_KEY
@@ -9,7 +9,7 @@ const anthropic = createAnthropic({
 
 export const maxDuration = 30;
 
-export async function POST(req) {
+export async function POST(req: NextRequest) {
     const session = await auth();
 
     if (!session || !session.user || !session.user.id) {
@@ -22,7 +22,7 @@ export async function POST(req) {
 
     const { prompt, messagesList } = params;
 
-    const messages = messagesList.map(message => ({
+    const messages = messagesList.map((message: any) => ({
         role: message.sender === 'ai' ? 'assistant' : 'user',
         content: message.prompt
     }));

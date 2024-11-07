@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { useCreationStore } from "../store/creationStore";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { FilePreview } from "./file-preview";
-import { UploadedFile } from "../types/files";
+import { FileToUpload } from "../types/files";
 
 interface DurationOption {
   name: string;
@@ -33,7 +33,7 @@ export function AiChatTab({ sendMessage, handleConfirmAvatar, handleConfirmVoice
     }
 
     const handleFileUpload = (newFiles: File[]) => {
-      const updatedFiles: UploadedFile[] = newFiles.map(file => {
+      const updatedFiles: FileToUpload[] = newFiles.map(file => {
         let type: "voice" | "avatar" | "media" = "media";
         if (file.type.startsWith('audio/')) {
           type = "voice";

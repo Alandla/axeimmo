@@ -11,6 +11,8 @@
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.51",
     "@auth/mongodb-adapter": "^3.7.0",
+    "@aws-sdk/client-s3": "^3.686.0",
+    "@aws-sdk/s3-request-presigner": "^3.686.0",
     "@postlight/parser": "^2.2.3",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-collapsible": "^1.1.1",
@@ -39,6 +41,7 @@
     "react-dom": "^18",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.0.2",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
