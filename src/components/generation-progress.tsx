@@ -1,11 +1,30 @@
 'use client'
 
 import { useCreationStore } from '../store/creationStore'
-import { StepState } from '../types/step'
-import { Check, Clock, Loader2 } from 'lucide-react'
+import { Steps, StepState } from '../types/step'
+import { Check, Clock, Loader2, Upload, Mic, FileText, User, Search } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export function GenerationProgress() {
   const { steps } = useCreationStore()
+  const t = useTranslations('generation')
+
+  const getPendingIcon = (stepName: Steps) => {
+    switch (stepName) {
+      case Steps.MEDIA_UPLOAD:
+        return <Upload className="h-3.5 w-3.5 text-gray-500" />;
+      case Steps.VOICE_GENERATION:
+        return <Mic className="h-3.5 w-3.5 text-gray-500" />;
+      case Steps.TRANSCRIPTION:
+        return <FileText className="h-3.5 w-3.5 text-gray-500" />;
+      case Steps.AVATAR_GENERATION:
+        return <User className="h-3.5 w-3.5 text-gray-500" />;
+      case Steps.SEARCH_MEDIA:
+        return <Search className="h-3.5 w-3.5 text-gray-500" />;
+      default:
+        return <Clock className="h-3.5 w-3.5 text-gray-500" />;
+    }
+  };
 
   return (
     <ul className="space-y-4 mt-4">
@@ -25,11 +44,11 @@ export function GenerationProgress() {
             ) : step.state === StepState.IN_PROGRESS ? (
               <Loader2 className="h-3.5 w-3.5 text-white animate-spin" />
             ) : (
-              <Clock className="h-3.5 w-3.5 text-gray-500" />
+              getPendingIcon(step.name)
             )}
           </div>
           <div className="flex-grow">
-            <p className="font-medium text-sm">{step.name}</p>
+            <p className="font-medium text-sm">{t(step.name)}</p>
             <div className="w-full bg-gray-200 rounded-full h-1.5 mt-0.5">
               <div
                 className={`h-1.5 rounded-full transition-all duration-300 ease-in-out ${

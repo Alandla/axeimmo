@@ -124,6 +124,21 @@
         "female": "Féminin"
       }
     },
+    "media": {
+      "no_media_uploaded": "Aucun fichier média n'a été téléchargé",
+      "describe_placeholder": "Décrivez ce media...",
+      "alert": {
+        "title": "Conseil",
+        "description": "Pour un meilleur positionnement, utilisez des mots-clés qui apparaissent dans votre script."
+      }
+    },
+    "generation": {
+      "MEDIA_UPLOAD": "Upload des fichiers",
+      "VOICE_GENERATION": "Génération de la voix",
+      "TRANSCRIPTION": "Transcription",
+      "AVATAR_GENERATION": "Génération de l'avatar",
+      "SEARCH_MEDIA": "Recherche des médias"
+    },
     "space": {
       "privateSpaceName": "Mon espace privé",
       "privateSpaceNameWithUserName": " espace privé"

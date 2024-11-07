@@ -4,6 +4,7 @@ import React from 'react'
 import { Card, CardContent } from "./ui/card"
 import { Textarea } from "./ui/textarea"
 import { Image, Video } from "lucide-react"
+import { useTranslations } from 'next-intl'
 
 interface MediaLabelCardProps {
   mediaUrl: string
@@ -24,6 +25,8 @@ export function MediaLabelCard({
   onTabPress,
   textareaRef 
 }: MediaLabelCardProps) {
+  const t = useTranslations('media')
+
   return (
     <Card className="flex flex-col relative">
       <CardContent className="flex flex-col justify-between p-4 h-full">
@@ -44,7 +47,7 @@ export function MediaLabelCard({
         </div>
         <Textarea
           ref={textareaRef}
-          placeholder="Décrivez ce média..."
+          placeholder={t('describe_placeholder')}
           className="min-h-[100px] resize-none"
           value={label}
           onChange={(e) => onLabelChange(e.target.value)}

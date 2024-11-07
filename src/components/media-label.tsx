@@ -17,10 +17,12 @@ import {
   AlertTitle,
 } from "@/src/components/ui/alert"
 import { InfoIcon } from "lucide-react"
+import { useTranslations } from 'next-intl'
 
 export function MediaLabel() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const { files, setFiles } = useCreationStore()
+  const t = useTranslations('media')
   
   const mediaFiles = useMemo(() => 
     files.filter(file => file.type === "media"),
@@ -81,7 +83,7 @@ export function MediaLabel() {
   if (mediaFiles.length === 0) {
     return (
       <div className="text-center p-4">
-        Aucun fichier média n'a été téléchargé
+        {t('no_media_uploaded')}
       </div>
     )
   }
@@ -91,10 +93,10 @@ export function MediaLabel() {
       <Alert>
         <InfoIcon className="h-4 w-4" />
         <AlertTitle className="text-base font-semibold">
-          Conseil
+          {t('alert.title')}
         </AlertTitle>
         <AlertDescription>
-          Pour un meilleur positionnement, utilisez des mots-clés qui apparaissent dans votre script.
+          {t('alert.description')}
         </AlertDescription>
       </Alert>
 
