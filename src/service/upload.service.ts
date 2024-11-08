@@ -1,7 +1,7 @@
 import { basicApiCall } from "@/src/lib/api";
 import { FileToUpload, UploadedFile } from "../types/files";
 
-export const uploadFiles = async (files: FileToUpload[], updateStepProgress: (stepId: number, progress: number) => void) => {
+export const uploadFiles = async (files: FileToUpload[], updateStepProgress: (stepName: string, progress: number) => void) => {
     let uploadedFiles: UploadedFile[] = []
     try {
         let completedFiles = 0
@@ -13,7 +13,7 @@ export const uploadFiles = async (files: FileToUpload[], updateStepProgress: (st
             .then(url => {
                 completedFiles++
                 const totalProgress = Math.round((completedFiles / totalFiles) * 100)
-                updateStepProgress(0, totalProgress)
+                updateStepProgress("MEDIA_UPLOAD", totalProgress)
 
                 const type = fileToUpload.file.type.startsWith('image/') ? "image" : fileToUpload.file.type.startsWith('video/') ? "video" : "audio"
 
@@ -33,7 +33,7 @@ export const uploadFiles = async (files: FileToUpload[], updateStepProgress: (st
 
     } catch (error) {
         console.error('Erreur lors de l\'upload:', error)
-        updateStepProgress(0, 0)
+        updateStepProgress("MEDIA_UPLOAD", 0)
     }
 
     return uploadedFiles

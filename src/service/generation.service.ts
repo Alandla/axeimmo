@@ -1,18 +1,17 @@
+import { auth, runs } from '@trigger.dev/sdk/v3'
+import { basicApiCall } from '../lib/api'
 import { useCreationStore } from '../store/creationStore'
 import { UploadedFile } from '../types/files'
-import { StepState } from '../types/step'
-import { getMediaUrlFromFileByPresignedUrl, uploadFiles } from './upload.service'
-
-// On récupère directement le store sans le hook
-const creationStore = useCreationStore.getState()
+import { Steps, StepState } from '../types/step'
+import { uploadFiles } from './upload.service'
 
 export const startGeneration = async () => {
-  const { files, steps, setSteps } = useCreationStore.getState()
+  const { files, script, selectedVoice, selectedAvatar, setSteps } = useCreationStore.getState()
   
-  // Exemple de mise à jour d'un step
-  const updateStepProgress = (stepId: number, progress: number) => {
-    const updatedSteps = steps.map(step => 
-      step.id === stepId 
+  const updateStepProgress = (stepName: string, progress: number) => {
+    const currentSteps = useCreationStore.getState().steps
+    const updatedSteps = currentSteps.map(step => 
+      step.name === stepName 
         ? { ...step, progress, state: progress === 100 ? StepState.COMPLETED : StepState.IN_PROGRESS }
         : step
     )
@@ -21,8 +20,30 @@ export const startGeneration = async () => {
 
   let uploadedFiles: UploadedFile[] = []
   if (files.length > 0) {
-    updateStepProgress(0, 0)
+    updateStepProgress("MEDIA_UPLOAD", 0)
     uploadedFiles = await uploadFiles(files, updateStepProgress)
+  }
+
+  const options = {
+    files: uploadedFiles,
+    script: script,
+    voice: selectedVoice,
+    avatar: selectedAvatar
+  }
+
+  //Start generation task
+  const { runId, publicAccessToken } = await basicApiCall("/trigger/startGeneration", { options }) as { runId: string, publicAccessToken: string }
+
+  //Access to the generation task
+  auth.configure({
+    accessToken: publicAccessToken,
+  });
+
+  //Subscribe to the generation task
+  for await (const run of runs.subscribeToRun(runId)) {
+    console.log(run)
+    console.log(run.metadata);
+    updateStepProgress(run.metadata?.name as Steps, run.metadata?.progress as number)
   }
 
   // Continuer la génération...
