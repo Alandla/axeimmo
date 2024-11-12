@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "bullied child crying",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "young boy suffering",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "child",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "South Africa map 1971",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "African country landscape",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "Africa",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "sad child portrait",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "troubled childhood",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "childhood",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "school bullying scene",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "bullied student",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "school",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "child reading computer book",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "young boy technology",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "book",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "child creating video game",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "young programmer",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "game",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "teenage immigrant canada",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "young traveler",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "travel",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "young man multiple jobs",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "working student",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "work",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "keywords": [
+      {
+        "search": "web",
+        "keyword": "Zip2 startup launch",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "tech startup founder",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "business",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "business sale contract",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "money transaction",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "money",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "keywords": [
+      {
+        "search": "web",
+        "keyword": "X.com PayPal founding",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "online payment startup",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "internet",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "keywords": [
+      {
+        "search": "web",
+        "keyword": "eBay acquisition contract",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "tech company sale",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "business",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "entrepreneur investing money",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "business investment",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "money",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "ambitious business project",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "innovative startup",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "business",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "keywords": [
+      {
+        "search": "web",
+        "keyword": "Tesla electric car factory",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "automotive innovation",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "car",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "keywords": [
+      {
+        "search": "web",
+        "keyword": "SpaceX rocket launch",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "space exploration",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "space",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "entrepreneur overcoming challenges",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "business resilience",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "success",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "keywords": [
+      {
+        "search": "web",
+        "keyword": "Tesla electric vehicle lineup",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "electric car market",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "car",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "keywords": [
+      {
+        "search": "web",
+        "keyword": "SpaceX successful mission",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "aerospace innovation",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "rocket",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "aerospace industry competition",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "technology breakthrough",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "technology",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "keywords": [
+      {
+        "search": "web",
+        "keyword": "Twitter acquisition 2022",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "social media purchase",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "internet",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "massive business transaction",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "corporate acquisition",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "money",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "entrepreneur transformation journey",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "business visionary",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "success",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "ambitious entrepreneur motivation",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "business success story",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "success",
+        "precision": "easy"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "social media comment section",
+        "precision": "hard"
+      },
+      {
+        "search": "stock",
+        "keyword": "online discussion",
+        "precision": "normal"
+      },
+      {
+        "search": "stock",
+        "keyword": "internet",
+        "precision": "easy"
+      }
+    ]
+  }
+]

@@ -1,0 +1,1354 @@
+{
+    "metadata": {
+      "audio_duration": 69.32898,
+      "number_of_distinct_channels": 1,
+      "billing_time": 69.32898,
+      "transcription_time": 28.182
+    },
+    "transcription": {
+      "languages": [
+        "fr"
+      ],
+      "utterances": [
+        {
+          "text": "Un enfant harcelé devient l'homme le plus riche du monde.",
+          "language": "fr",
+          "start": 0.08007,
+          "end": 2.78226,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": "Un",
+              "start": 0.08007,
+              "end": 0.20016,
+              "confidence": 0.99
+            },
+            {
+              "word": " enfant",
+              "start": 0.22018,
+              "end": 0.44036,
+              "confidence": 1
+            },
+            {
+              "word": " harcelé",
+              "start": 0.50041,
+              "end": 0.94077,
+              "confidence": 0.83
+            },
+            {
+              "word": " devient",
+              "start": 1.04085,
+              "end": 1.34109,
+              "confidence": 0.98
+            },
+            {
+              "word": " l'homme",
+              "start": 1.44117,
+              "end": 1.70138,
+              "confidence": 0.94
+            },
+            {
+              "word": " le",
+              "start": 1.7214,
+              "end": 1.8415,
+              "confidence": 1
+            },
+            {
+              "word": " plus",
+              "start": 1.86151,
+              "end": 2.00163,
+              "confidence": 0.99
+            },
+            {
+              "word": " riche",
+              "start": 2.06168,
+              "end": 2.24182,
+              "confidence": 0.87
+            },
+            {
+              "word": " du",
+              "start": 2.26184,
+              "end": 2.38194,
+              "confidence": 1
+            },
+            {
+              "word": " monde.",
+              "start": 2.44199,
+              "end": 2.78226,
+              "confidence": 1
+            }
+          ]
+        },
+        {
+          "text": "Né en Afrique du Sud en 1971,",
+          "language": "fr",
+          "start": 2.92238,
+          "end": 6.00488,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Né",
+              "start": 2.92238,
+              "end": 3.04247,
+              "confidence": 0.99
+            },
+            {
+              "word": " en",
+              "start": 3.24264,
+              "end": 3.36274,
+              "confidence": 1
+            },
+            {
+              "word": " Afrique",
+              "start": 3.38275,
+              "end": 3.683,
+              "confidence": 1
+            },
+            {
+              "word": " du",
+              "start": 3.683,
+              "end": 3.80309,
+              "confidence": 1
+            },
+            {
+              "word": " Sud",
+              "start": 3.88316,
+              "end": 4.06331,
+              "confidence": 1
+            },
+            {
+              "word": " en",
+              "start": 4.10334,
+              "end": 4.22344,
+              "confidence": 0.99
+            },
+            {
+              "word": " 1971,",
+              "start": 4.22344,
+              "end": 6.00488,
+              "confidence": 0.03
+            }
+          ]
+        },
+        {
+          "text": "Elon Musk a connu une enfance difficile.",
+          "language": "fr",
+          "start": 5.98487,
+          "end": 8.02653,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Elon",
+              "start": 5.98487,
+              "end": 6.10497,
+              "confidence": 0.02
+            },
+            {
+              "word": " Musk",
+              "start": 6.10497,
+              "end": 6.24508,
+              "confidence": 0.44
+            },
+            {
+              "word": " a",
+              "start": 6.2651,
+              "end": 6.36518,
+              "confidence": 1
+            },
+            {
+              "word": " connu",
+              "start": 6.38519,
+              "end": 6.62539,
+              "confidence": 1
+            },
+            {
+              "word": " une",
+              "start": 6.7655,
+              "end": 6.8856,
+              "confidence": 0.98
+            },
+            {
+              "word": " enfance",
+              "start": 6.94565,
+              "end": 7.34598,
+              "confidence": 0.96
+            },
+            {
+              "word": " difficile.",
+              "start": 7.38601,
+              "end": 8.02653,
+              "confidence": 0.98
+            }
+          ]
+        },
+        {
+          "text": "Victime de harcèlement scolaire,",
+          "language": "fr",
+          "start": 8.18666,
+          "end": 9.74793,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Victime",
+              "start": 8.18666,
+              "end": 8.64703,
+              "confidence": 1
+            },
+            {
+              "word": " de",
+              "start": 8.64703,
+              "end": 8.76713,
+              "confidence": 1
+            },
+            {
+              "word": " harcèlement",
+              "start": 8.78715,
+              "end": 9.22751,
+              "confidence": 0.86
+            },
+            {
+              "word": " scolaire,",
+              "start": 9.26754,
+              "end": 9.74793,
+              "confidence": 0.91
+            }
+          ]
+        },
+        {
+          "text": "il trouve refuge dans les livres et l'informatique.",
+          "language": "fr",
+          "start": 9.88804,
+          "end": 13.31083,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " il",
+              "start": 9.88804,
+              "end": 10.00814,
+              "confidence": 1
+            },
+            {
+              "word": " trouve",
+              "start": 10.06819,
+              "end": 10.4485,
+              "confidence": 1
+            },
+            {
+              "word": " refuge",
+              "start": 10.66868,
+              "end": 11.20912,
+              "confidence": 0.97
+            },
+            {
+              "word": " dans",
+              "start": 11.26917,
+              "end": 11.40928,
+              "confidence": 1
+            },
+            {
+              "word": " les",
+              "start": 11.40928,
+              "end": 11.52938,
+              "confidence": 0.92
+            },
+            {
+              "word": " livres",
+              "start": 11.56941,
+              "end": 11.90969,
+              "confidence": 0.93
+            },
+            {
+              "word": " et",
+              "start": 12.1699,
+              "end": 12.29,
+              "confidence": 0.99
+            },
+            {
+              "word": " l'informatique.",
+              "start": 12.57023,
+              "end": 13.31083,
+              "confidence": 0.94
+            }
+          ]
+        },
+        {
+          "text": "A 12 ans,",
+          "language": "fr",
+          "start": 13.7712,
+          "end": 14.39171,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " A",
+              "start": 13.7712,
+              "end": 13.8913,
+              "confidence": 1
+            },
+            {
+              "word": " 12",
+              "start": 13.93133,
+              "end": 14.1315,
+              "confidence": 0.5
+            },
+            {
+              "word": " ans,",
+              "start": 14.19154,
+              "end": 14.39171,
+              "confidence": 0.82
+            }
+          ]
+        },
+        {
+          "text": "il crée et vend son premier jeu vidéo.",
+          "language": "fr",
+          "start": 14.53182,
+          "end": 16.87373,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " il",
+              "start": 14.53182,
+              "end": 14.65192,
+              "confidence": 1
+            },
+            {
+              "word": " crée",
+              "start": 14.73198,
+              "end": 15.03223,
+              "confidence": 0.93
+            },
+            {
+              "word": " et",
+              "start": 15.17234,
+              "end": 15.29244,
+              "confidence": 0.49
+            },
+            {
+              "word": " vend",
+              "start": 15.31246,
+              "end": 15.53264,
+              "confidence": 0.6
+            },
+            {
+              "word": " son",
+              "start": 15.65273,
+              "end": 15.77283,
+              "confidence": 1
+            },
+            {
+              "word": " premier",
+              "start": 15.83288,
+              "end": 16.19317,
+              "confidence": 0.96
+            },
+            {
+              "word": " jeu",
+              "start": 16.29325,
+              "end": 16.41335,
+              "confidence": 0.89
+            },
+            {
+              "word": " vidéo.",
+              "start": 16.51343,
+              "end": 16.87373,
+              "confidence": 0.99
+            }
+          ]
+        },
+        {
+          "text": "A 17 ans,",
+          "language": "fr",
+          "start": 17.31408,
+          "end": 17.89456,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " A",
+              "start": 17.31408,
+              "end": 17.43418,
+              "confidence": 1
+            },
+            {
+              "word": " 17",
+              "start": 17.4542,
+              "end": 17.73443,
+              "confidence": 0.15
+            },
+            {
+              "word": " ans,",
+              "start": 17.77446,
+              "end": 17.89456,
+              "confidence": 0.98
+            }
+          ]
+        },
+        {
+          "text": "il quitte son pays pour le Canada,",
+          "language": "fr",
+          "start": 17.97462,
+          "end": 19.49586,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " il",
+              "start": 17.97462,
+              "end": 18.09472,
+              "confidence": 1
+            },
+            {
+              "word": " quitte",
+              "start": 18.15477,
+              "end": 18.35493,
+              "confidence": 0.99
+            },
+            {
+              "word": " son",
+              "start": 18.39496,
+              "end": 18.51506,
+              "confidence": 1
+            },
+            {
+              "word": " pays",
+              "start": 18.55509,
+              "end": 18.79529,
+              "confidence": 1
+            },
+            {
+              "word": " pour",
+              "start": 18.83532,
+              "end": 18.95542,
+              "confidence": 0.99
+            },
+            {
+              "word": " le",
+              "start": 18.97544,
+              "end": 19.09553,
+              "confidence": 1
+            },
+            {
+              "word": " Canada,",
+              "start": 19.11555,
+              "end": 19.49586,
+              "confidence": 1
+            }
+          ]
+        },
+        {
+          "text": "dormant chez des cousins et enchaînant les petits boulots.",
+          "language": "fr",
+          "start": 19.73605,
+          "end": 22.3782,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " dormant",
+              "start": 19.73605,
+              "end": 20.17641,
+              "confidence": 0.81
+            },
+            {
+              "word": " chez",
+              "start": 20.23646,
+              "end": 20.37658,
+              "confidence": 0.89
+            },
+            {
+              "word": " des",
+              "start": 20.37658,
+              "end": 20.49667,
+              "confidence": 1
+            },
+            {
+              "word": " cousins",
+              "start": 20.51669,
+              "end": 20.85697,
+              "confidence": 0.94
+            },
+            {
+              "word": " et",
+              "start": 20.99708,
+              "end": 21.11718,
+              "confidence": 0.98
+            },
+            {
+              "word": " enchaînant",
+              "start": 21.15721,
+              "end": 21.53752,
+              "confidence": 0.88
+            },
+            {
+              "word": " les",
+              "start": 21.53752,
+              "end": 21.65762,
+              "confidence": 1
+            },
+            {
+              "word": " petits",
+              "start": 21.69765,
+              "end": 22.01791,
+              "confidence": 0.98
+            },
+            {
+              "word": " boulots.",
+              "start": 22.07796,
+              "end": 22.3782,
+              "confidence": 0.65
+            }
+          ]
+        },
+        {
+          "text": "Après ses études,",
+          "language": "fr",
+          "start": 22.81856,
+          "end": 23.63923,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Après",
+              "start": 22.81856,
+              "end": 23.03874,
+              "confidence": 0.99
+            },
+            {
+              "word": " ses",
+              "start": 23.07877,
+              "end": 23.21889,
+              "confidence": 0.95
+            },
+            {
+              "word": " études,",
+              "start": 23.27894,
+              "end": 23.63923,
+              "confidence": 1
+            }
+          ]
+        },
+        {
+          "text": "il lance Zip2,",
+          "language": "fr",
+          "start": 23.91946,
+          "end": 24.84021,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " il",
+              "start": 23.91946,
+              "end": 24.03955,
+              "confidence": 1
+            },
+            {
+              "word": " lance",
+              "start": 24.0996,
+              "end": 24.43988,
+              "confidence": 0.93
+            },
+            {
+              "word": " Zip2,",
+              "start": 24.66006,
+              "end": 24.84021,
+              "confidence": 0.46
+            }
+          ]
+        },
+        {
+          "text": "sa première entreprise,",
+          "language": "fr",
+          "start": 25.38065,
+          "end": 26.72174,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " sa",
+              "start": 25.38065,
+              "end": 25.50074,
+              "confidence": 1
+            },
+            {
+              "word": " première",
+              "start": 25.54078,
+              "end": 25.96112,
+              "confidence": 1
+            },
+            {
+              "word": " entreprise,",
+              "start": 26.08122,
+              "end": 26.72174,
+              "confidence": 1
+            }
+          ]
+        },
+        {
+          "text": "qu'il revend pour 307 millions de dollars. ...",
+          "language": "fr",
+          "start": 26.76177,
+          "end": 29.20376,
+          "confidence": 0.8414285714285715,
+          "channel": 0,
+          "words": [
+            {
+              "word": " qu'il",
+              "start": 26.76177,
+              "end": 26.9219,
+              "confidence": 0.93
+            },
+            {
+              "word": " revend",
+              "start": 26.98195,
+              "end": 27.26218,
+              "confidence": 0.82
+            },
+            {
+              "word": " pour",
+              "start": 27.30221,
+              "end": 27.42231,
+              "confidence": 0.93
+            },
+            {
+              "word": " 307",
+              "start": 27.48236,
+              "end": 28.06283,
+              "confidence": 0.01
+            },
+            {
+              "word": " millions",
+              "start": 28.20294,
+              "end": 28.60327,
+              "confidence": 0.96
+            },
+            {
+              "word": " de",
+              "start": 28.60327,
+              "end": 28.72336,
+              "confidence": 0.99
+            },
+            {
+              "word": " dollars. ...",
+              "start": 28.74338,
+              "end": 29.20376,
+              "confidence": 0.91
+            }
+          ]
+        },
+        {
+          "text": "Il crée ensuite X.com qui devient Paypal,",
+          "language": "fr",
+          "start": 29.56407,
+          "end": 32.187020000000004,
+          "confidence": 0.93,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Il",
+              "start": 29.56407,
+              "end": 29.6842,
+              "confidence": 1
+            },
+            {
+              "word": " crée",
+              "start": 29.704230000000003,
+              "end": 29.90445,
+              "confidence": 0.96
+            },
+            {
+              "word": " ensuite",
+              "start": 30.02459,
+              "end": 30.40501,
+              "confidence": 1
+            },
+            {
+              "word": " X.com",
+              "start": 30.56519,
+              "end": 31.08578,
+              "confidence": 0.81
+            },
+            {
+              "word": " qui",
+              "start": 31.145850000000003,
+              "end": 31.265980000000003,
+              "confidence": 0.97
+            },
+            {
+              "word": " devient",
+              "start": 31.286,
+              "end": 31.646410000000003,
+              "confidence": 0.93
+            },
+            {
+              "word": " Paypal,",
+              "start": 31.766540000000003,
+              "end": 32.187020000000004,
+              "confidence": 0.71
+            }
+          ]
+        },
+        {
+          "text": "revendu à eBay pour 1,5 milliard.",
+          "language": "fr",
+          "start": 32.3472,
+          "end": 34.749900000000004,
+          "confidence": 0.93,
+          "channel": 0,
+          "words": [
+            {
+              "word": " revendu",
+              "start": 32.3472,
+              "end": 32.66756,
+              "confidence": 1
+            },
+            {
+              "word": " à",
+              "start": 32.687580000000004,
+              "end": 32.80771,
+              "confidence": 0.98
+            },
+            {
+              "word": " eBay",
+              "start": 32.84776,
+              "end": 33.128080000000004,
+              "confidence": 0.5
+            },
+            {
+              "word": " pour",
+              "start": 33.26823,
+              "end": 33.448440000000005,
+              "confidence": 1
+            },
+            {
+              "word": " 1,5",
+              "start": 33.54855,
+              "end": 33.86891,
+              "confidence": 0.41
+            },
+            {
+              "word": " milliard.",
+              "start": 34.249340000000004,
+              "end": 34.749900000000004,
+              "confidence": 0.93
+            }
+          ]
+        },
+        {
+          "text": "Mais Musk ne s'arrête pas là,",
+          "language": "fr",
+          "start": 35.15035,
+          "end": 36.37172,
+          "confidence": 0.93,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Mais",
+              "start": 35.15035,
+              "end": 35.27048,
+              "confidence": 0.97
+            },
+            {
+              "word": " Musk",
+              "start": 35.31053,
+              "end": 35.5508,
+              "confidence": 0.78
+            },
+            {
+              "word": " ne",
+              "start": 35.61087,
+              "end": 35.731,
+              "confidence": 0.98
+            },
+            {
+              "word": " s'arrête",
+              "start": 35.77105,
+              "end": 36.071380000000005,
+              "confidence": 0.95
+            },
+            {
+              "word": " pas",
+              "start": 36.11143,
+              "end": 36.23156,
+              "confidence": 0.95
+            },
+            {
+              "word": " là,",
+              "start": 36.25159,
+              "end": 36.37172,
+              "confidence": 1
+            }
+          ]
+        },
+        {
+          "text": "il investit sa fortune dans des projets ambitieux.",
+          "language": "fr",
+          "start": 36.65204,
+          "end": 39.33505,
+          "confidence": 0.93,
+          "channel": 0,
+          "words": [
+            {
+              "word": " il",
+              "start": 36.65204,
+              "end": 36.77217,
+              "confidence": 1
+            },
+            {
+              "word": " investit",
+              "start": 36.7922,
+              "end": 37.25271,
+              "confidence": 0.9
+            },
+            {
+              "word": " sa",
+              "start": 37.39287,
+              "end": 37.51301,
+              "confidence": 1
+            },
+            {
+              "word": " fortune",
+              "start": 37.57307,
+              "end": 38.01357,
+              "confidence": 0.99
+            },
+            {
+              "word": " dans",
+              "start": 38.05361,
+              "end": 38.17375,
+              "confidence": 0.97
+            },
+            {
+              "word": " des",
+              "start": 38.19377,
+              "end": 38.31391,
+              "confidence": 1
+            },
+            {
+              "word": " projets",
+              "start": 38.33393,
+              "end": 38.65429,
+              "confidence": 0.95
+            },
+            {
+              "word": " ambitieux.",
+              "start": 38.854510000000005,
+              "end": 39.33505,
+              "confidence": 0.96
+            }
+          ]
+        },
+        {
+          "text": "Tesla pour révolutionner l'automobile,",
+          "language": "fr",
+          "start": 39.77555,
+          "end": 41.91796,
+          "confidence": 0.93,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Tesla",
+              "start": 39.77555,
+              "end": 40.11593,
+              "confidence": 0.74
+            },
+            {
+              "word": " pour",
+              "start": 40.31616,
+              "end": 40.47634,
+              "confidence": 0.99
+            },
+            {
+              "word": " révolutionner",
+              "start": 40.57645,
+              "end": 41.23719,
+              "confidence": 1
+            },
+            {
+              "word": " l'automobile,",
+              "start": 41.27724,
+              "end": 41.91796,
+              "confidence": 0.98
+            }
+          ]
+        },
+        {
+          "text": "SpaceX pour conquérir l'espace.",
+          "language": "fr",
+          "start": 42.31841,
+          "end": 44.30064,
+          "confidence": 0.93,
+          "channel": 0,
+          "words": [
+            {
+              "word": " SpaceX",
+              "start": 42.31841,
+              "end": 42.798950000000005,
+              "confidence": 0.92
+            },
+            {
+              "word": " pour",
+              "start": 42.979150000000004,
+              "end": 43.11931,
+              "confidence": 1
+            },
+            {
+              "word": " conquérir",
+              "start": 43.1994,
+              "end": 43.65992,
+              "confidence": 0.97
+            },
+            {
+              "word": " l'espace.",
+              "start": 43.76003,
+              "end": 44.30064,
+              "confidence": 0.99
+            }
+          ]
+        },
+        {
+          "text": "Malgré les échecs et les critiques,",
+          "language": "fr",
+          "start": 44.72111,
+          "end": 46.36296,
+          "confidence": 0.93,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Malgré",
+              "start": 44.72111,
+              "end": 44.9814,
+              "confidence": 1
+            },
+            {
+              "word": " les",
+              "start": 45.041470000000004,
+              "end": 45.16161,
+              "confidence": 1
+            },
+            {
+              "word": " échecs",
+              "start": 45.20165,
+              "end": 45.6021,
+              "confidence": 0.88
+            },
+            {
+              "word": " et",
+              "start": 45.72224,
+              "end": 45.84237,
+              "confidence": 0.76
+            },
+            {
+              "word": " les",
+              "start": 45.84237,
+              "end": 45.94248,
+              "confidence": 0.95
+            },
+            {
+              "word": " critiques,",
+              "start": 45.94248,
+              "end": 46.36296,
+              "confidence": 0.94
+            }
+          ]
+        },
+        {
+          "text": "sa persévérance paie.",
+          "language": "fr",
+          "start": 46.66329,
+          "end": 47.924710000000005,
+          "confidence": 0.93,
+          "channel": 0,
+          "words": [
+            {
+              "word": " sa",
+              "start": 46.66329,
+              "end": 46.78343,
+              "confidence": 1
+            },
+            {
+              "word": " persévérance",
+              "start": 46.82347,
+              "end": 47.564310000000006,
+              "confidence": 1
+            },
+            {
+              "word": " paie.",
+              "start": 47.744510000000005,
+              "end": 47.924710000000005,
+              "confidence": 0.56
+            }
+          ]
+        },
+        {
+          "text": "Tesla devient leader des voitures électriques.",
+          "language": "fr",
+          "start": 48.32516,
+          "end": 50.627750000000006,
+          "confidence": 0.93,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Tesla",
+              "start": 48.32516,
+              "end": 48.60548,
+              "confidence": 0.91
+            },
+            {
+              "word": " devient",
+              "start": 48.665549999999996,
+              "end": 48.985910000000004,
+              "confidence": 0.97
+            },
+            {
+              "word": " leader",
+              "start": 49.12606,
+              "end": 49.46645,
+              "confidence": 0.84
+            },
+            {
+              "word": " des",
+              "start": 49.50649,
+              "end": 49.626630000000006,
+              "confidence": 0.95
+            },
+            {
+              "word": " voitures",
+              "start": 49.64665,
+              "end": 50.0471,
+              "confidence": 0.99
+            },
+            {
+              "word": " électriques.",
+              "start": 50.107169999999996,
+              "end": 50.627750000000006,
+              "confidence": 0.99
+            }
+          ]
+        },
+        {
+          "text": "SpaceX réussit là où les géants de l'aérospatiale échouent.",
+          "language": "fr",
+          "start": 50.96805,
+          "end": 55.40998,
+          "confidence": 0.91,
+          "channel": 0,
+          "words": [
+            {
+              "word": " SpaceX",
+              "start": 50.96805,
+              "end": 51.56831,
+              "confidence": 0.95
+            },
+            {
+              "word": " réussit",
+              "start": 51.968489999999996,
+              "end": 52.628769999999996,
+              "confidence": 0.92
+            },
+            {
+              "word": " là",
+              "start": 52.84887,
+              "end": 52.96892,
+              "confidence": 1
+            },
+            {
+              "word": " où",
+              "start": 53.149,
+              "end": 53.26905,
+              "confidence": 0.95
+            },
+            {
+              "word": " les",
+              "start": 53.30907,
+              "end": 53.469139999999996,
+              "confidence": 0.98
+            },
+            {
+              "word": " géants",
+              "start": 53.50915,
+              "end": 53.86931,
+              "confidence": 0.74
+            },
+            {
+              "word": " de",
+              "start": 53.88932,
+              "end": 54.00937,
+              "confidence": 1
+            },
+            {
+              "word": " l'aérospatiale",
+              "start": 54.04939,
+              "end": 54.82972,
+              "confidence": 0.83
+            },
+            {
+              "word": " échouent.",
+              "start": 54.92977,
+              "end": 55.40998,
+              "confidence": 0.67
+            }
+          ]
+        },
+        {
+          "text": "En 2022,",
+          "language": "fr",
+          "start": 55.40998,
+          "end": 57.11071,
+          "confidence": 0.91,
+          "channel": 0,
+          "words": [
+            {
+              "word": " En",
+              "start": 55.40998,
+              "end": 55.44999,
+              "confidence": 0.02
+            },
+            {
+              "word": " 2022,",
+              "start": 55.44999,
+              "end": 57.11071,
+              "confidence": 0.26
+            }
+          ]
+        },
+        {
+          "text": "il rachète Twitter pour 44 milliards de dollars.",
+          "language": "fr",
+          "start": 57.23076,
+          "end": 61.19248,
+          "confidence": 0.91,
+          "channel": 0,
+          "words": [
+            {
+              "word": " il",
+              "start": 57.23076,
+              "end": 57.35082,
+              "confidence": 1
+            },
+            {
+              "word": " rachète",
+              "start": 57.41084,
+              "end": 57.95108,
+              "confidence": 0.97
+            },
+            {
+              "word": " Twitter",
+              "start": 58.13115,
+              "end": 58.59135,
+              "confidence": 0.64
+            },
+            {
+              "word": " pour",
+              "start": 58.67139,
+              "end": 58.79144,
+              "confidence": 0.96
+            },
+            {
+              "word": " 44",
+              "start": 58.89148,
+              "end": 59.59179,
+              "confidence": 0
+            },
+            {
+              "word": " milliards",
+              "start": 59.67182,
+              "end": 60.392129999999995,
+              "confidence": 0.89
+            },
+            {
+              "word": " de",
+              "start": 60.5322,
+              "end": 60.652249999999995,
+              "confidence": 0.99
+            },
+            {
+              "word": " dollars.",
+              "start": 60.71227,
+              "end": 61.19248,
+              "confidence": 0.96
+            }
+          ]
+        },
+        {
+          "text": "De l'enfant solitaire au visionnaire controversé,",
+          "language": "fr",
+          "start": 61.51262,
+          "end": 63.75359,
+          "confidence": 0.91,
+          "channel": 0,
+          "words": [
+            {
+              "word": " De",
+              "start": 61.51262,
+              "end": 61.63267,
+              "confidence": 1
+            },
+            {
+              "word": " l'enfant",
+              "start": 61.65268,
+              "end": 61.9328,
+              "confidence": 0.97
+            },
+            {
+              "word": " solitaire",
+              "start": 61.97282,
+              "end": 62.49304,
+              "confidence": 0.99
+            },
+            {
+              "word": " au",
+              "start": 62.51305,
+              "end": 62.63311,
+              "confidence": 0.99
+            },
+            {
+              "word": " visionnaire",
+              "start": 62.65311,
+              "end": 63.11331,
+              "confidence": 0.97
+            },
+            {
+              "word": " controversé,",
+              "start": 63.15333,
+              "end": 63.75359,
+              "confidence": 1
+            }
+          ]
+        },
+        {
+          "text": "Musk prouve qu'avec de l'ambition et du travail,",
+          "language": "fr",
+          "start": 63.97369,
+          "end": 66.23467,
+          "confidence": 0.91,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Musk",
+              "start": 63.97369,
+              "end": 64.19378,
+              "confidence": 0.75
+            },
+            {
+              "word": " prouve",
+              "start": 64.29382,
+              "end": 64.53393,
+              "confidence": 1
+            },
+            {
+              "word": " qu'avec",
+              "start": 64.57395,
+              "end": 64.87407999999999,
+              "confidence": 0.94
+            },
+            {
+              "word": " de",
+              "start": 64.91409,
+              "end": 65.03415,
+              "confidence": 0.97
+            },
+            {
+              "word": " l'ambition",
+              "start": 65.11418,
+              "end": 65.6144,
+              "confidence": 0.97
+            },
+            {
+              "word": " et",
+              "start": 65.63441,
+              "end": 65.75446,
+              "confidence": 1
+            },
+            {
+              "word": " du",
+              "start": 65.73445,
+              "end": 65.8545,
+              "confidence": 1
+            },
+            {
+              "word": " travail,",
+              "start": 65.87451,
+              "end": 66.23467,
+              "confidence": 0.9
+            }
+          ]
+        },
+        {
+          "text": "tout est possible.",
+          "language": "fr",
+          "start": 66.3147,
+          "end": 67.03501,
+          "confidence": 0.91,
+          "channel": 0,
+          "words": [
+            {
+              "word": " tout",
+              "start": 66.3147,
+              "end": 66.47477,
+              "confidence": 0.98
+            },
+            {
+              "word": " est",
+              "start": 66.49477999999999,
+              "end": 66.61483,
+              "confidence": 0.81
+            },
+            {
+              "word": " possible.",
+              "start": 66.61483,
+              "end": 67.03501,
+              "confidence": 1
+            }
+          ]
+        },
+        {
+          "text": "Partagez votre avis en commentaire.",
+          "language": "fr",
+          "start": 67.43519,
+          "end": 68.99586,
+          "confidence": 0.91,
+          "channel": 0,
+          "words": [
+            {
+              "word": " Partagez",
+              "start": 67.43519,
+              "end": 67.81535,
+              "confidence": 0.99
+            },
+            {
+              "word": " votre",
+              "start": 67.85537,
+              "end": 68.03545,
+              "confidence": 0.99
+            },
+            {
+              "word": " avis",
+              "start": 68.09547,
+              "end": 68.29556,
+              "confidence": 0.76
+            },
+            {
+              "word": " en",
+              "start": 68.29556,
+              "end": 68.3956,
+              "confidence": 0.99
+            },
+            {
+              "word": " commentaire.",
+              "start": 68.41561,
+              "end": 68.99586,
+              "confidence": 0.99
+            }
+          ]
+        }
+      ],
+      "full_transcript": "Un enfant harcelé devient l'homme le plus riche du monde. Né en Afrique du Sud en 1971, Elon Musk a connu une enfance difficile. Victime de harcèlement scolaire, il trouve refuge dans les livres et l'informatique. A 12 ans, il crée et vend son premier jeu vidéo. A 17 ans, il quitte son pays pour le Canada, dormant chez des cousins et enchaînant les petits boulots. Après ses études, il lance Zip2, sa première entreprise, qu'il revend pour 307 millions de dollars. ... Il crée ensuite X.com qui devient Paypal, revendu à eBay pour 1,5 milliard. Mais Musk ne s'arrête pas là, il investit sa fortune dans des projets ambitieux. Tesla pour révolutionner l'automobile, SpaceX pour conquérir l'espace. Malgré les échecs et les critiques, sa persévérance paie. Tesla devient leader des voitures électriques. SpaceX réussit là où les géants de l'aérospatiale échouent. En 2022, il rachète Twitter pour 44 milliards de dollars. De l'enfant solitaire au visionnaire controversé, Musk prouve qu'avec de l'ambition et du travail, tout est possible. Partagez votre avis en commentaire."
+    }
+  }

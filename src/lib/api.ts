@@ -3,11 +3,20 @@ import { signIn } from "next-auth/react";
 import config from "@/config";
 import { useToast } from "@/src/hooks/use-toast";
 
-// use this to interact with our own API (/app/api folder) from the front-end side
-// See https://shipfa.st/docs/tutorials/api-call
-export const basicApiCall = async <T>(url: string, params: any): Promise<T> => {
+// Nouvelle fonction sans toast pour les appels non-React
+export const basicApiCall = async <T>(url: string, params: any, showToast = true): Promise<T> => {
   try {
-    const response = await apiClient.post<T>(url, params);
+    const response = await (showToast ? apiClientWithToast : apiClient).post<T>(`/api${url}`, params);
+    return response.data;
+  } catch (e: any) {
+    console.error(e?.message);
+    throw e;
+  }
+}
+
+export const basicApiGetCall = async <T>(url: string, showToast = true): Promise<T> => {
+  try {
+    const response = await (showToast ? apiClientWithToast : apiClient).get<T>(url);
     return response.data;
   } catch (e: any) {
     console.error(e?.message);
@@ -15,21 +24,13 @@ export const basicApiCall = async <T>(url: string, params: any): Promise<T> => {
   }
 }
 
-export const basicApiGetCall = async <T>(url: string): Promise<T> => {
-  try {
-    const response = await apiClient.get<T>(url);
-    return response.data;
-  } catch (e: any) {
-    console.error(e?.message);
-    throw e; // Relancer l'erreur pour la gérer au niveau supérieur
-  }
-}
-
-const apiClient = axios.create({
+// Client API séparé pour les appels avec toast (contexte React)
+export const apiClientWithToast = axios.create({
   baseURL: "/api",
 });
 
-apiClient.interceptors.response.use(
+// Déplacer l'intercepteur avec toast vers le client spécifique
+apiClientWithToast.interceptors.response.use(
   function (response: any) {
     return response.data;
   },
@@ -75,4 +76,17 @@ apiClient.interceptors.response.use(
   }
 );
 
-export default apiClient;
+// Garder une version simple pour les appels sans contexte React
+const apiClient = axios.create({
+  baseURL: "/api",
+});
+
+apiClient.interceptors.response.use(
+  function (response: any) {
+    return response.data;
+  },
+  function (error: any) {
+    console.error(error?.message || "An error occurred");
+    return Promise.reject(error);
+  }
+);
