@@ -48,9 +48,18 @@ export interface ISequence {
 }
 
 export interface IVideo {
+  id?: string;
   space: string; // MongoDB ObjectId as string
-  costToGenerate: number;
-  video: {
+  costToGenerate?: number;
+  state: {
+    type: 'pending' | 'generating' | 'done' | 'exporting' | 'error';
+    message?: string;
+  };
+  title?: string;
+  style?: string;
+  isNews?: boolean;
+  runId: string;
+  video?: {
     audioUrl: string;
     thumbnail: string;
     metadata: {
@@ -61,6 +70,11 @@ export interface IVideo {
     };
     sequences: ISequence[];
   };
+  history?: {
+    step: 'CREATE' | 'EDIT' | 'EXPORT';
+    user: string;
+    date: Date;
+  }[];
   createdAt?: Date;
   updatedAt?: Date;
 }

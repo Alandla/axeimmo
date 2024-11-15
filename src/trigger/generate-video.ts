@@ -15,7 +15,8 @@ import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
 import { searchMediaForSequence } from "../service/media.service";
 import { IVideo } from "../types/video";
-import { createVideo } from "../dao/videoDao";
+import { createVideo, updateVideo } from "../dao/videoDao";
+import { generateStartData } from "../lib/ai";
 
 interface GenerateVideoPayload {
   space: string
@@ -36,6 +37,35 @@ export const generateVideoTask = task({
     const mediaSource = payload.mediaSource || "PEXELS";
 
     logger.log("Generating video...", { payload, ctx });
+
+    let video : IVideo = {
+      space: payload.space,
+      state: {
+        type: 'generating',
+      },
+      runId: ctx.run.id,
+      history: [{
+        step: 'CREATE',
+        user: payload.userId,
+        date: new Date()
+      }]
+    }
+
+    let newVideo = await createVideo(video)
+
+    const startData = generateStartData(payload.script).then((data) => {
+      logger.info('Start data', data?.details)
+      newVideo = {
+        title: data?.details.title,
+        style: data?.details.style,
+        isNews: data?.details.news,
+        ...newVideo,
+      }
+
+      updateVideo(newVideo)
+
+      return data?.details
+    })
 
     /*
     /
@@ -124,7 +154,7 @@ export const generateVideoTask = task({
     /*
     /
     /   Clean transcription to get 2-3sec sequence separate and adjust words timing
-    /   Get Light JSON to send to MistralAI and reduce cost
+    /   Get Light JSON to send to AI and reduce cost
     /
     */
 
@@ -216,11 +246,21 @@ export const generateVideoTask = task({
     sequences = updatedSequences;
     logger.info('Sequences taille', { size: sequences.length })
     logger.info('Sequences', { sequences })
+
+    await metadata.replace({
+      name: Steps.SEARCH_MEDIA,
+      progress: 100,
+    });
+
+
     logger.log(`[MEDIA] Media search completed`)
 
-    const video : IVideo = {
-      space: payload.space,
+    newVideo = {
+      ...newVideo,
       costToGenerate: cost,
+      state: {
+        type: 'done',
+      },
       video: {
         audioUrl: voiceUrl,
         thumbnail: "",
@@ -231,12 +271,7 @@ export const generateVideoTask = task({
 
     logger.info('Cost infra', { costInCents: ctx.run.costInCents })
 
-    const newVideo = await createVideo(video)
-
-    await metadata.replace({
-      name: Steps.SEARCH_MEDIA,
-      progress: 100,
-    });
+    await updateVideo(newVideo)
 
     return {
       message: "Hello, world!",

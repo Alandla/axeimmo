@@ -1,6 +1,5 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
-import axios from "axios"
 import { calculateAnthropicCost } from "./cost";
 
 const anthropic = createAnthropic({

@@ -8,7 +8,30 @@ const videoSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId, // Référence à un espace
       ref: 'Space',
     },
+    state: {
+      type: {
+        type: String,
+        enum: ['pending', 'generating', 'done', 'exporting', 'error'],
+        default: 'pending',
+      },
+      message: String,
+    },
+    title: String,
+    style: {
+      type: String,
+      enum: ['Informative', 'Entertaining', 'Inspirational', 'Dramatic', 'Humorous', 'Educational', 'Mysterious', 'Relaxing'],
+    },
+    isNews: Boolean,
+    runId: String,
     costToGenerate: Number,
+    history: [{
+      step: String,
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+      date: Date
+    }],
     video: {
       audioUrl: String,
       thumbnail: String,
