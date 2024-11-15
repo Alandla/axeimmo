@@ -1,0 +1,442 @@
+[
+  {
+    "id": 1,
+    "keywords": [
+      {
+        "keyword": "Tycoon portrait",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Successful businessman",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Success",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "keywords": [
+      {
+        "keyword": "South Africa map",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Africa country overview",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Travel destination",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "keywords": [
+      {
+        "keyword": "Childhood struggles",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Difficult childhood",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Upbringing",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "keywords": [
+      {
+        "keyword": "Bullied child at school",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "School bullying",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "School struggles",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "keywords": [
+      {
+        "keyword": "Boy coding",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Teenager with laptop",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Computer enthusiast",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "keywords": [
+      {
+        "keyword": "Teenager creating video game",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Kid coding game",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Game development",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "keywords": [
+      {
+        "keyword": "Plane taking off",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Airport departure",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Travel",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "keywords": [
+      {
+        "keyword": "Man working multiple jobs",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Multitasking worker",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Work ethic",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "keywords": [
+      {
+        "keyword": "Startup founder",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Entrepreneur office",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "New business",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "keywords": [
+      {
+        "keyword": "Big business deal",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Merger and acquisition",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Business success",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "keywords": [
+      {
+        "keyword": "Online payment system",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "E-commerce website",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Digital payment",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "keywords": [
+      {
+        "keyword": "Company sale announcement",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Mergers and acquisitions",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Big business deal",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "keywords": [
+      {
+        "keyword": "Innovative ideas brainstorming",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Entrepreneur vision",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Innovation",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "keywords": [
+      {
+        "keyword": "Tesla car development",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Electric vehicle factory",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Electric car innovation",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "keywords": [
+      {
+        "keyword": "SpaceX rocket launch",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Space exploration",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Space travel",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "keywords": [
+      {
+        "keyword": "Perseverance quote",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Entrepreneurial spirit",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Success story",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "keywords": [
+      {
+        "keyword": "Tesla electric cars factory",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Electric vehicle market leader",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Sustainable transportation",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "keywords": [
+      {
+        "keyword": "SpaceX rocket success",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Innovative space exploration",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Space achievement",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "keywords": [
+      {
+        "keyword": "Twitter logo",
+        "precision": "HARD",
+        "search": "web"
+      },
+      {
+        "keyword": "Social media acquisition",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Big business deal",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "keywords": [
+      {
+        "keyword": "Elon Musk transformed",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "From shy to confident",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Personal growth",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "keywords": [
+      {
+        "keyword": "Visionary entrepreneur",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Successful businessman",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Ambition",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "keywords": [
+      {
+        "keyword": "Comment section",
+        "precision": "HARD",
+        "search": "stock"
+      },
+      {
+        "keyword": "Opinion sharing",
+        "precision": "NORMAL",
+        "search": "stock"
+      },
+      {
+        "keyword": "Discussion",
+        "precision": "EASY",
+        "search": "stock"
+      }
+    ]
+  }
+]

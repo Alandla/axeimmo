@@ -1,0 +1,442 @@
+[
+    {
+        "id": 1,
+        "keywords": [
+            {
+                "keyword": "sad child alone playground",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "bullied student",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "success",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "keywords": [
+            {
+                "keyword": "south african landscape",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "african city",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "africa",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "keywords": [
+            {
+                "keyword": "young elon musk",
+                "precision": "HARD",
+                "search": "web"
+            },
+            {
+                "keyword": "lonely child",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "childhood",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "keywords": [
+            {
+                "keyword": "school bullying scene",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "teenage harassment",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "school",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "keywords": [
+            {
+                "keyword": "child reading computer",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "library study",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "books",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "keywords": [
+            {
+                "keyword": "teen coding computer",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "programming screen",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "computer",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "keywords": [
+            {
+                "keyword": "plane landing canada",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "airport arrival",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "travel",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "keywords": [
+            {
+                "keyword": "student part time job",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "working student",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "work",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "keywords": [
+            {
+                "keyword": "startup office launch",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "business meeting",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "office",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "keywords": [
+            {
+                "keyword": "business deal handshake",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "contract signing",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "agreement",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "keywords": [
+            {
+                "keyword": "digital payment screen",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "online transaction",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "payment",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "keywords": [
+            {
+                "keyword": "paypal interface",
+                "precision": "HARD",
+                "search": "web"
+            },
+            {
+                "keyword": "online payment",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "money",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "keywords": [
+            {
+                "keyword": "investment portfolio screen",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "business planning",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "investment",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "keywords": [
+            {
+                "keyword": "tesla factory assembly",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "electric car",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "automobile",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "keywords": [
+            {
+                "keyword": "rocket launch spacex",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "space rocket",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "space",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "keywords": [
+            {
+                "keyword": "determined businessman desk",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "business challenge",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "determination",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "keywords": [
+            {
+                "keyword": "tesla showroom modern",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "electric vehicles",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "cars",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "keywords": [
+            {
+                "keyword": "spacex rocket landing",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "space mission",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "rocket",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "keywords": [
+            {
+                "keyword": "twitter headquarters",
+                "precision": "HARD",
+                "search": "web"
+            },
+            {
+                "keyword": "social media",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "business",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "keywords": [
+            {
+                "keyword": "elon musk speaking",
+                "precision": "HARD",
+                "search": "web"
+            },
+            {
+                "keyword": "tech presentation",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "speaker",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "keywords": [
+            {
+                "keyword": "visionary leader office",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "business success",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "achievement",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "keywords": [
+            {
+                "keyword": "social media comments",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "online discussion",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "comments",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    }
+]

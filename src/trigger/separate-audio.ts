@@ -6,14 +6,14 @@ import { Readable } from "node:stream";
 import os from "os";
 import path from "path";
 import { uploadToS3Audio } from '../lib/r2';
-import { Sequence } from "../lib/transcription";
+import { ISequence } from "../types/video";
 
 export const ffmpegExtractAudioSegments = task({
   id: "ffmpeg-extract-audio-segments",
-  run: async (payload: { audioUrl: string, sequences: Sequence[] }) => {
+  run: async (payload: { audioUrl: string, sequences: ISequence[] }) => {
     const { audioUrl, sequences } = payload;
     const tempDirectory = os.tmpdir();
-    const results: Sequence[] = [];
+    const results: ISequence[] = [];
 
     for (let i = 0; i < sequences.length; i++) {
       const response = await fetch(audioUrl);

@@ -63,7 +63,7 @@ export const getMediaUrlFromFileByPresignedUrl = async (file: File) => {
         throw new Error("Error during upload")
     }
 
-    const mediaUrl = `${url}${key}`
+    const mediaUrl = `https://media.hoox.video/${key}`
     const mediaId = key.split('.')[0]
 
     return { mediaUrl, mediaId }

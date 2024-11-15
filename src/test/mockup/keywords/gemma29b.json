@@ -1,0 +1,442 @@
+[
+    {
+        "id": 1,
+        "keywords": [
+            {
+                "keyword": "Billionaire portrait",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Successful businessman",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Inspirational",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "keywords": [
+            {
+                "keyword": "South Africa flag",
+                "precision": "HARD",
+                "search": "web"
+            },
+            {
+                "keyword": "Africa landscape",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Birthplace",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "keywords": [
+            {
+                "keyword": "Childhood hardship",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Troubled youth",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Difficult times",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "keywords": [
+            {
+                "keyword": "School bullying",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Schoolyard conflict",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Alone",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "keywords": [
+            {
+                "keyword": "Reading books",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Learning",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Exploration",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "keywords": [
+            {
+                "keyword": "Video game coding",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Early entrepreneur",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Innovation",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "keywords": [
+            {
+                "keyword": "Air travel",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Moving to new country",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Change",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "keywords": [
+            {
+                "keyword": "Part-time job",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Struggling young adult",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Hardworking",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "keywords": [
+            {
+                "keyword": "Startup office",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Young entrepreneur",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Business",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "keywords": [
+            {
+                "keyword": "Successful business deal",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Corporate meeting",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Wealth",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "keywords": [
+            {
+                "keyword": "Online payment",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Internet finance",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Technology",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "keywords": [
+            {
+                "keyword": "Corporate acquisition",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Business deal",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Giant",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "keywords": [
+            {
+                "keyword": "Investment portfolio",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Ambitious entrepreneur",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Future",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "keywords": [
+            {
+                "keyword": "Electric car factory",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Sustainable technology",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Revolution",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "keywords": [
+            {
+                "keyword": "Space rocket launch",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Space exploration",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Ambition",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "keywords": [
+            {
+                "keyword": "Overcoming obstacles",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Resilience",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Determination",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "keywords": [
+            {
+                "keyword": "Electric car showroom",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Successful business",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Leader",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "keywords": [
+            {
+                "keyword": "Spacecraft launch",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Space exploration success",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Triumph",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "keywords": [
+            {
+                "keyword": "Twitter logo",
+                "precision": "HARD",
+                "search": "web"
+            },
+            {
+                "keyword": "Social media platform",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Acquisition",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "keywords": [
+            {
+                "keyword": "Individual success",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "From rags to riches",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Journey",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "keywords": [
+            {
+                "keyword": "Dreaming big",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Achieving goals",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Inspiration",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "keywords": [
+            {
+                "keyword": "Comment section",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "Sharing opinions",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "Discussion",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    }
+]

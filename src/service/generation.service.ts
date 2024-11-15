@@ -32,7 +32,7 @@ export const startGeneration = async () => {
   }
 
   //Start generation task
-  const { runId, publicAccessToken } = await basicApiCall("/trigger/startGeneration", { options }) as { runId: string, publicAccessToken: string }
+  const { runId, publicAccessToken } = await basicApiCall("/trigger/startGeneration", { options, showToast: false }) as { runId: string, publicAccessToken: string }
 
   //Access to the generation task
   auth.configure({
@@ -44,6 +44,9 @@ export const startGeneration = async () => {
     console.log(run)
     console.log(run.metadata);
     updateStepProgress(run.metadata?.name as Steps, run.metadata?.progress as number)
+    if (run.status === "COMPLETED") {
+      break
+    }
   }
 
   // Continuer la génération...

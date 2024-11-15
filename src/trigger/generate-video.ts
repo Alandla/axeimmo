@@ -8,14 +8,18 @@ import { uploadToS3Audio } from "../lib/r2";
 import { createTranscription, getTranscription } from "../lib/gladia";
 
 import transcriptionMock from "../test/mockup/transcriptionComplete.json";
-import keywordsMock from "../test/mockup/keywordsResponse.json";
+import keywordsMock from "../test/mockup/keywords/llama3170b.json";
 import { createLightTranscription, splitIntoSequences } from "../lib/transcription";
 import { ffmpegExtractAudioSegments } from "./separate-audio";
-import { basicApiCall } from "../lib/api";
 import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
+import { searchMediaForSequence } from "../service/media.service";
+import { IVideo } from "../types/video";
+import { createVideo } from "../dao/videoDao";
 
 interface GenerateVideoPayload {
+  space: string
+  userId: string
   files: UploadedFile[]
   script: string
   voice: Voice
@@ -48,7 +52,7 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      voiceUrl = "https://media.hoox.video/903fe842-64d8-4101-ad9d-7960f965536f.mp3"
+      voiceUrl = "https://media.hoox.video/2070cf26-1edb-41aa-9653-bb54940abaf1.mp3"
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
@@ -128,6 +132,11 @@ export const generateVideoTask = task({
     logger.info('Sequences', { sequences })
     logger.info('Light transcription', { lightTranscription })
 
+    await metadata.replace({
+      name: Steps.TRANSCRIPTION,
+      progress: 100
+    })
+
     logger.log(`[TRANSCRIPTION] Transcription done`)
 
     /*
@@ -162,13 +171,9 @@ export const generateVideoTask = task({
 
     if (ctx.environment.type === "DEVELOPMENT") {
       keywords = keywordsMock
-      
-      await metadata.replace({
-        name: Steps.SEARCH_MEDIA,
-        progress: 100
-      })
     } else {
       const resultKeywords = await generateKeywords(lightTranscription)
+      keywords = resultKeywords?.keywords
 
       cost += resultKeywords?.cost || 0
 
@@ -178,7 +183,58 @@ export const generateVideoTask = task({
 
     logger.log(`[KEYWORDS] Keywords done`)
 
+    /*
+    /   Search media for sequences
+    /
+    */
+
     logger.log(`[MEDIA] Search media...`)
+
+    
+
+    const batchSize = 5;
+    const updatedSequences = [];
+    for (let i = 0; i < sequences.length; i += batchSize) {
+      const batch = sequences.slice(i, i + batchSize);
+      const batchPromises = batch.map((sequence, idx) => 
+        searchMediaForSequence(sequence, i + idx + 1, keywords)
+      );
+
+      const completedBatch = await Promise.all(batchPromises);
+      updatedSequences.push(...completedBatch);
+
+      // Update progress
+      const progress = Math.round((updatedSequences.length / sequences.length) * 100);
+      await metadata.replace({
+        name: Steps.SEARCH_MEDIA,
+        progress
+      });
+    }
+
+    sequences = updatedSequences;
+    logger.info('Sequences taille', { size: sequences.length })
+    logger.info('Sequences', { sequences })
+    logger.log(`[MEDIA] Media search completed`)
+
+    const video : IVideo = {
+      space: payload.space,
+      costToGenerate: cost,
+      video: {
+        audioUrl: voiceUrl,
+        thumbnail: "",
+        metadata: transcription.metadata,
+        sequences
+      }
+    }
+
+    logger.info('Cost infra', { costInCents: ctx.run.costInCents })
+
+    const newVideo = await createVideo(video)
+
+    await metadata.replace({
+      name: Steps.SEARCH_MEDIA,
+      progress: 100,
+    });
 
     return {
       message: "Hello, world!",

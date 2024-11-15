@@ -1,0 +1,442 @@
+[
+    {
+        "id": 1,
+        "keywords": [
+            {
+                "keyword": "bullied child success story",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "childhood transformation",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "success",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "keywords": [
+            {
+                "keyword": "south african landscape",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "birth location",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "birthplace",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "keywords": [
+            {
+                "keyword": "childhood struggle",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "difficult childhood",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "childhood",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "keywords": [
+            {
+                "keyword": "school bullying scene",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "bullying victim",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "bullying",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "keywords": [
+            {
+                "keyword": "reading computer learning",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "book computer study",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "learning",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "keywords": [
+            {
+                "keyword": "young programmer coding",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "child game developer",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "gaming",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "keywords": [
+            {
+                "keyword": "plane taking off",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "airport departure",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "travel",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "keywords": [
+            {
+                "keyword": "multiple job working",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "job hunting",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "work",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "keywords": [
+            {
+                "keyword": "startup launch moment",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "business startup",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "business",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "keywords": [
+            {
+                "keyword": "business sale celebration",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "company sale",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "money",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "keywords": [
+            {
+                "keyword": "online payment platform",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "digital finance",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "technology",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "keywords": [
+            {
+                "keyword": "massive business transaction",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "company acquisition",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "sale",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "keywords": [
+            {
+                "keyword": "ambitious entrepreneur investing",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "business investment",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "investment",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "keywords": [
+            {
+                "keyword": "electric vehicle innovation",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "automotive technology",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "technology",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "keywords": [
+            {
+                "keyword": "space exploration rocket",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "space mission",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "space",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "keywords": [
+            {
+                "keyword": "overcoming business challenges",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "business resilience",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "success",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "keywords": [
+            {
+                "keyword": "electric car production",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "electric vehicle market",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "cars",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "keywords": [
+            {
+                "keyword": "space rocket launch",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "aerospace achievement",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "success",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "keywords": [
+            {
+                "keyword": "social media acquisition",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "business purchase",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "purchase",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "keywords": [
+            {
+                "keyword": "entrepreneur transformation",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "personal growth",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "success",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "keywords": [
+            {
+                "keyword": "visionary entrepreneur journey",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "business success story",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "success",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "keywords": [
+            {
+                "keyword": "social media interaction",
+                "precision": "HARD",
+                "search": "stock"
+            },
+            {
+                "keyword": "online engagement",
+                "precision": "NORMAL",
+                "search": "stock"
+            },
+            {
+                "keyword": "comments",
+                "precision": "EASY",
+                "search": "stock"
+            }
+        ]
+    }
+]

@@ -1,3 +1,5 @@
+import { ISequence, IWord } from "../types/video";
+
 interface Word {
   word: string;
   start: number;
@@ -8,19 +10,10 @@ interface Word {
 
 interface Utterance {
   text: string;
-  words: Word[];
+  words: IWord[];
   start: number;
   end: number;
   // ... autres propriétés possibles
-}
-
-export interface Sequence {
-  text: string;
-  words: Word[];
-  start: number;
-  end: number;
-  durationInFrames?: number;
-  audioUrl?: string;
 }
 
 interface LightTranscription {
@@ -30,20 +23,20 @@ interface LightTranscription {
 
 const timeToFrames = (time: number, fps: number = 60): number => Math.round(time * fps);
 
-export function createLightTranscription(sequences: Sequence[]): LightTranscription[] {
+export function createLightTranscription(sequences: ISequence[]): LightTranscription[] {
   return sequences.map((sequence, index) => ({
     id: index + 1,
     text: sequence.text,
   }));
 }
 
-export function splitIntoSequences(utterances: Utterance[], audioDuration: number): Sequence[] {
+export function splitIntoSequences(utterances: Utterance[], audioDuration: number): ISequence[] {
   const allWords = utterances.reduce((acc, utterance) => {
     return [...acc, ...utterance.words];
-  }, [] as Word[]);
+  }, [] as IWord[]);
 
-  const sequences: Sequence[] = [];
-  let currentSequence: Word[] = [];
+  const sequences: ISequence[] = [];
+  let currentSequence: IWord[] = [];
 
   for (let i = 0; i < allWords.length; i++) {
     const word = allWords[i];
@@ -66,7 +59,7 @@ export function splitIntoSequences(utterances: Utterance[], audioDuration: numbe
   return adjustSequenceTimings(mergeShortSequences(sequences), audioDuration);
 }
 
-function createSequence(words: Word[]): Sequence {
+function createSequence(words: IWord[]): ISequence {
   const sequenceWords = words.map(word => ({
     ...word,
     word: word.word.trimStart()
@@ -80,7 +73,7 @@ function createSequence(words: Word[]): Sequence {
   };
 }
 
-function adjustSequenceTimings(sequences: Sequence[], audioDuration: number): Sequence[] {
+function adjustSequenceTimings(sequences: ISequence[], audioDuration: number): ISequence[] {
   return sequences.map((sequence, index, allSequences) => {
     let durationTotal = 0;
     const words = [...sequence.words];
@@ -116,8 +109,8 @@ function adjustSequenceTimings(sequences: Sequence[], audioDuration: number): Se
   });
 }
 
-function mergeShortSequences(sequences: Sequence[]): Sequence[] {
-  const result: Sequence[] = [];
+function mergeShortSequences(sequences: ISequence[]): ISequence[] {
+  const result: ISequence[] = [];
   
   for (let i = 0; i < sequences.length; i++) {
     const current = sequences[i];

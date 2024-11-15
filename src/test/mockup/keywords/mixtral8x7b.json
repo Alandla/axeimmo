@@ -1,0 +1,442 @@
+[
+    {
+      "id": 1,
+      "keywords": [
+        {
+          "keyword": "child being bullied",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "childhood struggle",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "overcoming adversity",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "keywords": [
+        {
+          "keyword": "baby in Africa",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "South African birth",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "African birth",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "keywords": [
+        {
+          "keyword": "struggling child",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "tough childhood",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "child hardship",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "keywords": [
+        {
+          "keyword": "school bullying",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "escaping harassment",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "bullying victim",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "keywords": [
+        {
+          "keyword": "reading books",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "child with computer",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "kid learning tech",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "keywords": [
+        {
+          "keyword": "child coding game",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "creating video game",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "young programmer",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "keywords": [
+        {
+          "keyword": "teenager leaving country",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "youth migration",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "traveling teen",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "keywords": [
+        {
+          "keyword": "couchsurfing",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "teenager working",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "youth jobs",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "keywords": [
+        {
+          "keyword": "launching startup",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "first business",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "entrepreneurial start",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "keywords": [
+        {
+          "keyword": "selling company",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "startup success",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "business profit",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "keywords": [
+        {
+          "keyword": "online payment",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "second company",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "payment innovation",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "keywords": [
+        {
+          "keyword": "buying company eBay",
+          "precision": "HARD",
+          "search": "web"
+        },
+        {
+          "keyword": "company acquisition",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "business sale",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "keywords": [
+        {
+          "keyword": "investing fortune",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "big projects",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "major investments",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "keywords": [
+        {
+          "keyword": "electric car company",
+          "precision": "HARD",
+          "search": "web"
+        },
+        {
+          "keyword": "car innovation",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "future cars",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "keywords": [
+        {
+          "keyword": "space travel company",
+          "precision": "HARD",
+          "search": "web"
+        },
+        {
+          "keyword": "space exploration",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "space innovation",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "keywords": [
+        {
+          "keyword": "perseverance",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "overcoming failures",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "handling criticism",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "keywords": [
+        {
+          "keyword": "leader in electric cars",
+          "precision": "HARD",
+          "search": "web"
+        },
+        {
+          "keyword": "electric vehicle success",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "electric car market",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "keywords": [
+        {
+          "keyword": "spacex success",
+          "precision": "HARD",
+          "search": "web"
+        },
+        {
+          "keyword": "space achievements",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "space innovation",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "keywords": [
+        {
+          "keyword": "buying Twitter",
+          "precision": "HARD",
+          "search": "web"
+        },
+        {
+          "keyword": "billion-dollar deal",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "company purchase",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "keywords": [
+        {
+          "keyword": "lonely child to visionary",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "rags to riches",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "success story",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "keywords": [
+        {
+          "keyword": "ambition and hard work",
+          "precision": "HARD",
+          "search": "stock"
+        },
+        {
+          "keyword": "making the impossible possible",
+          "precision": "NORMAL",
+          "search": "stock"
+        },
+        {
+          "keyword": "self-made success",
+          "precision": "EASY",
+          "search": "stock"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "keywords": [
+        {
+          "keyword": "commenting on video",
+          "precision": "HARD",
+          "search": "web"
+        },
+        {
+          "keyword": "viewer opinions",
+          "precision": "NORMAL",
+          "search": "web"
+        },
+        {
+          "keyword": "user feedback",
+          "precision": "EASY",
+          "search": "web"
+        }
+      ]
+    }
+  ]

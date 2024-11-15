@@ -6,7 +6,7 @@ import { useToast } from "@/src/hooks/use-toast";
 // Nouvelle fonction sans toast pour les appels non-React
 export const basicApiCall = async <T>(url: string, params: any, showToast = true): Promise<T> => {
   try {
-    const response = await (showToast ? apiClientWithToast : apiClient).post<T>(`/api${url}`, params);
+    const response = await (showToast ? apiClientWithToast : apiClient).post<T>(`${url}`, params);
     return response.data;
   } catch (e: any) {
     console.error(e?.message);
