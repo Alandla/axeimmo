@@ -1,15 +1,20 @@
 import { logger } from "@trigger.dev/sdk/v3";
 import { getGoogleImagesMedia } from "../lib/google";
 import { getPexelsVideosMedia } from "../lib/pexels";
+import { getStoryblocksVideosMedia } from "../lib/storyblocks";
 
-export const searchMediaForSequence = async (sequence: any, index: number, keywords: any) => {
+export const searchMediaForSequence = async (sequence: any, index: number, keywords: any, mediaSource: string) => {
     const sequenceKeywords = keywords[index - 1]?.keywords;
     if (!sequenceKeywords) return sequence;
 
     for (const keyword of sequenceKeywords) {
       let media: any[] = [];
       if (keyword.search === 'stock') {
-        media = await getPexelsVideosMedia(keyword.keyword, 5, 1);
+        if (mediaSource === "PEXELS") {
+          media = await getPexelsVideosMedia(keyword.keyword, 5, 1);
+        } else if (mediaSource === "STORYBLOCKS") {
+          media = await getStoryblocksVideosMedia(keyword.keyword, 5, 1);
+        }
       } else if (keyword.search === 'web') {
         media = await getGoogleImagesMedia(keyword.keyword, 5, 1);
       }

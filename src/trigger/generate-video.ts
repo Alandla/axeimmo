@@ -24,6 +24,7 @@ interface GenerateVideoPayload {
   script: string
   voice: Voice
   avatar: AvatarLook
+  mediaSource: string
 }
 
 export const generateVideoTask = task({
@@ -32,6 +33,7 @@ export const generateVideoTask = task({
   run: async (payload: GenerateVideoPayload, { ctx }) => {
 
     let cost = 0
+    const mediaSource = payload.mediaSource || "PEXELS";
 
     logger.log("Generating video...", { payload, ctx });
 
@@ -197,7 +199,7 @@ export const generateVideoTask = task({
     for (let i = 0; i < sequences.length; i += batchSize) {
       const batch = sequences.slice(i, i + batchSize);
       const batchPromises = batch.map((sequence, idx) => 
-        searchMediaForSequence(sequence, i + idx + 1, keywords)
+        searchMediaForSequence(sequence, i + idx + 1, keywords, mediaSource)
       );
 
       const completedBatch = await Promise.all(batchPromises);
