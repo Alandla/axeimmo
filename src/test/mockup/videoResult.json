@@ -1,8 +1,22 @@
 {
   "_id": {
-    "$oid": "67377da0f3ae7a7f2c2c4a69"
+    "$oid": "6737db919cb04c2d0b7816c9"
   },
-  "costToGenerate": 0,
+  "state": {
+    "type": "done"
+  },
+  "runId": "run_5c86pru7n1g222a13tsym",
+  "history": [
+    {
+      "step": "CREATE",
+      "date": {
+        "$date": "2024-11-15T23:38:57.513Z"
+      },
+      "_id": {
+        "$oid": "6737db919cb04c2d0b7816ca"
+      }
+    }
+  ],
   "video": {
     "audioUrl": "https://media.hoox.video/2070cf26-1edb-41aa-9653-bb54940abaf1.mp3",
     "thumbnail": "",
@@ -22,7 +36,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a6b"
+              "$oid": "6737db9f9cb04c2d0b7816d1"
             }
           },
           {
@@ -32,7 +46,7 @@
             "confidence": 1,
             "durationInFrames": 20,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a6c"
+              "$oid": "6737db9f9cb04c2d0b7816d2"
             }
           },
           {
@@ -42,7 +56,7 @@
             "confidence": 0.83,
             "durationInFrames": 35,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a6d"
+              "$oid": "6737db9f9cb04c2d0b7816d3"
             }
           },
           {
@@ -52,7 +66,7 @@
             "confidence": 0.99,
             "durationInFrames": 22,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a6e"
+              "$oid": "6737db9f9cb04c2d0b7816d4"
             }
           },
           {
@@ -62,7 +76,7 @@
             "confidence": 0.92,
             "durationInFrames": 14,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a6f"
+              "$oid": "6737db9f9cb04c2d0b7816d5"
             }
           },
           {
@@ -72,7 +86,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a70"
+              "$oid": "6737db9f9cb04c2d0b7816d6"
             }
           },
           {
@@ -82,7 +96,7 @@
             "confidence": 0.86,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a71"
+              "$oid": "6737db9f9cb04c2d0b7816d7"
             }
           },
           {
@@ -92,7 +106,7 @@
             "confidence": 0.96,
             "durationInFrames": 20,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a72"
+              "$oid": "6737db9f9cb04c2d0b7816d8"
             }
           },
           {
@@ -102,7 +116,7 @@
             "confidence": 1,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a73"
+              "$oid": "6737db9f9cb04c2d0b7816d9"
             }
           },
           {
@@ -112,7 +126,7 @@
             "confidence": 1,
             "durationInFrames": 49,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a74"
+              "$oid": "6737db9f9cb04c2d0b7816da"
             }
           }
         ],
@@ -123,10 +137,10 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Person holding money",
+            "keyword": "Wealthy person",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a75"
+              "$oid": "6737db9f9cb04c2d0b7816db"
             }
           },
           {
@@ -134,7 +148,7 @@
             "keyword": "Rich man",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a76"
+              "$oid": "6737db9f9cb04c2d0b7816dc"
             }
           },
           {
@@ -142,42 +156,36 @@
             "keyword": "Success",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a77"
+              "$oid": "6737db9f9cb04c2d0b7816dd"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 2048,
-          "width": 1080,
+          "height": 1080,
+          "width": 2048,
           "video": {
-            "id": "11128430",
+            "id": "11228508",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 9060680,
-            "width": 1080,
-            "height": 2048,
+            "size": 13165471,
+            "width": 2048,
+            "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/9565186/9565186-hd_1080_2048_25fps.mp4"
+            "link": "https://videos.pexels.com/video-files/10295414/10295414-hd_2048_1080_25fps.mp4"
           },
           "image": {
-            "id": "9565186",
-            "link": "https://images.pexels.com/videos/9565186/pexels-photo-9565186.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 4096
+            "id": "10295414",
+            "link": "https://images.pexels.com/videos/10295414/administration-adopted-adult-art-10295414.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4a78"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
+            "$oid": "6737db9f9cb04c2d0b7816de"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4a6a"
+          "$oid": "6737db9f9cb04c2d0b7816d0"
         }
       },
       {
@@ -189,7 +197,7 @@
             "confidence": 0.55,
             "durationInFrames": 19,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a7a"
+              "$oid": "6737db9f9cb04c2d0b7816e0"
             }
           },
           {
@@ -199,7 +207,7 @@
             "confidence": 0.99,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a7b"
+              "$oid": "6737db9f9cb04c2d0b7816e1"
             }
           },
           {
@@ -209,7 +217,7 @@
             "confidence": 1,
             "durationInFrames": 17,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a7c"
+              "$oid": "6737db9f9cb04c2d0b7816e2"
             }
           },
           {
@@ -219,7 +227,7 @@
             "confidence": 1,
             "durationInFrames": 12,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a7d"
+              "$oid": "6737db9f9cb04c2d0b7816e3"
             }
           },
           {
@@ -229,7 +237,7 @@
             "confidence": 1,
             "durationInFrames": 14,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a7e"
+              "$oid": "6737db9f9cb04c2d0b7816e4"
             }
           },
           {
@@ -239,7 +247,7 @@
             "confidence": 0.99,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a7f"
+              "$oid": "6737db9f9cb04c2d0b7816e5"
             }
           },
           {
@@ -249,7 +257,7 @@
             "confidence": 0.06,
             "durationInFrames": 126,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a80"
+              "$oid": "6737db9f9cb04c2d0b7816e6"
             }
           }
         ],
@@ -260,61 +268,55 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Map of South Africa",
+            "keyword": "African savannah",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a81"
+              "$oid": "6737db9f9cb04c2d0b7816e7"
             }
           },
           {
             "search": "stock",
-            "keyword": "African landscape",
+            "keyword": "South Africa",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a82"
+              "$oid": "6737db9f9cb04c2d0b7816e8"
             }
           },
           {
             "search": "stock",
-            "keyword": "Birthplace",
+            "keyword": "Africa",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a83"
+              "$oid": "6737db9f9cb04c2d0b7816e9"
             }
           }
         ],
         "media": {
           "type": "video",
           "height": 2160,
-          "width": 3840,
+          "width": 4096,
           "video": {
-            "id": "12052410",
-            "quality": null,
+            "id": "4839969",
+            "quality": "hd",
             "file_type": "video/mp4",
-            "size": 51862570,
-            "width": 3840,
+            "size": 32951660,
+            "width": 4096,
             "height": 2160,
             "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/27034714/12052410_3840_2160_30fps.mp4"
+            "link": "https://videos.pexels.com/video-files/11025493/11025493-hd_4096_2160_30fps.mp4"
           },
           "image": {
-            "id": "27034714",
-            "link": "https://images.pexels.com/videos/27034714/3d-3d-earth-africa-asia-27034714.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
+            "id": "11025493",
+            "link": "https://images.pexels.com/videos/11025493/pexels-photo-11025493.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
             "height": 2160
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4a84"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
+            "$oid": "6737db9f9cb04c2d0b7816ea"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4a79"
+          "$oid": "6737db9f9cb04c2d0b7816df"
         }
       },
       {
@@ -326,7 +328,7 @@
             "confidence": 0,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a86"
+              "$oid": "6737db9f9cb04c2d0b7816ec"
             }
           },
           {
@@ -336,7 +338,7 @@
             "confidence": 0.1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a87"
+              "$oid": "6737db9f9cb04c2d0b7816ed"
             }
           },
           {
@@ -346,7 +348,7 @@
             "confidence": 1,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a88"
+              "$oid": "6737db9f9cb04c2d0b7816ee"
             }
           },
           {
@@ -356,7 +358,7 @@
             "confidence": 0.97,
             "durationInFrames": 18,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a89"
+              "$oid": "6737db9f9cb04c2d0b7816ef"
             }
           },
           {
@@ -366,7 +368,7 @@
             "confidence": 0.95,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a8a"
+              "$oid": "6737db9f9cb04c2d0b7816f0"
             }
           },
           {
@@ -376,7 +378,7 @@
             "confidence": 0.87,
             "durationInFrames": 37,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a8b"
+              "$oid": "6737db9f9cb04c2d0b7816f1"
             }
           },
           {
@@ -386,7 +388,7 @@
             "confidence": 0.95,
             "durationInFrames": 74,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a8c"
+              "$oid": "6737db9f9cb04c2d0b7816f2"
             }
           }
         ],
@@ -397,26 +399,26 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Boy looking sad",
+            "keyword": "Childhood home",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a8d"
+              "$oid": "6737db9f9cb04c2d0b7816f3"
             }
           },
           {
             "search": "stock",
-            "keyword": "Childhood difficulties",
+            "keyword": "Difficult childhood",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a8e"
+              "$oid": "6737db9f9cb04c2d0b7816f4"
             }
           },
           {
             "search": "stock",
-            "keyword": "Unhappy child",
+            "keyword": "Childhood",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a8f"
+              "$oid": "6737db9f9cb04c2d0b7816f5"
             }
           }
         ],
@@ -425,33 +427,27 @@
           "height": 1920,
           "width": 1080,
           "video": {
-            "id": "10245868",
+            "id": "9434379",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 5506833,
+            "size": 7102084,
             "width": 1080,
             "height": 1920,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/6952523/6952523-hd_1080_1920_30fps.mp4"
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/4896507/4896507-hd_1080_1920_30fps.mp4"
           },
           "image": {
-            "id": "6952523",
-            "link": "https://images.pexels.com/videos/6952523/accurate-balance-boy-build-6952523.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
+            "id": "4896507",
+            "link": "https://images.pexels.com/videos/4896507/pexels-photo-4896507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 1080,
+            "height": 1920
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4a90"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
+            "$oid": "6737db9f9cb04c2d0b7816f6"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4a85"
+          "$oid": "6737db9f9cb04c2d0b7816eb"
         }
       },
       {
@@ -463,7 +459,7 @@
             "confidence": 1,
             "durationInFrames": 32,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a92"
+              "$oid": "6737db9f9cb04c2d0b7816f8"
             }
           },
           {
@@ -473,7 +469,7 @@
             "confidence": 1,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a93"
+              "$oid": "6737db9f9cb04c2d0b7816f9"
             }
           },
           {
@@ -483,7 +479,7 @@
             "confidence": 0.91,
             "durationInFrames": 34,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a94"
+              "$oid": "6737db9f9cb04c2d0b7816fa"
             }
           },
           {
@@ -493,7 +489,7 @@
             "confidence": 0.99,
             "durationInFrames": 40,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a95"
+              "$oid": "6737db9f9cb04c2d0b7816fb"
             }
           },
           {
@@ -503,7 +499,7 @@
             "confidence": 1,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a96"
+              "$oid": "6737db9f9cb04c2d0b7816fc"
             }
           },
           {
@@ -513,7 +509,7 @@
             "confidence": 0.99,
             "durationInFrames": 35,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a97"
+              "$oid": "6737db9f9cb04c2d0b7816fd"
             }
           },
           {
@@ -523,7 +519,7 @@
             "confidence": 0.94,
             "durationInFrames": 36,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a98"
+              "$oid": "6737db9f9cb04c2d0b7816fe"
             }
           }
         ],
@@ -534,10 +530,10 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Bullied kid",
+            "keyword": "Bullied child",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a99"
+              "$oid": "6737db9f9cb04c2d0b7816ff"
             }
           },
           {
@@ -545,50 +541,44 @@
             "keyword": "School bullying",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a9a"
+              "$oid": "6737db9f9cb04c2d0b781700"
             }
           },
           {
             "search": "stock",
-            "keyword": "Harassment",
+            "keyword": "Bullying",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a9b"
+              "$oid": "6737db9f9cb04c2d0b781701"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "height": 1080,
+          "width": 1920,
           "video": {
-            "id": "10232577",
+            "id": "10814191",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 6823655,
-            "width": 1080,
-            "height": 1920,
-            "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/6935811/6935811-hd_1080_1920_30fps.mp4"
+            "size": 4320945,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/8411069/8411069-hd_1920_1080_25fps.mp4"
           },
           "image": {
-            "id": "6935811",
-            "link": "https://images.pexels.com/videos/6935811/anti-bullying-antibully-asian-kid-bullying-be-kind-6935811.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 1080,
-            "height": 1920
+            "id": "8411069",
+            "link": "https://images.pexels.com/videos/8411069/pexels-photo-8411069.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4a9c"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
+            "$oid": "6737db9f9cb04c2d0b781702"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4a91"
+          "$oid": "6737db9f9cb04c2d0b7816f7"
         }
       },
       {
@@ -600,7 +590,7 @@
             "confidence": 1,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a9e"
+              "$oid": "6737db9f9cb04c2d0b781704"
             }
           },
           {
@@ -610,7 +600,7 @@
             "confidence": 0.98,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4a9f"
+              "$oid": "6737db9f9cb04c2d0b781705"
             }
           },
           {
@@ -620,7 +610,7 @@
             "confidence": 0.99,
             "durationInFrames": 41,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aa0"
+              "$oid": "6737db9f9cb04c2d0b781706"
             }
           },
           {
@@ -630,7 +620,7 @@
             "confidence": 1,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aa1"
+              "$oid": "6737db9f9cb04c2d0b781707"
             }
           },
           {
@@ -640,7 +630,7 @@
             "confidence": 0.97,
             "durationInFrames": 68,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aa2"
+              "$oid": "6737db9f9cb04c2d0b781708"
             }
           }
         ],
@@ -651,61 +641,55 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Boy reading book",
+            "keyword": "Child reading book",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aa3"
+              "$oid": "6737db9f9cb04c2d0b781709"
             }
           },
           {
             "search": "stock",
-            "keyword": "Computer hobby",
+            "keyword": "Child on computer",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aa4"
+              "$oid": "6737db9f9cb04c2d0b78170a"
             }
           },
           {
             "search": "stock",
-            "keyword": "Escape",
+            "keyword": "Learning",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aa5"
+              "$oid": "6737db9f9cb04c2d0b78170b"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1080,
-          "width": 1920,
+          "height": 1920,
+          "width": 1080,
           "video": {
-            "id": "10447920",
+            "id": "10448278",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 1977674,
-            "width": 1920,
-            "height": 1080,
+            "size": 5689966,
+            "width": 1080,
+            "height": 1920,
             "fps": 30,
-            "link": "https://videos.pexels.com/video-files/7494643/7494643-hd_1920_1080_30fps.mp4"
+            "link": "https://videos.pexels.com/video-files/7494784/7494784-hd_1080_1920_30fps.mp4"
           },
           "image": {
-            "id": "7494643",
-            "link": "https://images.pexels.com/videos/7494643/apartment-art-baby-bed-7494643.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
+            "id": "7494784",
+            "link": "https://images.pexels.com/videos/7494784/apartment-art-baby-bed-7494784.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4aa6"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
+            "$oid": "6737db9f9cb04c2d0b78170c"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4a9d"
+          "$oid": "6737db9f9cb04c2d0b781703"
         }
       },
       {
@@ -717,7 +701,7 @@
             "confidence": 0.99,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aa8"
+              "$oid": "6737db9f9cb04c2d0b78170e"
             }
           },
           {
@@ -727,7 +711,7 @@
             "confidence": 0.51,
             "durationInFrames": 17,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aa9"
+              "$oid": "6737db9f9cb04c2d0b78170f"
             }
           },
           {
@@ -737,7 +721,7 @@
             "confidence": 0.94,
             "durationInFrames": 23,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aaa"
+              "$oid": "6737db9f9cb04c2d0b781710"
             }
           },
           {
@@ -747,7 +731,7 @@
             "confidence": 1,
             "durationInFrames": 12,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aab"
+              "$oid": "6737db9f9cb04c2d0b781711"
             }
           },
           {
@@ -757,7 +741,7 @@
             "confidence": 0.98,
             "durationInFrames": 29,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aac"
+              "$oid": "6737db9f9cb04c2d0b781712"
             }
           },
           {
@@ -767,7 +751,7 @@
             "confidence": 0.91,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aad"
+              "$oid": "6737db9f9cb04c2d0b781713"
             }
           },
           {
@@ -777,7 +761,7 @@
             "confidence": 0.69,
             "durationInFrames": 24,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aae"
+              "$oid": "6737db9f9cb04c2d0b781714"
             }
           },
           {
@@ -787,7 +771,7 @@
             "confidence": 1,
             "durationInFrames": 13,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aaf"
+              "$oid": "6737db9f9cb04c2d0b781715"
             }
           },
           {
@@ -797,7 +781,7 @@
             "confidence": 0.95,
             "durationInFrames": 25,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ab0"
+              "$oid": "6737db9f9cb04c2d0b781716"
             }
           },
           {
@@ -807,7 +791,7 @@
             "confidence": 0.99,
             "durationInFrames": 18,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ab1"
+              "$oid": "6737db9f9cb04c2d0b781717"
             }
           },
           {
@@ -817,7 +801,7 @@
             "confidence": 0.93,
             "durationInFrames": 46,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ab2"
+              "$oid": "6737db9f9cb04c2d0b781718"
             }
           }
         ],
@@ -828,18 +812,18 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Kid coding",
+            "keyword": "Child coding",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ab3"
+              "$oid": "6737db9f9cb04c2d0b781719"
             }
           },
           {
             "search": "stock",
-            "keyword": "Child programmer",
+            "keyword": "Video game development",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ab4"
+              "$oid": "6737db9f9cb04c2d0b78171a"
             }
           },
           {
@@ -847,42 +831,36 @@
             "keyword": "Gaming",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ab5"
+              "$oid": "6737db9f9cb04c2d0b78171b"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "height": 1080,
+          "width": 2048,
           "video": {
-            "id": "10565852",
+            "id": "11165468",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 5751797,
-            "width": 1080,
-            "height": 1920,
+            "size": 9379106,
+            "width": 2048,
+            "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7730014/7730014-hd_1080_1920_25fps.mp4"
+            "link": "https://videos.pexels.com/video-files/9783697/9783697-hd_2048_1080_25fps.mp4"
           },
           "image": {
-            "id": "7730014",
-            "link": "https://images.pexels.com/videos/7730014/pexels-photo-7730014.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
+            "id": "9783697",
+            "link": "https://images.pexels.com/videos/9783697/abstract-adult-analogue-backlit-9783697.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4ab6"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
+            "$oid": "6737db9f9cb04c2d0b78171c"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4aa7"
+          "$oid": "6737db9f9cb04c2d0b78170d"
         }
       },
       {
@@ -894,7 +872,7 @@
             "confidence": 0.99,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ab8"
+              "$oid": "6737db9f9cb04c2d0b78171e"
             }
           },
           {
@@ -904,7 +882,7 @@
             "confidence": 0.29,
             "durationInFrames": 22,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ab9"
+              "$oid": "6737db9f9cb04c2d0b78171f"
             }
           },
           {
@@ -914,7 +892,7 @@
             "confidence": 0.96,
             "durationInFrames": 7,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aba"
+              "$oid": "6737db9f9cb04c2d0b781720"
             }
           },
           {
@@ -924,7 +902,7 @@
             "confidence": 1,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4abb"
+              "$oid": "6737db9f9cb04c2d0b781721"
             }
           },
           {
@@ -934,7 +912,7 @@
             "confidence": 1,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4abc"
+              "$oid": "6737db9f9cb04c2d0b781722"
             }
           },
           {
@@ -944,7 +922,7 @@
             "confidence": 1,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4abd"
+              "$oid": "6737db9f9cb04c2d0b781723"
             }
           },
           {
@@ -954,7 +932,7 @@
             "confidence": 1,
             "durationInFrames": 17,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4abe"
+              "$oid": "6737db9f9cb04c2d0b781724"
             }
           },
           {
@@ -964,7 +942,7 @@
             "confidence": 0.91,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4abf"
+              "$oid": "6737db9f9cb04c2d0b781725"
             }
           },
           {
@@ -974,7 +952,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ac0"
+              "$oid": "6737db9f9cb04c2d0b781726"
             }
           },
           {
@@ -984,7 +962,7 @@
             "confidence": 0.94,
             "durationInFrames": 43,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ac1"
+              "$oid": "6737db9f9cb04c2d0b781727"
             }
           },
           {
@@ -994,7 +972,7 @@
             "confidence": 0.9,
             "durationInFrames": 23,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ac2"
+              "$oid": "6737db9f9cb04c2d0b781728"
             }
           },
           {
@@ -1004,7 +982,7 @@
             "confidence": 0.93,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ac3"
+              "$oid": "6737db9f9cb04c2d0b781729"
             }
           }
         ],
@@ -1018,7 +996,7 @@
             "keyword": "Plane taking off",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ac4"
+              "$oid": "6737db9f9cb04c2d0b78172a"
             }
           },
           {
@@ -1026,7 +1004,7 @@
             "keyword": "Airport departure",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ac5"
+              "$oid": "6737db9f9cb04c2d0b78172b"
             }
           },
           {
@@ -1034,7 +1012,7 @@
             "keyword": "Travel",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ac6"
+              "$oid": "6737db9f9cb04c2d0b78172c"
             }
           }
         ],
@@ -1059,17 +1037,11 @@
             "height": 3840
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4ac7"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
+            "$oid": "6737db9f9cb04c2d0b78172d"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4ab7"
+          "$oid": "6737db9f9cb04c2d0b78171d"
         }
       },
       {
@@ -1081,7 +1053,7 @@
             "confidence": 0.99,
             "durationInFrames": 7,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ac9"
+              "$oid": "6737db9f9cb04c2d0b78172f"
             }
           },
           {
@@ -1091,7 +1063,7 @@
             "confidence": 0.93,
             "durationInFrames": 34,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aca"
+              "$oid": "6737db9f9cb04c2d0b781730"
             }
           },
           {
@@ -1101,7 +1073,7 @@
             "confidence": 0.95,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4acb"
+              "$oid": "6737db9f9cb04c2d0b781731"
             }
           },
           {
@@ -1111,7 +1083,7 @@
             "confidence": 0.93,
             "durationInFrames": 28,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4acc"
+              "$oid": "6737db9f9cb04c2d0b781732"
             }
           },
           {
@@ -1121,7 +1093,7 @@
             "confidence": 1,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4acd"
+              "$oid": "6737db9f9cb04c2d0b781733"
             }
           },
           {
@@ -1131,7 +1103,7 @@
             "confidence": 1,
             "durationInFrames": 19,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ace"
+              "$oid": "6737db9f9cb04c2d0b781734"
             }
           },
           {
@@ -1141,7 +1113,7 @@
             "confidence": 0.63,
             "durationInFrames": 41,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4acf"
+              "$oid": "6737db9f9cb04c2d0b781735"
             }
           }
         ],
@@ -1152,10 +1124,10 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Couch surfing",
+            "keyword": "Relative's home",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ad0"
+              "$oid": "6737db9f9cb04c2d0b781736"
             }
           },
           {
@@ -1163,50 +1135,44 @@
             "keyword": "Living with relatives",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ad1"
+              "$oid": "6737db9f9cb04c2d0b781737"
             }
           },
           {
             "search": "stock",
-            "keyword": "Unstable life",
+            "keyword": "Family",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ad2"
+              "$oid": "6737db9f9cb04c2d0b781738"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1080,
-          "width": 2048,
+          "height": 2048,
+          "width": 1080,
           "video": {
-            "id": "10556129",
+            "id": "10454620",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 6800479,
-            "width": 2048,
-            "height": 1080,
+            "size": 6227377,
+            "width": 1080,
+            "height": 2048,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7709068/7709068-hd_2048_1080_25fps.mp4"
+            "link": "https://videos.pexels.com/video-files/7491797/7491797-hd_1080_2048_25fps.mp4"
           },
           "image": {
-            "id": "7709068",
-            "link": "https://images.pexels.com/videos/7709068/adult-bed-computer-connection-7709068.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
+            "id": "7491797",
+            "link": "https://images.pexels.com/videos/7491797/pexels-photo-7491797.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 4096
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4ad3"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
+            "$oid": "6737db9f9cb04c2d0b781739"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4ac8"
+          "$oid": "6737db9f9cb04c2d0b78172e"
         }
       },
       {
@@ -1218,7 +1184,7 @@
             "confidence": 1,
             "durationInFrames": 14,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ad5"
+              "$oid": "6737db9f9cb04c2d0b78173b"
             }
           },
           {
@@ -1228,7 +1194,7 @@
             "confidence": 0.86,
             "durationInFrames": 12,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ad6"
+              "$oid": "6737db9f9cb04c2d0b78173c"
             }
           },
           {
@@ -1238,7 +1204,7 @@
             "confidence": 1,
             "durationInFrames": 35,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ad7"
+              "$oid": "6737db9f9cb04c2d0b78173d"
             }
           },
           {
@@ -1248,7 +1214,7 @@
             "confidence": 0.99,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ad8"
+              "$oid": "6737db9f9cb04c2d0b78173e"
             }
           },
           {
@@ -1258,7 +1224,7 @@
             "confidence": 0.94,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ad9"
+              "$oid": "6737db9f9cb04c2d0b78173f"
             }
           },
           {
@@ -1268,7 +1234,7 @@
             "confidence": 0.21,
             "durationInFrames": 40,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ada"
+              "$oid": "6737db9f9cb04c2d0b781740"
             }
           }
         ],
@@ -1279,61 +1245,55 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Entrepreneur at work",
+            "keyword": "Startup office",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4adb"
+              "$oid": "6737db9f9cb04c2d0b781741"
             }
           },
           {
             "search": "stock",
-            "keyword": "Start-up office",
+            "keyword": "New business",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4adc"
+              "$oid": "6737db9f9cb04c2d0b781742"
             }
           },
           {
             "search": "stock",
-            "keyword": "Business",
+            "keyword": "Entrepreneurship",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4add"
+              "$oid": "6737db9f9cb04c2d0b781743"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 2048,
-          "width": 1080,
+          "height": 1080,
+          "width": 1920,
           "video": {
-            "id": "10556432",
+            "id": "9955311",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 6676568,
-            "width": 1080,
-            "height": 2048,
+            "size": 3451422,
+            "width": 1920,
+            "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7710420/7710420-hd_1080_2048_25fps.mp4"
+            "link": "https://videos.pexels.com/video-files/6194002/6194002-hd_1920_1080_25fps.mp4"
           },
           "image": {
-            "id": "7710420",
-            "link": "https://images.pexels.com/videos/7710420/adult-blur-business-coffee-7710420.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 4096
+            "id": "6194002",
+            "link": "https://images.pexels.com/videos/6194002/african-african-american-brainstorming-business-6194002.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4ade"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.739Z"
+            "$oid": "6737db9f9cb04c2d0b781744"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4ad4"
+          "$oid": "6737db9f9cb04c2d0b78173a"
         }
       },
       {
@@ -1345,7 +1305,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae0"
+              "$oid": "6737db9f9cb04c2d0b781746"
             }
           },
           {
@@ -1355,7 +1315,7 @@
             "confidence": 0.99,
             "durationInFrames": 26,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae1"
+              "$oid": "6737db9f9cb04c2d0b781747"
             }
           },
           {
@@ -1365,7 +1325,7 @@
             "confidence": 1,
             "durationInFrames": 37,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae2"
+              "$oid": "6737db9f9cb04c2d0b781748"
             }
           },
           {
@@ -1375,7 +1335,7 @@
             "confidence": 0.94,
             "durationInFrames": 13,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae3"
+              "$oid": "6737db9f9cb04c2d0b781749"
             }
           },
           {
@@ -1385,7 +1345,7 @@
             "confidence": 0.86,
             "durationInFrames": 18,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae4"
+              "$oid": "6737db9f9cb04c2d0b78174a"
             }
           },
           {
@@ -1395,7 +1355,7 @@
             "confidence": 0.99,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae5"
+              "$oid": "6737db9f9cb04c2d0b78174b"
             }
           },
           {
@@ -1405,7 +1365,7 @@
             "confidence": 0,
             "durationInFrames": 43,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae6"
+              "$oid": "6737db9f9cb04c2d0b78174c"
             }
           },
           {
@@ -1415,7 +1375,7 @@
             "confidence": 0.88,
             "durationInFrames": 19,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae7"
+              "$oid": "6737db9f9cb04c2d0b78174d"
             }
           },
           {
@@ -1425,7 +1385,7 @@
             "confidence": 0.95,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae8"
+              "$oid": "6737db9f9cb04c2d0b78174e"
             }
           }
         ],
@@ -1439,15 +1399,15 @@
             "keyword": "Money transfer",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4ae9"
+              "$oid": "6737db9f9cb04c2d0b78174f"
             }
           },
           {
             "search": "stock",
-            "keyword": "Selling company",
+            "keyword": "Business deal",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aea"
+              "$oid": "6737db9f9cb04c2d0b781750"
             }
           },
           {
@@ -1455,7 +1415,7 @@
             "keyword": "Success",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aeb"
+              "$oid": "6737db9f9cb04c2d0b781751"
             }
           }
         ],
@@ -1464,33 +1424,27 @@
           "height": 1080,
           "width": 1920,
           "video": {
-            "id": "9983472",
+            "id": "9640388",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 4775218,
+            "size": 6783937,
             "width": 1920,
             "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/6266286/6266286-hd_1920_1080_25fps.mp4"
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/5220473/5220473-hd_1920_1080_30fps.mp4"
           },
           "image": {
-            "id": "6266286",
-            "link": "https://images.pexels.com/videos/6266286/pexels-photo-6266286.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "id": "5220473",
+            "link": "https://images.pexels.com/videos/5220473/pexels-photo-5220473.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
             "width": 3840,
             "height": 2160
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4aec"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b781752"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4adf"
+          "$oid": "6737db9f9cb04c2d0b781745"
         }
       },
       {
@@ -1502,7 +1456,7 @@
             "confidence": 0.75,
             "durationInFrames": 55,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aee"
+              "$oid": "6737db9f9cb04c2d0b781754"
             }
           },
           {
@@ -1512,7 +1466,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aef"
+              "$oid": "6737db9f9cb04c2d0b781755"
             }
           },
           {
@@ -1522,7 +1476,7 @@
             "confidence": 0.97,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4af0"
+              "$oid": "6737db9f9cb04c2d0b781756"
             }
           },
           {
@@ -1532,7 +1486,7 @@
             "confidence": 1,
             "durationInFrames": 46,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4af1"
+              "$oid": "6737db9f9cb04c2d0b781757"
             }
           },
           {
@@ -1542,7 +1496,7 @@
             "confidence": 0.54,
             "durationInFrames": 43,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4af2"
+              "$oid": "6737db9f9cb04c2d0b781758"
             }
           },
           {
@@ -1552,7 +1506,7 @@
             "confidence": 0.99,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4af3"
+              "$oid": "6737db9f9cb04c2d0b781759"
             }
           },
           {
@@ -1562,7 +1516,7 @@
             "confidence": 0.98,
             "durationInFrames": 37,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4af4"
+              "$oid": "6737db9f9cb04c2d0b78175a"
             }
           }
         ],
@@ -1573,61 +1527,55 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Website launch",
+            "keyword": "Online payment",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4af5"
+              "$oid": "6737db9f9cb04c2d0b78175b"
             }
           },
           {
             "search": "stock",
-            "keyword": "New business venture",
+            "keyword": "Financial transaction",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4af6"
+              "$oid": "6737db9f9cb04c2d0b78175c"
             }
           },
           {
             "search": "stock",
-            "keyword": "Innovation",
+            "keyword": "Finance",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4af7"
+              "$oid": "6737db9f9cb04c2d0b78175d"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1080,
-          "width": 1920,
+          "height": 1920,
+          "width": 1080,
           "video": {
-            "id": "10515170",
+            "id": "10475293",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 8965738,
-            "width": 1920,
-            "height": 1080,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/7649279/7649279-hd_1920_1080_30fps.mp4"
+            "size": 5949327,
+            "width": 1080,
+            "height": 1920,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7567357/7567357-hd_1080_1920_25fps.mp4"
           },
           "image": {
-            "id": "7649279",
-            "link": "https://images.pexels.com/videos/7649279/abstract-aircraft-alien-art-7649279.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
+            "id": "7567357",
+            "link": "https://images.pexels.com/videos/7567357/adult-african-african-american-black-7567357.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 1080,
+            "height": 1920
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4af8"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b78175e"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4aed"
+          "$oid": "6737db9f9cb04c2d0b781753"
         }
       },
       {
@@ -1639,7 +1587,7 @@
             "confidence": 0.77,
             "durationInFrames": 37,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4afa"
+              "$oid": "6737db9f9cb04c2d0b781760"
             }
           },
           {
@@ -1649,7 +1597,7 @@
             "confidence": 0.99,
             "durationInFrames": 26,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4afb"
+              "$oid": "6737db9f9cb04c2d0b781761"
             }
           },
           {
@@ -1659,7 +1607,7 @@
             "confidence": 0.99,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4afc"
+              "$oid": "6737db9f9cb04c2d0b781762"
             }
           },
           {
@@ -1669,7 +1617,7 @@
             "confidence": 0.49,
             "durationInFrames": 19,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4afd"
+              "$oid": "6737db9f9cb04c2d0b781763"
             }
           },
           {
@@ -1679,7 +1627,7 @@
             "confidence": 0.98,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4afe"
+              "$oid": "6737db9f9cb04c2d0b781764"
             }
           },
           {
@@ -1689,7 +1637,7 @@
             "confidence": 0.17,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4aff"
+              "$oid": "6737db9f9cb04c2d0b781765"
             }
           },
           {
@@ -1699,7 +1647,7 @@
             "confidence": 0.92,
             "durationInFrames": 107,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b00"
+              "$oid": "6737db9f9cb04c2d0b781766"
             }
           }
         ],
@@ -1713,7 +1661,7 @@
             "keyword": "eBay logo",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b01"
+              "$oid": "6737db9f9cb04c2d0b781767"
             }
           },
           {
@@ -1721,41 +1669,35 @@
             "keyword": "Company acquisition",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b02"
+              "$oid": "6737db9f9cb04c2d0b781768"
             }
           },
           {
             "search": "stock",
-            "keyword": "Deal",
+            "keyword": "Business growth",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b03"
+              "$oid": "6737db9f9cb04c2d0b781769"
             }
           }
         ],
         "media": {
           "type": "image",
-          "name": "EBay taps into NFT frenzy, allows sale on platform | Reuters",
-          "height": 3675,
-          "width": 5513,
+          "name": "Introducing the eBay Marketplace Integration | Akeneo",
+          "height": 1707,
+          "width": 2560,
           "image": {
-            "id": "img-1731689885644-tbjfxvnxj",
-            "link": "https://cloudfront-us-east-2.images.arcpublishing.com/reuters/TUHNCOEIKRMAXFQY5OB3WA3SPE.jpg",
-            "width": 5513,
-            "height": 3675
+            "id": "img-1731713948921-82fdyl6z8",
+            "link": "https://www.akeneo.com/wp-content/uploads/2024/10/AdobeStock_283674568_Editorial_Use_Only-scaled.jpeg",
+            "width": 2560,
+            "height": 1707
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b04"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b78176a"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4af9"
+          "$oid": "6737db9f9cb04c2d0b78175f"
         }
       },
       {
@@ -1767,7 +1709,7 @@
             "confidence": 0.85,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b06"
+              "$oid": "6737db9f9cb04c2d0b78176c"
             }
           },
           {
@@ -1777,7 +1719,7 @@
             "confidence": 0.52,
             "durationInFrames": 17,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b07"
+              "$oid": "6737db9f9cb04c2d0b78176d"
             }
           },
           {
@@ -1787,7 +1729,7 @@
             "confidence": 1,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b08"
+              "$oid": "6737db9f9cb04c2d0b78176e"
             }
           },
           {
@@ -1797,7 +1739,7 @@
             "confidence": 0.93,
             "durationInFrames": 20,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b09"
+              "$oid": "6737db9f9cb04c2d0b78176f"
             }
           },
           {
@@ -1807,7 +1749,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b0a"
+              "$oid": "6737db9f9cb04c2d0b781770"
             }
           },
           {
@@ -1817,7 +1759,7 @@
             "confidence": 1,
             "durationInFrames": 22,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b0b"
+              "$oid": "6737db9f9cb04c2d0b781771"
             }
           },
           {
@@ -1827,7 +1769,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b0c"
+              "$oid": "6737db9f9cb04c2d0b781772"
             }
           },
           {
@@ -1837,7 +1779,7 @@
             "confidence": 0.93,
             "durationInFrames": 29,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b0d"
+              "$oid": "6737db9f9cb04c2d0b781773"
             }
           },
           {
@@ -1847,7 +1789,7 @@
             "confidence": 1,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b0e"
+              "$oid": "6737db9f9cb04c2d0b781774"
             }
           },
           {
@@ -1857,7 +1799,7 @@
             "confidence": 1,
             "durationInFrames": 26,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b0f"
+              "$oid": "6737db9f9cb04c2d0b781775"
             }
           },
           {
@@ -1867,7 +1809,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b10"
+              "$oid": "6737db9f9cb04c2d0b781776"
             }
           },
           {
@@ -1877,7 +1819,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b11"
+              "$oid": "6737db9f9cb04c2d0b781777"
             }
           },
           {
@@ -1887,7 +1829,7 @@
             "confidence": 0.92,
             "durationInFrames": 28,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b12"
+              "$oid": "6737db9f9cb04c2d0b781778"
             }
           }
         ],
@@ -1898,26 +1840,26 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Investor at work",
+            "keyword": "Investment portfolio",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b13"
+              "$oid": "6737db9f9cb04c2d0b781779"
             }
           },
           {
             "search": "stock",
-            "keyword": "Ambitious projects",
+            "keyword": "Business investment",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b14"
+              "$oid": "6737db9f9cb04c2d0b78177a"
             }
           },
           {
             "search": "stock",
-            "keyword": "Risk",
+            "keyword": "Investment",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b15"
+              "$oid": "6737db9f9cb04c2d0b78177b"
             }
           }
         ],
@@ -1926,33 +1868,27 @@
           "height": 1080,
           "width": 2048,
           "video": {
-            "id": "10486762",
+            "id": "9852074",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 4242350,
+            "size": 20038496,
             "width": 2048,
             "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7579657/7579657-hd_2048_1080_25fps.mp4"
+            "link": "https://videos.pexels.com/video-files/5909908/5909908-hd_2048_1080_25fps.mp4"
           },
           "image": {
-            "id": "7579657",
-            "link": "https://images.pexels.com/videos/7579657/pexels-photo-7579657.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "id": "5909908",
+            "link": "https://images.pexels.com/videos/5909908/pexels-photo-5909908.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
             "width": 4096,
             "height": 2160
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b16"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b78177c"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b05"
+          "$oid": "6737db9f9cb04c2d0b78176b"
         }
       },
       {
@@ -1964,7 +1900,7 @@
             "confidence": 0.95,
             "durationInFrames": 53,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b18"
+              "$oid": "6737db9f9cb04c2d0b78177e"
             }
           },
           {
@@ -1974,7 +1910,7 @@
             "confidence": 0.85,
             "durationInFrames": 23,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b19"
+              "$oid": "6737db9f9cb04c2d0b78177f"
             }
           },
           {
@@ -1984,7 +1920,7 @@
             "confidence": 0.99,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b1a"
+              "$oid": "6737db9f9cb04c2d0b781780"
             }
           },
           {
@@ -1994,7 +1930,7 @@
             "confidence": 0.99,
             "durationInFrames": 36,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b1b"
+              "$oid": "6737db9f9cb04c2d0b781781"
             }
           },
           {
@@ -2004,7 +1940,7 @@
             "confidence": 0.93,
             "durationInFrames": 42,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b1c"
+              "$oid": "6737db9f9cb04c2d0b781782"
             }
           },
           {
@@ -2014,7 +1950,7 @@
             "confidence": 0.77,
             "durationInFrames": 44,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b1d"
+              "$oid": "6737db9f9cb04c2d0b781783"
             }
           }
         ],
@@ -2024,53 +1960,56 @@
         "durationInFrames": 214,
         "keywords": [
           {
-            "search": "web",
-            "keyword": "Tesla car logo",
+            "search": "stock",
+            "keyword": "Electric car",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b1e"
+              "$oid": "6737db9f9cb04c2d0b781784"
             }
           },
           {
-            "search": "stock",
-            "keyword": "Electric vehicle",
+            "search": "web",
+            "keyword": "Tesla logo",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b1f"
+              "$oid": "6737db9f9cb04c2d0b781785"
             }
           },
           {
             "search": "stock",
-            "keyword": "Sustainable energy",
+            "keyword": "Innovation",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b20"
+              "$oid": "6737db9f9cb04c2d0b781786"
             }
           }
         ],
         "media": {
-          "type": "image",
-          "name": "Tesla sets up China site to store car data locally | Reuters",
-          "height": 3662,
-          "width": 5494,
+          "type": "video",
+          "height": 1080,
+          "width": 1920,
+          "video": {
+            "id": "9267619",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 42928058,
+            "width": 1920,
+            "height": 1080,
+            "fps": 30,
+            "link": "https://videos.pexels.com/video-files/2053100/2053100-hd_1920_1080_30fps.mp4"
+          },
           "image": {
-            "id": "img-1731689886835-l4vc54i50",
-            "link": "https://cloudfront-us-east-2.images.arcpublishing.com/reuters/4NHVTP6M2BKTNCG5L7YBB43C5M.jpg",
-            "width": 5494,
-            "height": 3662
+            "id": "2053100",
+            "link": "https://images.pexels.com/videos/2053100/free-video-2053100.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b21"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b781787"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b17"
+          "$oid": "6737db9f9cb04c2d0b78177d"
         }
       },
       {
@@ -2082,7 +2021,7 @@
             "confidence": 0.92,
             "durationInFrames": 12,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b23"
+              "$oid": "6737db9f9cb04c2d0b781789"
             }
           },
           {
@@ -2092,7 +2031,7 @@
             "confidence": 0.9,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b24"
+              "$oid": "6737db9f9cb04c2d0b78178a"
             }
           },
           {
@@ -2102,7 +2041,7 @@
             "confidence": 0.95,
             "durationInFrames": 58,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b25"
+              "$oid": "6737db9f9cb04c2d0b78178b"
             }
           }
         ],
@@ -2113,10 +2052,10 @@
         "keywords": [
           {
             "search": "web",
-            "keyword": "SpaceX rocket launch",
+            "keyword": "SpaceX logo",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b26"
+              "$oid": "6737db9f9cb04c2d0b78178c"
             }
           },
           {
@@ -2124,41 +2063,35 @@
             "keyword": "Space exploration",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b27"
+              "$oid": "6737db9f9cb04c2d0b78178d"
             }
           },
           {
             "search": "stock",
-            "keyword": "Innovation",
+            "keyword": "Space",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b28"
+              "$oid": "6737db9f9cb04c2d0b78178e"
             }
           }
         ],
         "media": {
           "type": "image",
-          "name": "Used SpaceX Rocket Launches Satellite, Then Lands in Historic ...",
-          "height": 1365,
+          "name": "Symbol SpaceX Logo Iron-on Sticker (heat transfer) – Customisation ...",
+          "height": 943,
           "width": 2048,
           "image": {
-            "id": "img-1731689885406-dlujde9w3",
-            "link": "https://static.scientificamerican.com/sciam/cache/file/4BC816FB-F21A-49C2-A9CB4D85FD64EF69_source.jpg",
+            "id": "img-1731713950757-jbby700t2",
+            "link": "https://customisation.club/cdn/shop/products/IMG_20210513_092943_dcca2bb0-8fd1-430f-aa96-39d3f41846fb_1024x1024@2x.jpg?v=1682789860",
             "width": 2048,
-            "height": 1365
+            "height": 943
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b29"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b78178f"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b22"
+          "$oid": "6737db9f9cb04c2d0b781788"
         }
       },
       {
@@ -2170,7 +2103,7 @@
             "confidence": 0.93,
             "durationInFrames": 20,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b2b"
+              "$oid": "6737db9f9cb04c2d0b781791"
             }
           },
           {
@@ -2180,7 +2113,7 @@
             "confidence": 1,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b2c"
+              "$oid": "6737db9f9cb04c2d0b781792"
             }
           },
           {
@@ -2190,7 +2123,7 @@
             "confidence": 0.84,
             "durationInFrames": 22,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b2d"
+              "$oid": "6737db9f9cb04c2d0b781793"
             }
           },
           {
@@ -2200,7 +2133,7 @@
             "confidence": 0.83,
             "durationInFrames": 4,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b2e"
+              "$oid": "6737db9f9cb04c2d0b781794"
             }
           },
           {
@@ -2210,7 +2143,7 @@
             "confidence": 0.81,
             "durationInFrames": 7,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b2f"
+              "$oid": "6737db9f9cb04c2d0b781795"
             }
           },
           {
@@ -2220,7 +2153,7 @@
             "confidence": 0.91,
             "durationInFrames": 40,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b30"
+              "$oid": "6737db9f9cb04c2d0b781796"
             }
           },
           {
@@ -2230,7 +2163,7 @@
             "confidence": 1,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b31"
+              "$oid": "6737db9f9cb04c2d0b781797"
             }
           },
           {
@@ -2240,7 +2173,7 @@
             "confidence": 0.99,
             "durationInFrames": 49,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b32"
+              "$oid": "6737db9f9cb04c2d0b781798"
             }
           },
           {
@@ -2250,7 +2183,7 @@
             "confidence": 0.67,
             "durationInFrames": 32,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b33"
+              "$oid": "6737db9f9cb04c2d0b781799"
             }
           }
         ],
@@ -2261,10 +2194,10 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Persevering person",
+            "keyword": "Perseverance",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b34"
+              "$oid": "6737db9f9cb04c2d0b78179a"
             }
           },
           {
@@ -2272,50 +2205,44 @@
             "keyword": "Overcoming obstacles",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b35"
+              "$oid": "6737db9f9cb04c2d0b78179b"
             }
           },
           {
             "search": "stock",
-            "keyword": "Resilience",
+            "keyword": "Success",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b36"
+              "$oid": "6737db9f9cb04c2d0b78179c"
             }
           }
         ],
         "media": {
           "type": "video",
           "height": 1080,
-          "width": 1920,
+          "width": 2048,
           "video": {
-            "id": "12653766",
-            "quality": null,
+            "id": "9596061",
+            "quality": "hd",
             "file_type": "video/mp4",
-            "size": 220056994,
-            "width": 1920,
+            "size": 65530055,
+            "width": 2048,
             "height": 1080,
-            "fps": 59.939998626708984,
-            "link": "https://videos.pexels.com/video-files/29372295/12653766_1920_1080_60fps.mp4"
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/5013967/5013967-hd_2048_1080_25fps.mp4"
           },
           "image": {
-            "id": "29372295",
-            "link": "https://images.pexels.com/videos/29372295/buddha-square-29372295.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 1920,
-            "height": 1080
+            "id": "5013967",
+            "link": "https://images.pexels.com/videos/5013967/pexels-photo-5013967.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b37"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b78179d"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b2a"
+          "$oid": "6737db9f9cb04c2d0b781790"
         }
       },
       {
@@ -2327,7 +2254,7 @@
             "confidence": 0.91,
             "durationInFrames": 22,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b39"
+              "$oid": "6737db9f9cb04c2d0b78179f"
             }
           },
           {
@@ -2337,7 +2264,7 @@
             "confidence": 0.99,
             "durationInFrames": 23,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b3a"
+              "$oid": "6737db9f9cb04c2d0b7817a0"
             }
           },
           {
@@ -2347,7 +2274,7 @@
             "confidence": 0.74,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b3b"
+              "$oid": "6737db9f9cb04c2d0b7817a1"
             }
           },
           {
@@ -2357,7 +2284,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b3c"
+              "$oid": "6737db9f9cb04c2d0b7817a2"
             }
           },
           {
@@ -2367,7 +2294,7 @@
             "confidence": 0.95,
             "durationInFrames": 25,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b3d"
+              "$oid": "6737db9f9cb04c2d0b7817a3"
             }
           },
           {
@@ -2377,7 +2304,7 @@
             "confidence": 0.95,
             "durationInFrames": 48,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b3e"
+              "$oid": "6737db9f9cb04c2d0b7817a4"
             }
           }
         ],
@@ -2388,61 +2315,55 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Tesla car on road",
+            "keyword": "Electric car market",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b3f"
+              "$oid": "6737db9f9cb04c2d0b7817a5"
             }
           },
           {
             "search": "stock",
-            "keyword": "Electric vehicle market",
+            "keyword": "Tesla car",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b40"
+              "$oid": "6737db9f9cb04c2d0b7817a6"
             }
           },
           {
             "search": "stock",
-            "keyword": "Success",
+            "keyword": "Leadership",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b41"
+              "$oid": "6737db9f9cb04c2d0b7817a7"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1080,
-          "width": 1920,
+          "height": 1920,
+          "width": 1080,
           "video": {
-            "id": "9576986",
-            "quality": "hd",
+            "id": "12038850",
+            "quality": null,
             "file_type": "video/mp4",
-            "size": 9312743,
-            "width": 1920,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/4909066/4909066-hd_1920_1080_25fps.mp4"
+            "size": 58931446,
+            "width": 1080,
+            "height": 1920,
+            "fps": 50,
+            "link": "https://videos.pexels.com/video-files/26967507/12038850_1080_1920_50fps.mp4"
           },
           "image": {
-            "id": "4909066",
-            "link": "https://images.pexels.com/videos/4909066/pexels-photo-4909066.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
+            "id": "26967507",
+            "link": "https://images.pexels.com/videos/26967507/asia-driving-sunny-day-26967507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b42"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b7817a8"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b38"
+          "$oid": "6737db9f9cb04c2d0b78179e"
         }
       },
       {
@@ -2454,7 +2375,7 @@
             "confidence": 0.77,
             "durationInFrames": 38,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b44"
+              "$oid": "6737db9f9cb04c2d0b7817aa"
             }
           },
           {
@@ -2464,7 +2385,7 @@
             "confidence": 0.94,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b45"
+              "$oid": "6737db9f9cb04c2d0b7817ab"
             }
           },
           {
@@ -2474,7 +2395,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b46"
+              "$oid": "6737db9f9cb04c2d0b7817ac"
             }
           },
           {
@@ -2484,7 +2405,7 @@
             "confidence": 0.99,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b47"
+              "$oid": "6737db9f9cb04c2d0b7817ad"
             }
           },
           {
@@ -2494,7 +2415,7 @@
             "confidence": 0.99,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b48"
+              "$oid": "6737db9f9cb04c2d0b7817ae"
             }
           },
           {
@@ -2504,7 +2425,7 @@
             "confidence": 0.92,
             "durationInFrames": 19,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b49"
+              "$oid": "6737db9f9cb04c2d0b7817af"
             }
           },
           {
@@ -2514,7 +2435,7 @@
             "confidence": 1,
             "durationInFrames": 7,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b4a"
+              "$oid": "6737db9f9cb04c2d0b7817b0"
             }
           },
           {
@@ -2524,7 +2445,7 @@
             "confidence": 0.85,
             "durationInFrames": 53,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b4b"
+              "$oid": "6737db9f9cb04c2d0b7817b1"
             }
           },
           {
@@ -2534,7 +2455,7 @@
             "confidence": 0.7,
             "durationInFrames": 44,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b4c"
+              "$oid": "6737db9f9cb04c2d0b7817b2"
             }
           }
         ],
@@ -2545,18 +2466,18 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "SpaceX rocket in space",
+            "keyword": "SpaceX rocket",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b4d"
+              "$oid": "6737db9f9cb04c2d0b7817b3"
             }
           },
           {
             "search": "stock",
-            "keyword": "Space technology",
+            "keyword": "Space achievement",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b4e"
+              "$oid": "6737db9f9cb04c2d0b7817b4"
             }
           },
           {
@@ -2564,42 +2485,36 @@
             "keyword": "Innovation",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b4f"
+              "$oid": "6737db9f9cb04c2d0b7817b5"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1080,
-          "width": 1920,
+          "height": 1920,
+          "width": 1080,
           "video": {
-            "id": "10516194",
+            "id": "6195758",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 12792980,
-            "width": 1920,
-            "height": 1080,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/7649289/7649289-hd_1920_1080_30fps.mp4"
+            "size": 1815527,
+            "width": 1080,
+            "height": 1920,
+            "fps": 24,
+            "link": "https://videos.pexels.com/video-files/14618955/14618955-hd_1080_1920_24fps.mp4"
           },
           "image": {
-            "id": "7649289",
-            "link": "https://images.pexels.com/videos/7649289/aircraft-alien-astronaut-astronautics-7649289.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
+            "id": "14618955",
+            "link": "https://images.pexels.com/videos/14618955/cosmos-earth-jupiter-milky-way-14618955.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b50"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b7817b6"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b43"
+          "$oid": "6737db9f9cb04c2d0b7817a9"
         }
       },
       {
@@ -2611,7 +2526,7 @@
             "confidence": 0.88,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b52"
+              "$oid": "6737db9f9cb04c2d0b7817b8"
             }
           },
           {
@@ -2621,7 +2536,7 @@
             "confidence": 0,
             "durationInFrames": 55,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b53"
+              "$oid": "6737db9f9cb04c2d0b7817b9"
             }
           },
           {
@@ -2631,7 +2546,7 @@
             "confidence": 1,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b54"
+              "$oid": "6737db9f9cb04c2d0b7817ba"
             }
           },
           {
@@ -2641,7 +2556,7 @@
             "confidence": 0.94,
             "durationInFrames": 24,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b55"
+              "$oid": "6737db9f9cb04c2d0b7817bb"
             }
           },
           {
@@ -2651,7 +2566,7 @@
             "confidence": 0.67,
             "durationInFrames": 34,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b56"
+              "$oid": "6737db9f9cb04c2d0b7817bc"
             }
           },
           {
@@ -2661,7 +2576,7 @@
             "confidence": 0.99,
             "durationInFrames": 13,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b57"
+              "$oid": "6737db9f9cb04c2d0b7817bd"
             }
           },
           {
@@ -2671,7 +2586,7 @@
             "confidence": 0,
             "durationInFrames": 36,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b58"
+              "$oid": "6737db9f9cb04c2d0b7817be"
             }
           },
           {
@@ -2681,7 +2596,7 @@
             "confidence": 0.84,
             "durationInFrames": 26,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b59"
+              "$oid": "6737db9f9cb04c2d0b7817bf"
             }
           }
         ],
@@ -2695,49 +2610,43 @@
             "keyword": "Twitter logo",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b5a"
+              "$oid": "6737db9f9cb04c2d0b7817c0"
             }
           },
           {
             "search": "stock",
-            "keyword": "Social media acquisition",
+            "keyword": "Company acquisition",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b5b"
+              "$oid": "6737db9f9cb04c2d0b7817c1"
             }
           },
           {
             "search": "stock",
-            "keyword": "Deal",
+            "keyword": "Business growth",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b5c"
+              "$oid": "6737db9f9cb04c2d0b7817c2"
             }
           }
         ],
         "media": {
           "type": "image",
-          "name": "Why can't Twitter and TikTok be easily replaced? Something called ...",
-          "height": 2636,
-          "width": 3965,
+          "name": "Flip Elon the Bird: How to Turn the X App Icon Back Into Twitter's ...",
+          "height": 2160,
+          "width": 3840,
           "image": {
-            "id": "img-1731689887987-tm4cjx4ul",
-            "link": "https://cloudfront-us-east-1.images.arcpublishing.com/opb/UU6EQC7P44FDWLUIIZFH63DEBY.jpg",
-            "width": 3965,
-            "height": 2636
+            "id": "img-1731713951247-dsthdr9sv",
+            "link": "https://i.pcmag.com/imagery/articles/06HGiNuO9nzcBSyomWSg6e2-30..v1690990974.jpg",
+            "width": 3840,
+            "height": 2160
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b5d"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b7817c3"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b51"
+          "$oid": "6737db9f9cb04c2d0b7817b7"
         }
       },
       {
@@ -2749,7 +2658,7 @@
             "confidence": 0.98,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b5f"
+              "$oid": "6737db9f9cb04c2d0b7817c5"
             }
           },
           {
@@ -2759,7 +2668,7 @@
             "confidence": 0.85,
             "durationInFrames": 47,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b60"
+              "$oid": "6737db9f9cb04c2d0b7817c6"
             }
           },
           {
@@ -2769,7 +2678,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b61"
+              "$oid": "6737db9f9cb04c2d0b7817c7"
             }
           },
           {
@@ -2779,7 +2688,7 @@
             "confidence": 0.92,
             "durationInFrames": 22,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b62"
+              "$oid": "6737db9f9cb04c2d0b7817c8"
             }
           },
           {
@@ -2789,7 +2698,7 @@
             "confidence": 0.97,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b63"
+              "$oid": "6737db9f9cb04c2d0b7817c9"
             }
           },
           {
@@ -2799,7 +2708,7 @@
             "confidence": 0.99,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b64"
+              "$oid": "6737db9f9cb04c2d0b7817ca"
             }
           },
           {
@@ -2809,7 +2718,7 @@
             "confidence": 0.95,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b65"
+              "$oid": "6737db9f9cb04c2d0b7817cb"
             }
           },
           {
@@ -2819,7 +2728,7 @@
             "confidence": 1,
             "durationInFrames": 53,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b66"
+              "$oid": "6737db9f9cb04c2d0b7817cc"
             }
           }
         ],
@@ -2830,26 +2739,26 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "From loner to leader",
+            "keyword": "Visionary leader",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b67"
+              "$oid": "6737db9f9cb04c2d0b7817cd"
             }
           },
           {
             "search": "stock",
-            "keyword": "Visionary entrepreneur",
+            "keyword": "Controversial figure",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b68"
+              "$oid": "6737db9f9cb04c2d0b7817ce"
             }
           },
           {
             "search": "stock",
-            "keyword": "Inspiration",
+            "keyword": "Leadership",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b69"
+              "$oid": "6737db9f9cb04c2d0b7817cf"
             }
           }
         ],
@@ -2858,33 +2767,27 @@
           "height": 1920,
           "width": 1080,
           "video": {
-            "id": "9941070",
+            "id": "10354483",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 7084519,
+            "size": 4850361,
             "width": 1080,
             "height": 1920,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/6173152/6173152-hd_1080_1920_30fps.mp4"
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7224726/7224726-hd_1080_1920_25fps.mp4"
           },
           "image": {
-            "id": "6173152",
-            "link": "https://images.pexels.com/videos/6173152/pexels-photo-6173152.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 1080,
-            "height": 1920
+            "id": "7224726",
+            "link": "https://images.pexels.com/videos/7224726/pexels-photo-7224726.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b6a"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b7817d0"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b5e"
+          "$oid": "6737db9f9cb04c2d0b7817c4"
         }
       },
       {
@@ -2896,7 +2799,7 @@
             "confidence": 0.78,
             "durationInFrames": 24,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b6c"
+              "$oid": "6737db9f9cb04c2d0b7817d2"
             }
           },
           {
@@ -2906,7 +2809,7 @@
             "confidence": 0.99,
             "durationInFrames": 23,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b6d"
+              "$oid": "6737db9f9cb04c2d0b7817d3"
             }
           },
           {
@@ -2916,7 +2819,7 @@
             "confidence": 0.99,
             "durationInFrames": 17,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b6e"
+              "$oid": "6737db9f9cb04c2d0b7817d4"
             }
           },
           {
@@ -2926,7 +2829,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b6f"
+              "$oid": "6737db9f9cb04c2d0b7817d5"
             }
           },
           {
@@ -2936,7 +2839,7 @@
             "confidence": 0.93,
             "durationInFrames": 30,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b70"
+              "$oid": "6737db9f9cb04c2d0b7817d6"
             }
           },
           {
@@ -2946,7 +2849,7 @@
             "confidence": 1,
             "durationInFrames": 6,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b71"
+              "$oid": "6737db9f9cb04c2d0b7817d7"
             }
           },
           {
@@ -2956,7 +2859,7 @@
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b72"
+              "$oid": "6737db9f9cb04c2d0b7817d8"
             }
           },
           {
@@ -2966,7 +2869,7 @@
             "confidence": 0.98,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b73"
+              "$oid": "6737db9f9cb04c2d0b7817d9"
             }
           },
           {
@@ -2976,7 +2879,7 @@
             "confidence": 0.99,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b74"
+              "$oid": "6737db9f9cb04c2d0b7817da"
             }
           },
           {
@@ -2986,7 +2889,7 @@
             "confidence": 0.95,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b75"
+              "$oid": "6737db9f9cb04c2d0b7817db"
             }
           },
           {
@@ -2996,7 +2899,7 @@
             "confidence": 0.96,
             "durationInFrames": 46,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b76"
+              "$oid": "6737db9f9cb04c2d0b7817dc"
             }
           }
         ],
@@ -3007,18 +2910,18 @@
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Ambitious person",
+            "keyword": "Ambition",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b77"
+              "$oid": "6737db9f9cb04c2d0b7817dd"
             }
           },
           {
             "search": "stock",
-            "keyword": "Hard work and ambition",
+            "keyword": "Hard work",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b78"
+              "$oid": "6737db9f9cb04c2d0b7817de"
             }
           },
           {
@@ -3026,7 +2929,7 @@
             "keyword": "Success",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b79"
+              "$oid": "6737db9f9cb04c2d0b7817df"
             }
           }
         ],
@@ -3035,33 +2938,27 @@
           "height": 1920,
           "width": 1080,
           "video": {
-            "id": "10089169",
+            "id": "10635372",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 3098744,
+            "size": 5183853,
             "width": 1080,
             "height": 1920,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/6585110/6585110-hd_1080_1920_30fps.mp4"
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/7969484/7969484-hd_1080_1920_30fps.mp4"
           },
           "image": {
-            "id": "6585110",
-            "link": "https://images.pexels.com/videos/6585110/adult-african-african-man-afro-6585110.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "id": "7969484",
+            "link": "https://images.pexels.com/videos/7969484/pexels-photo-7969484.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
             "width": 2160,
             "height": 3840
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b7a"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b7817e0"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b6b"
+          "$oid": "6737db9f9cb04c2d0b7817d1"
         }
       },
       {
@@ -3073,7 +2970,7 @@
             "confidence": 0.96,
             "durationInFrames": 25,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b7c"
+              "$oid": "6737db9f9cb04c2d0b7817e2"
             }
           },
           {
@@ -3083,7 +2980,7 @@
             "confidence": 0.92,
             "durationInFrames": 13,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b7d"
+              "$oid": "6737db9f9cb04c2d0b7817e3"
             }
           },
           {
@@ -3093,7 +2990,7 @@
             "confidence": 0.76,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b7e"
+              "$oid": "6737db9f9cb04c2d0b7817e4"
             }
           },
           {
@@ -3103,7 +3000,7 @@
             "confidence": 0.99,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b7f"
+              "$oid": "6737db9f9cb04c2d0b7817e5"
             }
           },
           {
@@ -3113,7 +3010,7 @@
             "confidence": 0.99,
             "durationInFrames": 52,
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b80"
+              "$oid": "6737db9f9cb04c2d0b7817e6"
             }
           }
         ],
@@ -3127,23 +3024,23 @@
             "keyword": "Comment section",
             "precision": "HARD",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b81"
+              "$oid": "6737db9f9cb04c2d0b7817e7"
             }
           },
           {
             "search": "stock",
-            "keyword": "Sharing opinions",
+            "keyword": "Online discussion",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b82"
+              "$oid": "6737db9f9cb04c2d0b7817e8"
             }
           },
           {
             "search": "stock",
-            "keyword": "Discussion",
+            "keyword": "Feedback",
             "precision": "EASY",
             "_id": {
-              "$oid": "67377da0f3ae7a7f2c2c4b83"
+              "$oid": "6737db9f9cb04c2d0b7817e9"
             }
           }
         ],
@@ -3168,26 +3065,24 @@
             "height": 4096
           },
           "_id": {
-            "$oid": "67377da0f3ae7a7f2c2c4b84"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T16:58:08.740Z"
+            "$oid": "6737db9f9cb04c2d0b7817ea"
           }
         },
         "_id": {
-          "$oid": "67377da0f3ae7a7f2c2c4b7b"
+          "$oid": "6737db9f9cb04c2d0b7817e1"
         }
       }
     ]
   },
   "createdAt": {
-    "$date": "2024-11-15T16:58:08.741Z"
+    "$date": "2024-11-15T23:38:57.748Z"
   },
   "updatedAt": {
-    "$date": "2024-11-15T16:58:08.741Z"
+    "$date": "2024-11-15T23:39:11.660Z"
   },
-  "__v": 0
+  "__v": 0,
+  "isNews": false,
+  "style": "Informative",
+  "title": "Mockup Script Example",
+  "costToGenerate": 0
 }
