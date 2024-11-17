@@ -30,6 +30,8 @@
     "@radix-ui/react-toast": "^1.2.2",
     "@radix-ui/react-tooltip": "^1.1.3",
     "@remotion/cli": "4.0.229",
+    "@remotion/player": "^4.0.229",
+    "@remotion/preload": "^4.0.229",
     "@trigger.dev/sdk": "3.2.0",
     "ai": "^3.4.33",
     "axios": "^1.7.7",

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { PlayerRef } from '@remotion/player'
 import { Button } from "@/src/components/ui/button"
 import { Card } from "@/src/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
@@ -26,6 +27,7 @@ export default function VideoEditor() {
   const [activeTab, setActiveTab] = useState('sequences')
   const [isScrolled, setIsScrolled] = useState(false)
   const previewRef = useRef<HTMLDivElement>(null)
+  const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
 
   const handleWordInputChange = (wordIndex: number, newWord: string) => {
@@ -133,7 +135,7 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-              <VideoPreview />
+              <VideoPreview playerRef={playerRef} video={video} />
             </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -147,7 +149,7 @@ export default function VideoEditor() {
             isScrolled ? 'h-40' : 'h-64'
           }`}
         >
-          <VideoPreview />
+          <VideoPreview playerRef={playerRef} video={video} />
         </div>
         <Card className="mt-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
