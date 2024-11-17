@@ -29,6 +29,9 @@
         "joinSpaces": "Rejoindre un espace"
       }
     },
+    "edit": {
+      "loading-video-data": "Chargement des données de la vidéo..."
+    },
     "ai": {
       "hello": "Salut, ",
       "title-1": "Comment veux-tu créer ta vidéo ?",

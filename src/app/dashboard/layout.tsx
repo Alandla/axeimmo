@@ -46,8 +46,8 @@ export default function LayoutPrivate({ children }: Readonly<{children: React.Re
                 <BreadcrumbList>
                   {breadcrumbs.map((crumb, index) => (
                     <Fragment key={crumb.href}>
-                      {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
-                      <BreadcrumbItem className="hidden md:block">
+                      {index > 0 && <BreadcrumbSeparator/>}
+                      <BreadcrumbItem>
                         {index === breadcrumbs.length - 1 ? (
                           <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                         ) : (

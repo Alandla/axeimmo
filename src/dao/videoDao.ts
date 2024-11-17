@@ -2,6 +2,16 @@ import connectMongo from '../lib/mongoose';
 import Video from '../models/Video';
 import { IVideo } from '../types/video';
 
+export const getVideoById = async (id: string): Promise<IVideo | null> => {
+  try {
+    await connectMongo();
+    const video = await Video.findById(id);
+    return video?.toJSON();
+  } catch (error: any) {
+    throw new Error(`Erreur lors de la récupération de la vidéo: ${error.message}`);
+  }
+}
+
 export const updateVideo = async (videoData: IVideo): Promise<IVideo> => {
   try {
     await connectMongo();

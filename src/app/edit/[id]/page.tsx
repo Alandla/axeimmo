@@ -1,0 +1,181 @@
+'use client'
+
+import { useState, useEffect, useRef } from 'react'
+import { Button } from "@/src/components/ui/button"
+import { Card } from "@/src/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/src/components/ui/breadcrumb"
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
+import { Download, Save, Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import Sequence from '@/src/components/edit/sequence'
+import SequenceSettings from '@/src/components/edit/sequence-settings'
+import VideoPreview from '@/src/components/edit/video-preview'
+import { useParams } from 'next/navigation'
+import { basicApiGetCall } from '@/src/lib/api'
+import { IVideo } from '@/src/types/video'
+import { useTranslations } from 'next-intl'
+import { ScrollArea } from '@/src/components/ui/scroll-area'
+
+export default function VideoEditor() {
+  const { id } = useParams()
+  const t = useTranslations('edit')
+
+  const [video, setVideo] = useState<IVideo | null>(null)
+  const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
+  const [activeTab, setActiveTab] = useState('sequences')
+  const [isScrolled, setIsScrolled] = useState(false)
+  const previewRef = useRef<HTMLDivElement>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const handleWordInputChange = (wordIndex: number, newWord: string) => {
+    console.log("wordIndex", wordIndex, "newWord", newWord)
+  }
+
+  const handleCutSequence = (cutIndex: number) => {
+    console.log("cutIndex", cutIndex)
+  }
+
+  useEffect(() => {
+    const fetchVideo = async () => {
+      try {
+        setIsLoading(true)
+        const response = await basicApiGetCall<IVideo>(`/video/${id}`)
+        console.log("response", response)
+        setVideo(response)
+      } catch (error) {
+        console.error('Erreur lors de la récupération de la vidéo:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (id) {
+      fetchVideo()
+    }
+  }, [id])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (previewRef.current) {
+        setIsScrolled(window.scrollY > previewRef.current.offsetHeight / 2)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return (
+    <>
+    {isLoading && (
+        <div className="fixed inset-0 bg-muted/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="text-center space-y-4">
+            <Loader2 className="w-8 h-8 animate-spin mx-auto" />
+            <p className="text-lg font-medium">{t('loading-video-data')}</p>
+          </div>
+        </div>
+    )}
+    <div className="min-h-screen bg-muted">
+      {/* Header */}
+      <header className="sticky top-0 z-10 bg-muted p-4">
+        <div className="mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            <Breadcrumb>
+                <BreadcrumbList>
+                <BreadcrumbItem>
+                    <BreadcrumbLink href="/dashboard" asChild>
+                        <Link href="/dashboard">
+                            Dashboard
+                        </Link>
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator/>
+                    <BreadcrumbItem>
+                        <BreadcrumbPage>{video?.title || 'Chargement...'}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button variant="outline" size="icon">
+                <Save className="w-4 h-4" />
+            </Button>
+            <Button>
+                <Download className="w-4 h-4" />
+                Exporter
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Desktop Layout */}
+      <div className="hidden lg:block mx-auto px-4">
+        <ResizablePanelGroup 
+          direction="horizontal" 
+          className="min-h-[calc(100vh-5rem)] space-x-1"
+        >
+          <ResizablePanel defaultSize={30} minSize={20}>
+            <Card className="h-full">
+                <ScrollArea className="h-[calc(100vh-5rem)]">
+                    {video?.video?.sequences && video?.video?.sequences.map((sequence, index) => (
+                        <Sequence sequence={sequence} index={index} selectedIndex={selectedSequenceIndex} setSelectedIndex={setSelectedSequenceIndex} handleWordInputChange={handleWordInputChange} onCutSequence={handleCutSequence} />
+                    ))}
+                </ScrollArea>
+            </Card>
+          </ResizablePanel>
+          <ResizableHandle className="w-[1px] bg-transparent" />
+          <ResizablePanel defaultSize={30} minSize={20}>
+            <Card className="h-full">
+              <SequenceSettings />
+            </Card>
+          </ResizablePanel>
+          <ResizableHandle className="w-[1px] bg-transparent" />
+          <ResizablePanel defaultSize={20} minSize={10}>
+            <Card className="h-full">
+              <VideoPreview />
+            </Card>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="lg:hidden px-4">
+        <div
+          ref={previewRef}
+          className={`sticky top-[57px] z-20 transition-all duration-300 ${
+            isScrolled ? 'h-40' : 'h-64'
+          }`}
+        >
+          <VideoPreview />
+        </div>
+        <Card className="mt-4">
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="sequences">Séquences</TabsTrigger>
+              <TabsTrigger value="settings">Paramètres</TabsTrigger>
+            </TabsList>
+            <TabsContent value="sequences">
+              <ScrollArea className="h-[calc(100vh-16rem)]">
+                {video?.video?.sequences && video?.video?.sequences.map((sequence, index) => (
+                  <Sequence 
+                    sequence={sequence} 
+                    index={index} 
+                    selectedIndex={selectedSequenceIndex} 
+                    setSelectedIndex={setSelectedSequenceIndex} 
+                    handleWordInputChange={handleWordInputChange} 
+                    onCutSequence={handleCutSequence} 
+                  />
+                ))}
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings">
+              <SequenceSettings />
+            </TabsContent>
+          </Tabs>
+        </Card>
+      </div>
+    </div>
+    </>
+  )
+}
