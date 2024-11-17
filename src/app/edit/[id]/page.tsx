@@ -17,6 +17,7 @@ import { basicApiGetCall } from '@/src/lib/api'
 import { IVideo } from '@/src/types/video'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
+import { IMedia } from '@/src/types/video'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -36,6 +37,14 @@ export default function VideoEditor() {
 
   const handleCutSequence = (cutIndex: number) => {
     console.log("cutIndex", cutIndex)
+  }
+
+  const setSequenceMedia = (sequenceIndex: number, media: IMedia) => {
+    if (video && video.video) {
+      const newSequences = [...video.video.sequences]
+      newSequences[sequenceIndex].media = media
+      setVideo({ ...video, video: { ...video.video, sequences: newSequences } })
+    }
   }
 
   useEffect(() => {
@@ -136,7 +145,11 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={30} minSize={20}>
             <Card className="h-full">
-              <SequenceSettings />
+              <ScrollArea className="h-[calc(100vh-5rem)]">
+                {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
+                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} />
+                )}
+              </ScrollArea>
             </Card>
           </ResizablePanel>
           <ResizableHandle className="w-[1px] bg-transparent" />
@@ -177,7 +190,11 @@ export default function VideoEditor() {
               </ScrollArea>
             </TabsContent>
             <TabsContent value="settings">
-              <SequenceSettings />
+              <ScrollArea className="h-[calc(100vh-16rem)]">
+                {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
+                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} />
+                )}
+              </ScrollArea>
             </TabsContent>
           </Tabs>
         </Card>

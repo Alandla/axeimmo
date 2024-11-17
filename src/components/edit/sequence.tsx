@@ -29,7 +29,7 @@ export default function Sequence({ sequence, index, selectedIndex, setSelectedIn
                     <div className="relative">  
                         {sequence.media?.image ? (
                             <SkeletonImage
-                                src={typeof sequence.media.image === 'string' ? sequence.media.image : sequence.media.image.link}
+                                src={sequence.media.image.link}
                                 height={1200}
                                 width={630}
                                 alt={sequence.text}

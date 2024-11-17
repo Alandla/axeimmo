@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ data: { runId: handle.id, publicAccessToken: handle.publicAccessToken } })
   } catch (error) {
-    console.error('Error generating presigned URL:', error)
-    return NextResponse.json({ error: 'Error generating presigned URL' }, { status: 500 })
+    console.error('Error starting generation:', error)
+    return NextResponse.json({ error: 'Error starting generation' }, { status: 500 })
   }
 }
