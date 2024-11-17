@@ -25,7 +25,6 @@ export default function VideoEditor() {
   const [video, setVideo] = useState<IVideo | null>(null)
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
   const [activeTab, setActiveTab] = useState('sequences')
-  const [isScrolled, setIsScrolled] = useState(false)
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -65,20 +64,13 @@ export default function VideoEditor() {
   }, [selectedSequenceIndex])
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (previewRef.current) {
-        setIsScrolled(window.scrollY > previewRef.current.offsetHeight / 2)
-      }
-    }
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 1024) // 1024px est la breakpoint lg de Tailwind
     }
 
     checkIsMobile()
     window.addEventListener('resize', checkIsMobile)
-    window.addEventListener('scroll', handleScroll)
     return () => {
-      window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', checkIsMobile)
     }
   }, [])
@@ -93,7 +85,7 @@ export default function VideoEditor() {
           </div>
         </div>
     )}
-    <div className="min-h-screen bg-muted">
+    <div className="min-h-screen bg-muted overflow-hidden">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-muted p-4">
         <div className="mx-auto flex justify-between items-center">
@@ -150,7 +142,7 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-              {!isMobile && <VideoPreview playerRef={playerRef} video={video} />}
+              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
             </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -160,11 +152,9 @@ export default function VideoEditor() {
       <div className="lg:hidden px-4">
         <div
           ref={previewRef}
-          className={`sticky top-[57px] z-20 transition-all duration-300 ${
-            isScrolled ? 'h-40' : 'h-64'
-          }`}
+          className={`sticky top-[57px] z-20 transition-all duration-300 h-52`}
         >
-          {isMobile && <VideoPreview playerRef={playerRef} video={video} />}
+          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
         </div>
         <Card className="mt-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>

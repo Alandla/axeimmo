@@ -4,7 +4,7 @@ import { Player, PlayerRef } from "@remotion/player";
 import { useEffect } from "react";
 import { preloadAudio, preloadImage, preloadVideo } from "@remotion/preload";
 
-export default function VideoPreview({ playerRef, video }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null }) {
+export default function VideoPreview({ playerRef, video, isMobile }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null, isMobile: boolean }) {
     // Calculer l'aspect ratio basé sur les dimensions de la composition
     const aspectRatio = 1280 / 720;
 
@@ -30,7 +30,7 @@ export default function VideoPreview({ playerRef, video }: { playerRef: React.Re
     }, []);
 
     return (
-        <div className="h-full flex items-center justify-center p-4">
+        <div className={`h-full flex items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
             <div className="relative w-full h-full">
                 <Player
                     ref={playerRef}
