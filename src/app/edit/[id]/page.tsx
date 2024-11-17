@@ -29,6 +29,7 @@ export default function VideoEditor() {
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
 
   const handleWordInputChange = (wordIndex: number, newWord: string) => {
     console.log("wordIndex", wordIndex, "newWord", newWord)
@@ -58,14 +59,28 @@ export default function VideoEditor() {
   }, [id])
 
   useEffect(() => {
+    if (video?.video?.sequences && selectedSequenceIndex >= 0 && selectedSequenceIndex < video.video.sequences.length) {
+      playerRef.current?.seekTo(video.video.sequences[selectedSequenceIndex].start * 60)
+    }
+  }, [selectedSequenceIndex])
+
+  useEffect(() => {
     const handleScroll = () => {
       if (previewRef.current) {
         setIsScrolled(window.scrollY > previewRef.current.offsetHeight / 2)
       }
     }
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 1024) // 1024px est la breakpoint lg de Tailwind
+    }
 
+    checkIsMobile()
+    window.addEventListener('resize', checkIsMobile)
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', checkIsMobile)
+    }
   }, [])
 
   return (
@@ -135,7 +150,7 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-              <VideoPreview playerRef={playerRef} video={video} />
+              {!isMobile && <VideoPreview playerRef={playerRef} video={video} />}
             </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -149,7 +164,7 @@ export default function VideoEditor() {
             isScrolled ? 'h-40' : 'h-64'
           }`}
         >
-          <VideoPreview playerRef={playerRef} video={video} />
+          {isMobile && <VideoPreview playerRef={playerRef} video={video} />}
         </div>
         <Card className="mt-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>

@@ -30,8 +30,8 @@ export default function VideoPreview({ playerRef, video }: { playerRef: React.Re
     }, []);
 
     return (
-        <div className="p-4 w-full">
-            <div style={{ position: 'relative', width: '100%', paddingTop: `${aspectRatio * 100}%` }}>
+        <div className="h-full flex items-center justify-center p-4">
+            <div className="relative w-full h-full">
                 <Player
                     ref={playerRef}
                     component={VideoGenerate}
@@ -46,10 +46,12 @@ export default function VideoPreview({ playerRef, video }: { playerRef: React.Re
                     className="rounded-lg"
                     style={{
                         width: '100%',
-                        height: '100%',
                         position: 'absolute',
-                        top: 0,
-                        left: 0,
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        objectFit: 'contain',
+                        maxHeight: '100%',
                     }}
                 />
             </div>
