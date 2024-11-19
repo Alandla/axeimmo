@@ -47,8 +47,6 @@ export function pexelImageToMedia(images: Photo[]) {
     return images.map(image => {
       return {
         type: "image",
-        height: image.height,
-        width: image.width,
         name: image.alt,
         image: {
           id: image.id,
@@ -70,8 +68,6 @@ export function pexelVideoToMedia(videos: any[]) {
         height: video.height,
         width: video.width,
       },
-      height: video.videoBestQuality.height,
-      width: video.videoBestQuality.width,
       video: {
         ...video.videoBestQuality,
         link: video.videoBestQuality.link

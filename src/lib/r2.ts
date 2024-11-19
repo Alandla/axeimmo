@@ -59,3 +59,28 @@ export async function uploadToS3Audio(audio: any, bucket: string) {
       throw error;
   }
 }
+
+export async function uploadToS3Image(image: any, bucket: string) {
+  const imageId = uuidv4();
+  
+  const params: PutObjectCommandInput = {
+    Bucket: bucket,
+    Key: `${imageId}.jpg`,
+    Body: image,
+    ContentType: 'image/jpeg',
+    ACL: 'public-read'
+  };
+
+  try {
+    const response = await new Upload({
+      client: s3,
+      params
+    }).done();
+    const key = response?.Key || '';
+    const url = `https://media.hoox.video/${key}`;
+    return { url, imageId };
+  } catch (error: any) {
+    console.error("Error uploading to S3:", error.message);
+    throw error;
+  }
+}

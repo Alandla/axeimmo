@@ -7,19 +7,19 @@ export interface IWord {
 }
 
 export interface IMedia {
-  type: 'image' | 'video';
-  show: 'full' | 'middle' | 'hide';
+  type: 'image' | 'video' | 'audio';
+  usage: 'voice' | 'avatar' | 'media';
+  show?: 'full' | 'middle' | 'hide';
   name: string;
-  height: number;
-  width: number;
+  label: string;
   video?: {
     id: string;
-    quality: string;
+    quality?: string;
     file_type: string;
     size: number;
     width: number;
     height: number;
-    fps: number;
+    fps?: number;
     link: string;
   };
   image?: {

@@ -4,12 +4,14 @@ import SkeletonImage from "../ui/skeleton-image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Globe, ImageIcon, Loader, Loader2, Plus, Search, Video } from "lucide-react";
+import { Globe, ImageIcon, Loader, Loader2, Plus, Search, Upload, Video } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import SkeletonVideo from "../ui/skeleton-video";
 import { basicApiCall } from "@/src/lib/api";
 import MediaItem from "../ui/media-item";
+import { FileToUpload } from "@/src/types/files";
+import { uploadFiles2 } from "@/src/service/upload.service";
 
 export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void }) {
   const [searchType, setSearchType] = useState<'stock' | 'web'>('stock')
@@ -17,10 +19,12 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
   const [searchResults, setSearchResults] = useState<IMedia[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoadingMedia, setIsLoadingMedia] = useState(false)
+  const [isUploadingFiles, setIsUploadingFiles] = useState(false)
 
   const fetchResults = async (keyword: string, page: number) => {
     setCurrentPage(page)
     setIsLoadingMedia(true)
+    setSearchQuery(keyword)
     try {
       if (searchType === 'stock') {
         const results = await basicApiCall('/media/getPexelsVideo', { 
@@ -46,6 +50,21 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
     } finally {
       setIsLoadingMedia(false)
     }
+  }
+
+  const handleFileUpload = async (newFiles: File[]) => {
+    setIsUploadingFiles(true)
+    const uploadedFiles: FileToUpload[] = newFiles.map(file => {
+        return {
+          file,
+          type: "media",
+          label: ''
+        };
+    });
+
+    const files = await uploadFiles2(uploadedFiles)
+    console.log(files)
+    setIsUploadingFiles(false)
   }
 
   return (
@@ -127,8 +146,22 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
             </div>
           </TabsContent>
           <TabsContent value="assets">
-            {/* Implement assets content here */}
-            <p>Assets content goes here</p>
+            <input
+                id="file-input"
+                type="file"
+                multiple
+                className="hidden"
+                accept="image/*,video/*"
+                onChange={(e) => {
+                if (e.target.files) {
+                    handleFileUpload(Array.from(e.target.files));
+                }
+                }}
+            />
+            <Button className="w-full" disabled={isUploadingFiles} onClick={() => document.getElementById('file-input')?.click()}>
+              {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+              Upload a file
+            </Button>
           </TabsContent>
         </Tabs>
       </CardContent>

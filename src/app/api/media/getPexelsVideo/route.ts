@@ -15,8 +15,6 @@ export async function POST(req: NextRequest) {
 
   const { keyword, number, page } = params;
 
-  console.log("params: ", params)
-
   try {
 
     const results = await getPexelsVideosMedia(keyword, number, page)

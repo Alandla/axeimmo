@@ -5,18 +5,24 @@ const mediaSchema = new mongoose.Schema({
     type: {
       type: String,
       validate(value: string) {
-        return ["image", "video"].includes(value);
+        return ["image", "video", "audio"].includes(value);
+      },
+    },
+    usage: {
+      type: String,
+      validate(value: string) {
+        return ["voice", "avatar", "media"].includes(value);
       },
     },
     show: {
       type: String,
+      required: false,
       validate(value: string) {
         return ["full", "middle","hide"].includes(value);
       },
     },
     name: String,
-    height: Number,
-    width: Number,
+    label: String,
     video: {
       id: String,
       quality: String,
