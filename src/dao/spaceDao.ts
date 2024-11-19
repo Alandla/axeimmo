@@ -3,6 +3,7 @@ import SpaceModel from "../models/Space";
 import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
 import connectMongo from "../lib/mongoose";
 import { addSpaceToUser } from "./userDao";
+import { IMedia } from "../types/video";
 
 export const createPrivateSpaceForUser = async (userId: string, userName: string) => {
   await connectMongo();
@@ -32,6 +33,32 @@ export const createPrivateSpaceForUser = async (userId: string, userName: string
   return space;
 };
 
+export const addMediasToSpace = async (spaceId: string, medias: IMedia[]) => {
+  await connectMongo();
+  try {
+    const space = await getSpaceById(spaceId);
+    if (!space.medias) {
+      space.medias = [];
+    }
+    space.medias.push(...medias);
+    await space.save();
+  } catch (error) {
+    console.error("Error while adding medias to space: ", error);
+    throw error;
+  }
+}
+
+export const getSpaceById = async (spaceId: string) => {
+  await connectMongo();
+  try {
+    const space = await SpaceModel.findById(spaceId);
+    return space;
+  } catch (error) {
+    console.error("Error while getting space by id: ", error);
+    throw error;
+  }
+}
+
 export const getUserSpaces = async (userId: string) => {
   await connectMongo();
 
@@ -50,6 +77,7 @@ export const getUserSpaces = async (userId: string) => {
     return spaces.map((space) => {
       const userRole = space.members.find((member: any) => member.userId.toString() === userId)?.roles;
       return {
+        id: space._id,
         name: space.name,
         planName: space.plan.name,
         credits: space.credits,

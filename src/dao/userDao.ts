@@ -31,7 +31,18 @@ export const addSpaceToUser = async (userId: string, spaceId: string) => {
     throw error;
   }
 };
-    
+
+export const isUserInSpace = async (userId: string, spaceId: string) => {
+  await connectMongo();
+  try {
+    const user = await UserModel.findById(userId);
+    return user.spaces.includes(spaceId);
+  } catch (error) {
+    console.error("Error while checking if user is in space: ", error);
+    throw error;
+  }
+}
+
 export const isUserExist = async (email: string) => {
   await connectMongo();
   try {

@@ -147,7 +147,7 @@ export default function VideoEditor() {
             <Card className="h-full">
               <ScrollArea className="h-[calc(100vh-5rem)]">
                 {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} />
+                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} />
                 )}
               </ScrollArea>
             </Card>
@@ -192,7 +192,7 @@ export default function VideoEditor() {
             <TabsContent value="settings">
               <ScrollArea className="h-[calc(100vh-16rem)]">
                 {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} />
+                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} />
                 )}
               </ScrollArea>
             </TabsContent>

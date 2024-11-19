@@ -1,7 +1,39 @@
+import { MemberRole, PlanName, SubscriptionType } from "./enums";
+import { IMedia } from "./video";
+
+
+export interface IMember {
+  userId: string;
+  roles: MemberRole;
+}
+
+export interface IPlan {
+  name: PlanName;
+  customerId: string;
+  priceId: string;
+  subscriptionType: SubscriptionType;
+  creditsMonth: number;
+}
+
+export interface IMediaSpace {
+  media: IMedia;
+  uploadedBy: string;
+  uploadedAt: Date;
+}
+
 export interface SimpleSpace {
+  id: string;
   name: string;
   creditsPerMonth: number;
   credits: number;
   planName: string;
   userRole: string;
+}
+
+export interface ISpace {
+  name: string;
+  members: IMember[];
+  medias: IMediaSpace[];
+  plan: IPlan;
+  credits: number;
 }

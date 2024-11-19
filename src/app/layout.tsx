@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import config from "@/config";
 import localFont from "next/font/local";
 import "./globals.css";
-import { getLocale, getMessages } from "next-intl/server";
-import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 import ClientLayout from "../components/layout-client";
 
 export const viewport = {
@@ -32,7 +31,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
 
   const locale = await getLocale();
-  const messages = await getMessages();
 
   return (
     <html lang={locale} data-theme={config.colors.theme} >

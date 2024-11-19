@@ -4,7 +4,7 @@ import sequenceSchema from "./Sequence";
 
 // VIDEO SCHEMA
 const videoSchema = new mongoose.Schema({
-    space: {
+    spaceId: {
       type: mongoose.Schema.Types.ObjectId, // Référence à un espace
       ref: 'Space',
     },

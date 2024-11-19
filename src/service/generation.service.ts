@@ -4,9 +4,11 @@ import { useCreationStore } from '../store/creationStore'
 import { UploadedFile } from '../types/files'
 import { Steps, StepState } from '../types/step'
 import { uploadFiles } from './upload.service'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
 
 export const startGeneration = async () => {
   const { files, script, selectedVoice, selectedAvatar, setSteps } = useCreationStore.getState()
+  const { activeSpace } = useActiveSpaceStore.getState()
   
   const updateStepProgress = (stepName: string, progress: number) => {
     const currentSteps = useCreationStore.getState().steps
@@ -28,7 +30,8 @@ export const startGeneration = async () => {
     files: uploadedFiles,
     script: script,
     voice: selectedVoice,
-    avatar: selectedAvatar
+    avatar: selectedAvatar,
+    spaceId: activeSpace?.id
   }
 
   //Start generation task

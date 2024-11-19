@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
 import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
+import mediaSchema from "./Media";
 
 // Schéma pour les membres
 const memberSchema = new mongoose.Schema({
@@ -38,6 +39,17 @@ const planSchema = new mongoose.Schema({
   },
 });
 
+const mediaSpaceSchema = new mongoose.Schema(
+  {
+    media: mediaSchema,
+    uploadedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    uploadedAt: Date
+  }
+)
+
 const spaceSchema = new mongoose.Schema(
   {
     name: {
@@ -46,6 +58,7 @@ const spaceSchema = new mongoose.Schema(
       trim: true,
     },
     members: [memberSchema],
+    medias: [mediaSpaceSchema],
     plan: planSchema,
     credits: {
       type: Number,

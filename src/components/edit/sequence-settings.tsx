@@ -12,8 +12,10 @@ import { basicApiCall } from "@/src/lib/api";
 import MediaItem from "../ui/media-item";
 import { FileToUpload } from "@/src/types/files";
 import { uploadFiles2 } from "@/src/service/upload.service";
+import SequenceSettingsSearch from "./sequence-settings-search";
+import SequenceSettingsAssets from "./sequence-settings-assets";
 
-export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void }) {
+export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string }) {
   const [searchType, setSearchType] = useState<'stock' | 'web'>('stock')
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<IMedia[]>([])
@@ -63,7 +65,12 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
     });
 
     const files = await uploadFiles2(uploadedFiles)
-    console.log(files)
+    if (files.length > 0) {
+        await basicApiCall('/space/addMedias', {
+            spaceId: spaceId,
+            medias: files
+        })
+    }
     setIsUploadingFiles(false)
   }
 
@@ -91,77 +98,10 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
             <TabsTrigger value="assets">Assets</TabsTrigger>
           </TabsList>
           <TabsContent value="search">
-            <form onSubmit={(e) => { e.preventDefault(); fetchResults(searchQuery, 1) }} className="space-y-2 md:space-y-0 md:flex md:gap-2">
-              <Input placeholder="Search media..." className="w-full md:flex-grow" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-              <Select value={searchType} onValueChange={(value: 'stock' | 'web') => setSearchType(value)}>
-                <SelectTrigger className="w-full md:w-40">
-                  <SelectValue placeholder="Search type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="stock">
-                    <span className="flex items-center">
-                      <ImageIcon size={16} className="mr-2" /> Stock
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="web">
-                    <span className="flex items-center">
-                      <Globe size={16} className="mr-2" /> Web
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <Button type="submit" className="w-full md:w-auto">
-                {isLoadingMedia ? <Loader2 size={16} className="animate-spin" /> : <Search size={16} />}
-                Search
-              </Button>
-            </form>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {sequence.keywords?.slice(0, 3).map((keyword, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center"
-                  onClick={() => fetchResults(keyword.keyword, 1)}
-                >
-                  {keyword.keyword}
-                  <Search size={12} />
-                </Button>
-              ))}
-            </div>
-            <div className="mt-4 columns-3 gap-2">
-                {searchResults.map((media, index) => (
-                    <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} media={media} source='web' setShowModalRemoveMedia={() => {}} setSequenceMedia={setSequenceMedia} />
-                ))}
-            </div>
-            <div className="flex justify-center">
-                <Button 
-                    className="mt-4" 
-                    disabled={searchResults.length === 0 || isLoadingMedia}
-                    onClick={() => fetchResults(searchQuery, currentPage + 1)}
-                >
-                    {isLoadingMedia ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
-                    Load more
-                </Button>
-            </div>
+            <SequenceSettingsSearch sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} />
           </TabsContent>
           <TabsContent value="assets">
-            <input
-                id="file-input"
-                type="file"
-                multiple
-                className="hidden"
-                accept="image/*,video/*"
-                onChange={(e) => {
-                if (e.target.files) {
-                    handleFileUpload(Array.from(e.target.files));
-                }
-                }}
-            />
-            <Button className="w-full" disabled={isUploadingFiles} onClick={() => document.getElementById('file-input')?.click()}>
-              {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-              Upload a file
-            </Button>
+            <SequenceSettingsAssets sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={spaceId} />
           </TabsContent>
         </Tabs>
       </CardContent>

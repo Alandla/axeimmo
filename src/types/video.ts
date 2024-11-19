@@ -49,7 +49,7 @@ export interface ISequence {
 
 export interface IVideo {
   id?: string;
-  space: string; // MongoDB ObjectId as string
+  spaceId: string; // MongoDB ObjectId as string
   costToGenerate?: number;
   state: {
     type: 'pending' | 'generating' | 'done' | 'exporting' | 'error';
