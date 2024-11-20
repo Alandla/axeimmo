@@ -37,8 +37,8 @@ export default function VideoPreview({ playerRef, video, isMobile }: { playerRef
                     component={VideoGenerate}
                     durationInFrames={video?.video?.metadata.audio_duration ? Math.ceil(video?.video?.metadata.audio_duration * 60) : 1}
                     fps={60}
-                    compositionWidth={720}
-                    compositionHeight={1280}
+                    compositionWidth={1080}
+                    compositionHeight={1920}
                     inputProps={{
                         data: video,
                     }}
