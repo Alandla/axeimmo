@@ -87,7 +87,7 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
         </div>
         <div className="mt-4 columns-3 gap-2">
             {searchResults.map((media, index) => (
-                <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} media={media} source='web' setShowModalRemoveMedia={() => {}} setSequenceMedia={setSequenceMedia} />
+                <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} media={media} source='web' setSequenceMedia={setSequenceMedia} />
             ))}
         </div>
         <div className="flex justify-center">

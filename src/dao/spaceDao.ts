@@ -42,8 +42,21 @@ export const addMediasToSpace = async (spaceId: string, medias: IMedia[]) => {
     }
     space.medias.push(...medias);
     await space.save();
+    return space.medias;
   } catch (error) {
     console.error("Error while adding medias to space: ", error);
+    throw error;
+  }
+}
+
+export const deleteMediaFromSpace = async (spaceId: string, media: IMedia) => {
+  await connectMongo();
+  try {
+    const space = await getSpaceById(spaceId);
+    space.medias = space.medias.filter((m: any) => m.media._id.toString() !== media.id);
+    await space.save();
+  } catch (error) {
+    console.error("Error while deleting media from space: ", error);
     throw error;
   }
 }

@@ -7,9 +7,14 @@ import { Trash2 } from 'lucide-react';
 import SkeletonVideo from './skeleton-video';
 import SkeletonImage from './skeleton-image';
 import { useToast } from '@/src/hooks/use-toast';
+import { Button } from './button';
+import ModalConfirmDelete from '../modal/confirm-delete';
+import { useMediaToDeleteStore } from '@/src/store/mediaToDelete';
 
-const MediaItem = ({ sequence, sequenceIndex, media, source = 'aws', canRemove = false, setShowModalRemoveMedia, setSequenceMedia }: { sequence: ISequence, sequenceIndex: number, media: IMedia, source?: 'aws' | 'web', canRemove?: boolean, setShowModalRemoveMedia: (show: boolean) => void, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void }) => {
+const MediaItem = ({ sequence, sequenceIndex, media, source = 'aws', canRemove = false, setSequenceMedia, onDeleteMedia = () => {} }: { sequence: ISequence, sequenceIndex: number, media: IMedia, source?: 'aws' | 'web', canRemove?: boolean, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, onDeleteMedia?: (mediaId: string) => void }) => {
+    const { media: mediaToDelete, spaceId, setMedia: setMediaToDelete } = useMediaToDeleteStore()
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 768);
+    const [showModalDelete, setShowModalDelete] = useState(false);
     const { toast } = useToast()
 
     // Définition des animations pour le conteneur parent
@@ -26,7 +31,8 @@ const MediaItem = ({ sequence, sequenceIndex, media, source = 'aws', canRemove =
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const handleDelete = async () => {
+    const handleDelete = async (media: IMedia) => {
+        console.log('handleDelete', media)
         if ((media.type === 'video' && media.video?.link === sequence.media?.video?.link) || (media.type === 'image' && media.image?.link === sequence.media?.image?.link)) {
             toast({
                 title: 'You cannot delete the selected media',
@@ -34,7 +40,8 @@ const MediaItem = ({ sequence, sequenceIndex, media, source = 'aws', canRemove =
                 variant: 'destructive'
             })
         } else {
-            setShowModalRemoveMedia(true);
+            setMediaToDelete(media)
+            setShowModalDelete(true);
         }
     }
 
@@ -50,6 +57,12 @@ const MediaItem = ({ sequence, sequenceIndex, media, source = 'aws', canRemove =
     };
 
     return (
+        <>
+        <ModalConfirmDelete
+            isOpen={showModalDelete}
+            setIsOpen={setShowModalDelete}
+            onDeleteMedia={onDeleteMedia}
+        />
         <motion.div 
             className={`group relative overflow-hidden mb-4 break-inside-avoid cursor-pointer`}
             variants={container}
@@ -83,18 +96,20 @@ const MediaItem = ({ sequence, sequenceIndex, media, source = 'aws', canRemove =
                 {media.name}
             </motion.div>
             {canRemove && (
-                <motion.button 
-                    className="btn btn-circle btn-sm absolute top-0 right-0 bg-black bg-opacity-50 hover:bg-error text-white m-2"
+                <motion.div 
+                    className="absolute top-2 right-2"
                     variants={buttonAnimation}
-                    onClick={(e) => {
-                        e.stopPropagation(); // Empêche l'événement de clic du média d'être déclenché
-                        handleDelete();
-                    }}
                 >
-                    <Trash2 size={16} />
-                </motion.button>
+                    <Button size="iconRounded" className="hover:bg-destructive hover:text-destructive-foreground transition-colors duration-200" onClick={(e) => {
+                        e.stopPropagation(); // Empêche l'événement de clic du média d'être déclenché
+                        handleDelete(media);
+                    }}>
+                        <Trash2 size={16} />
+                    </Button>
+                </motion.div>
             )}
         </motion.div>
+        </>
     );
 };
 

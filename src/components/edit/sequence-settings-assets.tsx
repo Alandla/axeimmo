@@ -8,20 +8,34 @@ import { FileToUpload } from "@/src/types/files";
 import { uploadFiles2 } from "@/src/service/upload.service";
 import { IMediaSpace } from "@/src/types/space";
 import { useSession } from "next-auth/react";
+import { useMediaToDeleteStore } from "@/src/store/mediaToDelete";
+import { useToast } from "@/src/hooks/use-toast";
 
 export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSequenceMedia, spaceId }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string }) {
   const { data: session } = useSession()
 
   const [isUploadingFiles, setIsUploadingFiles] = useState(false)
   const [assets, setAssets] = useState<IMediaSpace[]>([])
+  const { setSpaceId } = useMediaToDeleteStore()
+  const { toast } = useToast()
 
   useEffect(() => {
     const fetchAssets = async () => {
       const assets: IMediaSpace[] = await basicApiCall('/space/getMedias', { spaceId })
       setAssets(assets)
     }
+    setSpaceId(spaceId)
     fetchAssets()
   }, [])
+
+  const onDeleteMedia = async (mediaId: string) => {
+    const updatedAssets = assets.filter(asset => asset.media.id !== mediaId);
+    setAssets(updatedAssets);
+    toast({
+      title: 'Media deleted',
+      description: 'The media has been deleted',
+    })
+  }
 
   const handleFileUpload = async (newFiles: File[]) => {
     setIsUploadingFiles(true)
@@ -44,11 +58,11 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
     })
 
     if (medias.length > 0) {
-      await basicApiCall('/space/addMedias', {
+      const addedMedias: IMediaSpace[] = await basicApiCall('/space/addMedias', {
           spaceId: spaceId,
           medias
       })
-      setAssets(prevAssets => prevAssets ? [...prevAssets, ...medias] : [...medias])
+      setAssets(addedMedias)
     }
     setIsUploadingFiles(false)
   }
@@ -73,7 +87,7 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
       </Button>
       <div className="mt-4 columns-3 gap-2">
           {assets && assets.map((asset, index) => (
-              <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} media={asset.media} source='web' setShowModalRemoveMedia={() => {}} setSequenceMedia={setSequenceMedia} />
+              <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} media={asset.media} source='web' canRemove={true} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
           ))}
       </div>
     </>

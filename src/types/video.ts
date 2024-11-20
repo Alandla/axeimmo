@@ -7,6 +7,7 @@ export interface IWord {
 }
 
 export interface IMedia {
+  id?: string;
   type: 'image' | 'video' | 'audio';
   usage: 'voice' | 'avatar' | 'media';
   show?: 'full' | 'middle' | 'hide';

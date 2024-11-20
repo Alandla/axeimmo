@@ -1,4 +1,4 @@
-import { PutObjectCommand, PutObjectCommandInput, S3, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, DeleteObjectCommandInput, PutObjectCommand, PutObjectCommandInput, S3, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { Upload } from '@aws-sdk/lib-storage';
@@ -83,4 +83,26 @@ export async function uploadToS3Image(image: any, bucket: string) {
     console.error("Error uploading to S3:", error.message);
     throw error;
   }
+}
+
+export async function deleteFromS3(key: string, bucket: string) {
+  
+  const input: DeleteObjectCommandInput = {
+    Bucket: bucket,
+    Key: key
+  }
+
+  try {
+    const response = await s3.send(new DeleteObjectCommand(input));
+    return response;
+  } catch (error) {
+    console.error("Error deleting from S3:", error);
+    throw error;
+  }
+}
+
+export async function getKeyFromUrl(url: string) {
+  const urlObj = new URL(url);
+  const pathname = urlObj.pathname;
+  return pathname.substring(1); // Enlève le / au début
 }
