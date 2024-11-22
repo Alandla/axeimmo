@@ -39,7 +39,7 @@ export const generateVideoTask = task({
     logger.log("Generating video...", { payload, ctx });
 
     let video : IVideo = {
-      space: payload.space,
+      spaceId: payload.space,
       state: {
         type: 'generating',
       },

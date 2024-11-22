@@ -10,45 +10,51 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/components/ui/dialog"
-import { basicApiCall } from '@/src/lib/api'
-import { useMediaToDeleteStore } from '@/src/store/mediaToDelete'
+import { Download } from 'lucide-react'
 
-interface ModalConfirmDeleteProps {
+interface ModalConfirmExportProps {
+  cost: number
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  onDeleteMedia: (mediaId: string) => void
+  onExportVideo: () => Promise<string | undefined>
 }
 
-export default function ModalConfirmDelete({
+export default function ModalConfirmExport({
+  cost,
   isOpen,
   setIsOpen,
-  onDeleteMedia = () => {}
-}: ModalConfirmDeleteProps) {
+  onExportVideo
+}: ModalConfirmExportProps) {
   const [isPending, setIsPending] = useState(false)
-  const { media, spaceId } = useMediaToDeleteStore()
 
   const handleConfirm = async () => {
     setIsPending(true)
-    await basicApiCall('/media/delete', {
-        media,
-        spaceId
-    })
-    onDeleteMedia(media?.id || '')
+    const exportId = await onExportVideo()
+    if (exportId) {
+      window.open(`/export/${exportId}`, '_blank')
+    }
     setIsPending(false)
     setIsOpen(false)
   }
 
   return (
-    <Dialog open={isOpen}>
+    <Dialog 
+      open={isOpen} 
+      onOpenChange={setIsOpen}
+    >
       <DialogContent 
-        className="sm:max-w-[425px]"
+        className="sm:max-w-[425px]" 
         onEscapeKeyDown={() => setIsOpen(false)}
         onInteractOutside={() => setIsOpen(false)}
       >
         <DialogHeader>
-          <DialogTitle>Confirm deletion</DialogTitle>
+          <DialogTitle>Export the video ?</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete {media?.name} ? This action is irreversible.
+            Exporting this video will cost you credits as follows, please confirm.
+            <div className="text-sm text-gray-500 mt-2">
+              <p><b>Cost:</b> {cost} credits</p>
+              <p><b>Balance:</b> 50 credits</p>
+            </div>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end">
@@ -62,11 +68,11 @@ export default function ModalConfirmDelete({
           </Button>
           <Button
             type="button"
-            variant="destructive"
             onClick={handleConfirm}
             disabled={isPending}
           >
-            {isPending ? 'Deleting...' : 'Delete'}
+            <Download className="w-4 h-4" />
+            {isPending ? 'Saving...' : 'Export'}
           </Button>
         </DialogFooter>
       </DialogContent>

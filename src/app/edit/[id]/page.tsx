@@ -13,11 +13,13 @@ import Sequence from '@/src/components/edit/sequence'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
-import { basicApiGetCall } from '@/src/lib/api'
+import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
 import { IVideo } from '@/src/types/video'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
+import ModalConfirmExport from '@/src/components/modal/confirm-export'
+import { IExport } from '@/src/types/export'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -30,7 +32,8 @@ export default function VideoEditor() {
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
-
+  const [showModalExport, setShowModalExport] = useState(false)
+  
   const handleWordInputChange = (wordIndex: number, newWord: string) => {
     console.log("wordIndex", wordIndex, "newWord", newWord)
   }
@@ -45,6 +48,24 @@ export default function VideoEditor() {
       newSequences[sequenceIndex].media = media
       setVideo({ ...video, video: { ...video.video, sequences: newSequences } })
     }
+  }
+
+  const onExportVideo = async () => {
+    const cost = calculateCredits(video?.video?.metadata.audio_duration || 30)
+    await basicApiCall('/video/save', { video })
+    const exportResult : IExport = await basicApiCall('/export/create', { videoId: video?.id, spaceId: video?.spaceId, creditCost: cost })
+    await basicApiCall('/space/removeCredits', { spaceId: video?.spaceId, cost })
+    return exportResult.id
+  }
+
+  const calculateCredits = (videoDurationInSeconds: number) => {
+    // Round up to the nearest 15 seconds
+    const roundedDuration = Math.ceil(videoDurationInSeconds / 15) * 15;
+    
+    // Calculate the number of credits based on the rounded duration
+    const creditsNeeded = Math.max(0.5, Math.ceil((roundedDuration - 15) / 30) * 0.5);
+    
+    return creditsNeeded * 10;
   }
 
   useEffect(() => {
@@ -94,6 +115,12 @@ export default function VideoEditor() {
           </div>
         </div>
     )}
+    <ModalConfirmExport
+      cost={calculateCredits(video?.video?.metadata.audio_duration || 30)}
+      isOpen={showModalExport}
+      setIsOpen={setShowModalExport}
+      onExportVideo={onExportVideo}
+    />
     <div className="min-h-screen bg-muted overflow-hidden">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-muted p-4">
@@ -101,14 +128,14 @@ export default function VideoEditor() {
           <div className="flex items-center space-x-4">
             <Breadcrumb>
                 <BreadcrumbList>
-                <BreadcrumbItem>
-                    <BreadcrumbLink href="/dashboard" asChild>
-                        <Link href="/dashboard">
-                            Dashboard
-                        </Link>
-                    </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator/>
+                  <BreadcrumbItem>
+                      <BreadcrumbLink href="/dashboard" asChild>
+                          <Link href="/dashboard">
+                              Dashboard
+                          </Link>
+                      </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator/>
                     <BreadcrumbItem>
                         <BreadcrumbPage>{video?.title || 'Chargement...'}</BreadcrumbPage>
                     </BreadcrumbItem>
@@ -119,9 +146,9 @@ export default function VideoEditor() {
             <Button variant="outline" size="icon">
                 <Save className="w-4 h-4" />
             </Button>
-            <Button>
+            <Button onClick={() => setShowModalExport(true)}>
                 <Download className="w-4 h-4" />
-                Exporter
+                Export
             </Button>
           </div>
         </div>

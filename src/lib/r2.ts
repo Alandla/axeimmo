@@ -3,6 +3,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { Upload } from '@aws-sdk/lib-storage';
 import { v4 as uuidv4 } from 'uuid';
+import fetch from 'node-fetch';
 
 const s3Client = new S3Client({
   region: "auto",
@@ -60,12 +61,10 @@ export async function uploadToS3Audio(audio: any, bucket: string) {
   }
 }
 
-export async function uploadToS3Image(image: any, bucket: string) {
-  const imageId = uuidv4();
-  
+export async function uploadToS3Image(image: any, bucket: string, fileName: string) {
   const params: PutObjectCommandInput = {
     Bucket: bucket,
-    Key: `${imageId}.jpg`,
+    Key: `${fileName}.jpg`,
     Body: image,
     ContentType: 'image/jpeg',
     ACL: 'public-read'
@@ -78,7 +77,7 @@ export async function uploadToS3Image(image: any, bucket: string) {
     }).done();
     const key = response?.Key || '';
     const url = `https://media.hoox.video/${key}`;
-    return { url, imageId };
+    return { url };
   } catch (error: any) {
     console.error("Error uploading to S3:", error.message);
     throw error;
@@ -105,4 +104,18 @@ export async function getKeyFromUrl(url: string) {
   const urlObj = new URL(url);
   const pathname = urlObj.pathname;
   return pathname.substring(1); // Enlève le / au début
+}
+
+export async function uploadImageFromUrlToS3(imageUrl: string, bucket: string, fileName: string) {
+  try {
+    const response = await fetch(imageUrl);
+    const arrayBuffer = await response.arrayBuffer();
+    const imageBuffer = Buffer.from(arrayBuffer);
+
+    const { url: s3Url } = await uploadToS3Image(imageBuffer, bucket, fileName);
+    return s3Url;
+  } catch (error: any) {
+    console.error("Error downloading and uploading image:", error.message);
+    throw error;
+  }
 }

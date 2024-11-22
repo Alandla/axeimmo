@@ -5,6 +5,7 @@ import os from "os";
 import path from "path";
 import { uploadToS3Image } from '../lib/r2';
 import { FileToUpload } from "../types/files";
+import { v4 as uuidv4 } from 'uuid';
 
 export const generateMediaThumbnail = task({
   id: "generate-media-thumbnail",
@@ -28,9 +29,11 @@ export const generateMediaThumbnail = task({
 
     // Lire l'image générée
     const thumbnailBuffer = await fs.readFile(outputPath);
+
+    const imageId = uuidv4();
     
     // Upload vers S3
-    const { url: thumbnailUrl, imageId } = await uploadToS3Image(thumbnailBuffer, 'medias-users');
+    const { url: thumbnailUrl } = await uploadToS3Image(thumbnailBuffer, 'medias-users', imageId);
     
     // Nettoyer le fichier temporaire
     await fs.unlink(outputPath);

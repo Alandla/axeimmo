@@ -49,6 +49,30 @@ export const addMediasToSpace = async (spaceId: string, medias: IMedia[]) => {
   }
 }
 
+export const removeCreditsToSpace = async (spaceId: string, credits: number) => {
+  await connectMongo();
+  try {
+    const space = await getSpaceById(spaceId);
+    space.credits -= credits;
+    await space.save();
+  } catch (error) {
+    console.error("Error while removing credits from space: ", error);
+    throw error;
+  }
+}
+
+export const addCreditsToSpace = async (spaceId: string, credits: number) => {
+  await connectMongo();
+  try {
+    const space = await getSpaceById(spaceId);
+    space.credits += credits;
+    await space.save();
+  } catch (error) {
+    console.error("Error while adding credits to space: ", error);
+    throw error;
+  }
+}
+
 export const deleteMediaFromSpace = async (spaceId: string, media: IMedia) => {
   await connectMongo();
   try {
