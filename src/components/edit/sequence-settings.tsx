@@ -6,8 +6,11 @@ import { ImageIcon } from "lucide-react";
 import SkeletonVideo from "../ui/skeleton-video";
 import SequenceSettingsSearch from "./sequence-settings-search";
 import SequenceSettingsAssets from "./sequence-settings-assets";
+import { useTranslations } from "next-intl";
 
 export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string }) {
+
+  const t = useTranslations('edit.sequence-edit')
 
   return (
     <>
@@ -29,8 +32,8 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
 
         <Tabs defaultValue="search">
           <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="search">Search</TabsTrigger>
-            <TabsTrigger value="assets">Assets</TabsTrigger>
+            <TabsTrigger value="search">{t('search')}</TabsTrigger>
+            <TabsTrigger value="assets">{t('assets')}</TabsTrigger>
           </TabsList>
           <TabsContent value="search">
             <SequenceSettingsSearch sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} />

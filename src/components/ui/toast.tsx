@@ -4,6 +4,7 @@ import * as React from "react"
 import { Cross2Icon } from "@radix-ui/react-icons"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
+import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
 
 import { cn } from "@/src/lib/utils"
 
@@ -32,6 +33,9 @@ const toastVariants = cva(
         default: "border bg-background text-foreground",
         destructive:
           "destructive group border-destructive bg-destructive text-destructive-foreground",
+        confirm:
+          "border bg-green-500 text-white",
+        loading: ""
       },
     },
     defaultVariants: {
@@ -50,7 +54,14 @@ const Toast = React.forwardRef<
       ref={ref}
       className={cn(toastVariants({ variant }), className)}
       {...props}
-    />
+    >
+      <div className="flex gap-2">
+        {variant === "loading" && <Loader2 className="h-4 w-4 animate-spin" />}
+        {variant === "confirm" && <CheckCircle2 className="h-4 w-4" />}
+        {variant === "destructive" && <AlertCircle className="h-4 w-4" />}
+        <div className="flex-1">{props.children}</div>
+      </div>
+    </ToastPrimitives.Root>
   )
 })
 Toast.displayName = ToastPrimitives.Root.displayName

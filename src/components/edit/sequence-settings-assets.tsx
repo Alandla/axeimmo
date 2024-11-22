@@ -10,9 +10,11 @@ import { IMediaSpace } from "@/src/types/space";
 import { useSession } from "next-auth/react";
 import { useMediaToDeleteStore } from "@/src/store/mediaToDelete";
 import { useToast } from "@/src/hooks/use-toast";
+import { useTranslations } from "next-intl";
 
 export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSequenceMedia, spaceId }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string }) {
   const { data: session } = useSession()
+  const t = useTranslations('edit.sequence-edit-assets')
 
   const [isUploadingFiles, setIsUploadingFiles] = useState(false)
   const [assets, setAssets] = useState<IMediaSpace[]>([])
@@ -29,42 +31,66 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
   }, [])
 
   const onDeleteMedia = async (mediaId: string) => {
+    toast({
+      title: t('toast.deleting-file'),
+      description: t('toast.deleting-file-description')
+    })
     const updatedAssets = assets.filter(asset => asset.media.id !== mediaId);
     setAssets(updatedAssets);
     toast({
-      title: 'Media deleted',
-      description: 'The media has been deleted',
+      title: t('toast.file-deleted'),
+      description: t('toast.file-deleted-description'),
+      variant: 'confirm'
     })
   }
 
   const handleFileUpload = async (newFiles: File[]) => {
-    setIsUploadingFiles(true)
-    const uploadedFiles: FileToUpload[] = newFiles.map(file => {
-        return {
-          file,
-          type: "media",
-          label: ''
-        };
-    });
-
-    const files: IMedia[] = await uploadFiles2(uploadedFiles)
-
-    const medias: IMediaSpace[] = files.map(file => {
-      return {
-        media: file,
-        uploadedBy: session?.user?.id || '',
-        uploadedAt: new Date()
-      }
+    toast({
+      title: t('toast.uploading-file'),
+      description: t('toast.uploading-file-description')
     })
+    try {
+      setIsUploadingFiles(true)
+      const uploadedFiles: FileToUpload[] = newFiles.map(file => {
+          return {
+            file,
+            type: "media",
+            label: ''
+          };
+      });
 
-    if (medias.length > 0) {
-      const addedMedias: IMediaSpace[] = await basicApiCall('/space/addMedias', {
-          spaceId: spaceId,
-          medias
+      const files: IMedia[] = await uploadFiles2(uploadedFiles)
+
+      const medias: IMediaSpace[] = files.map(file => {
+        return {
+          media: file,
+          uploadedBy: session?.user?.id || '',
+          uploadedAt: new Date()
+        }
       })
-      setAssets(addedMedias)
+
+      if (medias.length > 0) {
+        const addedMedias: IMediaSpace[] = await basicApiCall('/space/addMedias', {
+            spaceId: spaceId,
+            medias
+        })
+        setAssets(addedMedias)
+      }
+      setIsUploadingFiles(false)
+      toast({
+        title: t('toast.file-uploaded'),
+        description: t('toast.file-uploaded-description'),
+        variant: 'confirm'
+      })
+    } catch (error) {
+      setIsUploadingFiles(false)
+      console.error(error)
+      toast({
+        title: t('toast.title-error'),
+        description: t('toast.deleting-file-error'),
+        variant: 'destructive'
+      })
     }
-    setIsUploadingFiles(false)
   }
 
   return (
@@ -83,7 +109,7 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
       />
       <Button className="w-full" disabled={isUploadingFiles} onClick={() => document.getElementById('file-input')?.click()}>
         {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-        Upload a file
+        {t('upload-file-button')}
       </Button>
       <div className="mt-4 columns-3 gap-2">
           {assets && assets.map((asset, index) => (

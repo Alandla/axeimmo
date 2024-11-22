@@ -29,8 +29,63 @@
         "joinSpaces": "Join a space"
       }
     },
+    "export": {
+      "title": "Exporting Your Video",
+      "title-failed": "Exporting failed",
+      "title-completed": "Export completed !",
+      "message-failed": "An error occurred while exporting your video. Please try again.",
+      "retry-export": "Retry Export",
+      "processing": "Please wait while we process your masterpiece...",
+      "waiting-to-start": "Waiting to start the export...",
+      "download-video": "Download Video",
+      "back-to-dashboard": "Back to Dashboard"
+    },
     "edit": {
-      "loading-video-data": "Loading video data..."
+      "loading-video-data": "Loading video data...",
+      "export-button": "Export",
+      "toast": {
+        "title-error": "Error",
+        "title-saving": "Saving the video...",
+        "description-saving": "Please wait while we save your changes.",
+        "title-saved": "Video saved",
+        "description-saved": "Your changes have been saved."
+      },
+      "sequence-edit": {
+        "search": "Search",
+        "assets": "Assets"
+      },
+      "sequence-edit-assets": {
+        "upload-file-button": "Upload a file",
+        "toast": {
+          "title-error": "Error",
+          "uploading-file": "Uploading file...",
+          "uploading-file-description": "Please wait while we upload the file...",
+          "file-uploaded": "File uploaded",
+          "file-uploaded-description": "The file has been uploaded.",
+          "deleting-file": "Deleting file...",
+          "deleting-file-description": "Please wait while we delete the file...",
+          "deleting-file-error": "Error deleting the file",
+          "file-deleted": "File deleted",
+          "file-deleted-description": "The file has been deleted."
+        },
+        "error": {
+          "title": "Error",
+          "description-loading": "An error occurred while loading the video data."
+        }
+      },
+      "sequence-edit-search": {
+        "search-button": "Search",
+        "search-placeholder": "Search for a media...",
+        "load-more": "Load more",
+        "toast": {
+          "title-loading": "Loading results...",
+          "description-loading": "Please wait while we load the search results...",
+          "title-error": "Error",
+          "description-error": "An error occurred while loading the search results.",
+          "title-no-results": "No results",
+          "description-no-results": "No results found for your search."
+        }
+      }
     },
     "ai": {
       "hello": "Hello, ",

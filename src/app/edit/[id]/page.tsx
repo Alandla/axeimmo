@@ -20,9 +20,11 @@ import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
 import ModalConfirmExport from '@/src/components/modal/confirm-export'
 import { IExport } from '@/src/types/export'
+import { useToast } from '@/src/hooks/use-toast'
 
 export default function VideoEditor() {
   const { id } = useParams()
+  const { toast } = useToast()
   const t = useTranslations('edit')
 
   const [video, setVideo] = useState<IVideo | null>(null)
@@ -31,22 +33,51 @@ export default function VideoEditor() {
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [showModalExport, setShowModalExport] = useState(false)
+  const [isDirty, setIsDirty] = useState(false)
   
-  const handleWordInputChange = (wordIndex: number, newWord: string) => {
-    console.log("wordIndex", wordIndex, "newWord", newWord)
+  const updateVideo = (newVideoData: any) => {
+    setVideo(newVideoData)
+    setIsDirty(true)
+  }
+
+  const handleWordInputChange = (sequenceIndex: number, wordIndex: number, newWord: string) => {
+    if (video && video.video) {
+      const newSequences = [...video.video.sequences]
+      newSequences[sequenceIndex].words[wordIndex].word = newWord
+      newSequences[sequenceIndex].text = newSequences[sequenceIndex].words.map(word => word.word).join(' ')
+      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } })
+    }
   }
 
   const handleCutSequence = (cutIndex: number) => {
     console.log("cutIndex", cutIndex)
   }
 
+  const handleSaveVideo = async () => {
+    setIsSaving(true)
+    toast({
+      title: t('toast.title-saving'),
+      description: t('toast.description-saving'),
+      variant: 'loading'
+    })
+    await basicApiCall('/video/save', { video })
+    setIsDirty(false)
+    toast({
+      title: t('toast.title-saved'),
+      description: t('toast.description-saved'),
+      variant: 'confirm',
+    })
+    setIsSaving(false)
+  }
+
   const setSequenceMedia = (sequenceIndex: number, media: IMedia) => {
     if (video && video.video) {
       const newSequences = [...video.video.sequences]
       newSequences[sequenceIndex].media = media
-      setVideo({ ...video, video: { ...video.video, sequences: newSequences } })
+      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } })
     }
   }
 
@@ -68,6 +99,25 @@ export default function VideoEditor() {
     return creditsNeeded * 10;
   }
 
+  const handleSilentSave = async () => {
+    if (isDirty) {
+      setIsSaving(true)
+      await basicApiCall('/video/save', { video })
+      setIsDirty(false)
+      setIsSaving(false)
+    }
+  }
+
+  useEffect(() => {
+    const autoSaveInterval = setInterval(() => {
+      handleSilentSave()
+    }, 20000) // 20 secondes
+
+    return () => {
+      clearInterval(autoSaveInterval)
+    }
+  }, [video, isDirty])
+
   useEffect(() => {
     const fetchVideo = async () => {
       try {
@@ -76,7 +126,12 @@ export default function VideoEditor() {
         console.log("response", response)
         setVideo(response)
       } catch (error) {
-        console.error('Erreur lors de la récupération de la vidéo:', error)
+        console.error(error)
+        toast({
+          title: t('error.title'),
+          description: t('error.description-loading'),
+          variant: 'destructive'
+        })
       } finally {
         setIsLoading(false)
       }
@@ -143,12 +198,22 @@ export default function VideoEditor() {
             </Breadcrumb>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="icon">
-                <Save className="w-4 h-4" />
+            {isDirty ? (
+                <div className="w-2 h-2 rounded-full bg-yellow-500" />
+            ) : (
+                <div className="w-2 h-2 rounded-full bg-green-500" />
+            )}
+            <span className='text-sm text-muted-foreground'>{isDirty ? 'Unsaved' : 'Saved'}</span>
+            <Button variant="outline" size="icon" onClick={handleSaveVideo}>
+                {isSaving ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                    <Save className="w-4 h-4" />
+                )}
             </Button>
             <Button onClick={() => setShowModalExport(true)}>
                 <Download className="w-4 h-4" />
-                Export
+                {t('export-button')}
             </Button>
           </div>
         </div>

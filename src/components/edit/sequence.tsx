@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import React from "react";
 import { Badge } from "../ui/badge";
 
-export default function Sequence({ sequence, index, selectedIndex, setSelectedIndex, handleWordInputChange, onCutSequence}: { sequence: ISequence, index: number, selectedIndex: number, setSelectedIndex: (index: number) => void, handleWordInputChange: (wordIndex: number, newWord: string) => void, onCutSequence: (cutIndex: number) => void }) {
+export default function Sequence({ sequence, index, selectedIndex, setSelectedIndex, handleWordInputChange, onCutSequence}: { sequence: ISequence, index: number, selectedIndex: number, setSelectedIndex: (index: number) => void, handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void, onCutSequence: (cutIndex: number) => void }) {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
     const handleCutSequence = (cutIndex: number) => {
@@ -63,7 +63,7 @@ export default function Sequence({ sequence, index, selectedIndex, setSelectedIn
                                 <div 
                                     contentEditable="true"
                                     suppressContentEditableWarning={true}
-                                    onBlur={(e) => handleWordInputChange(wordIndex, e.currentTarget.textContent || '')}
+                                    onBlur={(e) => handleWordInputChange(index, wordIndex, e.currentTarget.textContent || '')}
                                     className="px-0.5 py-1 hover:ring-1 focus:ring-2 ring-primary rounded transition-all duration-200"
                                 >
                                     {word.word}

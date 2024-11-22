@@ -6,21 +6,33 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { basicApiCall } from "@/src/lib/api";
 import MediaItem from "../ui/media-item";
+import { useToast } from "@/src/hooks/use-toast";
+import { useTranslations } from "next-intl";
 
 export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSequenceMedia }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void }) {
+  const t = useTranslations('edit.sequence-edit-search')
+  
   const [searchType, setSearchType] = useState<'stock' | 'web'>('stock')
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<IMedia[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoadingMedia, setIsLoadingMedia] = useState(false)
+  const { toast } = useToast()
 
   const fetchResults = async (keyword: string, page: number) => {
     setCurrentPage(page)
     setIsLoadingMedia(true)
     setSearchQuery(keyword)
+
+    toast({
+      title: t('toast.title-loading'),
+      description: t('toast.description-loading')
+    })
+
     try {
+      let results: IMedia[] = []
       if (searchType === 'stock') {
-        const results = await basicApiCall('/media/getPexelsVideo', { 
+        results = await basicApiCall('/media/getPexelsVideo', { 
           keyword: keyword, 
           number: 10, 
           page : page
@@ -30,7 +42,7 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
           setSearchResults(prev => page === 1 ? results : [...prev, ...results])
         }
       } else if (searchType === 'web') {
-        const results = await basicApiCall('/media/getGoogleImage', { 
+        results = await basicApiCall('/media/getGoogleImage', { 
           keyword: keyword, 
           number: 10, 
           page : page
@@ -40,6 +52,19 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
           setSearchResults(prev => page === 1 ? results : [...prev, ...results])
         }
       }
+
+      if (results.length === 0) {
+        toast({
+          title: t('toast.title-no-results'),
+          description: t('toast.description-no-results'),
+        })
+      }
+    } catch (error) {
+      toast({
+        title: t('toast.title-error'),
+        description: t('toast.description-error'),
+        variant: 'destructive'
+      })
     } finally {
       setIsLoadingMedia(false)
     }
@@ -48,7 +73,7 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
   return (
     <>
         <form onSubmit={(e) => { e.preventDefault(); fetchResults(searchQuery, 1) }} className="space-y-2 md:space-y-0 md:flex md:gap-2">
-            <Input placeholder="Search media..." className="w-full md:flex-grow" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            <Input placeholder={t('search-placeholder')} className="w-full md:flex-grow" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             <Select value={searchType} onValueChange={(value: 'stock' | 'web') => setSearchType(value)}>
             <SelectTrigger className="w-full md:w-40">
                 <SelectValue placeholder="Search type" />
@@ -68,7 +93,7 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
             </Select>
             <Button type="submit" className="w-full md:w-auto">
             {isLoadingMedia ? <Loader2 size={16} className="animate-spin" /> : <Search size={16} />}
-            Search
+            {t('search-button')}
             </Button>
         </form>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -97,7 +122,7 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
                 onClick={() => fetchResults(searchQuery, currentPage + 1)}
             >
                 {isLoadingMedia ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
-                Load more
+                {t('load-more')}
             </Button>
         </div>
       </>

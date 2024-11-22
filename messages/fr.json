@@ -29,8 +29,63 @@
         "joinSpaces": "Rejoindre un espace"
       }
     },
+    "export": {
+      "title": "Exportation de ta vidéo",
+      "title-failed": "Exportation échouée",
+      "title-completed": "Export terminée !",
+      "message-failed": "Une erreur est survenue lors de l'exportation de ta vidéo. Veuillez réessayer.",
+      "retry-export": "Réessayer l'exportation",
+      "processing": "Veuillez patienter pendant que nous traitons ton chef d'oeuvre...",
+      "waiting-to-start": "En attente de démarrer l'exportation...",
+      "download-video": "Télécharger la vidéo",
+      "back-to-dashboard": "Retour au tableau de bord"
+    },
     "edit": {
-      "loading-video-data": "Chargement des données de la vidéo..."
+      "loading-video-data": "Chargement des données de la vidéo...",
+      "export-button": "Exporter",
+      "toast": {
+        "title-error": "Erreur",
+        "title-saving": "Sauvegarde de la vidéo...",
+        "description-saving": "Veuillez patienter pendant que nous sauvegardons vos modifications.",
+        "title-saved": "Vidéo sauvegardée",
+        "description-saved": "Vos modifications ont été sauvegardées."
+      },
+      "sequence-edit": {
+        "search": "Recherche",
+        "assets": "Médias"
+      },
+      "sequence-edit-assets": {
+        "upload-file-button": "Ajouter un fichier",
+        "toast": {
+          "title-error": "Erreur",
+          "uploading-file": "Téléchargement du fichier...",
+          "uploading-file-description": "Veuillez patienter pendant que nous téléchargeons le fichier...",
+          "file-uploaded": "Fichier téléchargé",
+          "file-uploaded-description": "Le fichier a été téléchargé.",
+          "deleting-file": "Suppression du fichier...",
+          "deleting-file-description": "Veuillez patienter pendant que nous supprimons le fichier...",
+          "deleting-file-error": "Erreur lors de la suppression du fichier",
+          "file-deleted": "Fichier supprimé",
+          "file-deleted-description": "Le fichier a été supprimé."
+        },
+        "error": {
+          "title": "Erreur",
+          "description-loading": "Une erreur est survenue lors du chargement des données de la vidéo."
+        }
+      },
+      "sequence-edit-search": {
+        "search-button": "Rechercher",
+        "search-placeholder": "Rechercher un média...",
+        "load-more": "Charger plus",
+        "toast": {
+          "title-loading": "Chargement des résultats...",
+          "description-loading": "Veuillez patienter pendant que nous chargeons les résultats de la recherche...",
+          "title-error": "Erreur",
+          "description-error": "Une erreur est survenue lors du chargement des résultats de la recherche.",
+          "title-no-results": "Aucun résultat",
+          "description-no-results": "Aucun résultat trouvé pour votre recherche."
+        }
+      }
     },
     "ai": {
       "hello": "Salut, ",
