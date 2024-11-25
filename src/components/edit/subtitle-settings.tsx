@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select"
-import { Italic, Minus, Plus, CaseUpper, RectangleEllipsis, ListOrdered, RectangleHorizontal, StretchHorizontal, WholeWord, MoveVertical, AlignVerticalJustifyEnd, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, PaintBucket, AArrowUp, View } from 'lucide-react'
+import { Italic, Minus, Plus, CaseUpper, RectangleEllipsis, RectangleHorizontal, StretchHorizontal, WholeWord, MoveVertical, AlignVerticalJustifyEnd, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, PaintBucket, AArrowUp, View, Save, Loader2 } from 'lucide-react'
 import { useTranslations } from "next-intl"
 import {
   Accordion,
@@ -22,8 +22,9 @@ import { Switch } from "@/src/components/ui/switch"
 import { templates } from "@/src/config/subtitles.config"
 import SelectFonts from "../ui/select/select-fonts"
 
-export default function SubtitleSettings({ video, updateSubtitleStyle }: { video: any, updateSubtitleStyle: any }) {
+export default function SubtitleSettings({ video, updateSubtitleStyle, handleSaveSubtitleStyle }: { video: any, updateSubtitleStyle: any, handleSaveSubtitleStyle: any }) {
   const t = useTranslations('edit.sequence-edit')
+  const [isSaving, setIsSaving] = useState(false)
 
   const updateStyle = (updates: Partial<typeof video.video.subtitle.style>) => {
     updateSubtitleStyle({ style: updates })
@@ -65,6 +66,12 @@ export default function SubtitleSettings({ video, updateSubtitleStyle }: { video
     updateStyle({ activeWord: { ...video?.video?.subtitle?.style?.activeWord, [style]: !video?.video?.subtitle?.style?.activeWord[style] } })
   }
 
+  const onSaveSubtitleStyle = async () => {
+    setIsSaving(true)
+    await handleSaveSubtitleStyle()
+    setIsSaving(false)
+  }
+
   const currentTemplate = templates.find(t => t.name === video?.video?.subtitle?.style?.template)
   const showShadowOption = currentTemplate?.optionsAvailable.includes('shadow')
   const showBorderOption = currentTemplate?.optionsAvailable.includes('border')
@@ -74,7 +81,13 @@ export default function SubtitleSettings({ video, updateSubtitleStyle }: { video
   return (
     <>
       <CardHeader>
-        <CardTitle>Subtitle Style</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle>Subtitle Style</CardTitle>
+          <Button size="sm" onClick={onSaveSubtitleStyle} disabled={isSaving}>
+            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save size={18} />}
+            {isSaving ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex gap-4 w-full">
@@ -259,7 +272,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle }: { video
             </AccordionContent>
           </AccordionItem>
 
-          {showShadowOption && (
+          {showAnimationOption && (
             <AccordionItem value="animation">
               <AccordionTrigger>Animation</AccordionTrigger>
               <AccordionContent>

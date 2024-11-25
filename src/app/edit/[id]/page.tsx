@@ -24,11 +24,15 @@ import { useToast } from '@/src/hooks/use-toast'
 import Panel1 from '@/src/components/edit/panel-1'
 import Subtitles from '@/src/components/edit/subtitles'
 import SubtitleSettings from '@/src/components/edit/subtitle-settings'
+import { ISpace, ISpaceSubtitleStyle } from '@/src/types/space'
+import { useSubtitleStyleStore } from '@/src/store/subtitlesStyleSore'
 
 export default function VideoEditor() {
   const { id } = useParams()
   const { toast } = useToast()
   const t = useTranslations('edit')
+
+  const { setSubtitleStyles } = useSubtitleStyleStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
@@ -75,6 +79,25 @@ export default function VideoEditor() {
       variant: 'confirm',
     })
     setIsSaving(false)
+  }
+
+  const handleSaveSubtitleStyle = async () => {
+    try {
+      const subtitleStyle : ISpaceSubtitleStyle[] = await basicApiCall("/space/addSubtitleStyle", { spaceId: video?.spaceId || '', subtitleStyle: video?.video?.subtitle?.style })
+      setSubtitleStyles(subtitleStyle)
+      toast({
+        title: t('toast.title-saved'),
+        description: t('toast.description-saved'),
+        variant: 'confirm',
+      })
+    } catch (error) {
+      console.error(error)
+      toast({
+        title: t('error.title'),
+        description: t('error.description-saving'),
+        variant: 'destructive'
+      })
+    }
   }
 
   const setSequenceMedia = (sequenceIndex: number, media: IMedia) => {
@@ -292,12 +315,12 @@ export default function VideoEditor() {
             <Card className="h-full">
               {activeTab1 === 'subtitle' ? (
                 <ScrollArea className="h-[calc(100vh-5rem)]">
-                  <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} />
+                  <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} />
                 </ScrollArea>
               ) : (
                 <ScrollArea className="h-[calc(100vh-5rem)]">
                   {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} />
+                    <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} />
                   )}
                 </ScrollArea>
               )}

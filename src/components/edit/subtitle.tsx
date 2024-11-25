@@ -1,12 +1,23 @@
 import { Button } from "@/src/components/ui/button"
-import { MoreVertical, Check } from "lucide-react"
+import { MoreVertical, Check, Pencil, Trash2, FileEdit, ArrowUp } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Player, PlayerRef } from "@remotion/player";
 import { PreviewSubtitle } from "@/src/remotion/previewSubtitle/Composition";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/src/components/ui/dropdown-menu"
+import { cn } from "@/src/lib/utils";
 
-export default function Subtitle({ video, subtitle, setSubtitleStyle }: { video: any, subtitle: any, setSubtitleStyle: any }) {
+export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = false, handleDelete, handleUpdate }: { video: any, subtitle: any, setSubtitleStyle: any, canEdit?: boolean, handleDelete?: any, handleUpdate?: any }) {
     const playerRef = useRef<PlayerRef>(null);
     const [isHovering, setIsHovering] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedName, setEditedName] = useState(subtitle.name);
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const handleMouseEnter = useCallback(() => setIsHovering(true), []);
     const handleMouseLeave = useCallback(() => setIsHovering(false), []);
 
@@ -22,7 +33,15 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle }: { video:
             }
         }
     }, [isHovering]);
-    
+
+    const handleNameSave = useCallback(() => {
+        setIsEditing(false);
+        if (editedName !== subtitle.name) {
+            subtitle.name = editedName
+            handleUpdate(subtitle.id, { ...subtitle, name: editedName });
+        }
+    }, [editedName, subtitle, handleUpdate]);
+
     return (
         <div 
             key={subtitle.id} 
@@ -38,7 +57,7 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle }: { video:
 
             {/* Preview area - à implémenter plus tard */}
             <div className="w-full h-24 bg-gray-100">
-                <div className="flex items-center justify-center w-full h-full">
+                <div className="flex items-center justify-center w-full h-full overflow-hidden">
                     <Player
                         ref={playerRef}
                         component={PreviewSubtitle}
@@ -57,11 +76,68 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle }: { video:
             </div>
             
             {/* Bottom section with name and settings */}
-            <div className="p-2 flex justify-between items-center">
-                <span className="ml-2">{subtitle.name}</span>
-                <Button variant="ghost" size="icon">
-                    <MoreVertical className="h-4 w-4" />
-                </Button>
+            
+            <div className="p-2 h-14 flex justify-between items-center">
+                {canEdit && isEditing ? (
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        value={editedName}
+                        onChange={(e) => setEditedName(e.target.value)}
+                        onBlur={handleNameSave}
+                        onKeyDown={(e) => e.key === 'Enter' && handleNameSave()}
+                        className="ml-2 border-0 border-b border-b-input focus:outline-none focus:ring-0"
+                        onClick={(e) => e.stopPropagation()}
+                        autoFocus
+                    />
+                ) : (
+                    <span 
+                        className={cn("ml-2", canEdit && "cursor-text")}
+                        onClick={(e) => {
+                            if (canEdit) {
+                                e.stopPropagation();
+                                setIsEditing(true);
+                            }
+                        }}
+                    >
+                        {subtitle.name}
+                    </span>
+                )}
+                {canEdit && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <MoreVertical className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleUpdate(subtitle.id, video.video.subtitle);
+                                }} 
+                                className="flex items-center"
+                            >
+                                <ArrowUp className="h-4 w-4" />
+                                Update
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDelete(subtitle.id);
+                                }}
+                                className={cn(
+                                    "flex items-center",
+                                    "hover:bg-red-200 hover:text-red-600",
+                                    "focus:bg-red-200 focus:text-red-600"
+                                )}
+                            >
+                                <Trash2 className="h-4 w-4" />
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
             </div>
         </div>
     )

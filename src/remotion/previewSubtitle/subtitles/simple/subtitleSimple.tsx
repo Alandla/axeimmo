@@ -24,7 +24,6 @@ export const SubtitleSimple = ({ subtitleSequence, start, style }: { subtitleSeq
                                         fill: style?.activeWord?.color,
                                         fontSize: `${style?.activeWord?.fontSize}px`,
                                         fontStyle: style?.activeWord?.isItalic ? 'italic' : 'normal',
-                                        textTransform: style?.activeWord?.isUppercase ? 'uppercase' as const : 'none' as const,
                                         fontFamily: `${style?.activeWord?.fontFamily || 'Montserrat'}, sans-serif`,
                                         fontWeight: style?.activeWord?.fontWeight || 700,
                                       }
@@ -32,7 +31,6 @@ export const SubtitleSimple = ({ subtitleSequence, start, style }: { subtitleSeq
                                         fill: style?.color,
                                         fontSize: `${style?.fontSize}px`,
                                         fontStyle: style?.isItalic ? 'italic' : 'normal',
-                                        textTransform: style?.isUppercase ? 'uppercase' as const : 'none' as const,
                                         fontFamily: `${style?.fontFamily || 'Montserrat'}, sans-serif`,
                                         fontWeight: style?.fontWeight || 700,
                                       };

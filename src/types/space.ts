@@ -7,6 +7,12 @@ export interface IMember {
   roles: MemberRole;
 }
 
+export interface ISpaceSubtitleStyle {
+  id?: string;
+  name: string
+  style: any
+}
+
 export interface IPlan {
   name: PlanName;
   customerId: string;
@@ -36,4 +42,5 @@ export interface ISpace {
   medias: IMediaSpace[];
   plan: IPlan;
   credits: number;
+  subtitleStyle: ISpaceSubtitleStyle[];
 }

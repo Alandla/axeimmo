@@ -49,6 +49,61 @@ export const addMediasToSpace = async (spaceId: string, medias: IMedia[]) => {
   }
 }
 
+export const removeSubtitleStyleFromSpace = async (spaceId: string, subtitleStyleId: string) => {
+  await connectMongo();
+  try {
+    const space = await getSpaceById(spaceId);
+    space.subtitleStyle = space.subtitleStyle.filter((style: any) => style._id.toString() !== subtitleStyleId);
+    await space.save();
+    return space.subtitleStyle;
+  } catch (error) {
+    console.error("Error while removing subtitle style from space: ", error);
+    throw error;
+  }
+}
+
+export const updateSubtitleStyleToSpace = async (spaceId: string, subtitleStyle: any, subtitleStyleId: string) => {
+  await connectMongo();
+  try {
+    const space = await getSpaceById(spaceId);
+    const subtitleStyleIndex = space.subtitleStyle.findIndex((style: any) => style._id.toString() === subtitleStyleId);
+    if (subtitleStyleIndex === -1) {
+      throw new Error("Subtitle style not found");
+    }
+    space.subtitleStyle[subtitleStyleIndex] = {
+      ...space.subtitleStyle[subtitleStyleIndex],
+      style: subtitleStyle.style,
+      name: subtitleStyle.name
+    };
+    await space.save();
+    return space.subtitleStyle;
+  } catch (error) {
+    console.error("Error while adding subtitle style to space: ", error);
+    throw error;
+  }
+}
+
+export const addSubtitleStyleToSpace = async (spaceId: string, subtitleStyle: any) => {
+  await connectMongo();
+  try {
+    const space = await getSpaceById(spaceId);
+    if (!space.subtitleStyle) {
+      space.subtitleStyle = [];
+    }
+    const name = "Title " + (space.subtitleStyle.length + 1);
+    const preset = {
+      name: name,
+      style: subtitleStyle,
+    }
+    space.subtitleStyle.push(preset);
+    await space.save();
+    return space.subtitleStyle;
+  } catch (error) {
+    console.error("Error while adding subtitle style to space: ", error);
+    throw error;
+  }
+}
+
 export const removeCreditsToSpace = async (spaceId: string, credits: number) => {
   await connectMongo();
   try {

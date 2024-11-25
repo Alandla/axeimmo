@@ -64,6 +64,14 @@ const spaceSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    subtitleStyle: [
+      {
+        name: String,
+        style: {
+          type: Object
+        }
+      }
+    ]
   },
   {
     timestamps: true,
