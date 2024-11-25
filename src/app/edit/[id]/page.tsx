@@ -285,11 +285,11 @@ export default function VideoEditor() {
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="sequences" className="flex items-center gap-2">
                             <ListVideo className="w-4 h-4" />
-                            Sequences
+                            {t('sequences-tabs-title')}
                         </TabsTrigger>
                         <TabsTrigger value="subtitle" className="flex items-center gap-2">
                             <SubtitlesIcon className="w-4 h-4" />
-                            Subtitles
+                            {t('subtitles-tabs-title')}
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="sequences">

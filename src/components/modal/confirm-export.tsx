@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/src/components/ui/dialog"
 import { Download } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 interface ModalConfirmExportProps {
   cost: number
@@ -26,6 +27,7 @@ export default function ModalConfirmExport({
   onExportVideo
 }: ModalConfirmExportProps) {
   const [isPending, setIsPending] = useState(false)
+  const t = useTranslations('export-modal')
 
   const handleConfirm = async () => {
     setIsPending(true)
@@ -48,12 +50,12 @@ export default function ModalConfirmExport({
         onInteractOutside={() => setIsOpen(false)}
       >
         <DialogHeader>
-          <DialogTitle>Export the video ?</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>
-            Exporting this video will cost you credits as follows, please confirm.
+            {t('description')}
             <div className="text-sm text-gray-500 mt-2">
-              <p><b>Cost:</b> {cost} credits</p>
-              <p><b>Balance:</b> 50 credits</p>
+              <p><b>{t('cost')}:</b> {cost} credits</p>
+              <p><b>{t('balance')}:</b> 50 credits</p>
             </div>
           </DialogDescription>
         </DialogHeader>
@@ -64,7 +66,7 @@ export default function ModalConfirmExport({
             onClick={() => setIsOpen(false)}
             disabled={isPending}
           >
-            Cancel
+            {t('cancel-button')}
           </Button>
           <Button
             type="button"
@@ -72,7 +74,7 @@ export default function ModalConfirmExport({
             disabled={isPending}
           >
             <Download className="w-4 h-4" />
-            {isPending ? 'Saving...' : 'Export'}
+            {isPending ? t('saving') : t('export-button')}
           </Button>
         </DialogFooter>
       </DialogContent>

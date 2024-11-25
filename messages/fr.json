@@ -40,11 +40,22 @@
       "download-video": "Télécharger la vidéo",
       "back-to-dashboard": "Retour au tableau de bord"
     },
+    "export-modal": {
+      "title": "Exporter la vidéo ?",
+      "description": "Exporter cette vidéo vous coûtera des crédits comme suit, veuillez confirmer.",
+      "cost": "Coût",
+      "balance": "Solde",
+      "export-button": "Exporter",
+      "cancel-button": "Annuler",
+      "saving": "Sauvegarde..."
+    },
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",
       "export-button": "Exporter",
       "unsaved": "Non sauvegardé",
       "saved": "Sauvegardé",
+      "sequences-tabs-title": "Sequences",
+      "subtitles-tabs-title": "Sous-titres",
       "toast": {
         "title-error": "Erreur",
         "title-saving": "Sauvegarde de la vidéo...",

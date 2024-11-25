@@ -40,11 +40,22 @@
       "download-video": "Download Video",
       "back-to-dashboard": "Back to Dashboard"
     },
+    "export-modal": {
+      "title": "Export the video ?",
+      "description": "Exporting this video will cost you credits as follows, please confirm.",
+      "cost": "Cost",
+      "balance": "Balance",
+      "export-button": "Export",
+      "cancel-button": "Cancel",
+      "saving": "Saving..."
+    },
     "edit": {
       "loading-video-data": "Loading video data...",
       "export-button": "Export",
       "unsaved": "Unsaved",
       "saved": "Saved",
+      "sequences-tabs-title": "Sequences",
+      "subtitles-tabs-title": "Subtitles",
       "toast": {
         "title-error": "Error",
         "title-saving": "Saving the video...",
