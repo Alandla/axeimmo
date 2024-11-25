@@ -11,7 +11,7 @@ export const SubtitleSimple = ({ subtitleSequence, start, style }: { subtitleSeq
                     <text 
                         key={lineIndex}
                         x="50%" 
-                        y={`${style.position + (lineIndex * 4)}%`}
+                        y={`${45 + (lineIndex * 15)}%`}
                         textAnchor="middle" 
                         dominantBaseline="middle"
                     >

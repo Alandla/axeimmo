@@ -17,6 +17,7 @@ import { searchMediaForSequence } from "../service/media.service";
 import { IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
 import { generateStartData } from "../lib/ai";
+import { subtitles } from "../config/subtitles.config";
 
 interface GenerateVideoPayload {
   space: string
@@ -265,7 +266,11 @@ export const generateVideoTask = task({
         audioUrl: voiceUrl,
         thumbnail: "",
         metadata: transcription.metadata,
-        sequences
+        sequences,
+        subtitle: {
+          name: subtitles[1].name,
+          style: subtitles[1].style,
+        }
       }
     }
 

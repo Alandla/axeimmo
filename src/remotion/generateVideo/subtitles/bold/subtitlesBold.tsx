@@ -1,15 +1,13 @@
 import { Sequence, useVideoConfig } from "remotion";
 import {fillTextBox} from '@remotion/layout-utils';
 import {useMemo} from 'react';
-import { SubtitleSimple } from "./subtitleSimple";
+import { SubtitleBold } from "./subtitleBold";
 import { Line, Sequence as SequenceType, SubtitleMode, Word } from "../../type/subtitle";
 
 export const formatSubtitles = (
 	sequences: SequenceType[],
 	maxWidth: number,
-	fontSize: number,
-	fontFamily: string = 'Arial',
-	style?: { isPunctuation?: boolean; fontSize?: number, fontFamily?: string, fontWeight?: number, isUppercase?: boolean, mode?: SubtitleMode }
+	style?: { isPunctuation?: boolean; isUppercase?: boolean, fontSize?: number, fontFamily?: string, fontWeight?: number, mode?: SubtitleMode }
 ) => {
 	const subtitles: {
 		lines: Line[];
@@ -36,7 +34,6 @@ export const formatSubtitles = (
 
 			word.startInFrames = startInFrame;
 			startInFrame += word.durationInFrames;
-
 			subtitles.push({
 				lines: [{ words: [{ ...word, word: processedWord }] }],
 				start: word.start,
@@ -65,7 +62,7 @@ export const formatSubtitles = (
 				text: processedWord,
 				fontFamily: `${style?.fontFamily || 'Montserrat'}, sans-serif`,
 				fontWeight: style?.fontWeight || 700,
-				fontSize: (style?.fontSize || 70) - 10,
+				fontSize: (style?.fontSize || 70) + 10,
 				textTransform: style?.isUppercase ? 'uppercase' : 'none',
 			});
 
@@ -116,11 +113,15 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesSimple = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
+export const SubtitlesBold = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
 	const { width } = useVideoConfig();
-
+	
 	const subtitles = useMemo(() => {
-        const sub = formatSubtitles(subtitleSequences, width*0.5, 50, "Helvetica, sans-serif", style);
+        const sub = formatSubtitles(
+			subtitleSequences, 
+			width*0.3, 
+			style
+		);
 		return sub;
 	}, [subtitleSequences, style]);
 
@@ -134,7 +135,7 @@ export const SubtitlesSimple = ({ subtitleSequences, style }: { subtitleSequence
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleSimple subtitleSequence={subtitle} start={currentFrame} style={style}/>
+						<SubtitleBold subtitleSequence={subtitle} start={currentFrame} style={style} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

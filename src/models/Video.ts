@@ -35,6 +35,10 @@ const videoSchema = new mongoose.Schema({
     video: {
       audioUrl: String,
       thumbnail: String,
+      subtitle: {
+        name: String,
+        style: Object
+      },
       metadata: {
         audio_duration: Number,
         number_of_distinct_channels: Number,

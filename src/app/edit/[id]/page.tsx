@@ -7,7 +7,7 @@ import { Card } from "@/src/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/src/components/ui/breadcrumb"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
-import { Download, Save, Loader2 } from 'lucide-react'
+import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon } from 'lucide-react'
 import Link from 'next/link'
 import Sequence from '@/src/components/edit/sequence'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
@@ -21,6 +21,9 @@ import { IMedia } from '@/src/types/video'
 import ModalConfirmExport from '@/src/components/modal/confirm-export'
 import { IExport } from '@/src/types/export'
 import { useToast } from '@/src/hooks/use-toast'
+import Panel1 from '@/src/components/edit/panel-1'
+import Subtitles from '@/src/components/edit/subtitles'
+import SubtitleSettings from '@/src/components/edit/subtitle-settings'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -29,7 +32,8 @@ export default function VideoEditor() {
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
-  const [activeTab, setActiveTab] = useState('sequences')
+  const [activeTabMobile, setActiveTabMobile] = useState('sequences')
+  const [activeTab1, setActiveTab1] = useState('sequences')
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -81,6 +85,34 @@ export default function VideoEditor() {
     }
   }
 
+  const setSubtitleStyle = (subtitle: any) => {
+    if (video && video.video) {
+      const newVideo = { ...video, video: { ...video.video, subtitle } }
+      updateVideo(newVideo)
+    }
+  }
+
+  const updateSubtitleStyle = (newStyleProps: any) => {
+    if (video?.video?.subtitle) {
+      console.log('video', video)
+      const updatedVideo = {
+        ...video,
+        video: {
+          ...video.video,
+          subtitle: {
+            ...video.video.subtitle,
+            style: {
+              ...video.video.subtitle.style,
+              ...newStyleProps.style
+            }
+          }
+        }
+      };
+      console.log('updatedVideo', updatedVideo)
+      updateVideo(updatedVideo);
+    }
+  };
+
   const onExportVideo = async () => {
     const cost = calculateCredits(video?.video?.metadata.audio_duration || 30)
     await basicApiCall('/video/save', { video })
@@ -102,7 +134,7 @@ export default function VideoEditor() {
   const handleSilentSave = async () => {
     if (isDirty) {
       setIsSaving(true)
-      await basicApiCall('/video/save', { video })
+      //await basicApiCall('/video/save', { video })
       setIsDirty(false)
       setIsSaving(false)
     }
@@ -227,21 +259,48 @@ export default function VideoEditor() {
         >
           <ResizablePanel defaultSize={30} minSize={20}>
             <Card className="h-full">
-                <ScrollArea className="h-[calc(100vh-5rem)]">
-                    {video?.video?.sequences && video?.video?.sequences.map((sequence, index) => (
-                        <Sequence sequence={sequence} index={index} selectedIndex={selectedSequenceIndex} setSelectedIndex={setSelectedSequenceIndex} handleWordInputChange={handleWordInputChange} onCutSequence={handleCutSequence} />
-                    ))}
-                </ScrollArea>
+              <div className="flex flex-col h-[calc(100vh-5rem)] mt-2 mx-2">
+                <Tabs defaultValue="sequences" className="w-full" onValueChange={setActiveTab1}>
+                    <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="sequences" className="flex items-center gap-2">
+                            <ListVideo className="w-4 h-4" />
+                            Sequences
+                        </TabsTrigger>
+                        <TabsTrigger value="subtitle" className="flex items-center gap-2">
+                            <SubtitlesIcon className="w-4 h-4" />
+                            Subtitles
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="sequences">
+                      <Panel1 
+                        sequences={video?.video?.sequences || []} 
+                        selectedSequenceIndex={selectedSequenceIndex} 
+                        setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                        handleWordInputChange={handleWordInputChange} 
+                        handleCutSequence={handleCutSequence} 
+                      />
+                    </TabsContent>
+                    <TabsContent value="subtitle">
+                      <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} />
+                    </TabsContent>
+                </Tabs>
+              </div>
             </Card>
           </ResizablePanel>
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={30} minSize={20}>
             <Card className="h-full">
-              <ScrollArea className="h-[calc(100vh-5rem)]">
-                {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
+              {activeTab1 === 'subtitle' ? (
+                <ScrollArea className="h-[calc(100vh-5rem)]">
+                  <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} />
+                </ScrollArea>
+              ) : (
+                <ScrollArea className="h-[calc(100vh-5rem)]">
+                  {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
                   <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} />
-                )}
-              </ScrollArea>
+                  )}
+                </ScrollArea>
+              )}
             </Card>
           </ResizablePanel>
           <ResizableHandle className="w-[1px] bg-transparent" />
@@ -262,7 +321,7 @@ export default function VideoEditor() {
           {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
         </div>
         <Card className="mt-4">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="sequences">Séquences</TabsTrigger>
               <TabsTrigger value="settings">Paramètres</TabsTrigger>
@@ -271,6 +330,7 @@ export default function VideoEditor() {
               <ScrollArea className="h-[calc(100vh-16rem)]">
                 {video?.video?.sequences && video?.video?.sequences.map((sequence, index) => (
                   <Sequence 
+                    key={index}
                     sequence={sequence} 
                     index={index} 
                     selectedIndex={selectedSequenceIndex} 

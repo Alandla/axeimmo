@@ -63,6 +63,7 @@ export interface IVideo {
   video?: {
     audioUrl: string;
     thumbnail: string;
+    subtitle: any;
     metadata: {
       audio_duration: number;
       number_of_distinct_channels: number;
