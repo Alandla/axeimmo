@@ -1,0 +1,145 @@
+import { logger, metadata, task, wait } from "@trigger.dev/sdk/v3";
+import { updateExport } from "../dao/exportDao";
+import { getVideoById, updateVideo } from "../dao/videoDao";
+import { getProgress, renderVideo } from "../lib/render";
+import { uploadImageFromUrlToS3 } from "../lib/r2";
+import { IVideo } from "../types/video";
+import { addCreditsToSpace } from "../dao/spaceDao";
+import { IExport } from "../types/export";
+
+interface RenderStatus {
+  status: string;
+  progress?: number;
+  videoUrl?: string | null;
+  costs?: number;
+  message?: string;
+}
+
+interface ExportVideoPayload {
+  videoId: string
+  exportId: string
+}
+
+export const exportVideoTask = task({
+  id: "export-video",
+  maxDuration: 300,
+  retry: {
+    maxAttempts: 2,
+  },
+  run: async (payload: ExportVideoPayload, { ctx }) => {
+    try {
+      const videoId = payload.videoId;
+      const exportId = payload.exportId;
+
+      logger.log("Exporting video...");
+      updateExport(exportId, { runId: ctx.run.id, status: 'processing' });
+
+      const video = await getVideoById(videoId);
+      if (!video) {
+        throw new Error('Video not found');
+      }
+      const render = await renderVideo(video);
+      await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
+
+      const renderStatus : RenderStatus = await pollRenderStatus(render.renderId, render.bucketName);
+
+      if (renderStatus.status === 'failed') {
+        if (ctx.attempt.number === 1) {
+          // Première tentative échouée : upload des images et réessai
+          await uploadGoogleImagesToS3(video);
+          throw new Error('Premier échec du rendu - Réessai après upload des images');
+        } else {
+          // Deuxième tentative échouée : on arrête avec l'erreur
+          const exportData : IExport = await updateExport(exportId, { 
+            status: 'failed',
+            errorMessage: renderStatus.message || 'Render failed'
+          });
+          await addCreditsToSpace(video.spaceId, exportData.creditCost);
+          await metadata.replace({
+            status: 'failed',
+            errorMessage: renderStatus.message || 'Render failed'
+          })
+          return { success: false, error: renderStatus.message };
+        }
+      }
+
+      if (renderStatus.status === 'completed' && renderStatus.videoUrl && renderStatus.costs) {
+        await updateExport(exportId, { 
+          downloadUrl: renderStatus.videoUrl, 
+          renderCost: renderStatus.costs + ctx.run.costInCents, 
+          status: 'completed' 
+        });
+        await metadata.replace({
+          status: 'completed',
+          downloadUrl: renderStatus.videoUrl,
+          renderCost: renderStatus.costs + ctx.run.costInCents
+        })
+        return { success: true, videoUrl: renderStatus.videoUrl };
+      }
+
+      logger.info('Cost infra', { costInCents: ctx.run.costInCents });
+    } catch (error : any) {
+      logger.error('Erreur lors de l\'export:', error);
+      throw error;
+    }
+  },
+});
+
+const pollRenderStatus = async (renderId: string, bucketName: string) => {
+  let attempts = 0;
+  const maxAttempts = 100;
+  const delayBetweenAttempts = 2;
+
+  while (attempts < maxAttempts) {
+    try {
+      const renderStatus : RenderStatus = await getProgress(renderId, bucketName)
+
+      if (renderStatus.status === 'processing' && renderStatus.progress) {
+        await metadata.replace({
+          status: 'processing',
+          progress: renderStatus.progress
+        })
+      } else if (renderStatus.status === 'completed' && renderStatus.videoUrl && renderStatus.costs) {
+        await metadata.replace({
+          status: 'completed',
+          videoUrl: renderStatus.videoUrl,
+          costs: renderStatus.costs
+        })
+        return renderStatus;
+      } else if (renderStatus.status === 'failed') {
+        return renderStatus;
+      }
+
+      await wait.for({ seconds: delayBetweenAttempts });
+      attempts++;
+    } catch (error) {
+      logger.error(`Error while getting transcription status: ${error}`);
+      await wait.for({ seconds: delayBetweenAttempts });
+      attempts++;
+    }
+  }
+
+  throw new Error('Nombre maximum de tentatives atteint sans obtenir un statut "done" pour la transcription.');
+};
+
+const uploadGoogleImagesToS3 = async (video: IVideo) => {
+  if (video && video.video) {
+    for (const sequence of video.video.sequences) {
+      if (sequence.media?.type === "image" && !sequence.media?.image?.link.startsWith('https://media.hoox.video/') && sequence.media?.image?.link) {
+        try {
+          const fileName = `image-${Date.now()}.jpg`;
+          const s3Url = await uploadImageFromUrlToS3(sequence.media?.image?.link, "medias-user", fileName);
+
+          if (sequence.media && sequence.media.image) {
+            sequence.media.image.link = s3Url;
+          }
+        } catch (error) {
+          console.log(error)
+          console.error('Erreur lors de l\'upload de l\'image sur S3:', error);
+        }
+      }
+    }
+    await updateVideo(video);
+  }
+  return video;
+}

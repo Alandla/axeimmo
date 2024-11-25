@@ -22,6 +22,10 @@ const exportSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    runId: {
+      type: String,
+      required: false,
+    },
     bucketName: {
       type: String,
       required: false,
@@ -39,6 +43,10 @@ const exportSchema = new mongoose.Schema(
     creditCost: {
       type: Number,
       required: true,
+    },
+    renderCost: {
+      type: Number,
+      required: false,
     },
     errorMessage: {
       type: String,

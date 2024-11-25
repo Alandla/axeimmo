@@ -54,7 +54,7 @@ export const getProgress = async (renderId: string, bucketName: string) => {
             status: "completed",
             videoUrl: progress.outputFile,
             size: progress.outputSizeInBytes,
-            costs: progress.costs
+            costs: progress.costs.accruedSoFar
         }
     }
 

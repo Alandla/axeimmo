@@ -4,10 +4,12 @@ export interface IExport {
   userId: string;
   spaceId: string;
   renderId?: string;
+  runId?: string;
   bucketName?: string;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   downloadUrl?: string;
   creditCost: number;
+  renderCost?: number;
   errorMessage?: string;
   createdAt?: Date;
   updatedAt?: Date;

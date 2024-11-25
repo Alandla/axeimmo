@@ -17,7 +17,8 @@ export const createExport = async (exportData: IExport) => {
 export const updateExport = async (id: string, updateData: Partial<IExport>) => {
   await connectMongo();
   try {
-    await ExportModel.findByIdAndUpdate(id, updateData);
+    const updatedExport = await ExportModel.findByIdAndUpdate(id, updateData);
+    return updatedExport;
   } catch (error) {
     console.error("Error while updating export: ", error);
     throw error;
