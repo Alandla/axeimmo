@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl"
 export default function Subtitles({ video, setSubtitleStyle }: { video: any, setSubtitleStyle: any }) {
     const { subtitleStyles, setSubtitleStyles } = useSubtitleStyleStore()
     const { toast } = useToast()
-    const t = useTranslations('edit')
+    const t = useTranslations('edit.subtitle')
 
     useEffect(() => {
         const fetchSpaceSubtitleStyles = async () => {
@@ -53,7 +53,7 @@ export default function Subtitles({ video, setSubtitleStyle }: { video: any, set
         <>
             {subtitleStyles && subtitleStyles.length > 0 && (
                 <>
-                    <h3 className="text-lg font-semibold mb-2">Space presets</h3>
+                    <h3 className="text-lg font-semibold mb-2">{t('title-presets-space')}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         {subtitleStyles.map((subtitleStyle: ISpaceSubtitleStyle, index: number) => (
                             <Subtitle key={index} video={video} subtitle={subtitleStyle} setSubtitleStyle={setSubtitleStyle} canEdit={true} handleDelete={deleteSubtitleStyle} handleUpdate={updateSubtitleStyle} />
@@ -61,7 +61,7 @@ export default function Subtitles({ video, setSubtitleStyle }: { video: any, set
                     </div>
                 </>
             )}
-            {subtitleStyles && <h3 className="text-lg font-semibold mb-2">Presets</h3>}
+            {subtitleStyles && <h3 className="text-lg font-semibold mb-2">{t('title-presets')}</h3>}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {subtitles.map((subtitle: any, index: number) => (
                     <Subtitle key={index} video={video} subtitle={subtitle} setSubtitleStyle={setSubtitleStyle} />

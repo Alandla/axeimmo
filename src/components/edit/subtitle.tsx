@@ -10,8 +10,10 @@ import {
     DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu"
 import { cn } from "@/src/lib/utils";
+import { useTranslations } from "next-intl";
 
 export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = false, handleDelete, handleUpdate }: { video: any, subtitle: any, setSubtitleStyle: any, canEdit?: boolean, handleDelete?: any, handleUpdate?: any }) {
+    const t = useTranslations('edit.subtitle')
     const playerRef = useRef<PlayerRef>(null);
     const [isHovering, setIsHovering] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -21,7 +23,7 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
     const handleMouseEnter = useCallback(() => setIsHovering(true), []);
     const handleMouseLeave = useCallback(() => setIsHovering(false), []);
 
-    const isSelected = video.video.subtitle.name === subtitle.name;
+    const isSelected = video.video.subtitle.id === subtitle.id;
 
     useEffect(() => {
         if (playerRef.current) {
@@ -119,7 +121,7 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
                                 className="flex items-center"
                             >
                                 <ArrowUp className="h-4 w-4" />
-                                Update
+                                {t('update')}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={(e) => {
@@ -133,7 +135,7 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
                                 )}
                             >
                                 <Trash2 className="h-4 w-4" />
-                                Delete
+                                {t('delete')}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

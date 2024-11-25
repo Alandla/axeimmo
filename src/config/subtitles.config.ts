@@ -18,6 +18,7 @@ export const templates = [
 
 export const subtitles = [
     {
+        id: '1',
         name: 'Simple',
         style: {
             template: 'simple',
@@ -49,6 +50,7 @@ export const subtitles = [
         }
     },
     {
+        id: '2',
         name: 'Bold',
         style: {
             template: 'bold',

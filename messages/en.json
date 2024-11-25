@@ -43,12 +43,57 @@
     "edit": {
       "loading-video-data": "Loading video data...",
       "export-button": "Export",
+      "unsaved": "Unsaved",
+      "saved": "Saved",
       "toast": {
         "title-error": "Error",
         "title-saving": "Saving the video...",
         "description-saving": "Please wait while we save your changes.",
         "title-saved": "Video saved",
-        "description-saved": "Your changes have been saved."
+        "description-saved": "Your changes have been saved.",
+        "title-subtitle-saved": "Subtitle style saved",
+        "description-subtitle-saved": "The subtitle style has been saved."
+      },
+      "subtitle": {
+        "title-presets": "Presets",
+        "title-presets-space": "Space presets",
+        "update": "Update",
+        "delete": "Delete"
+      },
+      "subtitle-settings": {
+        "title": "Subtitle style",
+        "save-button": "Save",
+        "title-subtitle-style-saved": "Subtitle style saved",
+        "description-subtitle-style-saved": "The subtitle style has been saved.",
+        "italic": "Italic",
+        "no-punctuation": "No punctuation",
+        "uppercase": "Uppercase",
+        "layout-title": "Layout",
+        "word-button": "Word",
+        "line-button": "Line",
+        "two-lines-button": "Two lines",
+        "position-title": "Position",
+        "animation-title": "Animation",
+        "appear-title": "Appear",
+        "appear-placeholder": "Select an animation",
+        "appear-none": "None",
+        "appear-zoom": "Zoom",
+        "appear-bounce": "Bounce",
+        "appear-fade": "Fade",
+        "shadow-title": "Shadow",
+        "color-label": "Color",
+        "border-title": "Border",
+        "size-label": "Size",
+        "active-word-title": "Active word",
+        "select": {
+          "weight-placeholder": "Select a weight",
+          "weight-light": "Light",
+          "weight-normal": "Normal",
+          "weight-medium": "Medium",
+          "weight-bold": "Bold",
+          "weight-black": "Black",
+          "font-placeholder": "Select a font"
+        }
       },
       "sequence-edit": {
         "search": "Search",

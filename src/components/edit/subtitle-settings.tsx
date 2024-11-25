@@ -23,7 +23,7 @@ import { templates } from "@/src/config/subtitles.config"
 import SelectFonts from "../ui/select/select-fonts"
 
 export default function SubtitleSettings({ video, updateSubtitleStyle, handleSaveSubtitleStyle }: { video: any, updateSubtitleStyle: any, handleSaveSubtitleStyle: any }) {
-  const t = useTranslations('edit.sequence-edit')
+  const t = useTranslations('edit.subtitle-settings')
   const [isSaving, setIsSaving] = useState(false)
 
   const updateStyle = (updates: Partial<typeof video.video.subtitle.style>) => {
@@ -82,10 +82,10 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
     <>
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle>Subtitle Style</CardTitle>
+          <CardTitle>{t('title')}</CardTitle>
           <Button size="sm" onClick={onSaveSubtitleStyle} disabled={isSaving}>
             {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save size={18} />}
-            {isSaving ? 'Saving...' : 'Save'}
+            {t('save-button')}
           </Button>
         </div>
       </CardHeader>
@@ -97,11 +97,11 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
               <SelectValue placeholder="Select Weight" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="300" className="font-light">Light</SelectItem>
-              <SelectItem value="500" className="font-normal">Regular</SelectItem>
-              <SelectItem value="600" className="font-medium">Medium</SelectItem>
-              <SelectItem value="800" className="font-bold">Bold</SelectItem>
-              <SelectItem value="900" className="font-black">Black</SelectItem>
+              <SelectItem value="300" className="font-light">{t('select.weight-light')}</SelectItem>
+              <SelectItem value="500" className="font-normal">{t('select.weight-normal')}</SelectItem>
+              <SelectItem value="600" className="font-medium">{t('select.weight-medium')}</SelectItem>
+              <SelectItem value="800" className="font-bold">{t('select.weight-bold')}</SelectItem>
+              <SelectItem value="900" className="font-black">{t('select.weight-black')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -168,7 +168,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
             onClick={() => toggleStyle('isItalic')}
           >
             <Italic className="h-4 w-4" />
-            Italic
+            {t('italic')}
           </Button>
           <Button
             variant={video?.video?.subtitle?.style?.isPunctuation ? "default" : "outline"}
@@ -176,7 +176,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
             onClick={() => toggleStyle('isPunctuation')}
           >
             <RectangleEllipsis className="h-4 w-4" />
-            No Punctuation
+            {t('no-punctuation')}
           </Button>
           <Button
             variant={video?.video?.subtitle?.style?.isUppercase ? "default" : "outline"}
@@ -184,13 +184,13 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
             onClick={() => toggleStyle('isUppercase')}
           >
             <CaseUpper className="h-4 w-4" />
-            Uppercase
+            {t('uppercase')}
           </Button>
         </div>
 
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="layout">
-            <AccordionTrigger>Layout</AccordionTrigger>
+            <AccordionTrigger>{t('layout-title')}</AccordionTrigger>
             <AccordionContent>
               <div className="flex flex-col gap-4">
                 <div className="flex w-full">
@@ -200,7 +200,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                     onClick={() => updateStyle({ mode: 'word' })}
                   >
                     <WholeWord className="h-4 w-4" />
-                    Word
+                    {t('word-button')}
                   </Button>
                   <Button
                     variant={video?.video?.subtitle?.style?.mode === 'line' ? "default" : "outline"}
@@ -208,7 +208,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                     onClick={() => updateStyle({ mode: 'line' })}
                   >
                     <RectangleHorizontal className="h-4 w-4" />
-                    Line
+                    {t('line-button')}
                   </Button>
                   <Button
                     variant={video?.video?.subtitle?.style?.mode === 'twoLines' ? "default" : "outline"}
@@ -216,14 +216,14 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                     onClick={() => updateStyle({ mode: 'twoLines' })}
                   >
                     <StretchHorizontal className="h-4 w-4" />
-                    Two Lines
+                    {t('two-lines-button')}
                   </Button>
                 </div>
 
                 <div className="flex items-center justify-between w-full">
                   <span className="flex items-center gap-2 min-w-20">
                     <MoveVertical className="h-4 w-4" />
-                    Position
+                    {t('position-title')}
                   </span>
                     <div className="flex">
                       <Button
@@ -274,24 +274,24 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
 
           {showAnimationOption && (
             <AccordionItem value="animation">
-              <AccordionTrigger>Animation</AccordionTrigger>
+              <AccordionTrigger>{t('animation-title')}</AccordionTrigger>
               <AccordionContent>
               <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between w-full">
                       <span className="flex items-center gap-2 min-w-20">
                         <View className="h-4 w-4" />
-                        Appear
+                        {t('appear-title')}
                       </span>
                       <div className="flex items-center w-1/2">
                         <Select value={video?.video?.subtitle?.style?.animation?.appear || "none"} onValueChange={(value) => updateStyle({ animation: { ...video?.video?.subtitle?.style?.animation, appear: value } })}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select Animation" />
+                            <SelectValue placeholder={t('appear-placeholder')} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="none">None</SelectItem>
-                            <SelectItem value="zoom">Zoom</SelectItem>
-                            <SelectItem value="bounce">Bounce</SelectItem>
-                            <SelectItem value="fade">Fade</SelectItem>
+                            <SelectItem value="none">{t('appear-none')}</SelectItem>
+                            <SelectItem value="zoom">{t('appear-zoom')}</SelectItem>
+                            <SelectItem value="bounce">{t('appear-bounce')}</SelectItem>
+                            <SelectItem value="fade">{t('appear-fade')}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -305,7 +305,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
             <AccordionItem value="shadow">
               <AccordionTrigger>
                 <div className="flex items-center justify-between flex-1">
-                  Shadow
+                  {t('shadow-title')}
                   <Switch 
                     checked={video?.video?.subtitle?.style?.shadow?.isActive || false}
                     className="mr-2"
@@ -364,7 +364,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                   <div className="flex items-center justify-between w-full">
                     <span className="flex items-center gap-2 min-w-20">
                       <PaintBucket className="h-4 w-4" />
-                      Color
+                      {t('color-label')}
                     </span>
                     <div className="flex items-center w-1/2">
                       <div 
@@ -398,7 +398,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
             <AccordionItem value="border">
               <AccordionTrigger>
                 <div className="flex items-center justify-between flex-1">
-                  Border
+                  {t('border-title')}
                   <Switch 
                     checked={video?.video?.subtitle?.style?.border?.isActive || false}
                     className="mr-2"
@@ -419,7 +419,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                   <div className="flex items-center justify-between w-full">
                     <span className="flex items-center gap-2 min-w-20">
                       <PaintBucket className="h-4 w-4" />
-                      Color
+                      {t('color-label')}
                     </span>
                     <div className="flex items-center w-1/2">
                       <div 
@@ -447,7 +447,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                   <div className="flex items-center justify-between w-full">
                     <span className="flex items-center gap-2 min-w-20">
                       <AArrowUp className="h-4 w-4" />
-                      Size
+                      {t('size-label')}
                     </span>
                     <div className="w-1/2 relative">
                       <Input
@@ -488,7 +488,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
             <AccordionItem value="activeWord">
               <AccordionTrigger>
                 <div className="flex items-center justify-between flex-1">
-                  Active Word
+                  {t('active-word-title')}
                   <Switch 
                     checked={video?.video?.subtitle?.style?.activeWord?.isActive || false}
                     className="mr-2"
@@ -511,14 +511,14 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
 
                     <Select value={video?.video?.subtitle?.style?.activeWord?.fontWeight || "500"} onValueChange={(value) => updateStyle({ activeWord: { ...video?.video?.subtitle?.style?.activeWord, fontWeight: value } })}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Weight" />
+                        <SelectValue placeholder={t('select.weight-placeholder')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="300" className="font-light">Light</SelectItem>
-                        <SelectItem value="500" className="font-normal">Regular</SelectItem>
-                        <SelectItem value="600" className="font-medium">Medium</SelectItem>
-                        <SelectItem value="800" className="font-bold">Bold</SelectItem>
-                        <SelectItem value="900" className="font-black">Black</SelectItem>
+                        <SelectItem value="300" className="font-light">{t('select.weight-light')}</SelectItem>
+                        <SelectItem value="500" className="font-normal">{t('select.weight-normal')}</SelectItem>
+                        <SelectItem value="600" className="font-medium">{t('select.weight-medium')}</SelectItem>
+                        <SelectItem value="800" className="font-bold">{t('select.weight-bold')}</SelectItem>
+                        <SelectItem value="900" className="font-black">{t('select.weight-black')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -585,7 +585,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                       onClick={() => toggleStyleActiveWord('isItalic')}
                     >
                       <Italic className="h-4 w-4" />
-                      Italic
+                      {t('italic')}
                     </Button>
                     <Button
                       variant={video?.video?.subtitle?.style?.activeWord?.isUppercase ? "default" : "outline"}
@@ -593,7 +593,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                       onClick={() => toggleStyleActiveWord('isUppercase')}
                     >
                       <CaseUpper className="h-4 w-4" />
-                      Uppercase
+                      {t('uppercase')}
                     </Button>
                   </div>
                 </div>

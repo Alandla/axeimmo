@@ -43,12 +43,58 @@
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",
       "export-button": "Exporter",
+      "unsaved": "Non sauvegardé",
+      "saved": "Sauvegardé",
       "toast": {
         "title-error": "Erreur",
         "title-saving": "Sauvegarde de la vidéo...",
         "description-saving": "Veuillez patienter pendant que nous sauvegardons vos modifications.",
         "title-saved": "Vidéo sauvegardée",
-        "description-saved": "Vos modifications ont été sauvegardées."
+        "description-saved": "Vos modifications ont été sauvegardées.",
+        "title-subtitle-saved": "Style de sous-titre sauvegardé",
+        "description-subtitle-saved": "Le style de sous-titre a été sauvegardé.",
+        "description-subtitle-error": "Une erreur est survenue lors de la sauvegarde du style de sous-titre."
+      },
+      "subtitle": {
+        "title-presets": "Presets",
+        "title-presets-space": "Presets de l'espace",
+        "update": "Mettre à jour",
+        "delete": "Supprimer"
+      },
+      "subtitle-settings": {
+        "title": "Style de sous-titre",
+        "save-button": "Sauvegarder",
+        "title-subtitle-style-saved": "Style de sous-titre sauvegardé",
+        "description-subtitle-style-saved": "Le style de sous-titre a été sauvegardé.",
+        "italic": "Italique",
+        "no-punctuation": "Sans ponctuation",
+        "uppercase": "Majuscules",
+        "layout-title": "Affichage",
+        "word-button": "Mot",
+        "line-button": "Ligne",
+        "two-lines-button": "Deux lignes",
+        "position-title": "Position",
+        "animation-title": "Animation",
+        "appear-title": "Apparition",
+        "appear-placeholder": "Sélectionne une animation",
+        "appear-none": "Aucune",
+        "appear-zoom": "Zoom",
+        "appear-bounce": "Rebond",
+        "appear-fade": "Estomper",
+        "shadow-title": "Ombres",
+        "color-label": "Couleur",
+        "border-title": "Bordure",
+        "size-label": "Taille",
+        "active-word-title": "Mot actif",
+        "select": {
+          "weight-placeholder": "Sélectionne une épaisseur",
+          "weight-light": "Léger",
+          "weight-normal": "Normal",
+          "weight-medium": "Moyen",
+          "weight-bold": "Gras",
+          "weight-black": "Noir",
+          "font-placeholder": "Sélectionne une police"
+        }
       },
       "sequence-edit": {
         "search": "Recherche",

@@ -86,15 +86,15 @@ export default function VideoEditor() {
       const subtitleStyle : ISpaceSubtitleStyle[] = await basicApiCall("/space/addSubtitleStyle", { spaceId: video?.spaceId || '', subtitleStyle: video?.video?.subtitle?.style })
       setSubtitleStyles(subtitleStyle)
       toast({
-        title: t('toast.title-saved'),
-        description: t('toast.description-saved'),
+        title: t('toast.title-subtitle-saved'),
+        description: t('toast.description-subtitle-saved'),
         variant: 'confirm',
       })
     } catch (error) {
       console.error(error)
       toast({
-        title: t('error.title'),
-        description: t('error.description-saving'),
+        title: t('toast.title-error'),
+        description: t('toast.description-subtitle-error'),
         variant: 'destructive'
       })
     }
@@ -117,7 +117,6 @@ export default function VideoEditor() {
 
   const updateSubtitleStyle = (newStyleProps: any) => {
     if (video?.video?.subtitle) {
-      console.log('video', video)
       const updatedVideo = {
         ...video,
         video: {
@@ -131,7 +130,6 @@ export default function VideoEditor() {
           }
         }
       };
-      console.log('updatedVideo', updatedVideo)
       updateVideo(updatedVideo);
     }
   };
@@ -258,7 +256,7 @@ export default function VideoEditor() {
             ) : (
                 <div className="w-2 h-2 rounded-full bg-green-500" />
             )}
-            <span className='text-sm text-muted-foreground'>{isDirty ? 'Unsaved' : 'Saved'}</span>
+            <span className='text-sm text-muted-foreground'>{isDirty ? t('unsaved') : t('saved')}</span>
             <Button variant="outline" size="icon" onClick={handleSaveVideo}>
                 {isSaving ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
