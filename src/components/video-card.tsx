@@ -18,7 +18,6 @@ import {
 } from "@/src/components/ui/dropdown-menu"
 
 import { Button } from "@/src/components/ui/button"
-import { IVideo } from '@/src/types/video'
 import { cn } from '../lib/utils'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import { VideoWithCreator } from '../app/dashboard/page'

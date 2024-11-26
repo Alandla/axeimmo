@@ -1,13 +1,15 @@
 import { Button } from "@/src/components/ui/button"
-import { MoreVertical, Check, Pencil, Trash2, FileEdit, ArrowUp } from "lucide-react"
+import { MoreVertical, Check, Pencil, Trash2, FileEdit, ArrowUp, Pen } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Player, PlayerRef } from "@remotion/player";
 import { PreviewSubtitle } from "@/src/remotion/previewSubtitle/Composition";
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuTrigger,
+    DropdownMenuSeparator
 } from "@/src/components/ui/dropdown-menu"
 import { cn } from "@/src/lib/utils";
 import { useTranslations } from "next-intl";
@@ -24,6 +26,13 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
     const handleMouseLeave = useCallback(() => setIsHovering(false), []);
 
     const isSelected = video.video.subtitle.id === subtitle.id;
+
+    const startEditing = useCallback(() => {
+        setIsEditing(true);
+        setTimeout(() => {
+            inputRef.current?.focus();
+        }, 200);
+    }, []);
 
     useEffect(() => {
         if (playerRef.current) {
@@ -112,17 +121,34 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
                                 <MoreVertical className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem 
-                                onClick={(e) => {
+                        <DropdownMenuContent
+                          className="w-[--radix-dropdown-menu-trigger-width] min-w-40 rounded-lg"
+                          side={"bottom"}
+                          align="end"
+                          sideOffset={4}
+                        >
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleUpdate(subtitle.id, video.video.subtitle);
+                                    }}
+                                    className="flex items-center"
+                                >
+                                    <ArrowUp />
+                                    {t('update')}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                    onClick={(e) => {
                                     e.stopPropagation();
-                                    handleUpdate(subtitle.id, video.video.subtitle);
-                                }} 
-                                className="flex items-center"
-                            >
-                                <ArrowUp className="h-4 w-4" />
-                                {t('update')}
-                            </DropdownMenuItem>
+                                    startEditing();
+                                    }}
+                                >
+                                    <Pen  />
+                                    Rename
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup>
+                            <DropdownMenuSeparator />
                             <DropdownMenuItem
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -134,7 +160,7 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
                                     "focus:bg-red-200 focus:text-red-600"
                                 )}
                             >
-                                <Trash2 className="h-4 w-4" />
+                                <Trash2 />
                                 {t('delete')}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
