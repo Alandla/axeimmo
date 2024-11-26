@@ -53,3 +53,14 @@ export const isUserExist = async (email: string) => {
     throw error;
   }
 };
+
+export const getUserById = async (userId: string) => {
+  await connectMongo();
+  try {
+    const user = await UserModel.findById(userId);
+    return user;
+  } catch (error) {
+    console.error("Error while getting user by id: ", error);
+    throw error;
+  }
+};

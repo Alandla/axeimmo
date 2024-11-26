@@ -19,6 +19,7 @@ import { MediaLabel } from './media-label'
 import { Steps, StepState } from '../types/step'
 import { GenerationProgress } from './generation-progress'
 import { startGeneration } from '../service/generation.service'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
 
 enum MessageType {
   TEXT = 'text',
@@ -39,6 +40,7 @@ interface Message {
 
 export function AiChat() {
   const { creationStep, setCreationStep, script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files, addStep } = useCreationStore()
+  const { activeSpace } = useActiveSpaceStore()
   const [messages, setMessages] = useState<Message[]>([])
   const { data: session } = useSession()
   const t = useTranslations('ai');
@@ -212,7 +214,7 @@ export function AiChat() {
         'Voici l\'avancer de la génération de la vidéo.',
         MessageType.GENERATION
       );
-      startGeneration()
+      startGeneration(session?.user?.id || '', activeSpace?.id || '')
     }
   }
 
@@ -221,7 +223,7 @@ export function AiChat() {
     setCreationStep(CreationStep.GENERATION)
     addMessageUser(`Voici une description des fichiers, nous pouvons lancer la génération de la vidéo.`)
     addMessageAi('Voici l\'avancée de la génération de la vidéo.', MessageType.GENERATION)
-    startGeneration()
+    startGeneration(session?.user?.id || '', activeSpace?.id || '')
   }
 
   const addMessageUser = (userMessage: string) => {

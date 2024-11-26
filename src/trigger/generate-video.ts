@@ -20,7 +20,7 @@ import { generateStartData } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
 
 interface GenerateVideoPayload {
-  space: string
+  spaceId: string
   userId: string
   files: UploadedFile[]
   script: string
@@ -40,7 +40,7 @@ export const generateVideoTask = task({
     logger.log("Generating video...", { payload, ctx });
 
     let video : IVideo = {
-      spaceId: payload.space,
+      spaceId: payload.spaceId,
       state: {
         type: 'generating',
       },

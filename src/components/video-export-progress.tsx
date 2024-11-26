@@ -20,8 +20,9 @@ import { IExport } from '../types/export';
 import { basicApiCall } from '../lib/api';
 import { IVideo } from '../types/video';
 import Link from 'next/link';
-import { pollExportStatus } from '../service/rendering.service';
 import { useTranslations } from 'next-intl';
+import { auth, runs } from '@trigger.dev/sdk/v3';
+import confetti from 'canvas-confetti';
 
 type ExportStatus = 'pending' | 'processing' | 'completed' | 'failed';
 
@@ -30,27 +31,95 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState<ExportStatus>('pending');
   const [downloadUrl, setDownloadUrl] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const triggerConfetti = () => {
+    const end = Date.now() + 1000; // 1 seconde
+    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+
+    const frame = () => {
+      if (Date.now() > end) return;
+
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 0, y: 0.5 },
+        colors: colors,
+      });
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 1, y: 0.5 },
+        colors: colors,
+      });
+
+      requestAnimationFrame(frame);
+    };
+
+    frame();
+  };
 
   useEffect(() => {
     const fetchExport = async () => {
       console.log("Fetching export", exportData, video)
       try {
-        if (exportData?.status === 'pending' && video && exportData) {
+        if (exportData?.status === 'pending' && video && exportData && !exportData.runId) {
 
-          const renderResult : { renderId: string, bucketName: string } = await basicApiCall('/export/start', { video: video, exportId: exportData.id });
-          setStatus('processing')
-
-          const downloadUrl = await pollExportStatus(renderResult.renderId, renderResult.bucketName, video, exportData, setProgress, setStatus, setDownloadUrl)
-          setDownloadUrl(downloadUrl)
-
-        } else if (video && exportData) {
-          console.log("ouais")
-          setStatus(exportData?.status || 'pending')
-
-          if (exportData?.renderId && exportData?.bucketName) {
-            const downloadUrl = await pollExportStatus(exportData.renderId, exportData.bucketName, video, exportData, setProgress, setStatus, setDownloadUrl)
-            setDownloadUrl(downloadUrl)
+          const options = {
+            videoId: video.id,
+            exportId: exportData.id
           }
+
+          const { runId, publicAccessToken } = await basicApiCall('/trigger/startExport', { options }) as { runId: string, publicAccessToken: string };
+
+          auth.configure({
+            accessToken: publicAccessToken,
+          });
+
+          for await (const run of runs.subscribeToRun(runId)) {
+            setStatus(run.metadata?.status as ExportStatus)
+            setProgress(run.metadata?.progress as number)
+            if (run.status === "COMPLETED") {
+              setDownloadUrl(run.metadata?.downloadUrl as string)
+              triggerConfetti()
+              break
+            }
+            if (run.status === "FAILED") {
+              setErrorMessage(run.metadata?.errorMessage as string)
+              break
+            }
+          }
+
+        } else if (exportData && video && exportData.status === 'processing' && exportData.runId) {
+          const { runId, publicAccessToken } = await basicApiCall('/trigger/getAccessToken', { runId: exportData.runId }) as { runId: string, publicAccessToken: string };
+
+          auth.configure({
+            accessToken: publicAccessToken,
+          });
+
+          for await (const run of runs.subscribeToRun(runId)) {
+            if (run.status === "COMPLETED") {
+              setDownloadUrl(run.output.videoUrl as string)
+              setStatus('completed')
+              triggerConfetti()
+              break
+            }
+            if (run.status === "FAILED") {
+              setErrorMessage(run.output.error as string)
+              setStatus('failed')
+              break
+            }
+            setStatus(run.metadata?.status as ExportStatus)
+            setProgress(run.metadata?.progress as number)
+          }
+        } else if (exportData && video && exportData.status === 'completed' && exportData.runId) {
+          triggerConfetti()
+          setDownloadUrl(exportData.downloadUrl as string)
+          setStatus('completed')
         }
       } catch (error) {
         console.error('Error fetching export:', error)
@@ -69,7 +138,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
           </div>
           <CardTitle className="text-center">{t('title-failed')}</CardTitle>
           <CardDescription className="text-center">
-            {t('message-failed')}
+            {errorMessage}
           </CardDescription>
         </CardHeader>
         <CardFooter className="flex justify-center">
@@ -117,9 +186,9 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
             <CardTitle className="text-center">{t('title-completed')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+            <div className="flex justify-center h-96 overflow-hidden">
               <video 
-                className="w-full h-full object-cover"
+                className="h-full object-cover rounded-lg"
                 controls
                 src={downloadUrl}
               />
@@ -128,14 +197,16 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
           <CardFooter className="flex justify-center gap-4">
             <Link href="/dashboard">
               <Button variant="outline" size="lg">
-                <ArrowLeft className="w-5 h-5 mr-2" />
+                <ArrowLeft className="w-5 h-5" />
                 {t('back-to-dashboard')}
               </Button>
             </Link>
-            <Button size="lg">
-              <Download className="w-5 h-5 mr-2" />
-              {t('download-video')}
-            </Button>
+            <a href={downloadUrl} download>
+              <Button size="lg">
+                <Download className="w-5 h-5" />
+                {t('download-video')}
+              </Button>
+            </a>
           </CardFooter>
         </>
       )}
