@@ -65,7 +65,9 @@ export default function Dashboard() {
       setVideos(processedVideos.reverse())
       setIsLoading(false)
     }
-    fetchVideos()
+    if (activeSpace) {
+      fetchVideos()
+    }
   }, [activeSpace])
 
   const handleDeleteVideo = async (video: IVideo) => {

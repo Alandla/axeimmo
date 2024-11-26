@@ -1,12 +1,11 @@
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import config from "@/config";
-import { useToast } from "@/src/hooks/use-toast";
 
 // Nouvelle fonction sans toast pour les appels non-React
-export const basicApiCall = async <T>(url: string, params: any, showToast = true): Promise<T> => {
+export const basicApiCall = async <T>(url: string, params: any): Promise<T> => {
   try {
-    const response = await (showToast ? apiClientWithToast : apiClient).post<T>(`${url}`, params);
+    const response = await apiClient.post<T>(`${url}`, params);
     return response.data;
   } catch (e: any) {
     console.error(e?.message);
@@ -14,9 +13,9 @@ export const basicApiCall = async <T>(url: string, params: any, showToast = true
   }
 }
 
-export const basicApiGetCall = async <T>(url: string, showToast = true): Promise<T> => {
+export const basicApiGetCall = async <T>(url: string): Promise<T> => {
   try {
-    const response = await (showToast ? apiClientWithToast : apiClient).get<T>(url);
+    const response = await apiClient.get<T>(url);
     return response.data;
   } catch (e: any) {
     console.error(e?.message);
@@ -25,27 +24,20 @@ export const basicApiGetCall = async <T>(url: string, showToast = true): Promise
 }
 
 // Client API séparé pour les appels avec toast (contexte React)
-export const apiClientWithToast = axios.create({
+export const apiClient = axios.create({
   baseURL: "/api",
 });
 
 // Déplacer l'intercepteur avec toast vers le client spécifique
-apiClientWithToast.interceptors.response.use(
+apiClient.interceptors.response.use(
   function (response: any) {
     return response.data;
   },
   function (error: any) {
-    const { toast } = useToast();
     let message = "";
 
     if (error.response?.status === 401) {
-      // User not auth, ask to re login
-      toast({
-        title: "Please login",
-        description: "You are not authorized to access this resource.",
-      })
-      // automatically redirect to /dashboard page after login
-      return signIn(undefined, { callbackUrl: config.auth.callbackUrl });
+      //return signIn(undefined, { callbackUrl: config.auth.callbackUrl });
     } else if (error.response?.status === 403) {
       // User not authorized, must subscribe/purchase/pick a plan
       message = "Pick a plan to use this feature";
@@ -59,34 +51,6 @@ apiClientWithToast.interceptors.response.use(
 
     console.error(error.message);
 
-    // Automatically display errors to the user
-    if (error.message) {
-      toast({
-        title: "Uh oh! Something went wrong.",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        variant: "destructive",
-        description: "something went wrong...",
-      });
-    }
-    return Promise.reject(error);
-  }
-);
-
-// Garder une version simple pour les appels sans contexte React
-const apiClient = axios.create({
-  baseURL: "/api",
-});
-
-apiClient.interceptors.response.use(
-  function (response: any) {
-    return response.data;
-  },
-  function (error: any) {
-    console.error(error?.message || "An error occurred");
     return Promise.reject(error);
   }
 );

@@ -34,7 +34,7 @@ export const startGeneration = async (userId: string, spaceId: string) => {
   }
 
   //Start generation task
-  const { runId, publicAccessToken } = await basicApiCall("/trigger/startGeneration", { options, showToast: false }) as { runId: string, publicAccessToken: string }
+  const { runId, publicAccessToken } = await basicApiCall("/trigger/startGeneration", { options }) as { runId: string, publicAccessToken: string }
 
   //Access to the generation task
   auth.configure({

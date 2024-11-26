@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserSpaces } from '@/src/dao/spaceDao';
 import { auth } from '@/src/lib/auth';
-import { SimpleSpace } from '@/src/types/space';
 import { getUserById } from '@/src/dao/userDao';
 import { IUser } from '@/src/types/user';
 
@@ -21,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const user: IUser = await getUserById(userId);
-
+    
     const response = {
       id: user.id,
       name: user.name,
