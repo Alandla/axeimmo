@@ -7,13 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Camera, Settings2, User2, Languages, Save, Loader2, X } from 'lucide-react'
 import { User } from "next-auth"
 import { basicApiCall } from "../lib/api"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { IUser } from "../types/user"
 import { getMediaUrlFromFileByPresignedUrl } from "../service/upload.service"
-import { useRouter } from "next/navigation"
 
 export function GeneralSettings({ user }: { user: User }) {
-  const router = useRouter();
+  const t = useTranslations('general-settings')
   const [isHovering, setIsHovering] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [name, setName] = useState(user.name || '')
@@ -25,8 +24,6 @@ export function GeneralSettings({ user }: { user: User }) {
   const [originalAvatarUrl, setOriginalAvatarUrl] = useState(user.image || undefined)
   const locale = useLocale()
   const [isUploading, setIsUploading] = useState(false)
-
-  console.log(isUploading && avatarFileInUpload && avatarFileInUpload !== undefined)
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsUploading(true)
@@ -72,7 +69,7 @@ export function GeneralSettings({ user }: { user: User }) {
 
   return (
     <div className="space-y-6 px-12">
-      <h2 className="text-2xl font-bold">General Settings</h2>
+      <h2 className="text-2xl font-bold">{t('title')}</h2>
 
       <div className="flex items-start justify-between h-24">
         <div className="space-y-1">
@@ -81,7 +78,7 @@ export function GeneralSettings({ user }: { user: User }) {
             <Label htmlFor="avatar" className="text-base">Avatar</Label>
           </div>
           <p className="text-sm text-muted-foreground">
-            Your profile picture visible to other users
+            {t('avatar.description')}
           </p>
         </div>
         <div className="flex items-center space-x-4">
@@ -90,7 +87,7 @@ export function GeneralSettings({ user }: { user: User }) {
             size="sm" 
             onClick={() => document.getElementById('avatar-upload')?.click()}
           >
-            Change
+            {t('avatar.change')}
           </Button>
           <Avatar 
             className="h-16 w-16 cursor-pointer relative rounded-lg"
@@ -131,39 +128,39 @@ export function GeneralSettings({ user }: { user: User }) {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <User2 className="h-4 w-4" />
-            <Label htmlFor="name" className="text-base">Name</Label>
+            <Label htmlFor="name" className="text-base">{t('name.title')}</Label>
           </div>
           <p className="text-sm text-muted-foreground">
-            Your full name that will be displayed to others
+            {t('name.description')}
           </p>
         </div>
-        <Input id="name" placeholder="Enter your name" className="w-[250px]" value={name} onChange={(e) => setName(e.target.value)} />
+        <Input id="name" placeholder={t('name.placeholder')} className="w-[250px]" value={name} onChange={(e) => setName(e.target.value)} />
       </div>
 
       <div className="flex items-start justify-between h-24">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Languages className="h-4 w-4" />
-            <Label htmlFor="language" className="text-base">Language</Label>
+            <Label htmlFor="language" className="text-base">{t('language.title')}</Label>
           </div>
           <p className="text-sm text-muted-foreground">
-            Choose your preferred language for the interface
+            {t('language.description')}
           </p>
         </div>
         <Select onValueChange={(value) => setLanguage(value)} value={language}>
           <SelectTrigger id="language" className="w-[250px]">
-            <SelectValue placeholder="Select a language" />
+            <SelectValue placeholder={t('language.placeholder')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="en">English</SelectItem>
-            <SelectItem value="fr">French</SelectItem>
+            <SelectItem value="en">{t('language.options.en')}</SelectItem>
+            <SelectItem value="fr">{t('language.options.fr')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div className="flex items-start justify-between h-24">
         <Button onClick={handleSave} disabled={isLoading}>
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          Save
+          {t('save-button')}
         </Button>
       </div>
     </div>

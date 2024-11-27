@@ -11,6 +11,48 @@
       "loginButton": "Se connecter",
       "orContinueWith": "Ou continuez avec"
     },
+    "breadcrumbs": {
+      "Dashboard": "Tableau de bord"
+    },
+    "dashboard": {
+      "title": "Tableau de bord"
+    },
+    "videos": {
+      "title": "Vidéos",
+      "more-options": "Plus d'options",
+      "dropdown-menu": {
+        "edit": "Editer",
+        "rename": "Renommer",
+        "delete": "Supprimer"
+      },
+      "toast": {
+        "title-updated": "Titre mis à jour",
+        "description-updated": "Ton titre a été mis à jour",
+        "error-message": "Une erreur est survenue lors de la mise à jour du titre"
+      }
+    },
+    "general-settings": {
+      "title": "Paramètres généraux",
+      "save-button": "Sauvegarder",
+      "avatar": {
+        "title": "Avatar",
+        "description": "Ta photo de profil visible pour les autres utilisateurs",
+        "change": "Changer"
+      },
+      "name": {
+        "title": "Nom",
+        "description": "Ton nom visible pour les autres utilisateurs"
+      },
+      "language": {
+        "title": "Langue",
+        "description": "Ta langue préférée pour l'interface",
+        "placeholder": "Sélectionne ta langue",
+        "options": {
+          "en": "Anglais",
+          "fr": "Français"
+        }
+      }
+    },
     "sidebar": {
       "createVideo": "Créer une vidéo",
       "links": {

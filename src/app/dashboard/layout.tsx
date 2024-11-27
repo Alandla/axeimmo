@@ -19,6 +19,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Fragment } from "react"
 import { TooltipProvider } from "@/src/components/ui/tooltip"
+import { useTranslations } from "next-intl"
 
 function generateBreadcrumbs(pathname: string) {
   const paths = pathname.split('/').filter(Boolean);
@@ -31,6 +32,7 @@ function generateBreadcrumbs(pathname: string) {
 export default function LayoutPrivate({ children }: Readonly<{children: React.ReactNode}>) {
   const pathname = usePathname();
   const breadcrumbs = generateBreadcrumbs(pathname);
+  const t = useTranslations('breadcrumbs')
 
   return (
     <>
@@ -49,7 +51,7 @@ export default function LayoutPrivate({ children }: Readonly<{children: React.Re
                       {index > 0 && <BreadcrumbSeparator/>}
                       <BreadcrumbItem>
                         {index === breadcrumbs.length - 1 ? (
-                          <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                          <BreadcrumbPage>{t(crumb.label)}</BreadcrumbPage>
                         ) : (
                           <BreadcrumbLink href={crumb.href} asChild>
                             <Link href={crumb.href}>

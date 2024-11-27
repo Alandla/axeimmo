@@ -4,8 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useRef, useCallback } from 'react'
 import { MoreVertical, Pen, Edit, Trash2, Settings2, Video as VideoIcon } from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { formatDistanceToNow, Locale } from 'date-fns'
+import { fr, enUS } from 'date-fns/locale'
 
 import {
   DropdownMenu,
@@ -25,6 +25,8 @@ import { AvatarImage } from '@radix-ui/react-avatar'
 import { basicApiCall } from '../lib/api'
 import { useToast } from '../hooks/use-toast'
 import { useVideoToDeleteStore } from '../store/videoToDelete'
+import { useTranslations } from 'next-intl'
+import { useSession } from 'next-auth/react'
 
 function formatDuration(seconds: number): string {
   const roundedSeconds = Math.round(seconds);
@@ -34,6 +36,9 @@ function formatDuration(seconds: number): string {
 }
 
 export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { video: VideoWithCreator, setIsModalConfirmDeleteOpen: (isOpen: boolean) => void }) {
+  const t = useTranslations('videos')
+  const { data: session } = useSession()
+
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(video.title);
@@ -64,12 +69,12 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
           }
         });
         toast({
-          title: "Title updated",
-          description: "Your video title has been updated",
+          title: t('toast.title-updated'),
+          description: t('toast.description-updated'),
           variant: "confirm",
         });
       } catch (error) {
-        console.error('Erreur lors de la mise à jour du titre:', error);
+        console.error(t('toast.error-message'), error);
         setEditedTitle(video.title); // Restaurer l'ancien titre en cas d'erreur
       }
     }
@@ -122,14 +127,14 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
             </h3>
           )}
           <p className="text-sm text-gray-500 truncate">
-            {formatDistanceToNow(video.createdAt ? new Date(video.createdAt) : new Date(), { addSuffix: true, locale: fr })}
+            {formatDistanceToNow(video.createdAt ? new Date(video.createdAt) : new Date(), { addSuffix: true, locale: session?.user?.options?.lang === 'en' ? enUS : fr })}
           </p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
               <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">Plus d'options</span>
+              <span className="sr-only">{t('more-options')}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -155,7 +160,7 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
               <DropdownMenuItem asChild>
                 <Link href={`/edit/${video.id}`}>
                   <Edit />
-                  Edit
+                  {t('dropdown-menu.edit')}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem 
@@ -165,7 +170,7 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
                 }}
               >
                 <Pen  />
-                Rename
+                {t('dropdown-menu.rename')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -178,7 +183,7 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
               )}
             >
               <Trash2 />
-              Delete
+              {t('dropdown-menu.delete')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

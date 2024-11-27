@@ -11,6 +11,48 @@
       "loginButton": "Log in",
       "orContinueWith": "Or continue with"
     },
+    "breadcrumbs": {
+      "Dashboard": "Dashboard"
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "videos": {
+      "title": "Videos",
+      "more-options": "More options",
+      "dropdown-menu": {
+        "edit": "Edit",
+        "rename": "Rename",
+        "delete": "Delete"
+      },
+      "toast": {
+        "title-updated": "Title updated",
+        "description-updated": "Your video title has been updated",
+        "error-message": "An error occurred while updating the title"
+      }
+    },
+    "general-settings": {
+      "title": "General Settings",
+      "save-button": "Save",
+      "avatar": {
+        "title": "Avatar",
+        "description": "Your profile picture visible to other users",
+        "change": "Change"
+      },
+      "name": {
+        "title": "Name",
+        "description": "Your full name that will be displayed to others"
+      },
+      "language": {
+        "title": "Language",
+        "description": "Your preferred language for the interface",
+        "placeholder": "Select your language",
+        "options": {
+          "en": "English",
+          "fr": "French"
+        }
+      }
+    },
     "sidebar": {
       "createVideo": "Create a video",
       "links": {
