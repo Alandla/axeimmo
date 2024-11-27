@@ -31,6 +31,8 @@ import { Skeleton } from "./ui/skeleton"
 import { cn } from "../lib/utils"
 import { signOut } from "next-auth/react"
 import { useTranslations } from "next-intl"
+import { useState } from "react"
+import { SettingsDrawer } from "./settings-drawer"
 
 export function NavUser({
   user,
@@ -40,6 +42,7 @@ export function NavUser({
   const t = useTranslations('sidebar')
   
   const { isMobile } = useSidebar()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   let loading = false
 
   if (!user) {
@@ -57,6 +60,8 @@ export function NavUser({
   }
 
   return (
+    <>
+    <SettingsDrawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} user={user} />
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
@@ -105,7 +110,7 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setIsDrawerOpen(true)}>
                 <Settings2 />
                 {t('user.settings')}
               </DropdownMenuItem>
@@ -126,5 +131,6 @@ export function NavUser({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
+    </>
   )
 }

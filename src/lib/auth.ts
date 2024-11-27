@@ -16,6 +16,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           image: profile.image,
           createdAt: new Date(),
           updatedAt: new Date(),
+          options: {
+            lang: "fr",
+          },
         };
       },
     })
@@ -28,7 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     }
   },
-  adapter: MongoDBAdapter(connectMongo),
+  adapter: MongoDBAdapter(connectMongo) as any,
   pages: {
     signIn: '/',
   },

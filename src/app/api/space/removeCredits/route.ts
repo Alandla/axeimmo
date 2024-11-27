@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  console.log("POST /api/space/removeCredits by user: ", session.user.id);
+  console.log("POST /api/user/update by user: ", session.user.id);
 
   const params = await req.json();
 

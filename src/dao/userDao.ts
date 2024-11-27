@@ -1,6 +1,7 @@
 import { User } from "next-auth";
 import connectMongo from "../lib/mongoose";
 import UserModel from "../models/User";
+import { IUser } from "../types/user";
 
 export const createUser = async (user: User) => {
   await connectMongo();
@@ -64,3 +65,14 @@ export const getUserById = async (userId: string) => {
     throw error;
   }
 };
+
+export const updateUser = async (userId: string, updateData: Partial<IUser>) => {
+  await connectMongo();
+  try {
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, updateData, { new: true });
+    return updatedUser;
+  } catch (error) {
+    console.error("Error while updating user: ", error);
+    throw error;
+  }
+}
