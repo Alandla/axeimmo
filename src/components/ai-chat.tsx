@@ -44,6 +44,7 @@ export function AiChat() {
   const [messages, setMessages] = useState<Message[]>([])
   const { data: session } = useSession()
   const t = useTranslations('ai');
+  const tAi = useTranslations('ai-chat');
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const handleSendMessage = (message: string, duration: number) => {
@@ -53,24 +54,18 @@ export function AiChat() {
         if (files.some(file => file.type === 'voice')) {
           addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.AVATAR)
-          addMessageAi(
-            'Tu m\'as envoyé un fichier audio, je vais l\'utiliser pour la vidéo. Maintenant tu peux choisir un avatar pour incarner ta vidéo, ce n\'est pas obligatoire et tu peux passer à l\'étape suivante si tu n\'en as pas besoin.',
-            MessageType.AVATAR
-          );
+          const messageAi = getRandomMessage('ai-get-audio-select-avatar');
+          addMessageAi(messageAi, MessageType.AVATAR);
           return;
         } else if (files.some(file => file.type === 'avatar') && files.some(file => file.type === 'media')) {
           setCreationStep(CreationStep.MEDIA)
-          addMessageAi(
-            'Tu m\'as envoyé des medias que je vais intégrer directement dans le montage de la vidéo, pour ça je vais avoir besoin de ton aide, est-ce que tu pourrais me décrire les fichiers pour que je puisse facilement les placer aux bons moments dans ta vidéo ?',
-            MessageType.MEDIA
-          );
+          const messageAi = getRandomMessage('ai-ask-media-description');
+          addMessageAi(messageAi, MessageType.MEDIA);
           return;
         } else if (files.some(file => file.type === 'avatar')) {
           setCreationStep(CreationStep.GENERATION)
-          addMessageAi(
-            'Tu m\'as envoyé un fichier avatar, je vais l\'utiliser en tant qu\'avatar et voix. Je n\'ai pas besoin de plus d\'informations donc j\'ai lancé la génération, tu peux voir l\'avancer de la génération :',
-            MessageType.GENERATION
-          );
+          const messageAi = getRandomMessage('ai-get-all-start-generation');
+          addMessageAi(messageAi, MessageType.GENERATION);
           return;
         }
       }
@@ -176,11 +171,10 @@ export function AiChat() {
     if (message && message.script) {
       setScript(message.script);
       setCreationStep(CreationStep.VOICE);
-      addMessageUser(`Utilise ce script pour la vidéo, on peut passer à l\'étape suivante.`)
-      addMessageAi(
-        'Parfait ! Maintenant il faut choisir la voix pour ta vidéo, voici la liste des voix disponibles.',
-        MessageType.VOICE
-      );
+      const messageUser = getRandomMessage('user-valid-script');
+      const messageAi = getRandomMessage('ai-select-voice');
+      addMessageUser(messageUser)
+      addMessageAi(messageAi, MessageType.VOICE);
     }
   }
 
@@ -188,41 +182,51 @@ export function AiChat() {
     addStep({ id: 2, name: Steps.VOICE_GENERATION, state: StepState.PENDING, progress: 0 })
     addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.AVATAR);
-    addMessageUser(`Je choisis la voix de ${selectedVoice?.name}, passons à l\'étape suivante`)
-    addMessageAi(
-      'Parfait ! Maintenant tu peux choisir un avatar pour incarner ta vidéo, ce n\'est pas obligatoire et tu peux passer à l\'étape suivante si tu n\'en as pas besoin.',
-      MessageType.AVATAR
-    );
+    const messageUser = getRandomMessage('user-select-voice', { "name": selectedVoice?.name || '' });
+    const messageAi = getRandomMessage('ai-select-avatar');
+    addMessageUser(messageUser)
+    addMessageAi(messageAi, MessageType.AVATAR);
   }
 
   const handleConfirmAvatar = () => {
+    let messageUser1 = '';
+    let messageUser2 = '';
+    let messageAi = '';
     if (selectedAvatar) {
+      messageUser1 = getRandomMessage('user-select-avatar', { "name": selectedVoice?.name || '' });
       addStep({ id: 4, name: Steps.AVATAR_GENERATION, state: StepState.PENDING, progress: 0 })
+    } else {
+      messageUser1 = getRandomMessage('user-no-avatar');
     }
     if (files.some(file => file.type === 'media')) {
+      messageUser2 = getRandomMessage('user-next-step');
+      messageAi = getRandomMessage('ai-ask-media-description');
+      const messageUser = messageUser1 + ' ' + messageUser2;
+
       setCreationStep(CreationStep.MEDIA)
-      addMessageUser(selectedAvatar ? `Je choisis l'avatar de ${selectedAvatar.name}, nous pouvons passer à l'étape suivante.` : 'Je n\'ai pas besoin d\'avatar, nous pouvons passer à l\'étape suivante.')
-      addMessageAi(
-        'Tu m\'as donné des fichiers medias que je vais intégrer directement dans le montage de la vidéo, pour ça je vais avoir besoin de ton aide, est-ce que tu pourrais me décrire les fichiers pour que je puisse facilement les placer aux bons moments dans ta vidéo ?',
-        MessageType.MEDIA
-      );
+
+      addMessageUser(messageUser)
+      addMessageAi(messageAi, MessageType.MEDIA);
     } else {
+      messageUser2 = getRandomMessage('user-start-generation');
+      messageAi = getRandomMessage('ai-generation-progress');
+      const messageUser = messageUser1 + ' ' + messageUser2;
+
       addStep({ id: 5, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
       setCreationStep(CreationStep.GENERATION)
-      addMessageUser(selectedAvatar ? `Je choisis l'avatar de ${selectedAvatar.name}, nous pouvons lancer la génération de ma vidéo.` : 'Je n\'ai pas besoin d\'avatar, nous pouvons lancer la génération de ma vidéo.')
-      addMessageAi(
-        'Voici l\'avancer de la génération de la vidéo.',
-        MessageType.GENERATION
-      );
-      startGeneration(session?.user?.id || '', activeSpace?.id || '')
+
+      addMessageUser(messageUser)
+      addMessageAi(messageAi, MessageType.GENERATION);
     }
   }
 
   const handleConfirmMedia = () => {
     addStep({ id: 5, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.GENERATION)
-    addMessageUser(`Voici une description des fichiers, nous pouvons lancer la génération de la vidéo.`)
-    addMessageAi('Voici l\'avancée de la génération de la vidéo.', MessageType.GENERATION)
+    const messageUser = getRandomMessage('user-confirm-media');
+    const messageAi = getRandomMessage('ai-generation-progress');
+    addMessageUser(messageUser)
+    addMessageAi(messageAi, MessageType.GENERATION)
     startGeneration(session?.user?.id || '', activeSpace?.id || '')
   }
 
@@ -244,6 +248,11 @@ export function AiChat() {
     ]);
     return messageId;
   }
+
+  const getRandomMessage = (messageType: string, params?: Record<string, string>) => {
+    const randomIndex = Math.floor(Math.random() * 29);
+    return tAi(`${messageType}.${randomIndex}`, params);
+  };
 
   const handleScriptChange = (messageId: string, newScript: string) => {
     setMessages(prevMessages => prevMessages.map(msg => 

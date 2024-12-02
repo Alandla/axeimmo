@@ -24,7 +24,7 @@ export default function Page() {
       {/* Left side */}
       <div className="flex flex-col justify-between w-1/2 p-8 bg-white">
         {/* Logo */}
-        <Image src="/img/logo.png" alt="Logo" width={769} height={364} className="w-24 h-auto mb-8 sm:w-32 md:w-38" />
+        <Image src="/img/logo_little.png" alt="Logo" width={769} height={364} className="w-24 h-auto mb-8 sm:w-32 md:w-38" />
         
         <div className="flex flex-col items-center justify-center flex-grow">
           <h1 className="text-2xl font-bold mb-2 text-center">{t('title')}</h1>
