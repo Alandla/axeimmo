@@ -30,6 +30,10 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
     updateSubtitleStyle({ style: updates })
   }
 
+  const updateModeBackground = (mode: 'word' | 'line' | 'twoLines' | 'full') => {
+    updateStyle({ background: { ...video?.video?.subtitle?.style?.background, mode: mode } })
+  }
+
   const incrementSize = () => {
     updateStyle({ fontSize: parseInt(video?.video?.subtitle?.style?.fontSize) + 1 })
   }
@@ -52,6 +56,14 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
 
   const decrementSizeActiveWord = () => {
     updateStyle({ activeWord: { ...video?.video?.subtitle?.style?.activeWord, fontSize: parseInt(video?.video?.subtitle?.style?.activeWord?.fontSize) - 1 } })
+  }
+
+  const incrementRadiusBackground = () => {
+    updateStyle({ background: { ...video?.video?.subtitle?.style?.background, radius: parseInt(video?.video?.subtitle?.style?.background?.radius) + 1 } })
+  }
+
+  const decrementRadiusBackground = () => {
+    updateStyle({ background: { ...video?.video?.subtitle?.style?.background, radius: parseInt(video?.video?.subtitle?.style?.background?.radius) - 1 } })
   }
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,6 +89,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
   const showBorderOption = currentTemplate?.optionsAvailable.includes('border')
   const showActiveWordOption = currentTemplate?.optionsAvailable.includes('activeWord')
   const showAnimationOption = currentTemplate?.optionsAvailable.includes('animation')
+  const showBackgroundOption = currentTemplate?.optionsAvailable.includes('background')
 
   return (
     <>
@@ -595,6 +608,122 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                       <CaseUpper className="h-4 w-4" />
                       {t('uppercase')}
                     </Button>
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+
+          {showBackgroundOption && (
+            <AccordionItem value="border-3d">
+              <AccordionTrigger>
+                <div className="flex items-center justify-between flex-1">
+                  Background
+                  <Switch 
+                    checked={video?.video?.subtitle?.style?.background?.isActive || false}
+                    className="mr-2"
+                    onCheckedChange={(checked: boolean) => 
+                      updateStyle({ 
+                        background: { 
+                          ...video?.video?.subtitle?.style?.background, 
+                          isActive: checked 
+                        } 
+                      })
+                    }
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
+                  />
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-col gap-4">
+                  <div className="flex w-full">
+                    <Button
+                      variant={video?.video?.subtitle?.style?.background?.mode === 'word' ? "default" : "outline"}
+                      className="flex-1 rounded-r-none"
+                      onClick={() => updateModeBackground('word')}
+                    >
+                      <WholeWord className="h-4 w-4" />
+                      {t('word-button')}
+                    </Button>
+                    <Button
+                      variant={video?.video?.subtitle?.style?.background?.mode === 'line' ? "default" : "outline"}
+                      className="flex-1 rounded-none border-x-0"
+                      onClick={() => updateModeBackground('line')}
+                    >
+                      <RectangleHorizontal className="h-4 w-4" />
+                      {t('line-button')}
+                    </Button>
+                    <Button
+                      variant={video?.video?.subtitle?.style?.background?.mode === 'full' ? "default" : "outline"}
+                      className="flex-1 rounded-l-none"
+                      onClick={() => updateModeBackground('full')}
+                    >
+                      <StretchHorizontal className="h-4 w-4" />
+                      {t('full-button')}
+                    </Button>
+                  </div>
+                  <div className="flex items-center justify-between w-full">
+                    <span className="flex items-center gap-2 min-w-20">
+                      <PaintBucket className="h-4 w-4" />
+                      {t('color-label')}
+                    </span>
+                    <div className="flex items-center w-1/2">
+                      <div 
+                        className="w-9 h-9 rounded-l-md border border-r-0 border-input cursor-pointer"
+                        style={{ backgroundColor: video?.video?.subtitle?.style?.background?.color || "#000000" }}
+                        onClick={() => document.getElementById('color-picker-background')?.click()}
+                      />
+                      <Input
+                        type="text"
+                        value={video?.video?.subtitle?.style?.background?.color || "#000000"}
+                        onChange={(e) => updateStyle({ background: { ...video?.video?.subtitle?.style?.background, color: e.target.value } })}
+                        className="flex-1 rounded-l-none uppercase"
+                        pattern="^#[0-9A-Fa-f]{6}$"
+                        title="Hexadecimal color code"
+                      />
+                      <input
+                        id="color-picker-background"
+                        type="color"
+                        value={video?.video?.subtitle?.style?.background?.color || "#000000"}
+                        onChange={(e) => updateStyle({ background: { ...video?.video?.subtitle?.style?.background, color: e.target.value } })}
+                        className="sr-only"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between w-full">
+                    <span className="flex items-center gap-2 min-w-20">
+                      <AArrowUp className="h-4 w-4" />
+                      {t('radius-label')}
+                    </span>
+                    <div className="w-1/2 relative">
+                      <Input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={video?.video?.subtitle?.style?.background?.radius?.toString() || "2"}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '')
+                          updateStyle({ background: { ...video?.video?.subtitle?.style?.background, radius: parseInt(value) } })
+                        }}
+                        className="w-full pl-8 pr-8 text-center"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={decrementRadiusBackground}
+                        className="absolute left-0 top-0 bottom-0 px-2"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={incrementRadiusBackground}
+                        className="absolute right-0 top-0 bottom-0 px-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </AccordionContent>

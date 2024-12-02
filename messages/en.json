@@ -126,6 +126,7 @@
         "word-button": "Word",
         "line-button": "Line",
         "two-lines-button": "Two lines",
+        "full-button": "Full",
         "position-title": "Position",
         "animation-title": "Animation",
         "appear-title": "Appear",
@@ -139,6 +140,8 @@
         "border-title": "Border",
         "size-label": "Size",
         "active-word-title": "Active word",
+        "background-title": "Background",
+        "radius-label": "Radius",
         "select": {
           "weight-placeholder": "Select a weight",
           "weight-light": "Light",

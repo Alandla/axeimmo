@@ -14,6 +14,23 @@ export const templates = [
         "animation",
       ],
     },
+    {
+      name: "background",
+      optionsAvailable: [
+          "activeWord",
+          "animation",
+          "background",
+          "border",
+      ],
+    },
+    {
+      name: "clean",
+      optionsAvailable: [
+        "activeWord",
+        "animation",
+        "background",
+    ],
+    },
 ]
 
 export const subtitles = [
@@ -80,6 +97,86 @@ export const subtitles = [
                 isActive: true,
                 size: 3,
                 color: "#000000",
+            },
+        }
+    },
+    {
+        id: '3',
+        name: 'Background',
+        style: {
+            template: 'background',
+            fontFamily: 'Montserrat',
+            fontWeight: "800",
+            fontSize: 60,
+            color: "#ffffff",
+            isItalic: false,
+            isPunctuation: true,
+            isUppercase: true,
+            mode: 'twoLines',
+            position: 50,
+            animation: {
+                appear: "bounce",
+            },
+            activeWord: {
+                isActive: false,
+                fontFamily: 'Montserrat',
+                fontWeight: "800",
+                fontSize: 60,
+                color: "#bbbbbb",
+                isItalic: false,
+                isPunctuation: true,
+                isUppercase: true,
+            },
+            background: {
+                isActive: true,
+                color: "#FF3838",
+                radius: 16,
+                mode: 'word'
+            },
+            shadow: {
+                isActive: true,
+                size: 1,
+                color: "#000000",
+            },
+            border: {
+                isActive: true,
+                size: 4,
+                color: "#000000"
+            },
+        }
+    },
+    {
+        id: '4',
+        name: 'Clean',
+        style: {
+            template: 'clean',
+            fontFamily: 'Montserrat',
+            fontWeight: "800",
+            fontSize: 40,
+            color: "#B0B0B0",
+            isItalic: false,
+            isPunctuation: true,
+            isUppercase: true,
+            mode: 'twoLines',
+            position: 75,
+            animation: {
+                appear: "none",
+            },
+            activeWord: {
+                isActive: true,
+                fontFamily: 'Montserrat',
+                fontWeight: "800",
+                fontSize: 40,
+                color: "#000000",
+                isItalic: false,
+                isPunctuation: true,
+                isUppercase: true,
+            },
+            background: {
+                isActive: true,
+                color: "#E5E7E5",
+                radius: 16,
+                mode: 'full'
             },
         }
     }

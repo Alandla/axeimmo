@@ -127,6 +127,7 @@
         "word-button": "Mot",
         "line-button": "Ligne",
         "two-lines-button": "Deux lignes",
+        "full-button": "Entier",
         "position-title": "Position",
         "animation-title": "Animation",
         "appear-title": "Apparition",
@@ -140,6 +141,8 @@
         "border-title": "Bordure",
         "size-label": "Taille",
         "active-word-title": "Mot actif",
+        "background-title": "Fond",
+        "radius-label": "Rayon",
         "select": {
           "weight-placeholder": "Sélectionne une épaisseur",
           "weight-light": "Léger",
