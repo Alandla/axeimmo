@@ -1,10 +1,25 @@
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
 import { useEffect, useState } from "react";
+import googleFonts from "../../config/googleFonts.config";
 
 export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequence: any, start: number, style: any }) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
+
+    useEffect(() => {
+        const loadFontByName = async (fontSelected: string) => {
+            const font = googleFonts.find((font) => font.family === fontSelected);
+            if (font) {
+                await font.load();
+            }
+        };
+
+        loadFontByName(style?.fontFamily || 'Montserrat');
+		if (style?.activeWord?.isActive && style?.activeWord?.fontFamily !== style?.fontFamily) {
+			loadFontByName(style?.activeWord.fontFamily || 'Montserrat');
+		}
+    }, [style?.fontFamily]);
 
     const getAnimationValues = () => {
         let scale = 1;
@@ -91,9 +106,12 @@ export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequ
                 )}
                 
                 {subtitleSequence.lines.map((line: Line, lineIndex: number) => {
-                    const isLineActive = (frame+start) >= line.words[0].startInFrames && 
-                        (frame+start) < (line.words[line.words.length - 1].startInFrames + 
-                        line.words[line.words.length - 1].durationInFrames);
+                    let isLineActive = false;
+                    if (line.words.length > 0) {
+                        isLineActive = (frame+start) >= line.words[0].startInFrames && 
+                            (frame+start) < (line.words[line.words.length - 1].startInFrames + 
+                            line.words[line.words.length - 1].durationInFrames);
+                    }
 
                     return (
                         <div key={lineIndex} style={{ position: 'relative' }}>

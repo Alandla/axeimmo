@@ -79,7 +79,7 @@ export const generateVideoTask = task({
 
     logger.log(`[VOICE] Start voice generation...`)
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (ctx.environment.type === "STAGING") {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
@@ -131,7 +131,7 @@ export const generateVideoTask = task({
     
     let transcription: any;
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (ctx.environment.type === "STAGING") {
       transcription = transcriptionMock
       await metadata.replace({
         name: Steps.TRANSCRIPTION,
@@ -202,7 +202,7 @@ export const generateVideoTask = task({
 
     let keywords: any;
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (ctx.environment.type === "STAGING") {
       keywords = keywordsMock
     } else {
       const resultKeywords = await generateKeywords(lightTranscription)
@@ -279,7 +279,7 @@ export const generateVideoTask = task({
     await updateVideo(newVideo)
 
     return {
-      message: "Hello, world!",
+      videoId: newVideo.id,
     }
   },
 });

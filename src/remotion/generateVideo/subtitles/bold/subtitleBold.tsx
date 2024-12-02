@@ -1,10 +1,25 @@
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
 import { useEffect, useState } from "react";
+import googleFonts from "../../config/googleFonts.config";
 
 export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSequence: any, start: number, style: any }) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
+
+    useEffect(() => {
+        const loadFontByName = async (fontSelected: string) => {
+            const font = googleFonts.find((font) => font.family === fontSelected);
+            if (font) {
+                await font.load();
+            }
+        };
+
+        loadFontByName(style?.fontFamily || 'Montserrat');
+		if (style?.activeWord?.isActive && style?.activeWord?.fontFamily !== style?.fontFamily) {
+			loadFontByName(style?.activeWord.fontFamily || 'Montserrat');
+		}
+    }, [style?.fontFamily]);
 
     const getAnimationValues = () => {
         let scale = 1;

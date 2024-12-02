@@ -41,16 +41,21 @@ export const startGeneration = async (userId: string, spaceId: string) => {
     accessToken: publicAccessToken,
   });
 
+  let videoId = ''
+
   //Subscribe to the generation task
   for await (const run of runs.subscribeToRun(runId)) {
     console.log(run)
     console.log(run.metadata);
     updateStepProgress(run.metadata?.name as Steps, run.metadata?.progress as number)
     if (run.status === "COMPLETED") {
+      videoId = run.output?.videoId as string
       break
     }
   }
 
   // Continuer la génération...
   console.log('continue generation')
+
+  return videoId
 }

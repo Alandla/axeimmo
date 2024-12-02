@@ -55,7 +55,7 @@ export default function LayoutPrivate({ children }: Readonly<{children: React.Re
                         ) : (
                           <BreadcrumbLink href={crumb.href} asChild>
                             <Link href={crumb.href}>
-                              {crumb.label}
+                            {t(crumb.label)}
                             </Link>
                           </BreadcrumbLink>
                         )}

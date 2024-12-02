@@ -20,6 +20,7 @@ import { Steps, StepState } from '../types/step'
 import { GenerationProgress } from './generation-progress'
 import { startGeneration } from '../service/generation.service'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { useRouter } from 'next/navigation'
 
 enum MessageType {
   TEXT = 'text',
@@ -41,6 +42,7 @@ interface Message {
 export function AiChat() {
   const { creationStep, setCreationStep, script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files, addStep } = useCreationStore()
   const { activeSpace } = useActiveSpaceStore()
+  const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const { data: session } = useSession()
   const t = useTranslations('ai');
@@ -214,20 +216,26 @@ export function AiChat() {
 
       addStep({ id: 5, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
       setCreationStep(CreationStep.GENERATION)
+      handleStartGeneration()
 
       addMessageUser(messageUser)
       addMessageAi(messageAi, MessageType.GENERATION);
     }
   }
 
-  const handleConfirmMedia = () => {
+  const handleConfirmMedia = async () => {
     addStep({ id: 5, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.GENERATION)
     const messageUser = getRandomMessage('user-confirm-media');
     const messageAi = getRandomMessage('ai-generation-progress');
     addMessageUser(messageUser)
     addMessageAi(messageAi, MessageType.GENERATION)
-    startGeneration(session?.user?.id || '', activeSpace?.id || '')
+    handleStartGeneration()
+  }
+
+  const handleStartGeneration = async () => {
+    const videoId = await startGeneration(session?.user?.id || '', activeSpace?.id || '')
+    router.push(`/edit/${videoId}`)
   }
 
   const addMessageUser = (userMessage: string) => {
