@@ -156,28 +156,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
 
   return (
     <Card>
-      {status === 'processing' || status === 'pending' ? (
-        <>
-          <CardHeader>
-            <div className="flex justify-center">
-              <Video className="w-12 h-12 text-primary animate-pulse" />
-            </div>
-            <CardTitle className="text-center">{t('title')}</CardTitle>
-            <CardDescription className="text-center">
-              {status === 'processing' ? t('processing') : t('waiting-to-start')}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center mb-8">
-              <span className="text-8xl font-bold text-card-foreground tabular-nums">
-                {progress}
-                <span className="text-primary">%</span>
-              </span>
-            </div>
-            <Progress value={progress} className="h-3" />
-          </CardContent>
-        </>
-      ) : (
+      {status === 'completed' ? (
         <>
           <CardHeader>
             <div className="flex justify-center">
@@ -208,6 +187,27 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
               </Button>
             </a>
           </CardFooter>
+        </>
+      ) : (
+        <>
+          <CardHeader>
+            <div className="flex justify-center">
+              <Video className="w-12 h-12 text-primary animate-pulse" />
+            </div>
+            <CardTitle className="text-center">{t('title')}</CardTitle>
+            <CardDescription className="text-center">
+              {status === 'processing' ? t('processing') : t('waiting-to-start')}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center mb-8">
+              <span className="text-8xl font-bold text-card-foreground tabular-nums">
+                {progress}
+                <span className="text-primary">%</span>
+              </span>
+            </div>
+            <Progress value={progress} className="h-3" />
+          </CardContent>
         </>
       )}
     </Card>

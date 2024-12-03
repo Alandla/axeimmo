@@ -275,6 +275,7 @@ export const generateVideoTask = task({
     }
 
     logger.info('Cost infra', { costInCents: ctx.run.costInCents })
+    logger.info('Cost base', { baseCostInCents: ctx.run.baseCostInCents })
 
     await updateVideo(newVideo)
 

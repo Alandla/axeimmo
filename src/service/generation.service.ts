@@ -44,10 +44,15 @@ export const startGeneration = async (userId: string, spaceId: string) => {
   let videoId = ''
 
   //Subscribe to the generation task
+  let lastStep;
   for await (const run of runs.subscribeToRun(runId)) {
     console.log(run)
     console.log(run.metadata);
+    if (lastStep && run.metadata?.name !== lastStep) {
+      updateStepProgress(lastStep as Steps, 100)
+    }
     updateStepProgress(run.metadata?.name as Steps, run.metadata?.progress as number)
+    lastStep = run.metadata?.name as Steps
     if (run.status === "COMPLETED") {
       videoId = run.output?.videoId as string
       break
