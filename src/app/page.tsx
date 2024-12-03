@@ -23,7 +23,7 @@ export default function Page() {
   return (
     <div className="flex min-h-screen">
       {/* Left side */}
-      <div className="flex flex-col justify-between w-1/2 p-8 bg-white">
+      <div className="flex flex-col justify-between w-full md:w-1/2 p-8 bg-white">
         {/* Logo */}
         <Image src="/img/logo_little.png" alt="Logo" width={769} height={364} className="w-24 h-auto mb-8 sm:w-32 md:w-38" />
         
@@ -61,15 +61,15 @@ export default function Page() {
         <div className="flex justify-between text-sm text-gray-500 w-full">
           <p>{tFooter('rights')}</p>
           <div>
-            <Link href="/privacy" className="hover:underline">{tFooter('privacy')}</Link>
+            <Link href="/privacy-policy" className="hover:underline">{tFooter('privacy')}</Link>
             <span className="mx-2">|</span>
-            <Link href="/terms" className="hover:underline">{tFooter('terms')}</Link>
+            <Link href="/tos" className="hover:underline">{tFooter('terms')}</Link>
           </div>
         </div>
       </div>
       
       {/* Right side */}
-      <div className="flex flex-col justify-center items-center w-1/2 bg-black text-white p-8 rounded-l-lg">
+      <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-black text-white p-8 rounded-l-lg">
         {/* Ajoutez ici le contenu du côté droit */}
       </div>
     </div>
