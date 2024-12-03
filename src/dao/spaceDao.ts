@@ -23,7 +23,7 @@ export const createPrivateSpaceForUser = async (userId: string, userName?: strin
       subscriptionType: SubscriptionType.MONTHLY,
       creditsMonth: 0,
     },
-    credits: 0,
+    credits: 100,
   });
 
   await space.save();

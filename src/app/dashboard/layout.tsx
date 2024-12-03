@@ -15,7 +15,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/src/components/ui/sidebar"
-import { usePathname, useRouter } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Fragment, useEffect } from "react"
 import { TooltipProvider } from "@/src/components/ui/tooltip"
@@ -32,14 +32,13 @@ function generateBreadcrumbs(pathname: string) {
 
 export default function LayoutPrivate({ children }: Readonly<{children: React.ReactNode}>) {
   const { data: session } = useSession()
-  const router = useRouter()
   const pathname = usePathname();
   const breadcrumbs = generateBreadcrumbs(pathname);
   const t = useTranslations('breadcrumbs')
 
   useEffect(() => {
     if (!session) {
-      router.push('/')
+      redirect('/')
     }
   }, [session])
 
