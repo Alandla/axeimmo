@@ -304,7 +304,8 @@
       "VOICE_GENERATION": "Voice generation",
       "TRANSCRIPTION": "Transcription",
       "AVATAR_GENERATION": "Avatar generation",
-      "SEARCH_MEDIA": "Search media"
+      "SEARCH_MEDIA": "Search media",
+      "error-message": "Error, please contact support."
     },
     "space": {
       "privateSpaceName": "My Private Space",

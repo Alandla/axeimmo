@@ -45,22 +45,36 @@ export const startGeneration = async (userId: string, spaceId: string) => {
 
   //Subscribe to the generation task
   let lastStep;
-  for await (const run of runs.subscribeToRun(runId)) {
-    console.log(run)
-    console.log(run.metadata);
-    if (lastStep && run.metadata?.name !== lastStep) {
-      updateStepProgress(lastStep as Steps, 100)
-    }
-    updateStepProgress(run.metadata?.name as Steps, run.metadata?.progress as number)
-    lastStep = run.metadata?.name as Steps
-    if (run.status === "COMPLETED") {
-      videoId = run.output?.videoId as string
-      break
-    }
-  }
+  try {
+    for await (const run of runs.subscribeToRun(runId)) {
+      console.log(run)
+      console.log(run.metadata);
+      
+      if (run.status === "FAILED") {
+        const currentSteps = useCreationStore.getState().steps
+        const updatedSteps = currentSteps.map(step => 
+          step.name === run.metadata?.name 
+            ? { ...step, state: StepState.FAILED }
+            : step
+        )
+        setSteps(updatedSteps)
+        throw new Error('Generation failed')
+      }
 
-  // Continuer la génération...
-  console.log('continue generation')
+      if (lastStep && run.metadata?.name !== lastStep) {
+        updateStepProgress(lastStep as Steps, 100)
+      }
+      updateStepProgress(run.metadata?.name as Steps, run.metadata?.progress as number)
+      lastStep = run.metadata?.name as Steps
+      if (run.status === "COMPLETED") {
+        videoId = run.output?.videoId as string
+        break
+      }
+    }
+  } catch (error) {
+    console.error('Generation error:', error)
+    return null
+  }
 
   return videoId
 }

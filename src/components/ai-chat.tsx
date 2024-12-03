@@ -235,7 +235,9 @@ export function AiChat() {
 
   const handleStartGeneration = async () => {
     const videoId = await startGeneration(session?.user?.id || '', activeSpace?.id || '')
-    router.push(`/edit/${videoId}`)
+    if (videoId) {
+      router.push(`/edit/${videoId}`)
+    }
   }
 
   const addMessageUser = (userMessage: string) => {

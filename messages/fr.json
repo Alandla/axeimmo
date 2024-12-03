@@ -305,7 +305,8 @@
       "VOICE_GENERATION": "Génération de la voix",
       "TRANSCRIPTION": "Transcription",
       "AVATAR_GENERATION": "Génération de l'avatar",
-      "SEARCH_MEDIA": "Recherche des médias"
+      "SEARCH_MEDIA": "Recherche des médias",
+      "error-message": "Erreur, veuillez contacter le support."
     },
     "space": {
       "privateSpaceName": "Mon espace privé",

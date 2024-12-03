@@ -2,7 +2,7 @@
 
 import { useCreationStore } from '../store/creationStore'
 import { Steps, StepState } from '../types/step'
-import { Check, Clock, Loader2, Upload, Mic, FileText, User, Search } from 'lucide-react'
+import { Check, Clock, Loader2, Upload, Mic, FileText, User, Search, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export function GenerationProgress() {
@@ -36,6 +36,8 @@ export function GenerationProgress() {
                 ? "bg-green-500"
                 : step.state === StepState.IN_PROGRESS
                 ? "bg-primary"
+                : step.state === StepState.FAILED
+                ? "bg-red-500"
                 : "bg-gray-300"
             }`}
           >
@@ -43,12 +45,18 @@ export function GenerationProgress() {
               <Check className="h-3.5 w-3.5 text-white" />
             ) : step.state === StepState.IN_PROGRESS ? (
               <Loader2 className="h-3.5 w-3.5 text-white animate-spin" />
+            ) : step.state === StepState.FAILED ? (
+              <X className="h-3.5 w-3.5 text-white" />
             ) : (
               getPendingIcon(step.name)
             )}
           </div>
           <div className="flex-grow">
-            <p className="font-medium text-sm">{t(step.name)}</p>
+            <p className="font-medium text-sm">
+              {step.state === StepState.FAILED 
+                ? t('error-message') 
+                : t(step.name)}
+            </p>
             <div className="w-full bg-gray-200 rounded-full h-1.5 mt-0.5">
               <div
                 className={`h-1.5 rounded-full transition-all duration-300 ease-in-out ${
@@ -56,6 +64,8 @@ export function GenerationProgress() {
                     ? "bg-green-500"
                     : step.state === StepState.IN_PROGRESS
                     ? "bg-primary"
+                    : step.state === StepState.FAILED
+                    ? "bg-red-500"
                     : "bg-gray-300"
                 }`}
                 style={{ width: `${step.progress}%` }}
