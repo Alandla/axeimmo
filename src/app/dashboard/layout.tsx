@@ -1,46 +1,22 @@
-"use client"
-
 import { AppSidebar } from "@/src/components/app-sidebar"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/src/components/ui/breadcrumb"
 import { Separator } from "@/src/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/src/components/ui/sidebar"
-import { redirect, usePathname } from 'next/navigation';
-import Link from 'next/link';
-import { Fragment, useEffect } from "react"
 import { TooltipProvider } from "@/src/components/ui/tooltip"
-import { useTranslations } from "next-intl"
 import { useSession } from "next-auth/react"
+import { BreadcrumbDashboard } from "@/src/components/breadcrumb-dashboard";
+import { auth } from "@/src/lib/auth"
+import { redirect } from "next/navigation"
 
-function generateBreadcrumbs(pathname: string) {
-  const paths = pathname.split('/').filter(Boolean);
-  return paths.map((path, index) => {
-    const href = '/' + paths.slice(0, index + 1).join('/');
-    return { href, label: path.charAt(0).toUpperCase() + path.slice(1) };
-  });
-}
+export default async function LayoutPrivate({ children }: Readonly<{children: React.ReactNode}>) {
+  const session = await auth();
 
-export default function LayoutPrivate({ children }: Readonly<{children: React.ReactNode}>) {
-  const { data: session } = useSession()
-  const pathname = usePathname();
-  const breadcrumbs = generateBreadcrumbs(pathname);
-  const t = useTranslations('breadcrumbs')
-
-  useEffect(() => {
-    if (!session) {
-      redirect('/')
-    }
-  }, [session])
+  if (!session) {
+    redirect('/');
+  }
 
   return (
     <>
@@ -52,26 +28,7 @@ export default function LayoutPrivate({ children }: Readonly<{children: React.Re
             <div className="flex items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
-              <Breadcrumb>
-                <BreadcrumbList>
-                  {breadcrumbs.map((crumb, index) => (
-                    <Fragment key={crumb.href}>
-                      {index > 0 && <BreadcrumbSeparator/>}
-                      <BreadcrumbItem>
-                        {index === breadcrumbs.length - 1 ? (
-                          <BreadcrumbPage>{t(crumb.label)}</BreadcrumbPage>
-                        ) : (
-                          <BreadcrumbLink href={crumb.href} asChild>
-                            <Link href={crumb.href}>
-                            {t(crumb.label)}
-                            </Link>
-                          </BreadcrumbLink>
-                        )}
-                      </BreadcrumbItem>
-                    </Fragment>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
+              <BreadcrumbDashboard />
             </div>
           </header>
             {children}

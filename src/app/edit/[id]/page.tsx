@@ -26,6 +26,7 @@ import Subtitles from '@/src/components/edit/subtitles'
 import SubtitleSettings from '@/src/components/edit/subtitle-settings'
 import { ISpace, ISpaceSubtitleStyle } from '@/src/types/space'
 import { useSubtitleStyleStore } from '@/src/store/subtitlesStyleSore'
+import Image from 'next/image'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -250,6 +251,16 @@ export default function VideoEditor() {
                 </BreadcrumbList>
             </Breadcrumb>
           </div>
+          <Link href="/dashboard">
+            <Image
+              src="/img/logo_little.png"
+              alt="Logo"
+              width={70}
+              height={20}
+              className="w-auto h-auto"
+              priority
+            />
+          </Link>
           <div className="flex items-center space-x-2">
             {isDirty ? (
                 <div className="w-2 h-2 rounded-full bg-yellow-500" />

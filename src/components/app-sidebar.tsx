@@ -4,10 +4,9 @@ import * as React from "react"
 import { useEffect } from "react"
 import {
   Home,
-  Image,
   Video,
 } from "lucide-react"
-
+import Image from "next/image"
 
 import { NavUser } from "@/src/components/nav-user"
 import {
@@ -46,7 +45,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     fetchSpaces()
   }, [])
 
-  const links = [
+  const linksFuture = [
     {
       name: `${t('links.home')}`,
       url: "/dashboard",
@@ -64,9 +63,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
   ]
 
+  const links = [
+    {
+      name: `${t('links.home')}`,
+      url: "/dashboard",
+      icon: Home,
+    },
+  ]
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
+        <div className="w-full py-2 flex items-center justify-center">
+          <Image
+            src="/img/logo_little.png"
+            alt="Logo"
+            width={120}
+            height={40}
+            className="w-auto h-auto"
+            priority
+          />
+        </div>
         <SpaceSwitcher spaces={spaces} />
       </SidebarHeader>
       <SidebarContent>

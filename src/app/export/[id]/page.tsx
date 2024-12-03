@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { IExport } from "@/src/types/export";
 import { basicApiGetCall } from "@/src/lib/api";
 import { IVideo } from "@/src/types/video";
+import Image from "next/image";
 
 export default function Export() {
   const { id } = useParams()
@@ -34,8 +35,8 @@ export default function Export() {
     return (
       <div className="min-h-screen bg-muted overflow-hidden">
         <header className="sticky top-0 z-10 bg-muted p-4">
-          <div className="mx-auto flex justify-between items-center">
-            <div className="flex items-center space-x-4">
+          <div className="mx-auto flex justify-between items-center relative">
+            <div className="flex items-center">
               <Breadcrumb>
                   <BreadcrumbList>
                     <BreadcrumbItem>
@@ -59,6 +60,18 @@ export default function Export() {
                     </BreadcrumbItem>
                   </BreadcrumbList>
               </Breadcrumb>
+            </div>
+            <div className="absolute left-1/2 transform -translate-x-1/2">
+              <Link href="/dashboard">
+                <Image
+                  src="/img/logo_little.png"
+                  alt="Logo"
+                  width={90}
+                  height={25}
+                  className="w-auto h-auto"
+                  priority
+                />
+              </Link>
             </div>
           </div>
         </header>
