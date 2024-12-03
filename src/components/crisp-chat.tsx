@@ -19,6 +19,7 @@ export const CrispChat = () => {
   useEffect(() => {
     if (session?.user) {
       Crisp.session.setData({ userId: session.user?.id });
+      Crisp.session.setData({ email: session.user?.email });
     }
   }, [session]);
 
