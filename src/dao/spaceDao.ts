@@ -5,7 +5,7 @@ import connectMongo from "../lib/mongoose";
 import { addSpaceToUser } from "./userDao";
 import { IMedia } from "../types/video";
 
-export const createPrivateSpaceForUser = async (userId: string, userName: string) => {
+export const createPrivateSpaceForUser = async (userId: string, userName?: string | null) => {
   await connectMongo();
 
   const spaceName = userName ? `${userName}'s Private Space` : "Private Space";
@@ -27,6 +27,8 @@ export const createPrivateSpaceForUser = async (userId: string, userName: string
   });
 
   await space.save();
+
+  console.log("Space created: ", space);
 
   await addSpaceToUser(userId, space._id);
 

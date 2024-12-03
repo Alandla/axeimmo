@@ -48,6 +48,7 @@
       },
       "name": {
         "title": "Name",
+        "placeholder": "Enter your name",
         "description": "Your full name that will be displayed to others"
       },
       "language": {

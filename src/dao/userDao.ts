@@ -24,6 +24,7 @@ export const createUser = async (user: User) => {
 export const addSpaceToUser = async (userId: string, spaceId: string) => {
   await connectMongo();
   try {
+    console.log("Adding space to user: ", userId, spaceId);
     const user = await UserModel.findById(userId);
     user.spaces.push(spaceId);
     await user.save();
@@ -73,6 +74,22 @@ export const updateUser = async (userId: string, updateData: Partial<IUser>) => 
     return updatedUser;
   } catch (error) {
     console.error("Error while updating user: ", error);
+    throw error;
+  }
+}
+
+export const addDefaultDataToUser = async (userId: string) => {
+  await connectMongo();
+  try {
+    const user = await UserModel.findById(userId);
+    user.createdAt = new Date();
+    user.updatedAt = new Date();
+    user.options = {
+      lang: "fr",
+    };
+    await user.save();
+  } catch (error) {
+    console.error("Error while adding default data to user: ", error);
     throw error;
   }
 }

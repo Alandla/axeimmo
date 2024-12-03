@@ -18,8 +18,7 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     emailVerified: {
-      type: Boolean,
-      default: false,
+      type: Date,
     },
     options: {
       lang: {
@@ -39,9 +38,11 @@ const userSchema = new mongoose.Schema(
     ],
     createdAt: {
       type: Date,
+      default: Date.now,
     },
     updatedAt: {
       type: Date,
+      default: Date.now,
     },
   },
   {

@@ -48,6 +48,7 @@
       },
       "name": {
         "title": "Nom",
+        "placeholder": "Entrez votre nom",
         "description": "Ton nom visible pour les autres utilisateurs"
       },
       "language": {

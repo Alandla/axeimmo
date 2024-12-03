@@ -102,7 +102,7 @@ export function GeneralSettings({ user }: { user: User }) {
             )}
             {avatarFileInUpload && <AvatarImage src={URL.createObjectURL(avatarFileInUpload)} alt={user.name ?? ''} />}
             {!avatarFileInUpload && (avatarUrl || avatarUrl === undefined) && <AvatarImage src={avatarUrl} alt={user.name ?? ''} />}
-            <AvatarFallback className="rounded-lg">{name?.charAt(0) ?? ''}</AvatarFallback>
+            <AvatarFallback className="rounded-lg">{user.name?.charAt(0).toUpperCase() ?? user.email?.charAt(0).toUpperCase() ?? ''}</AvatarFallback>
             {isHovering && !isUploading && avatarUrl === undefined && (
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
                 <Camera className="h-6 w-6 text-white" />

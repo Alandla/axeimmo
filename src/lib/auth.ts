@@ -3,8 +3,8 @@ import connectMongo from "./mongo"
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import google from "next-auth/providers/google"
 import { createPrivateSpaceForUser } from "../dao/spaceDao";
-import { createUser, isUserExist } from "../dao/userDao";
-import { createContact, sendVerificationRequest } from "./loops";
+import { addDefaultDataToUser, createUser, isUserExist } from "../dao/userDao";
+import { addUserIdToContact, createContact, sendVerificationRequest } from "./loops";
 import checkBetaAccess from "./beta";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -18,9 +18,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           image: profile.image,
           createdAt: new Date(),
           updatedAt: new Date(),
-          options: {
-            lang: "fr",
-          },
         };
       },
     }),
@@ -45,6 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
     async signIn({ user }) {
+      console.log("Sign in event: ", user);
       if (user.email) {
         let hasBetaAccess = await checkBetaAccess(user.email);
         if (hasBetaAccess && user.options === undefined) {
@@ -66,8 +64,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   events: {
     createUser: async (user) => {
-      if (user.user.name && user.user.id) {
-        await createPrivateSpaceForUser(user.user.id, user.user.name);
+      console.log("Create user event: ", user);
+      if (user.user.id && user.user.email) {
+        await addUserIdToContact(user.user.id, user.user.email);
+        await createPrivateSpaceForUser(user.user.id, user?.user?.name);
       }
     },
   },

@@ -11,6 +11,8 @@ import { IVideo } from "@/src/types/video";
 import { useEffect, useState } from "react";
 import Link from "next/link"
 import { useTranslations } from "next-intl";
+import { Sparkles, VideoOff } from "lucide-react"
+import { Button } from "@/src/components/ui/button";
 
 interface User {
   id: string;
@@ -103,15 +105,16 @@ export default function Dashboard() {
           ))
         ) : videos.length === 0 ? (
           <div className="col-span-full flex flex-col items-center justify-center py-20">
+            <VideoOff className="w-12 h-12 text-gray-400 mb-4" />
             <h2 className="text-2xl font-semibold mb-2">{t('no-videos')}</h2>
             <p className="text-gray-500 mb-6 text-center">
               {t('no-videos-description')}
             </p>
-            <Link 
-              href="/video/create" 
-              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              {t('create-video')}
+            <Link href="/dashboard/create">
+              <Button size="lg">
+                <Sparkles className="w-4 h-4" />
+                {t('create-video')}
+              </Button>
             </Link>
           </div>
         ) : (

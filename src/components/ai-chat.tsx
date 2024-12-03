@@ -320,9 +320,6 @@ export function AiChat() {
         {messages.length === 0 ? (
           <div className="w-full max-w-md">
             <div className="text-center mb-8">
-              <Avatar className="w-24 h-24 mx-auto mb-4">
-                <img src="/placeholder.svg?height=96&width=96" alt="AI Avatar" className="rounded-full" />
-              </Avatar>
               <h1 className="text-2xl font-bold mb-2">{t('hello')}{session?.user?.name}</h1>
               <p className="text-xl mb-4">{t('title-1')}</p>
               <p className="text-sm text-gray-500">{t('title-2')}</p>
@@ -340,8 +337,8 @@ export function AiChat() {
                 className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
               >
                 {message.sender === 'ai' && (
-                  <Avatar className="w-8 h-8 mr-2 flex-shrink-0">
-                    <img src="/placeholder.svg?height=32&width=32" alt="AI Avatar" className="rounded-full" />
+                  <Avatar className="w-8 h-8 mr-2 flex-shrink-0 bg-muted">
+                    <img src="/img/logo-square.png" alt="AI Avatar" className="rounded-full" />
                   </Avatar>
                 )}
                 <div className={`rounded-lg p-3 max-w-xl ${message.script && 'w-full'} shadow ${message.sender === 'user' ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
