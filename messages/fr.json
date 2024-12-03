@@ -24,6 +24,9 @@
     "videos": {
       "title": "Vidéos",
       "more-options": "Plus d'options",
+      "no-videos": "Aucune vidéo trouvée",
+      "create-video": "Créer une vidéo",
+      "no-videos-description": "Commencez par créer votre première vidéo pour la voir ici.",
       "dropdown-menu": {
         "edit": "Editer",
         "rename": "Renommer",

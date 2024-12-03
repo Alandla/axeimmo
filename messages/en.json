@@ -24,6 +24,9 @@
     "videos": {
       "title": "Videos",
       "more-options": "More options",
+      "no-videos": "No videos found",
+      "create-video": "Create a video",
+      "no-videos-description": "Start by creating your first video to see it here.",
       "dropdown-menu": {
         "edit": "Edit",
         "rename": "Rename",

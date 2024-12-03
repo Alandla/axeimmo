@@ -389,7 +389,7 @@ export function AiChat() {
                 {message.sender === 'user' && (
                   <Avatar className="h-8 w-8 ml-2 flex-shrink-0">
                     {session?.user?.image && <AvatarImage src={session?.user?.image} alt={session?.user?.name ?? ''} />}
-                    <AvatarFallback className="rounded-lg">{(session?.user?.name?.charAt(0) ?? '')}</AvatarFallback>
+                    <AvatarFallback className="rounded-lg">{(session?.user?.name?.charAt(0).toUpperCase() ?? session?.user?.email?.charAt(0).toUpperCase() ?? '')}</AvatarFallback>
                   </Avatar>
                 )}
               </motion.div>
