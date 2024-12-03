@@ -1,4 +1,5 @@
 import { LoopsClient } from 'loops';
+import { mails } from '../config/mails.config';
 
 const loops = new LoopsClient(process.env.LOOPS_API_KEY as string);
 
@@ -17,13 +18,13 @@ export const addUserIdToContact = async (userId: string, email: string) => {
 }
 
 
-export const sendVerificationRequest = async ({ identifier: email, url }: { identifier: string, url: string }) => {
+export async function sendVerificationRequest({ identifier: email, url }: { identifier: string, url: string }) {
   const dataVariables = {
-    url: url
+    link: url
   }
 
   const result = await loops.sendTransactionalEmail({
-    transactionalId: "clx9nzuzs03c5i0yuujszbzew",
+    transactionalId: mails.magicLink.id,
     email,
     dataVariables
   })

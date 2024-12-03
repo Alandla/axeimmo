@@ -9,7 +9,10 @@
       "emailLabel": "Email",
       "emailPlaceholder": "Enter your email",
       "loginButton": "Log in",
-      "orContinueWith": "Or continue with"
+      "orContinueWith": "Or continue with",
+      "checkEmail": "Check your emails",
+      "emailSent": "A verification email has been sent to the address indicated.",
+      "openGmail": "Open Gmail"
     },
     "breadcrumbs": {
       "Dashboard": "Dashboard",

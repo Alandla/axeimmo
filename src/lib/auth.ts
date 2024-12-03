@@ -4,6 +4,8 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import google from "next-auth/providers/google"
 import { createPrivateSpaceForUser } from "../dao/spaceDao";
 import { createUser, isUserExist } from "../dao/userDao";
+import { createContact, sendVerificationRequest } from "./loops";
+import checkBetaAccess from "./beta";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -21,7 +23,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
         };
       },
-    })
+    }),
+    {
+      id: "http-email",
+      name: "Email",
+      type: "email",
+      maxAge: 60 * 60 * 24, // Email link will expire in 24 hours
+      sendVerificationRequest: async (params) => {
+        await sendVerificationRequest({
+          identifier: params.identifier,
+          url: params.url
+        });
+      },
+    },
   ],
   callbacks: {
     async session({ session, user }) {
@@ -29,6 +43,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = user.id;
       }
       return session;
+    },
+    async signIn({ user }) {
+      if (user.email) {
+        let hasBetaAccess = await checkBetaAccess(user.email);
+        if (hasBetaAccess && user.options === undefined) {
+          const contactProperties = {
+            firstName: user.name,
+            videosCount: 0
+          };
+          await createContact(user.email, contactProperties);
+          return true;
+        }
+        return hasBetaAccess;
+      }
+      return false;
     }
   },
   adapter: MongoDBAdapter(connectMongo) as any,
