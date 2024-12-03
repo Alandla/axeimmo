@@ -40,10 +40,11 @@ interface Message {
 }
 
 export function AiChat() {
-  const { creationStep, setCreationStep, script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files, addStep } = useCreationStore()
+  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files, addStep } = useCreationStore()
   const { activeSpace } = useActiveSpaceStore()
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
+  const [creationStep, setCreationStep] = useState(CreationStep.START)
   const { data: session } = useSession()
   const t = useTranslations('ai');
   const tAi = useTranslations('ai-chat');
@@ -79,9 +80,10 @@ export function AiChat() {
   }
 
   const handleAiChat = async (message: string, duration: number, improve: boolean = false) => {
+    const messageAiThinking = getRandomMessage('thinking');
     const messageUserId = addMessageUser(message)
     const messageAiId = addMessageAi(
-      t('thinking'),
+      messageAiThinking,
       MessageType.TEXT
     );
 
@@ -99,7 +101,7 @@ export function AiChat() {
           return msg;
         }));
         setScript("Ceci est un exemple de script mockup.\nIl contient plusieurs lignes.\nPour tester le comportement de l'interface.");
-      }, 300); // Simulation d'un délai réseau
+      }, 1000); // Simulation d'un délai réseau
       return;
     }
 
@@ -395,7 +397,7 @@ export function AiChat() {
             ))}
           </div>
         )}
-        <AiChatTab sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} handleConfirmVoice={handleConfirmVoice} handleConfirmMedia={handleConfirmMedia} />
+        <AiChatTab creationStep={creationStep} sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} handleConfirmVoice={handleConfirmVoice} handleConfirmMedia={handleConfirmMedia} />
       </div>
     </div>
   )

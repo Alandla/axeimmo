@@ -15,8 +15,8 @@ interface DurationOption {
   value: number;
 }
 
-export function AiChatTab({ sendMessage, handleConfirmAvatar, handleConfirmVoice, handleConfirmMedia }: { sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleConfirmVoice: () => void, handleConfirmMedia: () => void }) {
-    const { creationStep, files, selectedVoice, selectedAvatar, setFiles } = useCreationStore()
+export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, handleConfirmVoice, handleConfirmMedia }: { creationStep: CreationStep, sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleConfirmVoice: () => void, handleConfirmMedia: () => void }) {
+    const { files, selectedVoice, selectedAvatar, setFiles } = useCreationStore()
     const [inputMessage, setInputMessage] = useState('')
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
     const [isDragging, setIsDragging] = useState(false);
@@ -127,7 +127,12 @@ export function AiChatTab({ sendMessage, handleConfirmAvatar, handleConfirmVoice
                   className={`w-full mb-2 border-none shadow-none focus:ring-0 resize-none ${isDragging ? 'opacity-50' : ''}`}
                   rows={1}
                   variant="no-focus-border"
-                  onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(inputMessage, videoDuration?.value || 936)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage(inputMessage, videoDuration?.value || 936);
+                    }
+                  }}
                 />
                 <div className={`flex items-center justify-between ${isDragging ? 'opacity-50' : ''}`}>
                   <div className="flex items-center space-x-2">
@@ -196,7 +201,12 @@ export function AiChatTab({ sendMessage, handleConfirmAvatar, handleConfirmVoice
                   className="w-full border-none shadow-none focus:ring-0 resize-none"
                   rows={1}
                   variant="no-focus-border"
-                  onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(inputMessage, 0)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage(inputMessage, 0);
+                    }
+                  }}
                 />
                 <Button 
                   size="icon" 
