@@ -47,6 +47,10 @@ export default function Dashboard() {
         const userId = createEvent?.user
 
         if (userId && !newUsers.has(userId)) {
+          newUsers.set(userId, {
+            id: userId
+          })
+
           // Récupérer les données de l'utilisateur depuis l'API
           const user: User = await basicApiCall('/user/getByIdForVideo', { userId })
           

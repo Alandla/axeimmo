@@ -1,14 +1,31 @@
 import mongoose from "mongoose";
 
-const connectMongo = async () => {
+let isConnected = false;
+
+export const connectMongo = async () => {
   if (!process.env.MONGODB_URI) {
-    throw new Error(
-      "Add the MONGODB_URI environment variable inside .env.local to use mongoose"
-    );
+    throw new Error("MONGODB_URI manquant dans les variables d'environnement");
   }
-  return mongoose
-    .connect(process.env.MONGODB_URI)
-    .catch((e) => console.error("Mongoose Client Error: " + e.message));
+
+  if (isConnected) {
+    return;
+  }
+
+  try {
+    const options = {
+      serverSelectionTimeoutMS: 15000,
+      socketTimeoutMS: 30000,
+      maxPoolSize: 50,
+      minPoolSize: 10
+    };
+
+    await mongoose.connect(process.env.MONGODB_URI, options);
+    isConnected = true;
+    console.log('Connexion MongoDB établie');
+  } catch (error) {
+    console.error('Erreur de connexion MongoDB:', error);
+    throw error;
+  }
 };
 
 export default connectMongo;
