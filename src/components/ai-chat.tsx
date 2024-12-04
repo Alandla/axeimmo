@@ -40,7 +40,7 @@ interface Message {
 }
 
 export function AiChat() {
-  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files, addStep } = useCreationStore()
+  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files, addStep, resetSteps } = useCreationStore()
   const { activeSpace } = useActiveSpaceStore()
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
@@ -52,6 +52,7 @@ export function AiChat() {
 
   const handleSendMessage = (message: string, duration: number) => {
     if (creationStep === CreationStep.START) {
+      resetSteps()
       if (files.length !== 0) {
         addStep({ id: 0, name: Steps.MEDIA_UPLOAD, state: StepState.PENDING, progress: 0 })
         if (files.some(file => file.type === 'voice')) {
@@ -198,7 +199,7 @@ export function AiChat() {
     let messageAi = '';
     if (selectedAvatar) {
       messageUser1 = getRandomMessage('user-select-avatar', { "name": selectedVoice?.name || '' });
-      addStep({ id: 4, name: Steps.AVATAR_GENERATION, state: StepState.PENDING, progress: 0 })
+      addStep({ id: 5, name: Steps.ANALYZE, state: StepState.PENDING, progress: 0 })
     } else {
       messageUser1 = getRandomMessage('user-no-avatar');
     }
@@ -216,7 +217,7 @@ export function AiChat() {
       messageAi = getRandomMessage('ai-generation-progress');
       const messageUser = messageUser1 + ' ' + messageUser2;
 
-      addStep({ id: 5, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
+      addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
       setCreationStep(CreationStep.GENERATION)
       handleStartGeneration()
 
@@ -226,7 +227,7 @@ export function AiChat() {
   }
 
   const handleConfirmMedia = async () => {
-    addStep({ id: 5, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.GENERATION)
     const messageUser = getRandomMessage('user-confirm-media');
     const messageAi = getRandomMessage('ai-generation-progress');
