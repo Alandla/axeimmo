@@ -8,7 +8,7 @@ import { uploadToS3Audio } from "../lib/r2";
 import { createTranscription, getTranscription } from "../lib/gladia";
 
 import transcriptionMock from "../test/mockup/transcriptionComplete.json";
-import keywordsMock from "../test/mockup/keywords/llama3170b.json";
+import keywordsMock from "../test/mockup/keywordsResponse.json";
 import { createLightTranscription, splitIntoSequences } from "../lib/transcription";
 import { ffmpegExtractAudioSegments } from "./separate-audio";
 import { generateKeywords } from "../lib/keywords";
@@ -18,6 +18,8 @@ import { IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
 import { generateStartData } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
+import { analyzeMediaWithSieve, getAnalysisResult, getJobCost, SieveCostResponse } from "../lib/sieve";
+import { simplifySequences } from "../lib/analyse";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -79,13 +81,13 @@ export const generateVideoTask = task({
 
     logger.log(`[VOICE] Start voice generation...`)
 
-    if (ctx.environment.type === "STAGING") {
+    if (ctx.environment.type === "PRODUCTION") {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
       })
 
-      voiceUrl = "https://media.hoox.video/2070cf26-1edb-41aa-9653-bb54940abaf1.mp3"
+      voiceUrl = "https://media.hoox.video/226f797c-f636-4108-ae60-0e785295c4df.mp3"
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
@@ -131,7 +133,7 @@ export const generateVideoTask = task({
     
     let transcription: any;
 
-    if (ctx.environment.type === "STAGING") {
+    if (ctx.environment.type === "PRODUCTION") {
       transcription = transcriptionMock
       await metadata.replace({
         name: Steps.TRANSCRIPTION,
@@ -202,7 +204,7 @@ export const generateVideoTask = task({
 
     let keywords: any;
 
-    if (ctx.environment.type === "STAGING") {
+    if (ctx.environment.type === "PRODUCTION") {
       keywords = keywordsMock
     } else {
       const resultKeywords = await generateKeywords(lightTranscription)
@@ -217,44 +219,59 @@ export const generateVideoTask = task({
     logger.log(`[KEYWORDS] Keywords done`)
 
     /*
+    /
     /   Search media for sequences
     /
     */
 
-    logger.log(`[MEDIA] Search media...`)
-
-    
+    logger.log(`[MEDIA] Search media...`);
 
     const batchSize = 5;
     const updatedSequences = [];
     for (let i = 0; i < sequences.length; i += batchSize) {
-      const batch = sequences.slice(i, i + batchSize);
-      const batchPromises = batch.map((sequence, idx) => 
-        searchMediaForSequence(sequence, i + idx + 1, keywords, mediaSource)
-      );
+        const batch = sequences.slice(i, i + batchSize);
+        const batchPromises = batch.map((sequence, idx) => 
+            searchMediaForSequence(sequence, i + idx + 1, keywords, mediaSource)
+        );
 
-      const completedBatch = await Promise.all(batchPromises);
-      updatedSequences.push(...completedBatch);
+        const completedBatch = await Promise.all(batchPromises);
+        updatedSequences.push(...completedBatch);
 
-      // Update progress
-      const progress = Math.round((updatedSequences.length / sequences.length) * 100);
-      await metadata.replace({
-        name: Steps.SEARCH_MEDIA,
-        progress
-      });
+        // Update progress
+        const progress = Math.round((updatedSequences.length / sequences.length) * 100);
+        await metadata.replace({
+            name: Steps.SEARCH_MEDIA,
+            progress
+        });
     }
 
     sequences = updatedSequences;
-    logger.info('Sequences taille', { size: sequences.length })
-    logger.info('Sequences', { sequences })
 
     await metadata.replace({
       name: Steps.SEARCH_MEDIA,
       progress: 100,
     });
 
-
     logger.log(`[MEDIA] Media search completed`)
+
+    /*
+    /
+    /   Analyze
+    /
+    */
+
+    if (payload.avatar) {
+      logger.log(`[ANALYSIS] Starting media analysis...`);
+      const { sequences: updatedSequences, totalCost } = await processBatchWithSieve(sequences);
+      sequences = updatedSequences;
+      cost += totalCost;
+      logger.info(`Analyse vidéo terminée. Coût total: $${totalCost}`);
+      const dataForAnalysis = simplifySequences(sequences);
+      logger.info('Data for analysis', { dataForAnalysis })
+    }
+
+    logger.info('Sequences taille', { size: sequences.length })
+    logger.info('Sequences', { sequences })
 
     newVideo = {
       ...newVideo,
@@ -318,3 +335,56 @@ const pollTranscriptionStatus = async (transcriptionId: string) => {
 
   throw new Error('Nombre maximum de tentatives atteint sans obtenir un statut "done" pour la transcription.');
 };
+
+const processBatchWithSieve = async (sequences: any[]) => {
+  const updatedSequences = [...sequences];
+  let totalCost = 0;
+  let finishedSequences = 0;
+
+  logger.log('Sequences', { sequences })
+  logger.log('Sequences length', { length: sequences.length })
+  
+  for (let i = 0; i < sequences.length; i += 3) { //3 - max concurrent jobs
+      const batch = sequences.slice(i, Math.min(i + 3, sequences.length));
+      
+      const analysisPromises = batch.map(async (sequence, index) => {
+          const mediaUrl = sequence.media.type === 'video' ? sequence.media.video.link : sequence.media.image.link;
+
+          logger.log('Media URL', { mediaUrl })
+          
+          if (!mediaUrl) return sequence;
+
+          try {
+              logger.log('Analyze media', { mediaUrl })
+              const jobId : string = await analyzeMediaWithSieve(mediaUrl);
+              logger.log(`Job ID`, { jobId })
+              const description = await getAnalysisResult(jobId, 0, mediaUrl);
+              logger.log('Description', { description })
+
+              //const costInfo : SieveCostResponse = await getJobCost(jobId);
+              //totalCost += costInfo.cost;
+              
+              if (description) {
+                  logger.log('Description', { description })
+                  updatedSequences[i + index].media.description = description;
+                  finishedSequences++;
+                  await metadata.replace({
+                    name: Steps.ANALYZE,
+                    progress: Math.round(finishedSequences / sequences.length * 100)
+                  })
+              }
+          } catch (error: any) {
+              logger.error(`Failed to analyze media for sequence ${i + index}:`, error.response?.data || error.message);
+          }
+          
+          return sequence;
+      });
+
+      await Promise.all(analysisPromises);
+  }
+
+  return {
+      sequences: updatedSequences,
+      totalCost
+  };
+}

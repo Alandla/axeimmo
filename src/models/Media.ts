@@ -23,6 +23,7 @@ const mediaSchema = new mongoose.Schema({
     },
     name: String,
     label: String,
+    description: String,
     video: {
       id: String,
       quality: String,
