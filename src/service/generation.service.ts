@@ -47,8 +47,6 @@ export const startGeneration = async (userId: string, spaceId: string) => {
   let lastStep;
   try {
     for await (const run of runs.subscribeToRun(runId)) {
-      console.log(run)
-      console.log(run.metadata);
       
       if (run.status === "FAILED") {
         const currentSteps = useCreationStore.getState().steps

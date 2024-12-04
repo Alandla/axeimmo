@@ -4,6 +4,7 @@ export enum Steps {
   TRANSCRIPTION = "TRANSCRIPTION",
   AVATAR_GENERATION = "AVATAR_GENERATION",
   SEARCH_MEDIA = "SEARCH_MEDIA",
+  ANALYZE = "ANALYZE",
 }
 
 export enum StepState {

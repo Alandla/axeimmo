@@ -22,6 +22,7 @@ type CreationStore = {
   setSelectedAvatar: (avatar: AvatarLook | null) => void
   addStep: (step: Step) => void
   setSteps: (steps: Step[]) => void
+  resetSteps: () => void
 }
 
 export const useCreationStore = create<CreationStore>((set) => ({
@@ -41,5 +42,6 @@ export const useCreationStore = create<CreationStore>((set) => ({
   setSelectedAvatar: (avatar) => set({ selectedAvatar: avatar }),
   addStep: (step) => set((state) => ({ steps: [...state.steps, step] })),
   setSteps: (steps) => set({ steps }),
+  resetSteps: () => set({ steps: [] })
 }))
 

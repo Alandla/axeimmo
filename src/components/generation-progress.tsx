@@ -2,7 +2,7 @@
 
 import { useCreationStore } from '../store/creationStore'
 import { Steps, StepState } from '../types/step'
-import { Check, Clock, Loader2, Upload, Mic, FileText, User, Search, X } from 'lucide-react'
+import { Check, Clock, Loader2, Upload, Mic, FileText, User, Search, X, Sparkle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export function GenerationProgress() {
@@ -21,6 +21,8 @@ export function GenerationProgress() {
         return <User className="h-3.5 w-3.5 text-gray-500" />;
       case Steps.SEARCH_MEDIA:
         return <Search className="h-3.5 w-3.5 text-gray-500" />;
+      case Steps.ANALYZE:
+        return <Sparkle className="h-3.5 w-3.5 text-gray-500" />;
       default:
         return <Clock className="h-3.5 w-3.5 text-gray-500" />;
     }
@@ -28,7 +30,9 @@ export function GenerationProgress() {
 
   return (
     <ul className="space-y-4 mt-4">
-      {steps.map((step) => (
+      {steps
+        .sort((a, b) => a.id - b.id)
+        .map((step) => (
         <li key={step.id} className="flex items-center space-x-4">
           <div
             className={`rounded-full p-1 ${
