@@ -14,7 +14,13 @@ export default function VideoPreview({ playerRef, video, isMobile }: { playerRef
 
         // Précharger l'audio principal
         if (video.video.audioUrl) {
-            preloadAudio(video.video.audioUrl);
+          preloadAudio(video.video.audioUrl);
+        }
+
+        if (video.video.avatar?.videoUrl) {
+          preloadVideo(video.video.avatar.videoUrl);
+        } else if (video.video.avatar?.previewUrl) {
+          preloadVideo(video.video.avatar.previewUrl);
         }
 
         // Précharger tous les médias des séquences

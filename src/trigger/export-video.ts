@@ -6,6 +6,8 @@ import { uploadImageFromUrlToS3 } from "../lib/r2";
 import { IVideo } from "../types/video";
 import { addCreditsToSpace } from "../dao/spaceDao";
 import { IExport } from "../types/export";
+import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
+import { calculateHeygenCost } from "../lib/cost";
 
 interface RenderStatus {
   status: string;
@@ -24,7 +26,7 @@ export const exportVideoTask = task({
   id: "export-video",
   maxDuration: 300,
   retry: {
-    maxAttempts: 2,
+    maxAttempts: 1,
   },
   run: async (payload: ExportVideoPayload, { ctx }) => {
     try {
@@ -38,6 +40,22 @@ export const exportVideoTask = task({
       if (!video) {
         throw new Error('Video not found');
       }
+
+      if (video.video?.avatar?.id && video.video?.audioUrl && !video.video?.avatar?.videoUrl) {
+        logger.log("Génération de la vidéo avatar...");
+        const avatarResponse = await generateAvatarVideo(video.video.avatar.id, video.video.audioUrl);
+        logger.log("Avatar response", { avatarResponse });
+        const avatarVideoUrl = await pollAvatarVideoStatus(avatarResponse.data.video_id);
+        logger.log("Avatar video response", { avatarVideoUrl });
+
+        if (avatarVideoUrl) {
+          const cost = calculateHeygenCost(video.video.metadata.audio_duration);
+          video.costToGenerate = (video.costToGenerate || 0) + cost;
+          video.video.avatar.videoUrl = avatarVideoUrl;
+          await updateVideo(video);
+        }
+      }
+
       const render = await renderVideo(video);
       await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
 
@@ -46,7 +64,8 @@ export const exportVideoTask = task({
       if (renderStatus.status === 'failed') {
         if (ctx.attempt.number === 1) {
           // Première tentative échouée : upload des images et réessai
-          await uploadGoogleImagesToS3(video);
+          //await uploadGoogleImagesToS3(video);
+          logger.log("Error", { message: renderStatus.message });
           throw new Error('Premier échec du rendu - Réessai après upload des images');
         } else {
           // Deuxième tentative échouée : on arrête avec l'erreur
@@ -97,6 +116,7 @@ const pollRenderStatus = async (renderId: string, bucketName: string) => {
       if (renderStatus.status === 'processing' && renderStatus.progress) {
         await metadata.replace({
           status: 'processing',
+          step: 'render',
           progress: renderStatus.progress
         })
       } else if (renderStatus.status === 'completed' && renderStatus.videoUrl && renderStatus.costs) {
@@ -127,8 +147,8 @@ const uploadGoogleImagesToS3 = async (video: IVideo) => {
     for (const sequence of video.video.sequences) {
       if (sequence.media?.type === "image" && !sequence.media?.image?.link.startsWith('https://media.hoox.video/') && sequence.media?.image?.link) {
         try {
-          const fileName = `image-${Date.now()}.jpg`;
-          const s3Url = await uploadImageFromUrlToS3(sequence.media?.image?.link, "medias-user", fileName);
+          const fileName = `image-${Date.now()}`;
+          const s3Url = await uploadImageFromUrlToS3(sequence.media?.image?.link, "medias-users", fileName);
 
           if (sequence.media && sequence.media.image) {
             sequence.media.image.link = s3Url;
@@ -142,4 +162,38 @@ const uploadGoogleImagesToS3 = async (video: IVideo) => {
     await updateVideo(video);
   }
   return video;
+}
+
+async function pollAvatarVideoStatus(videoId: string): Promise<string> {
+  let attempts = 0;
+  const maxAttempts = 1000;
+  const delayBetweenAttempts = 2;
+
+  while (attempts < maxAttempts) {
+    try {
+      const status = await getVideoDetails(videoId);
+      logger.log("Avatar status", { status });
+      if (status.data.status === 'completed' && status.data.video_url) {
+        return status.data.video_url;
+      } else if (status.data.status === 'failed') {
+        logger.error('La génération de la vidéo avatar a échoué', { error: status.data.error });
+        throw new Error('La génération de la vidéo avatar a échoué');
+      }
+
+      await metadata.replace({
+        status: 'processing',
+        step: 'avatar',
+        progress: attempts
+      })
+
+      await wait.for({ seconds: delayBetweenAttempts });
+      attempts++;
+    } catch (error) {
+      logger.error(`Erreur lors de la vérification du statut de la vidéo avatar: ${error}`);
+      await wait.for({ seconds: delayBetweenAttempts });
+      attempts++;
+    }
+  }
+
+  throw new Error('Timeout lors de la génération de la vidéo avatar');
 }

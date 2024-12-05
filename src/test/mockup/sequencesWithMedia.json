@@ -1,0 +1,1368 @@
+[
+  {
+    "words": [
+      {
+        "word": "Un",
+        "start": 0.10004,
+        "end": 0.30013,
+        "confidence": 0.99,
+        "durationInFrames": 12
+      },
+      {
+        "word": "enfant",
+        "start": 0.30013,
+        "end": 0.76033,
+        "confidence": 1,
+        "durationInFrames": 28
+      },
+      {
+        "word": "harcelé",
+        "start": 0.76033,
+        "end": 1.32057,
+        "confidence": 0.85,
+        "durationInFrames": 34
+      },
+      {
+        "word": "devient",
+        "start": 1.32057,
+        "end": 1.72074,
+        "confidence": 0.96,
+        "durationInFrames": 24
+      },
+      {
+        "word": "l'homme",
+        "start": 1.72074,
+        "end": 2.02087,
+        "confidence": 0.94,
+        "durationInFrames": 18
+      },
+      {
+        "word": "le",
+        "start": 2.02087,
+        "end": 2.18094,
+        "confidence": 0.89,
+        "durationInFrames": 10
+      },
+      {
+        "word": "plus",
+        "start": 2.18094,
+        "end": 2.44105,
+        "confidence": 0.96,
+        "durationInFrames": 16
+      },
+      {
+        "word": "riche",
+        "start": 2.44105,
+        "end": 2.78119,
+        "confidence": 0.98,
+        "durationInFrames": 20
+      },
+      {
+        "word": "du",
+        "start": 2.78119,
+        "end": 2.96127,
+        "confidence": 1,
+        "durationInFrames": 11
+      },
+      {
+        "word": "monde.",
+        "start": 2.96127,
+        "end": 4.02173,
+        "confidence": 1,
+        "durationInFrames": 64
+      }
+    ],
+    "text": "Un enfant harcelé devient l'homme le plus riche du monde.",
+    "start": 0.10004,
+    "end": 4.02173,
+    "durationInFrames": 237,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Bullied child",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Childhood struggles",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Success",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "A young boy is sitting on the floor of a library, with his arms wrapped around his legs. He is looking down at the floor and appears to be sad or upset. There are bookshelves behind him, and the shelves are full of books.  The lighting is dim and the overall mood is somber.",
+      "video": {
+        "id": "10814111",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 8367329,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25,
+        "link": "https://videos.pexels.com/video-files/8410760/8410760-hd_1920_1080_25fps.mp4"
+      },
+      "image": {
+        "id": "8410760",
+        "link": "https://images.pexels.com/videos/8410760/pexels-photo-8410760.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 1920,
+        "height": 1080
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "Né",
+        "start": 4.02173,
+        "end": 4.22181,
+        "confidence": 0.99,
+        "durationInFrames": 12
+      },
+      {
+        "word": "en",
+        "start": 4.22181,
+        "end": 4.38188,
+        "confidence": 1,
+        "durationInFrames": 10
+      },
+      {
+        "word": "Afrique",
+        "start": 4.38188,
+        "end": 4.72203,
+        "confidence": 1,
+        "durationInFrames": 20
+      },
+      {
+        "word": "du",
+        "start": 4.72203,
+        "end": 4.92211,
+        "confidence": 1,
+        "durationInFrames": 12
+      },
+      {
+        "word": "Sud,",
+        "start": 4.92211,
+        "end": 5.54238,
+        "confidence": 0.97,
+        "durationInFrames": 37
+      },
+      {
+        "word": "le",
+        "start": 5.54238,
+        "end": 5.72245,
+        "confidence": 1,
+        "durationInFrames": 11
+      },
+      {
+        "word": "jeune",
+        "start": 5.72245,
+        "end": 6.10262,
+        "confidence": 0.96,
+        "durationInFrames": 23
+      },
+      {
+        "word": "Elon",
+        "start": 6.10262,
+        "end": 6.54281,
+        "confidence": 0.56,
+        "durationInFrames": 26
+      },
+      {
+        "word": "était",
+        "start": 6.54281,
+        "end": 6.82293,
+        "confidence": 1,
+        "durationInFrames": 17
+      },
+      {
+        "word": "différent",
+        "start": 6.82293,
+        "end": 7.34315,
+        "confidence": 0.97,
+        "durationInFrames": 31
+      }
+    ],
+    "text": "Né en Afrique du Sud, le jeune Elon était différent",
+    "start": 4.02173,
+    "end": 7.34315,
+    "durationInFrames": 199,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "African savannah",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "South African landscape",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Africa",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "The video shows a view from a vehicle driving through a savanna. The camera is pointed towards the right side of the vehicle and we see a brown dirt road, dry grass, and bushes, with a few trees in the background.  The sky is blue with a few white clouds.",
+      "video": {
+        "id": "4839969",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 32951660,
+        "width": 4096,
+        "height": 2160,
+        "fps": 29.969999313354492,
+        "link": "https://videos.pexels.com/video-files/11025493/11025493-hd_4096_2160_30fps.mp4"
+      },
+      "image": {
+        "id": "11025493",
+        "link": "https://images.pexels.com/videos/11025493/pexels-photo-11025493.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 4096,
+        "height": 2160
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "des",
+        "start": 7.34315,
+        "end": 7.58325,
+        "confidence": 1,
+        "durationInFrames": 14
+      },
+      {
+        "word": "autres.",
+        "start": 7.58325,
+        "end": 8.52366,
+        "confidence": 0.99,
+        "durationInFrames": 56
+      },
+      {
+        "word": "Passionné",
+        "start": 8.52366,
+        "end": 9.06389,
+        "confidence": 0.98,
+        "durationInFrames": 32
+      },
+      {
+        "word": "par",
+        "start": 9.06389,
+        "end": 9.20395,
+        "confidence": 1,
+        "durationInFrames": 8
+      },
+      {
+        "word": "l'informatique,",
+        "start": 9.20395,
+        "end": 10.32443,
+        "confidence": 0.99,
+        "durationInFrames": 67
+      },
+      {
+        "word": "il",
+        "start": 10.32443,
+        "end": 10.50451,
+        "confidence": 1,
+        "durationInFrames": 11
+      }
+    ],
+    "text": "des autres. Passionné par l'informatique, il",
+    "start": 7.34315,
+    "end": 10.50451,
+    "durationInFrames": 188,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Child with computer",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Young programmer",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Technology",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "A woman is sitting at a desk with a baby in her arms. She is looking at a laptop screen. There is a man on the screen. The woman is wearing a maroon sweater and blue jeans. The baby is wearing a blue onesie. The woman is sitting on a white stool.  The laptop is open on the desk and a man is on the screen.  The woman's right hand is resting on the desk. The baby's head is resting on the woman's shoulder.  The room is well-lit. There is a window behind the woman. There is a star-shaped ornament hanging from the window. The desk is white with a drawer.  There are some items on the desk, including a couple of pencils, a small ceramic figure, and a box of crayons. The woman is looking intently at the man on the screen. She seems to be engaged in a conversation.",
+      "video": {
+        "id": "10032637",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 9350589,
+        "width": 1080,
+        "height": 1920,
+        "fps": 23.97599983215332,
+        "link": "https://videos.pexels.com/video-files/6413918/6413918-hd_1080_1920_24fps.mp4"
+      },
+      "image": {
+        "id": "6413918",
+        "link": "https://images.pexels.com/videos/6413918/pexels-photo-6413918.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+        "width": 2160,
+        "height": 3840
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "crée",
+        "start": 10.50451,
+        "end": 10.76462,
+        "confidence": 0.82,
+        "durationInFrames": 16
+      },
+      {
+        "word": "son",
+        "start": 10.76462,
+        "end": 10.98471,
+        "confidence": 1,
+        "durationInFrames": 13
+      },
+      {
+        "word": "premier",
+        "start": 10.98471,
+        "end": 11.38488,
+        "confidence": 1,
+        "durationInFrames": 24
+      },
+      {
+        "word": "jeu",
+        "start": 11.38488,
+        "end": 11.60498,
+        "confidence": 0.99,
+        "durationInFrames": 13
+      },
+      {
+        "word": "vidéo",
+        "start": 11.60498,
+        "end": 12.06518,
+        "confidence": 0.93,
+        "durationInFrames": 28
+      },
+      {
+        "word": "à",
+        "start": 12.06518,
+        "end": 12.24525,
+        "confidence": 1,
+        "durationInFrames": 11
+      },
+      {
+        "word": "12",
+        "start": 12.24525,
+        "end": 12.60541,
+        "confidence": 0.4,
+        "durationInFrames": 22
+      },
+      {
+        "word": "ans.",
+        "start": 12.60541,
+        "end": 13.42576,
+        "confidence": 0.98,
+        "durationInFrames": 49
+      }
+    ],
+    "text": "crée son premier jeu vidéo à 12 ans.",
+    "start": 10.50451,
+    "end": 13.42576,
+    "durationInFrames": 176,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "12-year-old coding",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Child creating video game",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Gaming",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "A man is sitting at a desk and typing on a laptop. The camera is positioned behind him, so only his back and the laptop screen are visible. The man is wearing a brown jacket, a white shirt, and a watch. He has short dark hair and a beard. There is a headset on the desk, along with a notebook, a pen, a glass of water, and some plants.  The laptop screen shows code.",
+      "video": {
+        "id": "9445904",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 5371165,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25,
+        "link": "https://videos.pexels.com/video-files/4254582/4254582-hd_1920_1080_25fps.mp4"
+      },
+      "image": {
+        "id": "4254582",
+        "link": "https://images.pexels.com/videos/4254582/business-coronavirus-covid-19-isolation-period-4254582.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 3840,
+        "height": 2160
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "Après",
+        "start": 13.42576,
+        "end": 13.76591,
+        "confidence": 1,
+        "durationInFrames": 20
+      },
+      {
+        "word": "des",
+        "start": 13.76591,
+        "end": 14.00601,
+        "confidence": 1,
+        "durationInFrames": 14
+      },
+      {
+        "word": "études",
+        "start": 14.00601,
+        "end": 14.50622,
+        "confidence": 1,
+        "durationInFrames": 30
+      },
+      {
+        "word": "au",
+        "start": 14.50622,
+        "end": 14.66629,
+        "confidence": 1,
+        "durationInFrames": 10
+      },
+      {
+        "word": "Canada,",
+        "start": 14.66629,
+        "end": 15.3866,
+        "confidence": 1,
+        "durationInFrames": 43
+      },
+      {
+        "word": "il",
+        "start": 15.3866,
+        "end": 15.56668,
+        "confidence": 1,
+        "durationInFrames": 11
+      },
+      {
+        "word": "lance",
+        "start": 15.56668,
+        "end": 16.10691,
+        "confidence": 0.94,
+        "durationInFrames": 32
+      },
+      {
+        "word": "Zip2,",
+        "start": 16.10691,
+        "end": 16.92726,
+        "confidence": 0.59,
+        "durationInFrames": 49
+      },
+      {
+        "word": "puis",
+        "start": 16.92726,
+        "end": 17.46749,
+        "confidence": 1,
+        "durationInFrames": 32
+      }
+    ],
+    "text": "Après des études au Canada, il lance Zip2, puis",
+    "start": 13.42576,
+    "end": 17.46749,
+    "durationInFrames": 241,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "University campus",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Canadian university",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Education",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "The video shows a grassy area with a brick pathway leading towards a brick building. The building has large windows and appears to be a school or university building. There are trees, a black bench, and a few people walking around the building.  The sky is blue and the sun is shining.  The camera pans across the scene and shows a more panoramic view of the area as the video progresses.",
+      "video": {
+        "id": "9304568",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 15932444,
+        "width": 1920,
+        "height": 1080,
+        "fps": 29.969999313354492,
+        "link": "https://videos.pexels.com/video-files/3288315/3288315-hd_1920_1080_30fps.mp4"
+      },
+      "image": {
+        "id": "3288315",
+        "link": "https://images.pexels.com/videos/3288315/free-video-3288315.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 2720,
+        "height": 1530
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "X.com,",
+        "start": 17.46749,
+        "end": 18.66801,
+        "confidence": 0.99,
+        "durationInFrames": 72
+      },
+      {
+        "word": "qui",
+        "start": 18.66801,
+        "end": 18.84809,
+        "confidence": 1,
+        "durationInFrames": 11
+      },
+      {
+        "word": "deviendra",
+        "start": 18.84809,
+        "end": 19.38832,
+        "confidence": 1,
+        "durationInFrames": 32
+      },
+      {
+        "word": "PayPal.",
+        "start": 19.38832,
+        "end": 20.48879,
+        "confidence": 0.9,
+        "durationInFrames": 66
+      }
+    ],
+    "text": "X.com, qui deviendra PayPal.",
+    "start": 17.46749,
+    "end": 20.48879,
+    "durationInFrames": 181,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Startup office",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Entrepreneur working",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Business",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "Two men are working on a laptop computer together. The man on the left is wearing a red beanie and a tan hoodie. He has a beard and is looking at the laptop. The man on the right is wearing glasses and a brown sweater. He is pointing at the laptop screen. They are in an office setting with a brick wall in the background.",
+      "video": {
+        "id": "9955311",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 3451422,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25,
+        "link": "https://videos.pexels.com/video-files/6194002/6194002-hd_1920_1080_25fps.mp4"
+      },
+      "image": {
+        "id": "6194002",
+        "link": "https://images.pexels.com/videos/6194002/african-african-american-brainstorming-business-6194002.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 3840,
+        "height": 2160
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "Mais",
+        "start": 20.48879,
+        "end": 21.00901,
+        "confidence": 0.89,
+        "durationInFrames": 31
+      },
+      {
+        "word": "sa",
+        "start": 21.00901,
+        "end": 21.2091,
+        "confidence": 1,
+        "durationInFrames": 12
+      },
+      {
+        "word": "vraie",
+        "start": 21.2091,
+        "end": 21.46921,
+        "confidence": 0.77,
+        "durationInFrames": 16
+      },
+      {
+        "word": "vision",
+        "start": 21.46921,
+        "end": 21.96942,
+        "confidence": 1,
+        "durationInFrames": 30
+      },
+      {
+        "word": "était",
+        "start": 21.96942,
+        "end": 22.3696,
+        "confidence": 1,
+        "durationInFrames": 24
+      },
+      {
+        "word": "ailleurs.",
+        "start": 22.3696,
+        "end": 23.24997,
+        "confidence": 0.94,
+        "durationInFrames": 53
+      }
+    ],
+    "text": "Mais sa vraie vision était ailleurs.",
+    "start": 20.48879,
+    "end": 23.24997,
+    "durationInFrames": 166,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Visionary thinking",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Innovative ideas",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Inspiration",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "A woman is sitting in the backseat of a car and looking out the window. She is wearing a black coat over a white shirt. Her hands are in her lap, and she is looking straight ahead. The car is driving through a city. The view out the window is of buildings and other cars.",
+      "video": {
+        "id": "10354483",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 4850361,
+        "width": 1080,
+        "height": 1920,
+        "fps": 25,
+        "link": "https://videos.pexels.com/video-files/7224726/7224726-hd_1080_1920_25fps.mp4"
+      },
+      "image": {
+        "id": "7224726",
+        "link": "https://images.pexels.com/videos/7224726/pexels-photo-7224726.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+        "width": 2160,
+        "height": 3840
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "Il",
+        "start": 23.24997,
+        "end": 23.41004,
+        "confidence": 1,
+        "durationInFrames": 10
+      },
+      {
+        "word": "investit",
+        "start": 23.41004,
+        "end": 23.99029,
+        "confidence": 0.9,
+        "durationInFrames": 35
+      },
+      {
+        "word": "sa",
+        "start": 23.99029,
+        "end": 24.19038,
+        "confidence": 1,
+        "durationInFrames": 12
+      },
+      {
+        "word": "fortune",
+        "start": 24.19038,
+        "end": 24.75062,
+        "confidence": 1,
+        "durationInFrames": 34
+      },
+      {
+        "word": "dans",
+        "start": 24.75062,
+        "end": 24.97071,
+        "confidence": 0.96,
+        "durationInFrames": 13
+      },
+      {
+        "word": "Tesla",
+        "start": 24.97071,
+        "end": 25.57097,
+        "confidence": 0.97,
+        "durationInFrames": 36
+      },
+      {
+        "word": "et",
+        "start": 25.57097,
+        "end": 25.77106,
+        "confidence": 0.71,
+        "durationInFrames": 12
+      },
+      {
+        "word": "SpaceX,",
+        "start": 25.77106,
+        "end": 26.83151,
+        "confidence": 0.84,
+        "durationInFrames": 64
+      }
+    ],
+    "text": "Il investit sa fortune dans Tesla et SpaceX,",
+    "start": 23.24997,
+    "end": 26.83151,
+    "durationInFrames": 216,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Investor meeting",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Business investment",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Finance",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "A person is sitting at a desk and typing on a laptop. The laptop screen shows a design program with a 3D model of a product. There are many papers and other items on the desk.  The person is wearing a blue shirt.",
+      "video": {
+        "id": "10422395",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 10627242,
+        "width": 1920,
+        "height": 1080,
+        "fps": 24,
+        "link": "https://videos.pexels.com/video-files/7414128/7414128-hd_1920_1080_24fps.mp4"
+      },
+      "image": {
+        "id": "7414128",
+        "link": "https://images.pexels.com/videos/7414128/access-adult-agreement-angel-investor-7414128.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 1920,
+        "height": 1080
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "deux",
+        "start": 26.83151,
+        "end": 27.11163,
+        "confidence": 0.84,
+        "durationInFrames": 17
+      },
+      {
+        "word": "paris",
+        "start": 27.11163,
+        "end": 27.47179,
+        "confidence": 0.97,
+        "durationInFrames": 22
+      },
+      {
+        "word": "risqués.",
+        "start": 27.47179,
+        "end": 28.4681,
+        "confidence": 0.94,
+        "durationInFrames": 60
+      }
+    ],
+    "text": "deux paris risqués.",
+    "start": 26.83151,
+    "end": 28.4681,
+    "durationInFrames": 99,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Risk taking",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Entrepreneurial risk",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Challenge",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "A woman in a grey tank top and black pants hangs from a climbing wall, her feet are off the ground. She is wearing a harness and climbing shoes. The wall has various holds and a climbing route. There is a sign and some windows behind her.",
+      "video": {
+        "id": "9682644",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 4292579,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25,
+        "link": "https://videos.pexels.com/video-files/5378830/5378830-hd_1920_1080_25fps.mp4"
+      },
+      "image": {
+        "id": "5378830",
+        "link": "https://images.pexels.com/videos/5378830/pexels-photo-5378830.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 3840,
+        "height": 2160
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "Malgré",
+        "start": 28.4681,
+        "end": 28.88843,
+        "confidence": 0.99,
+        "durationInFrames": 25
+      },
+      {
+        "word": "les",
+        "start": 28.88843,
+        "end": 29.08859,
+        "confidence": 1,
+        "durationInFrames": 12
+      },
+      {
+        "word": "échecs",
+        "start": 29.08859,
+        "end": 29.50892,
+        "confidence": 0.95,
+        "durationInFrames": 25
+      },
+      {
+        "word": "et",
+        "start": 29.50892,
+        "end": 29.62902,
+        "confidence": 1,
+        "durationInFrames": 7
+      },
+      {
+        "word": "les",
+        "start": 29.62902,
+        "end": 29.78915,
+        "confidence": 0.73,
+        "durationInFrames": 10
+      },
+      {
+        "word": "moqueries,",
+        "start": 29.78915,
+        "end": 30.589779999999998,
+        "confidence": 0.81,
+        "durationInFrames": 48
+      },
+      {
+        "word": "ils",
+        "start": 30.589779999999998,
+        "end": 30.74991,
+        "confidence": 0.85,
+        "durationInFrames": 10
+      },
+      {
+        "word": "persévèrent.",
+        "start": 30.74991,
+        "end": 32.07096,
+        "confidence": 0.84,
+        "durationInFrames": 79
+      }
+    ],
+    "text": "Malgré les échecs et les moqueries, ils persévèrent.",
+    "start": 28.4681,
+    "end": 32.07096,
+    "durationInFrames": 216,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Perseverance",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Overcoming obstacles",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Determination",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "A rock climber in a yellow shirt and blue jeans is climbing a steep cliff face.  The climber is attached to a rope and is using their hands and feet to pull themselves up the rock.  The climber is facing the rock face and is looking up. The camera is positioned behind and above the climber, facing the rock face.",
+      "video": {
+        "id": "9596061",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 65530055,
+        "width": 2048,
+        "height": 1080,
+        "fps": 25,
+        "link": "https://videos.pexels.com/video-files/5013967/5013967-hd_2048_1080_25fps.mp4"
+      },
+      "image": {
+        "id": "5013967",
+        "link": "https://images.pexels.com/videos/5013967/pexels-photo-5013967.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 4096,
+        "height": 2160
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "Tesla",
+        "start": 32.07096,
+        "end": 32.51131,
+        "confidence": 0.78,
+        "durationInFrames": 26
+      },
+      {
+        "word": "révolutionne",
+        "start": 32.51131,
+        "end": 33.2519,
+        "confidence": 0.99,
+        "durationInFrames": 44
+      },
+      {
+        "word": "l'automobile",
+        "start": 33.2519,
+        "end": 33.97247,
+        "confidence": 0.95,
+        "durationInFrames": 43
+      },
+      {
+        "word": "électrique.",
+        "start": 33.97247,
+        "end": 34.913219999999995,
+        "confidence": 0.97,
+        "durationInFrames": 56
+      }
+    ],
+    "text": "Tesla révolutionne l'automobile électrique.",
+    "start": 32.07096,
+    "end": 34.913219999999995,
+    "durationInFrames": 169,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Electric car manufacturing",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Tesla factory",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Sustainability",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "A man is grinding the side of a red car. The man is wearing a black shirt and overalls, and a black cap. He is squatting down on the ground as he works. He has a beard and is wearing black shoes. There is a lot of sparks flying from the grinder as he works. The garage is lit with red and blue neon lights.",
+      "video": {
+        "id": "9381693",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 18746512,
+        "width": 1080,
+        "height": 2048,
+        "fps": 25,
+        "link": "https://videos.pexels.com/video-files/4488704/4488704-hd_1080_2048_25fps.mp4"
+      },
+      "image": {
+        "id": "4488704",
+        "link": "https://images.pexels.com/videos/4488704/pexels-photo-4488704.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+        "width": 2160,
+        "height": 4096
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "SpaceX",
+        "start": 34.913219999999995,
+        "end": 35.733869999999996,
+        "confidence": 0.83,
+        "durationInFrames": 49
+      },
+      {
+        "word": "réinvente",
+        "start": 35.733869999999996,
+        "end": 36.37438,
+        "confidence": 0.96,
+        "durationInFrames": 38
+      },
+      {
+        "word": "l'exploration",
+        "start": 36.37438,
+        "end": 37.155,
+        "confidence": 0.99,
+        "durationInFrames": 47
+      },
+      {
+        "word": "spatiale.",
+        "start": 37.155,
+        "end": 38.47605,
+        "confidence": 0.9,
+        "durationInFrames": 79
+      }
+    ],
+    "text": "SpaceX réinvente l'exploration spatiale.",
+    "start": 34.913219999999995,
+    "end": 38.47605,
+    "durationInFrames": 213,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "SpaceX launch",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Rocket launch",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Space exploration",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "The space shuttle is on the launch pad and the engines are firing. The exhaust is white and there are sparks coming from the engines.  The camera is focused on the engines and the bottom of the shuttle.",
+      "video": {
+        "id": "9252347",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 37495567,
+        "width": 1920,
+        "height": 1080,
+        "fps": 24,
+        "link": "https://videos.pexels.com/video-files/854269/854269-hd_1920_1080_24fps.mp4"
+      },
+      "image": {
+        "id": "854269",
+        "link": "https://images.pexels.com/videos/854269/free-video-854269.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 1920,
+        "height": 1080
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "Aujourd'hui,",
+        "start": 38.47605,
+        "end": 39.416799999999995,
+        "confidence": 0.88,
+        "durationInFrames": 56
+      },
+      {
+        "word": "ces",
+        "start": 39.416799999999995,
+        "end": 39.65699,
+        "confidence": 0.81,
+        "durationInFrames": 14
+      },
+      {
+        "word": "entreprises",
+        "start": 39.65699,
+        "end": 40.33753,
+        "confidence": 0.99,
+        "durationInFrames": 41
+      },
+      {
+        "word": "transforment",
+        "start": 40.33753,
+        "end": 41.07812,
+        "confidence": 0.92,
+        "durationInFrames": 44
+      },
+      {
+        "word": "le",
+        "start": 41.07812,
+        "end": 41.23824,
+        "confidence": 1,
+        "durationInFrames": 10
+      },
+      {
+        "word": "monde.",
+        "start": 41.23824,
+        "end": 42.15897,
+        "confidence": 0.99,
+        "durationInFrames": 55
+      }
+    ],
+    "text": "Aujourd'hui, ces entreprises transforment le monde.",
+    "start": 38.47605,
+    "end": 42.15897,
+    "durationInFrames": 220,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Innovation hub",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Transformative technology",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Progress",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "The video shows three scientists in a laboratory.  They are wearing white lab coats. They are looking at something on a table. There are many beakers filled with colored liquids in the lab.  The video is shot through the beakers and the focus is on the scientists.  It seems like the scientists are discussing something related to their work.  One of the scientists is gesturing with her hand.  The video is shot from a low angle.",
+      "video": {
+        "id": "9293483",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 6536708,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25,
+        "link": "https://videos.pexels.com/video-files/3191861/3191861-hd_1920_1080_25fps.mp4"
+      },
+      "image": {
+        "id": "3191861",
+        "link": "https://images.pexels.com/videos/3191861/free-video-3191861.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 3840,
+        "height": 2160
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "De",
+        "start": 42.15897,
+        "end": 42.33912,
+        "confidence": 1,
+        "durationInFrames": 11
+      },
+      {
+        "word": "Twitter",
+        "start": 42.33912,
+        "end": 42.8195,
+        "confidence": 0.74,
+        "durationInFrames": 29
+      },
+      {
+        "word": "à",
+        "start": 42.8195,
+        "end": 43.01966,
+        "confidence": 0.27,
+        "durationInFrames": 12
+      },
+      {
+        "word": "Neuralink,",
+        "start": 43.01966,
+        "end": 43.74023,
+        "confidence": 0.67,
+        "durationInFrames": 43
+      },
+      {
+        "word": "ils",
+        "start": 43.74023,
+        "end": 43.90036,
+        "confidence": 0.78,
+        "durationInFrames": 10
+      },
+      {
+        "word": "continuent",
+        "start": 43.90036,
+        "end": 44.44079,
+        "confidence": 0.87,
+        "durationInFrames": 32
+      },
+      {
+        "word": "d'innover",
+        "start": 44.44079,
+        "end": 45.10131,
+        "confidence": 0.87,
+        "durationInFrames": 40
+      },
+      {
+        "word": "sans",
+        "start": 45.10131,
+        "end": 45.38153,
+        "confidence": 0.99,
+        "durationInFrames": 17
+      }
+    ],
+    "text": "De Twitter à Neuralink, ils continuent d'innover sans",
+    "start": 42.15897,
+    "end": 45.38153,
+    "durationInFrames": 194,
+    "keywords": [
+      {
+        "search": "web",
+        "keyword": "Twitter logo",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Neuralink technology",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Innovation",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "image",
+      "name": "How to change back to the old Twitter app icon on iOS | TechCrunch",
+      "description": "The image is of a blue bird icon superimposed with a black X on top of a grey background. The bird is facing right, with its wings spread. The X is in the center of the image and is tilted slightly to the right. The background is a textured grey, and in the bottom right corner is a white label with the text \"Bryce Durbin / TechCrunch\".  The image appears to be a symbol, perhaps representing the shutting down of a social media platform.",
+      "image": {
+        "id": "img-1733286275597-4j20qvj77",
+        "link": "https://techcrunch.com/wp-content/uploads/2023/04/twitter-x-corp.jpg",
+        "width": 3200,
+        "height": 1800
+      }
+    }
+  },
+  {
+    "words": [
+      {
+        "word": "limite.",
+        "start": 45.38153,
+        "end": 46.40235,
+        "confidence": 0.99,
+        "durationInFrames": 61
+      },
+      {
+        "word": "Partagez",
+        "start": 46.40235,
+        "end": 46.98281,
+        "confidence": 1,
+        "durationInFrames": 35
+      },
+      {
+        "word": "votre",
+        "start": 46.98281,
+        "end": 47.26303,
+        "confidence": 1,
+        "durationInFrames": 17
+      },
+      {
+        "word": "avis",
+        "start": 47.26303,
+        "end": 47.6033,
+        "confidence": 0.7,
+        "durationInFrames": 20
+      },
+      {
+        "word": "en",
+        "start": 47.6033,
+        "end": 47.76343,
+        "confidence": 1,
+        "durationInFrames": 10
+      },
+      {
+        "word": "commentaire.",
+        "start": 47.76343,
+        "end": 48.796735,
+        "confidence": 0.99,
+        "durationInFrames": 62
+      }
+    ],
+    "text": "limite. Partagez votre avis en commentaire.",
+    "start": 45.38153,
+    "end": 48.796735,
+    "durationInFrames": 205,
+    "keywords": [
+      {
+        "search": "stock",
+        "keyword": "Comment section",
+        "precision": "HARD"
+      },
+      {
+        "search": "stock",
+        "keyword": "Online discussion",
+        "precision": "NORMAL"
+      },
+      {
+        "search": "stock",
+        "keyword": "Feedback",
+        "precision": "EASY"
+      }
+    ],
+    "media": {
+      "type": "video",
+      "description": "The video shows a green screen with various social media icons, including thumbs up, hearts, and emojis, slowly falling down. The icons include thumbs up, hearts, laughing, shocked, and angry emojis. The emojis are all in a circle with a white background, with the angry emojis being red and the other emojis being yellow.  There appears to be a larger number of laughing and shocked emojis than other icons. \n",
+      "video": {
+        "id": "11189808",
+        "quality": "hd",
+        "file_type": "video/mp4",
+        "size": 8277877,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25,
+        "link": "https://videos.pexels.com/video-files/7451173/7451173-hd_1920_1080_25fps.mp4"
+      },
+      "image": {
+        "id": "7451173",
+        "link": "https://images.pexels.com/videos/7451173/emoji-facebook-instagram-social-media-7451173.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "width": 3840,
+        "height": 2160
+      }
+    }
+  }
+]

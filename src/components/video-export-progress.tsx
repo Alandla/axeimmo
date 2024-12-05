@@ -25,11 +25,14 @@ import { auth, runs } from '@trigger.dev/sdk/v3';
 import confetti from 'canvas-confetti';
 
 type ExportStatus = 'pending' | 'processing' | 'completed' | 'failed';
+type ExportStep = 'avatar' | 'render';
 
 export default function VideoExportProgress({ exportData, video }: { exportData: IExport | null, video: IVideo | null }) {
   const t = useTranslations('export')
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState<ExportStatus>('pending');
+  const [step, setStep] = useState<ExportStep>('render');
+  const [startedExport, setStartedExport] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -74,26 +77,29 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
             exportId: exportData.id
           }
 
-          const { runId, publicAccessToken } = await basicApiCall('/trigger/startExport', { options }) as { runId: string, publicAccessToken: string };
+          if (!startedExport) {
+            setStartedExport(true)
+            const { runId, publicAccessToken } = await basicApiCall('/trigger/startExport', { options }) as { runId: string, publicAccessToken: string };
 
-          auth.configure({
-            accessToken: publicAccessToken,
-          });
+            auth.configure({
+              accessToken: publicAccessToken,
+            });
 
-          for await (const run of runs.subscribeToRun(runId)) {
-            setStatus(run.metadata?.status as ExportStatus)
-            setProgress(run.metadata?.progress as number)
-            if (run.status === "COMPLETED") {
-              setDownloadUrl(run.metadata?.downloadUrl as string)
-              triggerConfetti()
-              break
-            }
-            if (run.status === "FAILED") {
-              setErrorMessage(run.metadata?.errorMessage as string)
-              break
+            for await (const run of runs.subscribeToRun(runId)) {
+              setStatus(run.metadata?.status as ExportStatus)
+              setProgress(run.metadata?.progress as number)
+              setStep(run.metadata?.step as ExportStep)
+              if (run.status === "COMPLETED") {
+                setDownloadUrl(run.metadata?.downloadUrl as string)
+                triggerConfetti()
+                break
+              }
+              if (run.status === "FAILED") {
+                setErrorMessage(run.metadata?.errorMessage as string)
+                break
+              }
             }
           }
-
         } else if (exportData && video && exportData.status === 'processing' && exportData.runId) {
           const { runId, publicAccessToken } = await basicApiCall('/trigger/getAccessToken', { runId: exportData.runId }) as { runId: string, publicAccessToken: string };
 
@@ -194,7 +200,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
             <div className="flex justify-center">
               <Video className="w-12 h-12 text-primary animate-pulse" />
             </div>
-            <CardTitle className="text-center">{t('title')}</CardTitle>
+            <CardTitle className="text-center">{step === 'avatar' ? t('title-avatar') : t('title')}</CardTitle>
             <CardDescription className="text-center">
               {status === 'processing' ? t('processing') : t('waiting-to-start')}
             </CardDescription>

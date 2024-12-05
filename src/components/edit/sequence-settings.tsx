@@ -7,28 +7,50 @@ import SkeletonVideo from "../ui/skeleton-video";
 import SequenceSettingsSearch from "./sequence-settings-search";
 import SequenceSettingsAssets from "./sequence-settings-assets";
 import { useTranslations } from "next-intl";
+import { Button } from "../ui/button";
+import { IconEyeSlash } from "../icons/eye-slash";
+import { IconEyeLowVision } from "../icons/eye-low-vision";
+import { IconEye } from "../icons/eye";
 
-export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string }) {
+export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId, hadAvatar }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string, hadAvatar: boolean }) {
 
   const t = useTranslations('edit.sequence-edit')
 
   return (
     <>
       <CardHeader>
-        <CardTitle>Sequence {sequenceIndex + 1}</CardTitle>
+        <CardTitle>Media {sequenceIndex + 1}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="w-full mb-4 relative overflow-hidden rounded-md h-max-60">
-            {!sequence.media?.image?.link ? (
-                <ImageIcon className="w-full h-full text-gray-400" />
-            ) : sequence.media.type === 'image' ? (
-                <SkeletonImage src={sequence.media.image.link} width={sequence.media.image.width} height={sequence.media.image.height} alt={sequence.text} className="h-auto" style={{ width: 'auto', objectFit: 'contain' }} />
-            ) : sequence.media.video ? (
-                <SkeletonVideo srcImg={sequence.media.image.link} srcVideo={sequence.media.video.link} alt={sequence.text} className="h-auto" />
-            ) : (
-                <ImageIcon className="w-full h-full text-gray-400" />
-            )}
-        </div>
+
+        {hadAvatar && (
+          <div className="flex w-full">
+            <Button
+              variant={sequence.media?.show === 'hide' ? "default" : "outline"}
+              className="flex-1 rounded-r-none"
+              onClick={() => setSequenceMedia(sequenceIndex, { ...sequence.media, show: 'hide' } as IMedia)}
+            >
+              <IconEyeSlash className="h-4 w-4" />
+              {t('hide-button')}
+            </Button>
+            <Button
+              variant={sequence.media?.show === 'half' ? "default" : "outline"}
+              className="flex-1 rounded-none border-x-0"
+              onClick={() => setSequenceMedia(sequenceIndex, { ...sequence.media, show: 'half' } as IMedia)}
+            >
+              <IconEyeLowVision className="h-4 w-4" />
+              {t('half-button')}
+            </Button>
+            <Button
+              variant={sequence.media?.show === 'full' ? "default" : "outline"}
+              className="flex-1 rounded-l-none"
+              onClick={() => setSequenceMedia(sequenceIndex, { ...sequence.media, show: 'full' } as IMedia)}
+            >
+              <IconEye className="h-4 w-4" />
+              {t('full-button')}
+            </Button>
+          </div>
+        )}
 
         <Tabs defaultValue="search">
           <TabsList className="grid w-full grid-cols-2 mb-4">

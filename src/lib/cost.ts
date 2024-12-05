@@ -25,3 +25,12 @@ export function calculateElevenLabsCost(text: string, isTurbo: boolean = false):
   return (text.length / 1000) * baseRate;
 }
 
+export function calculateHeygenCost(durationInSeconds: number): number {
+  const COST_PER_30_SECONDS = 0.2475;
+  
+  // Arrondir au multiple de 30 secondes supérieur
+  const segments = Math.ceil(durationInSeconds / 30);
+  
+  return segments * COST_PER_30_SECONDS;
+}
+

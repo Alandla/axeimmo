@@ -1,3 +1,5 @@
+import { AvatarLook } from "./avatar";
+
 export interface IWord {
   word: string;
   start: number;
@@ -10,9 +12,10 @@ export interface IMedia {
   id?: string;
   type: 'image' | 'video' | 'audio';
   usage: 'voice' | 'avatar' | 'media';
-  show?: 'full' | 'middle' | 'hide';
+  show?: 'full' | 'half' | 'hide';
   name: string;
   label: string;
+  description?: string;
   video?: {
     id: string;
     quality?: string;
@@ -71,6 +74,7 @@ export interface IVideo {
       transcription_time: number;
     };
     sequences: ISequence[];
+    avatar?: AvatarLook
   };
   history?: {
     step: 'CREATE' | 'EDIT' | 'EXPORT';

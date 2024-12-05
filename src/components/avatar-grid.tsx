@@ -88,7 +88,7 @@ export function AvatarGridComponent() {
       // Si aucun tag n'est sélectionné, afficher tous les looks
       if (selectedTags.length === 0) return true
       // Sinon, vérifier si le look contient tous les tags sélectionnés
-      return selectedTags.every(tag => look.tags.includes(tag))
+      return selectedTags.every(tag => look.tags?.includes(tag) || false)
     }) 
     : currentAvatars
 

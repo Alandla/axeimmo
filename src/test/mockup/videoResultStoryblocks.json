@@ -1,140 +1,214 @@
 {
   "_id": {
-    "$oid": "6737be2fecc68e860830f7aa"
+    "$oid": "675092eb3b92719a4909c260"
   },
-  "costToGenerate": 0,
+  "spaceId": {
+    "$oid": "6712b76b9a0cc70740a8bd1b"
+  },
+  "state": {
+    "type": "done"
+  },
+  "runId": "run_4spe9oixrbuxnmgaagxx7",
+  "history": [
+    {
+      "step": "CREATE",
+      "user": {
+        "$oid": "6712b76b9a0cc70740a8bd1a"
+      },
+      "date": {
+        "$date": "2024-12-04T17:35:39.457Z"
+      },
+      "_id": {
+        "$oid": "675092eb3b92719a4909c261"
+      }
+    }
+  ],
   "video": {
-    "audioUrl": "https://media.hoox.video/2070cf26-1edb-41aa-9653-bb54940abaf1.mp3",
-    "thumbnail": "",
-    "metadata": {
-      "audio_duration": 67.970612,
-      "number_of_distinct_channels": 1,
-      "billing_time": 67.970612,
-      "transcription_time": 16.081
+    "subtitle": {
+      "name": "Background",
+      "style": {
+        "template": "background",
+        "fontFamily": "Montserrat",
+        "fontWeight": "800",
+        "fontSize": 60,
+        "color": "#ffffff",
+        "isItalic": false,
+        "isPunctuation": true,
+        "isUppercase": true,
+        "mode": "twoLines",
+        "position": 50,
+        "animation": {
+          "appear": "bounce"
+        },
+        "activeWord": {
+          "isActive": false,
+          "fontFamily": "Montserrat",
+          "fontWeight": "800",
+          "fontSize": 60,
+          "color": "#bbbbbb",
+          "isItalic": false,
+          "isPunctuation": true,
+          "isUppercase": true
+        },
+        "background": {
+          "isActive": true,
+          "color": "#FF3838",
+          "radius": 16,
+          "mode": "word"
+        },
+        "shadow": {
+          "isActive": true,
+          "size": 1,
+          "color": "#000000"
+        },
+        "border": {
+          "isActive": true,
+          "size": 4,
+          "color": "#000000"
+        }
+      }
     },
+    "metadata": {
+      "audio_duration": 48.796735,
+      "number_of_distinct_channels": 1,
+      "billing_time": 48.796735,
+      "transcription_time": 14.669
+    },
+    "avatar": {
+      "settings": {
+        "position": 42
+      },
+      "id": "Conrad_sitting_sofa_front",
+      "name": "Conrad House Front",
+      "previewUrl": "https://files2.heygen.ai/avatar/v3/e45585843830421496f598bf27e00dee_37140/preview_video_target.mp4",
+      "thumbnail": "https://files2.heygen.ai/avatar/v3/ea333829d88c4fc8b6d08e8baf80297a_37140/preview_talk_3.webp",
+      "videoUrl": "https://files2.heygen.ai/aws_pacific/avatar_tmp/1a6582ef7d574bef81967b9c630c607b/a1d48305ea3647058554789c20ea8312.mp4?Expires=1733968561&Signature=f622YgllTxVz4IfiGwFB5qlllHKwz6zU0q66PJFd2s1X9CYFt4tQkRvJEY3xedXpr5QeWQQz81nqhLUytUwiFnJJB2Akzy0E6O03jrjyemJjQ4L-iIwEhmtFc1WYfZsdmE~O1mbBJhcWETIQj67XD3nheoRnAITR2TOdE2UJVY1BsEHAuSKYxlx32JtyQsyfLG9hJ75xznJivWG0vHK39iUy4NAxwuahE4C2D02moAgRSqGeVBTIhdoFeAtYomhqB7wQ8Egp~uf7EcSKnMMvHfeYB2vDmvEUI5uI-yed17AWVNV4maQbiFZe0F34gNq5izO5iuDuGVe6z1j1W6LIYw__&Key-Pair-Id=K38HBHX5LX3X2H"
+    },
+    "audioUrl": "https://media.hoox.video/db9b9f57-bd1a-42ac-8095-d28b7d52a4e4.mp3",
+    "thumbnail": "",
     "sequences": [
       {
         "words": [
           {
             "word": "Un",
             "start": 0.10004,
-            "end": 0.24011,
-            "confidence": 1,
-            "durationInFrames": 8,
+            "end": 0.30013,
+            "confidence": 0.99,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7ac"
+              "$oid": "675092ed3b92719a4909c268"
             }
           },
           {
             "word": "enfant",
-            "start": 0.24011,
-            "end": 0.58026,
+            "start": 0.30013,
+            "end": 0.76033,
             "confidence": 1,
-            "durationInFrames": 20,
+            "durationInFrames": 28,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7ad"
+              "$oid": "675092ed3b92719a4909c269"
             }
           },
           {
             "word": "harcelé",
-            "start": 0.58026,
-            "end": 1.16052,
-            "confidence": 0.83,
-            "durationInFrames": 35,
+            "start": 0.76033,
+            "end": 1.32057,
+            "confidence": 0.85,
+            "durationInFrames": 34,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7ae"
+              "$oid": "675092ed3b92719a4909c26a"
             }
           },
           {
             "word": "devient",
-            "start": 1.16052,
-            "end": 1.52068,
-            "confidence": 0.99,
-            "durationInFrames": 22,
+            "start": 1.32057,
+            "end": 1.72074,
+            "confidence": 0.96,
+            "durationInFrames": 24,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7af"
+              "$oid": "675092ed3b92719a4909c26b"
             }
           },
           {
             "word": "l'homme",
-            "start": 1.52068,
-            "end": 1.76078,
-            "confidence": 0.92,
-            "durationInFrames": 14,
+            "start": 1.72074,
+            "end": 2.02087,
+            "confidence": 0.94,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7b0"
+              "$oid": "675092ed3b92719a4909c26c"
             }
           },
           {
             "word": "le",
-            "start": 1.76078,
-            "end": 1.90085,
-            "confidence": 1,
-            "durationInFrames": 8,
+            "start": 2.02087,
+            "end": 2.18094,
+            "confidence": 0.89,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7b1"
+              "$oid": "675092ed3b92719a4909c26d"
             }
           },
           {
             "word": "plus",
-            "start": 1.90085,
-            "end": 2.08093,
-            "confidence": 0.86,
-            "durationInFrames": 11,
+            "start": 2.18094,
+            "end": 2.44105,
+            "confidence": 0.96,
+            "durationInFrames": 16,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7b2"
+              "$oid": "675092ed3b92719a4909c26e"
             }
           },
           {
             "word": "riche",
-            "start": 2.08093,
-            "end": 2.42108,
-            "confidence": 0.96,
+            "start": 2.44105,
+            "end": 2.78119,
+            "confidence": 0.98,
             "durationInFrames": 20,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7b3"
+              "$oid": "675092ed3b92719a4909c26f"
             }
           },
           {
             "word": "du",
-            "start": 2.42108,
-            "end": 2.60116,
+            "start": 2.78119,
+            "end": 2.96127,
             "confidence": 1,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7b4"
+              "$oid": "675092ed3b92719a4909c270"
             }
           },
           {
             "word": "monde.",
-            "start": 2.60116,
-            "end": 3.42152,
+            "start": 2.96127,
+            "end": 4.02173,
             "confidence": 1,
-            "durationInFrames": 49,
+            "durationInFrames": 64,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7b5"
+              "$oid": "675092ed3b92719a4909c271"
             }
           }
         ],
         "text": "Un enfant harcelé devient l'homme le plus riche du monde.",
         "start": 0.10004,
-        "end": 3.42152,
-        "durationInFrames": 198,
+        "end": 4.02173,
+        "durationInFrames": 237,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Person holding money",
+            "keyword": "Bullied child",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737be2fecc68e860830f7b6"
+              "$oid": "675092ed3b92719a4909c272"
             }
           },
           {
             "search": "stock",
-            "keyword": "Rich man",
+            "keyword": "Childhood struggles",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737be2fecc68e860830f7b7"
+              "$oid": "675092ed3b92719a4909c273"
             }
           },
           {
@@ -142,684 +216,422 @@
             "keyword": "Success",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737be2fecc68e860830f7b8"
+              "$oid": "675092ed3b92719a4909c274"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1280,
-          "width": 720,
+          "show": "full",
+          "description": "A young boy is sitting on the floor of a library, with his arms wrapped around his legs. He is looking down at the floor and appears to be sad or upset. There are bookshelves behind him, and the shelves are full of books.  The lighting is dim and the overall mood is somber.",
           "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/xCCDBUa/young-business-woman-holding-fan-of-money_smlfiwnd0__8107b7f148351592af3a1db9d3c72d60__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414269&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=2796698&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=0d79c7c1-d0c2-414a-b53e-78a6b0cc62d9&searchPageId=a8dcaaeb-199e-42e8-bdf2-76b1544a5dc5"
+            "id": "10814111",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 8367329,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/8410760/8410760-hd_1920_1080_25fps.mp4"
           },
           "image": {
-            "id": "2796698",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/xCCDBUa/young-business-woman-holding-fan-of-money_smlfiwnd0_thumbnail-180_01.jpg",
-            "width": 720,
-            "height": 1280
+            "id": "8410760",
+            "link": "https://images.pexels.com/videos/8410760/pexels-photo-8410760.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
           },
           "_id": {
-            "$oid": "6737be2fecc68e860830f7b9"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
+            "$oid": "67510e53b4078cafeaa4047a"
           }
         },
         "_id": {
-          "$oid": "6737be2fecc68e860830f7ab"
+          "$oid": "675092ed3b92719a4909c267"
         }
       },
       {
         "words": [
           {
             "word": "Né",
-            "start": 3.42152,
-            "end": 3.74166,
-            "confidence": 0.55,
-            "durationInFrames": 19,
+            "start": 4.02173,
+            "end": 4.22181,
+            "confidence": 0.99,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7bb"
+              "$oid": "675092ed3b92719a4909c277"
             }
           },
           {
             "word": "en",
-            "start": 3.74166,
-            "end": 3.90173,
-            "confidence": 0.99,
+            "start": 4.22181,
+            "end": 4.38188,
+            "confidence": 1,
             "durationInFrames": 10,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7bc"
+              "$oid": "675092ed3b92719a4909c278"
             }
           },
           {
             "word": "Afrique",
-            "start": 3.90173,
-            "end": 4.18186,
+            "start": 4.38188,
+            "end": 4.72203,
             "confidence": 1,
-            "durationInFrames": 17,
+            "durationInFrames": 20,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7bd"
+              "$oid": "675092ed3b92719a4909c279"
             }
           },
           {
             "word": "du",
-            "start": 4.18186,
-            "end": 4.38195,
+            "start": 4.72203,
+            "end": 4.92211,
             "confidence": 1,
             "durationInFrames": 12,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7be"
+              "$oid": "675092ed3b92719a4909c27a"
             }
           },
           {
-            "word": "Sud",
-            "start": 4.38195,
-            "end": 4.62205,
+            "word": "Sud,",
+            "start": 4.92211,
+            "end": 5.54238,
+            "confidence": 0.97,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c27b"
+            }
+          },
+          {
+            "word": "le",
+            "start": 5.54238,
+            "end": 5.72245,
+            "confidence": 1,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c27c"
+            }
+          },
+          {
+            "word": "jeune",
+            "start": 5.72245,
+            "end": 6.10262,
+            "confidence": 0.96,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c27d"
+            }
+          },
+          {
+            "word": "Elon",
+            "start": 6.10262,
+            "end": 6.54281,
+            "confidence": 0.56,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c27e"
+            }
+          },
+          {
+            "word": "était",
+            "start": 6.54281,
+            "end": 6.82293,
+            "confidence": 1,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c27f"
+            }
+          },
+          {
+            "word": "différent",
+            "start": 6.82293,
+            "end": 7.34315,
+            "confidence": 0.97,
+            "durationInFrames": 31,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c280"
+            }
+          }
+        ],
+        "text": "Né en Afrique du Sud, le jeune Elon était différent",
+        "start": 4.02173,
+        "end": 7.34315,
+        "durationInFrames": 199,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "African savannah",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c281"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "South African landscape",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c282"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Africa",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c283"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "half",
+          "description": "The video shows a view from a vehicle driving through a savanna. The camera is pointed towards the right side of the vehicle and we see a brown dirt road, dry grass, and bushes, with a few trees in the background.  The sky is blue with a few white clouds.",
+          "video": {
+            "id": "4839969",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 32951660,
+            "width": 4096,
+            "height": 2160,
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/11025493/11025493-hd_4096_2160_30fps.mp4"
+          },
+          "image": {
+            "id": "11025493",
+            "link": "https://images.pexels.com/videos/11025493/pexels-photo-11025493.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67510e53b4078cafeaa40489"
+          }
+        },
+        "_id": {
+          "$oid": "675092ed3b92719a4909c276"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "des",
+            "start": 7.34315,
+            "end": 7.58325,
             "confidence": 1,
             "durationInFrames": 14,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7bf"
+              "$oid": "675092ed3b92719a4909c286"
             }
           },
           {
-            "word": "en",
-            "start": 4.62205,
-            "end": 4.76212,
+            "word": "autres.",
+            "start": 7.58325,
+            "end": 8.52366,
             "confidence": 0.99,
-            "durationInFrames": 8,
+            "durationInFrames": 56,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7c0"
+              "$oid": "675092ed3b92719a4909c287"
             }
           },
           {
-            "word": "1971,",
-            "start": 4.76212,
-            "end": 6.86305,
-            "confidence": 0.06,
-            "durationInFrames": 126,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7c1"
-            }
-          }
-        ],
-        "text": "Né en Afrique du Sud en 1971,",
-        "start": 3.42152,
-        "end": 6.86305,
-        "durationInFrames": 206,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Map of South Africa",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7c2"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "African landscape",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7c3"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Birthplace",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7c4"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/rueMN_EHjla4kh6g7/videoblocks-6327a9a49467e60a6bd35e0a_hzewlpiij__0642d3f930992f36529191e9391b5c60__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414230&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=347395942&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=6bed592f-4a87-40dd-b194-c1a96fe1925f&searchPageId=8e37f1e0-3ec7-4582-a4e7-3e7a3d07ff91"
-          },
-          "image": {
-            "id": "347395942",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/rueMN_EHjla4kh6g7/videoblocks-6327a9a49467e60a6bd35e0a_hzewlpiij_thumbnail-180_15.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f7c5"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f7ba"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Elon",
-            "start": 6.86305,
-            "end": 7.00311,
-            "confidence": 0,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7c7"
-            }
-          },
-          {
-            "word": "Musk",
-            "start": 7.00311,
-            "end": 7.14318,
-            "confidence": 0.1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7c8"
-            }
-          },
-          {
-            "word": "a",
-            "start": 7.14318,
-            "end": 7.30325,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7c9"
-            }
-          },
-          {
-            "word": "connu",
-            "start": 7.30325,
-            "end": 7.60338,
-            "confidence": 0.97,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7ca"
-            }
-          },
-          {
-            "word": "une",
-            "start": 7.60338,
-            "end": 7.78346,
-            "confidence": 0.95,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7cb"
-            }
-          },
-          {
-            "word": "enfance",
-            "start": 7.78346,
-            "end": 8.40374,
-            "confidence": 0.87,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7cc"
-            }
-          },
-          {
-            "word": "difficile.",
-            "start": 8.40374,
-            "end": 9.64429,
-            "confidence": 0.95,
-            "durationInFrames": 74,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7cd"
-            }
-          }
-        ],
-        "text": "Elon Musk a connu une enfance difficile.",
-        "start": 6.86305,
-        "end": 9.64429,
-        "durationInFrames": 166,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Boy looking sad",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7ce"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Childhood difficulties",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7cf"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Unhappy child",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7d0"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/B4cMs-jMKktgra49g/videoblocks-boy-looking-sad-on-outdoors-at-park-as-people-walk-by_hlaeqwuj0__89cf8d48e0f3126b83f54591dff3a81d__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414238&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=348937431&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=d2a945d4-85c8-4bfc-b8fa-07721d00a76f&searchPageId=7eb6675b-319c-4757-8a69-d5dd3d11ce79"
-          },
-          "image": {
-            "id": "348937431",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/B4cMs-jMKktgra49g/videoblocks-boy-looking-sad-on-outdoors-at-park-as-people-walk-by_hlaeqwuj0_thumbnail-180_04.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f7d1"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f7c6"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Victime",
-            "start": 9.64429,
-            "end": 10.18453,
-            "confidence": 1,
+            "word": "Passionné",
+            "start": 8.52366,
+            "end": 9.06389,
+            "confidence": 0.98,
             "durationInFrames": 32,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7d3"
+              "$oid": "675092ed3b92719a4909c288"
             }
           },
           {
-            "word": "de",
-            "start": 10.18453,
-            "end": 10.44464,
+            "word": "par",
+            "start": 9.06389,
+            "end": 9.20395,
             "confidence": 1,
-            "durationInFrames": 16,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7d4"
+              "$oid": "675092ed3b92719a4909c289"
             }
           },
           {
-            "word": "harcèlement",
-            "start": 10.44464,
-            "end": 11.00489,
-            "confidence": 0.91,
-            "durationInFrames": 34,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7d5"
-            }
-          },
-          {
-            "word": "scolaire,",
-            "start": 11.00489,
-            "end": 11.66519,
+            "word": "l'informatique,",
+            "start": 9.20395,
+            "end": 10.32443,
             "confidence": 0.99,
-            "durationInFrames": 40,
+            "durationInFrames": 67,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7d6"
+              "$oid": "675092ed3b92719a4909c28a"
             }
           },
           {
             "word": "il",
-            "start": 11.66519,
-            "end": 11.82526,
+            "start": 10.32443,
+            "end": 10.50451,
             "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7d7"
-            }
-          },
-          {
-            "word": "trouve",
-            "start": 11.82526,
-            "end": 12.40552,
-            "confidence": 0.99,
-            "durationInFrames": 35,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7d8"
-            }
-          },
-          {
-            "word": "refuge",
-            "start": 12.40552,
-            "end": 13.00578,
-            "confidence": 0.94,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7d9"
-            }
-          }
-        ],
-        "text": "Victime de harcèlement scolaire, il trouve refuge",
-        "start": 9.64429,
-        "end": 13.00578,
-        "durationInFrames": 203,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Bullied kid",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7da"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "School bullying",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7db"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Harassment",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7dc"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/HrrabAxWinloumzm/videoblocks-441_tuvovefmiehfquxuscbbtkqgvutsqulorsa1_h7emls2x9__167f27c04ec6c94fc975d46d810467c1__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414233&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=346819815&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=c50251bc-6279-4d59-9b01-38467da8092b&searchPageId=c0338178-f3ce-45cc-81df-4ddd1ab10611"
-          },
-          "image": {
-            "id": "346819815",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/HrrabAxWinloumzm/videoblocks-441_tuvovefmiehfquxuscbbtkqgvutsqulorsa1_h7emls2x9_thumbnail-180_14.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f7dd"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f7d2"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "dans",
-            "start": 13.00578,
-            "end": 13.16585,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7df"
-            }
-          },
-          {
-            "word": "les",
-            "start": 13.16585,
-            "end": 13.32592,
-            "confidence": 0.98,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7e0"
-            }
-          },
-          {
-            "word": "livres",
-            "start": 13.32592,
-            "end": 14.00623,
-            "confidence": 0.99,
-            "durationInFrames": 41,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7e1"
-            }
-          },
-          {
-            "word": "et",
-            "start": 14.00623,
-            "end": 14.26634,
-            "confidence": 1,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7e2"
-            }
-          },
-          {
-            "word": "l'informatique.",
-            "start": 14.26634,
-            "end": 15.40685,
-            "confidence": 0.97,
-            "durationInFrames": 68,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7e3"
-            }
-          }
-        ],
-        "text": "dans les livres et l'informatique.",
-        "start": 13.00578,
-        "end": 15.40685,
-        "durationInFrames": 145,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Boy reading book",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7e4"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Computer hobby",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7e5"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Escape",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7e6"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/43IycoJux/videoblocks-733_u2hhbgfzaf9tb3rozxigmdaxoa_rpjh6dup3__476994325e44a0ab9d24567fbc418758__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414268&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=347731695&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=7970245d-e544-487b-ba14-e312d71df572&searchPageId=6d79c20b-c4f1-437a-9ded-5cb57899b133"
-          },
-          "image": {
-            "id": "347731695",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/43IycoJux/videoblocks-733_u2hhbgfzaf9tb3rozxigmdaxoa_rpjh6dup3_thumbnail-180_02.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f7e7"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f7de"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "A",
-            "start": 15.40685,
-            "end": 15.56692,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7e9"
-            }
-          },
-          {
-            "word": "12",
-            "start": 15.56692,
-            "end": 15.84705,
-            "confidence": 0.51,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7ea"
-            }
-          },
-          {
-            "word": "ans,",
-            "start": 15.84705,
-            "end": 16.22721,
-            "confidence": 0.94,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7eb"
-            }
-          },
-          {
-            "word": "il",
-            "start": 16.22721,
-            "end": 16.4273,
-            "confidence": 1,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7ec"
-            }
-          },
-          {
-            "word": "crée",
-            "start": 16.4273,
-            "end": 16.90752,
-            "confidence": 0.98,
-            "durationInFrames": 29,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7ed"
-            }
-          },
-          {
-            "word": "et",
-            "start": 16.90752,
-            "end": 17.0876,
-            "confidence": 0.91,
             "durationInFrames": 11,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7ee"
+              "$oid": "675092ed3b92719a4909c28b"
+            }
+          }
+        ],
+        "text": "des autres. Passionné par l'informatique, il",
+        "start": 7.34315,
+        "end": 10.50451,
+        "durationInFrames": 188,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "Child with computer",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c28c"
             }
           },
           {
-            "word": "vend",
-            "start": 17.0876,
-            "end": 17.48777,
-            "confidence": 0.69,
-            "durationInFrames": 24,
+            "search": "stock",
+            "keyword": "Young programmer",
+            "precision": "NORMAL",
             "_id": {
-              "$oid": "6737be2fecc68e860830f7ef"
+              "$oid": "675092ed3b92719a4909c28d"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Technology",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c28e"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "hide",
+          "description": "A woman is sitting at a desk with a baby in her arms. She is looking at a laptop screen. There is a man on the screen. The woman is wearing a maroon sweater and blue jeans. The baby is wearing a blue onesie. The woman is sitting on a white stool.  The laptop is open on the desk and a man is on the screen.  The woman's right hand is resting on the desk. The baby's head is resting on the woman's shoulder.  The room is well-lit. There is a window behind the woman. There is a star-shaped ornament hanging from the window. The desk is white with a drawer.  There are some items on the desk, including a couple of pencils, a small ceramic figure, and a box of crayons. The woman is looking intently at the man on the screen. She seems to be engaged in a conversation.",
+          "video": {
+            "id": "10032637",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 9350589,
+            "width": 1080,
+            "height": 1920,
+            "fps": 23.97599983215332,
+            "link": "https://videos.pexels.com/video-files/6413918/6413918-hd_1080_1920_24fps.mp4"
+          },
+          "image": {
+            "id": "6413918",
+            "link": "https://images.pexels.com/videos/6413918/pexels-photo-6413918.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
+          },
+          "_id": {
+            "$oid": "67510e53b4078cafeaa40494"
+          }
+        },
+        "_id": {
+          "$oid": "675092ed3b92719a4909c285"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "crée",
+            "start": 10.50451,
+            "end": 10.76462,
+            "confidence": 0.82,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c291"
             }
           },
           {
             "word": "son",
-            "start": 17.48777,
-            "end": 17.70787,
+            "start": 10.76462,
+            "end": 10.98471,
             "confidence": 1,
             "durationInFrames": 13,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7f0"
+              "$oid": "675092ed3b92719a4909c292"
             }
           },
           {
             "word": "premier",
-            "start": 17.70787,
-            "end": 18.12806,
-            "confidence": 0.95,
-            "durationInFrames": 25,
+            "start": 10.98471,
+            "end": 11.38488,
+            "confidence": 1,
+            "durationInFrames": 24,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7f1"
+              "$oid": "675092ed3b92719a4909c293"
             }
           },
           {
             "word": "jeu",
-            "start": 18.12806,
-            "end": 18.42819,
+            "start": 11.38488,
+            "end": 11.60498,
             "confidence": 0.99,
-            "durationInFrames": 18,
+            "durationInFrames": 13,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7f2"
+              "$oid": "675092ed3b92719a4909c294"
             }
           },
           {
-            "word": "vidéo.",
-            "start": 18.42819,
-            "end": 19.18853,
+            "word": "vidéo",
+            "start": 11.60498,
+            "end": 12.06518,
             "confidence": 0.93,
-            "durationInFrames": 46,
+            "durationInFrames": 28,
             "_id": {
-              "$oid": "6737be2fecc68e860830f7f3"
+              "$oid": "675092ed3b92719a4909c295"
+            }
+          },
+          {
+            "word": "à",
+            "start": 12.06518,
+            "end": 12.24525,
+            "confidence": 1,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c296"
+            }
+          },
+          {
+            "word": "12",
+            "start": 12.24525,
+            "end": 12.60541,
+            "confidence": 0.4,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c297"
+            }
+          },
+          {
+            "word": "ans.",
+            "start": 12.60541,
+            "end": 13.42576,
+            "confidence": 0.98,
+            "durationInFrames": 49,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c298"
             }
           }
         ],
-        "text": "A 12 ans, il crée et vend son premier jeu vidéo.",
-        "start": 15.40685,
-        "end": 19.18853,
-        "durationInFrames": 228,
+        "text": "crée son premier jeu vidéo à 12 ans.",
+        "start": 10.50451,
+        "end": 13.42576,
+        "durationInFrames": 176,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Kid coding",
+            "keyword": "12-year-old coding",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737be2fecc68e860830f7f4"
+              "$oid": "675092ed3b92719a4909c299"
             }
           },
           {
             "search": "stock",
-            "keyword": "Child programmer",
+            "keyword": "Child creating video game",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737be2fecc68e860830f7f5"
+              "$oid": "675092ed3b92719a4909c29a"
             }
           },
           {
@@ -827,438 +639,251 @@
             "keyword": "Gaming",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737be2fecc68e860830f7f6"
+              "$oid": "675092ed3b92719a4909c29b"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1280,
-          "width": 720,
+          "show": "full",
+          "description": "A man is sitting at a desk and typing on a laptop. The camera is positioned behind him, so only his back and the laptop screen are visible. The man is wearing a brown jacket, a white shirt, and a watch. He has short dark hair and a beard. There is a headset on the desk, along with a notebook, a pen, a glass of water, and some plants.  The laptop screen shows code.",
           "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/B04Gfy1teiz3sdqe6/663f5bfe7550ef179a190017-3ld9zrk910__36b77ca29b029d46aefd7e145f61f7d8__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414475&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=349103088&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=00a115a3-d1b0-446a-9975-35e17e6cb429&searchPageId=b9b8a032-9ae7-4ab4-8f7b-1663e2bcba72"
+            "id": "9445904",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 5371165,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/4254582/4254582-hd_1920_1080_25fps.mp4"
           },
           "image": {
-            "id": "349103088",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/B04Gfy1teiz3sdqe6/663f5bfe7550ef179a190017-3ld9zrk910_thumbnail-180_08.jpg",
-            "width": 720,
-            "height": 1280
+            "id": "4254582",
+            "link": "https://images.pexels.com/videos/4254582/business-coronavirus-covid-19-isolation-period-4254582.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
           },
           "_id": {
-            "$oid": "6737be2fecc68e860830f7f7"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.904Z"
+            "$oid": "67510e53b4078cafeaa404a1"
           }
         },
         "_id": {
-          "$oid": "6737be2fecc68e860830f7e8"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "A",
-            "start": 19.18853,
-            "end": 19.32859,
-            "confidence": 0.99,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7f9"
-            }
-          },
-          {
-            "word": "17",
-            "start": 19.32859,
-            "end": 19.68875,
-            "confidence": 0.29,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7fa"
-            }
-          },
-          {
-            "word": "ans,",
-            "start": 19.68875,
-            "end": 19.80881,
-            "confidence": 0.96,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7fb"
-            }
-          },
-          {
-            "word": "il",
-            "start": 19.80881,
-            "end": 19.98889,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7fc"
-            }
-          },
-          {
-            "word": "quitte",
-            "start": 19.98889,
-            "end": 20.249,
-            "confidence": 1,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7fd"
-            }
-          },
-          {
-            "word": "son",
-            "start": 20.249,
-            "end": 20.42908,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7fe"
-            }
-          },
-          {
-            "word": "pays",
-            "start": 20.42908,
-            "end": 20.70921,
-            "confidence": 1,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f7ff"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 20.70921,
-            "end": 20.84927,
-            "confidence": 0.91,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f800"
-            }
-          },
-          {
-            "word": "le",
-            "start": 20.84927,
-            "end": 20.98933,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f801"
-            }
-          },
-          {
-            "word": "Canada,",
-            "start": 20.98933,
-            "end": 21.70965,
-            "confidence": 0.94,
-            "durationInFrames": 43,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f802"
-            }
-          },
-          {
-            "word": "dormant",
-            "start": 21.70965,
-            "end": 22.08982,
-            "confidence": 0.9,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f803"
-            }
-          },
-          {
-            "word": "chez",
-            "start": 22.08982,
-            "end": 22.22988,
-            "confidence": 0.93,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f804"
-            }
-          }
-        ],
-        "text": "A 17 ans, il quitte son pays pour le Canada, dormant chez",
-        "start": 19.18853,
-        "end": 22.22988,
-        "durationInFrames": 182,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Plane taking off",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f805"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Airport departure",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f806"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Travel",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f807"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/GTYSdDW/plane-taking-off-extremely-close-up_zyl3dn8eh__5813b3edd5ea5e2bde30767d67c7e7df__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414467&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=9328&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=5e5aa7b1-91de-4381-9a44-4301aeb4dcb1&searchPageId=04a6c1cc-8f9a-49e2-81bd-489e5b5f7d3c"
-          },
-          "image": {
-            "id": "9328",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/GTYSdDW/plane-taking-off-extremely-close-up_zyl3dn8eh_thumbnail-180_01.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f808"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f7f8"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "des",
-            "start": 22.22988,
-            "end": 22.34994,
-            "confidence": 0.99,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f80a"
-            }
-          },
-          {
-            "word": "cousins",
-            "start": 22.34994,
-            "end": 22.91019,
-            "confidence": 0.93,
-            "durationInFrames": 34,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f80b"
-            }
-          },
-          {
-            "word": "et",
-            "start": 22.91019,
-            "end": 23.09027,
-            "confidence": 0.95,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f80c"
-            }
-          },
-          {
-            "word": "enchaînant",
-            "start": 23.09027,
-            "end": 23.55047,
-            "confidence": 0.93,
-            "durationInFrames": 28,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f80d"
-            }
-          },
-          {
-            "word": "les",
-            "start": 23.55047,
-            "end": 23.71054,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f80e"
-            }
-          },
-          {
-            "word": "petits",
-            "start": 23.71054,
-            "end": 24.03068,
-            "confidence": 1,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f80f"
-            }
-          },
-          {
-            "word": "boulots.",
-            "start": 24.03068,
-            "end": 24.71099,
-            "confidence": 0.63,
-            "durationInFrames": 41,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f810"
-            }
-          }
-        ],
-        "text": "des cousins et enchaînant les petits boulots.",
-        "start": 22.22988,
-        "end": 24.71099,
-        "durationInFrames": 150,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Couch surfing",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f811"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Living with relatives",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f812"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Unstable life",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f813"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/2O0VXeG/happy-couple-on-comfortable-couch-surfing-on-laptop-in-living-room_v1puie1d__cb43eed572e20fe2c6eca7f5ece33eac__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414488&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=563001&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=a8bb189b-399b-4397-867f-0fd5a235f8fc&searchPageId=16fcfb8e-fa2d-4b14-8d8f-496810fe3bc9"
-          },
-          "image": {
-            "id": "563001",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/2O0VXeG/happy-couple-on-comfortable-couch-surfing-on-laptop-in-living-room_v1puie1d_thumbnail-180_02.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f814"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f809"
+          "$oid": "675092ed3b92719a4909c290"
         }
       },
       {
         "words": [
           {
             "word": "Après",
-            "start": 24.71099,
-            "end": 24.95109,
+            "start": 13.42576,
+            "end": 13.76591,
+            "confidence": 1,
+            "durationInFrames": 20,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c29e"
+            }
+          },
+          {
+            "word": "des",
+            "start": 13.76591,
+            "end": 14.00601,
             "confidence": 1,
             "durationInFrames": 14,
             "_id": {
-              "$oid": "6737be2fecc68e860830f816"
+              "$oid": "675092ed3b92719a4909c29f"
             }
           },
           {
-            "word": "ses",
-            "start": 24.95109,
-            "end": 25.15118,
-            "confidence": 0.86,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f817"
-            }
-          },
-          {
-            "word": "études,",
-            "start": 25.15118,
-            "end": 25.73144,
+            "word": "études",
+            "start": 14.00601,
+            "end": 14.50622,
             "confidence": 1,
-            "durationInFrames": 35,
+            "durationInFrames": 30,
             "_id": {
-              "$oid": "6737be2fecc68e860830f818"
+              "$oid": "675092ed3b92719a4909c2a0"
+            }
+          },
+          {
+            "word": "au",
+            "start": 14.50622,
+            "end": 14.66629,
+            "confidence": 1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2a1"
+            }
+          },
+          {
+            "word": "Canada,",
+            "start": 14.66629,
+            "end": 15.3866,
+            "confidence": 1,
+            "durationInFrames": 43,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2a2"
             }
           },
           {
             "word": "il",
-            "start": 25.73144,
-            "end": 25.89151,
-            "confidence": 0.99,
-            "durationInFrames": 10,
+            "start": 15.3866,
+            "end": 15.56668,
+            "confidence": 1,
+            "durationInFrames": 11,
             "_id": {
-              "$oid": "6737be2fecc68e860830f819"
+              "$oid": "675092ed3b92719a4909c2a3"
             }
           },
           {
             "word": "lance",
-            "start": 25.89151,
-            "end": 26.41174,
+            "start": 15.56668,
+            "end": 16.10691,
             "confidence": 0.94,
-            "durationInFrames": 31,
+            "durationInFrames": 32,
             "_id": {
-              "$oid": "6737be2fecc68e860830f81a"
+              "$oid": "675092ed3b92719a4909c2a4"
             }
           },
           {
-            "word": "Zip2.",
-            "start": 26.41174,
-            "end": 27.07204,
-            "confidence": 0.21,
-            "durationInFrames": 40,
+            "word": "Zip2,",
+            "start": 16.10691,
+            "end": 16.92726,
+            "confidence": 0.59,
+            "durationInFrames": 49,
             "_id": {
-              "$oid": "6737be2fecc68e860830f81b"
+              "$oid": "675092ed3b92719a4909c2a5"
+            }
+          },
+          {
+            "word": "puis",
+            "start": 16.92726,
+            "end": 17.46749,
+            "confidence": 1,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2a6"
             }
           }
         ],
-        "text": "Après ses études, il lance Zip2.",
-        "start": 24.71099,
-        "end": 27.07204,
-        "durationInFrames": 142,
+        "text": "Après des études au Canada, il lance Zip2, puis",
+        "start": 13.42576,
+        "end": 17.46749,
+        "durationInFrames": 241,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Entrepreneur at work",
+            "keyword": "University campus",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737be2fecc68e860830f81c"
+              "$oid": "675092ed3b92719a4909c2a7"
             }
           },
           {
             "search": "stock",
-            "keyword": "Start-up office",
+            "keyword": "Canadian university",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737be2fecc68e860830f81d"
+              "$oid": "675092ed3b92719a4909c2a8"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Education",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2a9"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "half",
+          "description": "The video shows a grassy area with a brick pathway leading towards a brick building. The building has large windows and appears to be a school or university building. There are trees, a black bench, and a few people walking around the building.  The sky is blue and the sun is shining.  The camera pans across the scene and shows a more panoramic view of the area as the video progresses.",
+          "video": {
+            "id": "9304568",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 15932444,
+            "width": 1920,
+            "height": 1080,
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/3288315/3288315-hd_1920_1080_30fps.mp4"
+          },
+          "image": {
+            "id": "3288315",
+            "link": "https://images.pexels.com/videos/3288315/free-video-3288315.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 2720,
+            "height": 1530
+          },
+          "_id": {
+            "$oid": "67510e53b4078cafeaa404af"
+          }
+        },
+        "_id": {
+          "$oid": "675092ed3b92719a4909c29d"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "X.com,",
+            "start": 17.46749,
+            "end": 18.66801,
+            "confidence": 0.99,
+            "durationInFrames": 72,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2ac"
+            }
+          },
+          {
+            "word": "qui",
+            "start": 18.66801,
+            "end": 18.84809,
+            "confidence": 1,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2ad"
+            }
+          },
+          {
+            "word": "deviendra",
+            "start": 18.84809,
+            "end": 19.38832,
+            "confidence": 1,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2ae"
+            }
+          },
+          {
+            "word": "PayPal.",
+            "start": 19.38832,
+            "end": 20.48879,
+            "confidence": 0.9,
+            "durationInFrames": 66,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2af"
+            }
+          }
+        ],
+        "text": "X.com, qui deviendra PayPal.",
+        "start": 17.46749,
+        "end": 20.48879,
+        "durationInFrames": 181,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "Startup office",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2b0"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Entrepreneur working",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2b1"
             }
           },
           {
@@ -1266,1522 +891,120 @@
             "keyword": "Business",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737be2fecc68e860830f81e"
+              "$oid": "675092ed3b92719a4909c2b2"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1280,
-          "width": 720,
+          "show": "half",
+          "description": "Two men are working on a laptop computer together. The man on the left is wearing a red beanie and a tan hoodie. He has a beard and is looking at the laptop. The man on the right is wearing glasses and a brown sweater. He is pointing at the laptop screen. They are in an office setting with a brick wall in the background.",
           "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/Hc_TvUoHMjcyusz29/videoblocks-64f47cc42d49ce62a11c6311_svbzkkwyt__26e28724e2d3f368e7e43466045e19c2__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414461&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=348496052&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=e2b9b99a-43da-4d84-8b45-510398aa1bc5&searchPageId=8956f81c-3b24-43e8-ad3e-24c55dddc0b1"
+            "id": "9955311",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 3451422,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/6194002/6194002-hd_1920_1080_25fps.mp4"
           },
           "image": {
-            "id": "348496052",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/Hc_TvUoHMjcyusz29/videoblocks-64f47cc42d49ce62a11c6311_svbzkkwyt_thumbnail-180_11.jpg",
-            "width": 720,
-            "height": 1280
+            "id": "6194002",
+            "link": "https://images.pexels.com/videos/6194002/african-african-american-brainstorming-business-6194002.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
           },
           "_id": {
-            "$oid": "6737be2fecc68e860830f81f"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
+            "$oid": "67510e53b4078cafeaa404b8"
           }
         },
         "_id": {
-          "$oid": "6737be2fecc68e860830f815"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Sa",
-            "start": 27.07204,
-            "end": 27.212120000000002,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f821"
-            }
-          },
-          {
-            "word": "première",
-            "start": 27.212120000000002,
-            "end": 27.65237,
-            "confidence": 0.99,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f822"
-            }
-          },
-          {
-            "word": "entreprise",
-            "start": 27.65237,
-            "end": 28.27272,
-            "confidence": 1,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f823"
-            }
-          },
-          {
-            "word": "qu'il",
-            "start": 28.27272,
-            "end": 28.49284,
-            "confidence": 0.94,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f824"
-            }
-          },
-          {
-            "word": "revend",
-            "start": 28.49284,
-            "end": 28.793010000000002,
-            "confidence": 0.86,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f825"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 28.793010000000002,
-            "end": 28.973110000000002,
-            "confidence": 0.99,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f826"
-            }
-          },
-          {
-            "word": "307",
-            "start": 28.973110000000002,
-            "end": 29.69351,
-            "confidence": 0,
-            "durationInFrames": 43,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f827"
-            }
-          },
-          {
-            "word": "millions",
-            "start": 29.69351,
-            "end": 30.01369,
-            "confidence": 0.88,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f828"
-            }
-          },
-          {
-            "word": "de",
-            "start": 30.01369,
-            "end": 30.19379,
-            "confidence": 0.95,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f829"
-            }
-          }
-        ],
-        "text": "Sa première entreprise qu'il revend pour 307 millions de",
-        "start": 27.07204,
-        "end": 30.19379,
-        "durationInFrames": 186,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Money transfer",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f82a"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Selling company",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f82b"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Success",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f82c"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/49EwKH5deijotr386/videoblocks-nfc-credit-card-payment-woman-paying-with-contactless-credit-card-with-nfc-technology-wireless-money-transaction-wireless-payment_rkjmoniri__54152aa9412578765c93aee9253227b1__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414469&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=10917579&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=b90fc449-ac49-4c9d-84ea-8ea3f045778f&searchPageId=64ece921-94b7-4e2b-a757-1412307b5f78"
-          },
-          "image": {
-            "id": "10917579",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/49EwKH5deijotr386/videoblocks-nfc-credit-card-payment-woman-paying-with-contactless-credit-card-with-nfc-technology-wireless-money-transaction-wireless-payment_rkjmoniri_thumbnail-180_02.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f82d"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f820"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "dollars.",
-            "start": 30.19379,
-            "end": 31.11431,
-            "confidence": 0.75,
-            "durationInFrames": 55,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f82f"
-            }
-          },
-          {
-            "word": "Il",
-            "start": 31.11431,
-            "end": 31.25439,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f830"
-            }
-          },
-          {
-            "word": "crée",
-            "start": 31.25439,
-            "end": 31.51453,
-            "confidence": 0.97,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f831"
-            }
-          },
-          {
-            "word": "ensuite",
-            "start": 31.51453,
-            "end": 32.27496,
-            "confidence": 1,
-            "durationInFrames": 46,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f832"
-            }
-          },
-          {
-            "word": "X.com",
-            "start": 32.27496,
-            "end": 32.99536,
-            "confidence": 0.54,
-            "durationInFrames": 43,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f833"
-            }
-          },
-          {
-            "word": "qui",
-            "start": 32.99536,
-            "end": 33.15545,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f834"
-            }
-          },
-          {
-            "word": "devient",
-            "start": 33.15545,
-            "end": 33.775800000000004,
-            "confidence": 0.98,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f835"
-            }
-          }
-        ],
-        "text": "dollars. Il crée ensuite X.com qui devient",
-        "start": 30.19379,
-        "end": 33.775800000000004,
-        "durationInFrames": 215,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Website launch",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f836"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "New business venture",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f837"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Innovation",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f838"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/BKaAXTX/videoblocks-a-closeup-shallow-dof-shot-of-a-person-click-on-the-launch-missiles-button-on-a-tablet-pcs-touchscreen_bmxkouqvw__0fdb5149b9cbd0a7ab0aadbe1d4824d6__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414679&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=4753158&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=5f5ec9cc-c230-497e-b003-75f2f9067005&searchPageId=5a2e3555-f9a7-4ea0-954a-61aa6724fbec"
-          },
-          "image": {
-            "id": "4753158",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/BKaAXTX/videoblocks-a-closeup-shallow-dof-shot-of-a-person-click-on-the-launch-missiles-button-on-a-tablet-pcs-touchscreen_bmxkouqvw_thumbnail-180_05.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f839"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f82e"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Paypal,",
-            "start": 33.775800000000004,
-            "end": 34.39615,
-            "confidence": 0.77,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f83b"
-            }
-          },
-          {
-            "word": "revendu",
-            "start": 34.39615,
-            "end": 34.83639,
-            "confidence": 0.99,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f83c"
-            }
-          },
-          {
-            "word": "à",
-            "start": 34.83639,
-            "end": 35.016490000000005,
-            "confidence": 0.99,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f83d"
-            }
-          },
-          {
-            "word": "eBay",
-            "start": 35.016490000000005,
-            "end": 35.33667,
-            "confidence": 0.49,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f83e"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 35.33667,
-            "end": 35.51677,
-            "confidence": 0.98,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f83f"
-            }
-          },
-          {
-            "word": "1,5",
-            "start": 35.51677,
-            "end": 35.65685,
-            "confidence": 0.17,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f840"
-            }
-          },
-          {
-            "word": "milliard.",
-            "start": 35.65685,
-            "end": 37.43785,
-            "confidence": 0.92,
-            "durationInFrames": 107,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f841"
-            }
-          }
-        ],
-        "text": "Paypal, revendu à eBay pour 1,5 milliard.",
-        "start": 33.775800000000004,
-        "end": 37.43785,
-        "durationInFrames": 219,
-        "keywords": [
-          {
-            "search": "web",
-            "keyword": "eBay logo",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f842"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Company acquisition",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f843"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Deal",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f844"
-            }
-          }
-        ],
-        "media": {
-          "type": "image",
-          "name": "EBay taps into NFT frenzy, allows sale on platform | Reuters",
-          "height": 3675,
-          "width": 5513,
-          "image": {
-            "id": "img-1731706414847-1zc4dmtqg",
-            "link": "https://cloudfront-us-east-2.images.arcpublishing.com/reuters/TUHNCOEIKRMAXFQY5OB3WA3SPE.jpg",
-            "width": 5513,
-            "height": 3675
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f845"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f83a"
+          "$oid": "675092ed3b92719a4909c2ab"
         }
       },
       {
         "words": [
           {
             "word": "Mais",
-            "start": 37.43785,
-            "end": 37.59794,
-            "confidence": 0.85,
-            "durationInFrames": 10,
+            "start": 20.48879,
+            "end": 21.00901,
+            "confidence": 0.89,
+            "durationInFrames": 31,
             "_id": {
-              "$oid": "6737be2fecc68e860830f847"
-            }
-          },
-          {
-            "word": "Musk",
-            "start": 37.59794,
-            "end": 37.8781,
-            "confidence": 0.52,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f848"
-            }
-          },
-          {
-            "word": "ne",
-            "start": 37.8781,
-            "end": 38.03818,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f849"
-            }
-          },
-          {
-            "word": "s'arrête",
-            "start": 38.03818,
-            "end": 38.37838,
-            "confidence": 0.93,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f84a"
-            }
-          },
-          {
-            "word": "pas",
-            "start": 38.37838,
-            "end": 38.51845,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f84b"
-            }
-          },
-          {
-            "word": "là,",
-            "start": 38.51845,
-            "end": 38.878659999999996,
-            "confidence": 1,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f84c"
-            }
-          },
-          {
-            "word": "il",
-            "start": 38.878659999999996,
-            "end": 39.018730000000005,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f84d"
-            }
-          },
-          {
-            "word": "investit",
-            "start": 39.018730000000005,
-            "end": 39.499,
-            "confidence": 0.93,
-            "durationInFrames": 29,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f84e"
+              "$oid": "675092ed3b92719a4909c2b5"
             }
           },
           {
             "word": "sa",
-            "start": 39.499,
-            "end": 39.65909,
+            "start": 21.00901,
+            "end": 21.2091,
             "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f84f"
-            }
-          },
-          {
-            "word": "fortune",
-            "start": 39.65909,
-            "end": 40.09934,
-            "confidence": 1,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f850"
-            }
-          },
-          {
-            "word": "dans",
-            "start": 40.09934,
-            "end": 40.23942,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f851"
-            }
-          },
-          {
-            "word": "des",
-            "start": 40.23942,
-            "end": 40.3795,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f852"
-            }
-          },
-          {
-            "word": "projets",
-            "start": 40.3795,
-            "end": 40.83975,
-            "confidence": 0.92,
-            "durationInFrames": 28,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f853"
-            }
-          }
-        ],
-        "text": "Mais Musk ne s'arrête pas là, il investit sa fortune dans des projets",
-        "start": 37.43785,
-        "end": 40.83975,
-        "durationInFrames": 204,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Investor at work",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f854"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Ambitious projects",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f855"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Risk",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f856"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/BgrICs-NZj4hksnn3/videoblocks-6536716a8815972af33a6302_hbzzqmjm6__78be094d953b834b2d9fc5c6109b2257__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706414670&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=348623125&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=84c496ec-fe21-4cb9-9b31-aa6264d3bb01&searchPageId=6e90ad27-9e71-47c0-9da5-4258e5644ffd"
-          },
-          "image": {
-            "id": "348623125",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/BgrICs-NZj4hksnn3/videoblocks-6536716a8815972af33a6302_hbzzqmjm6_thumbnail-180_14.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f857"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f846"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "ambitieux.",
-            "start": 40.83975,
-            "end": 41.72025,
-            "confidence": 0.95,
-            "durationInFrames": 53,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f859"
-            }
-          },
-          {
-            "word": "Tesla",
-            "start": 41.72025,
-            "end": 42.10046,
-            "confidence": 0.85,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f85a"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 42.10046,
-            "end": 42.36061,
-            "confidence": 0.99,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f85b"
-            }
-          },
-          {
-            "word": "révolutionner",
-            "start": 42.36061,
-            "end": 42.96094,
-            "confidence": 0.99,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f85c"
-            }
-          },
-          {
-            "word": "l'automobile,",
-            "start": 42.96094,
-            "end": 43.66133,
-            "confidence": 0.93,
-            "durationInFrames": 42,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f85d"
-            }
-          },
-          {
-            "word": "SpaceX",
-            "start": 43.66133,
-            "end": 44.40175,
-            "confidence": 0.77,
-            "durationInFrames": 44,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f85e"
-            }
-          }
-        ],
-        "text": "ambitieux. Tesla pour révolutionner l'automobile, SpaceX",
-        "start": 40.83975,
-        "end": 44.40175,
-        "durationInFrames": 214,
-        "keywords": [
-          {
-            "search": "web",
-            "keyword": "Tesla car logo",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f85f"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Electric vehicle",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f860"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Sustainable energy",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f861"
-            }
-          }
-        ],
-        "media": {
-          "type": "image",
-          "name": "999+ Tesla Logo Pictures | Download Free Images on Unsplash",
-          "height": 5333,
-          "width": 3000,
-          "image": {
-            "id": "img-1731706414801-vxxb9ev5s",
-            "link": "https://images.unsplash.com/photo-1700934509528-d7e0ddf28b6e?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHRlc2xhJTIwbG9nb3xlbnwwfHwwfHx8MA%3D%3D",
-            "width": 3000,
-            "height": 5333
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f862"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f858"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "pour",
-            "start": 44.40175,
-            "end": 44.60186,
-            "confidence": 0.92,
             "durationInFrames": 12,
             "_id": {
-              "$oid": "6737be2fecc68e860830f864"
+              "$oid": "675092ed3b92719a4909c2b6"
             }
           },
           {
-            "word": "conquérir",
-            "start": 44.60186,
-            "end": 45.122150000000005,
-            "confidence": 0.9,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f865"
-            }
-          },
-          {
-            "word": "l'espace.",
-            "start": 45.122150000000005,
-            "end": 46.08269,
-            "confidence": 0.95,
-            "durationInFrames": 58,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f866"
-            }
-          }
-        ],
-        "text": "pour conquérir l'espace.",
-        "start": 44.40175,
-        "end": 46.08269,
-        "durationInFrames": 101,
-        "keywords": [
-          {
-            "search": "web",
-            "keyword": "SpaceX rocket launch",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f867"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Space exploration",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f868"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Innovation",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f869"
-            }
-          }
-        ],
-        "media": {
-          "type": "image",
-          "name": "Launch Roundup: Falcon 9 and Electron to extend satellite ...",
-          "height": 1376,
-          "width": 2064,
-          "image": {
-            "id": "img-1731706414953-qkw30p81q",
-            "link": "https://www.nasaspaceflight.com/wp-content/uploads/2024/09/Falcon-9-launches-Galileo-L13-mission-from-SLC-40-Credit-Julia-Bergeron-for-NSF.jpeg",
-            "width": 2064,
-            "height": 1376
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f86a"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f863"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Malgré",
-            "start": 46.08269,
-            "end": 46.42288,
-            "confidence": 0.93,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f86c"
-            }
-          },
-          {
-            "word": "les",
-            "start": 46.42288,
-            "end": 46.60298,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f86d"
-            }
-          },
-          {
-            "word": "échecs",
-            "start": 46.60298,
-            "end": 46.96318,
-            "confidence": 0.84,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f86e"
-            }
-          },
-          {
-            "word": "et",
-            "start": 46.96318,
-            "end": 47.02322,
-            "confidence": 0.83,
-            "durationInFrames": 4,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f86f"
-            }
-          },
-          {
-            "word": "les",
-            "start": 47.02322,
-            "end": 47.143280000000004,
-            "confidence": 0.81,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f870"
-            }
-          },
-          {
-            "word": "critiques,",
-            "start": 47.143280000000004,
-            "end": 47.803650000000005,
-            "confidence": 0.91,
-            "durationInFrames": 40,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f871"
-            }
-          },
-          {
-            "word": "sa",
-            "start": 47.803650000000005,
-            "end": 47.98375,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f872"
-            }
-          },
-          {
-            "word": "persévérance",
-            "start": 47.98375,
-            "end": 48.80421,
-            "confidence": 0.99,
-            "durationInFrames": 49,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f873"
-            }
-          },
-          {
-            "word": "paie.",
-            "start": 48.80421,
-            "end": 49.34452,
-            "confidence": 0.67,
-            "durationInFrames": 32,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f874"
-            }
-          }
-        ],
-        "text": "Malgré les échecs et les critiques, sa persévérance paie.",
-        "start": 46.08269,
-        "end": 49.34452,
-        "durationInFrames": 196,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Persevering person",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f875"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Overcoming obstacles",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f876"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Resilience",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f877"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/HanRIVMTnllmc6z4b/videoblocks-22_66_47_woman_using_gym_equipment_rbpfzl7ah__cfb4be0b107254f81e92ded9cd60a0cf__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706415167&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=348454570&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=7c2cf522-82b6-4e2b-98fe-d485213e4bd7&searchPageId=69d68867-cd5f-4533-a43d-eae33c565026"
-          },
-          "image": {
-            "id": "348454570",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/HanRIVMTnllmc6z4b/videoblocks-22_66_47_woman_using_gym_equipment_rbpfzl7ah_thumbnail-180_13.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f878"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f86b"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Tesla",
-            "start": 49.34452,
-            "end": 49.70472,
-            "confidence": 0.91,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f87a"
-            }
-          },
-          {
-            "word": "devient",
-            "start": 49.70472,
-            "end": 50.08493,
-            "confidence": 0.99,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f87b"
-            }
-          },
-          {
-            "word": "leader",
-            "start": 50.08493,
-            "end": 50.60522,
-            "confidence": 0.74,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f87c"
-            }
-          },
-          {
-            "word": "des",
-            "start": 50.60522,
-            "end": 50.7453,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f87d"
-            }
-          },
-          {
-            "word": "voitures",
-            "start": 50.7453,
-            "end": 51.16554,
-            "confidence": 0.95,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f87e"
-            }
-          },
-          {
-            "word": "électriques.",
-            "start": 51.16554,
-            "end": 51.96598,
-            "confidence": 0.95,
-            "durationInFrames": 48,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f87f"
-            }
-          }
-        ],
-        "text": "Tesla devient leader des voitures électriques.",
-        "start": 49.34452,
-        "end": 51.96598,
-        "durationInFrames": 157,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Tesla car on road",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f880"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Electric vehicle market",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f881"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Success",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f882"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/eeIr1Cv/videoblocks-a-new-tesla-model-3-driving-down-the-road_skbxywdhi__23a51fd71a29ec36bfced10fa4a5dc84__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706415173&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=10907952&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=0801d1e6-f849-496e-b96d-a9a50eadfba4&searchPageId=66b4f07f-872e-4535-88d8-cd211a5611c6"
-          },
-          "image": {
-            "id": "10907952",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/eeIr1Cv/videoblocks-a-new-tesla-model-3-driving-down-the-road_skbxywdhi_thumbnail-180_03.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f883"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f879"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "SpaceX",
-            "start": 51.96598,
-            "end": 52.60634,
+            "word": "vraie",
+            "start": 21.2091,
+            "end": 21.46921,
             "confidence": 0.77,
-            "durationInFrames": 38,
+            "durationInFrames": 16,
             "_id": {
-              "$oid": "6737be2fecc68e860830f885"
+              "$oid": "675092ed3b92719a4909c2b7"
             }
           },
           {
-            "word": "réussit",
-            "start": 52.60634,
-            "end": 53.126630000000006,
-            "confidence": 0.94,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f886"
-            }
-          },
-          {
-            "word": "là",
-            "start": 53.126630000000006,
-            "end": 53.26671,
+            "word": "vision",
+            "start": 21.46921,
+            "end": 21.96942,
             "confidence": 1,
-            "durationInFrames": 8,
+            "durationInFrames": 30,
             "_id": {
-              "$oid": "6737be2fecc68e860830f887"
+              "$oid": "675092ed3b92719a4909c2b8"
             }
           },
           {
-            "word": "où",
-            "start": 53.26671,
-            "end": 53.4268,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f888"
-            }
-          },
-          {
-            "word": "les",
-            "start": 53.4268,
-            "end": 53.58689,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f889"
-            }
-          },
-          {
-            "word": "géants",
-            "start": 53.58689,
-            "end": 53.907070000000004,
-            "confidence": 0.92,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f88a"
-            }
-          },
-          {
-            "word": "de",
-            "start": 53.907070000000004,
-            "end": 54.02714,
+            "word": "était",
+            "start": 21.96942,
+            "end": 22.3696,
             "confidence": 1,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f88b"
-            }
-          },
-          {
-            "word": "l'aérospatiale",
-            "start": 54.02714,
-            "end": 54.90763,
-            "confidence": 0.85,
-            "durationInFrames": 53,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f88c"
-            }
-          },
-          {
-            "word": "échouent.",
-            "start": 54.90763,
-            "end": 55.64816,
-            "confidence": 0.7,
-            "durationInFrames": 44,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f88d"
-            }
-          }
-        ],
-        "text": "SpaceX réussit là où les géants de l'aérospatiale échouent.",
-        "start": 51.96598,
-        "end": 55.64816,
-        "durationInFrames": 220,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "SpaceX rocket in space",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f88e"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Space technology",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f88f"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Innovation",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f890"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1280,
-          "width": 720,
-          "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/UD7CEz6/videoblocks-editorial-spacex-logo-on-glass-building_hazzlpjjg__8ae5e1fb223ccdb23d8cc14053bbda4e__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706415164&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=3818507&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=8fa1e8e0-58cf-48c8-95cc-769462751ba2&searchPageId=fc746721-88ec-4259-9058-a32c4c90e88c"
-          },
-          "image": {
-            "id": "3818507",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/UD7CEz6/videoblocks-editorial-spacex-logo-on-glass-building_hazzlpjjg_thumbnail-180_02.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f891"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f884"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "En",
-            "start": 55.64816,
-            "end": 55.80847,
-            "confidence": 0.88,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f893"
-            }
-          },
-          {
-            "word": "2022,",
-            "start": 55.80847,
-            "end": 56.73028,
-            "confidence": 0,
-            "durationInFrames": 55,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f894"
-            }
-          },
-          {
-            "word": "il",
-            "start": 56.73028,
-            "end": 56.890589999999996,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f895"
-            }
-          },
-          {
-            "word": "rachète",
-            "start": 56.890589999999996,
-            "end": 57.29138,
-            "confidence": 0.94,
             "durationInFrames": 24,
             "_id": {
-              "$oid": "6737be2fecc68e860830f896"
+              "$oid": "675092ed3b92719a4909c2b9"
             }
           },
           {
-            "word": "Twitter",
-            "start": 57.29138,
-            "end": 57.85248,
-            "confidence": 0.67,
-            "durationInFrames": 34,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f897"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 57.85248,
-            "end": 58.07291,
-            "confidence": 0.99,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f898"
-            }
-          },
-          {
-            "word": "44",
-            "start": 58.07291,
-            "end": 58.67409,
-            "confidence": 0,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f899"
-            }
-          },
-          {
-            "word": "milliards",
-            "start": 58.67409,
-            "end": 59.11495,
-            "confidence": 0.84,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f89a"
-            }
-          }
-        ],
-        "text": "En 2022, il rachète Twitter pour 44 milliards",
-        "start": 55.64816,
-        "end": 59.11495,
-        "durationInFrames": 208,
-        "keywords": [
-          {
-            "search": "web",
-            "keyword": "Twitter logo",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f89b"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Social media acquisition",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f89c"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Deal",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737be2fecc68e860830f89d"
-            }
-          }
-        ],
-        "media": {
-          "type": "image",
-          "name": "iPhones Featuring The Old Twitter Icon Are Being Sold For Up To A ...",
-          "height": 1336,
-          "width": 1920,
-          "image": {
-            "id": "img-1731706415404-2m33t2066",
-            "link": "https://cdn.wccftech.com/wp-content/uploads/2023/07/Old-Twitter-icon-on-an-iPhone.jpg",
-            "width": 1920,
-            "height": 1336
-          },
-          "_id": {
-            "$oid": "6737be2fecc68e860830f89e"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          }
-        },
-        "_id": {
-          "$oid": "6737be2fecc68e860830f892"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "de",
-            "start": 59.11495,
-            "end": 59.25523,
-            "confidence": 0.98,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8a0"
-            }
-          },
-          {
-            "word": "dollars.",
-            "start": 59.25523,
-            "end": 60.03676,
-            "confidence": 0.85,
-            "durationInFrames": 47,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8a1"
-            }
-          },
-          {
-            "word": "De",
-            "start": 60.03676,
-            "end": 60.177029999999995,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8a2"
-            }
-          },
-          {
-            "word": "l'enfant",
-            "start": 60.177029999999995,
-            "end": 60.53774,
-            "confidence": 0.92,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8a3"
-            }
-          },
-          {
-            "word": "solitaire",
-            "start": 60.53774,
-            "end": 61.05876,
-            "confidence": 0.97,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8a4"
-            }
-          },
-          {
-            "word": "au",
-            "start": 61.05876,
-            "end": 61.19904,
-            "confidence": 0.99,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8a5"
-            }
-          },
-          {
-            "word": "visionnaire",
-            "start": 61.19904,
-            "end": 61.72006,
-            "confidence": 0.95,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8a6"
-            }
-          },
-          {
-            "word": "controversé,",
-            "start": 61.72006,
-            "end": 62.601789999999994,
-            "confidence": 1,
+            "word": "ailleurs.",
+            "start": 22.3696,
+            "end": 23.24997,
+            "confidence": 0.94,
             "durationInFrames": 53,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8a7"
+              "$oid": "675092ed3b92719a4909c2ba"
             }
           }
         ],
-        "text": "de dollars. De l'enfant solitaire au visionnaire controversé,",
-        "start": 59.11495,
-        "end": 62.601789999999994,
-        "durationInFrames": 208,
+        "text": "Mais sa vraie vision était ailleurs.",
+        "start": 20.48879,
+        "end": 23.24997,
+        "durationInFrames": 166,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "From loner to leader",
+            "keyword": "Visionary thinking",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737be2fecc68e860830f8a8"
+              "$oid": "675092ed3b92719a4909c2bb"
             }
           },
           {
             "search": "stock",
-            "keyword": "Visionary entrepreneur",
+            "keyword": "Innovative ideas",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737be2fecc68e860830f8a9"
+              "$oid": "675092ed3b92719a4909c2bc"
             }
           },
           {
@@ -2789,333 +1012,998 @@
             "keyword": "Inspiration",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737be2fecc68e860830f8aa"
+              "$oid": "675092ed3b92719a4909c2bd"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1280,
-          "width": 720,
+          "show": "hide",
+          "description": "A woman is sitting in the backseat of a car and looking out the window. She is wearing a black coat over a white shirt. Her hands are in her lap, and she is looking straight ahead. The car is driving through a city. The view out the window is of buildings and other cars.",
           "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/BPDPkANXukm1vn7si/videoblocks-276z_as613_rertp0cly__27d75179cacbf00acb413b86d78cdff6__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706415152&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=346699536&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=0d64fc57-9fa2-4bc4-bfed-f1425c90cfa8&searchPageId=9777863e-9944-433d-80ff-b89e66b3043f"
+            "id": "10354483",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 4850361,
+            "width": 1080,
+            "height": 1920,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7224726/7224726-hd_1080_1920_25fps.mp4"
           },
           "image": {
-            "id": "346699536",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/BPDPkANXukm1vn7si/videoblocks-276z_as613_rertp0cly_thumbnail-180_05.jpg",
-            "width": 720,
-            "height": 1280
+            "id": "7224726",
+            "link": "https://images.pexels.com/videos/7224726/pexels-photo-7224726.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
           },
           "_id": {
-            "$oid": "6737be2fecc68e860830f8ab"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
+            "$oid": "67510e53b4078cafeaa404c3"
           }
         },
         "_id": {
-          "$oid": "6737be2fecc68e860830f89f"
+          "$oid": "675092ed3b92719a4909c2b4"
         }
       },
       {
         "words": [
           {
-            "word": "Musk",
-            "start": 62.601789999999994,
-            "end": 63.00257,
-            "confidence": 0.78,
-            "durationInFrames": 24,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8ad"
-            }
-          },
-          {
-            "word": "prouve",
-            "start": 63.00257,
-            "end": 63.38332,
-            "confidence": 0.99,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8ae"
-            }
-          },
-          {
-            "word": "qu'avec",
-            "start": 63.38332,
-            "end": 63.663869999999996,
-            "confidence": 0.99,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8af"
-            }
-          },
-          {
-            "word": "de",
-            "start": 63.663869999999996,
-            "end": 63.80414,
+            "word": "Il",
+            "start": 23.24997,
+            "end": 23.41004,
             "confidence": 1,
-            "durationInFrames": 8,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8b0"
+              "$oid": "675092ed3b92719a4909c2c0"
             }
           },
           {
-            "word": "l'ambition",
-            "start": 63.80414,
-            "end": 64.30512999999999,
-            "confidence": 0.93,
-            "durationInFrames": 30,
+            "word": "investit",
+            "start": 23.41004,
+            "end": 23.99029,
+            "confidence": 0.9,
+            "durationInFrames": 35,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8b1"
+              "$oid": "675092ed3b92719a4909c2c1"
+            }
+          },
+          {
+            "word": "sa",
+            "start": 23.99029,
+            "end": 24.19038,
+            "confidence": 1,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2c2"
+            }
+          },
+          {
+            "word": "fortune",
+            "start": 24.19038,
+            "end": 24.75062,
+            "confidence": 1,
+            "durationInFrames": 34,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2c3"
+            }
+          },
+          {
+            "word": "dans",
+            "start": 24.75062,
+            "end": 24.97071,
+            "confidence": 0.96,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2c4"
+            }
+          },
+          {
+            "word": "Tesla",
+            "start": 24.97071,
+            "end": 25.57097,
+            "confidence": 0.97,
+            "durationInFrames": 36,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2c5"
             }
           },
           {
             "word": "et",
-            "start": 64.30512999999999,
-            "end": 64.40532,
-            "confidence": 1,
-            "durationInFrames": 6,
+            "start": 25.57097,
+            "end": 25.77106,
+            "confidence": 0.71,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8b2"
+              "$oid": "675092ed3b92719a4909c2c6"
             }
           },
           {
-            "word": "du",
-            "start": 64.40532,
-            "end": 64.5456,
-            "confidence": 1,
-            "durationInFrames": 8,
+            "word": "SpaceX,",
+            "start": 25.77106,
+            "end": 26.83151,
+            "confidence": 0.84,
+            "durationInFrames": 64,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8b3"
-            }
-          },
-          {
-            "word": "travail,",
-            "start": 64.5456,
-            "end": 65.06662,
-            "confidence": 0.98,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8b4"
-            }
-          },
-          {
-            "word": "tout",
-            "start": 65.06662,
-            "end": 65.24697,
-            "confidence": 0.99,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8b5"
-            }
-          },
-          {
-            "word": "est",
-            "start": 65.24697,
-            "end": 65.38725,
-            "confidence": 0.95,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8b6"
-            }
-          },
-          {
-            "word": "possible.",
-            "start": 65.38725,
-            "end": 66.14874,
-            "confidence": 0.96,
-            "durationInFrames": 46,
-            "_id": {
-              "$oid": "6737be2fecc68e860830f8b7"
+              "$oid": "675092ed3b92719a4909c2c7"
             }
           }
         ],
-        "text": "Musk prouve qu'avec de l'ambition et du travail, tout est possible.",
-        "start": 62.601789999999994,
-        "end": 66.14874,
-        "durationInFrames": 212,
+        "text": "Il investit sa fortune dans Tesla et SpaceX,",
+        "start": 23.24997,
+        "end": 26.83151,
+        "durationInFrames": 216,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Ambitious person",
+            "keyword": "Investor meeting",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737be2fecc68e860830f8b8"
+              "$oid": "675092ed3b92719a4909c2c8"
             }
           },
           {
             "search": "stock",
-            "keyword": "Hard work and ambition",
+            "keyword": "Business investment",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737be2fecc68e860830f8b9"
+              "$oid": "675092ed3b92719a4909c2c9"
             }
           },
           {
             "search": "stock",
-            "keyword": "Success",
+            "keyword": "Finance",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737be2fecc68e860830f8ba"
+              "$oid": "675092ed3b92719a4909c2ca"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1280,
-          "width": 720,
+          "show": "half",
+          "description": "A person is sitting at a desk and typing on a laptop. The laptop screen shows a design program with a 3D model of a product. There are many papers and other items on the desk.  The person is wearing a blue shirt.",
           "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/Vd3bj2jPe/videoblocks-630c82a300ade4276cc18ef7_hhdyhf9yi__e50328a25f97dcb1c9c6e45e2030da21__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706415594&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=347140138&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=f7322692-739a-4381-a9d3-48300e1a2224&searchPageId=4b2451c9-3a64-4aa9-97cd-1e1a3f8788a8"
+            "id": "10422395",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 10627242,
+            "width": 1920,
+            "height": 1080,
+            "fps": 24,
+            "link": "https://videos.pexels.com/video-files/7414128/7414128-hd_1920_1080_24fps.mp4"
           },
           "image": {
-            "id": "347140138",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/Vd3bj2jPe/videoblocks-630c82a300ade4276cc18ef7_hhdyhf9yi_thumbnail-180_10.jpg",
-            "width": 720,
-            "height": 1280
+            "id": "7414128",
+            "link": "https://images.pexels.com/videos/7414128/access-adult-agreement-angel-investor-7414128.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
           },
           "_id": {
-            "$oid": "6737be2fecc68e860830f8bb"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
+            "$oid": "67510e53b4078cafeaa404d0"
           }
         },
         "_id": {
-          "$oid": "6737be2fecc68e860830f8ac"
+          "$oid": "675092ed3b92719a4909c2bf"
         }
       },
       {
         "words": [
           {
-            "word": "Partagez",
-            "start": 66.14874,
-            "end": 66.56956,
-            "confidence": 0.96,
+            "word": "deux",
+            "start": 26.83151,
+            "end": 27.11163,
+            "confidence": 0.84,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2cd"
+            }
+          },
+          {
+            "word": "paris",
+            "start": 27.11163,
+            "end": 27.47179,
+            "confidence": 0.97,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2ce"
+            }
+          },
+          {
+            "word": "risqués.",
+            "start": 27.47179,
+            "end": 28.4681,
+            "confidence": 0.94,
+            "durationInFrames": 60,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2cf"
+            }
+          }
+        ],
+        "text": "deux paris risqués.",
+        "start": 26.83151,
+        "end": 28.4681,
+        "durationInFrames": 99,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "Risk taking",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2d0"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Entrepreneurial risk",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2d1"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Challenge",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2d2"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "hide",
+          "description": "A woman in a grey tank top and black pants hangs from a climbing wall, her feet are off the ground. She is wearing a harness and climbing shoes. The wall has various holds and a climbing route. There is a sign and some windows behind her.",
+          "video": {
+            "id": "9682644",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 4292579,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/5378830/5378830-hd_1920_1080_25fps.mp4"
+          },
+          "image": {
+            "id": "5378830",
+            "link": "https://images.pexels.com/videos/5378830/pexels-photo-5378830.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67510e53b4078cafeaa404d8"
+          }
+        },
+        "_id": {
+          "$oid": "675092ed3b92719a4909c2cc"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Malgré",
+            "start": 28.4681,
+            "end": 28.88843,
+            "confidence": 0.99,
             "durationInFrames": 25,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8bd"
+              "$oid": "675092ed3b92719a4909c2d5"
+            }
+          },
+          {
+            "word": "les",
+            "start": 28.88843,
+            "end": 29.08859,
+            "confidence": 1,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2d6"
+            }
+          },
+          {
+            "word": "échecs",
+            "start": 29.08859,
+            "end": 29.50892,
+            "confidence": 0.95,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2d7"
+            }
+          },
+          {
+            "word": "et",
+            "start": 29.50892,
+            "end": 29.62902,
+            "confidence": 1,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2d8"
+            }
+          },
+          {
+            "word": "les",
+            "start": 29.62902,
+            "end": 29.78915,
+            "confidence": 0.73,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2d9"
+            }
+          },
+          {
+            "word": "moqueries,",
+            "start": 29.78915,
+            "end": 30.589779999999998,
+            "confidence": 0.81,
+            "durationInFrames": 48,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2da"
+            }
+          },
+          {
+            "word": "ils",
+            "start": 30.589779999999998,
+            "end": 30.74991,
+            "confidence": 0.85,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2db"
+            }
+          },
+          {
+            "word": "persévèrent.",
+            "start": 30.74991,
+            "end": 32.07096,
+            "confidence": 0.84,
+            "durationInFrames": 79,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2dc"
+            }
+          }
+        ],
+        "text": "Malgré les échecs et les moqueries, ils persévèrent.",
+        "start": 28.4681,
+        "end": 32.07096,
+        "durationInFrames": 216,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "Perseverance",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2dd"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Overcoming obstacles",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2de"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Determination",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2df"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "hide",
+          "description": "A rock climber in a yellow shirt and blue jeans is climbing a steep cliff face.  The climber is attached to a rope and is using their hands and feet to pull themselves up the rock.  The climber is facing the rock face and is looking up. The camera is positioned behind and above the climber, facing the rock face.",
+          "video": {
+            "id": "9596061",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 65530055,
+            "width": 2048,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/5013967/5013967-hd_2048_1080_25fps.mp4"
+          },
+          "image": {
+            "id": "5013967",
+            "link": "https://images.pexels.com/videos/5013967/pexels-photo-5013967.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67510e53b4078cafeaa404e5"
+          }
+        },
+        "_id": {
+          "$oid": "675092ed3b92719a4909c2d4"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Tesla",
+            "start": 32.07096,
+            "end": 32.51131,
+            "confidence": 0.78,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2e2"
+            }
+          },
+          {
+            "word": "révolutionne",
+            "start": 32.51131,
+            "end": 33.2519,
+            "confidence": 0.99,
+            "durationInFrames": 44,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2e3"
+            }
+          },
+          {
+            "word": "l'automobile",
+            "start": 33.2519,
+            "end": 33.97247,
+            "confidence": 0.95,
+            "durationInFrames": 43,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2e4"
+            }
+          },
+          {
+            "word": "électrique.",
+            "start": 33.97247,
+            "end": 34.913219999999995,
+            "confidence": 0.97,
+            "durationInFrames": 56,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2e5"
+            }
+          }
+        ],
+        "text": "Tesla révolutionne l'automobile électrique.",
+        "start": 32.07096,
+        "end": 34.913219999999995,
+        "durationInFrames": 169,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "Electric car manufacturing",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2e6"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Tesla factory",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2e7"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Sustainability",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2e8"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "description": "A man is grinding the side of a red car. The man is wearing a black shirt and overalls, and a black cap. He is squatting down on the ground as he works. He has a beard and is wearing black shoes. There is a lot of sparks flying from the grinder as he works. The garage is lit with red and blue neon lights.",
+          "video": {
+            "id": "8390746",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 5305747,
+            "width": 1080,
+            "height": 1920,
+            "fps": 60,
+            "link": "https://videos.pexels.com/video-files/19343053/19343053-hd_1080_1920_60fps.mp4"
+          },
+          "image": {
+            "id": "19343053",
+            "link": "https://images.pexels.com/videos/19343053/cybertruck-elon-kobebryantmemes-marscolonization-19343053.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
+          },
+          "_id": {
+            "$oid": "67510e53b4078cafeaa404ee"
+          }
+        },
+        "_id": {
+          "$oid": "675092ed3b92719a4909c2e1"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "SpaceX",
+            "start": 34.913219999999995,
+            "end": 35.733869999999996,
+            "confidence": 0.83,
+            "durationInFrames": 49,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2eb"
+            }
+          },
+          {
+            "word": "réinvente",
+            "start": 35.733869999999996,
+            "end": 36.37438,
+            "confidence": 0.96,
+            "durationInFrames": 38,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2ec"
+            }
+          },
+          {
+            "word": "l'exploration",
+            "start": 36.37438,
+            "end": 37.155,
+            "confidence": 0.99,
+            "durationInFrames": 47,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2ed"
+            }
+          },
+          {
+            "word": "spatiale.",
+            "start": 37.155,
+            "end": 38.47605,
+            "confidence": 0.9,
+            "durationInFrames": 79,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2ee"
+            }
+          }
+        ],
+        "text": "SpaceX réinvente l'exploration spatiale.",
+        "start": 34.913219999999995,
+        "end": 38.47605,
+        "durationInFrames": 213,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "SpaceX launch",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2ef"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Rocket launch",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2f0"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Space exploration",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2f1"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "half",
+          "description": "The space shuttle is on the launch pad and the engines are firing. The exhaust is white and there are sparks coming from the engines.  The camera is focused on the engines and the bottom of the shuttle.",
+          "video": {
+            "id": "9252347",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 37495567,
+            "width": 1920,
+            "height": 1080,
+            "fps": 24,
+            "link": "https://videos.pexels.com/video-files/854269/854269-hd_1920_1080_24fps.mp4"
+          },
+          "image": {
+            "id": "854269",
+            "link": "https://images.pexels.com/videos/854269/free-video-854269.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "67510e53b4078cafeaa404f7"
+          }
+        },
+        "_id": {
+          "$oid": "675092ed3b92719a4909c2ea"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Aujourd'hui,",
+            "start": 38.47605,
+            "end": 39.416799999999995,
+            "confidence": 0.88,
+            "durationInFrames": 56,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2f4"
+            }
+          },
+          {
+            "word": "ces",
+            "start": 39.416799999999995,
+            "end": 39.65699,
+            "confidence": 0.81,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2f5"
+            }
+          },
+          {
+            "word": "entreprises",
+            "start": 39.65699,
+            "end": 40.33753,
+            "confidence": 0.99,
+            "durationInFrames": 41,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2f6"
+            }
+          },
+          {
+            "word": "transforment",
+            "start": 40.33753,
+            "end": 41.07812,
+            "confidence": 0.92,
+            "durationInFrames": 44,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2f7"
+            }
+          },
+          {
+            "word": "le",
+            "start": 41.07812,
+            "end": 41.23824,
+            "confidence": 1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2f8"
+            }
+          },
+          {
+            "word": "monde.",
+            "start": 41.23824,
+            "end": 42.15897,
+            "confidence": 0.99,
+            "durationInFrames": 55,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2f9"
+            }
+          }
+        ],
+        "text": "Aujourd'hui, ces entreprises transforment le monde.",
+        "start": 38.47605,
+        "end": 42.15897,
+        "durationInFrames": 220,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "Innovation hub",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2fa"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Transformative technology",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2fb"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Progress",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2fc"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "description": "The video shows three scientists in a laboratory.  They are wearing white lab coats. They are looking at something on a table. There are many beakers filled with colored liquids in the lab.  The video is shot through the beakers and the focus is on the scientists.  It seems like the scientists are discussing something related to their work.  One of the scientists is gesturing with her hand.  The video is shot from a low angle.",
+          "video": {
+            "id": "9293483",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 6536708,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/3191861/3191861-hd_1920_1080_25fps.mp4"
+          },
+          "image": {
+            "id": "3191861",
+            "link": "https://images.pexels.com/videos/3191861/free-video-3191861.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67510e53b4078cafeaa40502"
+          }
+        },
+        "_id": {
+          "$oid": "675092ed3b92719a4909c2f3"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "De",
+            "start": 42.15897,
+            "end": 42.33912,
+            "confidence": 1,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c2ff"
+            }
+          },
+          {
+            "word": "Twitter",
+            "start": 42.33912,
+            "end": 42.8195,
+            "confidence": 0.74,
+            "durationInFrames": 29,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c300"
+            }
+          },
+          {
+            "word": "à",
+            "start": 42.8195,
+            "end": 43.01966,
+            "confidence": 0.27,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c301"
+            }
+          },
+          {
+            "word": "Neuralink,",
+            "start": 43.01966,
+            "end": 43.74023,
+            "confidence": 0.67,
+            "durationInFrames": 43,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c302"
+            }
+          },
+          {
+            "word": "ils",
+            "start": 43.74023,
+            "end": 43.90036,
+            "confidence": 0.78,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c303"
+            }
+          },
+          {
+            "word": "continuent",
+            "start": 43.90036,
+            "end": 44.44079,
+            "confidence": 0.87,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c304"
+            }
+          },
+          {
+            "word": "d'innover",
+            "start": 44.44079,
+            "end": 45.10131,
+            "confidence": 0.87,
+            "durationInFrames": 40,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c305"
+            }
+          },
+          {
+            "word": "sans",
+            "start": 45.10131,
+            "end": 45.38153,
+            "confidence": 0.99,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c306"
+            }
+          }
+        ],
+        "text": "De Twitter à Neuralink, ils continuent d'innover sans",
+        "start": 42.15897,
+        "end": 45.38153,
+        "durationInFrames": 194,
+        "keywords": [
+          {
+            "search": "web",
+            "keyword": "Twitter logo",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c307"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Neuralink technology",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c308"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "Innovation",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "675092ed3b92719a4909c309"
+            }
+          }
+        ],
+        "media": {
+          "type": "image",
+          "show": "half",
+          "name": "How to change back to the old Twitter app icon on iOS | TechCrunch",
+          "description": "The image is of a blue bird icon superimposed with a black X on top of a grey background. The bird is facing right, with its wings spread. The X is in the center of the image and is tilted slightly to the right. The background is a textured grey, and in the bottom right corner is a white label with the text \"Bryce Durbin / TechCrunch\".  The image appears to be a symbol, perhaps representing the shutting down of a social media platform.",
+          "image": {
+            "id": "img-1733286275597-4j20qvj77",
+            "link": "https://media.hoox.video/image-1733364946374.jpg.jpg",
+            "width": 3200,
+            "height": 1800
+          },
+          "_id": {
+            "$oid": "67510e53b4078cafeaa4050f"
+          }
+        },
+        "_id": {
+          "$oid": "675092ed3b92719a4909c2fe"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "limite.",
+            "start": 45.38153,
+            "end": 46.40235,
+            "confidence": 0.99,
+            "durationInFrames": 61,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c30c"
+            }
+          },
+          {
+            "word": "Partagez",
+            "start": 46.40235,
+            "end": 46.98281,
+            "confidence": 1,
+            "durationInFrames": 35,
+            "_id": {
+              "$oid": "675092ed3b92719a4909c30d"
             }
           },
           {
             "word": "votre",
-            "start": 66.56956,
-            "end": 66.78999999999999,
-            "confidence": 0.92,
-            "durationInFrames": 13,
+            "start": 46.98281,
+            "end": 47.26303,
+            "confidence": 1,
+            "durationInFrames": 17,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8be"
+              "$oid": "675092ed3b92719a4909c30e"
             }
           },
           {
             "word": "avis",
-            "start": 66.78999999999999,
-            "end": 66.97035,
-            "confidence": 0.76,
-            "durationInFrames": 11,
+            "start": 47.26303,
+            "end": 47.6033,
+            "confidence": 0.7,
+            "durationInFrames": 20,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8bf"
+              "$oid": "675092ed3b92719a4909c30f"
             }
           },
           {
             "word": "en",
-            "start": 66.97035,
-            "end": 67.11063,
-            "confidence": 0.99,
-            "durationInFrames": 8,
+            "start": 47.6033,
+            "end": 47.76343,
+            "confidence": 1,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8c0"
+              "$oid": "675092ed3b92719a4909c310"
             }
           },
           {
             "word": "commentaire.",
-            "start": 67.11063,
-            "end": 67.970612,
+            "start": 47.76343,
+            "end": 48.796735,
             "confidence": 0.99,
-            "durationInFrames": 52,
+            "durationInFrames": 62,
             "_id": {
-              "$oid": "6737be2fecc68e860830f8c1"
+              "$oid": "675092ed3b92719a4909c311"
             }
           }
         ],
-        "text": "Partagez votre avis en commentaire.",
-        "start": 66.14874,
-        "end": 67.970612,
-        "durationInFrames": 109,
+        "text": "limite. Partagez votre avis en commentaire.",
+        "start": 45.38153,
+        "end": 48.796735,
+        "durationInFrames": 205,
         "keywords": [
           {
             "search": "stock",
             "keyword": "Comment section",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737be2fecc68e860830f8c2"
+              "$oid": "675092ed3b92719a4909c312"
             }
           },
           {
             "search": "stock",
-            "keyword": "Sharing opinions",
+            "keyword": "Online discussion",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737be2fecc68e860830f8c3"
+              "$oid": "675092ed3b92719a4909c313"
             }
           },
           {
             "search": "stock",
-            "keyword": "Discussion",
+            "keyword": "Feedback",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737be2fecc68e860830f8c4"
+              "$oid": "675092ed3b92719a4909c314"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1280,
-          "width": 720,
+          "show": "hide",
+          "description": "The video shows a green screen with various social media icons, including thumbs up, hearts, and emojis, slowly falling down. The icons include thumbs up, hearts, laughing, shocked, and angry emojis. The emojis are all in a circle with a white background, with the angry emojis being red and the other emojis being yellow.  There appears to be a larger number of laughing and shocked emojis than other icons. \n",
           "video": {
-            "width": 720,
-            "height": 1280,
-            "fps": 30,
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/Sf5P8PTin0n4yu1/videoblocks-nyc-night-times-square-409_stu2rdley__75ca0ac0bfd417b876c0c2c9ad015753__P720.mp4?type=preview&origin=VIDEOBLOCKS&timestamp_ms=1731706415608&publicKey=test_e5f2c7e2ce08e6cff32aa9baabf8f12d096314a652dcad84af533221552&apiVersion=2.0&stockItemId=346668371&resolution=720p&endUserId=a94a8fe5ccb19ba61c4c0873d391e987982fbbd3&projectId=Hoox&searchId=0861f9f7-bfec-49c9-be9e-7e6f51d9aa37&searchPageId=cec372bf-c7a9-4694-96a7-b9333636bf51"
+            "id": "11189808",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 8277877,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7451173/7451173-hd_1920_1080_25fps.mp4"
           },
           "image": {
-            "id": "346668371",
-            "link": "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/Sf5P8PTin0n4yu1/videoblocks-nyc-night-times-square-409_stu2rdley_thumbnail-180_15.jpg",
-            "width": 720,
-            "height": 1280
+            "id": "7451173",
+            "link": "https://images.pexels.com/videos/7451173/emoji-facebook-instagram-social-media-7451173.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
           },
           "_id": {
-            "$oid": "6737be2fecc68e860830f8c5"
-          },
-          "createdAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
-          },
-          "updatedAt": {
-            "$date": "2024-11-15T21:33:35.905Z"
+            "$oid": "67510e53b4078cafeaa4051a"
           }
         },
         "_id": {
-          "$oid": "6737be2fecc68e860830f8bc"
+          "$oid": "675092ed3b92719a4909c30b"
         }
       }
     ]
   },
   "createdAt": {
-    "$date": "2024-11-15T21:33:35.905Z"
+    "$date": "2024-12-04T17:35:39.712Z"
   },
   "updatedAt": {
-    "$date": "2024-11-15T21:33:35.905Z"
+    "$date": "2024-12-05T02:22:11.659Z"
   },
-  "__v": 0
+  "__v": 0,
+  "isNews": false,
+  "style": "Informative",
+  "title": "Elon musk avatar",
+  "costToGenerate": 0
 }
