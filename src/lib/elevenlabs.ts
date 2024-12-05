@@ -21,7 +21,8 @@ export const createAudioTTS = async (voiceId: string, text: string) => {
             voice_settings: {
                 stability: 0.5,
                 similarity_boost: 0.5
-            }
+            },
+            apply_text_normalization: 'auto'
         };
 
         const response = await axios.post(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, data, options)
