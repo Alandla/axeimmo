@@ -82,7 +82,7 @@ export const generateVideoTask = task({
 
     logger.log(`[VOICE] Start voice generation...`)
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
@@ -134,7 +134,7 @@ export const generateVideoTask = task({
     
     let transcription: any;
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       transcription = transcriptionMock
       await metadata.replace({
         name: Steps.TRANSCRIPTION,
@@ -205,7 +205,7 @@ export const generateVideoTask = task({
 
     let keywords: any;
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       keywords = keywordsMock
     } else {
       const resultKeywords = await generateKeywords(lightTranscription)
@@ -227,7 +227,7 @@ export const generateVideoTask = task({
 
     logger.log(`[MEDIA] Search media...`);
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       sequences = sequencesWithMediaMock as ISequence[]
     } else {
 
@@ -267,7 +267,7 @@ export const generateVideoTask = task({
     /
     */
 
-    if (ctx.environment.type !== "PRODUCTION" && payload.avatar) {
+    if (ctx.environment.type !== "DEVELOPMENT" && payload.avatar) {
       logger.log(`[ANALYSIS] Starting media analysis...`);
       const { sequences: updatedSequences, totalCost } = await processBatchWithSieve(sequences);
       sequences = updatedSequences;

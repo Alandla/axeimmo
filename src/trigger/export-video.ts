@@ -7,6 +7,7 @@ import { IVideo } from "../types/video";
 import { addCreditsToSpace } from "../dao/spaceDao";
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
+import { calculateHeygenCost } from "../lib/cost";
 
 interface RenderStatus {
   status: string;
@@ -48,6 +49,8 @@ export const exportVideoTask = task({
         logger.log("Avatar video response", { avatarVideoUrl });
 
         if (avatarVideoUrl) {
+          const cost = calculateHeygenCost(video.video.metadata.audio_duration);
+          video.costToGenerate = (video.costToGenerate || 0) + cost;
           video.video.avatar.videoUrl = avatarVideoUrl;
           await updateVideo(video);
         }
