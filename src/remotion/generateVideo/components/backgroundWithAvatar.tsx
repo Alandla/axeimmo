@@ -4,7 +4,6 @@ import { AvatarLook } from "../type/avatar";
 
 export const BackgroundWithAvatar = ({ sequences, avatar, duration }: { sequences: any, avatar: AvatarLook, duration: number }) => {
     const frame = useCurrentFrame();
-    const isRendering = getRemotionEnvironment().isRendering;
 
     const { backgroundHeight, mediaElements } = useMemo(() => {
         let currentFrame = 0;
@@ -78,7 +77,7 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration }: { sequence
         <>
             <Sequence from={0}>
                 <AbsoluteFill style={{ zIndex: 1 }}>
-                        {isRendering && avatar.videoUrl ? (
+                        {avatar.videoUrl ? (
                             <OffthreadVideo
                                 src={avatar.videoUrl}
                                 style={{
@@ -92,20 +91,22 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration }: { sequence
                                 muted
                             />
                         ) : (
-                            <Video
-                                src={avatar.videoUrl ? avatar.videoUrl : avatar.previewUrl}
-                                startFrom={0}
-                                style={{
-                                    width: '100%',
-                                    height: `${backgroundHeight}%`,
-                                    objectFit: 'cover',
-                                    objectPosition: `${avatar.settings?.position ? avatar.settings?.position : 50}% ${100 - 80}%`,
-                                    position: 'absolute',
-                                    bottom: 0,
-                                }}
-                                loop
-                                muted
-                            />
+                            <Loop durationInFrames={Math.ceil(duration * 60)}>
+                                <Video
+                                    src={avatar.previewUrl}
+                                    startFrom={0}
+                                    style={{
+                                        width: '100%',
+                                        height: `${backgroundHeight}%`,
+                                        objectFit: 'cover',
+                                        objectPosition: `${avatar.settings?.position ? avatar.settings?.position : 50}% ${100 - 80}%`,
+                                        position: 'absolute',
+                                        bottom: 0,
+                                    }}
+                                    loop
+                                    muted
+                                />
+                            </Loop>
                         )}
                 </AbsoluteFill>
             </Sequence>

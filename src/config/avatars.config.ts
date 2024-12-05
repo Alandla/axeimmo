@@ -91,7 +91,7 @@ export const avatars: Avatar[] = [
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/ea333829d88c4fc8b6d08e8baf80297a_37140/preview_talk_3.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/ea333829d88c4fc8b6d08e8baf80297a_37140/preview_video_talk_3.mp4',
                 settings: {
-                    position: 42
+                    position: 55
                 }
             },
             {
@@ -100,7 +100,10 @@ export const avatars: Avatar[] = [
                 place: 'sofa',
                 tags: ['sitting'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/e45585843830421496f598bf27e00dee_37140/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/e45585843830421496f598bf27e00dee_37140/preview_video_target.mp4'
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/e45585843830421496f598bf27e00dee_37140/preview_video_target.mp4',
+                settings: {
+                    position: 42
+                }
             }
         ]
     },
