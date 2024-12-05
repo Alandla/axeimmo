@@ -34,6 +34,9 @@ interface GenerateVideoPayload {
 
 export const generateVideoTask = task({
   id: "generate-video",
+  machine: {
+    preset: "medium-1x"
+  },
   maxDuration: 300, // Stop executing after 300 secs (5 mins) of compute
   run: async (payload: GenerateVideoPayload, { ctx }) => {
 
