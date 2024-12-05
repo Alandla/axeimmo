@@ -86,7 +86,7 @@
       "title-completed": "Export completed !",
       "message-failed": "An error occurred while exporting your video. Please try again.",
       "retry-export": "Retry Export",
-      "processing": "Please wait while we process your masterpiece...",
+      "processing": "Few seconds to wait while we process your masterpiece...",
       "waiting-to-start": "Waiting to start the export...",
       "download-video": "Download Video",
       "back-to-dashboard": "Back to Dashboard"
