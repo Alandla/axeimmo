@@ -76,7 +76,7 @@ export function AvatarLookCard({ look }: AvatarLookCardProps) {
             }}
           >
             <div className="flex gap-1 min-w-min">
-              {look.tags.map((tag, index) => (
+              {look.tags?.map((tag, index) => (
                 <Badge key={index} variant="secondary" className="shrink-0 whitespace-nowrap">
                   {t(`tags.${tag}`)}
                 </Badge>
@@ -85,14 +85,14 @@ export function AvatarLookCard({ look }: AvatarLookCardProps) {
           </div>
           <div className="w-full aspect-square rounded-md overflow-hidden mb-4">
             <Image 
-              src={look.thumbnail} 
-              alt={look.name}
+              src={look.thumbnail || ''} 
+              alt={look.name || ''}
               className="w-full h-full object-cover"
               width={1280}
               height={720}
             />
           </div>
-          <PreviewModal previewUrl={look.previewUrl} avatarName={selectedAvatar?.name || ''} lookPlace={t(`place.${look.place}`)}>
+          <PreviewModal previewUrl={look.previewUrl || ''} avatarName={selectedAvatar?.name || ''} lookPlace={t(`place.${look.place}`)}>
             <Button
               variant="outline"
               size="sm"
