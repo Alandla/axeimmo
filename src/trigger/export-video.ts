@@ -64,7 +64,7 @@ export const exportVideoTask = task({
       if (renderStatus.status === 'failed') {
         if (ctx.attempt.number === 1) {
           // Première tentative échouée : upload des images et réessai
-          //await uploadGoogleImagesToS3(video);
+          await uploadGoogleImagesToS3(video);
           logger.log("Error", { message: renderStatus.message });
           throw new Error('Premier échec du rendu - Réessai après upload des images');
         } else {
@@ -106,7 +106,7 @@ export const exportVideoTask = task({
 
 const pollRenderStatus = async (renderId: string, bucketName: string) => {
   let attempts = 0;
-  const maxAttempts = 100;
+  const maxAttempts = 1000;
   const delayBetweenAttempts = 2;
 
   while (attempts < maxAttempts) {
@@ -139,7 +139,7 @@ const pollRenderStatus = async (renderId: string, bucketName: string) => {
     }
   }
 
-  throw new Error('Nombre maximum de tentatives atteint sans obtenir un statut "done" pour la transcription.');
+  throw new Error('Nombre maximum de tentatives atteint sans obtenir un statut "done" pour le rendu.');
 };
 
 const uploadGoogleImagesToS3 = async (video: IVideo) => {
