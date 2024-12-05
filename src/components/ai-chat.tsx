@@ -55,8 +55,8 @@ export function AiChat() {
       resetSteps()
       if (files.length !== 0) {
         addStep({ id: 0, name: Steps.MEDIA_UPLOAD, state: StepState.PENDING, progress: 0 })
+        addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
         if (files.some(file => file.type === 'voice')) {
-          addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.AVATAR)
           const messageAi = getRandomMessage('ai-get-audio-select-avatar');
           addMessageAi(messageAi, MessageType.AVATAR);
@@ -67,9 +67,12 @@ export function AiChat() {
           addMessageAi(messageAi, MessageType.MEDIA);
           return;
         } else if (files.some(file => file.type === 'avatar')) {
+          addStep({ id: 2, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 3, name: Steps.ANALYZE, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.GENERATION)
           const messageAi = getRandomMessage('ai-get-all-start-generation');
           addMessageAi(messageAi, MessageType.GENERATION);
+          handleStartGeneration()
           return;
         }
       }

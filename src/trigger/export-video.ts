@@ -26,7 +26,7 @@ export const exportVideoTask = task({
   id: "export-video",
   maxDuration: 300,
   retry: {
-    maxAttempts: 1,
+    maxAttempts: 2,
   },
   run: async (payload: ExportVideoPayload, { ctx }) => {
     try {

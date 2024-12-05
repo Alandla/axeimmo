@@ -39,6 +39,7 @@ export const generateVideoTask = task({
 
     let cost = 0
     const mediaSource = payload.mediaSource || "PEXELS";
+    const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
     logger.log("Generating video...", { payload, ctx });
 
@@ -57,19 +58,21 @@ export const generateVideoTask = task({
 
     let newVideo = await createVideo(video)
 
-    const startData = generateStartData(payload.script).then((data) => {
-      logger.info('Start data', data?.details)
-      newVideo = {
-        title: data?.details.title,
-        style: data?.details.style,
-        isNews: data?.details.news,
-        ...newVideo,
-      }
+    if (payload.script) {
+      const startData = generateStartData(payload.script).then((data) => {
+        logger.info('Start data', data?.details)
+        newVideo = {
+          title: data?.details.title,
+          style: data?.details.style,
+          isNews: data?.details.news,
+          ...newVideo,
+        }
 
-      updateVideo(newVideo)
+        updateVideo(newVideo)
 
-      return data?.details
-    })
+        return data?.details
+      })
+    }
 
     /*
     /
@@ -98,7 +101,7 @@ export const generateVideoTask = task({
     } else if (voiceFile) {
       logger.log(`[VOICE] Voice file already uploaded`)
       voiceUrl = voiceFile.url
-    } else {
+    } else if (!avatarFile) {
       logger.log(`[VOICE] Generate voice with elevenlabs...`)
 
       await metadata.replace({
@@ -115,6 +118,8 @@ export const generateVideoTask = task({
         name: Steps.VOICE_GENERATION,
         progress: 100
       })
+    } else if (avatarFile) {
+      voiceUrl = avatarFile.url
     }
 
     logger.log(`[VOICE] Voice URL: ${voiceUrl}`)
@@ -154,6 +159,23 @@ export const generateVideoTask = task({
     }
 
     logger.info('Transcription', transcription)
+
+    if (!payload.script) {
+      const script = transcription.transcription.utterances.map((utterance: any) => utterance.text).join(' ');
+      const startData = generateStartData(script).then((data) => {
+        logger.info('Start data', data?.details)
+        newVideo = {
+          title: data?.details.title,
+          style: data?.details.style,
+          isNews: data?.details.news,
+          ...newVideo,
+        }
+
+        updateVideo(newVideo)
+
+        return data?.details
+      })
+    }
 
     /*
     /
@@ -267,15 +289,12 @@ export const generateVideoTask = task({
     /
     */
 
-    if (ctx.environment.type !== "DEVELOPMENT" && payload.avatar) {
+    if (ctx.environment.type !== "DEVELOPMENT" && (payload.avatar || avatarFile)) {
       logger.log(`[ANALYSIS] Starting media analysis...`);
       const { sequences: updatedSequences, totalCost } = await processBatchWithSieve(sequences);
       sequences = updatedSequences;
       cost += totalCost;
       logger.info(`Analyse vidéo terminée. Coût total: $${totalCost}`);
-    }
-
-    if (payload.avatar) {
       const dataForAnalysis = simplifySequences(sequences);
       logger.info('Data for analysis', { dataForAnalysis })
       const showBrollResult : ShowBrollResult | null = await generateBrollDisplay(dataForAnalysis)
@@ -289,7 +308,6 @@ export const generateVideoTask = task({
     logger.info('Sequences', { sequences })
 
     let avatar;
-    let avatarFile = payload.files.find(f => f.usage === 'avatar')
     if (avatarFile) {
       avatar = {
         videoUrl: avatarFile.url

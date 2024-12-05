@@ -48,8 +48,8 @@ export default function Export() {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator/>
                     <BreadcrumbItem>
-                        <BreadcrumbLink href="/edit/1" asChild>
-                            <Link href="/edit/1">
+                        <BreadcrumbLink href={`/edit/${video?.id}`} asChild>
+                            <Link href={`/edit/${video?.id}`}>
                                 Edit
                             </Link>
                         </BreadcrumbLink>
