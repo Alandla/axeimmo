@@ -27,9 +27,11 @@ import SubtitleSettings from '@/src/components/edit/subtitle-settings'
 import { ISpace, ISpaceSubtitleStyle } from '@/src/types/space'
 import { useSubtitleStyleStore } from '@/src/store/subtitlesStyleSore'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 
 export default function VideoEditor() {
   const { id } = useParams()
+  const { data: session } = useSession()
   const { toast } = useToast()
   const t = useTranslations('edit')
 
@@ -157,11 +159,9 @@ export default function VideoEditor() {
   }
 
   const handleSilentSave = async () => {
-    if (isDirty) {
+    if (isDirty && process.env.NODE_ENV !== 'development' && (session?.user?.email !== 'alan@hoox.video' && session?.user?.email !== 'maxime@hoox.video')) {
       setIsSaving(true)
-      if (process.env.NODE_ENV !== 'development') {
-        await basicApiCall('/video/save', { video })
-      }
+      await basicApiCall('/video/save', { video })
       setIsDirty(false)
       setIsSaving(false)
     }
