@@ -45,7 +45,17 @@ const videoSchema = new mongoose.Schema({
         billing_time: Number,
         transcription_time: Number,
       },
-      sequences: [sequenceSchema]
+      sequences: [sequenceSchema],
+      avatar: {
+        id: String,
+        name: String,
+        thumbnail: String,
+        previewUrl: String,
+        videoUrl: String,
+        settings: {
+          position: Number
+        }
+      }
     },
   },
   {

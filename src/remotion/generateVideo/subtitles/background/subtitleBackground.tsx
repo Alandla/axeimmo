@@ -91,6 +91,7 @@ export const SubtitleBackground = ({ subtitleSequence, start, style }: { subtitl
         <AbsoluteFill
             style={{
                 marginTop: `${verticalPosition}px`,
+                zIndex: 10
             }}
         >
             <div 

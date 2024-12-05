@@ -17,8 +17,9 @@ const mediaSchema = new mongoose.Schema({
     show: {
       type: String,
       required: false,
+      default: "full",
       validate(value: string) {
-        return ["full", "middle","hide"].includes(value);
+        return ["full", "half", "hide"].includes(value);
       },
     },
     name: String,

@@ -6,7 +6,7 @@ export const SubtitleSimple = ({ subtitleSequence, start, style }: { subtitleSeq
     
     return (
         <AbsoluteFill>
-            <svg width="100%" height="100%">
+            <svg width="100%" height="100%" style={{ zIndex: 10 }}>
                 {subtitleSequence.lines.map((line: Line, lineIndex: number) => (
                     <text 
                         key={lineIndex}

@@ -9,17 +9,18 @@ import { createTranscription, getTranscription } from "../lib/gladia";
 
 import transcriptionMock from "../test/mockup/transcriptionComplete.json";
 import keywordsMock from "../test/mockup/keywordsResponse.json";
+import sequencesWithMediaMock from "../test/mockup/sequencesWithMedia.json";
 import { createLightTranscription, splitIntoSequences } from "../lib/transcription";
 import { ffmpegExtractAudioSegments } from "./separate-audio";
 import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
 import { searchMediaForSequence } from "../service/media.service";
-import { IVideo } from "../types/video";
+import { ISequence, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
-import { generateStartData } from "../lib/ai";
+import { generateBrollDisplay, generateStartData } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
 import { analyzeMediaWithSieve, getAnalysisResult, getJobCost, SieveCostResponse } from "../lib/sieve";
-import { simplifySequences } from "../lib/analyse";
+import { applyShowBrollToSequences, ShowBrollResult, simplifySequences } from "../lib/analyse";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -87,7 +88,7 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      voiceUrl = "https://media.hoox.video/226f797c-f636-4108-ae60-0e785295c4df.mp3"
+      voiceUrl = "https://media.hoox.video/db9b9f57-bd1a-42ac-8095-d28b7d52a4e4.mp3"
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
@@ -226,33 +227,39 @@ export const generateVideoTask = task({
 
     logger.log(`[MEDIA] Search media...`);
 
-    const batchSize = 5;
-    const updatedSequences = [];
-    for (let i = 0; i < sequences.length; i += batchSize) {
-        const batch = sequences.slice(i, i + batchSize);
-        const batchPromises = batch.map((sequence, idx) => 
-            searchMediaForSequence(sequence, i + idx + 1, keywords, mediaSource)
-        );
+    if (ctx.environment.type === "PRODUCTION") {
+      sequences = sequencesWithMediaMock as ISequence[]
+    } else {
 
-        const completedBatch = await Promise.all(batchPromises);
-        updatedSequences.push(...completedBatch);
+      const batchSize = 5;
+      const updatedSequences = [];
+      for (let i = 0; i < sequences.length; i += batchSize) {
+          const batch = sequences.slice(i, i + batchSize);
+          const batchPromises = batch.map((sequence, idx) => 
+              searchMediaForSequence(sequence, i + idx + 1, keywords, mediaSource)
+          );
 
-        // Update progress
-        const progress = Math.round((updatedSequences.length / sequences.length) * 100);
-        await metadata.replace({
-            name: Steps.SEARCH_MEDIA,
-            progress
-        });
+          const completedBatch = await Promise.all(batchPromises);
+          updatedSequences.push(...completedBatch);
+
+          // Update progress
+          const progress = Math.round((updatedSequences.length / sequences.length) * 100);
+          await metadata.replace({
+              name: Steps.SEARCH_MEDIA,
+              progress
+          });
+      }
+
+      sequences = updatedSequences;
+
+      await metadata.replace({
+        name: Steps.SEARCH_MEDIA,
+        progress: 100,
+      });
+
+      logger.log(`[MEDIA] Media search completed`)
+
     }
-
-    sequences = updatedSequences;
-
-    await metadata.replace({
-      name: Steps.SEARCH_MEDIA,
-      progress: 100,
-    });
-
-    logger.log(`[MEDIA] Media search completed`)
 
     /*
     /
@@ -260,22 +267,40 @@ export const generateVideoTask = task({
     /
     */
 
-    if (payload.avatar) {
+    if (ctx.environment.type !== "PRODUCTION" && payload.avatar) {
       logger.log(`[ANALYSIS] Starting media analysis...`);
       const { sequences: updatedSequences, totalCost } = await processBatchWithSieve(sequences);
       sequences = updatedSequences;
       cost += totalCost;
       logger.info(`Analyse vidéo terminée. Coût total: $${totalCost}`);
+    }
+
+    if (payload.avatar) {
       const dataForAnalysis = simplifySequences(sequences);
       logger.info('Data for analysis', { dataForAnalysis })
+      const showBrollResult : ShowBrollResult | null = await generateBrollDisplay(dataForAnalysis)
+      logger.info('Show broll result', { showBrollResult })
+      if (showBrollResult) {
+        sequences = applyShowBrollToSequences(sequences, showBrollResult)
+      }
     }
 
     logger.info('Sequences taille', { size: sequences.length })
     logger.info('Sequences', { sequences })
 
+    let avatar;
+    let avatarFile = payload.files.find(f => f.usage === 'avatar')
+    if (avatarFile) {
+      avatar = {
+        videoUrl: avatarFile.url
+      }
+    } else if (payload.avatar) {
+      avatar = payload.avatar
+    }
+
     newVideo = {
       ...newVideo,
-      costToGenerate: cost,
+      costToGenerate: cost + ctx.run.baseCostInCents,
       state: {
         type: 'done',
       },
@@ -284,15 +309,13 @@ export const generateVideoTask = task({
         thumbnail: "",
         metadata: transcription.metadata,
         sequences,
+        avatar,
         subtitle: {
           name: subtitles[1].name,
           style: subtitles[1].style,
         }
       }
     }
-
-    logger.info('Cost infra', { costInCents: ctx.run.costInCents })
-    logger.info('Cost base', { baseCostInCents: ctx.run.baseCostInCents })
 
     await updateVideo(newVideo)
 

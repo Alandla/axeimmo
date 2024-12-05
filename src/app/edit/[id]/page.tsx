@@ -104,7 +104,10 @@ export default function VideoEditor() {
   const setSequenceMedia = (sequenceIndex: number, media: IMedia) => {
     if (video && video.video) {
       const newSequences = [...video.video.sequences]
-      newSequences[sequenceIndex].media = media
+      newSequences[sequenceIndex].media = {
+        ...newSequences[sequenceIndex].media,
+        ...media,
+      };
       updateVideo({ ...video, video: { ...video.video, sequences: newSequences } })
     }
   }
@@ -156,7 +159,9 @@ export default function VideoEditor() {
   const handleSilentSave = async () => {
     if (isDirty) {
       setIsSaving(true)
-      //await basicApiCall('/video/save', { video })
+      if (process.env.NODE_ENV !== 'development') {
+        await basicApiCall('/video/save', { video })
+      }
       setIsDirty(false)
       setIsSaving(false)
     }
@@ -329,7 +334,7 @@ export default function VideoEditor() {
               ) : (
                 <ScrollArea className="h-[calc(100vh-5rem)]">
                   {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                    <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} />
+                    <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
                   )}
                 </ScrollArea>
               )}
@@ -376,7 +381,7 @@ export default function VideoEditor() {
             <TabsContent value="settings">
               <ScrollArea className="h-[calc(100vh-16rem)]">
                 {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} />
+                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
                 )}
               </ScrollArea>
             </TabsContent>

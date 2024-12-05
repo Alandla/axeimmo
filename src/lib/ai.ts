@@ -1,10 +1,116 @@
 import { createGroq } from "@ai-sdk/groq";
 import { generateText } from "ai";
 import { calculateAnthropicCost } from "./cost";
+import { SimpleSequence } from "./analyse";
 
 const groq = createGroq({
     apiKey: process.env.GROQ_API_KEY
 });
+
+export const generateBrollDisplay = async (sequences: SimpleSequence[]) => {
+    try {
+        const result = await generateText({
+            model: groq('llama-3.1-70b-versatile'),
+            messages: [
+                {
+                    role: "user",
+                    content: "You are an AI tasked with determining the optimal display mode for video sequences in a social media-oriented video generation system. Your goal is to analyze the relationship between the spoken text and the visual content for each sequence, and decide how prominently the visual content (b-roll) should be displayed." +
+                            "You will be given a list of video sequences in the following format:" +
+                            "" +
+                            "<video_sequences>"+
+                            sequences +
+                            "</video_sequences>"+
+                            "" +
+                            "For each sequence, consider the following criteria to determine the importance of the visual content:" +
+                            "" +
+                            "1. Relevance: How closely does the visual content relate to the spoken text?" +
+                            "2. Informativeness: Does the visual content provide additional information not present in the text?" +
+                            "3. Emotional impact: Does the visual content evoke emotions that enhance the message?" +
+                            "4. Novelty: Is the visual content unique or unexpected given the context?" +
+                            "5. Narrative support: Does the visual content help tell or reinforce the story?" +
+                            "" +
+                            "Based on these criteria, you will assign one of three display modes to each sequence:" +
+                            "" +
+                            "- \"full\": The b-roll should be displayed prominently, taking up the entire screen." +
+                            "- \"half\": The b-roll should be displayed partially, with the avatar visible above it." +
+                            "- \"hide\": The b-roll should not be displayed, showing only the avatar." +
+                            "" +
+                            "The same display mode should never be used more than 2 times in a row." +
+                            "" +
+                            "For each sequence, follow these steps:" +
+                            "" +
+                            "1. Read the spoken text and media description carefully." +
+                            "2. Evaluate the importance of the visual content based on the criteria above." +
+                            "3. Determine the most appropriate display mode." +
+                            "4. Provide a brief justification for your decision." +
+                            "5. Output the sequence ID and the chosen display mode." +
+                            "" +
+                            "Here are two examples of how to process a sequence:" +
+                            "" +
+                            "Example 1:" +
+                            "Text: Un enfant harcelé devient l'homme le plus riche du monde." +
+                            "Media Description: A young boy is sitting on the floor of a library, with his arms wrapped around his legs. He is looking down at the floor and appears to be sad or upset. There are bookshelves behind him, and the shelves are full of books. The lighting is dim and the overall mood is somber." +
+                            "" +
+                            "Reasoning: The visual content is highly relevant to the text, showing a child who appears to be bullied or upset. It provides strong emotional impact and supports the narrative of someone who faced challenges early in life. The library setting also hints at a focus on learning and knowledge." +
+                            "" +
+                            "Output:" +
+                            "{"+
+                            "  id: 1,"+
+                            "  show: \"full\""+
+                            "}"+
+                            "" +
+                            "Example 2:" +
+                            "Text: Né en Afrique du Sud, le jeune Elon était différent" +
+                            "Media Description: The video shows a view from a vehicle driving through a savanna. The camera is pointed towards the right side of the vehicle and we see a brown dirt road, dry grass, and bushes, with a few trees in the background. The sky is blue with a few white clouds." +
+                            "" +
+                            "Reasoning: While the visual content shows a scene from Africa, which is relevant to Elon Musk's birthplace, it doesn't directly relate to him being \"different\" or provide significant additional information about his character. The scene is somewhat generic and doesn't strongly support the narrative." +
+                            "" +
+                            "Output:" +
+                            "{"+
+                            "  id: 2,"+
+                            "  show: \"half\""+
+                            "}"+
+                            "" +
+                            "After processing all sequences, provide your final output as a JSON array containing objects with \"id\" and \"show\" properties for each sequence, like this:" +
+                            "" +
+                            "<output>" +
+                            "[" +
+                            "  {" +
+                            "    id: 1,"+
+                            "    show: \"full\""+
+                            "  },"+
+                            "  {" +
+                            "    id: 2,"+
+                            "    show: \"half\""+
+                            "  },"+
+                            "  ..."+
+                            "]"+
+                            "</output>"+
+                            "" +
+                            "Ensure that your output contains only the JSON array with no additional text or explanations." +
+                            "YOU MUST REPLY ONLY WITH JSON" +
+                            "RESPECT THE RESPONSE STRUCTURE" +
+                            "NEVER RESPOND EXPLANATION" +
+                            "NO INTRODUCTION LIKE \"Here is the json...\""
+                }
+            ],
+        });
+
+        console.log("Result", result);
+
+        const jsonResponse = JSON.parse(result.text);
+
+        const data = {
+            show: jsonResponse,
+            cost: 0
+        }
+
+        return data
+    } catch (error) {
+        console.error(error)
+        return null
+    }
+}
 
 export const generateStartData = async (script: string) => {
     try {

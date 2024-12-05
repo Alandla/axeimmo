@@ -78,6 +78,7 @@ export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequ
         <AbsoluteFill
             style={{
                 marginTop: `${verticalPosition}px`,
+                zIndex: 10
             }}
         >
             <div 

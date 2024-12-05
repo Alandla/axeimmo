@@ -89,6 +89,7 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
         <AbsoluteFill
             style={{
                 marginTop: `${verticalPosition}px`,
+                zIndex: 10
             }}
         >
             <div 
