@@ -12,5 +12,18 @@ export const mailBetaList = [
     "contact@christophe-guillon.com",
     "clotilde.bouchet.coach@gmail.com",
     "gdmgroupsarl@gmail.com",
-    "torrent.water.92@gmail.com"
+    "torrent.water.92@gmail.com",
+    "marketing@codupal.fr",
+    "patriciaperche@gmail.com",
+    "lison.puget@apef.fr",
+    "fabian@publicactif.com",
+    "antoine@lipitt.com",
+    "max@timeleft.com",
+    "bouillaguet@bigsuccess.fr",
+    "vossovic@nextage.ai",
+    "tmazin@mathez-compliance.com",
+    "thibaud.chevalier@366.fr",
+    "jduca@reworldmedia.com",
+    "julien.cadot@humanoid.fr",
+    "c.lepage@lab4games.com"
 ]
