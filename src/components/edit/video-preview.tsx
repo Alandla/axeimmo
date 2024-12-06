@@ -3,16 +3,16 @@ import { IVideo } from "@/src/types/video";
 import { Player, PlayerRef } from "@remotion/player";
 import { useEffect } from "react";
 import { preloadAudio, preloadImage, preloadVideo } from "@remotion/preload";
+import { Alert, AlertDescription } from "../ui/alert";
+import { AlertCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function VideoPreview({ playerRef, video, isMobile }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null, isMobile: boolean }) {
-    // Calculer l'aspect ratio basé sur les dimensions de la composition
-    const aspectRatio = 1280 / 720;
+    const t = useTranslations('edit')
 
-    // Précharger les médias quand la vidéo change
     useEffect(() => {
         if (!video?.video?.sequences) return;
 
-        // Précharger l'audio principal
         if (video.video.audioUrl) {
           preloadAudio(video.video.audioUrl);
         }
@@ -23,7 +23,6 @@ export default function VideoPreview({ playerRef, video, isMobile }: { playerRef
           preloadVideo(video.video.avatar.previewUrl);
         }
 
-        // Précharger tous les médias des séquences
         video.video.sequences.forEach(sequence => {
             if (sequence.media) {
                 if (sequence.media.type === 'video' && sequence.media.video?.link) {
@@ -36,7 +35,13 @@ export default function VideoPreview({ playerRef, video, isMobile }: { playerRef
     }, []);
 
     return (
-        <div className={`h-full flex items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
+        <div className={`h-full flex flex-col items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
+            {video?.video?.avatar && (
+                <div className="w-full rounded-lg border bg-background text-foreground px-4 py-3 text-sm flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4" />
+                    {t('lip-sync-export-message')}
+                </div>
+            )}
             <div className="relative w-full h-full">
                 <Player
                     ref={playerRef}

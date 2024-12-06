@@ -103,6 +103,7 @@
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",
       "export-button": "Exporter",
+      "lip-sync-export-message": "Le lip-sync ne s'affichera que après l'export.",
       "unsaved": "Non sauvegardé",
       "saved": "Sauvegardé",
       "sequences-tabs-title": "Sequences",

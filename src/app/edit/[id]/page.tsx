@@ -28,6 +28,7 @@ import { ISpace, ISpaceSubtitleStyle } from '@/src/types/space'
 import { useSubtitleStyleStore } from '@/src/store/subtitlesStyleSore'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
+import { Alert, AlertDescription } from '@/src/components/ui/alert'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -344,7 +345,7 @@ export default function VideoEditor() {
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
               {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
-            </Card>
+          </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
