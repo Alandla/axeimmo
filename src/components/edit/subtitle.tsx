@@ -25,7 +25,7 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
     const handleMouseEnter = useCallback(() => setIsHovering(true), []);
     const handleMouseLeave = useCallback(() => setIsHovering(false), []);
 
-    const isSelected = video.video.subtitle.id === subtitle.id;
+    const isSelected = video.video.subtitle.name === subtitle.name;
 
     const startEditing = useCallback(() => {
         setIsEditing(true);

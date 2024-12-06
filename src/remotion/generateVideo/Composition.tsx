@@ -5,13 +5,11 @@ import { SubtitlesSimple } from './subtitles/simple/subtitlesSimple';
 import { SubtitlesBackground } from './subtitles/background/subtitlesBackground';
 import { SubtitlesClean } from './subtitles/clean/subtitlesClean';
 import { BackgroundWithAvatar } from './components/backgroundWithAvatar';
-import { Watermark } from './components/Watermark';
 
 export const VideoGenerate = ({ data }: { data: any }) => {
 	if (!data || !data.video.sequences.length || data.video.sequences.length === 0) {
         return <div>Loading...</div>;
     }
-
 	return (
 		<>
 			<Audio src={data.video.audioUrl} />

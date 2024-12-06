@@ -17,96 +17,100 @@ export const formatSubtitles = (
 		durationInFrames: number;
 	}[] = [];
 
-	// Créer la liste complète des mots
-	const allWords: Word[] = sequences.reduce((acc, sequence) => {
-		return [...acc, ...sequence.words];
-	}, [] as Word[]);
-
 	let startInFrame = 0;
 	let mode = style?.mode || 'twoLines';
 
 	if (mode === 'word') {
-		// Un sous-titre par mot
-		allWords.forEach((word) => {
-			const processedWord = style?.isPunctuation 
-				? word.word.replace(/[.,;!?]/g, '')
-				: word.word;
+		// Traiter chaque séquence
+		sequences.forEach((sequence) => {
+			sequence.words.forEach((word) => {
+				const processedWord = style?.isPunctuation 
+					? word.word.replace(/[.,;!?]/g, '')
+					: word.word;
 
-			word.startInFrames = startInFrame;
-			startInFrame += word.durationInFrames;
-			subtitles.push({
-				lines: [{ words: [{ ...word, word: processedWord }] }],
-				start: word.start,
-				end: word.end,
-				text: word.word,
-				durationInFrames: word.durationInFrames,
+				word.startInFrames = startInFrame;
+				startInFrame += word.durationInFrames;
+				subtitles.push({
+					lines: [{ words: [{ ...word, word: processedWord }] }],
+					start: word.start,
+					end: word.end,
+					text: word.word,
+					durationInFrames: word.durationInFrames,
+				});
 			});
 		});
 	} else {
-		let box = fillTextBox({
-			maxBoxWidth: maxWidth,
-			maxLines: mode === 'twoLines' ? 2 : 1,
-		});
-
-		let currentLine: Line[] = mode === 'twoLines' ? [{words: []}, {words: []}] : [{words: []}];
-		let durationInFrames = 0;
-		let actualLine = 0;
-		let text = '';
-
-		allWords.forEach((word, index) => {
-			const processedWord = style?.isPunctuation 
-				? word.word.replace(/[.,;!?]/g, '')
-				: word.word;
-
-			const result = box.add({
-				text: processedWord,
-				fontFamily: `${style?.fontFamily || 'Montserrat'}, sans-serif`,
-				fontWeight: style?.fontWeight || 700,
-				fontSize: (style?.fontSize || 70) + 10,
-				textTransform: style?.isUppercase ? 'uppercase' : 'none',
+		// Traiter chaque séquence
+		sequences.forEach((sequence) => {
+			let box = fillTextBox({
+				maxBoxWidth: maxWidth,
+				maxLines: mode === 'twoLines' ? 2 : 1,
 			});
 
-			if (result.newLine && mode === 'twoLines' && actualLine < 1) {
-				actualLine++;
-			}
+			let currentLine: Line[] = mode === 'twoLines' ? [{words: []}, {words: []}] : [{words: []}];
+			let durationInFrames = 0;
+			let actualLine = 0;
+			let text = '';
 
-			if (result.exceedsBox) {
-				if (currentLine[0].words.length > 0) {
+			sequence.words.forEach((word, index, words) => {
+				const processedWord = style?.isPunctuation 
+					? word.word.replace(/[.,;!?]/g, '')
+					: word.word;
+
+				const result = box.add({
+					text: processedWord,
+					fontFamily: `${style?.fontFamily || 'Montserrat'}, sans-serif`,
+					fontWeight: style?.fontWeight || 700,
+					fontSize: (style?.fontSize || 70) + 10,
+					textTransform: style?.isUppercase ? 'uppercase' : 'none',
+				});
+
+				if (result.newLine && mode === 'twoLines' && actualLine < 1 && text.length > 0) {
+					actualLine++;
+				}
+
+				if (result.exceedsBox) {
+					if (currentLine[0].words.length > 0) {
+						subtitles.push({
+							lines: [...currentLine],
+							start: currentLine[0].words[0].start,
+							end: currentLine[actualLine].words[currentLine[actualLine].words.length - 1].end,
+							text,
+							durationInFrames,
+						});
+					}
+					durationInFrames = word.durationInFrames;
+					word.startInFrames = startInFrame;
+					startInFrame += word.durationInFrames;
+					currentLine = mode === 'twoLines' ? [{words: [{...word, word: processedWord}]}, {words: []}] : [{words: [{...word, word: processedWord}]}];
+					actualLine = 0;
+					text = word.word + ' ';
+					box = fillTextBox({
+						maxBoxWidth: maxWidth,
+						maxLines: mode === 'twoLines' ? 2 : 1,
+					});
+				} else {
+					durationInFrames += word.durationInFrames;
+					word.startInFrames = startInFrame;
+					startInFrame += word.durationInFrames;
+					text += word.word + ' ';
+					currentLine[actualLine].words.push({ ...word, word: processedWord });
+				}
+
+				if (result.newLine && mode === 'twoLines' && actualLine < 1 && !(text.length > 0)) {
+					actualLine++;
+				}
+
+				if (index === words.length - 1 && currentLine.length > 0) {
 					subtitles.push({
 						lines: [...currentLine],
 						start: currentLine[0].words[0].start,
-						end: currentLine[actualLine].words[currentLine[actualLine].words.length - 1].end,
-						text,
+						end: word.end,
+						text: text,
 						durationInFrames,
 					});
 				}
-				durationInFrames = word.durationInFrames;
-				word.startInFrames = startInFrame;
-				startInFrame += word.durationInFrames;
-				currentLine = mode === 'twoLines' ? [{words: [{...word, word: processedWord}]}, {words: []}] : [{words: [{...word, word: processedWord}]}];
-				actualLine = 0;
-				text = word.word + ' ';
-				box = fillTextBox({
-					maxBoxWidth: maxWidth,
-					maxLines: mode === 'twoLines' ? 2 : 1,
-				});
-			} else {
-				durationInFrames += word.durationInFrames;
-				word.startInFrames = startInFrame;
-				startInFrame += word.durationInFrames;
-				text += word.word + ' ';
-				currentLine[actualLine].words.push({ ...word, word: processedWord });
-			}
-
-			if (index === allWords.length - 1 && currentLine.length > 0) {
-				subtitles.push({
-					lines: [...currentLine],
-					start: currentLine[0].words[0].start,
-					end: word.end,
-					text: text,
-					durationInFrames,
-				});
-			}
+			});
 		});
 	}
 

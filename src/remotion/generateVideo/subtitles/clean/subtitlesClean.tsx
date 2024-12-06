@@ -1,5 +1,5 @@
 import { Sequence, useVideoConfig } from "remotion";
-import {fillTextBox} from '@remotion/layout-utils';
+import {fillTextBox} from '../../utils/measureText';
 import {useMemo} from 'react';
 import { Line, Sequence as SequenceType, SubtitleMode, Word } from "../../type/subtitle";
 import { SubtitleClean } from "./subtitleClean";
@@ -65,6 +65,9 @@ export const formatSubtitles = (
 					textTransform: style?.isUppercase ? 'uppercase' : 'none',
 				});
 
+				console.log('word', processedWord);
+				console.log('result', result);
+
 				if (result.newLine && mode === 'twoLines' && actualLine < 1) {
 					actualLine++;
 				}
@@ -124,8 +127,6 @@ export const SubtitlesClean = ({ subtitleSequences, style }: { subtitleSequences
 		);
 		return sub;
 	}, [subtitleSequences, style]);
-
-	console.log(subtitles);
 
     let currentFrame = 0;
     
