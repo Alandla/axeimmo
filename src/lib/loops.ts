@@ -17,6 +17,10 @@ export const addUserIdToContact = async (userId: string, email: string) => {
   return result;
 }
 
+export const checkHasBetaAccess = async (email: string) => {
+  const result = await loops.findContact({ email });
+  return !!result[0].betaAccess; //Convert to primitive boolean
+}
 
 export async function sendVerificationRequest({ identifier: email, url }: { identifier: string, url: string }) {
   const dataVariables = {

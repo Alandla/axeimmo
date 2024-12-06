@@ -3,9 +3,7 @@ import connectMongo from "./mongo"
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import google from "next-auth/providers/google"
 import { createPrivateSpaceForUser } from "../dao/spaceDao";
-import { addDefaultDataToUser, createUser, isUserExist } from "../dao/userDao";
-import { addUserIdToContact, createContact, sendVerificationRequest } from "./loops";
-import checkBetaAccess from "./beta";
+import { addUserIdToContact, checkHasBetaAccess, createContact, sendVerificationRequest } from "./loops";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -44,7 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user }) {
       console.log("Sign in event: ", user);
       if (user.email) {
-        let hasBetaAccess = await checkBetaAccess(user.email);
+        let hasBetaAccess = await checkHasBetaAccess(user.email);
         if (hasBetaAccess && user.options === undefined) {
           const contactProperties = {
             firstName: user.name,
