@@ -34,5 +34,6 @@ export const mailBetaList = [
     "cfoury@mathez-compliance.com",
     "arantxa.biscay@gmail.com",
     "jules-arthur.patte@gs1fr.org",
-    "jules-arthur.patte@orange.fr"
+    "jules-arthur.patte@orange.fr",
+    "lmasseport@dms-imaging.com"
 ]
