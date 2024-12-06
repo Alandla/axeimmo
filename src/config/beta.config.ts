@@ -30,6 +30,9 @@ export const mailBetaList = [
     "joanna.cottennec@gmail.com",
     "roumiersebastien@hotmail.com",
     "jduca@reworldmedia.com",
-    "arnaud.gelineau@humanoid.fr"
-
+    "arnaud.gelineau@humanoid.fr",
+    "cfoury@mathez-compliance.com",
+    "arantxa.biscay@gmail.com",
+    "jules-arthur.patte@gs1fr.org",
+    "jules-arthur.patte@orange.fr"
 ]
