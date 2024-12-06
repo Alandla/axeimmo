@@ -25,5 +25,11 @@ export const mailBetaList = [
     "thibaud.chevalier@366.fr",
     "jduca@reworldmedia.com",
     "julien.cadot@humanoid.fr",
-    "c.lepage@lab4games.com"
+    "c.lepage@lab4games.com",
+    "ndengler@gmail.com",
+    "joanna.cottennec@gmail.com",
+    "roumiersebastien@hotmail.com",
+    "jduca@reworldmedia.com",
+    "arnaud.gelineau@humanoid.fr"
+
 ]
