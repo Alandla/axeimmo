@@ -27,6 +27,7 @@ import { useToast } from '../hooks/use-toast'
 import { useVideoToDeleteStore } from '../store/videoToDelete'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
+import { useUsersStore } from '../store/creatorUserVideo'
 
 function formatDuration(seconds: number): string {
   const roundedSeconds = Math.round(seconds);
@@ -44,6 +45,8 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
   const [editedTitle, setEditedTitle] = useState(video.title);
   const { setVideo } = useVideoToDeleteStore()
   const inputRef = useRef<HTMLInputElement>(null);
+  const { fetchUser } = useUsersStore()
+  const [creator, setCreator] = useState(video.creator)
 
   const handleDelete = () => {
     setVideo(video)
@@ -79,6 +82,13 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
       }
     }
   }, [editedTitle, video]);
+
+  const handleDropdownOpen = async (isOpen: boolean) => {
+    if (isOpen && !creator.name && creator.id) {
+      const userData = await fetchUser(creator.id)
+      setCreator(userData)
+    }
+  }
 
   return (
     <div className="relative">
@@ -130,7 +140,7 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
             {formatDistanceToNow(video.createdAt ? new Date(video.createdAt) : new Date(), { addSuffix: true, locale: session?.user?.options?.lang === 'en' ? enUS : fr })}
           </p>
         </div>
-        <DropdownMenu>
+        <DropdownMenu onOpenChange={handleDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
               <MoreVertical className="h-4 w-4" />
@@ -146,12 +156,18 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  {video.creator.image && <AvatarImage src={video.creator.image} alt={video.creator.name ?? ''} />}
-                  <AvatarFallback className="rounded-lg">{video.creator.name?.charAt(0) ?? ''}</AvatarFallback>
+                  {video.creator.image && <AvatarImage src={video.creator.image} alt={creator.name ?? ''} />}
+                  <AvatarFallback className="rounded-lg">{creator.name?.charAt(0) ?? ''}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{video.creator.name}</span>
-                  <span className="truncate text-xs">{video.createdAt ? new Date(video.createdAt).toLocaleDateString() : ''}</span>
+                  {!creator.name ? (
+                    <div className="h-5 w-24 bg-muted animate-pulse rounded" />
+                  ) : (
+                    <span className="truncate font-semibold">{creator.name}</span>
+                  )}
+                  <span className="truncate text-xs">
+                    {video.createdAt ? new Date(video.createdAt).toLocaleDateString() : ''}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>

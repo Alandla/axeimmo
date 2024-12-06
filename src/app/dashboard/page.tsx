@@ -38,38 +38,19 @@ export default function Dashboard() {
       setIsLoading(true)
       const rawVideos: IVideo[] = await basicApiCall('/space/getVideos', { spaceId: activeSpace?.id })
       
-      // Créer un nouveau Map pour les utilisateurs
-      const newUsers = new Map<string, User>()
-      
-      // Traiter chaque vidéo pour trouver son créateur
-      const processedVideos = await Promise.all(rawVideos.map(async video => {
+      const processedVideos = rawVideos.map(video => {
         const createEvent = video.history?.find(h => h.step === 'CREATE')
         const userId = createEvent?.user
 
-        if (userId && !newUsers.has(userId)) {
-          newUsers.set(userId, {
-            id: userId
-          })
-
-          // Récupérer les données de l'utilisateur depuis l'API
-          const user: User = await basicApiCall('/user/getByIdForVideo', { userId })
-          
-          newUsers.set(userId, {
-            id: userId,
-            name: user?.name,
-            image: user?.image
-          })
-        }
-
         return {
           ...video,
-          creator: newUsers.get(userId || '') || {
+          creator: {
             id: userId || '',
             name: '',
             image: ''
           }
         }
-      }))
+      })
 
       setVideos(processedVideos.reverse())
       setIsLoading(false)
