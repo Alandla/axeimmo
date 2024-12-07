@@ -173,7 +173,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
           <CardContent>
             <div className="flex justify-center h-96 overflow-hidden">
               <video 
-                className="h-full object-cover rounded-lg"
+                className="rounded-lg"
                 controls
                 src={downloadUrl}
               />

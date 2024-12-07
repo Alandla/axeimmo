@@ -19,6 +19,12 @@ export const MediaBackground = ({ sequences }: { sequences: any }) => {
                     nextIndex++;
                 }
 
+                // Si c'est la dernière séquence avec un média
+                if (nextIndex >= sequences.length) {
+                    // Ajuster la durée pour aller jusqu'à la fin
+                    duration = 600;
+                }
+
                 let element;
 
                 if (media.type === 'image') {
