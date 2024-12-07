@@ -43,7 +43,7 @@ export const exportVideoTask = task({
 
       if (video.video?.avatar?.id && video.video?.audioUrl && !video.video?.avatar?.videoUrl) {
         logger.log("Génération de la vidéo avatar...");
-        const avatarResponse = await generateAvatarVideo(video.video.avatar.id, video.video.audioUrl);
+        const avatarResponse = await generateAvatarVideo(video.video.avatar, video.video.audioUrl);
         logger.log("Avatar response", { avatarResponse });
         const avatarVideoUrl = await pollAvatarVideoStatus(avatarResponse.data.video_id);
         logger.log("Avatar video response", { avatarVideoUrl });
