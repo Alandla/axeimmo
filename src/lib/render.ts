@@ -42,8 +42,6 @@ export const getProgress = async (renderId: string, bucketName: string) => {
         region: "eu-west-3",
     });
 
-    console.log("errors", progress.errors);
-
     if (progress.fatalErrorEncountered) {
         return {
             status: "failed",
