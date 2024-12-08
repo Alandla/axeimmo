@@ -1,4 +1,4 @@
-import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
 import { useEffect, useState } from "react";
 import googleFonts from "../../config/googleFonts.config";
@@ -24,7 +24,7 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
     const getAnimationValues = () => {
         let scale = 1;
         let opacity = 1;
-
+        let blurValue = 0;
         switch (style.animation?.appear) {
             case 'zoom':
                 scale = spring({
@@ -66,11 +66,32 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
                     durationInFrames: 20,
                 });
                 break;
+            case 'blur':
+                const blurAnimation = spring({
+                    fps,
+                    frame,
+                    config: {
+                      damping: 200,
+                      stiffness: 100,
+                      overshootClamping: true,
+                    },
+                  });
+                
+                  // Valeur du flou : réduit de 20px à 0px en 0.3 secondes
+                blurValue = interpolate(
+                    blurAnimation,
+                    [0, 0.5],
+                    [10, 0], // De 20px de flou à 0px
+                    {
+                      extrapolateLeft: "clamp",
+                      extrapolateRight: "clamp",
+                    }
+                );
         }
-        return { scale, opacity };
+        return { scale, opacity, blurValue };
     };
 
-    const { scale, opacity } = getAnimationValues();
+    const { scale, opacity, blurValue } = getAnimationValues();
 
     const shadowColor = style.shadow.color ? style.shadow.color : 'black';
 
@@ -133,6 +154,7 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
                                         textAlign: 'center',
                                         lineHeight: '1.2',
                                         textShadow: style.shadow.isActive ? shadowSizes[style.shadow.size] : 'none',
+                                        filter: blurValue > 0 ? `blur(${blurValue}px)` : 'none',
                                     }}>
                                         {word.word}{' '}
                                 </span>

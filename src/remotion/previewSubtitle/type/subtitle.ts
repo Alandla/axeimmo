@@ -5,6 +5,7 @@ export type Word = {
 	confidence: number;
 	durationInFrames: number;
 	startInFrames: number;
+	fontSize?: number;
 };
 
 export type Line = {

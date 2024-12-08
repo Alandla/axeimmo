@@ -29,8 +29,22 @@ export const templates = [
         "activeWord",
         "animation",
         "background",
-    ],
+      ],
     },
+    {
+      name: "daniel",
+      optionsAvailable: [
+        "shadow",
+      ],
+    },
+    {
+        name: "modern",
+        optionsAvailable: [
+          "secondLine",
+          "animation",
+          "shadow",
+        ],
+      },
 ]
 
 export const subtitles = [
@@ -177,6 +191,62 @@ export const subtitles = [
                 color: "#E5E7E5",
                 radius: 16,
                 mode: 'full'
+            },
+        }
+    },
+    {
+        id: '5',
+        name: 'Daniel',
+        style: {
+            template: 'daniel',
+            fontFamily: 'Arial',
+            fontWeight: "800",
+            fontSize: 80,
+            color: "#ffffff",
+            isItalic: false,
+            isPunctuation: true,
+            isUppercase: false,
+            mode: 'twoLines',
+            position: 50,
+            shadow: {
+                isActive: true,
+                size: 1,
+                color: "#000000",
+            },
+        }
+    },
+    {
+        id: '6',
+        name: 'Modern',
+        style: {
+            template: 'modern',
+            fontFamily: 'Arial',
+            fontWeight: "800",
+            fontSize: 80,
+            color: "#ffffff",
+            isItalic: false,
+            isPunctuation: true,
+            isUppercase: false,
+            mode: 'twoLines',
+            position: 50,
+            animation: {
+                appear: "blur",
+            },
+            secondLine: {
+                isActive: true,
+                fontFamily: 'Fraunces',
+                fontWeight: "800",
+                fontSize: 80,
+                color: "#fee601",
+                isItalic: false,
+                isPunctuation: true,
+                isUppercase: false,
+                dynamicSize: true,
+            },
+            shadow: {
+                isActive: true,
+                size: 3,
+                color: "#000000",
             },
         }
     }

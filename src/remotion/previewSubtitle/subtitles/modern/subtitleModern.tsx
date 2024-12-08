@@ -1,14 +1,28 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
 
-export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSequence: any, start: number, style: any }) => {
+export const SubtitleModern = ({ subtitleSequence, start, style }: { subtitleSequence: any, start: number, style: any }) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
+
+    const shadowColor = style.shadow.color ? style.shadow.color : 'black';
+
+    const verticalPosition = (style.position / 100) * 1750;
+
+    const shadowSizes = [
+        'none',
+        `${shadowColor}80 0px 0px 8px, ${shadowColor}80 0px 0px 9px, ${shadowColor}80 0px 0px 10px, ${shadowColor}80 0px 0px 11px, ${shadowColor}80 0px 0px 12px`,
+        `${shadowColor}80 0px 0px 8px, ${shadowColor}80 0px 0px 10px, ${shadowColor}80 0px 0px 12px, ${shadowColor}80 0px 0px 14px, ${shadowColor}80 0px 0px 16px, ${shadowColor}80 0px 0px 18px`,
+        `${shadowColor}80 0px 0px 8px, ${shadowColor}80 0px 0px 11px, ${shadowColor}80 0px 0px 14px, ${shadowColor}80 0px 0px 17px, ${shadowColor}80 0px 0px 20px, ${shadowColor}80 0px 0px 23px, ${shadowColor}80 0px 0px 26px, ${shadowColor}80 0px 0px 29px, ${shadowColor}80 0px 0px 32px`,
+        `${shadowColor}80 0px 0px 8px, ${shadowColor}80 0px 0px 12px, ${shadowColor}80 0px 0px 16px, ${shadowColor}80 0px 0px 20px, ${shadowColor}80 0px 0px 24px, ${shadowColor}80 0px 0px 28px, ${shadowColor}80 0px 0px 32px, ${shadowColor}80 0px 0px 36px, ${shadowColor}80 0px 0px 40px, ${shadowColor}80 0px 0px 44px`,
+        `${shadowColor}80 0px 0px 8px, ${shadowColor}80 0px 0px 13px, ${shadowColor}80 0px 0px 18px, ${shadowColor}80 0px 0px 23px, ${shadowColor}80 0px 0px 28px, ${shadowColor}80 0px 0px 33px, ${shadowColor}80 0px 0px 38px, ${shadowColor}80 0px 0px 43px, ${shadowColor}80 0px 0px 48px, ${shadowColor}80 0px 0px 53px`,
+    ];
 
     const getAnimationValues = () => {
         let scale = 1;
         let opacity = 1;
         let blurValue = 0;
+
         switch (style.animation?.appear) {
             case 'zoom':
                 scale = spring({
@@ -77,23 +91,10 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
 
     const { scale, opacity, blurValue } = getAnimationValues();
 
-    const shadowColor = style.shadow.color ? style.shadow.color : 'black';
-
-    const verticalPosition = (style.position / 100) * 1750;
-
-    const shadowSizes = [
-        'none',
-        `${shadowColor} 0px 0px 8px, ${shadowColor} 0px 0px 9px, ${shadowColor} 0px 0px 10px, ${shadowColor} 0px 0px 11px, ${shadowColor} 0px 0px 12px`,
-        `${shadowColor} 0px 0px 8px, ${shadowColor} 0px 0px 10px, ${shadowColor} 0px 0px 12px, ${shadowColor} 0px 0px 14px, ${shadowColor} 0px 0px 16px, ${shadowColor} 0px 0px 18px`,
-        `${shadowColor} 0px 0px 8px, ${shadowColor} 0px 0px 11px, ${shadowColor} 0px 0px 14px, ${shadowColor} 0px 0px 17px, ${shadowColor} 0px 0px 20px, ${shadowColor} 0px 0px 23px, ${shadowColor} 0px 0px 26px, ${shadowColor} 0px 0px 29px, ${shadowColor} 0px 0px 32px`,
-        `${shadowColor} 0px 0px 8px, ${shadowColor} 0px 0px 12px, ${shadowColor} 0px 0px 16px, ${shadowColor} 0px 0px 20px, ${shadowColor} 0px 0px 24px, ${shadowColor} 0px 0px 28px, ${shadowColor} 0px 0px 32px, ${shadowColor} 0px 0px 36px, ${shadowColor} 0px 0px 40px, ${shadowColor} 0px 0px 44px`,
-        `${shadowColor} 0px 0px 8px, ${shadowColor} 0px 0px 13px, ${shadowColor} 0px 0px 18px, ${shadowColor} 0px 0px 23px, ${shadowColor} 0px 0px 28px, ${shadowColor} 0px 0px 33px, ${shadowColor} 0px 0px 38px, ${shadowColor} 0px 0px 43px, ${shadowColor} 0px 0px 48px, ${shadowColor} 0px 0px 53px`,
-    ];
-
     return (
         <AbsoluteFill
             style={{
-                marginTop: `155px`,
+                marginTop: `180px`,
                 zIndex: 10
             }}
         >
@@ -109,16 +110,17 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
                 {subtitleSequence.lines.map((line: Line, lineIndex: number) => (
                     <div key={lineIndex}>
                         {line.words.map((word: Word, index: number) => {
-                            const isWordActive = (frame+start) >= word.startInFrames && (frame+start) < (word.startInFrames + word.durationInFrames);
+                            const wordInSecondLine = lineIndex === 1;
+                            const isSecondLineActive = lineIndex === 1 && ((frame+start) >= line.words[0]?.startInFrames && (frame+start) < (line.words[line.words.length - 1]?.startInFrames + line.words[line.words.length - 1]?.durationInFrames));
 
-                            const wordStyle = isWordActive && style.activeWord.isActive
+                            const wordStyle = wordInSecondLine && style.secondLine.isActive
                                 ? {
-                                    color: style.activeWord.color,
-                                    fontSize: `${style.activeWord.fontSize}px`,
-                                    fontStyle: style.activeWord.isItalic ? 'italic' : 'normal',
-                                    textTransform: style.activeWord.isUppercase ? 'uppercase' as const : 'none' as const,
-                                    fontFamily: `${style.activeWord.fontFamily || 'Montserrat'}, sans-serif`,
-                                    fontWeight: style.activeWord.fontWeight || 700,
+                                    color: style.secondLine.color,
+                                    fontSize: `${word.fontSize || style.secondLine.fontSize}px`,
+                                    fontStyle: style.secondLine.isItalic ? 'italic' : 'normal',
+                                    textTransform: style.secondLine.isUppercase ? 'uppercase' as const : 'none' as const,
+                                    fontFamily: `${style.secondLine.fontFamily || 'Montserrat'}, sans-serif`,
+                                    fontWeight: style.secondLine.fontWeight || 700,
                                   }
                                 : {
                                     color: style.color,
@@ -135,18 +137,19 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
                                     className="word"
                                     style={{
                                         ...wordStyle,
-                                        textAlign: 'center',
-                                        lineHeight: '1.2',
-                                        textShadow: style.shadow.isActive ? shadowSizes[style.shadow.size] : 'none',
                                         filter: blurValue > 0 ? `blur(${blurValue}px)` : 'none',
+                                        textAlign: 'center',
+                                        lineHeight: '0.8',
+                                        opacity: wordInSecondLine && !isSecondLineActive ? 0 : 1,
+                                        textShadow: style.shadow.isActive ? shadowSizes[style.shadow.size] : 'none',
                                     }}>
                                         {word.word}{' '}
                                 </span>
-                            )
+                            );
                         })}
                     </div>
                 ))}
             </div>
         </AbsoluteFill>
     );
-}
+};

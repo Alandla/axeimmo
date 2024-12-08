@@ -1,6 +1,5 @@
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
-import { useEffect, useState } from "react";
 
 export const SubtitleBackground = ({ subtitleSequence, start, style }: { subtitleSequence: any, start: number, style: any }) => {
     const frame = useCurrentFrame();
@@ -59,6 +58,8 @@ export const SubtitleBackground = ({ subtitleSequence, start, style }: { subtitl
 
     const shadowColor = style.shadow.color ? style.shadow.color : 'black';
 
+    const verticalPosition = (style.position / 100) * 1750;
+
     const getStroke3D = (isWordActive: boolean) => {
         let threeDEffect = '';
         for (let i = 1; i <= style.border.size; i++) {
@@ -74,6 +75,7 @@ export const SubtitleBackground = ({ subtitleSequence, start, style }: { subtitl
         <AbsoluteFill
             style={{
                 marginTop: `180px`,
+                zIndex: 10
             }}
         >
             <div 
@@ -102,9 +104,12 @@ export const SubtitleBackground = ({ subtitleSequence, start, style }: { subtitl
                 )}
                 
                 {subtitleSequence.lines.map((line: Line, lineIndex: number) => {
-                    const isLineActive = (frame+start) >= line.words[0].startInFrames && 
-                        (frame+start) < (line.words[line.words.length - 1].startInFrames + 
+                    let isLineActive = false;
+                    if (line.words.length > 0) {
+                        isLineActive = (frame+start) >= line.words[0].startInFrames && 
+                            (frame+start) < (line.words[line.words.length - 1].startInFrames + 
                         line.words[line.words.length - 1].durationInFrames);
+                    }
 
                     return (
                         <div key={lineIndex} style={{ position: 'relative' }}>

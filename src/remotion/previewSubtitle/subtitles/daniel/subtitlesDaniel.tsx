@@ -1,8 +1,8 @@
 import { Sequence, useVideoConfig } from "remotion";
-import {fillTextBox} from '../../utils/measureText';
 import {useMemo} from 'react';
 import { Line, Sequence as SequenceType, SubtitleMode, Word } from "../../type/subtitle";
-import { SubtitleClean } from "./subtitleClean";
+import { fillTextBox } from "../../utils/measureText";
+import { SubtitleDaniel } from "./subtitleDaniel";
 
 export const formatSubtitles = (
 	sequences: SequenceType[],
@@ -65,10 +65,7 @@ export const formatSubtitles = (
 					textTransform: style?.isUppercase ? 'uppercase' : 'none',
 				});
 
-				console.log('word', processedWord);
-				console.log('result', result);
-
-				if (result.newLine && mode === 'twoLines' && actualLine < 1) {
+				if (result.newLine && mode === 'twoLines' && actualLine < 1 && text.length > 0) {
 					actualLine++;
 				}
 
@@ -100,6 +97,10 @@ export const formatSubtitles = (
 					currentLine[actualLine].words.push({ ...word, word: processedWord });
 				}
 
+				if (result.newLine && mode === 'twoLines' && actualLine < 1 && !(text.length > 0)) {
+					actualLine++;
+				}
+
 				if (index === words.length - 1 && currentLine.length > 0) {
 					subtitles.push({
 						lines: [...currentLine],
@@ -116,7 +117,7 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesClean = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
+export const SubtitlesDaniel = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -138,7 +139,7 @@ export const SubtitlesClean = ({ subtitleSequences, style }: { subtitleSequences
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleClean subtitleSequence={subtitle} start={currentFrame} style={style} />
+						<SubtitleDaniel subtitleSequence={subtitle} start={currentFrame} style={style} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

@@ -6,6 +6,8 @@ import { SubtitlesBackground } from './subtitles/background/subtitlesBackground'
 import { SubtitlesClean } from './subtitles/clean/subtitlesClean';
 import { BackgroundWithAvatar } from './components/backgroundWithAvatar';
 import { Watermark } from './components/Watermark';
+import { SubtitlesDaniel } from './subtitles/daniel/subtitlesDaniel';
+import { SubtitlesModern } from './subtitles/modern/subtitlesModern';
 
 export const VideoGenerate = ({ data }: { data: any }) => {
 	if (!data || !data.video.sequences.length || data.video.sequences.length === 0) {
@@ -20,6 +22,8 @@ export const VideoGenerate = ({ data }: { data: any }) => {
 			{ data.video.subtitle.style.template === 'simple' && <SubtitlesSimple subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
 			{ data.video.subtitle.style.template === 'background' && <SubtitlesBackground subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
 			{ data.video.subtitle.style.template === 'clean' && <SubtitlesClean subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
+			{ data.video.subtitle.style.template === 'daniel' && <SubtitlesDaniel subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
+			{ data.video.subtitle.style.template === 'modern' && <SubtitlesModern subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
 		</>
 	);
 };

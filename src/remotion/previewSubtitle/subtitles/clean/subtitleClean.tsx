@@ -1,6 +1,5 @@
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
-import { useEffect, useState } from "react";
 
 export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequence: any, start: number, style: any }) => {
     const frame = useCurrentFrame();
@@ -63,6 +62,7 @@ export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequ
         <AbsoluteFill
             style={{
                 marginTop: `210px`,
+                zIndex: 10
             }}
         >
             <div 
@@ -91,9 +91,12 @@ export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequ
                 )}
                 
                 {subtitleSequence.lines.map((line: Line, lineIndex: number) => {
-                    const isLineActive = (frame+start) >= line.words[0].startInFrames && 
-                        (frame+start) < (line.words[line.words.length - 1].startInFrames + 
-                        line.words[line.words.length - 1].durationInFrames);
+                    let isLineActive = false;
+                    if (line.words.length > 0) {
+                        isLineActive = (frame+start) >= line.words[0].startInFrames && 
+                            (frame+start) < (line.words[line.words.length - 1].startInFrames + 
+                            line.words[line.words.length - 1].durationInFrames);
+                    }
 
                     return (
                         <div key={lineIndex} style={{ position: 'relative' }}>

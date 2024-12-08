@@ -58,6 +58,14 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
     updateStyle({ activeWord: { ...video?.video?.subtitle?.style?.activeWord, fontSize: parseInt(video?.video?.subtitle?.style?.activeWord?.fontSize) - 1 } })
   }
 
+  const incrementSizeSecondLine = () => {
+    updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, fontSize: parseInt(video?.video?.subtitle?.style?.secondLine?.fontSize) + 1 } })
+  }
+
+  const decrementSizeSecondLine = () => {
+    updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, fontSize: parseInt(video?.video?.subtitle?.style?.secondLine?.fontSize) - 1 } })
+  }
+
   const incrementRadiusBackground = () => {
     updateStyle({ background: { ...video?.video?.subtitle?.style?.background, radius: parseInt(video?.video?.subtitle?.style?.background?.radius) + 1 } })
   }
@@ -78,6 +86,10 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
     updateStyle({ activeWord: { ...video?.video?.subtitle?.style?.activeWord, [style]: !video?.video?.subtitle?.style?.activeWord[style] } })
   }
 
+  const toggleStyleSecondLine = (style: 'isItalic' | 'isUppercase') => {
+    updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, [style]: !video?.video?.subtitle?.style?.secondLine[style] } })
+  }
+
   const onSaveSubtitleStyle = async () => {
     setIsSaving(true)
     await handleSaveSubtitleStyle()
@@ -90,6 +102,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
   const showActiveWordOption = currentTemplate?.optionsAvailable.includes('activeWord')
   const showAnimationOption = currentTemplate?.optionsAvailable.includes('animation')
   const showBackgroundOption = currentTemplate?.optionsAvailable.includes('background')
+  const showSecondLineOption = currentTemplate?.optionsAvailable.includes('secondLine')
 
   return (
     <>
@@ -305,6 +318,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                             <SelectItem value="zoom">{t('appear-zoom')}</SelectItem>
                             <SelectItem value="bounce">{t('appear-bounce')}</SelectItem>
                             <SelectItem value="fade">{t('appear-fade')}</SelectItem>
+                            <SelectItem value="blur">{t('appear-blur')}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -609,6 +623,144 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                       {t('uppercase')}
                     </Button>
                   </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+
+          {showSecondLineOption && (
+            <AccordionItem value="secondLine">
+              <AccordionTrigger>
+                <div className="flex items-center justify-between flex-1">
+                  {t('second-line-title')}
+                  <Switch 
+                    checked={video?.video?.subtitle?.style?.secondLine?.isActive || false}
+                    className="mr-2"
+                    onCheckedChange={(checked: boolean) => 
+                      updateStyle({ 
+                        secondLine: { 
+                          ...video?.video?.subtitle?.style?.secondLine, 
+                          isActive: checked 
+                        } 
+                      })
+                    }
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
+                  />
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-4">
+                  <div className="flex gap-4 w-full">
+                    <SelectFonts value={video?.video?.subtitle?.style?.secondLine?.fontFamily || "Montserrat"} onChange={(value) => updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, fontFamily: value } })} />
+
+                    <Select value={video?.video?.subtitle?.style?.secondLine?.fontWeight || "500"} onValueChange={(value) => updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, fontWeight: value } })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('select.weight-placeholder')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="300" className="font-light">{t('select.weight-light')}</SelectItem>
+                        <SelectItem value="500" className="font-normal">{t('select.weight-normal')}</SelectItem>
+                        <SelectItem value="600" className="font-medium">{t('select.weight-medium')}</SelectItem>
+                        <SelectItem value="800" className="font-bold">{t('select.weight-bold')}</SelectItem>
+                        <SelectItem value="900" className="font-black">{t('select.weight-black')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex gap-4 w-full">
+                    <div className="flex items-center w-1/2">
+                      <div 
+                        className="w-9 h-9 rounded-l-md border border-r-0 border-input cursor-pointer"
+                        style={{ backgroundColor: video?.video?.subtitle?.style?.secondLine?.color || "#FFFFFF" }}
+                        onClick={() => document.getElementById('color-picker-secondLine')?.click()}
+                      />
+                      <Input
+                        type="text"
+                        value={video?.video?.subtitle?.style?.secondLine?.color || "#FFFFFF"}
+                        onChange={(e) => updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, color: e.target.value } })}
+                        className="flex-1 rounded-l-none uppercase"
+                        pattern="^#[0-9A-Fa-f]{6}$"
+                        title="Hexadecimal color code"
+                      />
+                      <input
+                        id="color-picker-secondLine"
+                        type="color"
+                        value={video?.video?.subtitle?.style?.secondLine?.color || "#FFFFFF"}
+                        onChange={(e) => updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, color: e.target.value } })}
+                        className="sr-only"
+                      />
+                    </div>
+
+                    <div className="w-1/2 relative">
+                      <Input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={video?.video?.subtitle?.style?.secondLine?.fontSize?.toString() || "20"}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '')
+                          updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, fontSize: parseInt(value) } })
+                        }}
+                        className="w-full pl-8 pr-8 text-center"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={decrementSizeSecondLine}
+                        className="absolute left-0 top-0 bottom-0 px-2"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={incrementSizeSecondLine}
+                        className="absolute right-0 top-0 bottom-0 px-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="flex w-full">
+                    <Button
+                      variant={video?.video?.subtitle?.style?.secondLine?.isItalic ? "default" : "outline"}
+                      className="flex-1 rounded-r-none"
+                      onClick={() => toggleStyleSecondLine('isItalic')}
+                    >
+                      <Italic className="h-4 w-4" />
+                      {t('italic')}
+                    </Button>
+                    <Button
+                      variant={video?.video?.subtitle?.style?.activeWord?.isUppercase ? "default" : "outline"}
+                      className="flex-1 rounded-l-none border-l-0"
+                      onClick={() => toggleStyleSecondLine('isUppercase')}
+                    >
+                      <CaseUpper className="h-4 w-4" />
+                      {t('uppercase')}
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center justify-between w-full">
+                      <span className="flex items-center gap-2 min-w-20">
+                        <AArrowUp className="h-4 w-4" />
+                        {t('dynamic-size-label')}
+                      </span>
+                      <div className="flex items-center">
+                        <Switch 
+                          checked={video?.video?.subtitle?.style?.secondLine?.dynamicSize || false}
+                          onCheckedChange={(checked: boolean) => 
+                            updateStyle({ 
+                              secondLine: { 
+                                ...video?.video?.subtitle?.style?.secondLine, 
+                                dynamicSize: checked 
+                              } 
+                            })
+                          }
+                          onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
+                        />
+                      </div>
+                    </div>
                 </div>
               </AccordionContent>
             </AccordionItem>

@@ -1,13 +1,14 @@
 import { Sequence, useVideoConfig } from "remotion";
-import {fillTextBox} from '../../utils/measureText';
 import {useMemo} from 'react';
 import { Line, Sequence as SequenceType, SubtitleMode, Word } from "../../type/subtitle";
-import { SubtitleClean } from "./subtitleClean";
+import { fillTextBox } from "../../utils/measureText";
+import { SubtitleModern } from "./subtitleModern";
+import { fitText, measureText } from "@remotion/layout-utils";
 
 export const formatSubtitles = (
 	sequences: SequenceType[],
 	maxWidth: number,
-	style?: { isPunctuation?: boolean; isUppercase?: boolean, fontSize?: number, fontFamily?: string, fontWeight?: number, mode?: SubtitleMode }
+	style?: { isPunctuation?: boolean; isUppercase?: boolean, fontSize?: number, fontFamily?: string, fontWeight?: number, mode?: SubtitleMode, secondLine?: { dynamicSize?: boolean } }
 ) => {
 	const subtitles: {
 		lines: Line[];
@@ -52,10 +53,55 @@ export const formatSubtitles = (
 			let actualLine = 0;
 			let text = '';
 
+			// Une fois qu'on a rempli les deux lignes, on ajuste la taille
+			const adjustSecondLineSize = (lines: Line[]) => {
+				if (lines[0].words.length === 0 || lines[1].words.length === 0) return;
+
+				// Mesure la largeur de la première ligne
+				const line1Width = measureText({
+					text: lines[0].words.map(w => w.word).join(' '),
+					fontFamily: style?.fontFamily || 'Montserrat',
+					fontSize: style?.fontSize || 70,
+					fontWeight: style?.fontWeight || 700,
+				}).width;
+
+				// Mesure la largeur de la deuxième ligne avec la taille initiale
+				const line2Text = lines[1].words.map(w => w.word).join(' ');
+				const line2Width = measureText({
+					text: line2Text,
+					fontFamily: style?.fontFamily || 'Montserrat',
+					fontSize: style?.fontSize || 70,
+					fontWeight: style?.fontWeight || 700,
+				}).width;
+
+				// Si la première ligne est plus large, on ajuste la taille de la deuxième
+				if (line1Width > line2Width) {
+					const { fontSize: newFontSize } = fitText({
+						text: line2Text,
+						fontFamily: style?.fontFamily || 'Montserrat',
+						fontWeight: style?.fontWeight || 700,
+						withinWidth: line1Width,
+					});
+
+					const maxAllowedSize = (style?.fontSize || 70) * 2 || 140; // 300% de 70px par défaut
+					const finalFontSize = Math.min(newFontSize, maxAllowedSize);
+
+					// On applique la nouvelle taille à tous les mots de la deuxième ligne
+					lines[1].words.forEach(word => {
+						word.fontSize = finalFontSize;
+					});
+
+					// On applique la nouvelle taille à tous les mots de la deuxième ligne
+					lines[1].words.forEach(word => {
+						word.fontSize = newFontSize;
+					});
+				}
+			};
+
 			sequence.words.forEach((word, index, words) => {
 				const processedWord = style?.isPunctuation 
-					? word.word.replace(/[.,;!?]/g, '')
-					: word.word;
+						? word.word.replace(/[.,;!?]/g, '')
+						: word.word;
 
 				const result = box.add({
 					text: processedWord,
@@ -65,15 +111,15 @@ export const formatSubtitles = (
 					textTransform: style?.isUppercase ? 'uppercase' : 'none',
 				});
 
-				console.log('word', processedWord);
-				console.log('result', result);
-
-				if (result.newLine && mode === 'twoLines' && actualLine < 1) {
+				if (result.newLine && mode === 'twoLines' && actualLine < 1 && text.length > 0) {
 					actualLine++;
 				}
 
 				if (result.exceedsBox) {
 					if (currentLine[0].words.length > 0) {
+						if (style?.secondLine?.dynamicSize) {
+						  adjustSecondLineSize(currentLine);
+						}
 						subtitles.push({
 							lines: [...currentLine],
 							start: currentLine[0].words[0].start,
@@ -100,7 +146,14 @@ export const formatSubtitles = (
 					currentLine[actualLine].words.push({ ...word, word: processedWord });
 				}
 
+				if (result.newLine && mode === 'twoLines' && actualLine < 1 && !(text.length > 0)) {
+					actualLine++;
+				}
+
 				if (index === words.length - 1 && currentLine.length > 0) {
+					if (style?.secondLine?.dynamicSize) {
+					  adjustSecondLineSize(currentLine);
+					}
 					subtitles.push({
 						lines: [...currentLine],
 						start: currentLine[0].words[0].start,
@@ -116,7 +169,7 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesClean = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
+export const SubtitlesModern = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -128,6 +181,8 @@ export const SubtitlesClean = ({ subtitleSequences, style }: { subtitleSequences
 		return sub;
 	}, [subtitleSequences, style]);
 
+	console.log(subtitles);
+
     let currentFrame = 0;
     
 	return (
@@ -138,7 +193,7 @@ export const SubtitlesClean = ({ subtitleSequences, style }: { subtitleSequences
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleClean subtitleSequence={subtitle} start={currentFrame} style={style} />
+						<SubtitleModern subtitleSequence={subtitle} start={currentFrame} style={style} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;
