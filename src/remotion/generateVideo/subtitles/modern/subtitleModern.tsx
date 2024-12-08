@@ -9,15 +9,17 @@ export const SubtitleModern = ({ subtitleSequence, start, style }: { subtitleSeq
 
     useEffect(() => {
         const loadFontByName = async (fontSelected: string) => {
+            console.log('load font :', fontSelected);
             const font = googleFonts.find((font) => font.family === fontSelected);
             if (font) {
                 await font.load();
+                console.log('font loaded :', fontSelected);
             }
         };
 
         loadFontByName(style?.fontFamily || 'Montserrat');
-        if (style?.activeWord?.isActive && style?.activeWord?.fontFamily !== style?.fontFamily) {
-            loadFontByName(style?.activeWord.fontFamily || 'Montserrat');
+        if (style?.secondLine?.isActive && style?.secondLine?.fontFamily !== style?.fontFamily) {
+            loadFontByName(style?.secondLine?.fontFamily || 'Montserrat');
         }
     }, [style?.fontFamily]);
 
