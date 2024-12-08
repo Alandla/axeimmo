@@ -1,4 +1,4 @@
-import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
 import { useEffect, useState } from "react";
 import googleFonts from "../../config/googleFonts.config";
@@ -24,6 +24,7 @@ export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequ
     const getAnimationValues = () => {
         let scale = 1;
         let opacity = 1;
+        let blurValue = 0;
 
         switch (style.animation?.appear) {
             case 'zoom':
@@ -66,11 +67,32 @@ export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequ
                     durationInFrames: 20,
                 });
                 break;
+            case 'blur':
+                const blurAnimation = spring({
+                    fps,
+                    frame,
+                    config: {
+                      damping: 200,
+                      stiffness: 100,
+                      overshootClamping: true,
+                    },
+                  });
+                
+                  // Valeur du flou : réduit de 20px à 0px en 0.3 secondes
+                blurValue = interpolate(
+                    blurAnimation,
+                    [0, 0.5],
+                    [10, 0], // De 20px de flou à 0px
+                    {
+                      extrapolateLeft: "clamp",
+                      extrapolateRight: "clamp",
+                    }
+                );
         }
-        return { scale, opacity };
+        return { scale, opacity, blurValue };
     };
 
-    const { scale, opacity } = getAnimationValues();
+    const { scale, opacity, blurValue } = getAnimationValues();
 
     const verticalPosition = (style.position / 100) * 1750;
 
@@ -103,6 +125,7 @@ export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequ
                         right: `-10px`,
                         backgroundColor: style.background.color || 'red',
                         borderRadius: style.background.radius,
+                        filter: blurValue > 0 ? `blur(${blurValue}px)` : 'none',
                     }}></div>
                 )}
                 
@@ -128,6 +151,7 @@ export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequ
                                     right: `-10px`,
                                     backgroundColor: style.background.color || 'red',
                                     borderRadius: style.background.radius,
+                                    filter: blurValue > 0 ? `blur(${blurValue}px)` : 'none',
                                 }}></div>
                             )}
                             
@@ -181,6 +205,7 @@ export const SubtitleClean = ({ subtitleSequence, start, style }: { subtitleSequ
                                                 zIndex: 5,
                                                 textAlign: 'center',
                                                 lineHeight: '1.2',
+                                                filter: blurValue > 0 ? `blur(${blurValue}px)` : 'none',
                                             }}>
                                                 {word.word}{' '}
                                         </span>
