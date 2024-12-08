@@ -5,6 +5,7 @@ import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
 import { loadFont as loadLora } from "@remotion/google-fonts/Lora";
 import { loadFont as loadSchoolbell } from "@remotion/google-fonts/Schoolbell";
 import { loadFont as loadUnbounded } from "@remotion/google-fonts/Unbounded";
+import { loadFont as loadFraunces } from "@remotion/google-fonts/Fraunces";
 
 export type Font = {
   family: string;
@@ -43,7 +44,11 @@ const googleFonts: Font[] = [
   {
     family: 'Unbounded',
     load: loadUnbounded,
-  }
+  },
+  {
+    family: 'Fraunces',
+    load: loadFraunces,
+  },
 ];
 
 export default googleFonts;
