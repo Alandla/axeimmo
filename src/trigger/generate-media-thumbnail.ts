@@ -9,6 +9,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const generateMediaThumbnail = task({
   id: "generate-media-thumbnail",
+  machine: {
+    preset: "medium-1x"
+  },
   run: async (payload: { media: FileToUpload, url: string }) => {
     const { url } = payload;
     const tempDirectory = os.tmpdir();
