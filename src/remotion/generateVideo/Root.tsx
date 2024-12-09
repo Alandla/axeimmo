@@ -8,7 +8,6 @@ const calculateMetadata = ({props}: {props: any}) => {
 	return {
 	  durationInFrames: Math.ceil(duration * 60), // 60 est le fps
 	  data: props.data.video.result,
-	  audioUrl: props.data.video.audioUrl,
 	};
   };
 

@@ -41,9 +41,9 @@ export const exportVideoTask = task({
         throw new Error('Video not found');
       }
 
-      if (video.video?.avatar?.id && video.video?.audioUrl && !video.video?.avatar?.videoUrl) {
+      if (video.video?.avatar?.id && video.video?.audio?.url && !video.video?.avatar?.videoUrl) {
         logger.log("Génération de la vidéo avatar...");
-        const avatarResponse = await generateAvatarVideo(video.video.avatar, video.video.audioUrl);
+        const avatarResponse = await generateAvatarVideo(video.video.avatar, video.video.audio?.url);
         logger.log("Avatar response", { avatarResponse });
         const avatarVideoUrl = await pollAvatarVideoStatus(avatarResponse.data.video_id);
         logger.log("Avatar video response", { avatarVideoUrl });
