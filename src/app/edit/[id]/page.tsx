@@ -7,7 +7,7 @@ import { Card } from "@/src/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/src/components/ui/breadcrumb"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
-import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon } from 'lucide-react'
+import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2 } from 'lucide-react'
 import Link from 'next/link'
 import Sequence from '@/src/components/edit/sequence'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
@@ -24,11 +24,12 @@ import { useToast } from '@/src/hooks/use-toast'
 import Panel1 from '@/src/components/edit/panel-1'
 import Subtitles from '@/src/components/edit/subtitles'
 import SubtitleSettings from '@/src/components/edit/subtitle-settings'
-import { ISpace, ISpaceSubtitleStyle } from '@/src/types/space'
+import { ISpaceSubtitleStyle } from '@/src/types/space'
 import { useSubtitleStyleStore } from '@/src/store/subtitlesStyleSore'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
-import { Alert, AlertDescription } from '@/src/components/ui/alert'
+import AudioSettings from '@/src/components/edit/audio-settings'
+import Musics from '@/src/components/edit/musics'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -141,6 +142,19 @@ export default function VideoEditor() {
     }
   };
 
+  const updateAudioSettings = (audioSettings: any) => {
+    if (video && video.video) {
+      const updatedVideo = {
+        ...video,
+        video: {
+          ...video.video,
+          audio: audioSettings
+        }
+      };
+      updateVideo(updatedVideo);
+    }
+  };
+
   const onExportVideo = async () => {
     const cost = calculateCredits(video?.video?.metadata.audio_duration || 30)
     await basicApiCall('/video/save', { video })
@@ -183,7 +197,6 @@ export default function VideoEditor() {
       try {
         setIsLoading(true)
         const response = await basicApiGetCall<IVideo>(`/video/${id}`)
-        console.log("response", response)
         setVideo(response)
       } catch (error) {
         console.error(error)
@@ -299,7 +312,7 @@ export default function VideoEditor() {
             <Card className="h-full">
               <div className="flex flex-col h-[calc(100vh-5rem)] mt-2 mx-2">
                 <Tabs defaultValue="sequences" className="w-full" onValueChange={setActiveTab1}>
-                    <TabsList className="grid w-full grid-cols-2">
+                    <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="sequences" className="flex items-center gap-2">
                             <ListVideo className="w-4 h-4" />
                             {t('sequences-tabs-title')}
@@ -307,6 +320,10 @@ export default function VideoEditor() {
                         <TabsTrigger value="subtitle" className="flex items-center gap-2">
                             <SubtitlesIcon className="w-4 h-4" />
                             {t('subtitles-tabs-title')}
+                        </TabsTrigger>
+                        <TabsTrigger value="audio" className="flex items-center gap-2">
+                            <Volume2 className="w-4 h-4" />
+                            {t('audio-tabs-title')}
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="sequences">
@@ -321,6 +338,9 @@ export default function VideoEditor() {
                     <TabsContent value="subtitle">
                       <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} />
                     </TabsContent>
+                    <TabsContent value="audio">
+                      <Musics video={video} updateAudioSettings={updateAudioSettings} />
+                    </TabsContent>
                 </Tabs>
               </div>
             </Card>
@@ -331,6 +351,10 @@ export default function VideoEditor() {
               {activeTab1 === 'subtitle' ? (
                 <ScrollArea className="h-[calc(100vh-5rem)]">
                   <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} />
+                </ScrollArea>
+              ) : activeTab1 === 'audio' ? (
+                <ScrollArea className="h-[calc(100vh-5rem)]">
+                  <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
                 </ScrollArea>
               ) : (
                 <ScrollArea className="h-[calc(100vh-5rem)]">

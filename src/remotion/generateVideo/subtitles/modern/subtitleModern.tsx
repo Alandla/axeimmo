@@ -9,11 +9,9 @@ export const SubtitleModern = ({ subtitleSequence, start, style }: { subtitleSeq
 
     useEffect(() => {
         const loadFontByName = async (fontSelected: string) => {
-            console.log('load font :', fontSelected);
             const font = googleFonts.find((font) => font.family === fontSelected);
             if (font) {
                 await font.load();
-                console.log('font loaded :', fontSelected);
             }
         };
 

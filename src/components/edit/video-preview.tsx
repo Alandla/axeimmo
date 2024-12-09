@@ -3,7 +3,6 @@ import { IVideo } from "@/src/types/video";
 import { Player, PlayerRef } from "@remotion/player";
 import { useEffect } from "react";
 import { preloadAudio, preloadImage, preloadVideo } from "@remotion/preload";
-import { Alert, AlertDescription } from "../ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -13,8 +12,12 @@ export default function VideoPreview({ playerRef, video, isMobile }: { playerRef
     useEffect(() => {
         if (!video?.video?.sequences) return;
 
-        if (video.video.audioUrl) {
-          preloadAudio(video.video.audioUrl);
+        if (video.video.audio?.url) {
+          preloadAudio(video.video.audio.url);
+        }
+
+        if (video.video.audio?.music?.url) {
+            preloadAudio(video.video.audio.music.url);
         }
 
         if (video.video.avatar?.videoUrl) {

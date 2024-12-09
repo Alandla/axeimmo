@@ -15,7 +15,8 @@ export const VideoGenerate = ({ data }: { data: any }) => {
     }
 	return (
 		<>
-			<Audio src={data.video.audioUrl} />
+			<Audio src={data.video.audio.url} volume={data.video.audio.volume} />
+			{ data.video.audio.music && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
 			<Watermark />
 			{ data.video.avatar ? <BackgroundWithAvatar sequences={data.video.sequences} avatar={data.video.avatar} duration={data.video.metadata.audio_duration} /> : <MediaBackground sequences={data.video.sequences} /> }
 			{ data.video.subtitle.style.template === 'bold' && <SubtitlesBold subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }

@@ -21,6 +21,8 @@ import { generateBrollDisplay, generateStartData } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
 import { analyzeMediaWithSieve, getAnalysisResult, getJobCost, SieveCostResponse } from "../lib/sieve";
 import { applyShowBrollToSequences, ShowBrollResult, simplifySequences } from "../lib/analyse";
+import { music } from "../config/musics.config";
+import { Genre } from "../types/music";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -43,6 +45,7 @@ export const generateVideoTask = task({
     let cost = 0
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
+    let videoStyle: string | undefined;
 
     logger.log("Generating video...", { payload, ctx });
 
@@ -64,6 +67,7 @@ export const generateVideoTask = task({
     if (payload.script) {
       const startData = generateStartData(payload.script).then((data) => {
         logger.info('Start data', data?.details)
+        videoStyle = data?.details.style
         newVideo = {
           title: data?.details.title,
           style: data?.details.style,
@@ -167,6 +171,7 @@ export const generateVideoTask = task({
       const script = transcription.transcription.utterances.map((utterance: any) => utterance.text).join(' ');
       const startData = generateStartData(script).then((data) => {
         logger.info('Start data', data?.details)
+        videoStyle = data?.details.style
         newVideo = {
           title: data?.details.title,
           style: data?.details.style,
@@ -319,6 +324,14 @@ export const generateVideoTask = task({
       avatar = payload.avatar
     }
 
+    let videoMusic;
+    logger.info('Video style', { videoStyle })
+    if (videoStyle) {
+      let style = videoStyle as Genre
+      const matchingMusics = music.filter((m: any) => m.genre === style)
+      videoMusic = matchingMusics[Math.floor(Math.random() * matchingMusics.length)]
+    }
+
     newVideo = {
       ...newVideo,
       costToGenerate: cost + ctx.run.baseCostInCents,
@@ -326,7 +339,16 @@ export const generateVideoTask = task({
         type: 'done',
       },
       video: {
-        audioUrl: voiceUrl,
+        audio: {
+          url: voiceUrl,
+          volume: 1,
+          music: videoMusic ? {
+            url: videoMusic.url,
+            volume: 0.10,
+            name: videoMusic.name,
+            genre: videoMusic.genre
+          } : undefined
+        },
         thumbnail: "",
         metadata: transcription.metadata,
         sequences,

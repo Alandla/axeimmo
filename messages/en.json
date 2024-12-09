@@ -108,6 +108,7 @@
       "saved": "Saved",
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Subtitles",
+      "audio-tabs-title": "Audio",
       "toast": {
         "title-error": "Error",
         "title-saving": "Saving the video...",
@@ -202,6 +203,31 @@
           "title-no-results": "No results",
           "description-no-results": "No results found for your search."
         }
+      },
+      "audio": {
+        "title": "Audio settings",
+        "no-music": "No music selected",
+        "music-tracks": "Background music",
+        "audio-settings": "Audio settings",
+        "background-music-volume": "Background music volume",
+        "voice-volume": "Voice volume",
+        "select_genre": "Select a genre",
+        "all_genres": "All genres",
+        "search": "Search a music...",
+        "volume-music-title": "Music volume",
+        "volume-voice-title": "Voice volume",
+        "genres": {
+          "dramatic": "Dramatic",
+          "relaxing": "Relaxing",
+          "inspirational": "Inspirational",
+          "mysterious": "Mysterious",
+          "informative": "Informative",
+          "entertaining": "Entertaining",
+          "educational": "Educational",
+          "humorous": "Humorous"
+        },
+        "listen": "Listen",
+        "pause": "Pause"
       }
     },
     "ai": {

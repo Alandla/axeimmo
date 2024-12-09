@@ -173,8 +173,6 @@ export const generateStartData = async (script: string) => {
             ],
         });
 
-        console.log("Result", result);
-
         const jsonResponse = JSON.parse(result.text);
 
         const data = {

@@ -33,8 +33,17 @@ const videoSchema = new mongoose.Schema({
       date: Date
     }],
     video: {
-      audioUrl: String,
       thumbnail: String,
+      audio: {
+        url: String,
+        volume: Number,
+        music: {
+          name: String,
+          url: String,
+          volume: Number,
+          genre: String,
+        }
+      },
       subtitle: {
         name: String,
         style: Object

@@ -64,9 +64,18 @@ export interface IVideo {
   isNews?: boolean;
   runId: string;
   video?: {
-    audioUrl: string;
     thumbnail: string;
     subtitle: any;
+    audio?: {
+      url: string;
+      volume: number;
+      music?: {
+        name: string;
+        url: string;
+        volume: number;
+        genre: string;
+      }
+    }
     metadata: {
       audio_duration: number;
       number_of_distinct_channels: number;
