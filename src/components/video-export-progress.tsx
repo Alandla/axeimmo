@@ -87,7 +87,11 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
 
             for await (const run of runs.subscribeToRun(runId)) {
               setStatus(run.metadata?.status as ExportStatus)
-              setProgress(run.metadata?.progress as number)
+              if (run.metadata?.progress) {
+                setProgress(run.metadata?.progress as number)
+              } else {
+                setProgress(0)
+              }
               setStep(run.metadata?.step as ExportStep)
               if (run.status === "COMPLETED") {
                 setDownloadUrl(run.metadata?.downloadUrl as string)
