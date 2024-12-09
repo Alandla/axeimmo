@@ -18,7 +18,8 @@ const genreStyles = {
     [Genre.HUMOROUS]: { hue: 300, saturation: 90 },      // Rose
     [Genre.INFORMATIVE]: { hue: 180, saturation: 100 },  // Cyan
     [Genre.MYSTERIOUS]: { hue: 270, saturation: 100 },   // Violet
-    [Genre.RELAXING]: { hue: 150, saturation: 80 }       // Vert menthe
+    [Genre.RELAXING]: { hue: 150, saturation: 80 },      // Vert menthe
+    [Genre.INSPIRATIONAL]: { hue: 90, saturation: 100 },  // Rose orangé
 };
 
 export const music: MusicWithStyle[] = [
@@ -1040,6 +1041,106 @@ export const music: MusicWithStyle[] = [
             ...genreStyles[Genre.RELAXING],
             rotate: 235,
             gradient: 2
+        }
+    },
+    {
+        name: 'Electronic Rock King',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/electronic-rock-king-around-here-15045.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 15,
+            gradient: 1
+        }
+    },
+    {
+        name: 'Golden UK Drill',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/goldn-uk-drill-music-116392.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 35,
+            gradient: 3
+        }
+    },
+    {
+        name: 'Guitar Electro Sport',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/guitar-electro-sport-trailer-115571.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 55,
+            gradient: 5
+        }
+    },
+    {
+        name: 'Inspiring Motivational',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/inspiring-motivational-mood-14107.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 75,
+            gradient: 2
+        }
+    },
+    {
+        name: 'Motivation',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/motivation-258263.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 95,
+            gradient: 4
+        }
+    },
+    {
+        name: 'Motivational Opening Speech',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/motivational-opening-speech-262288.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 115,
+            gradient: 6
+        }
+    },
+    {
+        name: 'Stomp Snaps',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/stomp-snaps-111917.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 135,
+            gradient: 7
+        }
+    },
+    {
+        name: 'Stomps Riser Rhythm',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/stomps-riser-rhythm-riot-246396.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 155,
+            gradient: 1
+        }
+    },
+    {
+        name: 'Success Motivation Adventure',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/success-motivation-adventure-heroic-epic-award-263789.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 175,
+            gradient: 3
+        }
+    },
+    {
+        name: 'The Future Bass',
+        genre: Genre.INSPIRATIONAL,
+        url: 'https://music.hoox.video/the-future-bass-15017.mp3',
+        style: {
+            ...genreStyles[Genre.INSPIRATIONAL],
+            rotate: 195,
+            gradient: 5
         }
     }
 ]
