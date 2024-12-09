@@ -65,9 +65,6 @@ export const formatSubtitles = (
 					textTransform: style?.isUppercase ? 'uppercase' : 'none',
 				});
 
-				console.log('word', processedWord);
-				console.log('result', result);
-
 				if (result.newLine && mode === 'twoLines' && actualLine < 1) {
 					actualLine++;
 				}

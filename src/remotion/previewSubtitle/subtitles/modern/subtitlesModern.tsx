@@ -181,8 +181,6 @@ export const SubtitlesModern = ({ subtitleSequences, style }: { subtitleSequence
 		return sub;
 	}, [subtitleSequences, style]);
 
-	console.log(subtitles);
-
     let currentFrame = 0;
     
 	return (
