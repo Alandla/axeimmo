@@ -104,7 +104,7 @@ export const subtitles = [
                 fontSize: 70,
                 color: "#bbbbbb",
                 isItalic: false,
-                isPunctuation: true,
+                isPunctuation: false,
                 isUppercase: true,
             },
             shadow: {

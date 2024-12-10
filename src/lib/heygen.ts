@@ -31,7 +31,7 @@ export async function generateAvatarVideo(avatar: AvatarLook, audioUrl: string) 
             type: "avatar",
             avatar_id: avatar.id,
             avatar_style: "normal",
-            scale: 3.15,
+            scale: 3.17,
             offset: {
               x: xOffset,
               y: 0.0
