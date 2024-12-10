@@ -52,9 +52,11 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
     try {
       setIsUploadingFiles(true)
       const uploadedFiles: FileToUpload[] = newFiles.map(file => {
+          const type = file.type.startsWith('image/') ? "image" : file.type.startsWith('video/') ? "video" : "audio";
           return {
             file,
-            type: "media",
+            type,
+            usage: "media",
             label: ''
           };
       });

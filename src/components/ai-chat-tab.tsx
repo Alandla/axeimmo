@@ -15,7 +15,7 @@ interface DurationOption {
   value: number;
 }
 
-export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, handleConfirmVoice, handleConfirmMedia }: { creationStep: CreationStep, sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleConfirmVoice: () => void, handleConfirmMedia: () => void }) {
+export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, handleConfirmVoice }: { creationStep: CreationStep, sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleConfirmVoice: () => void }) {
     const { files, selectedVoice, selectedAvatar, setFiles } = useCreationStore()
     const [inputMessage, setInputMessage] = useState('')
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
@@ -33,26 +33,27 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
     }
 
     const handleFileUpload = (newFiles: File[]) => {
+      console.log('newFiles', newFiles)
       const updatedFiles: FileToUpload[] = newFiles.map(file => {
-        let type: "voice" | "avatar" | "media" = "media";
+        let usage: "voice" | "avatar" | "media" = "media";
         if (file.type.startsWith('audio/')) {
-          type = "voice";
+          usage = "voice";
         }
-        if (file.type.startsWith('video/') && files.filter(file => file.type === "avatar").length === 0) {
-          type = "avatar";
-        }
+        const type = file.type.startsWith('image/') ? "image" : file.type.startsWith('video/') ? "video" : "audio";
         return {
           file,
           type,
+          usage,
           label: ''
         };
       });
+      console.log('updatedFiles', updatedFiles)
       setFiles([...files, ...updatedFiles]);
     };
 
-    const handleFileTypeChange = (fileIndex: number, newType: "voice" | "avatar" | "media") => {
+    const handleFileUsageChange = (fileIndex: number, newUsage: "voice" | "avatar" | "media") => {
       setFiles(files.map((file, index) => 
-        index === fileIndex ? { ...file, type: newType } : file
+        index === fileIndex ? { ...file, usage: newUsage } : file
       ));
     };
 
@@ -106,8 +107,8 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                         <FilePreview
                           key={index}
                           file={file.file}
-                          type={file.type}
-                          onTypeChange={(newType) => handleFileTypeChange(index, newType)}
+                          usage={file.usage}
+                          onUsageChange={(newUsage) => handleFileUsageChange(index, newUsage)}
                           onRemove={() => handleFileRemove(index)}
                         />
                       ))}
@@ -122,7 +123,7 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                     setInputMessage(e.target.value);
                     adjustTextareaHeight(e);
                   }}
-                  disabled={files.some(file => file.type === "voice" || file.type === "avatar")}
+                  disabled={files.some(file => file.usage === "voice" || file.usage === "avatar")}
                   onInput={adjustTextareaHeight}
                   className={`w-full mb-2 border-none shadow-none focus:ring-0 resize-none ${isDragging ? 'opacity-50' : ''}`}
                   rows={1}
@@ -146,14 +147,14 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                     <SelectDuration 
                       value={videoDuration} 
                       onChange={setVideoDuration} 
-                      disabled={files.some(file => file.type === "voice" || file.type === "avatar")}
+                      disabled={files.some(file => file.usage === "voice" || file.usage === "avatar")}
                     />
                     <input
                       id="file-input"
                       type="file"
                       multiple
                       className="hidden"
-                      accept={files.some(file => file.type === "voice") ? 
+                      accept={files.some(file => file.usage === "voice") ? 
                         'image/*,video/*' : 
                         'image/*,video/*,audio/*'}
                       onChange={(e) => {
@@ -170,7 +171,7 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                           size="icon" 
                           onClick={() => handleSendMessage(inputMessage, videoDuration?.value || 936)} 
                           disabled={
-                            !files.some(file => file.type === "voice" || file.type === "avatar") && 
+                            !files.some(file => file.usage === "voice" || file.usage === "avatar") && 
                             (!inputMessage.trim() || !videoDuration)
                           }
                         >
@@ -178,7 +179,7 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                         </Button>
                       </div>
                     </TooltipTrigger>
-                    {(!files.some(file => file.type === "voice" || file.type === "avatar") && (!inputMessage.trim() || !videoDuration)) && 
+                    {(!files.some(file => file.usage === "voice" || file.usage === "avatar") && (!inputMessage.trim() || !videoDuration)) && 
                       <TooltipContent>
                         {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
                       </TooltipContent>
@@ -238,34 +239,13 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
             <>
               {selectedAvatar ? (
                 <Button className="w-full" onClick={handleConfirmAvatar}>
-                  <Check />{files.some(file => file.type === 'media') ? t('next-step') : t('start-generation')}
+                  <Check />{files.some(file => file.usage === 'media') ? t('next-step') : t('start-generation')}
                 </Button>
               ) : (
                 <Button className="w-full" onClick={handleConfirmAvatar}>
-                  <Check />{files.some(file => file.type === 'media') ? t('no-avatar') : t('no-avatar-generation')}
+                  <Check />{files.some(file => file.usage === 'media') ? t('no-avatar') : t('no-avatar-generation')}
                 </Button>
               )}
-            </>
-          ) : creationStep === CreationStep.MEDIA ? (
-            <>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <div>
-                    <Button 
-                      className="w-full" 
-                      disabled={files.some(file => !file.label)} 
-                      onClick={handleConfirmMedia}
-                    >
-                      <Check />{t('start-generation')}
-                    </Button>
-                  </div>
-                </TooltipTrigger>
-                {files.some(file => !file.label) && (
-                  <TooltipContent>
-                    {t('label-all-files')}
-                  </TooltipContent>
-                )}
-              </Tooltip>
             </>
           ) : creationStep === CreationStep.GENERATION ? (
             <>

@@ -15,7 +15,6 @@ import { motion } from 'framer-motion'
 import { VoicesGridComponent } from './voices-grid'
 import { useCreationStore } from '../store/creationStore'
 import { AvatarGridComponent } from './avatar-grid'
-import { MediaLabel } from './media-label'
 import { Steps, StepState } from '../types/step'
 import { GenerationProgress } from './generation-progress'
 import { startGeneration } from '../service/generation.service'
@@ -26,7 +25,6 @@ enum MessageType {
   TEXT = 'text',
   VOICE = 'voice',
   AVATAR = 'avatar',
-  MEDIA = 'media',
   GENERATION = 'generation',
 }
 
@@ -56,19 +54,18 @@ export function AiChat() {
       if (files.length !== 0) {
         addStep({ id: 0, name: Steps.MEDIA_UPLOAD, state: StepState.PENDING, progress: 0 })
         addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
-        if (files.some(file => file.type === 'voice')) {
+        
+        if (files.some(file => file.usage === 'media')) {
+          addStep({ id: 2, name: Steps.ANALYZE, state: StepState.PENDING, progress: 0 })
+        }
+
+        if (files.some(file => file.usage === 'voice')) {
           setCreationStep(CreationStep.AVATAR)
           const messageAi = getRandomMessage('ai-get-audio-select-avatar');
           addMessageAi(messageAi, MessageType.AVATAR);
           return;
-        } else if (files.some(file => file.type === 'avatar') && files.some(file => file.type === 'media')) {
-          setCreationStep(CreationStep.MEDIA)
-          const messageAi = getRandomMessage('ai-ask-media-description');
-          addMessageAi(messageAi, MessageType.MEDIA);
-          return;
-        } else if (files.some(file => file.type === 'avatar')) {
-          addStep({ id: 2, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
-          addStep({ id: 3, name: Steps.ANALYZE, state: StepState.PENDING, progress: 0 })
+        } else if (files.some(file => file.usage === 'avatar')) {
+          addStep({ id: 3, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.GENERATION)
           const messageAi = getRandomMessage('ai-get-all-start-generation');
           addMessageAi(messageAi, MessageType.GENERATION);
@@ -206,37 +203,17 @@ export function AiChat() {
     } else {
       messageUser1 = getRandomMessage('user-no-avatar');
     }
-    if (files.some(file => file.type === 'media')) {
-      messageUser2 = getRandomMessage('user-next-step');
-      messageAi = getRandomMessage('ai-ask-media-description');
-      const messageUser = messageUser1 + ' ' + messageUser2;
 
-      setCreationStep(CreationStep.MEDIA)
+    messageUser2 = getRandomMessage('user-start-generation');
+    messageAi = getRandomMessage('ai-generation-progress');
+    const messageUser = messageUser1 + ' ' + messageUser2;
 
-      addMessageUser(messageUser)
-      addMessageAi(messageAi, MessageType.MEDIA);
-    } else {
-      messageUser2 = getRandomMessage('user-start-generation');
-      messageAi = getRandomMessage('ai-generation-progress');
-      const messageUser = messageUser1 + ' ' + messageUser2;
-
-      addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
-      setCreationStep(CreationStep.GENERATION)
-      handleStartGeneration()
-
-      addMessageUser(messageUser)
-      addMessageAi(messageAi, MessageType.GENERATION);
-    }
-  }
-
-  const handleConfirmMedia = async () => {
     addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.GENERATION)
-    const messageUser = getRandomMessage('user-confirm-media');
-    const messageAi = getRandomMessage('ai-generation-progress');
-    addMessageUser(messageUser)
-    addMessageAi(messageAi, MessageType.GENERATION)
     handleStartGeneration()
+
+    addMessageUser(messageUser)
+    addMessageAi(messageAi, MessageType.GENERATION);
   }
 
   const handleStartGeneration = async () => {
@@ -384,9 +361,6 @@ export function AiChat() {
                   {message.type === MessageType.VOICE && (
                     <VoicesGridComponent />
                   )}
-                  {message.type === MessageType.MEDIA && (
-                    <MediaLabel />
-                  )}
                   {message.type === MessageType.GENERATION && (
                     <GenerationProgress />
                   )}
@@ -401,7 +375,7 @@ export function AiChat() {
             ))}
           </div>
         )}
-        <AiChatTab creationStep={creationStep} sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} handleConfirmVoice={handleConfirmVoice} handleConfirmMedia={handleConfirmMedia} />
+        <AiChatTab creationStep={creationStep} sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} handleConfirmVoice={handleConfirmVoice} />
       </div>
     </div>
   )

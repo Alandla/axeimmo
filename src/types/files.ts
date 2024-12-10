@@ -1,6 +1,7 @@
 export type FileToUpload = {
   file: File,
-  type: "voice" | "avatar" | "media",
+  type: "image" | "video" | "audio"
+  usage: "voice" | "avatar" | "media"
   label: string
 }
 

@@ -15,7 +15,13 @@ export interface IMedia {
   show?: 'full' | 'half' | 'hide';
   name: string;
   label: string;
-  description?: string;
+  description?: [
+    {
+      start: number;
+      duration?: number;
+      text: string;
+    }
+  ];
   video?: {
     id: string;
     quality?: string;

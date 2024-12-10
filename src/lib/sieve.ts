@@ -23,14 +23,14 @@ export interface SieveCostResponse {
     }
 }
 
-export const analyzeMediaWithSieve = async (mediaUrl: string) => {
+export const analyzeSimpleVideoWithSieve = async (mediaUrl: string) => {
     try {
         const data = {
             function: "sieve/visual-qa",
             inputs: {
                 file: { url: mediaUrl },
                 backend: "gemini-1.5-flash",
-                prompt: "Give me a description of what you see in the video",
+                prompt: "Give me a description of what you see",
                 fps: 1,
                 audio_context: false,
                 start_time: 0,
@@ -53,7 +53,61 @@ export const analyzeMediaWithSieve = async (mediaUrl: string) => {
     }
 }
 
-const handleAnalysisRetry = async (mediaUrl: string, retryCount: number): Promise<string | null> => {
+export const analyzeVideoWithSieve = async (mediaUrl: string) => {
+    try {
+        const data = {
+            function: "sieve/visual-qa",
+            inputs: {
+                file: { url: mediaUrl },
+                backend: "gemini-1.5-flash",
+                prompt: "Analyze this video by identifying distinct sequences based on significant changes in action or context. A sequence is defined as a continuous period in which the same main action or situation takes place. Do not create new sequences for minor changes or subtle camera movements." +
+                        "" +
+                        "For each sequence identified, provide :"+
+                        "" +
+                        "Start timestamp" +
+                        "A precise description of the main action" +
+                        "" +
+                        "Important rules :" +
+                        "" +    
+                        "A new sequence should be created only when there is a significant change of action or scene." +
+                        "Sequences must be at least 2 seconds long." +
+                        "Ignores micro-changes that do not modify the main action" +
+                        "Merges similar or continuous actions into a single sequence",
+                fps: 1,
+                function_json: {
+                    "type": "list",
+                    "items": {
+                      "text": "description of the sequence",
+                      "start": "The start of the sequence in second",
+                      "duration": "Duration fo the sequence"
+                    }
+                },
+                audio_context: false,
+                start_time: 0,
+                end_time: -1,
+                crop_coordinates: "-1, -1, -1, -1"
+            }
+        };
+
+        const response = await axios.post(`${SIEVE_API_URL}/push`, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': process.env.SIEVE_API_KEY
+            }
+        });
+
+        return response.data.id;
+    } catch (error: any) {
+        logger.error('Error analyzing media:', error.response?.data || error.message);
+        throw error;
+    }
+}
+
+const handleAnalysisRetry = async (
+    mediaUrl: string, 
+    retryCount: number,
+    isDetailedAnalysis: boolean
+): Promise<string | null> => {
     const MAX_RETRIES = 3;
     
     if (retryCount >= MAX_RETRIES) {
@@ -61,11 +115,17 @@ const handleAnalysisRetry = async (mediaUrl: string, retryCount: number): Promis
     }
 
     logger.warn(`Analyse échouée, nouvelle tentative ${retryCount + 1}/${MAX_RETRIES}...`);
-    const newJobId = await analyzeMediaWithSieve(mediaUrl);
-    return getAnalysisResult(newJobId, retryCount + 1, mediaUrl);
+    const analyzeFunction = isDetailedAnalysis ? analyzeVideoWithSieve : analyzeSimpleVideoWithSieve;
+    const newJobId = await analyzeFunction(mediaUrl);
+    return getAnalysisResult(newJobId, retryCount + 1, mediaUrl, isDetailedAnalysis);
 }
 
-export const getAnalysisResult = async (jobId: string, retryCount = 0, mediaUrl: string): Promise<string | null> => {
+export const getAnalysisResult = async (
+    jobId: string, 
+    retryCount = 0, 
+    mediaUrl: string,
+    isDetailedAnalysis = false
+): Promise<string | null> => {
     try {
         const response = await axios.get(`${SIEVE_API_URL}/jobs/${jobId}/await`, {
             headers: {
@@ -73,14 +133,22 @@ export const getAnalysisResult = async (jobId: string, retryCount = 0, mediaUrl:
             }
         });
 
-        const data = response.data as SieveJobResponse;
+        const data = response.data;
+        let responseData = data.outputs[0].data;
+
+        if (!isDetailedAnalysis) {
+            responseData = [{
+                start: 0,
+                text: responseData
+            }]
+        }
 
         if (data.status === 'error') {
-            return handleAnalysisRetry(mediaUrl, retryCount);
+            return handleAnalysisRetry(mediaUrl, retryCount, isDetailedAnalysis);
         }
 
         if (data.status === 'finished' && data.outputs && data.outputs.length > 0) {
-            return data.outputs[0].data;
+            return responseData;
         }
 
         return null;

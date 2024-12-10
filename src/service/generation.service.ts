@@ -1,9 +1,9 @@
 import { auth, runs } from '@trigger.dev/sdk/v3'
 import { basicApiCall } from '../lib/api'
 import { useCreationStore } from '../store/creationStore'
-import { UploadedFile } from '../types/files'
 import { Steps, StepState } from '../types/step'
 import { uploadFiles } from './upload.service'
+import { IMedia } from '../types/video'
 
 export const startGeneration = async (userId: string, spaceId: string) => {
   const { files, script, selectedVoice, selectedAvatar, setSteps } = useCreationStore.getState()
@@ -18,8 +18,9 @@ export const startGeneration = async (userId: string, spaceId: string) => {
     setSteps(updatedSteps)
   }
 
-  let uploadedFiles: UploadedFile[] = []
+  let uploadedFiles: IMedia[] = []
   if (files.length > 0) {
+    console.log("files", files)
     updateStepProgress("MEDIA_UPLOAD", 0)
     uploadedFiles = await uploadFiles(files, updateStepProgress)
   }
