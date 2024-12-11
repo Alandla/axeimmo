@@ -523,7 +523,7 @@ export const voices: Voice[] = [
     id: 'GgV5QStPLpmkN7FOHJtY',
     name: 'Peter',
     language: 'french',
-    accent: 'swiss',
+    accent: 'french',
     gender: 'male',
     age: 'young',
     tags: ['narration', 'educational'],
@@ -542,6 +542,26 @@ export const voices: Voice[] = [
     age: 'middle aged',
     tags: ['social_media'],
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/9BWtsMINqrJLrRacOk9x/405766b8-1f4e-4d3c-aba1-6f25333823ec.mp3'
+  },
+  {
+    id: 'FpvROcY4IGWevepmBWO2',
+    name: 'Jessy',
+    language: 'french',
+    accent: 'french',
+    gender: 'female',
+    age: 'young',
+    tags: ['journalism', 'entertainment'],
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ZAS4o4vI8aVeceS8bWmtpuSYDqM2/voices/FpvROcY4IGWevepmBWO2/bS9p4qTvVCRqxuIqhvk3.mp3'
+  },
+  {
+    id: 'PBm6YPbx7WbrxFTZwj3E',
+    name: 'Gabriel',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['audiobooks', 'podcasts', 'storytelling'],
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/PBm6YPbx7WbrxFTZwj3E/D8U7C2MgPxZt3MVgeFjn.mp3'
   }
 ]
 
