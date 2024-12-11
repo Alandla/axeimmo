@@ -64,10 +64,10 @@ export default function Sequence({
                                 height={1200}
                                 width={630}
                                 alt={sequence.text}
-                                className='w-24 h-24 rounded-md object-cover opacity-100 hover:opacity-50'
+                                className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover opacity-100 hover:opacity-50'
                             />
                         ) : (
-                            <div className="w-24 h-24 rounded-md bg-gray-200 flex items-center justify-center">
+                            <div className="w-12 h-12 sm:w-24 sm:h-24 rounded-md bg-gray-200 flex items-center justify-center">
                                 <FileImage className="text-gray-400 text-3xl" />
                             </div>
                         )}
@@ -78,7 +78,7 @@ export default function Sequence({
                 </div>
 
                 {/* Contenu à droite de l'image */}
-                <div className="flex-1 space-y-2 ml-4">
+                <div className="flex-1 sm:space-y-2 ml-4">
                     <Badge variant="outline">
                         <Clock className="w-3 h-3 mr-1" />
                         {((sequence.end - sequence.start)).toFixed(2)}
@@ -95,7 +95,7 @@ export default function Sequence({
                                     contentEditable="true"
                                     suppressContentEditableWarning={true}
                                     onBlur={(e) => handleWordInputChange(index, wordIndex, e.currentTarget.textContent || '')}
-                                    className="px-0.5 py-1 hover:ring-1 focus:ring-2 ring-primary rounded transition-all duration-200"
+                                    className="text-sm sm:text-base px-0.5 py-[0.1rem] sm:py-1 hover:ring-1 focus:ring-2 ring-primary rounded transition-all duration-200"
                                 >
                                     {word.word}
                                 </div>
