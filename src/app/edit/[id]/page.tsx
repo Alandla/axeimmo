@@ -270,7 +270,7 @@ export default function VideoEditor() {
                 </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <Link href="/dashboard">
+          <Link href="/dashboard" className="hidden sm:block">
             <Image
               src="/img/logo_little.png"
               alt="Logo"
@@ -282,11 +282,13 @@ export default function VideoEditor() {
           </Link>
           <div className="flex items-center space-x-2">
             {isDirty ? (
-                <div className="w-2 h-2 rounded-full bg-yellow-500" />
+              <div className="w-2 h-2 rounded-full bg-yellow-500" />
             ) : (
                 <div className="w-2 h-2 rounded-full bg-green-500" />
             )}
-            <span className='text-sm text-muted-foreground'>{isDirty ? t('unsaved') : t('saved')}</span>
+            <div className="hidden sm:flex items-center space-x-2">
+              <span className='text-sm text-muted-foreground'>{isDirty ? t('unsaved') : t('saved')}</span>
+            </div>
             <Button variant="outline" size="icon" onClick={handleSaveVideo}>
                 {isSaving ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -378,18 +380,28 @@ export default function VideoEditor() {
       <div className="lg:hidden px-4">
         <div
           ref={previewRef}
-          className={`sticky top-[57px] z-20 transition-all duration-300 h-52`}
+          className={`sticky top-[57px] z-20 transition-all duration-300 h-64`}
         >
           {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
         </div>
         <Card className="mt-4">
           <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="sequences">Séquences</TabsTrigger>
-              <TabsTrigger value="settings">Paramètres</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="sequences" className="flex items-center gap-2">
+                    <ListVideo className="w-4 h-4" />
+                    {t('sequences-tabs-title')}
+                </TabsTrigger>
+                <TabsTrigger value="subtitle" className="flex items-center gap-2">
+                    <SubtitlesIcon className="w-4 h-4" />
+                    {t('subtitles-tabs-title')}
+                </TabsTrigger>
+                <TabsTrigger value="audio" className="flex items-center gap-2">
+                    <Volume2 className="w-4 h-4" />
+                    {t('audio-tabs-title')}
+                </TabsTrigger>
             </TabsList>
             <TabsContent value="sequences">
-              <ScrollArea className="h-[calc(100vh-16rem)]">
+              <ScrollArea className="h-[calc(100vh-25rem)]">
                 {video?.video?.sequences && video?.video?.sequences.map((sequence, index) => (
                   <Sequence 
                     key={index}
@@ -398,16 +410,38 @@ export default function VideoEditor() {
                     selectedIndex={selectedSequenceIndex} 
                     setSelectedIndex={setSelectedSequenceIndex} 
                     handleWordInputChange={handleWordInputChange} 
-                    onCutSequence={handleCutSequence} 
+                    onCutSequence={handleCutSequence}
+                    setActiveTabMobile={setActiveTabMobile}
+                    isMobile={isMobile}
                   />
                 ))}
               </ScrollArea>
             </TabsContent>
-            <TabsContent value="settings">
-              <ScrollArea className="h-[calc(100vh-16rem)]">
+            <TabsContent value="subtitle">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} setActiveTabMobile={setActiveTabMobile} isMobile={isMobile} />
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="audio">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2 overflow-visible">
+                <Musics video={video} updateAudioSettings={updateAudioSettings} isMobile={isMobile} setActiveTabMobile={setActiveTabMobile} />
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-sequence">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
                 {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
                   <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
                 )}
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-subtitle">
+              <ScrollArea className="h-[calc(100vh-25rem)]">
+                <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} isMobile={isMobile} />
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-audio">
+              <ScrollArea className="h-[calc(100vh-25rem)] pt-4">
+                <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
               </ScrollArea>
             </TabsContent>
           </Tabs>

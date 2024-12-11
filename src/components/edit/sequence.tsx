@@ -1,5 +1,5 @@
 import { ISequence } from "@/src/types/video";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
 import { Clock, Edit, FileImage, Scissors } from "lucide-react";
@@ -7,12 +7,40 @@ import { motion, AnimatePresence } from 'framer-motion';
 import React from "react";
 import { Badge } from "../ui/badge";
 
-export default function Sequence({ sequence, index, selectedIndex, setSelectedIndex, handleWordInputChange, onCutSequence}: { sequence: ISequence, index: number, selectedIndex: number, setSelectedIndex: (index: number) => void, handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void, onCutSequence: (cutIndex: number) => void }) {
+interface SequenceProps {
+  sequence: ISequence;
+  index: number;
+  selectedIndex: number;
+  setSelectedIndex: (index: number) => void;
+  handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void;
+  onCutSequence: (cutIndex: number) => void;
+  setActiveTabMobile?: (tab: string) => void;
+  isMobile?: boolean;
+}
+
+export default function Sequence({ 
+  sequence, 
+  index, 
+  selectedIndex, 
+  setSelectedIndex, 
+  handleWordInputChange, 
+  onCutSequence,
+  setActiveTabMobile,
+  isMobile = false,
+}: SequenceProps) {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
     const handleCutSequence = (cutIndex: number) => {
         cutIndex++
         onCutSequence(cutIndex);
+    };
+
+    const handleImageClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (isMobile && setActiveTabMobile) {
+            setActiveTabMobile('settings-sequence');
+        }
+        setSelectedIndex(index);
     };
     
     return (
@@ -26,7 +54,10 @@ export default function Sequence({ sequence, index, selectedIndex, setSelectedIn
             <CardContent className="flex p-2">
                 {/* Image et icônes à gauche */}
                 <div className="flex flex-col">
-                    <div className="relative">  
+                    <div 
+                        className="relative"
+                        onClick={handleImageClick}
+                    >  
                         {sequence.media?.image ? (
                             <SkeletonImage
                                 src={sequence.media.image.link}

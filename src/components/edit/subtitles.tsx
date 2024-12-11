@@ -6,11 +6,20 @@ import { basicApiCall, basicApiGetCall } from "@/src/lib/api"
 import { useSubtitleStyleStore } from "@/src/store/subtitlesStyleSore"
 import { useToast } from "@/src/hooks/use-toast"
 import { useTranslations } from "next-intl"
+import { Settings } from "lucide-react"
+import { Button } from "../ui/button"
 
-export default function Subtitles({ video, setSubtitleStyle }: { video: any, setSubtitleStyle: any }) {
+export default function Subtitles({ video, setSubtitleStyle, setActiveTabMobile, isMobile = false }: { video: any, setSubtitleStyle: any, setActiveTabMobile?: (tab: string) => void, isMobile?: boolean }) {
     const { subtitleStyles, setSubtitleStyles } = useSubtitleStyleStore()
     const { toast } = useToast()
     const t = useTranslations('edit.subtitle')
+
+    const handleChangeMobileTab = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (isMobile && setActiveTabMobile) {
+            setActiveTabMobile('settings-subtitle');
+        }
+    };
 
     useEffect(() => {
         const fetchSpaceSubtitleStyles = async () => {
@@ -53,16 +62,32 @@ export default function Subtitles({ video, setSubtitleStyle }: { video: any, set
         <>
             {subtitleStyles && subtitleStyles.length > 0 && (
                 <>
-                    <h3 className="text-lg font-semibold mb-2">{t('title-presets-space')}</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg font-semibold">{t('title-presets-space')}</h3>
+                        {isMobile && (
+                            <Button size="icon" variant="outline" onClick={handleChangeMobileTab}>
+                                <Settings size={16} />
+                            </Button>
+                        )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 mb-4">
                         {subtitleStyles.map((subtitleStyle: ISpaceSubtitleStyle, index: number) => (
                             <Subtitle key={index} video={video} subtitle={subtitleStyle} setSubtitleStyle={setSubtitleStyle} canEdit={true} handleDelete={deleteSubtitleStyle} handleUpdate={updateSubtitleStyle} />
                         ))}
                     </div>
                 </>
             )}
-            {subtitleStyles && <h3 className="text-lg font-semibold mb-2">{t('title-presets')}</h3>}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {(subtitleStyles || isMobile) && (
+                <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-lg font-semibold">{t('title-presets')}</h3>
+                    {isMobile && !subtitleStyles?.length && (
+                        <Button size="icon" variant="outline" onClick={handleChangeMobileTab}>
+                            <Settings size={16} />
+                        </Button>
+                    )}
+                </div>
+            )}
+            <div className="grid grid-cols-2 gap-4">
                 {subtitles.map((subtitle: any, index: number) => (
                     <Subtitle key={index} video={video} subtitle={subtitle} setSubtitleStyle={setSubtitleStyle} />
                 ))}

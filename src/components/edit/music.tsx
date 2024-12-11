@@ -24,9 +24,10 @@ interface MusicProps {
   onSelect: (trackId: string) => void
   playingTrack: { track: any, audio: HTMLAudioElement | null }
   onPreviewTrack: (track: any) => void
+  isMobile?: boolean
 }
 
-export default function Music({ track, isSelected, onSelect, playingTrack, onPreviewTrack }: MusicProps) {
+export default function Music({ track, isSelected, onSelect, playingTrack, onPreviewTrack, isMobile = false }: MusicProps) {
   const t = useTranslations('edit.audio')
   const isPlaying = playingTrack.track?.name === track.name
 
@@ -41,13 +42,13 @@ export default function Music({ track, isSelected, onSelect, playingTrack, onPre
       onClick={() => onSelect(track.id)}
     >
       {isSelected && (
-        <div className="absolute top-4 right-2 transition-all duration-150">
+        <div className="absolute top-2 right-2 transition-all duration-150">
           <Check className="h-5 w-5 text-primary" />
         </div>
       )}
       <CardContent className="p-4 flex flex-col h-full gap-4">
         <div className="flex gap-4">
-          <div className="relative w-16 h-16 shrink-0 overflow-hidden rounded-lg">
+          <div className={`relative w-16 h-16 shrink-0 overflow-hidden rounded-lg ${isMobile && 'hidden'}`}>
             <Image
               src={`/img/gradient/gradient-${track.style.gradient}.jpg`}
               alt=""

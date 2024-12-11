@@ -22,7 +22,7 @@ import { Switch } from "@/src/components/ui/switch"
 import { templates } from "@/src/config/subtitles.config"
 import SelectFonts from "../ui/select/select-fonts"
 
-export default function SubtitleSettings({ video, updateSubtitleStyle, handleSaveSubtitleStyle }: { video: any, updateSubtitleStyle: any, handleSaveSubtitleStyle: any }) {
+export default function SubtitleSettings({ video, updateSubtitleStyle, handleSaveSubtitleStyle, isMobile = false }: { video: any, updateSubtitleStyle: any, handleSaveSubtitleStyle: any, isMobile?: boolean}) {
   const t = useTranslations('edit.subtitle-settings')
   const [isSaving, setIsSaving] = useState(false)
 
@@ -194,7 +194,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
             onClick={() => toggleStyle('isItalic')}
           >
             <Italic className="h-4 w-4" />
-            {t('italic')}
+            {!isMobile && t('italic')}
           </Button>
           <Button
             variant={video?.video?.subtitle?.style?.isPunctuation ? "default" : "outline"}
@@ -202,7 +202,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
             onClick={() => toggleStyle('isPunctuation')}
           >
             <RectangleEllipsis className="h-4 w-4" />
-            {t('no-punctuation')}
+            {!isMobile && t('no-punctuation')}
           </Button>
           <Button
             variant={video?.video?.subtitle?.style?.isUppercase ? "default" : "outline"}
@@ -210,7 +210,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
             onClick={() => toggleStyle('isUppercase')}
           >
             <CaseUpper className="h-4 w-4" />
-            {t('uppercase')}
+            {!isMobile && t('uppercase')}
           </Button>
         </div>
 
@@ -226,7 +226,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                     onClick={() => updateStyle({ mode: 'word' })}
                   >
                     <WholeWord className="h-4 w-4" />
-                    {t('word-button')}
+                    {!isMobile && t('word-button')}
                   </Button>
                   <Button
                     variant={video?.video?.subtitle?.style?.mode === 'line' ? "default" : "outline"}
@@ -234,7 +234,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                     onClick={() => updateStyle({ mode: 'line' })}
                   >
                     <RectangleHorizontal className="h-4 w-4" />
-                    {t('line-button')}
+                    {!isMobile && t('line-button')}
                   </Button>
                   <Button
                     variant={video?.video?.subtitle?.style?.mode === 'twoLines' ? "default" : "outline"}
@@ -242,7 +242,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                     onClick={() => updateStyle({ mode: 'twoLines' })}
                   >
                     <StretchHorizontal className="h-4 w-4" />
-                    {t('two-lines-button')}
+                    {!isMobile && t('two-lines-button')}
                   </Button>
                 </div>
 
@@ -251,48 +251,49 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
                     <MoveVertical className="h-4 w-4" />
                     {t('position-title')}
                   </span>
-                    <div className="flex">
-                      <Button
-                        variant={video?.video?.subtitle?.style?.position === 15 ? "default" : "outline"}
-                        onClick={() => updateStyle({ position: 15 })}
-                        className="rounded-r-none px-3"
-                      >
-                        <AlignVerticalJustifyStart className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant={video?.video?.subtitle?.style?.position === 50 ? "default" : "outline"}
-                        onClick={() => updateStyle({ position: 50 })}
-                        className="rounded-none border-x-0 px-3"
-                      >
-                        <AlignVerticalJustifyCenter className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant={video?.video?.subtitle?.style?.position === 75 ? "default" : "outline"}
-                        onClick={() => updateStyle({ position: 75 })}
-                        className="rounded-l-none rounded-r-none border-r-0 px-3"
-                      >
-                        <AlignVerticalJustifyEnd className="h-4 w-4" />
-                      </Button>
-                      <Input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={video?.video?.subtitle?.style?.position?.toString() || "50"}
-                        onChange={(e) => {
-                          const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0))
-                          updateStyle({ position: value })
-                        }}
-                        className="w-32 rounded-l-none text-center"
-                      />
-                    </div>
-                    <Slider
-                      value={[video?.video?.subtitle?.style?.position || 50]}
-                      min={0}
-                      max={100}
-                      step={1}
-                      onValueChange={(value: number[]) => updateStyle({ position: value[0] })}
-                      className="w-32"
+                  {!isMobile && <div className="flex">
+                    <Button
+                      variant={video?.video?.subtitle?.style?.position === 15 ? "default" : "outline"}
+                      onClick={() => updateStyle({ position: 15 })}
+                      className="rounded-r-none px-3"
+                    >
+                      <AlignVerticalJustifyStart className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant={video?.video?.subtitle?.style?.position === 50 ? "default" : "outline"}
+                      onClick={() => updateStyle({ position: 50 })}
+                      className="rounded-none border-x-0 px-3"
+                    >
+                      <AlignVerticalJustifyCenter className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant={video?.video?.subtitle?.style?.position === 75 ? "default" : "outline"}
+                      onClick={() => updateStyle({ position: 75 })}
+                      className="rounded-l-none rounded-r-none border-r-0 px-3"
+                    >
+                      <AlignVerticalJustifyEnd className="h-4 w-4" />
+                    </Button>
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={video?.video?.subtitle?.style?.position?.toString() || "50"}
+                      onChange={(e) => {
+                        const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0))
+                        updateStyle({ position: value })
+                      }}
+                      className={`w-32 rounded-l-none text-center`}
                     />
+                  </div>
+                  }
+                  <Slider
+                    value={[video?.video?.subtitle?.style?.position || 50]}
+                    min={0}
+                    max={100}
+                    step={1}
+                    onValueChange={(value: number[]) => updateStyle({ position: value[0] })}
+                    className="w-32"
+                  />
                 </div>
               </div>
             </AccordionContent>

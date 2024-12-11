@@ -17,19 +17,31 @@ import {
   PaginationPrevious,
 } from "@/src/components/ui/pagination"
 import { cn } from '@/src/lib/utils'
+import { Button } from '../ui/button'
+import { Settings, Settings2 } from 'lucide-react'
 
 interface MusicsProps {
   video: any
   updateAudioSettings: (settings: any) => void
+  isMobile?: boolean
+  setActiveTabMobile?: (tab: string) => void
 }
 
-export default function Musics({ video, updateAudioSettings }: MusicsProps) {
+export default function Musics({ video, updateAudioSettings, isMobile = false, setActiveTabMobile }: MusicsProps) {
   const t = useTranslations('edit.audio')
   const [search, setSearch] = useState('')
   const [selectedGenre, setSelectedGenre] = useState<Genre | 'ALL'>(video?.video?.audio?.music?.genre || 'ALL')
   const [currentPage, setCurrentPage] = useState(1)
   const tracksPerPage = 8
   const [playingTrack, setPlayingTrack] = useState<{ track: any, audio: HTMLAudioElement | null }>({ track: null, audio: null })
+
+
+  const handleChangeMobileTab = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isMobile && setActiveTabMobile) {
+      setActiveTabMobile('settings-audio');
+    }
+  };
 
   // Filtrer les pistes
   const filteredTracks = music.filter(track => {
@@ -88,7 +100,7 @@ export default function Musics({ video, updateAudioSettings }: MusicsProps) {
   // Fonction pour générer les numéros de page à afficher
   const getPageNumbers = () => {
     const pageNumbers = []
-    const totalPagesToShow = 5
+    const totalPagesToShow = isMobile ? 3 : 5
     const halfWay = Math.floor(totalPagesToShow / 2)
     
     let startPage = Math.max(currentPage - halfWay, 1)
@@ -131,7 +143,7 @@ export default function Musics({ video, updateAudioSettings }: MusicsProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <>
       <div className="flex gap-4 mb-4">
         <Input
           placeholder={t('search')}
@@ -146,7 +158,7 @@ export default function Musics({ video, updateAudioSettings }: MusicsProps) {
             handleFilters(filteredTracks)
           }}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className={`${isMobile ? 'w-[150px]' : 'w-[180px]'}`}>
             <SelectValue placeholder={t('select_genre')} />
           </SelectTrigger>
           <SelectContent>
@@ -158,9 +170,14 @@ export default function Musics({ video, updateAudioSettings }: MusicsProps) {
             ))}
           </SelectContent>
         </Select>
+        {isMobile && (
+          <Button size="icon" variant="outline" onClick={handleChangeMobileTab}>
+            <Settings size={16} />
+          </Button>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-2 gap-4 mb-4">
         {currentTracks.map((track) => (
           <Music
             key={track.name}
@@ -175,6 +192,7 @@ export default function Musics({ video, updateAudioSettings }: MusicsProps) {
             onSelect={handleTrackSelect}
             playingTrack={playingTrack}
             onPreviewTrack={handlePreviewTrack}
+            isMobile={isMobile}
           />
         ))}
       </div>
@@ -184,6 +202,7 @@ export default function Musics({ video, updateAudioSettings }: MusicsProps) {
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious 
+                showText={!isMobile}
                 onClick={() => handlePageChange(currentPage - 1)}
                 className={cn(
                   "cursor-pointer",
@@ -231,6 +250,7 @@ export default function Musics({ video, updateAudioSettings }: MusicsProps) {
 
             <PaginationItem>
               <PaginationNext 
+                showText={!isMobile}
                 onClick={() => handlePageChange(currentPage + 1)}
                 className={cn(
                   "cursor-pointer",
@@ -241,6 +261,6 @@ export default function Musics({ video, updateAudioSettings }: MusicsProps) {
           </PaginationContent>
         </Pagination>
       )}
-    </div>
+    </>
   )
 }
