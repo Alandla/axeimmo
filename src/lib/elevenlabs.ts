@@ -20,7 +20,8 @@ export const createAudioTTS = async (voiceId: string, text: string, voiceSetting
             model_id: MODEL,
             voice_settings: {
                 stability: voiceSettings?.stability || 0.5,
-                similarity_boost: voiceSettings?.similarity_boost || 0.75
+                similarity_boost: voiceSettings?.similarity_boost || 0.75,
+                use_speaker_boost: true
             },
             apply_text_normalization: 'auto'
         };
