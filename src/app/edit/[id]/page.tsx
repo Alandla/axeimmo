@@ -380,7 +380,7 @@ export default function VideoEditor() {
       <div className="lg:hidden px-4">
         <div
           ref={previewRef}
-          className={`sticky top-[57px] z-20 transition-all duration-300 h-64`}
+          className={`sticky top-[57px] z-20 transition-all duration-300 h-96`}
         >
           {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
         </div>
@@ -440,7 +440,7 @@ export default function VideoEditor() {
               </ScrollArea>
             </TabsContent>
             <TabsContent value="settings-audio">
-              <ScrollArea className="h-[calc(100vh-25rem)] pt-4">
+              <ScrollArea className="h-[calc(100vh-25rem)]">
                 <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
               </ScrollArea>
             </TabsContent>

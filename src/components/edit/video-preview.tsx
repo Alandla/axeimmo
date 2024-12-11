@@ -38,9 +38,9 @@ export default function VideoPreview({ playerRef, video, isMobile }: { playerRef
     }, []);
 
     return (
-        <div className={`h-full flex flex-col items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
+        <div className={`h-full flex flex-row sm:flex-col items-center justify-center`}>
             {video?.video?.avatar && (
-                <div className="w-full rounded-lg border bg-background text-foreground px-4 py-3 text-sm flex items-center gap-2">
+                <div className="text-xs sm:text-sm pl-2 sm:pl-0 w-full rounded-lg border bg-background text-foreground px-4 py-3 flex items-center gap-2">
                     <AlertCircle className="h-4 w-4" />
                     {t('lip-sync-export-message')}
                 </div>

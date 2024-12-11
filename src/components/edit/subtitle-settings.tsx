@@ -106,7 +106,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
 
   return (
     <>
-      <CardHeader>
+      <CardHeader className="p-2 sm:p-6">
         <div className="flex justify-between items-center">
           <CardTitle>{t('title')}</CardTitle>
           <Button size="sm" onClick={onSaveSubtitleStyle} disabled={isSaving}>
@@ -115,7 +115,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">
         <div className="flex gap-4 w-full">
           <SelectFonts value={video?.video?.subtitle?.style?.fontFamily || "Montserrat"} onChange={(value) => updateStyle({ fontFamily: value })} />
           <Select value={video?.video?.subtitle?.style?.fontWeight || "500"} onValueChange={(value) => updateStyle({ fontWeight: value })}>
