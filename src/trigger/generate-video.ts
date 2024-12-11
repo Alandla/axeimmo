@@ -116,7 +116,7 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      const audioBuffer = await createAudioTTS(payload.voice.id, payload.script);
+      const audioBuffer = await createAudioTTS(payload.voice.id, payload.script, payload.voice.voiceSettings);
       voiceUrl = await uploadToS3Audio(audioBuffer, 'medias-users');
 
       cost += calculateElevenLabsCost(payload.script)
