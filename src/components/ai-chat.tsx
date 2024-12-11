@@ -322,11 +322,11 @@ export function AiChat() {
                 className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
               >
                 {message.sender === 'ai' && (
-                  <Avatar className="w-8 h-8 mr-2 flex-shrink-0 bg-muted">
+                  <Avatar className="w-8 h-8 mr-2 flex-shrink-0 bg-muted hidden sm:block">
                     <img src="/img/logo-square.png" alt="AI Avatar" className="rounded-full" />
                   </Avatar>
                 )}
-                <div className={`rounded-lg p-3 max-w-xl ${message.script && 'w-full'} shadow ${message.sender === 'user' ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
+                <div className={`rounded-lg p-3 max-w-[85vw] sm:max-w-xl ${message.script && 'w-full'} shadow ${message.sender === 'user' ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
                   {message.content}
                   {message.type === MessageType.TEXT && message.script && (
                     <>
@@ -366,7 +366,7 @@ export function AiChat() {
                   )}
                 </div>
                 {message.sender === 'user' && (
-                  <Avatar className="h-8 w-8 ml-2 flex-shrink-0">
+                  <Avatar className="h-8 w-8 ml-2 flex-shrink-0 hidden sm:block">
                     {session?.user?.image && <AvatarImage src={session?.user?.image} alt={session?.user?.name ?? ''} />}
                     <AvatarFallback className="rounded-lg">{(session?.user?.name?.charAt(0).toUpperCase() ?? session?.user?.email?.charAt(0).toUpperCase() ?? '')}</AvatarFallback>
                   </Avatar>

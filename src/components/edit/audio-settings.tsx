@@ -32,10 +32,10 @@ export default function AudioSettings({ video, updateAudioSettings }: AudioProps
 
   return (
     <>
-        <CardHeader>
+        <CardHeader className="p-2 sm:p-6">
             <CardTitle>{t('title')}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">
         <div className="flex items-center justify-between w-full">
           <span className="flex items-center gap-2 min-w-20">
             {video?.video?.audio?.volume === 0 ? (

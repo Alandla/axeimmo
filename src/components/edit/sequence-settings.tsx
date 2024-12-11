@@ -18,10 +18,10 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
 
   return (
     <>
-      <CardHeader>
+      <CardHeader className="p-2 sm:p-6">
         <CardTitle>Media {sequenceIndex + 1}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">
 
         {hadAvatar && (
           <div className="flex w-full">

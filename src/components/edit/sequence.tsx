@@ -1,5 +1,5 @@
 import { ISequence } from "@/src/types/video";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
 import { Clock, Edit, FileImage, Scissors } from "lucide-react";
@@ -7,12 +7,40 @@ import { motion, AnimatePresence } from 'framer-motion';
 import React from "react";
 import { Badge } from "../ui/badge";
 
-export default function Sequence({ sequence, index, selectedIndex, setSelectedIndex, handleWordInputChange, onCutSequence}: { sequence: ISequence, index: number, selectedIndex: number, setSelectedIndex: (index: number) => void, handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void, onCutSequence: (cutIndex: number) => void }) {
+interface SequenceProps {
+  sequence: ISequence;
+  index: number;
+  selectedIndex: number;
+  setSelectedIndex: (index: number) => void;
+  handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void;
+  onCutSequence: (cutIndex: number) => void;
+  setActiveTabMobile?: (tab: string) => void;
+  isMobile?: boolean;
+}
+
+export default function Sequence({ 
+  sequence, 
+  index, 
+  selectedIndex, 
+  setSelectedIndex, 
+  handleWordInputChange, 
+  onCutSequence,
+  setActiveTabMobile,
+  isMobile = false,
+}: SequenceProps) {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
     const handleCutSequence = (cutIndex: number) => {
         cutIndex++
         onCutSequence(cutIndex);
+    };
+
+    const handleImageClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (isMobile && setActiveTabMobile) {
+            setActiveTabMobile('settings-sequence');
+        }
+        setSelectedIndex(index);
     };
     
     return (
@@ -26,17 +54,20 @@ export default function Sequence({ sequence, index, selectedIndex, setSelectedIn
             <CardContent className="flex p-2">
                 {/* Image et icônes à gauche */}
                 <div className="flex flex-col">
-                    <div className="relative">  
+                    <div 
+                        className="relative"
+                        onClick={handleImageClick}
+                    >  
                         {sequence.media?.image ? (
                             <SkeletonImage
                                 src={sequence.media.image.link}
                                 height={1200}
                                 width={630}
                                 alt={sequence.text}
-                                className='w-24 h-24 rounded-md object-cover opacity-100 hover:opacity-50'
+                                className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover opacity-100 hover:opacity-50'
                             />
                         ) : (
-                            <div className="w-24 h-24 rounded-md bg-gray-200 flex items-center justify-center">
+                            <div className="w-12 h-12 sm:w-24 sm:h-24 rounded-md bg-gray-200 flex items-center justify-center">
                                 <FileImage className="text-gray-400 text-3xl" />
                             </div>
                         )}
@@ -47,7 +78,7 @@ export default function Sequence({ sequence, index, selectedIndex, setSelectedIn
                 </div>
 
                 {/* Contenu à droite de l'image */}
-                <div className="flex-1 space-y-2 ml-4">
+                <div className="flex-1 sm:space-y-2 ml-4">
                     <Badge variant="outline">
                         <Clock className="w-3 h-3 mr-1" />
                         {((sequence.end - sequence.start)).toFixed(2)}
@@ -64,7 +95,7 @@ export default function Sequence({ sequence, index, selectedIndex, setSelectedIn
                                     contentEditable="true"
                                     suppressContentEditableWarning={true}
                                     onBlur={(e) => handleWordInputChange(index, wordIndex, e.currentTarget.textContent || '')}
-                                    className="px-0.5 py-1 hover:ring-1 focus:ring-2 ring-primary rounded transition-all duration-200"
+                                    className="text-sm sm:text-base px-0.5 py-[0.1rem] sm:py-1 hover:ring-1 focus:ring-2 ring-primary rounded transition-all duration-200"
                                 >
                                     {word.word}
                                 </div>

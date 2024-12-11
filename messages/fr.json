@@ -103,7 +103,7 @@
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",
       "export-button": "Exporter",
-      "lip-sync-export-message": "Le lip-sync ne s'affichera que après l'export.",
+      "lip-sync-export-message": "La synchronisation labiale ne s'affichera que après l'export.",
       "unsaved": "Non sauvegardé",
       "saved": "Sauvegardé",
       "sequences-tabs-title": "Sequences",
@@ -287,7 +287,12 @@
         "entertainment_tv": "Divertissement TV",
         "informative_educational": "Informatif",
         "story": "Histoire",
-        "characters_animation": "Personnages d'animation"
+        "characters_animation": "Personnages d'animation",
+        "audiobooks": "Livres audio",
+        "podcasts": "Podcasts",
+        "storytelling": "Storytelling",
+        "journalism": "Journalisme",
+        "entertainment": "Divertissement"
       },
       "gender": {
         "male": "Masculin",

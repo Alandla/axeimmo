@@ -10,6 +10,16 @@ import { Check } from "lucide-react"
 import { useTranslations } from 'next-intl'
 import { Voice } from '../types/voice'
 import { accentFlags, voices } from '../config/voices.config'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious
+} from "@/src/components/ui/pagination"
+import { cn } from "@/src/lib/utils"
 
 export function VoicesGridComponent() {
   const t = useTranslations('voices')
@@ -102,6 +112,29 @@ export function VoicesGridComponent() {
     handleFilters(newFilteredVoices)
   }
 
+  const getPageNumbers = () => {
+    const pageNumbers = []
+    const totalPagesToShow = 3
+    const halfWay = Math.floor(totalPagesToShow / 2)
+    
+    let startPage = Math.max(currentPage - halfWay, 1)
+    let endPage = Math.min(startPage + totalPagesToShow - 1, totalPages)
+    
+    if (endPage - startPage + 1 < totalPagesToShow) {
+      startPage = Math.max(endPage - totalPagesToShow + 1, 1)
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i)
+    }
+
+    return {
+      numbers: pageNumbers,
+      showStartEllipsis: startPage > 1,
+      showEndEllipsis: endPage < totalPages
+    }
+  }
+
   return (
     <div className="space-y-4 mt-4">
       <div>
@@ -116,8 +149,20 @@ export function VoicesGridComponent() {
           setSelectedAccent(value)
           handleFilters(filteredVoices)
         }}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Accent" />
+          <SelectTrigger className="w-[120px] sm:w-[180px]">
+            <SelectValue>
+              {selectedAccent === 'all' ? (
+                <div className="flex items-center">
+                  <span>🌍</span>
+                  <span className="hidden sm:inline ml-1">{tCommon('all-f')}</span>
+                </div>
+              ) : (
+                <div className="flex items-center">
+                  <span>{accentFlags[selectedAccent]}</span>
+                  <span className="hidden sm:inline ml-1">{t(`accent.${selectedAccent}`)}</span>
+                </div>
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
@@ -134,24 +179,41 @@ export function VoicesGridComponent() {
           setSelectedGender(value)
           handleFilters(filteredVoices)
         }}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Genre" />
+          <SelectTrigger className="w-[100px] sm:w-[180px]">
+            <SelectValue>
+              {selectedGender === 'all' ? (
+                <div className="flex items-center">
+                  <IconGenderMaleFemale className="w-4 h-4" />
+                  <span className="hidden sm:inline ml-1">{tCommon('all-m')}</span>
+                </div>
+              ) : selectedGender === 'male' ? (
+                <div className="flex items-center">
+                  <IconGenderMale className="w-4 h-4 text-blue-500" />
+                  <span className="hidden sm:inline ml-1">{t('gender.male')}</span>
+                </div>
+              ) : (
+                <div className="flex items-center">
+                  <IconGenderFemale className="w-4 h-4 text-pink-500" />
+                  <span className="hidden sm:inline ml-1">{t('gender.female')}</span>
+                </div>
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              <div className="flex">
+              <div className="flex items-center">
                 <IconGenderMaleFemale className="w-4 h-4 mr-2" />
                 {tCommon('all-m')}
               </div>
             </SelectItem>
             <SelectItem value="male">
-              <div className="flex">
+              <div className="flex items-center">
                 <IconGenderMale className="w-4 h-4 mr-2 text-blue-500" />
                 {t('gender.male')}
               </div>
             </SelectItem>
             <SelectItem value="female">
-              <div className="flex">
+              <div className="flex items-center">
                 <IconGenderFemale className="w-4 h-4 mr-2 text-pink-500" />
                 {t('gender.female')}
               </div>
@@ -182,7 +244,7 @@ export function VoicesGridComponent() {
       </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
         {currentVoices.map((voice) => (
           <VoiceCard
             key={voice.id}
@@ -193,17 +255,86 @@ export function VoicesGridComponent() {
         ))}
       </div>
 
-      <div className="flex justify-center gap-2 mt-4">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <Button
-            key={i + 1}
-            variant={currentPage === i + 1 ? "default" : "outline"}
-            onClick={() => setCurrentPage(i + 1)}
-          >
-            {i + 1}
-          </Button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious 
+                showText={false}
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className={cn(
+                  "cursor-pointer sm:hidden",
+                  currentPage === 1 && "pointer-events-none opacity-50"
+                )}
+              />
+              <PaginationPrevious 
+                showText={true}
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className={cn(
+                  "cursor-pointer hidden sm:flex",
+                  currentPage === 1 && "pointer-events-none opacity-50"
+                )}
+              />
+            </PaginationItem>
+
+            {getPageNumbers().showStartEllipsis && (
+              <>
+                <PaginationItem>
+                  <PaginationLink onClick={() => setCurrentPage(1)}>
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              </>
+            )}
+
+            {getPageNumbers().numbers.map((pageNumber) => (
+              <PaginationItem key={pageNumber}>
+                <PaginationLink
+                  isActive={currentPage === pageNumber}
+                  onClick={() => setCurrentPage(pageNumber)}
+                >
+                  {pageNumber}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            {getPageNumbers().showEndEllipsis && (
+              <>
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink onClick={() => setCurrentPage(totalPages)}>
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
+            )}
+
+            <PaginationItem>
+              <PaginationNext 
+                showText={false}
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className={cn(
+                  "cursor-pointer sm:hidden",
+                  currentPage === totalPages && "pointer-events-none opacity-50"
+                )}
+              />
+              <PaginationNext 
+                showText={true}
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className={cn(
+                  "cursor-pointer hidden sm:flex",
+                  currentPage === totalPages && "pointer-events-none opacity-50"
+                )}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   )
 }

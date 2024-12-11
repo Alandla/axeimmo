@@ -39,6 +39,10 @@ export const voices: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['news', 'video-game'],
+    voiceSettings: {
+        stability: 0.8,
+        similarity_boost: 0.69
+    },
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/1Mn4lcdhvCTTZOJZAqLZXhDzI913/voices/AmMsHJaCw4BtwV3KoUXF/dcfdf987-abaa-4677-bf1c-bd62db878c41.mp3'
   },
   {
@@ -49,6 +53,10 @@ export const voices: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['story'],
+    voiceSettings: {
+        stability: 0.99,
+        similarity_boost: 0.90
+    },
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/hv6gVog5LgtIUX88Nmq8/tx8rwfCue7TqWMKmoWLv.mp3'
   },
   {
@@ -59,7 +67,25 @@ export const voices: Voice[] = [
     gender: 'female',
     age: 'middle aged',
     tags: ['social_media'],
+    voiceSettings: {
+        stability: 0.52,
+        similarity_boost: 0.67
+    },
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/koOonD4HAsSMVyHuP4QTaatQ9cA2/voices/F1toM6PcP54s45kOOAyV/MXFPpZ9ofNwrZ8kY0wXJ.mp3'
+  },
+  {
+    id: 'IHngRooVccHyPqB4uQkG',
+    name: 'Corentin',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'young',
+    tags: ['social_media'],
+    voiceSettings: {
+        stability: 0.52,
+        similarity_boost: 0.67
+    },
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/IHngRooVccHyPqB4uQkG/yQPlGmXFNsSO01HV7Qsk.mp3'
   },
   {
     id: 'wyZnrAs18zdIj8UgFSV8',
@@ -79,6 +105,10 @@ export const voices: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['children_stories'],
+    voiceSettings: {
+        stability: 0.42,
+        similarity_boost: 0.75
+    },
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/Zj9ZLb9VaXcqr3nC8n9J55ADmaB2/voices/KmqhNPEmmOndTBOPk4mJ/Q2N4SM2u9Rc5dlcx4ZvR.mp3'
   },
   {
@@ -109,6 +139,10 @@ export const voices: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['advertising'],
+    voiceSettings: {
+        stability: 1,
+        similarity_boost: 0.75
+    },
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/PZVKCR3CEIRXaGs4kAkaa6xW9gu2/voices/TnnHlREp9UyW7nQDycZx/zd4Now7NNZt7XTpQfowW.mp3'
   },
   {
@@ -430,6 +464,104 @@ export const voices: Voice[] = [
     age: 'middle aged',
     tags: ['story'],
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/y8FeN9lFTEmQOYCaE07F/9bxoWAk64KX3ReXWWxzF.mp3'
+  },
+  {
+    id: 'yl2ZDV1MzN4HbQJbMihG',
+    name: 'Alex',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'young',
+    tags: ['social_media', 'entertainment'],
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/yl2ZDV1MzN4HbQJbMihG/TxJIOexqYqCv1Dzexs6Y.mp3'
+  },
+  {
+    id: 'wcGcDDfRHvH6LR9p07u4',
+    name: 'Apollo',
+    language: 'german',
+    accent: 'german',
+    gender: 'male',
+    age: 'young',
+    tags: ['documentary', 'tv'],
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/wcGcDDfRHvH6LR9p07u4/MwCrcs1GOzSgvpRzteGO.mp3'
+  },
+  {
+    id: '7H4vk4UjjbKDZiGTgH8K',
+    name: 'DellaRayne',
+    language: 'english',
+    accent: 'american', 
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['news', 'social_media'],
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/cRXPVHkjb5YtcgDRqlqIZ9N7AdP2/voices/7H4vk4UjjbKDZiGTgH8K/tmQekACAPn5p2i4Z4Jtu.mp3'
+  },
+  {
+    id: 'rpw80tAFDqIOQ0Ve2QVJ',
+    name: 'Fred',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['entertainment'],
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/LhidVU2Rn4OyolheNv4hiKZPyJj1/voices/rpw80tAFDqIOQ0Ve2QVJ/9a88462c-d0be-4d15-8443-fbf1c5fa7da7.mp3'
+  },
+  {
+    id: 'ohItIVrXTBI80RrUECOD',
+    name: 'Guillaume',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    voiceSettings: {
+        stability: 0.52,
+        similarity_boost: 0.53
+    },
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/ohItIVrXTBI80RrUECOD/9mwgJwmYqekI6JTMJTcv.mp3'
+  },
+  {
+    id: 'GgV5QStPLpmkN7FOHJtY',
+    name: 'Peter',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration', 'educational'],
+    voiceSettings: {
+        stability: 0.52,
+        similarity_boost: 1
+    },
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/GgV5QStPLpmkN7FOHJtY/bmKBkANSoceD0lpX6ZiA.mp3'
+  },
+  {
+    id: '9BWtsMINqrJLrRacOk9x',
+    name: 'Aria',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['social_media'],
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/9BWtsMINqrJLrRacOk9x/405766b8-1f4e-4d3c-aba1-6f25333823ec.mp3'
+  },
+  {
+    id: 'FpvROcY4IGWevepmBWO2',
+    name: 'Jessy',
+    language: 'french',
+    accent: 'french',
+    gender: 'female',
+    age: 'young',
+    tags: ['journalism', 'entertainment'],
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ZAS4o4vI8aVeceS8bWmtpuSYDqM2/voices/FpvROcY4IGWevepmBWO2/bS9p4qTvVCRqxuIqhvk3.mp3'
+  },
+  {
+    id: 'PBm6YPbx7WbrxFTZwj3E',
+    name: 'Gabriel',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['audiobooks', 'podcasts', 'storytelling'],
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/PBm6YPbx7WbrxFTZwj3E/D8U7C2MgPxZt3MVgeFjn.mp3'
   }
 ]
 

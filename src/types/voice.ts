@@ -7,4 +7,8 @@ export type Voice = {
     accent: string
     tags: string[]
     previewUrl: string
+    voiceSettings?: {
+        stability: number
+        similarity_boost: number
+    }
 }

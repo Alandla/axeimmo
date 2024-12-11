@@ -77,7 +77,7 @@ const MediaItem = ({ sequence, sequenceIndex, media, source = 'aws', canRemove =
                     srcImg={media.image?.link || ''}
                     srcVideo={media.video?.link || ''}
                     alt={media.name}
-                    className={`w-full h-auto rounded-md object-cover ${media.video?.link === sequence.media?.video?.link ? 'border-2 border-primary rounded-lg' : ''}`}
+                    className={`w-full h-fit rounded-md object-cover ${media.video?.link === sequence.media?.video?.link ? 'border-2 border-primary rounded-lg' : ''}`}
                 />
             ) : (
                 <SkeletonImage
@@ -85,7 +85,7 @@ const MediaItem = ({ sequence, sequenceIndex, media, source = 'aws', canRemove =
                     alt={media.name}
                     width={media.image?.width || 100}
                     height={media.image?.height || 100}
-                    className={`w-full h-auto rounded-md object-cover ${media.image?.link === sequence.media?.image?.link ? 'border-2 border-primary rounded-md' : ''}`}
+                    className={`w-full h-fit rounded-md object-cover ${media.image?.link === sequence.media?.image?.link ? 'border-2 border-primary rounded-md' : ''}`}
                     unoptimized={source === 'web'}
                 />
             )}

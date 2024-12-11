@@ -286,7 +286,12 @@
         "entertainment_tv": "Entertainment TV",
         "informative_educational": "Informative",
         "story": "Story",
-        "characters_animation": "Animation Characters"
+        "characters_animation": "Animation Characters",
+        "audiobooks": "Audiobooks",
+        "podcasts": "Podcasts",
+        "storytelling": "Storytelling",
+        "journalism": "Journalism",
+        "entertainment": "Entertainment"
       },
       "gender": {
         "male": "Male",

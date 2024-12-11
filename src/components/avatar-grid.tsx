@@ -15,6 +15,16 @@ import { AvatarLookCard } from './avatar-look-card'
 import { useCreationStore } from '../store/creationStore'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/src/components/ui/pagination"
+import { cn } from '@/src/lib/utils'
 
 export function AvatarGridComponent() {
   const t = useTranslations('avatars')
@@ -28,6 +38,10 @@ export function AvatarGridComponent() {
   const avatarsPerPage = 6
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null)
+
+  // Ajouter l'état pour la pagination des looks
+  const [currentLookPage, setCurrentLookPage] = useState(1)
+  const looksPerPage = 6
 
   // Obtenir tous les tags uniques
   const allTags = Array.from(new Set(avatars.flatMap(avatar => avatar.tags)))
@@ -45,6 +59,17 @@ export function AvatarGridComponent() {
   const indexOfFirstAvatar = indexOfLastAvatar - avatarsPerPage
   const currentAvatars = filteredAvatars.slice(indexOfFirstAvatar, indexOfLastAvatar)
   const totalPages = Math.ceil(filteredAvatars.length / avatarsPerPage)
+
+  // Calculs pour la pagination des looks
+  const filteredLooks = activeAvatar ? activeAvatar.looks.filter(look => {
+    if (selectedTags.length === 0) return true
+    return selectedTags.every(tag => look.tags?.includes(tag) || false)
+  }) : []
+
+  const indexOfLastLook = currentLookPage * looksPerPage
+  const indexOfFirstLook = indexOfLastLook - looksPerPage
+  const currentLooks = filteredLooks.slice(indexOfFirstLook, indexOfLastLook)
+  const totalLookPages = Math.ceil(filteredLooks.length / looksPerPage)
 
   const toggleTag = (tag: string) => {
     const newTags = selectedTags.includes(tag)
@@ -82,15 +107,64 @@ export function AvatarGridComponent() {
     handleFilters(newFilteredAvatars)
   }
 
-  // Modifier la section d'affichage des cartes
-  const displayedItems = activeAvatar ? 
-    activeAvatar.looks.filter(look => {
-      // Si aucun tag n'est sélectionné, afficher tous les looks
-      if (selectedTags.length === 0) return true
-      // Sinon, vérifier si le look contient tous les tags sélectionnés
-      return selectedTags.every(tag => look.tags?.includes(tag) || false)
-    }) 
-    : currentAvatars
+  // Fonctions de pagination pour les looks
+  const getLookPageNumbers = () => {
+    const pageNumbers = []
+    const totalPagesToShow = 5
+    const halfWay = Math.floor(totalPagesToShow / 2)
+    
+    let startPage = Math.max(currentLookPage - halfWay, 1)
+    let endPage = Math.min(startPage + totalPagesToShow - 1, totalLookPages)
+    
+    if (endPage - startPage + 1 < totalPagesToShow) {
+      startPage = Math.max(endPage - totalPagesToShow + 1, 1)
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i)
+    }
+
+    return {
+      numbers: pageNumbers,
+      showStartEllipsis: startPage > 1,
+      showEndEllipsis: endPage < totalLookPages
+    }
+  }
+
+  const getPageNumbers = () => {
+    const pageNumbers = []
+    const totalPagesToShow = 5
+    const halfWay = Math.floor(totalPagesToShow / 2)
+    
+    let startPage = Math.max(currentPage - halfWay, 1)
+    let endPage = Math.min(startPage + totalPagesToShow - 1, totalPages)
+    
+    if (endPage - startPage + 1 < totalPagesToShow) {
+      startPage = Math.max(endPage - totalPagesToShow + 1, 1)
+    }
+  
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i)
+    }
+  
+    return {
+      numbers: pageNumbers,
+      showStartEllipsis: startPage > 1,
+      showEndEllipsis: endPage < totalPages
+    }
+  }
+
+  const handleLookPageChange = (page: number) => {
+    if (page >= 1 && page <= totalLookPages) {
+      setCurrentLookPage(page)
+    }
+  }
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page)
+    }
+  }
 
   return (
     <div className="space-y-4 mt-4">
@@ -103,7 +177,10 @@ export function AvatarGridComponent() {
             exit={{ y: -20, opacity: 0 }}
             className="flex items-center gap-2"
           >
-            <Button size="icon" variant="ghost" onClick={() => setActiveAvatar(null)}>
+            <Button size="icon" variant="ghost" onClick={() => {
+              setActiveAvatar(null)
+              setCurrentLookPage(1)
+            }}>
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <h2 className="text-xl font-semibold">{activeAvatar.name}</h2>
@@ -194,11 +271,11 @@ export function AvatarGridComponent() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
         {activeAvatar ? (
           // Afficher les looks de l'avatar sélectionné
-          (displayedItems as AvatarLook[]).length > 0 ? (
-            (displayedItems as AvatarLook[]).map((look: AvatarLook) => (
+          (currentLooks as AvatarLook[]).length > 0 ? (
+            (currentLooks as AvatarLook[]).map((look: AvatarLook) => (
               <AvatarLookCard
                 key={look.id}
                 look={look}
@@ -211,7 +288,7 @@ export function AvatarGridComponent() {
           )
         ) : (
           // Afficher la liste des avatars
-          (displayedItems as Avatar[]).map((avatar: Avatar) => (
+          (currentAvatars as Avatar[]).map((avatar: Avatar) => (
             <AvatarCard
               key={avatar.id}
               avatar={avatar}
@@ -221,17 +298,171 @@ export function AvatarGridComponent() {
         )}
       </div>
 
-      <div className="flex justify-center gap-2 mt-4">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <Button
-            key={i + 1}
-            variant={currentPage === i + 1 ? "default" : "outline"}
-            onClick={() => setCurrentPage(i + 1)}
-          >
-            {i + 1}
-          </Button>
-        ))}
-      </div>
+      {activeAvatar ? (
+        // Pagination des looks
+        totalLookPages > 1 && (
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  showText={false}
+                  onClick={() => handleLookPageChange(currentLookPage - 1)}
+                  className={cn(
+                    "cursor-pointer sm:hidden",
+                    currentLookPage === 1 && "pointer-events-none opacity-50"
+                  )}
+                />
+                <PaginationPrevious 
+                  showText={true}
+                  onClick={() => handleLookPageChange(currentLookPage - 1)}
+                  className={cn(
+                    "cursor-pointer hidden sm:flex",
+                    currentLookPage === 1 && "pointer-events-none opacity-50"
+                  )}
+                />
+              </PaginationItem>
+
+              {getLookPageNumbers().showStartEllipsis && (
+                <>
+                  <PaginationItem>
+                    <PaginationLink onClick={() => handleLookPageChange(1)}>
+                      1
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                </>
+              )}
+
+              {getLookPageNumbers().numbers.map((pageNumber) => (
+                <PaginationItem key={pageNumber}>
+                  <PaginationLink
+                    isActive={currentLookPage === pageNumber}
+                    onClick={() => handleLookPageChange(pageNumber)}
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              {getLookPageNumbers().showEndEllipsis && (
+                <>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink onClick={() => handleLookPageChange(totalLookPages)}>
+                      {totalLookPages}
+                    </PaginationLink>
+                  </PaginationItem>
+                </>
+              )}
+
+              <PaginationItem>
+                <PaginationNext 
+                showText={false}
+                onClick={() => handleLookPageChange(currentLookPage + 1)}
+                className={cn(
+                  "cursor-pointer sm:hidden",
+                  currentLookPage === totalPages && "pointer-events-none opacity-50"
+                )}
+              />
+              <PaginationNext 
+                showText={true}
+                onClick={() => handleLookPageChange(currentLookPage + 1)}
+                className={cn(
+                  "cursor-pointer hidden sm:flex",
+                  currentLookPage === totalPages && "pointer-events-none opacity-50"
+                )}
+              />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )
+      ) : (
+        // Pagination des avatars
+        totalPages > 1 && (
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  showText={false}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className={cn(
+                    "cursor-pointer sm:hidden",
+                    currentPage === 1 && "pointer-events-none opacity-50"
+                  )}
+                />
+                <PaginationPrevious 
+                  showText={true}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className={cn(
+                    "cursor-pointer hidden sm:flex",
+                    currentPage === 1 && "pointer-events-none opacity-50"
+                  )}
+                />
+              </PaginationItem>
+
+              {getPageNumbers().showStartEllipsis && (
+                <>
+                  <PaginationItem>
+                    <PaginationLink onClick={() => handlePageChange(1)}>
+                      1
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                </>
+              )}
+
+              {getPageNumbers().numbers.map((pageNumber) => (
+                <PaginationItem key={pageNumber}>
+                  <PaginationLink
+                    isActive={currentPage === pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              {getPageNumbers().showEndEllipsis && (
+                <>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink onClick={() => handlePageChange(totalPages)}>
+                      {totalPages}
+                    </PaginationLink>
+                  </PaginationItem>
+                </>
+              )}
+
+              <PaginationItem>
+                <PaginationNext 
+                  showText={false}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className={cn(
+                    "cursor-pointer sm:hidden",
+                    currentPage === totalPages && "pointer-events-none opacity-50"
+                  )}
+                />
+                <PaginationNext 
+                  showText={true}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className={cn(
+                    "cursor-pointer hidden sm:flex",
+                    currentPage === totalPages && "pointer-events-none opacity-50"
+                  )}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )
+      )}
     </div>
   )
 }
