@@ -22,9 +22,23 @@ const mediaSchema = new mongoose.Schema({
         return ["full", "half", "hide"].includes(value);
       },
     },
+    startAt: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
     name: String,
     label: String,
-    description: String,
+    description: [
+      {
+        start: Number,
+        duration: {
+          type: Number,
+          required: false,
+        },
+        text: String
+      }
+    ],
     video: {
       id: String,
       quality: String,
@@ -40,6 +54,10 @@ const mediaSchema = new mongoose.Schema({
       link: String,
       width: Number,
       height: Number,
+    },
+    audio: {
+      id: String,
+      link: String,
     }
   },
   {

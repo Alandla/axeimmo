@@ -1,3 +1,5 @@
+import { IMedia } from "../types/video";
+
 export function getDataForAnalysis() {
   return '';
 }
@@ -8,11 +10,23 @@ export interface SimpleSequence {
   mediaDescription: string;
 }
 
+export interface SimpleMedia {
+  id: number;
+  description: string[]
+}
+
 export function simplifySequences(sequences: any[]): SimpleSequence[] {
   return sequences.map((sequence, index) => ({
     id: index + 1,
     text: sequence.text,
     mediaDescription: sequence.media?.description || ''
+  }));
+}
+
+export function simplifyMedia(media: IMedia[]): SimpleMedia[] {
+  return media.map((media, index) => ({
+    id: index,
+    description: media.description?.map(d => d.text) || []
   }));
 }
 

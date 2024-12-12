@@ -13,6 +13,7 @@ export interface IMedia {
   type: 'image' | 'video' | 'audio';
   usage: 'voice' | 'avatar' | 'media';
   show?: 'full' | 'half' | 'hide';
+  startAt?: number;
   name: string;
   label: string;
   description?: [
@@ -37,6 +38,10 @@ export interface IMedia {
     link: string;
     width: number;
     height: number;
+  };
+  audio?: {
+    id: string;
+    link: string;
   };
   createdAt?: Date;
   updatedAt?: Date;

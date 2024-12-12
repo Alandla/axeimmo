@@ -23,6 +23,7 @@ export const uploadFiles = async (
 
                 let image
                 let video
+                let audio
                 
                 if (fileToUpload.type === "video") {
 
@@ -60,6 +61,11 @@ export const uploadFiles = async (
                         height: dimensionsImage.height,
                         link: url?.mediaUrl
                     }
+                } else if (fileToUpload.type === "audio") {
+                    audio = {
+                        id: url?.mediaId,
+                        link: url?.mediaUrl
+                    }
                 }
 
                 uploadedFiles.push({
@@ -67,7 +73,7 @@ export const uploadFiles = async (
                     usage: fileToUpload.usage,
                     name: fileToUpload.file.name,
                     label: fileToUpload.label,
-                    ...{image, video}
+                    ...{image, video, audio}
                 })
             })
         )

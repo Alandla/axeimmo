@@ -363,6 +363,7 @@
         "house": "House",
         "outdoor": "Outdoor",
         "indoor": "Indoor",
+        "lobby": "Lobby",
         "outdoor-chair": "Outdoor chair",
         "outdoor-table": "Outdoor table",
         "outdoor-sport": "Outdoor sport",
@@ -403,7 +404,8 @@
       "TRANSCRIPTION": "Transcription",
       "AVATAR_GENERATION": "Avatar generation",
       "SEARCH_MEDIA": "Search media",
-      "ANALYZE": "Analyze",
+      "ANALYZE_YOUR_MEDIA": "Analyze your media",
+      "ANALYZE_NEW_MEDIA": "Analyze added media",
       "error-message": "Error, please contact support."
     },
     "space": {

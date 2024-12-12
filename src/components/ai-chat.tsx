@@ -53,19 +53,20 @@ export function AiChat() {
       resetSteps()
       if (files.length !== 0) {
         addStep({ id: 0, name: Steps.MEDIA_UPLOAD, state: StepState.PENDING, progress: 0 })
-        addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
         
         if (files.some(file => file.usage === 'media')) {
-          addStep({ id: 2, name: Steps.ANALYZE, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 3, name: Steps.ANALYZE_YOUR_MEDIA, state: StepState.PENDING, progress: 0 })
         }
 
         if (files.some(file => file.usage === 'voice')) {
+          addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.AVATAR)
           const messageAi = getRandomMessage('ai-get-audio-select-avatar');
           addMessageAi(messageAi, MessageType.AVATAR);
           return;
         } else if (files.some(file => file.usage === 'avatar')) {
-          addStep({ id: 3, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.GENERATION)
           const messageAi = getRandomMessage('ai-get-all-start-generation');
           addMessageAi(messageAi, MessageType.GENERATION);
@@ -184,8 +185,8 @@ export function AiChat() {
   }
 
   const handleConfirmVoice = () => {
-    addStep({ id: 2, name: Steps.VOICE_GENERATION, state: StepState.PENDING, progress: 0 })
-    addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 1, name: Steps.VOICE_GENERATION, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 2, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.AVATAR);
     const messageUser = getRandomMessage('user-select-voice', { "name": selectedVoice?.name || '' });
     const messageAi = getRandomMessage('ai-select-avatar');
@@ -199,7 +200,7 @@ export function AiChat() {
     let messageAi = '';
     if (selectedAvatar) {
       messageUser1 = getRandomMessage('user-select-avatar', { "name": selectedVoice?.name || '' });
-      addStep({ id: 5, name: Steps.ANALYZE, state: StepState.PENDING, progress: 0 })
+      addStep({ id: 5, name: Steps.ANALYZE_NEW_MEDIA, state: StepState.PENDING, progress: 0 })
     } else {
       messageUser1 = getRandomMessage('user-no-avatar');
     }

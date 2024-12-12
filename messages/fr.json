@@ -364,6 +364,7 @@
         "house": "Maison",
         "outdoor": "Extérieur",
         "indoor": "Intérieur",
+        "lobby": "Lobby",
         "outdoor-chair": "Chaise extérieure",
         "outdoor-table": "Table extérieure",
         "outdoor-sport": "Sport extérieur",
@@ -404,7 +405,8 @@
       "TRANSCRIPTION": "Transcription",
       "AVATAR_GENERATION": "Génération de l'avatar",
       "SEARCH_MEDIA": "Recherche des médias",
-      "ANALYZE": "Analyse du contenu",
+      "ANALYZE_YOUR_MEDIA": "Analyse de vos médias",
+      "ANALYZE_NEW_MEDIA": "Analyse du contenu ajouté",
       "error-message": "Erreur, veuillez contacter le support."
     },
     "space": {

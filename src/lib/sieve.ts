@@ -125,7 +125,7 @@ export const getAnalysisResult = async (
     retryCount = 0, 
     mediaUrl: string,
     isDetailedAnalysis = false
-): Promise<string | null> => {
+): Promise<any> => {
     try {
         const response = await axios.get(`${SIEVE_API_URL}/jobs/${jobId}/await`, {
             headers: {

@@ -56,7 +56,7 @@ export const generateKeywords = async (sequences: any) => {
                 "" +
                 "[" +
                 " {" +
-                "    \"id\": 1," +
+                "    \"id\": 0," +
                 "    \"keywords\": [" +
                 "        {" +
                 "            \"keyword\": \"HARD keyword\"," +
