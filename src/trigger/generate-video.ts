@@ -25,6 +25,7 @@ import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
 import { addMediasToSpace } from "../dao/spaceDao";
 import { IMediaSpace } from "../types/space";
+import { addVideoCountContact } from "../lib/loops";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -94,7 +95,7 @@ export const generateVideoTask = task({
 
     logger.log(`[VOICE] Start voice generation...`)
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
@@ -149,7 +150,7 @@ export const generateVideoTask = task({
     
     let transcription: any;
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       transcription = transcriptionMock
       await metadata.replace({
         name: Steps.TRANSCRIPTION,
@@ -308,7 +309,7 @@ export const generateVideoTask = task({
 
     let keywords: any;
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       keywords = keywordsMock
     } else {
       const resultKeywords = await generateKeywords(lightTranscription)
@@ -330,7 +331,7 @@ export const generateVideoTask = task({
 
     logger.log(`[MEDIA] Search media...`);
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       sequences = sequencesWithMediaMock as ISequence[]
     } else {
 
@@ -370,7 +371,7 @@ export const generateVideoTask = task({
     /
     */
 
-    if (ctx.environment.type !== "PRODUCTION" && (payload.avatar || avatarFile)) {
+    if (ctx.environment.type !== "DEVELOPMENT" && (payload.avatar || avatarFile)) {
       logger.log(`[ANALYSIS] Starting media analysis...`);
       
       const mediasToAnalyze = sequences.map(seq => seq.media)
@@ -462,6 +463,8 @@ export const generateVideoTask = task({
     }
 
     await updateVideo(newVideo)
+
+    await addVideoCountContact(payload.userId)
 
     return {
       videoId: newVideo.id,
