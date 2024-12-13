@@ -57,7 +57,6 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
             file,
             type,
             usage: "media",
-            label: ''
           };
       });
 

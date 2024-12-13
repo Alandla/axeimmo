@@ -2,7 +2,6 @@ export type FileToUpload = {
   file: File,
   type: "image" | "video" | "audio"
   usage: "voice" | "avatar" | "media"
-  label: string
 }
 
 export type UploadedFile = {
@@ -11,5 +10,4 @@ export type UploadedFile = {
   name: string
   type: "image" | "video" | "audio"
   usage: "voice" | "avatar" | "media"
-  label: string
 }

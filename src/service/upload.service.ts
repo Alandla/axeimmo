@@ -72,7 +72,6 @@ export const uploadFiles = async (
                     type: fileToUpload.type,
                     usage: fileToUpload.usage,
                     name: fileToUpload.file.name,
-                    label: fileToUpload.label,
                     ...{image, video, audio}
                 })
             })

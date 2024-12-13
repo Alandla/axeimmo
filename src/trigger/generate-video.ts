@@ -14,7 +14,7 @@ import { createLightTranscription, splitIntoSequences } from "../lib/transcripti
 import { ffmpegExtractAudioSegments } from "./separate-audio";
 import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
-import { searchMediaForSequence } from "../service/media.service";
+import { mediaToMediaSpace, searchMediaForSequence } from "../service/media.service";
 import { IMedia, ISequence, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
 import { generateBrollDisplay, generateStartData, matchMediaToSequences } from "../lib/ai";
@@ -24,6 +24,7 @@ import { applyShowBrollToSequences, ShowBrollResult, simplifyMedia, simplifySequ
 import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
 import { addMediasToSpace } from "../dao/spaceDao";
+import { IMediaSpace } from "../types/space";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -250,7 +251,9 @@ export const generateVideoTask = task({
 
       logger.info('Analyzed medias', { analyzedMedias })
 
-      await addMediasToSpace(payload.spaceId, analyzedMedias)
+      const mediasSpace : IMediaSpace[] = mediaToMediaSpace(analyzedMedias, payload.userId)
+
+      await addMediasToSpace(payload.spaceId, mediasSpace)
 
       logger.info('Analyzed medias', { analyzedMedias })
       logger.info('Total cost', { totalCost })

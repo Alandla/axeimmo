@@ -28,7 +28,6 @@ const mediaSchema = new mongoose.Schema({
       default: 0,
     },
     name: String,
-    label: String,
     description: [
       {
         start: Number,

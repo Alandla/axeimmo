@@ -44,7 +44,6 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
           file,
           type,
           usage,
-          label: ''
         };
       });
       console.log('updatedFiles', updatedFiles)
@@ -80,8 +79,14 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
 
     const filterFiles = (files: File[]) => {
         const hasVoice = files.some(file => file.type === "voice");
-        if (!hasVoice) return files;
-        return files.filter(file => !file.type.startsWith('audio/'));
+        const filteredFiles = hasVoice ? files.filter(file => !file.type.startsWith('audio/')) : files;
+        
+        return filteredFiles.filter(file => {
+            if (file.type.startsWith('image/')) {
+                return !['image/avif', 'image/webp'].includes(file.type);
+            }
+            return true;
+        });
     };
 
     return (
@@ -155,8 +160,8 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                       multiple
                       className="hidden"
                       accept={files.some(file => file.usage === "voice") ? 
-                        'image/*,video/*' : 
-                        'image/*,video/*,audio/*'}
+                        'image/jpeg,image/png,image/gif,video/*' : 
+                        'image/jpeg,image/png,image/gif,video/*,audio/*'}
                       onChange={(e) => {
                         if (e.target.files) {
                           handleFileUpload(filterFiles(Array.from(e.target.files)));

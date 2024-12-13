@@ -2,6 +2,7 @@ import { logger } from "@trigger.dev/sdk/v3";
 import { getGoogleImagesMedia } from "../lib/google";
 import { getPexelsVideosMedia } from "../lib/pexels";
 import { getStoryblocksVideosMedia } from "../lib/storyblocks";
+import { IMedia } from "../types/video";
 
 export const searchMediaForSequence = async (sequence: any, index: number, keywords: any, mediaSource: string) => {
     const sequenceKeywords = keywords[index]?.keywords;
@@ -36,3 +37,13 @@ export const searchMediaForSequence = async (sequence: any, index: number, keywo
     
     return sequence;
 };
+
+export const mediaToMediaSpace = (medias: IMedia[], userId: string) => {
+  return medias.map((media) => {
+    return {
+      media,
+      uploadedBy: userId,
+      uploadedAt: new Date()
+    }
+  })
+}
