@@ -6,12 +6,12 @@ import { useState, useEffect } from "react";
 
 interface FilePreviewProps {
   file: File;
-  type: "voice" | "avatar" | "media";
-  onTypeChange: (newType: "voice" | "avatar" | "media") => void;
+  usage: "voice" | "avatar" | "media";
+  onUsageChange: (newUsage: "voice" | "avatar" | "media") => void;
   onRemove: () => void;
 }
 
-export function FilePreview({ file, type, onTypeChange, onRemove }: FilePreviewProps) {
+export function FilePreview({ file, usage, onUsageChange, onRemove }: FilePreviewProps) {
   const t = useTranslations("filePreview.tooltip");
   const [mediaUrl, setMediaUrl] = useState<string>("");
 
@@ -69,7 +69,7 @@ export function FilePreview({ file, type, onTypeChange, onRemove }: FilePreviewP
           </button>
         </div>
         <div className="flex items-center mt-1">
-          <Select value={type} onValueChange={onTypeChange}>
+          <Select value={usage} onValueChange={onUsageChange}>
             <SelectTrigger className="w-[110px] h-8">
               <SelectValue />
             </SelectTrigger>

@@ -16,7 +16,7 @@ interface Utterance {
   // ... autres propriétés possibles
 }
 
-interface LightTranscription {
+export interface LightTranscription {
   id: number;
   text: string;
 }
@@ -25,7 +25,7 @@ const timeToFrames = (time: number, fps: number = 60): number => Math.round(time
 
 export function createLightTranscription(sequences: ISequence[]): LightTranscription[] {
   return sequences.map((sequence, index) => ({
-    id: index + 1,
+    id: index,
     text: sequence.text,
   }));
 }

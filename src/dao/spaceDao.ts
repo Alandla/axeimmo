@@ -5,6 +5,7 @@ import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
 import connectMongo from "../lib/mongoose";
 import { addSpaceToUser } from "./userDao";
 import { IMedia } from "../types/video";
+import { IMediaSpace } from "../types/space";
 
 export const createPrivateSpaceForUser = async (userId: string, userName?: string | null) => {
   return executeWithRetry(async () => {
@@ -28,7 +29,7 @@ export const createPrivateSpaceForUser = async (userId: string, userName?: strin
   });
 };
 
-export const addMediasToSpace = async (spaceId: string, medias: IMedia[]) => {
+export const addMediasToSpace = async (spaceId: string, medias: IMediaSpace[]) => {
   try {
     return await executeWithRetry(async () => {
       const space = await getSpaceById(spaceId);

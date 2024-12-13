@@ -2,45 +2,7 @@ import { basicApiCall } from "@/src/lib/api";
 import { FileToUpload, UploadedFile } from "../types/files";
 import { IMedia } from "../types/video";
 
-export const uploadFiles = async (files: FileToUpload[], updateStepProgress: (stepName: string, progress: number) => void) => {
-    let uploadedFiles: UploadedFile[] = []
-    try {
-        let completedFiles = 0
-        const totalFiles = files.length
-
-        // Upload tous les fichiers en parallèle avec suivi de progression
-        const uploadPromises = files.map(async (fileToUpload) => 
-            getMediaUrlFromFileByPresignedUrl(fileToUpload.file)
-            .then(url => {
-                completedFiles++
-                const totalProgress = Math.round((completedFiles / totalFiles) * 100)
-                updateStepProgress("MEDIA_UPLOAD", totalProgress)
-
-                const type = fileToUpload.file.type.startsWith('image/') ? "image" : fileToUpload.file.type.startsWith('video/') ? "video" : "audio"
-
-                uploadedFiles.push({
-                    url: url?.mediaUrl,
-                    id: url?.mediaId,
-                    name: fileToUpload.file.name,
-                    usage: fileToUpload.type,
-                    type: type,
-                    label: fileToUpload.label
-                })
-            })
-        )
-
-        // Attendre que tous les uploads soient terminés
-        await Promise.all(uploadPromises)
-
-    } catch (error) {
-        console.error('Erreur lors de l\'upload:', error)
-        updateStepProgress("MEDIA_UPLOAD", 0)
-    }
-
-    return uploadedFiles
-}
-
-export const uploadFiles2 = async (
+export const uploadFiles = async (
     files: FileToUpload[], 
     updateStepProgress?: (stepName: string, progress: number) => void
 ) => {
@@ -59,15 +21,13 @@ export const uploadFiles2 = async (
                     updateStepProgress("MEDIA_UPLOAD", totalProgress)
                 }
 
-                const type = fileToUpload.file.type.startsWith('image/') ? "image" : fileToUpload.file.type.startsWith('video/') ? "video" : "audio"
-
                 let image
                 let video
+                let audio
                 
-                if (type === "video") {
+                if (fileToUpload.type === "video") {
 
                     const thumbnail : any = await basicApiCall("/trigger/generateMediaThumbnail", {
-                        media: fileToUpload,
                         url: url?.mediaUrl
                     })
 
@@ -91,7 +51,7 @@ export const uploadFiles2 = async (
                         height: dimensionsImage.height,
                         link: thumbnailUrl
                     }
-                } else if (type === "image") {
+                } else if (fileToUpload.type === "image") {
 
                     const dimensionsImage = await getImageDimensions(url?.mediaUrl)
 
@@ -101,14 +61,18 @@ export const uploadFiles2 = async (
                         height: dimensionsImage.height,
                         link: url?.mediaUrl
                     }
+                } else if (fileToUpload.type === "audio") {
+                    audio = {
+                        id: url?.mediaId,
+                        link: url?.mediaUrl
+                    }
                 }
 
                 uploadedFiles.push({
-                    type: type,
-                    usage: fileToUpload.type,
+                    type: fileToUpload.type,
+                    usage: fileToUpload.usage,
                     name: fileToUpload.file.name,
-                    label: fileToUpload.label,
-                    ...{image, video}
+                    ...{image, video, audio}
                 })
             })
         )

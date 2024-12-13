@@ -55,6 +55,7 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration }: { sequence
                         ) : (
                             <OffthreadVideo
                                 src={media.video.link}
+                                startFrom={media.startAt*60 || 0}
                                 style={{
                                     width: '100%',
                                     height: `${mediaHeight}%`,

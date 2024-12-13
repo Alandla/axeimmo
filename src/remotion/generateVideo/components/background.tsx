@@ -61,6 +61,7 @@ export const MediaBackground = ({ sequences }: { sequences: any }) => {
                             <AbsoluteFill>
                                 <OffthreadVideo
                                     src={file}
+                                    startFrom={media.startAt*60 || 0}
                                     style={{
                                         width: '100%',
                                         height: '100%',

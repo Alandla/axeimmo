@@ -95,7 +95,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "A young boy is sitting on the floor of a library, with his arms wrapped around his legs. He is looking down at the floor and appears to be sad or upset. There are bookshelves behind him, and the shelves are full of books.  The lighting is dim and the overall mood is somber.",
+      "description": [
+        {
+          "start": 0,
+          "text": "A young boy is sitting on the floor of a library, with his arms wrapped around his legs. He is looking down at the floor and appears to be sad or upset. There are bookshelves behind him, and the shelves are full of books.  The lighting is dim and the overall mood is somber."
+        }
+      ],
       "video": {
         "id": "10814111",
         "quality": "hd",
@@ -210,7 +215,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "The video shows a view from a vehicle driving through a savanna. The camera is pointed towards the right side of the vehicle and we see a brown dirt road, dry grass, and bushes, with a few trees in the background.  The sky is blue with a few white clouds.",
+      "description": [
+        {
+          "start": 0,
+          "text": "The video shows a view from a vehicle driving through a savanna. The camera is pointed towards the right side of the vehicle and we see a brown dirt road, dry grass, and bushes, with a few trees in the background.  The sky is blue with a few white clouds."
+        }
+      ],
       "video": {
         "id": "4839969",
         "quality": "hd",
@@ -297,7 +307,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "A woman is sitting at a desk with a baby in her arms. She is looking at a laptop screen. There is a man on the screen. The woman is wearing a maroon sweater and blue jeans. The baby is wearing a blue onesie. The woman is sitting on a white stool.  The laptop is open on the desk and a man is on the screen.  The woman's right hand is resting on the desk. The baby's head is resting on the woman's shoulder.  The room is well-lit. There is a window behind the woman. There is a star-shaped ornament hanging from the window. The desk is white with a drawer.  There are some items on the desk, including a couple of pencils, a small ceramic figure, and a box of crayons. The woman is looking intently at the man on the screen. She seems to be engaged in a conversation.",
+      "description": [
+        {
+          "start": 0,
+          "text": "A woman is sitting at a desk with a baby in her arms. She is looking at a laptop screen. There is a man on the screen. The woman is wearing a maroon sweater and blue jeans. The baby is wearing a blue onesie. The woman is sitting on a white stool.  The laptop is open on the desk and a man is on the screen.  The woman's right hand is resting on the desk. The baby's head is resting on the woman's shoulder.  The room is well-lit. There is a window behind the woman. There is a star-shaped ornament hanging from the window. The desk is white with a drawer.  There are some items on the desk, including a couple of pencils, a small ceramic figure, and a box of crayons. The woman is looking intently at the man on the screen. She seems to be engaged in a conversation."
+        }
+      ],
       "video": {
         "id": "10032637",
         "quality": "hd",
@@ -398,7 +413,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "A man is sitting at a desk and typing on a laptop. The camera is positioned behind him, so only his back and the laptop screen are visible. The man is wearing a brown jacket, a white shirt, and a watch. He has short dark hair and a beard. There is a headset on the desk, along with a notebook, a pen, a glass of water, and some plants.  The laptop screen shows code.",
+      "description": [
+        {
+          "start": 0,
+          "text": "A man is sitting at a desk and typing on a laptop. The camera is positioned behind him, so only his back and the laptop screen are visible. The man is wearing a brown jacket, a white shirt, and a watch. He has short dark hair and a beard. There is a headset on the desk, along with a notebook, a pen, a glass of water, and some plants.  The laptop screen shows code."
+        }
+      ],
       "video": {
         "id": "9445904",
         "quality": "hd",
@@ -506,7 +526,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "The video shows a grassy area with a brick pathway leading towards a brick building. The building has large windows and appears to be a school or university building. There are trees, a black bench, and a few people walking around the building.  The sky is blue and the sun is shining.  The camera pans across the scene and shows a more panoramic view of the area as the video progresses.",
+      "description": [
+        {
+          "start": 0,
+          "text": "The video shows a grassy area with a brick pathway leading towards a brick building. The building has large windows and appears to be a school or university building. There are trees, a black bench, and a few people walking around the building.  The sky is blue and the sun is shining.  The camera pans across the scene and shows a more panoramic view of the area as the video progresses."
+        }
+      ],
       "video": {
         "id": "9304568",
         "quality": "hd",
@@ -579,7 +604,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "Two men are working on a laptop computer together. The man on the left is wearing a red beanie and a tan hoodie. He has a beard and is looking at the laptop. The man on the right is wearing glasses and a brown sweater. He is pointing at the laptop screen. They are in an office setting with a brick wall in the background.",
+      "description": [
+        {
+          "start": 0,
+          "text": "Two men are working on a laptop computer together. The man on the left is wearing a red beanie and a tan hoodie. He has a beard and is looking at the laptop. The man on the right is wearing glasses and a brown sweater. He is pointing at the laptop screen. They are in an office setting with a brick wall in the background."
+        }
+      ],
       "video": {
         "id": "9955311",
         "quality": "hd",
@@ -666,7 +696,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "A woman is sitting in the backseat of a car and looking out the window. She is wearing a black coat over a white shirt. Her hands are in her lap, and she is looking straight ahead. The car is driving through a city. The view out the window is of buildings and other cars.",
+      "description": [
+        {
+          "start": 0,
+          "text": "A woman is sitting in the backseat of a car and looking out the window. She is wearing a black coat over a white shirt. Her hands are in her lap, and she is looking straight ahead. The car is driving through a city. The view out the window is of buildings and other cars."
+        }
+      ],
       "video": {
         "id": "10354483",
         "quality": "hd",
@@ -767,7 +802,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "A person is sitting at a desk and typing on a laptop. The laptop screen shows a design program with a 3D model of a product. There are many papers and other items on the desk.  The person is wearing a blue shirt.",
+      "description": [
+        {
+          "start": 0,
+          "text": "A person is sitting at a desk and typing on a laptop. The laptop screen shows a design program with a 3D model of a product. There are many papers and other items on the desk.  The person is wearing a blue shirt."
+        }
+      ],
       "video": {
         "id": "10422395",
         "quality": "hd",
@@ -833,7 +873,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "A woman in a grey tank top and black pants hangs from a climbing wall, her feet are off the ground. She is wearing a harness and climbing shoes. The wall has various holds and a climbing route. There is a sign and some windows behind her.",
+      "description": [
+        {
+          "start": 0,
+          "text": "A woman in a grey tank top and black pants hangs from a climbing wall, her feet are off the ground. She is wearing a harness and climbing shoes. The wall has various holds and a climbing route. There is a sign and some windows behind her."
+        }
+      ],
       "video": {
         "id": "9682644",
         "quality": "hd",
@@ -934,7 +979,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "A rock climber in a yellow shirt and blue jeans is climbing a steep cliff face.  The climber is attached to a rope and is using their hands and feet to pull themselves up the rock.  The climber is facing the rock face and is looking up. The camera is positioned behind and above the climber, facing the rock face.",
+      "description": [
+        {
+          "start": 0,
+          "text": "A rock climber in a yellow shirt and blue jeans is climbing a steep cliff face.  The climber is attached to a rope and is using their hands and feet to pull themselves up the rock.  The climber is facing the rock face and is looking up. The camera is positioned behind and above the climber, facing the rock face."
+        }
+      ],
       "video": {
         "id": "9596061",
         "quality": "hd",
@@ -1007,7 +1057,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "A man is grinding the side of a red car. The man is wearing a black shirt and overalls, and a black cap. He is squatting down on the ground as he works. He has a beard and is wearing black shoes. There is a lot of sparks flying from the grinder as he works. The garage is lit with red and blue neon lights.",
+      "description": [
+        {
+          "start": 0,
+          "text": "A man is grinding the side of a red car. The man is wearing a black shirt and overalls, and a black cap. He is squatting down on the ground as he works. He has a beard and is wearing black shoes. There is a lot of sparks flying from the grinder as he works. The garage is lit with red and blue neon lights."
+        }
+      ],
       "video": {
         "id": "9381693",
         "quality": "hd",
@@ -1080,7 +1135,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "The space shuttle is on the launch pad and the engines are firing. The exhaust is white and there are sparks coming from the engines.  The camera is focused on the engines and the bottom of the shuttle.",
+      "description": [
+        {
+          "start": 0,
+          "text": "The space shuttle is on the launch pad and the engines are firing. The exhaust is white and there are sparks coming from the engines.  The camera is focused on the engines and the bottom of the shuttle."
+        }
+      ],
       "video": {
         "id": "9252347",
         "quality": "hd",
@@ -1167,7 +1227,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "The video shows three scientists in a laboratory.  They are wearing white lab coats. They are looking at something on a table. There are many beakers filled with colored liquids in the lab.  The video is shot through the beakers and the focus is on the scientists.  It seems like the scientists are discussing something related to their work.  One of the scientists is gesturing with her hand.  The video is shot from a low angle.",
+      "description": [
+        {
+          "start": 0,
+          "text": "The video shows three scientists in a laboratory.  They are wearing white lab coats. They are looking at something on a table. There are many beakers filled with colored liquids in the lab.  The video is shot through the beakers and the focus is on the scientists.  It seems like the scientists are discussing something related to their work.  One of the scientists is gesturing with her hand.  The video is shot from a low angle."
+        }
+      ],
       "video": {
         "id": "9293483",
         "quality": "hd",
@@ -1269,7 +1334,12 @@
     "media": {
       "type": "image",
       "name": "How to change back to the old Twitter app icon on iOS | TechCrunch",
-      "description": "The image is of a blue bird icon superimposed with a black X on top of a grey background. The bird is facing right, with its wings spread. The X is in the center of the image and is tilted slightly to the right. The background is a textured grey, and in the bottom right corner is a white label with the text \"Bryce Durbin / TechCrunch\".  The image appears to be a symbol, perhaps representing the shutting down of a social media platform.",
+      "description": [
+        {
+          "start": 0,
+          "text": "The image is of a blue bird icon superimposed with a black X on top of a grey background. The bird is facing right, with its wings spread. The X is in the center of the image and is tilted slightly to the right. The background is a textured grey, and in the bottom right corner is a white label with the text \"Bryce Durbin / TechCrunch\".  The image appears to be a symbol, perhaps representing the shutting down of a social media platform."
+        }
+      ],
       "image": {
         "id": "img-1733286275597-4j20qvj77",
         "link": "https://techcrunch.com/wp-content/uploads/2023/04/twitter-x-corp.jpg",
@@ -1346,7 +1416,12 @@
     ],
     "media": {
       "type": "video",
-      "description": "The video shows a green screen with various social media icons, including thumbs up, hearts, and emojis, slowly falling down. The icons include thumbs up, hearts, laughing, shocked, and angry emojis. The emojis are all in a circle with a white background, with the angry emojis being red and the other emojis being yellow.  There appears to be a larger number of laughing and shocked emojis than other icons. \n",
+      "description": [
+        {
+          "start": 0,
+          "text": "The video shows a green screen with various social media icons, including thumbs up, hearts, and emojis, slowly falling down. The icons include thumbs up, hearts, laughing, shocked, and angry emojis. The emojis are all in a circle with a white background, with the angry emojis being red and the other emojis being yellow.  There appears to be a larger number of laughing and shocked emojis than other icons."
+        }
+      ],
       "video": {
         "id": "11189808",
         "quality": "hd",

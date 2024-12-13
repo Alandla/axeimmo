@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { basicApiCall } from "@/src/lib/api";
 import MediaItem from "../ui/media-item";
 import { FileToUpload } from "@/src/types/files";
-import { uploadFiles2 } from "@/src/service/upload.service";
+import { uploadFiles } from "@/src/service/upload.service";
 import { IMediaSpace } from "@/src/types/space";
 import { useSession } from "next-auth/react";
 import { useMediaToDeleteStore } from "@/src/store/mediaToDelete";
@@ -52,14 +52,15 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
     try {
       setIsUploadingFiles(true)
       const uploadedFiles: FileToUpload[] = newFiles.map(file => {
+          const type = file.type.startsWith('image/') ? "image" : file.type.startsWith('video/') ? "video" : "audio";
           return {
             file,
-            type: "media",
-            label: ''
+            type,
+            usage: "media",
           };
       });
 
-      const files: IMedia[] = await uploadFiles2(uploadedFiles)
+      const files: IMedia[] = await uploadFiles(uploadedFiles)
 
       const medias: IMediaSpace[] = files.map(file => {
         return {

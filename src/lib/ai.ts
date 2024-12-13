@@ -1,7 +1,8 @@
 import { createGroq } from "@ai-sdk/groq";
 import { generateText } from "ai";
 import { calculateAnthropicCost } from "./cost";
-import { SimpleSequence } from "./analyse";
+import { SimpleMedia, SimpleSequence } from "./analyse";
+import { LightTranscription } from "./transcription";
 
 const groq = createGroq({
     apiKey: process.env.GROQ_API_KEY
@@ -18,7 +19,7 @@ export const generateBrollDisplay = async (sequences: SimpleSequence[]) => {
                             "You will be given a list of video sequences in the following format:" +
                             "" +
                             "<video_sequences>"+
-                            sequences +
+                            JSON.stringify(sequences) +
                             "</video_sequences>"+
                             "" +
                             "For each sequence, consider the following criteria to determine the importance of the visual content:" +
@@ -177,6 +178,124 @@ export const generateStartData = async (script: string) => {
 
         const data = {
             details: jsonResponse,
+            cost: 0
+        }
+
+        return data
+    } catch (error) {
+        console.error(error)
+        return null
+    }
+}
+
+export const matchMediaToSequences = async (sequences: LightTranscription[], media: SimpleMedia[]) => {
+    try {
+        const result = await generateText({
+            model: groq('llama-3.3-70b-versatile'),
+            messages: [
+                {
+                    role: "user",
+                    content: "You are an AI assistant tasked with matching media descriptions to video sequences based on their content. Your goal is to create a JSON output that links each media item to the most appropriate sequence(s)." +
+                            "" +
+                            "Instructions:" +
+                            "1. Carefully read through the sequences and media descriptions." +
+                            "2. For each media description, find the most appropriate matching sequence based on the following rules:" +
+                            "  a. Every media description must be used exactly once." +
+                            "  b. Not all sequences need to have a media item assigned to them." +
+                            "  c. Match the media descriptions to sequences where the visual content best complements the voice-over text." +
+                            "3. Create a JSON array output where each element contains:" +
+                            "  a. The sequence ID (sequenceId)" +
+                            "  b. The media ID (mediaId)" +
+                            "  c. The index of the description used (description_index, 0-based)" +
+                            "" +
+                            "Important constraints:" +
+                            "- Each pair of mediaId and description_index should only occur once in the output." +
+                            "- The description_index should always be 0-based (0 for the first description, 1 for the second, etc.)." +
+                            "- Each sequenceId should only appear once in the output." +
+                            "" +
+                            "Here's an example of how the input and output might look:" +
+                            "" +
+                            "Input example:" +
+                            "" +
+                            "<sequences>" +
+                            "[" +
+                            "  {" +
+                            "    id: 0," +
+                            "    text: Welcome to our beautiful city" +
+                            "  }," +
+                            "  {" +
+                            "    id: 1," +
+                            "    text: Our parks offer a peaceful retreat" +
+                            "  }," +
+                            "  {" +
+                            "    id: 2," +
+                            "    text: Our restaurants are fabulous, with an enormous range of dishes." +
+                            "  }," +
+                            "  {" +
+                            "    id: 3," +
+                            "    text: The skyline is breathtaking at night" +
+                            "  }" +
+                            "]" +
+                            "</sequences>" +
+                            "" +
+                            "<media>" +
+                            "[" +
+                            "  {" +
+                            "    id: 0," +
+                            "    descriptions: [\"A panoramic view of a city\"]" +
+                            "  }," +
+                            "  {" +
+                            "    id: 1," +
+                            "    descriptions: [\"Tall buildings lit up against a night sky\",\"People walking in a green park with trees\"]" +
+                            "  }" +
+                            "]" +
+                            "</media>" +
+                            "" +
+                            "Output example:" +
+                            "" +
+                            "[" +
+                            "  {" +
+                            "    sequenceId: 0," +
+                            "    mediaId: 0," +
+                            "    description_index: 0" +
+                            "  }," +
+                            "  {" +
+                            "    sequenceId: 1," +
+                            "    mediaId: 1," +
+                            "    description_index: 1" +
+                            "  }," +
+                            "  {" +
+                            "    sequenceId: 3," +
+                            "    mediaId: 1," +
+                            "    description_index: 0" +
+                            "  }" +
+                            "]" +
+                            "" +
+                            "YOU MUST REPLY ONLY WITH JSON" +
+                            "RESPECT THE RESPONSE STRUCTURE" +
+                            "NEVER RESPOND EXPLANATION" +
+                            "NO INTRODUCTION LIKE \"Here is the json...\"" +
+                            "PUTS THE RAW JSON WITH NOTHING AROUND IT" +
+                            "" +
+                            "Here are the input variables you will work with:" +
+                            "" +
+                            "<sequences>" +
+                            JSON.stringify(sequences) +
+                            "</sequences>" +
+                            "" +
+                            "<media>" +
+                            JSON.stringify(media) +
+                            "</media>"
+                }
+            ],
+        });
+
+        console.log("Result", result);
+
+        const jsonResponse = JSON.parse(result.text);
+
+        const data = {
+            assignments: jsonResponse,
             cost: 0
         }
 
