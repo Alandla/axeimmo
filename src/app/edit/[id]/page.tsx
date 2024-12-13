@@ -246,6 +246,7 @@ export default function VideoEditor() {
     <ModalConfirmExport
       cost={calculateCredits(video?.video?.metadata.audio_duration || 30)}
       isOpen={showModalExport}
+      spaceId={video?.spaceId || ''}
       setIsOpen={setShowModalExport}
       onExportVideo={onExportVideo}
     />

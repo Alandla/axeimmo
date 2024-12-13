@@ -32,11 +32,12 @@ export interface SimpleSpace {
   name: string;
   creditsPerMonth: number;
   credits: number;
-  planName: string;
-  userRole: string;
+  planName: PlanName;
+  userRole?: string;
 }
 
 export interface ISpace {
+  id: string;
   name: string;
   members: IMember[];
   medias: IMediaSpace[];

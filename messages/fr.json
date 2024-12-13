@@ -63,6 +63,8 @@
     },
     "sidebar": {
       "createVideo": "Créer une vidéo",
+      "upgrade": "Améliorer",
+      "credits-used": "crédits utilisés",
       "links": {
         "title": "Tableau de bord",
         "home": "Accueil",
@@ -77,6 +79,12 @@
         "settings": "Paramètres",
         "spaces": "Espaces",
         "joinSpaces": "Rejoindre un espace"
+      },
+      "plan": {
+        "FREE": "Gratuit",
+        "PRO": "Pro",
+        "CREATOR": "Créateur",
+        "ENTREPRISE": "Entreprise"
       }
     },
     "export": {
