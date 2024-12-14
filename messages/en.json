@@ -16,7 +16,8 @@
     },
     "breadcrumbs": {
       "Dashboard": "Dashboard",
-      "Create": "Create"
+      "Create": "Create",
+      "Pricing": "Pricing"
     },
     "dashboard": {
       "title": "Dashboard"
@@ -86,6 +87,12 @@
         "CREATOR": "Creator",
         "ENTREPRISE": "Entreprise"
       }
+    },
+    "plan": {
+      "FREE": "Gratuit",
+      "PRO": "Pro",
+      "CREATOR": "Créateur",
+      "ENTREPRISE": "Entreprise"
     },
     "export": {
       "title": "Exporting Your Video",

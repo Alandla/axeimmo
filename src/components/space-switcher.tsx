@@ -28,6 +28,7 @@ export function SpaceSwitcher({
   spaces: SimpleSpace[]
 }) {
   const t = useTranslations('sidebar')
+  const tPlan = useTranslations('plan')
 
   const { isMobile } = useSidebar()
 
@@ -59,7 +60,7 @@ export function SpaceSwitcher({
                   {!activeSpace?.planName ? (
                     <Skeleton className="h-3 w-10 mt-1" />
                   ) : (
-                    activeSpace.planName.charAt(0).toUpperCase() + activeSpace.planName.slice(1).toLowerCase()
+                    tPlan(activeSpace.planName)
                   )}
                 </span>
               </div>

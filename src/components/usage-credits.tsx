@@ -5,6 +5,7 @@ import { useActiveSpaceStore } from "../store/activeSpaceStore"
 import { useTranslations } from "next-intl"
 import { useSidebar } from "@/src/components/ui/sidebar"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
+import Link from "next/link"
 
 export function UsageCredits() {
   const t = useTranslations('sidebar')
@@ -23,10 +24,12 @@ export function UsageCredits() {
             </div>
             <Progress value={0} className="h-2" />
           </div>
-          <Button variant="outline" size="sm" className="text-xs w-full opacity-50" disabled>
-            <Rocket className="w-3 h-3" />
-            Mettre à niveau
-          </Button>
+          <Link href="/dashboard/pricing">
+            <Button variant="outline" size="sm" className="text-xs w-full opacity-50" disabled>
+              <Rocket className="w-3 h-3" />
+              {t('upgrade')}
+            </Button>
+          </Link>
         </div>
       )
     }
@@ -40,10 +43,12 @@ export function UsageCredits() {
           </div>
           <Progress value={0} className="h-2" />
         </div>
-        <Button variant="outline" size="sm" className="text-xs w-full opacity-50" disabled>
-          <Rocket className="w-3 h-3" />
-          Mettre à niveau
-        </Button>
+        <Link href="/dashboard/pricing">
+          <Button variant="outline" size="sm" className="text-xs w-full opacity-50" disabled>
+            <Rocket className="w-3 h-3" />
+            {t('upgrade')}
+          </Button>
+        </Link>
       </div>
     )
   }
@@ -57,9 +62,11 @@ export function UsageCredits() {
               <div className="flex flex-col items-center">
                 <span className="text-xs font-medium">{activeSpace?.credits}</span>
               </div>
-              <Button variant="outline" size="icon">
-                <Rocket className="w-3 h-3" />
-              </Button>
+              <Link href="/dashboard/pricing">
+                <Button variant="outline" size="icon">
+                  <Rocket className="w-3 h-3" />
+                </Button>
+              </Link>
             </div>
           </div>
         </TooltipTrigger>
@@ -81,9 +88,11 @@ export function UsageCredits() {
         </div>
         <Progress value={percentage} className="h-2" />
       </div>
-      <Button variant="outline" size="sm" className="text-xs w-full">
-        <Rocket className="w-3 h-3" />
-        Mettre à niveau
+      <Button variant="outline" size="sm" className="text-xs w-full justify-center">
+        <Link href="/dashboard/pricing" className="flex items-center gap-2">
+          <Rocket className="w-3 h-3" />
+          {t('upgrade')}
+        </Link>
       </Button>
     </div>
   )

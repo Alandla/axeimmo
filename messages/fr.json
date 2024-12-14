@@ -16,7 +16,8 @@
     },
     "breadcrumbs": {
       "Dashboard": "Tableau de bord",
-      "Create": "Créer"
+      "Create": "Créer",
+      "Pricing": "Tarifs"
     },
     "dashboard": {
       "title": "Tableau de bord"
@@ -79,13 +80,13 @@
         "settings": "Paramètres",
         "spaces": "Espaces",
         "joinSpaces": "Rejoindre un espace"
-      },
-      "plan": {
-        "FREE": "Gratuit",
-        "PRO": "Pro",
-        "CREATOR": "Créateur",
-        "ENTREPRISE": "Entreprise"
       }
+    },
+    "plan": {
+      "FREE": "Gratuit",
+      "PRO": "Pro",
+      "CREATOR": "Créateur",
+      "ENTREPRISE": "Entreprise"
     },
     "export": {
       "title": "Exportation de ta vidéo",
