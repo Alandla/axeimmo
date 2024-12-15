@@ -30,7 +30,7 @@ import { addVideoCountContact } from "../lib/loops";
 interface GenerateVideoPayload {
   spaceId: string
   userId: string
-  files: UploadedFile[]
+  files: IMedia[]
   script: string
   voice: Voice
   avatar: AvatarLook
@@ -130,7 +130,7 @@ export const generateVideoTask = task({
         progress: 100
       })
     } else if (avatarFile) {
-      voiceUrl = avatarFile.url
+      voiceUrl = avatarFile.video?.link || ""
     }
 
     logger.log(`[VOICE] Voice URL: ${voiceUrl}`)
@@ -420,7 +420,7 @@ export const generateVideoTask = task({
     let avatar;
     if (avatarFile) {
       avatar = {
-        videoUrl: avatarFile.url
+        videoUrl: avatarFile.video?.link || ""
       }
     } else if (payload.avatar) {
       avatar = payload.avatar
