@@ -5,6 +5,17 @@ export interface Plan {
   icon: string
   monthlyPrice: number
   annualPrice: number
+  credits: number
   features: string[]
   popular?: boolean
+  priceId: {
+    month: { 
+      euros: string
+      dollars: string
+    },
+    annual: {
+      euros: string
+      dollars: string
+    }
+  }
 }

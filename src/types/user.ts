@@ -3,7 +3,7 @@ export interface IUser {
   name: string;
   email: string;
   image: string;
-  locale: string;
+  customerId: string;
   options: {
     lang: string;
   };

@@ -37,6 +37,15 @@ const planSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  nextPhase: {
+    type: Date,
+    required: true,
+    default: () => {
+      const date = new Date();
+      date.setMonth(date.getMonth() + 1);
+      return date;
+    },
+  },
 });
 
 const mediaSpaceSchema = new mongoose.Schema(

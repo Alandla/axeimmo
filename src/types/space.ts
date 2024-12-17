@@ -19,6 +19,7 @@ export interface IPlan {
   priceId: string;
   subscriptionType: SubscriptionType;
   creditsMonth: number;
+  nextPhase?: Date;
 }
 
 export interface IMediaSpace {

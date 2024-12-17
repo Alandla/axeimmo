@@ -66,6 +66,7 @@
     "react-resizable-panels": "^2.1.6",
     "remotion": "4.0.236",
     "shadcn": "^2.1.6",
+    "stripe": "^17.4.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.0.2",

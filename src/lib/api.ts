@@ -1,6 +1,4 @@
 import axios from "axios";
-import { signIn } from "next-auth/react";
-import config from "@/config";
 
 // Nouvelle fonction sans toast pour les appels non-React
 export const basicApiCall = async <T>(url: string, params: any): Promise<T> => {

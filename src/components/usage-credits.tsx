@@ -88,12 +88,12 @@ export function UsageCredits() {
         </div>
         <Progress value={percentage} className="h-2" />
       </div>
-      <Button variant="outline" size="sm" className="text-xs w-full justify-center">
-        <Link href="/dashboard/pricing" className="flex items-center gap-2">
+      <Link href="/dashboard/pricing" className="flex items-center gap-2">
+        <Button variant="outline" size="sm" className="text-xs w-full justify-center">
           <Rocket className="w-3 h-3" />
           {t('upgrade')}
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     </div>
   )
 }

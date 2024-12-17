@@ -1,24 +1,100 @@
 'use client'
 
 import { useState } from 'react'
-import { Star, Heart, Diamond, Check, Gem, ArrowRight } from 'lucide-react'
+import { Star, Heart, Diamond, Check, Gem, ArrowRight, Info, Loader2 } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/src/components/ui/tooltip"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card'
 import { Button } from '@/src/components/ui/button'
 import { useTranslations } from 'next-intl'
 import { PlanName } from '../types/enums'
-import { plans } from '../config/plan.config'
+import { discount, plans } from '../config/plan.config'
+import { Plan } from '../types/plan'
+import { basicApiCall } from '../lib/api'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
 
 export default function PricingPage() {
   const tPlan = useTranslations('plan')
   const [isAnnual, setIsAnnual] = useState(false)
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
+  const { activeSpace } = useActiveSpaceStore()
   
   const calculateDiscount = (monthly: number, annual: number) => {
     const discount = ((monthly - annual) / monthly) * 100
     return Math.round(discount)
   }
 
+  const handlePayment = async (plan: Plan) => {
+    try {
+      setLoadingPlan(plan.name);
+      const priceId = isAnnual ? plan.priceId.annual : plan.priceId.month;
+      const price = priceId.euros;
+      
+      const url: string = await basicApiCall('/stripe/createCheckout', {
+        priceId: price,
+        spaceId: activeSpace?.id,
+        mode: 'subscription',
+        couponId: discount.active ? discount.couponId : undefined,
+        successUrl: window.location.href,
+        cancelUrl: window.location.href,
+      })
+
+      window.location.href = url;
+      setLoadingPlan(null);
+    } catch (error) {
+      setLoadingPlan(null);
+    }
+  }
+
+  const applyDiscount = (price: number) => {
+    if (!discount.active) return price;
+    if (discount.mode === "all" 
+      || (discount.mode === "year" && isAnnual) 
+      || (discount.mode === "month" && !isAnnual)) {
+      return price * discount.reduction;
+    }
+    return price;
+  };
+
+  const calculateAnnualDiscount = (monthly: number, annual: number) => {
+    return Math.round(((monthly - annual) / monthly) * 100);
+  };
+
+  const getButtonProps = (planName: PlanName) => {
+    if (!activeSpace?.planName) return { text: 'Upgrade', disabled: false }
+    
+    const currentPlanIndex = plans.findIndex(p => p.name === activeSpace.planName)
+    const thisPlanIndex = plans.findIndex(p => p.name === planName)
+    
+    if (planName === activeSpace.planName) {
+      return { text: 'Actual plan', disabled: true }
+    }
+    
+    return {
+      text: thisPlanIndex > currentPlanIndex ? 'Upgrade' : 'Downgrade',
+      disabled: false
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-16 sm:max-w-7xl">
+      {discount.active && (
+        <div className="mb-8 text-center">
+          <div className="bg-[#FB5688]/10 text-[#FB5688] p-4 rounded-lg">
+            <p className="font-medium">
+              Offre spéciale : {Math.round((1 - discount.reduction) * 100)}% de réduction 
+              {discount.mode === "year" && " sur les abonnements annuels"}
+              {discount.mode === "month" && " sur les abonnements mensuels"}
+              !
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="mb-8 text-center">
         <div className="inline-flex items-center rounded-full border p-1 mb-8">
           <button
@@ -45,8 +121,14 @@ export default function PricingPage() {
 
       <div className="grid gap-8 md:grid-cols-3 mb-8">
         {plans.map((plan) => {
-          const price = isAnnual ? plan.annualPrice : plan.monthlyPrice
-          const discount = calculateDiscount(plan.monthlyPrice, plan.annualPrice)
+          const basePrice = isAnnual ? plan.annualPrice : plan.monthlyPrice;
+          const discountedPrice = applyDiscount(basePrice);
+          const buttonProps = getButtonProps(plan.name)
+          
+          const promoSavePercentage = discount.active ? Math.round((1 - discount.reduction) * 100) : 0;
+          const annualSavePercentage = calculateAnnualDiscount(plan.monthlyPrice, plan.annualPrice);
+          
+          const savePercentage = discount.active ? promoSavePercentage : (isAnnual ? annualSavePercentage : 0);
           
           return (
             <Card 
@@ -60,13 +142,11 @@ export default function PricingPage() {
                   Popular
                 </div>
               )}
-              {isAnnual && (
+              {savePercentage > 0 && (
                 <div className={`absolute top-4 right-4 px-2 py-1 text-xs font-medium rounded-full ${
-                  plan.popular 
-                    ? 'bg-white text-black' 
-                    : 'bg-black text-white'
+                  plan.popular ? 'bg-white text-black' : 'bg-black text-white'
                 }`}>
-                  Save {calculateDiscount(plan.monthlyPrice, plan.annualPrice)}%
+                  Save {savePercentage}%
                 </div>
               )}
               <CardHeader>
@@ -79,9 +159,9 @@ export default function PricingPage() {
                   <CardTitle>{tPlan(plan.name)}</CardTitle>
                 </div>
                 <div className="flex gap-2">
-                  <span className="text-4xl font-bold">{price}€</span>
+                  <span className="text-4xl font-bold">{discountedPrice.toFixed(2)}€</span>
                   <div className="flex flex-col text-sm">
-                    <span className={`line-through ${isAnnual ? '' : 'opacity-0'}`}>{plan.monthlyPrice}€</span>
+                    <span className={`line-through ${savePercentage > 0 ? '' : 'opacity-0'}`}>{plan.monthlyPrice}€</span>
                     <span className="text-sm text-muted-foreground">/month{isAnnual && ', billed annually'}</span>
                   </div>
                 </div>
@@ -95,12 +175,51 @@ export default function PricingPage() {
                         ? 'bg-white text-black hover:bg-gray-100' 
                         : ''
                   }`}
+                  onClick={() => handlePayment(plan)}
+                  disabled={loadingPlan === plan.name || buttonProps.disabled}
                 >
-                  Upgrade to {tPlan(plan.name)}
-                  <ArrowRight className="w-4 h-4" />
+                  {buttonProps.text}
+                  {loadingPlan === plan.name ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <ArrowRight className="w-4 h-4" />
+                  )}
                 </Button>
+                <div className="border-t my-4" />
+                <div className="mb-4">
+                  <h3 className="font-medium mb-1">Features</h3>
+                  {plan.name !== PlanName.CREATOR ? (
+                    <p className="text-sm text-muted-foreground">
+                      Everything in {tPlan(plans[plans.findIndex(p => p.name === plan.name) - 1].name)} plus:
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Everything in Free plus:
+                    </p>
+                  )}
+                </div>
                 <ul className="space-y-3">
-                  {plan.features.map((feature) => (
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4" />
+                    <span className="text-sm font-bold flex items-center gap-1">
+                        {plan.credits} crédits
+                        <TooltipProvider>
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger>
+                              <Info className="h-4 w-4 text-muted-foreground" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>
+                                {plan.credits === 300 && "300 crédits = 30 minutes de vidéo"}
+                                {plan.credits === 1000 && "1000 crédits = 1h40 de vidéo"}
+                                {plan.credits === 3000 && "3000 crédits = 5 heures de vidéo"}
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </span>
+                  </li>
+                  {plan.features.map((feature, index) => (
                     <li key={feature} className="flex items-center gap-2">
                       <Check className="h-4 w-4" />
                       <span className="text-sm">{feature}</span>
