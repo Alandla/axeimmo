@@ -2,7 +2,6 @@ import { executeWithRetry } from "../lib/db";
 import UserModel from "../models/User";
 import SpaceModel from "../models/Space";
 import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
-import connectMongo from "../lib/mongoose";
 import { addSpaceToUser } from "./userDao";
 import { IMedia } from "../types/video";
 import { IMediaSpace, IPlan } from "../types/space";
@@ -17,9 +16,9 @@ export const createPrivateSpaceForUser = async (userId: string, userName?: strin
       plan: {
         name: PlanName.FREE,
         subscriptionType: SubscriptionType.MONTHLY,
-        creditsMonth: 0,
+        creditsMonth: 10,
       },
-      credits: 100,
+      credits: 10,
     });
 
     await space.save();

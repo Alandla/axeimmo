@@ -103,7 +103,6 @@ export async function POST(req: Request) {
         }
 
         await updateSpacePlan(spaceId as string, planSpace);
-        await setCreditsToSpace(spaceId as string, plan.credits);
 
         // Extra: send email with user link, product page, etc...
         // try {
