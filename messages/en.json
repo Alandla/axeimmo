@@ -169,6 +169,8 @@
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Subtitles",
       "audio-tabs-title": "Audio",
+      "modal-pricing-not-enough-credits": "Not enough credits",
+      "modal-pricing-description-not-enough-credits": "You don't have enough credits to export your video, upgrade to a higher plan to export your video.",
       "toast": {
         "title-error": "Error",
         "title-saving": "Saving the video...",
@@ -176,7 +178,10 @@
         "title-saved": "Video saved",
         "description-saved": "Your changes have been saved.",
         "title-subtitle-saved": "Subtitle style saved",
-        "description-subtitle-saved": "The subtitle style has been saved."
+        "description-subtitle-saved": "The subtitle style has been saved.",
+        "description-subtitle-error": "An error occurred while saving the subtitle style.",
+        "description-not-enough-credits": "You don't have enough credits to export your video.",
+        "description-space-not-found": "The space was not found."
       },
       "subtitle": {
         "title-presets": "Presets",

@@ -24,8 +24,8 @@ export function UsageCredits() {
             </div>
             <Progress value={0} className="h-2" />
           </div>
-          <Link href="/dashboard/pricing">
-            <Button variant="outline" size="sm" className="text-xs w-full opacity-50" disabled>
+          <Link href="/dashboard/pricing" className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="text-xs w-full justify-center">
               <Rocket className="w-3 h-3" />
               {t('upgrade')}
             </Button>
@@ -43,8 +43,8 @@ export function UsageCredits() {
           </div>
           <Progress value={0} className="h-2" />
         </div>
-        <Link href="/dashboard/pricing">
-          <Button variant="outline" size="sm" className="text-xs w-full opacity-50" disabled>
+        <Link href="/dashboard/pricing" className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="text-xs w-full justify-center">
             <Rocket className="w-3 h-3" />
             {t('upgrade')}
           </Button>
