@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Star, Heart, Diamond, Check, Gem, ArrowRight, Info, Loader2 } from 'lucide-react'
+import { Star, Heart, Diamond, Check, Gem, ArrowRight, Info, Loader2, Phone, PhoneCall } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -17,6 +17,7 @@ import { Plan } from '../types/plan'
 import { basicApiCall } from '../lib/api'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import Link from 'next/link'
+import DiscountBanner from './discount-banner'
 
 export default function PricingPage() {
   const tPlan = useTranslations('plan')
@@ -24,11 +25,6 @@ export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(false)
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
   const { activeSpace } = useActiveSpaceStore()
-  
-  const calculateDiscount = (monthly: number, annual: number) => {
-    const discount = ((monthly - annual) / monthly) * 100
-    return Math.round(discount)
-  }
 
   const handlePayment = async (plan: Plan) => {
     try {
@@ -93,22 +89,13 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16 sm:max-w-7xl">
+    <div className="container mx-auto px-4 sm:max-w-7xl">
       {discount.active && (
-        <div className="mb-8 text-center">
-          <div className="bg-[#FB5688]/10 text-[#FB5688] p-4 rounded-lg">
-            <p className="font-medium">
-              Offre spéciale : {Math.round((1 - discount.reduction) * 100)}% de réduction 
-              {discount.mode === "year" && " sur les abonnements annuels"}
-              {discount.mode === "month" && " sur les abonnements mensuels"}
-              !
-            </p>
-          </div>
-        </div>
+        <DiscountBanner />
       )}
 
       <div className="mb-8 text-center">
-        <div className="inline-flex items-center rounded-full border p-1 mb-8">
+        <div className="inline-flex items-center rounded-full border p-1">
           <button
             onClick={() => setIsAnnual(false)}
             className={`px-4 py-2 rounded-full text-sm ${
@@ -171,7 +158,7 @@ export default function PricingPage() {
                   <CardTitle>{tPlan(plan.name)}</CardTitle>
                 </div>
                 <div className="flex gap-2">
-                  <span className="text-4xl font-bold">{discountedPrice.toFixed(0)}€</span>
+                  <span className="text-4xl font-bold">{Math.floor(discountedPrice)}€</span>
                   <div className="flex flex-col text-sm">
                     <span className={`line-through ${savePercentage > 0 ? '' : 'opacity-0'}`}>{plan.monthlyPrice}€</span>
                     <span className="text-sm text-muted-foreground">/{tPricing('month')}{isAnnual && `, ${tPricing('billed-annually')}`}</span>
@@ -257,9 +244,10 @@ export default function PricingPage() {
           </div>
         </CardHeader>
         <CardFooter>
-          <Link href="https://calendar.app.google/FHm4qKBiq43Cr8oK9" target='_blank'>
+          <Link href="https://calendar.app.google/FHm4qKBiq43Cr8oK9" target='_blank' className="w-full">
             <Button variant="outline" className="w-full">
               {tPricing('contact-sales')}
+              <PhoneCall className="w-4 h-4" />
             </Button>
           </Link>
         </CardFooter>

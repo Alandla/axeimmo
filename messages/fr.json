@@ -108,6 +108,13 @@
       "custom": "Personnalisé",
       "need-custom-plan": "Besoin d'un plan personnalisé ? Contactez-nous pour une solution sur mesure.",
       "contact-sales": "Contactez-nous",
+      "discount": {
+        "title": "Offre Bêta Test",
+        "description": "Profitez de notre tarif exclusif pendant la phase bêta.",
+        "days": "jours",
+        "hours": "heures",
+        "minutes": "mins"
+      },
       "feature": {
         "1-member": "1 membre",
         "2-members": "2 membres",

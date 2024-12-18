@@ -108,6 +108,13 @@
       "custom": "Custom",
       "need-custom-plan": "Need a custom plan ? Contact us for a tailored solution.",
       "contact-sales": "Contact us",
+      "discount": {
+        "title": "Beta Test Offer",
+        "description": "Enjoy our exclusive offer during the beta phase.",
+        "days": "days",
+        "hours": "hours",
+        "minutes": "mins"
+      },
       "feature": {
         "1-member": "1 member",
         "2-members": "2 members",
