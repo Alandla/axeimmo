@@ -5,7 +5,7 @@ import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
 import connectMongo from "../lib/mongoose";
 import { addSpaceToUser } from "./userDao";
 import { IMedia } from "../types/video";
-import { IMediaSpace } from "../types/space";
+import { IMediaSpace, IPlan } from "../types/space";
 
 export const createPrivateSpaceForUser = async (userId: string, userName?: string | null) => {
   return executeWithRetry(async () => {
@@ -40,6 +40,19 @@ export const addMediasToSpace = async (spaceId: string, medias: IMediaSpace[]) =
     });
   } catch (error) {
     console.error("Error while adding medias to space: ", error);
+    throw error;
+  }
+}
+
+export const updateSpacePlan = async (spaceId: string, plan: Partial<IPlan>) => {
+  try {
+    return await executeWithRetry(async () => {
+      const space = await SpaceModel.findByIdAndUpdate(spaceId, { $set: { plan } }, { new: true });
+      if (!space) throw new Error("Space not found");
+      return space.plan;
+    });
+  } catch (error) {
+    console.error("Error while updating space plan: ", error);
     throw error;
   }
 }
@@ -119,6 +132,20 @@ export const addCreditsToSpace = async (spaceId: string, credits: number) => {
     });
   } catch (error) {
     console.error("Error while adding credits to space: ", error);
+    throw error;
+  }
+}
+
+export const setCreditsToSpace = async (spaceId: string, credits: number) => {
+  try {
+    return await executeWithRetry(async () => {
+      const space = await getSpaceById(spaceId);
+      space.credits = credits;
+      await space.save();
+      return space.credits;
+    });
+  } catch (error) {
+    console.error("Error while setting credits to space: ", error);
     throw error;
   }
 }

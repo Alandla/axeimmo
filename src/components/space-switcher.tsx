@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronsUpDown, Plus, Settings2 } from "lucide-react"
+import { Check, ChevronsUpDown, DollarSign, Loader2, Plus, Settings2 } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -21,6 +21,9 @@ import { useTranslations } from "next-intl"
 import { Skeleton } from "./ui/skeleton"
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
 import { SimpleSpace } from "../types/space"
+import { useState } from "react"
+import { basicApiCall } from "../lib/api"
+import { useToast } from "../hooks/use-toast"
 
 export function SpaceSwitcher({
   spaces
@@ -28,10 +31,30 @@ export function SpaceSwitcher({
   spaces: SimpleSpace[]
 }) {
   const t = useTranslations('sidebar')
-
-  const { isMobile } = useSidebar()
-
+  const tPlan = useTranslations('plan')
+  const [isLoadingBilling, setIsLoadingBilling] = useState(false);
+  const { toast } = useToast();
   const { activeSpace, setActiveSpace } = useActiveSpaceStore()
+
+  const openStripePortal = async () => {
+    setIsLoadingBilling(true);
+    try {
+      const stripePortalURL: string = await basicApiCall('/stripe/createPortal', {
+        spaceId: activeSpace?.id,
+        returnUrl: window.location.href,
+      });
+      if (stripePortalURL) {
+        window.location.href = stripePortalURL;
+      }
+    } catch (error : any) {
+      toast({
+        title: t('billing.error-title'),
+        description: t('billing.error-description'),
+        variant: 'destructive',
+      })
+    }
+    setIsLoadingBilling(false);
+  };
 
   return (
     <SidebarMenu>
@@ -59,7 +82,7 @@ export function SpaceSwitcher({
                   {!activeSpace?.planName ? (
                     <Skeleton className="h-3 w-10 mt-1" />
                   ) : (
-                    activeSpace.planName.charAt(0).toUpperCase() + activeSpace.planName.slice(1).toLowerCase()
+                    tPlan(activeSpace.planName)
                   )}
                 </span>
               </div>
@@ -75,6 +98,10 @@ export function SpaceSwitcher({
             <DropdownMenuItem>
               <Settings2 />
               {t('teams.settings')}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={openStripePortal}>
+              {isLoadingBilling ? <Loader2 className="animate-spin" /> : <DollarSign />}
+              {t('billing.title')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="text-xs text-muted-foreground">

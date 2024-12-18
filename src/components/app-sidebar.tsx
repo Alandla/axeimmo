@@ -24,6 +24,7 @@ import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
 import { getSpaces } from "../service/user.service"
 import { SpaceSwitcher } from "./space-switcher"
 import { SimpleSpace } from "../types/space"
+import { UsageCredits } from "./usage-credits"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession()
@@ -91,6 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={links} />
       </SidebarContent>
       <SidebarFooter>
+        <UsageCredits />
         <NavUser user={session?.user} />
       </SidebarFooter>
       <SidebarRail />

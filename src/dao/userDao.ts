@@ -69,6 +69,17 @@ export const getUserById = async (userId: string) => {
   }
 };
 
+export const getUserByEmail = async (email: string) => {
+  try {
+    return await executeWithRetry(async () => {
+      return await UserModel.findOne({ email });
+    });
+  } catch (error) {
+    console.error("Error while getting user by email: ", error);
+    throw error;
+  }
+};
+
 export const updateUser = async (userId: string, updateData: Partial<IUser>) => {
   try {
     return await executeWithRetry(async () => {

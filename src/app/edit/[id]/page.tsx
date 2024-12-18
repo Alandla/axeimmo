@@ -30,6 +30,7 @@ import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import AudioSettings from '@/src/components/edit/audio-settings'
 import Musics from '@/src/components/edit/musics'
+import ModalPricing from '@/src/components/modal/modal-pricing'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -49,6 +50,9 @@ export default function VideoEditor() {
   const [isSaving, setIsSaving] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [showModalExport, setShowModalExport] = useState(false)
+  const [showModalPricing, setShowModalPricing] = useState(false)
+  const [modalPricingTitle, setModalPricingTitle] = useState('')
+  const [modalPricingDescription, setModalPricingDescription] = useState('')
   const [isDirty, setIsDirty] = useState(false)
   
   const updateVideo = (newVideoData: any) => {
@@ -156,11 +160,22 @@ export default function VideoEditor() {
   };
 
   const onExportVideo = async () => {
-    const cost = calculateCredits(video?.video?.metadata.audio_duration || 30)
     await basicApiCall('/video/save', { video })
-    const exportResult : IExport = await basicApiCall('/export/create', { videoId: video?.id, spaceId: video?.spaceId, creditCost: cost })
-    await basicApiCall('/space/removeCredits', { spaceId: video?.spaceId, cost })
-    return exportResult.id
+    try {
+      const exportResult : IExport = await basicApiCall('/export/create', { videoId: video?.id, spaceId: video?.spaceId })
+      return exportResult.id
+    } catch (error : any) {
+      console.error(error)
+      setModalPricingTitle(t('modal-pricing-not-enough-credits'))
+      setModalPricingDescription(t('modal-pricing-description-not-enough-credits'))
+      setShowModalPricing(true)
+      toast({
+        title: t('toast.title-error'),
+        description: t(`toast.description-${error.message}`),
+        variant: 'destructive'
+      })
+      return undefined
+    }
   }
 
   const calculateCredits = (videoDurationInSeconds: number) => {
@@ -243,9 +258,16 @@ export default function VideoEditor() {
           </div>
         </div>
     )}
+    <ModalPricing
+      title={modalPricingTitle}
+      description={modalPricingDescription}
+      isOpen={showModalPricing}
+      setIsOpen={setShowModalPricing}
+    />
     <ModalConfirmExport
       cost={calculateCredits(video?.video?.metadata.audio_duration || 30)}
       isOpen={showModalExport}
+      spaceId={video?.spaceId || ''}
       setIsOpen={setShowModalExport}
       onExportVideo={onExportVideo}
     />

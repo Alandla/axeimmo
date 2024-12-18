@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/src/components/ui/button"
 import {
   Dialog,
@@ -12,9 +12,13 @@ import {
 } from "@/src/components/ui/dialog"
 import { Download } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
+import { SimpleSpace } from '@/src/types/space'
+import { getSpaceById } from '@/src/service/space.service'
 
 interface ModalConfirmExportProps {
   cost: number
+  spaceId: string
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   onExportVideo: () => Promise<string | undefined>
@@ -22,11 +26,13 @@ interface ModalConfirmExportProps {
 
 export default function ModalConfirmExport({
   cost,
+  spaceId,
   isOpen,
   setIsOpen,
   onExportVideo
 }: ModalConfirmExportProps) {
   const [isPending, setIsPending] = useState(false)
+  const [space, setSpace] = useState<SimpleSpace | null>(null)
   const t = useTranslations('export-modal')
 
   const handleConfirm = async () => {
@@ -38,6 +44,16 @@ export default function ModalConfirmExport({
     setIsPending(false)
     setIsOpen(false)
   }
+
+  useEffect(() => {
+    const fetchSpace = async () => {
+      const space = await getSpaceById(spaceId)
+      setSpace(space)
+    }
+    if (spaceId && (!space || isOpen)) {
+      fetchSpace()
+    }
+  }, [isOpen])
 
   return (
     <Dialog 
@@ -55,7 +71,7 @@ export default function ModalConfirmExport({
             {t('description')}
             <div className="text-sm text-gray-500 mt-2">
               <p><b>{t('cost')}:</b> {cost} credits</p>
-              <p><b>{t('balance')}:</b> 50 credits</p>
+              <p><b>{t('balance')}:</b> {space?.credits} credits</p>
             </div>
           </DialogDescription>
         </DialogHeader>

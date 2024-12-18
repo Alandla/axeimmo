@@ -4,7 +4,7 @@ import { getVideoById, updateVideo } from "../dao/videoDao";
 import { getProgress, renderVideo } from "../lib/render";
 import { uploadImageFromUrlToS3 } from "../lib/r2";
 import { IVideo } from "../types/video";
-import { addCreditsToSpace } from "../dao/spaceDao";
+import { addCreditsToSpace, removeCreditsToSpace } from "../dao/spaceDao";
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
 import { calculateHeygenCost } from "../lib/cost";
@@ -34,7 +34,13 @@ export const exportVideoTask = task({
       const exportId = payload.exportId;
 
       logger.log("Exporting video...");
-      updateExport(exportId, { runId: ctx.run.id, status: 'processing' });
+      const exportData : IExport = await updateExport(exportId, { runId: ctx.run.id, status: 'processing' });
+
+      logger.log("Export data", { exportData });
+
+      if (ctx.attempt.number === 1) {
+        await removeCreditsToSpace(exportData.spaceId, exportData.creditCost);
+      }
 
       const video = await getVideoById(videoId);
       if (!video) {

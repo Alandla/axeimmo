@@ -16,7 +16,8 @@
     },
     "breadcrumbs": {
       "Dashboard": "Dashboard",
-      "Create": "Create"
+      "Create": "Create",
+      "Pricing": "Pricing"
     },
     "dashboard": {
       "title": "Dashboard"
@@ -63,6 +64,8 @@
     },
     "sidebar": {
       "createVideo": "Create a video",
+      "upgrade": "Upgrade",
+      "credits-used": "credits left",
       "links": {
         "title": "Dashboard",
         "home": "Home",
@@ -77,7 +80,64 @@
         "settings": "Settings",
         "spaces": "Spaces",
         "joinSpaces": "Join a space"
+      },
+      "billing": {
+        "title": "Billing",
+        "error-title": "Error",
+        "error-description": "You don't have an active subscription."
       }
+    },
+    "pricing": {
+      "upgrade": "Upgrade",
+      "downgrade": "Downgrade",
+      "current-plan": "Current plan",
+      "monthly": "Monthly",
+      "annually": "Annually",
+      "month": "month",
+      "billed-annually": "billed annually",
+      "features": "Features",
+      "20-off": "20% off",
+      "popular": "Popular",
+      "save": "Save",
+      "everything-in": "Everything included in",
+      "plus": "plus",
+      "credits": "credits",
+      "250-credits": "250 credits = 25 minutes of video",
+      "1000-credits": "1000 credits = 1h40 of video",
+      "3000-credits": "3000 credits = 5 hours of video",
+      "custom": "Custom",
+      "need-custom-plan": "Need a custom plan ? Contact us for a tailored solution.",
+      "contact-sales": "Contact us",
+      "discount": {
+        "title": "Beta Test Offer",
+        "description": "Enjoy our exclusive offer during the beta phase.",
+        "days": "days",
+        "hours": "hours",
+        "minutes": "mins"
+      },
+      "feature": {
+        "1-member": "1 member",
+        "2-members": "2 members",
+        "5-members": "5 members",
+        "duration-1-max": "Maximum duration of 1 minute",
+        "duration-3-max": "Maximum duration of 3 minutes",
+        "duration-5-max": "Maximum duration of 5 minutes",
+        "subtitles": "Automatic subtitles",
+        "voice": "High quality voice",
+        "avatar": "Realistic avatar photo",
+        "create-article": "Create a video from an article",
+        "add-media": "Automatically add your media",
+        "brand-kit": "Brand kit",
+        "voice-cloning": "Voice cloning",
+        "avatar-clone": "Avatar cloning",
+        "save-template": "Save templates"
+      }
+    },
+    "plan": {
+      "FREE": "Free",
+      "PRO": "Pro",
+      "CREATOR": "Creator",
+      "ENTREPRISE": "Entreprise"
     },
     "export": {
       "title": "Exporting Your Video",
@@ -109,6 +169,8 @@
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Subtitles",
       "audio-tabs-title": "Audio",
+      "modal-pricing-not-enough-credits": "Not enough credits",
+      "modal-pricing-description-not-enough-credits": "You don't have enough credits to export your video, upgrade to a higher plan to export your video.",
       "toast": {
         "title-error": "Error",
         "title-saving": "Saving the video...",
@@ -116,7 +178,10 @@
         "title-saved": "Video saved",
         "description-saved": "Your changes have been saved.",
         "title-subtitle-saved": "Subtitle style saved",
-        "description-subtitle-saved": "The subtitle style has been saved."
+        "description-subtitle-saved": "The subtitle style has been saved.",
+        "description-subtitle-error": "An error occurred while saving the subtitle style.",
+        "description-not-enough-credits": "You don't have enough credits to export your video.",
+        "description-space-not-found": "The space was not found."
       },
       "subtitle": {
         "title-presets": "Presets",

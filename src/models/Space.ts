@@ -35,7 +35,16 @@ const planSchema = new mongoose.Schema({
   creditsMonth: {
     type: Number,
     required: true,
-    default: 0,
+    default: 10,
+  },
+  nextPhase: {
+    type: Date,
+    required: true,
+    default: () => {
+      const date = new Date();
+      date.setMonth(date.getMonth() + 1);
+      return date;
+    },
   },
 });
 
