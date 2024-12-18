@@ -47,9 +47,8 @@ export const addMediasToSpace = async (spaceId: string, medias: IMediaSpace[]) =
 export const updateSpacePlan = async (spaceId: string, plan: Partial<IPlan>) => {
   try {
     return await executeWithRetry(async () => {
-      const space = await getSpaceById(spaceId);
-      space.plan = plan;
-      await space.save();
+      const space = await SpaceModel.findByIdAndUpdate(spaceId, { $set: { plan } }, { new: true });
+      if (!space) throw new Error("Space not found");
       return space.plan;
     });
   } catch (error) {

@@ -86,7 +86,7 @@ export function UsageCredits() {
           <Sparkles className="w-3 h-3" />
           <span>{activeSpace?.credits} / {activeSpace?.creditsPerMonth} {t('credits-used')}</span>
         </div>
-        <Progress value={percentage} className="h-2" />
+        <Progress value={percentage > 100 ? 100 : percentage} className="h-2" />
       </div>
       <Link href="/dashboard/pricing" className="flex items-center gap-2">
         <Button variant="outline" size="sm" className="text-xs w-full justify-center">

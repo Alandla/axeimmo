@@ -90,3 +90,19 @@ export const findCheckoutSession = async (sessionId: string) => {
     return null;
   }
 };
+
+export const createCustomerPortal = async ({ customerId, returnUrl }: { customerId: string, returnUrl: string }) => {
+  try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: returnUrl,
+    });
+
+    return portalSession.url;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};

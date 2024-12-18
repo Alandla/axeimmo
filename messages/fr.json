@@ -65,7 +65,7 @@
     "sidebar": {
       "createVideo": "Créer une vidéo",
       "upgrade": "Améliorer",
-      "credits-used": "crédits utilisés",
+      "credits-used": "crédits restants",
       "links": {
         "title": "Tableau de bord",
         "home": "Accueil",
@@ -80,6 +80,50 @@
         "settings": "Paramètres",
         "spaces": "Espaces",
         "joinSpaces": "Rejoindre un espace"
+      },
+      "billing": {
+        "title": "Facturation",
+        "error-title": "Erreur",
+        "error-description": "Tu n'as pas d'abonnement actif."
+      }
+    },
+    "pricing": {
+      "upgrade": "Mettre à niveau",
+      "downgrade": "Rétrograder",
+      "current-plan": "Plan actuel",
+      "monthly": "Mensuel",
+      "annually": "Annuel",
+      "month": "mois",
+      "billed-annually": "facturé annuellement",
+      "features": "Fonctionnalités",
+      "20-off": "-20%",
+      "popular": "Populaire",
+      "save": "Économisez",
+      "everything-in": "Tout ce qui est inclus dans",
+      "plus": "plus",
+      "credits": "crédits",
+      "250-credits": "250 crédits = 25 minutes de vidéo",
+      "1000-credits": "1000 crédits = 1h40 de vidéo",
+      "3000-credits": "3000 crédits = 5 heures de vidéo",
+      "custom": "Personnalisé",
+      "need-custom-plan": "Besoin d'un plan personnalisé ? Contactez-nous pour une solution sur mesure.",
+      "contact-sales": "Contactez-nous",
+      "feature": {
+        "1-member": "1 membre",
+        "2-members": "2 membres",
+        "5-members": "5 membres",
+        "duration-1-max": "Durée maximale de 1 minute",
+        "duration-3-max": "Durée maximale de 3 minutes",
+        "duration-5-max": "Durée maximale de 5 minutes",
+        "subtitles": "Sous titres automatiques",
+        "voice": "Voix de hautes qualités",
+        "avatar": "Avatar photo réaliste",
+        "create-article": "Créer une vidéo à partir d'un article",
+        "add-media": "Ajoutes automatiquement tes medias",
+        "brand-kit": "Kit de marque",
+        "voice-cloning": "Clonage de voix",
+        "avatar-clone": "Clonage de l'avatar",
+        "save-template": "Sauvegardes de templates"
       }
     },
     "plan": {

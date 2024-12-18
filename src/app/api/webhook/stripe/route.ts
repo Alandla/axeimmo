@@ -49,7 +49,9 @@ export async function POST(req: Request) {
         const userId = event.data.object.client_reference_id;
         const spaceId = session?.metadata?.spaceId;
 
-        const customer = await stripe.customers.retrieve(customerId as string);
+        const customerEmail = event.data.object.customer_details?.email;
+        const customerName = event.data.object.customer_details?.name;
+
         const priceData = await stripe.prices.retrieve(priceId as string);
         const productData = await stripe.products.retrieve(priceData.product as string);
 
@@ -60,13 +62,13 @@ export async function POST(req: Request) {
         // Get or create the user. userId is normally pass in the checkout session (clientReferenceID) to identify the user when we get the webhook event
         if (userId) {
           user = await getUserById(userId);
-        } else if (!('deleted' in customer) && customer.email) {
-          user = await getUserByEmail(customer.email);
+        } else if (customerEmail) {
+          user = await getUserByEmail(customerEmail);
 
           if (!user) {
             const u = {
-              email: customer?.email,
-              name: customer?.name,
+              email: customerEmail,
+              name: customerName,
             }
             user = await createUser(u);
             await addUserIdToContact(user.id, user.email);
@@ -125,11 +127,13 @@ export async function POST(req: Request) {
         // You can update the user data to show a "Cancel soon" badge for instance
         console.log("STRIPE EVENT: customer.subscription.updated")
 
-        const subscription = await stripe.subscriptions.retrieve(event.data.object.id);
-        const spaceId = subscription.metadata.spaceId;
-        const customerId = subscription.customer;
-        const priceId = subscription.items.data[0].price.id;
-        const billingInterval = subscription.items.data[0].price.recurring?.interval;
+        const product = event.data.object.items.data[0].price.product;
+        const spaceId = event.data.object.metadata.spaceId;
+        const customerId = event.data.object.customer;
+        const priceId = event.data.object.items.data[0].price.id;
+        const billingInterval = event.data.object.items.data[0].price.recurring?.interval;
+
+        const productData = await stripe.products.retrieve(product as string);
 
         let nextPhase;
 
@@ -139,10 +143,18 @@ export async function POST(req: Request) {
           nextPhase.setMonth(nextPhase.getMonth() + 1);
         }
 
-        const planSpace = {
-          priceId: priceId,
+        const plan = plans.find(p => p.name === productData.metadata.name);
+        if (!plan) {
+          throw new Error(`Plan ${productData.metadata.name} not found`);
+        }
+
+        const planSpace : IPlan = {
+          name: plan.name,
+          customerId: customerId as string,
+          priceId: priceId as string,
           subscriptionType: billingInterval === "month" ? SubscriptionType.MONTHLY : SubscriptionType.ANNUAL,
-          nextPhase: nextPhase,
+          creditsMonth: plan.credits,
+          nextPhase: nextPhase
         }
 
         await updateSpacePlan(spaceId, planSpace);
@@ -182,8 +194,12 @@ export async function POST(req: Request) {
         // ✅ Grant access to the product
         console.log("STRIPE EVENT: checkout.invoice.paid")
 
-        const subscription = await stripe.subscriptions.retrieve(event.data.object.subscription as string);
-        const spaceId = subscription.metadata.spaceId;
+        const spaceId = event.data.object.subscription_details?.metadata?.spaceId;
+
+        if (!spaceId) {
+          console.error("Space not found");
+          break;
+        }
 
         const space : ISpace = await getSpaceById(spaceId);
 
