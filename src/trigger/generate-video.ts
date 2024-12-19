@@ -95,7 +95,7 @@ export const generateVideoTask = task({
 
     logger.log(`[VOICE] Start voice generation...`)
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
