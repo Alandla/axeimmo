@@ -37,6 +37,13 @@ interface GenerateVideoPayload {
   mediaSource: string
 }
 
+interface SentenceData {
+  index: number;
+  text: string;
+  audioUrl?: string;
+  transcription?: any;
+}
+
 export const generateVideoTask = task({
   id: "generate-video",
   machine: {
@@ -94,8 +101,9 @@ export const generateVideoTask = task({
     const voiceFile: IMedia | undefined = payload.files?.find(file => file.usage === "voice");
 
     logger.log(`[VOICE] Start voice generation...`)
+    let sentences: SentenceData[] = [];
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (ctx.environment.type === "PRODUCTION") {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
@@ -120,68 +128,120 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      // Découper le script en phrases
-      const sentences = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
-      const audioBuffers: Buffer[] = [];
-      let processedSentences = 0;
+      const rawSentences = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
+      let processedCount = 0;
 
       // Traiter les phrases par lots de 5
-      for (let i = 0; i < sentences.length; i += 5) {
-        const batch = sentences.slice(i, Math.min(i + 5, sentences.length));
+      for (let i = 0; i < rawSentences.length; i += 5) {
+        const batch = rawSentences.slice(i, Math.min(i + 5, rawSentences.length));
         
-        const batchPromises = batch.map(async (sentence, index) => {
-          const currentIndex = i + index;
-          const previousText = currentIndex > 0 ? sentences[currentIndex - 1] : undefined;
-          const nextText = currentIndex < sentences.length - 1 ? sentences[currentIndex + 1] : undefined;
-
+        const batchPromises = batch.map(async (text, batchIndex) => {
+          const globalIndex = i + batchIndex; // Index global pour maintenir l'ordre
           try {
             const audioBuffer = await createAudioTTS(
-              payload.voice.id, 
-              sentence.trim(), 
-              payload.voice.voiceSettings,
+              payload.voice.id,
+              text.trim(),
+              payload.voice.voiceSettings
             );
-            return { index: currentIndex, buffer: audioBuffer };
+            
+            // Upload directement après la génération
+            const audioUrl = await uploadToS3Audio(audioBuffer, 'medias-users');
+
+
+            processedCount++
+            await metadata.replace({
+              name: Steps.VOICE_GENERATION,
+              progress: Math.round((processedCount / rawSentences.length) * 100)
+            });
+            
+            return {
+              index: globalIndex,
+              text: text.trim(),
+              audioUrl
+            };
           } catch (error: any) {
             if (error.response?.status === 422) {
-              // Attendre 2 seconde et réessayer
               await wait.for({ seconds: 2 });
-              return await createAudioTTS(
-                payload.voice.id, 
-                sentence.trim(), 
-                payload.voice.voiceSettings,
+
+              const retryBuffer = await createAudioTTS(
+                payload.voice.id,
+                text.trim(),
+                payload.voice.voiceSettings
               );
+
+              const audioUrl = await uploadToS3Audio(retryBuffer, 'medias-users');
+
+              processedCount++
+              await metadata.replace({
+                name: Steps.VOICE_GENERATION,
+                progress: Math.round((processedCount / rawSentences.length) * 100)
+              });
+
+              return {
+                index: globalIndex,
+                text: text.trim(),
+                audioUrl
+              };
             }
             throw error;
           }
         });
 
         const batchResults = await Promise.all(batchPromises);
-        
-        // Trier les résultats par index et ajouter les buffers
-        batchResults
-          .sort((a, b) => a.index - b.index)
-          .forEach(result => audioBuffers.push(result.buffer));
-
-        processedSentences += batch.length;
-        await metadata.replace({
-          name: Steps.VOICE_GENERATION,
-          progress: Math.round((processedSentences / sentences.length) * 100)
-        });
+        sentences.push(...batchResults);
       }
 
-      // Combiner tous les buffers audio
-      const combinedBuffer = Buffer.concat(audioBuffers);
-      voiceUrl = await uploadToS3Audio(combinedBuffer, 'medias-users');
+      // Trier les phrases par index
+      sentences.sort((a, b) => a.index - b.index);
 
       cost += calculateElevenLabsCost(payload.script);
 
-      await metadata.replace({
-        name: Steps.VOICE_GENERATION,
-        progress: 100
-      });
+      /*
+      /
+      /   Get transcription
+      /
+      */
+      logger.log(`[TRANSCRIPTION] Start transcription...`);
+
+      let processedTranscriptions = 0;
+      
+      // Traiter les transcriptions par lots
+      for (let i = 0; i < sentences.length; i += 3) {
+        const batch = sentences.slice(i, Math.min(i + 3, sentences.length));
+        
+        const transcriptionPromises = batch.map(async (sentence) => {
+          if (!sentence.audioUrl) throw new Error("Audio URL missing");
+          
+          const transcriptionResponse = await createTranscription(sentence.audioUrl);
+          const result = await pollTranscriptionStatus(transcriptionResponse.id);
+
+
+          processedTranscriptions++
+          await metadata.replace({
+            name: Steps.TRANSCRIPTION,
+            progress: Math.round((processedTranscriptions / sentences.length) * 100)
+          });
+
+          return {
+            index: sentence.index,
+            result
+          };
+        });
+
+        const transcriptionResults = await Promise.all(transcriptionPromises);
+        
+        transcriptionResults.forEach(({ index, result }) => {
+          const sentence = sentences.find(s => s.index === index);
+          if (sentence) {
+            sentence.transcription = result.result;
+          }
+        });
+      }
     } else if (avatarFile) {
       voiceUrl = avatarFile.video?.link || ""
     }
+
+    logger.info('Sentences', { sentences })
 
     logger.log(`[VOICE] Voice URL: ${voiceUrl}`)
 
@@ -207,16 +267,53 @@ export const generateVideoTask = task({
         progress: 100
       })
     } else {
-      const createTranscriptionResponse = await createTranscription(voiceUrl);
-      let transcriptionData: any;
+      let processedTranscriptions = 0;
+      
+      // Traiter les transcriptions par lots tout en maintenant l'ordre
+      for (let i = 0; i < sentences.length; i += 5) {
+        const batch = sentences.slice(i, Math.min(i + 5, sentences.length));
+        
+        const transcriptionPromises = batch.map(async (sentence) => {
+          if (!sentence.audioUrl) throw new Error("Audio URL missing");
+          
+          const transcriptionResponse = await createTranscription(sentence.audioUrl);
+          const result = await pollTranscriptionStatus(transcriptionResponse.id);
+          return {
+            index: sentence.index,
+            result
+          };
+        });
 
-      await pollTranscriptionStatus(createTranscriptionResponse.id)
-        .then((completedTranscription) => {
-          transcriptionData = completedTranscription;
-        })
-        .catch(logger.error);
+        const transcriptionResults = await Promise.all(transcriptionPromises);
+        
+        // Assigner les transcriptions aux bonnes phrases
+        transcriptionResults.forEach(({ index, result }) => {
+          const sentence = sentences.find(s => s.index === index);
+          if (sentence) {
+            sentence.transcription = result;
+          }
+        });
 
-      transcription = transcriptionData?.result;
+        processedTranscriptions += batch.length;
+        await metadata.replace({
+          name: Steps.TRANSCRIPTION,
+          progress: Math.round((processedTranscriptions / sentences.length) * 100)
+        });
+      }
+
+      // Combiner les transcriptions dans l'ordre
+      transcription = {
+        transcription: {
+          utterances: sentences
+            .sort((a, b) => a.index - b.index)
+            .flatMap(s => s.transcription?.transcription.utterances || [])
+        },
+        metadata: {
+          audio_duration: sentences.reduce((total, s) => 
+            total + (s.transcription?.metadata.audio_duration || 0), 0
+          )
+        }
+      };
     }
 
     logger.info('Transcription', transcription)
@@ -531,12 +628,7 @@ const pollTranscriptionStatus = async (transcriptionId: string) => {
     try {
       const transcriptionStatus = await getTranscription(transcriptionId);
 
-      if (transcriptionStatus.status === 'processing') {
-        await metadata.replace({
-          name: Steps.TRANSCRIPTION,
-          progress: attempts
-        })
-      } else if (transcriptionStatus.status === 'done') {
+      if (transcriptionStatus.status === 'done') {
         await metadata.replace({
           name: Steps.TRANSCRIPTION,
           progress: 100
