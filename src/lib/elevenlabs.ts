@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const MODEL = "eleven_multilingual_v2"
 
-export const createAudioTTS = async (voiceId: string, text: string, voiceSettings?: { stability: number, similarity_boost: number }) => {
+export const createAudioTTS = async (voiceId: string, text: string, voiceSettings?: { stability: number, similarity_boost: number }, previousText?: string, nextText?: string) => {
     try {
 
         const options = {
@@ -14,7 +14,6 @@ export const createAudioTTS = async (voiceId: string, text: string, voiceSetting
             responseType: 'arraybuffer' as const
         };
 
-
         const data = {
             text: text,
             model_id: MODEL,
@@ -23,6 +22,8 @@ export const createAudioTTS = async (voiceId: string, text: string, voiceSetting
                 similarity_boost: voiceSettings?.similarity_boost || 0.75,
                 use_speaker_boost: true
             },
+            previous_text: previousText,
+            next_text: nextText,
             apply_text_normalization: 'auto'
         };
 
