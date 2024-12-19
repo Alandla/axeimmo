@@ -71,7 +71,7 @@ const spaceSchema = new mongoose.Schema(
     plan: planSchema,
     credits: {
       type: Number,
-      default: 10,
+      default: 30,
     },
     subtitleStyle: [
       {
