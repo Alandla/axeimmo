@@ -513,10 +513,6 @@ export const voices: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['narration'],
-    voiceSettings: {
-        stability: 0.52,
-        similarity_boost: 0.53
-    },
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/ohItIVrXTBI80RrUECOD/9mwgJwmYqekI6JTMJTcv.mp3'
   },
   {

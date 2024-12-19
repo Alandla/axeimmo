@@ -95,7 +95,7 @@ export const generateVideoTask = task({
 
     logger.log(`[VOICE] Start voice generation...`)
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (ctx.environment.type === "PRODUCTION") {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
@@ -120,15 +120,65 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      const audioBuffer = await createAudioTTS(payload.voice.id, payload.script, payload.voice.voiceSettings);
-      voiceUrl = await uploadToS3Audio(audioBuffer, 'medias-users');
+      // Découper le script en phrases
+      const sentences = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
+      const audioBuffers: Buffer[] = [];
+      let processedSentences = 0;
 
-      cost += calculateElevenLabsCost(payload.script)
+      // Traiter les phrases par lots de 5
+      for (let i = 0; i < sentences.length; i += 5) {
+        const batch = sentences.slice(i, Math.min(i + 5, sentences.length));
+        
+        const batchPromises = batch.map(async (sentence, index) => {
+          const currentIndex = i + index;
+          const previousText = currentIndex > 0 ? sentences[currentIndex - 1] : undefined;
+          const nextText = currentIndex < sentences.length - 1 ? sentences[currentIndex + 1] : undefined;
+
+          try {
+            const audioBuffer = await createAudioTTS(
+              payload.voice.id, 
+              sentence.trim(), 
+              payload.voice.voiceSettings,
+            );
+            return { index: currentIndex, buffer: audioBuffer };
+          } catch (error: any) {
+            if (error.response?.status === 422) {
+              // Attendre 2 seconde et réessayer
+              await wait.for({ seconds: 2 });
+              return await createAudioTTS(
+                payload.voice.id, 
+                sentence.trim(), 
+                payload.voice.voiceSettings,
+              );
+            }
+            throw error;
+          }
+        });
+
+        const batchResults = await Promise.all(batchPromises);
+        
+        // Trier les résultats par index et ajouter les buffers
+        batchResults
+          .sort((a, b) => a.index - b.index)
+          .forEach(result => audioBuffers.push(result.buffer));
+
+        processedSentences += batch.length;
+        await metadata.replace({
+          name: Steps.VOICE_GENERATION,
+          progress: Math.round((processedSentences / sentences.length) * 100)
+        });
+      }
+
+      // Combiner tous les buffers audio
+      const combinedBuffer = Buffer.concat(audioBuffers);
+      voiceUrl = await uploadToS3Audio(combinedBuffer, 'medias-users');
+
+      cost += calculateElevenLabsCost(payload.script);
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 100
-      })
+      });
     } else if (avatarFile) {
       voiceUrl = avatarFile.video?.link || ""
     }
