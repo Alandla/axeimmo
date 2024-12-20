@@ -86,6 +86,7 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
   for (let i = 0; i < sentences.length; i++) {
     // Ajouter les métadonnées de la transcription courante
     const currentMetadata = sentences[i].transcription.metadata;
+    combinedMetadata.audio_duration += currentMetadata.audio_duration;
     combinedMetadata.billing_time += currentMetadata.billing_time;
     combinedMetadata.transcription_time += currentMetadata.transcription_time;
 
