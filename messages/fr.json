@@ -162,6 +162,7 @@
     },
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",
+      "loading-regenerating-audio": "Regénération de l'audio...",
       "export-button": "Exporter",
       "lip-sync-export-message": "La synchronisation labiale ne s'affichera que après l'export.",
       "unsaved": "Non sauvegardé",
@@ -181,7 +182,15 @@
         "description-subtitle-saved": "Le style de sous-titre a été sauvegardé.",
         "description-subtitle-error": "Une erreur est survenue lors de la sauvegarde du style de sous-titre.",
         "description-not-enough-credits": "Tu n'as pas assez de crédits pour exporter ta vidéo.",
-        "description-space-not-found": "L'espace n'a pas été trouvé."
+        "description-space-not-found": "L'espace n'a pas été trouvé.",
+        "title-regenerated": "Regénération de l'audio",
+        "description-regenerated": "L'audio a été regénéré avec succès.",
+        "description-regeneration-error": "Une erreur est survenue lors de la regénération de l'audio."
+      },
+      "sequence": {
+        "regeneration-needed": "Régénération audio nécessaire",
+        "button-regenerate": "Regénérer l'audio",
+        "button-delete": "Supprimer la séquence"
       },
       "subtitle": {
         "title-presets": "Presets",

@@ -162,6 +162,7 @@
     },
     "edit": {
       "loading-video-data": "Loading video data...",
+      "loading-regenerating-audio": "Regenerating audio...",
       "export-button": "Export",
       "lip-sync-export-message": "The lip-sync will only be displayed after export.",
       "unsaved": "Unsaved",
@@ -181,7 +182,15 @@
         "description-subtitle-saved": "The subtitle style has been saved.",
         "description-subtitle-error": "An error occurred while saving the subtitle style.",
         "description-not-enough-credits": "You don't have enough credits to export your video.",
-        "description-space-not-found": "The space was not found."
+        "description-space-not-found": "The space was not found.",
+        "title-regenerated": "Regenerating audio",
+        "description-regenerated": "The audio has been regenerated successfully.",
+        "description-regeneration-error": "An error occurred while regenerating the audio."
+      },
+      "sequence": {
+        "regeneration-needed": "Regeneration audio needed",
+        "button-regenerate": "Regenerate audio",
+        "button-delete": "Delete sequence"
       },
       "subtitle": {
         "title-presets": "Presets",

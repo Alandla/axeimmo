@@ -15,6 +15,7 @@ import {
 } from "../ui/dropdown-menu"
 import { Trash, RefreshCw } from "lucide-react"
 import { cn } from "@/src/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface SequenceProps {
   sequence: ISequence;
@@ -50,6 +51,8 @@ export default function Sequence({
         }
         setSelectedIndex(index);
     };
+
+    const t = useTranslations('edit.sequence')
     
     return (
         <>
@@ -95,9 +98,9 @@ export default function Sequence({
 
                         <div className="flex items-center gap-2">
                             {sequence.needsAudioRegeneration && (
-                                <Badge variant="destructive">
+                                <Badge variant="destructive" onClick={() => onRegenerateAudio(index)}>
                                     <AlertTriangle className="w-3 h-3 mr-1" />
-                                    Régénération audio nécessaire
+                                    {t('regeneration-needed')}
                                 </Badge>
                             )}
                             <DropdownMenu>
@@ -107,7 +110,7 @@ export default function Sequence({
                                     </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
-                                    className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                                    className="w-[--radix-dropdown-menu-trigger-width] min-w-48 rounded-lg"
                                     align="end"
                                     sideOffset={4}
                                 >
@@ -116,7 +119,7 @@ export default function Sequence({
                                         className="cursor-pointer"
                                     >
                                         <RefreshCw className="w-4 h-4 mr-2" />
-                                        Régénérer l'audio
+                                        {t('button-regenerate')}
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem
@@ -128,7 +131,7 @@ export default function Sequence({
                                     )}
                                     >
                                     <Trash2 />
-                                    Supprimer la séquence
+                                    {t('button-delete')}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
