@@ -21,7 +21,6 @@ import { IMedia } from '@/src/types/video'
 import ModalConfirmExport from '@/src/components/modal/confirm-export'
 import { IExport } from '@/src/types/export'
 import { useToast } from '@/src/hooks/use-toast'
-import Panel1 from '@/src/components/edit/panel-1'
 import Subtitles from '@/src/components/edit/subtitles'
 import SubtitleSettings from '@/src/components/edit/subtitle-settings'
 import { ISpaceSubtitleStyle } from '@/src/types/space'
@@ -31,6 +30,9 @@ import { useSession } from 'next-auth/react'
 import AudioSettings from '@/src/components/edit/audio-settings'
 import Musics from '@/src/components/edit/musics'
 import ModalPricing from '@/src/components/modal/modal-pricing'
+import Sequences from '@/src/components/edit/sequences'
+import { regenerateAudioForSequence, updateSequenceTimings, updateVideoTimings, updateVideoWithNewAudio, waitForTranscription } from '@/src/lib/audio'
+import transcriptionMockup from '@/src/test/mockup/transcriptionRegenrateAudio.json'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -41,6 +43,7 @@ export default function VideoEditor() {
   const { setSubtitleStyles } = useSubtitleStyleStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
+  const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
@@ -62,12 +65,23 @@ export default function VideoEditor() {
 
   const handleWordInputChange = (sequenceIndex: number, wordIndex: number, newWord: string) => {
     if (video && video.video) {
-      const newSequences = [...video.video.sequences]
-      newSequences[sequenceIndex].words[wordIndex].word = newWord
-      newSequences[sequenceIndex].text = newSequences[sequenceIndex].words.map(word => word.word).join(' ')
-      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } })
+      const newSequences = [...video.video.sequences];
+      const sequence = newSequences[sequenceIndex];
+      
+      // Mettre à jour le mot
+      sequence.words[wordIndex].word = newWord;
+      
+      // Reconstruire le texte complet
+      const newText = sequence.words.map(word => word.word).join(' ');
+      sequence.text = newText;
+      
+      // Vérifier si le texte est différent de l'original
+      const needsRegeneration = newText !== sequence.originalText;
+      sequence.needsAudioRegeneration = needsRegeneration;
+      
+      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
     }
-  }
+  };
 
   const handleCutSequence = (cutIndex: number) => {
     console.log("cutIndex", cutIndex)
@@ -210,9 +224,19 @@ export default function VideoEditor() {
   useEffect(() => {
     const fetchVideo = async () => {
       try {
-        setIsLoading(true)
-        const response = await basicApiGetCall<IVideo>(`/video/${id}`)
-        setVideo(response)
+        setIsLoading(true);
+        const response = await basicApiGetCall<IVideo>(`/video/${id}`);
+        
+        // Ajouter originalText à chaque séquence si ce n'est pas déjà fait
+        if (response.video?.sequences) {
+          response.video.sequences = response.video.sequences.map(seq => ({
+            ...seq,
+            originalText: seq.text,
+            needsAudioRegeneration: false
+          }));
+        }
+        
+        setVideo(response);
       } catch (error) {
         console.error(error)
         toast({
@@ -221,14 +245,14 @@ export default function VideoEditor() {
           variant: 'destructive'
         })
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
     if (id) {
-      fetchVideo()
+      fetchVideo();
     }
-  }, [id])
+  }, [id]);
 
   useEffect(() => {
     if (video?.video?.sequences && selectedSequenceIndex >= 0 && selectedSequenceIndex < video.video.sequences.length) {
@@ -248,13 +272,52 @@ export default function VideoEditor() {
     }
   }, [])
 
+  const handleRegenerateAudio = async (sequenceIndex: number) => {
+    if (!video?.video) return;
+
+    setLoadingMessage('loading-regenerating-audio')
+    setIsLoading(true);
+
+    try {
+      //const { audioUrl, transcriptionId } = await regenerateAudioForSequence(video, sequenceIndex);
+      const audioIndex = video.video.sequences[sequenceIndex].audioIndex;
+      //const transcription = await waitForTranscription(transcriptionId);
+
+      const audioUrl = "https://media.hoox.video/bce99061-dbd1-4232-95a2-8a6c6861b03a.mp3"
+      const transcription = transcriptionMockup
+
+      console.log("transcription", transcription)
+
+      let updatedVideo = updateVideoTimings(video, audioIndex, audioUrl, transcription);
+
+      console.log("updatedVideo", updatedVideo)
+
+      updateVideo(updatedVideo);
+      
+      toast({
+        title: t('toast.title-regenerated'),
+        description: t('toast.description-regenerated'),
+        variant: 'confirm'
+      });
+    } catch (error) {
+      console.error('Error regenerating audio:', error);
+      toast({
+        title: t('toast.title-error'),
+        description: t('toast.description-regeneration-error'),
+        variant: 'destructive'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
     {isLoading && (
         <div className="fixed inset-0 bg-muted/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="text-center space-y-4">
             <Loader2 className="w-8 h-8 animate-spin mx-auto" />
-            <p className="text-lg font-medium">{t('loading-video-data')}</p>
+            <p className="text-lg font-medium">{t(loadingMessage)}</p>
           </div>
         </div>
     )}
@@ -351,12 +414,13 @@ export default function VideoEditor() {
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="sequences">
-                      <Panel1 
+                      <Sequences 
                         sequences={video?.video?.sequences || []} 
                         selectedSequenceIndex={selectedSequenceIndex} 
                         setSelectedSequenceIndex={setSelectedSequenceIndex} 
                         handleWordInputChange={handleWordInputChange} 
-                        handleCutSequence={handleCutSequence} 
+                        handleCutSequence={handleCutSequence}
+                        onRegenerateAudio={handleRegenerateAudio}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">

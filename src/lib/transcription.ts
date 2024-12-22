@@ -33,7 +33,7 @@ export interface LightTranscription {
   text: string;
 }
 
-const timeToFrames = (time: number, fps: number = 60): number => Math.round(time * fps);
+export const timeToFrames = (time: number, fps: number = 60): number => Math.round(time * fps);
 
 export function createLightTranscription(sequences: ISequence[]): LightTranscription[] {
   return sequences.map((sequence, index) => ({
@@ -132,7 +132,7 @@ function createSequence(words: IWord[], sentenceIndex: number): ISequence {
   };
 }
 
-function adjustSequenceTimings(sequences: ISequence[], audioDuration: number): ISequence[] {
+export function adjustSequenceTimings(sequences: ISequence[], audioDuration: number): ISequence[] {
   return sequences.map((sequence, index, allSequences) => {
     let durationTotal = 0;
     const words = [...sequence.words];

@@ -18,11 +18,12 @@ export const getTranscription = async (transcriptionId: string) => {
 
 }
 
-export const createTranscription = async (audioUrl: string) => {
+export const createTranscription = async (audioUrl: string, text?: string) => {
 
   try {
     const response = await axios.post('https://api.gladia.io/v2/transcription', {
       audio_url: audioUrl,
+      context_prompt: text ? "Here's the original audio text, base your transcription on it: " + text : undefined
     }, {
       headers: {
         'x-gladia-key': process.env.GLADIA_SECRET_KEY,

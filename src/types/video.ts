@@ -59,6 +59,8 @@ export interface ISequence {
     precision: 'hard' | 'normal' | 'easy';
   }>;
   media?: IMedia;
+  originalText?: string;
+  needsAudioRegeneration?: boolean;
 }
 
 export interface IVideo {
@@ -79,6 +81,7 @@ export interface IVideo {
     audio?: {
       voices: {
         url: string;
+        voiceId?: string;
         index: number;
         start: number;
         end: number;

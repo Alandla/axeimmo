@@ -1,11 +1,20 @@
 import { ISequence } from "@/src/types/video";
-import { useState, useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
-import { Clock, Edit, FileImage, Scissors } from "lucide-react";
-import { motion, AnimatePresence } from 'framer-motion';
+import { Clock, Edit, FileImage, Scissors, AlertTriangle, MoreVertical, Trash2 } from "lucide-react";
+import { motion } from 'framer-motion';
 import React from "react";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
+import { Trash, RefreshCw } from "lucide-react"
+import { cn } from "@/src/lib/utils";
 
 interface SequenceProps {
   sequence: ISequence;
@@ -16,6 +25,9 @@ interface SequenceProps {
   onCutSequence: (cutIndex: number) => void;
   setActiveTabMobile?: (tab: string) => void;
   isMobile?: boolean;
+  needsAudioRegeneration?: boolean;
+  onRegenerateAudio?: (index: number) => void;
+  onDeleteSequence?: (index: number) => void;
 }
 
 export default function Sequence({ 
@@ -27,13 +39,9 @@ export default function Sequence({
   onCutSequence,
   setActiveTabMobile,
   isMobile = false,
+  onRegenerateAudio = () => {},
+  onDeleteSequence = () => {},
 }: SequenceProps) {
-    const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-
-    const handleCutSequence = (cutIndex: number) => {
-        cutIndex++
-        onCutSequence(cutIndex);
-    };
 
     const handleImageClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -79,10 +87,53 @@ export default function Sequence({
 
                 {/* Contenu à droite de l'image */}
                 <div className="flex-1 sm:space-y-2 ml-4">
-                    <Badge variant="outline">
-                        <Clock className="w-3 h-3 mr-1" />
-                        {((sequence.end - sequence.start)).toFixed(2)}
-                    </Badge>
+                    <div className="flex items-center justify-between gap-2">
+                        <Badge variant="outline">
+                            <Clock className="w-3 h-3 mr-1" />
+                            {((sequence.end - sequence.start)).toFixed(2)}
+                        </Badge>
+
+                        <div className="flex items-center gap-2">
+                            {sequence.needsAudioRegeneration && (
+                                <Badge variant="destructive">
+                                    <AlertTriangle className="w-3 h-3 mr-1" />
+                                    Régénération audio nécessaire
+                                </Badge>
+                            )}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <div className="flex items-center hover:bg-accent rounded-md p-1 cursor-pointer transition-all duration-200">
+                                        <MoreVertical className="w-4 h-4" />
+                                    </div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                                    align="end"
+                                    sideOffset={4}
+                                >
+                                    <DropdownMenuItem 
+                                        onClick={() => onRegenerateAudio(index)}
+                                        className="cursor-pointer"
+                                    >
+                                        <RefreshCw className="w-4 h-4 mr-2" />
+                                        Régénérer l'audio
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                    onClick={() => onDeleteSequence(index)}
+                                    className={cn(
+                                        "flex items-center cursor-pointer",
+                                        "hover:bg-red-200 hover:text-red-600",
+                                        "focus:bg-red-200 focus:text-red-600"
+                                    )}
+                                    >
+                                    <Trash2 />
+                                    Supprimer la séquence
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    </div>
                     
                     {/* Zone de texte qui ne déclenche pas la sélection */}
                     <div className="flex flex-wrap">

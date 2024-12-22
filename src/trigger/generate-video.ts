@@ -221,7 +221,7 @@ export const generateVideoTask = task({
         const transcriptionPromises = batch.map(async (sentence) => {
           if (!sentence.audioUrl) throw new Error("Audio URL missing");
           
-          const transcriptionResponse = await createTranscription(sentence.audioUrl);
+          const transcriptionResponse = await createTranscription(sentence.audioUrl, sentence.text);
           const result = await pollTranscriptionStatus(transcriptionResponse.id);
 
 
@@ -630,18 +630,20 @@ const processBatchWithSieve = async (
   };
 }
 
-function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[]): {
+function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], voiceId?: string): {
   index: number;
   url: string;
   start: number;
   end: number;
   durationInFrames: number;
+  voiceId?: string;
 }[] {
   const voiceSegments = new Map<number, {
     start: number;
     end: number;
     durationInFrames: number;
     sequences: ISequence[];
+    voiceId?: string;
   }>();
 
   // Grouper les séquences par audioIndex
@@ -651,13 +653,15 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[]): {
         start: sequence.start,
         end: sequence.end,
         durationInFrames: sequence.durationInFrames || 0,
-        sequences: [sequence]
+        sequences: [sequence],
+        voiceId: voiceId || undefined
       });
     } else {
       const current = voiceSegments.get(sequence.audioIndex)!;
       current.end = sequence.end;
       current.durationInFrames += sequence.durationInFrames || 0;
       current.sequences.push(sequence);
+      current.voiceId = voiceId || undefined
     }
   });
 
@@ -667,7 +671,8 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[]): {
     url: sentences[index].audioUrl,
     start: data.start,
     end: data.end,
-    durationInFrames: data.durationInFrames
+    durationInFrames: data.durationInFrames,
+    voiceId
   }));
 
   // Si aucun résultat, retourner au moins un segment par défaut
@@ -676,6 +681,7 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[]): {
     url: '',
     start: 0,
     end: 0,
-    durationInFrames: 0
+    durationInFrames: 0,
+    voiceId
   }];
 }
