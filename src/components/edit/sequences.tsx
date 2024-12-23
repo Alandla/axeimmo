@@ -12,6 +12,7 @@ interface SequencesProps {
     handleWordDelete: (sequenceIndex: number, wordIndex: number) => void;
     handleCutSequence: (cutIndex: number) => void;
     onRegenerateAudio: (index: number) => void;
+    onDeleteSequence: (index: number) => void;
     playerRef?: React.RefObject<PlayerRef>;
 }
 
@@ -24,14 +25,26 @@ export default function Sequences({
     handleWordDelete, 
     handleCutSequence, 
     onRegenerateAudio,
-    playerRef
+    onDeleteSequence,
+    playerRef,
 }: SequencesProps) {
 
     return (
-        <ScrollArea className="h-[calc(100vh-8rem)]">
+        <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
             {sequences && sequences.map((sequence, index) => (
-                <Sequence key={index} sequence={sequence} index={index} selectedIndex={selectedSequenceIndex} setSelectedIndex={setSelectedSequenceIndex} handleWordInputChange={handleWordInputChange} handleWordAdd={handleWordAdd} handleWordDelete={handleWordDelete} onCutSequence={handleCutSequence} onRegenerateAudio={onRegenerateAudio} playerRef={playerRef} />
+                <Sequence key={index} sequence={sequence} index={index} selectedIndex={selectedSequenceIndex} setSelectedIndex={setSelectedSequenceIndex} handleWordInputChange={handleWordInputChange} handleWordAdd={handleWordAdd} handleWordDelete={handleWordDelete} onCutSequence={handleCutSequence} onRegenerateAudio={onRegenerateAudio} onDeleteSequence={onDeleteSequence} canDelete={isSequenceDeletable(sequences, index)} playerRef={playerRef} />
             ))}
         </ScrollArea>
     )
+}
+
+function isSequenceDeletable(sequences: ISequence[], index: number): boolean {
+    const currentSequence = sequences[index];
+    const audioIndex = currentSequence.audioIndex;
+    
+    const sequencesWithSameAudio = sequences.filter(seq => seq.audioIndex === audioIndex);
+    const isFirst = sequencesWithSameAudio[0] === currentSequence;
+    const isLast = sequencesWithSameAudio[sequencesWithSameAudio.length - 1] === currentSequence;
+    
+    return isFirst || isLast;
 }

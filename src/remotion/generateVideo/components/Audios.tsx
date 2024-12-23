@@ -6,6 +6,7 @@ interface Voice {
   start: number;
   end: number;
   durationInFrames: number;
+  startOffset?: number;
 }
 
 export const Voices = ({voices, volume}: {voices: Voice[], volume: number}) => {
@@ -18,7 +19,7 @@ export const Voices = ({voices, volume}: {voices: Voice[], volume: number}) => {
           <Sequence key={voice.index} premountFor={120} from={currentFrame} durationInFrames={voice.durationInFrames + 15}>
             <Audio 
               src={voice.url}
-              startFrom={0}
+              startFrom={voice.startOffset ? voice.startOffset : 0}
               volume={volume}
             />
           </Sequence>

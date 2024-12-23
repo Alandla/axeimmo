@@ -188,7 +188,7 @@
         "description-regeneration-error": "An error occurred while regenerating the audio."
       },
       "sequence": {
-        "regeneration-needed": "Regeneration audio needed",
+        "regeneration-needed": "Audio regeneration needed",
         "button-regenerate": "Regenerate audio",
         "button-delete": "Delete sequence",
         "edit-word": "Edit word",

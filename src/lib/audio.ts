@@ -35,10 +35,7 @@ export async function regenerateAudioForSequence(
 }
 
 export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: string, transcription: any) {
-
     const relatedSequences = video?.video?.sequences.filter(seq => seq.audioIndex === audioIndex);
-
-    console.log("relatedSequences", relatedSequences)
 
     if (!relatedSequences) {
         throw new Error('No related sequences found');
@@ -48,9 +45,21 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
 
     let updatedSequences = updateSequenceTimings(relatedSequences, transcription.transcription.utterances[0].words);
     updatedSequences = adjustSequenceTimings(updatedSequences, transcription.metadata.audio_duration);
-    console.log("updatedSequences", updatedSequences)
 
     let newSequences = [...updatedVideo?.video?.sequences || []];
+    
+    // Trouver l'index de la dernière séquence concernée
+    const lastUpdatedSequenceIndex = newSequences.findIndex(seq => 
+        seq.audioIndex === audioIndex && 
+        seq.text === updatedSequences[updatedSequences.length - 1].text
+    );
+
+    // Calculer la différence de durée
+    const oldDuration = (video?.video?.audio?.voices[audioIndex]?.end || 0) - (video?.video?.audio?.voices[audioIndex]?.start || 0);
+    const newDuration = transcription.metadata.audio_duration;
+    const durationDifference = newDuration - oldDuration;
+
+    // Mettre à jour les séquences modifiées
     updatedSequences.forEach(updatedSeq => {
         const index = newSequences.findIndex(seq => 
             seq.audioIndex === audioIndex && seq.text === updatedSeq.text
@@ -60,10 +69,23 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
         }
     });
 
-    console.log("audio_duration", video?.video?.metadata?.audio_duration)
+    // Ajuster les timings des séquences suivantes
+    for (let i = lastUpdatedSequenceIndex + 1; i < newSequences.length; i++) {
+        const currentSequence = newSequences[i];
+        
+        // Ajuster les timings de la séquence
+        currentSequence.start += durationDifference;
+        currentSequence.end += durationDifference;
+        
+        // Ajuster les timings de chaque mot
+        currentSequence.words = currentSequence.words.map(word => ({
+            ...word,
+            start: word.start + durationDifference,
+            end: word.end + durationDifference
+        }));
+    }
 
-    const oldDuration = (video?.video?.audio?.voices[audioIndex]?.end || 0) - (video?.video?.audio?.voices[audioIndex]?.start || 0);
-    const newDuration = transcription.metadata.audio_duration;
+    // Mettre à jour la durée totale
     let duration = ((video.video?.metadata?.audio_duration || 0) - oldDuration) + newDuration;
 
     if (!updatedVideo.video) {
@@ -71,7 +93,6 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
     }
 
     updatedVideo.video.metadata.audio_duration = duration;
-
     updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, transcription.metadata.audio_duration);
     
     updatedVideo = {
@@ -140,6 +161,8 @@ export function updateSequenceTimings(
   transcriptionWords: IWord[],
 ): ISequence[] {
   let currentTranscriptionIndex = 0;
+
+  const offset = sequences[0].start;
   
   return sequences.map(sequence => {
     const newWords = [...sequence.words];
@@ -159,8 +182,8 @@ export function updateSequenceTimings(
         console.log("Je trouve :", originalWord)
         newWords[i] = {
           ...newWords[i],
-          start: transcriptionWords[currentTranscriptionIndex].start,
-          end: transcriptionWords[currentTranscriptionIndex].end,
+          start: transcriptionWords[currentTranscriptionIndex].start + offset,
+          end: transcriptionWords[currentTranscriptionIndex].end + offset,
           confidence: transcriptionWords[currentTranscriptionIndex].confidence,
           durationInFrames: timeToFrames(transcriptionWords[currentTranscriptionIndex].end - transcriptionWords[currentTranscriptionIndex].start)
         };
@@ -175,8 +198,8 @@ export function updateSequenceTimings(
           if (originalWord === nextTranscriptionWord) {
             newWords[i] = {
               ...newWords[i],
-              start: transcriptionWords[j].start,
-              end: transcriptionWords[j].end,
+              start: transcriptionWords[j].start + offset,
+              end: transcriptionWords[j].end + offset,
               confidence: transcriptionWords[j].confidence,
               durationInFrames: timeToFrames(transcriptionWords[j].end - transcriptionWords[j].start)
             };
@@ -194,8 +217,8 @@ export function updateSequenceTimings(
           if (prevWord && nextWord) {
             newWords[i] = {
               ...newWords[i],
-              start: prevWord.end,
-              end: nextWord.start,
+              start: prevWord.end + offset,
+              end: nextWord.start + offset,
               confidence: 0.5,
               durationInFrames: timeToFrames(nextWord.start - prevWord.end)
             };
@@ -204,8 +227,8 @@ export function updateSequenceTimings(
             const avgWordDuration = 0.3; // Durée moyenne estimée d'un mot
             newWords[i] = {
               ...newWords[i],
-              start: prevWord.end,
-              end: prevWord.end + avgWordDuration,
+              start: prevWord.end + offset,
+              end: prevWord.end + avgWordDuration + offset,
               confidence: 0.5,
               durationInFrames: timeToFrames(avgWordDuration)
             };

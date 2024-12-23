@@ -83,6 +83,7 @@ export interface IVideo {
         url: string;
         voiceId?: string;
         index: number;
+        startOffset?: number;
         start: number;
         end: number;
         durationInFrames: number;

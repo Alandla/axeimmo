@@ -35,6 +35,7 @@ interface SequenceProps {
   onRegenerateAudio?: (index: number) => void;
   onDeleteSequence?: (index: number) => void;
   playerRef?: React.RefObject<PlayerRef>;
+  canDelete: boolean;
 }
 
 export default function Sequence({ 
@@ -51,6 +52,7 @@ export default function Sequence({
   onRegenerateAudio = () => {},
   onDeleteSequence = () => {},
   playerRef,
+  canDelete,
 }: SequenceProps) {
 
     const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -86,6 +88,11 @@ export default function Sequence({
         }
         setOpenDropdownIndex(open ? wordIndex : null);
         setSelectedIndex(index);
+        
+        if (!open && openDropdownIndex === wordIndex) {
+            startWordEditing(wordIndex);
+        }
+        
         setTimeout(() => {
             if (playerRef?.current && sequence.words[wordIndex]) {
                 playerRef.current.seekTo(sequence.words[wordIndex].start * 60);
@@ -110,7 +117,7 @@ export default function Sequence({
                         selection.addRange(range);
                     }
                 }
-            }, 0);
+            }, 250);
         }
     }, [index, handleWordAdd]);
 
@@ -200,13 +207,15 @@ export default function Sequence({
                                     <DropdownMenuItem
                                         onClick={() => onDeleteSequence(index)}
                                         className={cn(
-                                            "flex items-center cursor-pointer",
-                                            "hover:bg-red-200 hover:text-red-600",
-                                            "focus:bg-red-200 focus:text-red-600"
+                                            "flex items-center",
+                                            canDelete 
+                                                ? "cursor-pointer hover:bg-red-200 hover:text-red-600 focus:bg-red-200 focus:text-red-600"
+                                                : "cursor-not-allowed opacity-50"
                                         )}
+                                        disabled={!canDelete}
                                     >
                                         <Trash2 size={16} />
-                                        {t('button-delete')}
+                                        {canDelete ? t('button-delete') : t('button-delete-disabled')}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -241,14 +250,15 @@ export default function Sequence({
                                             className={cn(
                                                 "text-sm sm:text-base px-0.5 py-[0.1rem] sm:py-1",
                                                 "hover:ring-1 focus:ring-2 ring-primary rounded transition-all duration-200",
-                                                isEditing && editingWordIndex === wordIndex ? "cursor-text" : "cursor-pointer"
+                                                isEditing && editingWordIndex === wordIndex ? "cursor-text" : "cursor-pointer",
+                                                openDropdownIndex === wordIndex ? "ring-1 ring-primary" : ""
                                             )}
                                         >
                                             {word.word}
                                         </div>
                                     </div>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="start" sideOffset={0}>
+                                <DropdownMenuContent align="start">
                                     <DropdownMenuGroup>
                                         <DropdownMenuItem 
                                             onClick={(e) => {

@@ -366,6 +366,82 @@ export default function VideoEditor() {
     return -1;
   };
 
+  const handleDeleteSequence = (sequenceIndex: number) => {
+    if (!video?.video) return;
+
+    const sequence = video.video.sequences[sequenceIndex];
+    const audioIndex = sequence.audioIndex;
+    const newSequences = [...video.video.sequences];
+    
+    // Trouver toutes les séquences avec le même audioIndex
+    const sequencesWithSameAudio = newSequences.filter(seq => seq.audioIndex === audioIndex);
+    const isFirst = sequencesWithSameAudio[0] === sequence;
+    const isLast = sequencesWithSameAudio[sequencesWithSameAudio.length - 1] === sequence;
+    
+    if (!video.video.audio) return;
+
+    const newAudio = [...video.video.audio.voices];
+    const audioToUpdate = newAudio[audioIndex];
+    
+    if (isLast) {
+        // Réduire la durée de l'audio
+        audioToUpdate.durationInFrames -= sequence.durationInFrames || 0;
+    }
+    
+    if (isFirst) {
+        // Ajuster le startOffset et la durée
+        audioToUpdate.startOffset = (audioToUpdate.startOffset || 0) + (sequence.durationInFrames || 0);
+        audioToUpdate.durationInFrames -= sequence.durationInFrames || 0;
+    }
+    
+    // Calculer la durée de la séquence à supprimer
+    const sequenceDuration = sequence.end - sequence.start;
+    
+    // Supprimer la séquence
+    newSequences.splice(sequenceIndex, 1);
+    
+    // Ajuster les timings de toutes les séquences suivantes
+    for (let i = sequenceIndex; i < newSequences.length; i++) {
+        const currentSequence = newSequences[i];
+        
+        // Ajuster les timings de la séquence
+        currentSequence.start -= sequenceDuration;
+        currentSequence.end -= sequenceDuration;
+        
+        // Ajuster les timings de chaque mot
+        currentSequence.words = currentSequence.words.map(word => ({
+            ...word,
+            start: word.start - sequenceDuration,
+            end: word.end - sequenceDuration
+        }));
+    }
+    
+    // Calculer la nouvelle durée audio totale
+    const newAudioDuration = (video.video.metadata.audio_duration || 0) - sequenceDuration;
+    
+    // Mettre à jour le state
+    updateVideo({
+        ...video,
+        video: {
+            ...video.video,
+            sequences: newSequences,
+            audio: {
+                ...video.video.audio,
+                voices: newAudio
+            },
+            metadata: {
+                ...video.video.metadata,
+                audio_duration: newAudioDuration
+            }
+        }
+    });
+    
+    // Mettre à jour l'index sélectionné si nécessaire
+    if (selectedSequenceIndex >= sequenceIndex) {
+        setSelectedSequenceIndex(Math.max(0, selectedSequenceIndex - 1));
+    }
+  };
+
   return (
     <>
     {isLoading && (
@@ -479,6 +555,7 @@ export default function VideoEditor() {
                         handleCutSequence={handleCutSequence}
                         onRegenerateAudio={handleRegenerateAudio}
                         playerRef={playerRef}
+                        onDeleteSequence={handleDeleteSequence}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
@@ -545,23 +622,18 @@ export default function VideoEditor() {
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="sequences">
-              <ScrollArea className="h-[calc(100vh-25rem)]">
-                {video?.video?.sequences && video?.video?.sequences.map((sequence, index) => (
-                  <Sequence 
-                    key={index}
-                    sequence={sequence} 
-                    index={index} 
-                    selectedIndex={selectedSequenceIndex} 
-                    setSelectedIndex={setSelectedSequenceIndex} 
-                    handleWordInputChange={handleWordInputChange}
-                    handleWordAdd={handleWordAdd}
-                    handleWordDelete={handleWordDelete}
-                    onCutSequence={handleCutSequence}
-                    setActiveTabMobile={setActiveTabMobile}
-                    isMobile={isMobile}
-                  />
-                ))}
-              </ScrollArea>
+              <Sequences 
+                sequences={video?.video?.sequences || []} 
+                selectedSequenceIndex={selectedSequenceIndex} 
+                setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                handleWordInputChange={handleWordInputChange} 
+                handleWordAdd={handleWordAdd}
+                handleWordDelete={handleWordDelete}
+                handleCutSequence={handleCutSequence}
+                onRegenerateAudio={handleRegenerateAudio}
+                onDeleteSequence={handleDeleteSequence}
+                playerRef={playerRef}
+              />
             </TabsContent>
             <TabsContent value="subtitle">
               <ScrollArea className="h-[calc(100vh-25rem)] mx-2">

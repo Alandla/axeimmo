@@ -41,7 +41,11 @@ const videoSchema = new mongoose.Schema({
           start: Number,
           end: Number,
           durationInFrames: Number,
-          voiceId: String
+          voiceId: String,
+          startOffset: {
+            type: Number,
+            default: 0
+          }
         }],
         volume: Number,
         music: {
