@@ -140,12 +140,12 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                     onClick={(e) => {
-                                    e.stopPropagation();
-                                    startEditing();
+                                        e.stopPropagation();
+                                        startEditing();
                                     }}
                                 >
                                     <Pen  />
-                                    Rename
+                                    {t('rename')}
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />

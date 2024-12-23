@@ -188,6 +188,9 @@
         "description-regeneration-error": "Une erreur est survenue lors de la regénération de l'audio."
       },
       "sequence": {
+        "edit-word": "Editer le mot",
+        "add-word": "Ajouter un mot",
+        "remove-word": "Supprimer le mot",
         "regeneration-needed": "Régénération audio nécessaire",
         "button-regenerate": "Regénérer l'audio",
         "button-delete": "Supprimer la séquence"
@@ -196,7 +199,8 @@
         "title-presets": "Presets",
         "title-presets-space": "Presets de l'espace",
         "update": "Mettre à jour",
-        "delete": "Supprimer"
+        "delete": "Supprimer",
+        "rename": "Renommer"
       },
       "subtitle-settings": {
         "title": "Style de sous-titre",

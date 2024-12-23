@@ -190,13 +190,17 @@
       "sequence": {
         "regeneration-needed": "Regeneration audio needed",
         "button-regenerate": "Regenerate audio",
-        "button-delete": "Delete sequence"
+        "button-delete": "Delete sequence",
+        "edit-word": "Edit word",
+        "add-word": "Add word",
+        "remove-word": "Remove word"
       },
       "subtitle": {
         "title-presets": "Presets",
         "title-presets-space": "Space presets",
         "update": "Update",
-        "delete": "Delete"
+        "delete": "Delete",
+        "rename": "Rename"
       },
       "subtitle-settings": {
         "title": "Subtitle style",

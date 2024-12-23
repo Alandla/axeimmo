@@ -1,14 +1,15 @@
 import { ISequence } from "@/src/types/video";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
-import { Clock, Edit, FileImage, Scissors, AlertTriangle, MoreVertical, Trash2 } from "lucide-react";
+import { Clock, Edit, FileImage, Scissors, AlertTriangle, MoreVertical, Trash2, Plus, Pen } from "lucide-react";
 import { motion } from 'framer-motion';
-import React from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -16,6 +17,7 @@ import {
 import { Trash, RefreshCw } from "lucide-react"
 import { cn } from "@/src/lib/utils";
 import { useTranslations } from "next-intl";
+import AutoResizingInput from "../auto-resizing-input";
 
 interface SequenceProps {
   sequence: ISequence;
@@ -23,6 +25,8 @@ interface SequenceProps {
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
   handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void;
+  handleWordAdd: (sequenceIndex: number, wordIndex: number) => void;
+  handleWordDelete: (sequenceIndex: number, wordIndex: number) => void;
   onCutSequence: (cutIndex: number) => void;
   setActiveTabMobile?: (tab: string) => void;
   isMobile?: boolean;
@@ -36,13 +40,20 @@ export default function Sequence({
   index, 
   selectedIndex, 
   setSelectedIndex, 
-  handleWordInputChange, 
+  handleWordInputChange,
+  handleWordAdd,
+  handleWordDelete,
   onCutSequence,
   setActiveTabMobile,
   isMobile = false,
   onRegenerateAudio = () => {},
   onDeleteSequence = () => {},
 }: SequenceProps) {
+
+    const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingWordIndex, setEditingWordIndex] = useState<number | null>(null);
 
     const handleImageClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -53,7 +64,30 @@ export default function Sequence({
     };
 
     const t = useTranslations('edit.sequence')
-    
+
+    const onWordChange = (wordIndex: number, newWord: string) => {
+        handleWordInputChange(index, wordIndex, newWord)
+    }
+
+    const startWordEditing = useCallback((wordIndex: number) => {
+        setOpenDropdownIndex(null);
+        setIsEditing(true);
+        setEditingWordIndex(wordIndex);
+        const element = wordRefs.current[wordIndex];
+        if (element) {
+            setTimeout(() => {
+                element.focus();
+            }, 200);
+        }
+    }, []);
+
+    const handleDropdownChange = (open: boolean, wordIndex: number) => {
+        if (isEditing && wordIndex === editingWordIndex) {
+            return;
+        }
+        setOpenDropdownIndex(open ? wordIndex : null);
+    };
+
     return (
         <>
         <motion.div
@@ -118,20 +152,20 @@ export default function Sequence({
                                         onClick={() => onRegenerateAudio(index)}
                                         className="cursor-pointer"
                                     >
-                                        <RefreshCw className="w-4 h-4 mr-2" />
+                                        <RefreshCw size={16} />
                                         {t('button-regenerate')}
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem
-                                    onClick={() => onDeleteSequence(index)}
-                                    className={cn(
-                                        "flex items-center cursor-pointer",
-                                        "hover:bg-red-200 hover:text-red-600",
-                                        "focus:bg-red-200 focus:text-red-600"
-                                    )}
+                                        onClick={() => onDeleteSequence(index)}
+                                        className={cn(
+                                            "flex items-center cursor-pointer",
+                                            "hover:bg-red-200 hover:text-red-600",
+                                            "focus:bg-red-200 focus:text-red-600"
+                                        )}
                                     >
-                                    <Trash2 />
-                                    {t('button-delete')}
+                                        <Trash2 size={16} />
+                                        {t('button-delete')}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -141,19 +175,67 @@ export default function Sequence({
                     {/* Zone de texte qui ne déclenche pas la sélection */}
                     <div className="flex flex-wrap">
                         {sequence.words.map((word, wordIndex) => (
-                            <div 
+                            <DropdownMenu 
                                 key={wordIndex} 
-                                className="inline-block"
+                                open={openDropdownIndex === wordIndex} 
+                                onOpenChange={(open) => handleDropdownChange(open, wordIndex)}
                             >
-                                <div 
-                                    contentEditable="true"
-                                    suppressContentEditableWarning={true}
-                                    onBlur={(e) => handleWordInputChange(index, wordIndex, e.currentTarget.textContent || '')}
-                                    className="text-sm sm:text-base px-0.5 py-[0.1rem] sm:py-1 hover:ring-1 focus:ring-2 ring-primary rounded transition-all duration-200"
+                                <DropdownMenuTrigger 
+                                    asChild
+                                    disabled={isEditing && editingWordIndex === wordIndex}
                                 >
-                                    {word.word}
-                                </div>
-                            </div>
+                                    <div className="inline-block">
+                                        <div 
+                                            ref={(el: HTMLInputElement | null) => {
+                                                wordRefs.current[wordIndex] = el;
+                                            }}
+                                            contentEditable="true"
+                                            suppressContentEditableWarning={true}
+                                            onBlur={(e) => {
+                                                handleWordInputChange(index, wordIndex, e.currentTarget.textContent || '');
+                                                setIsEditing(false);
+                                                setEditingWordIndex(null);
+                                            }}
+                                            className={cn(
+                                                "text-sm sm:text-base px-0.5 py-[0.1rem] sm:py-1",
+                                                "hover:ring-1 focus:ring-2 ring-primary rounded transition-all duration-200",
+                                                isEditing && editingWordIndex === wordIndex ? "cursor-text" : "cursor-pointer"
+                                            )}
+                                        >
+                                            {word.word}
+                                        </div>
+                                    </div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" sideOffset={0}>
+                                    <DropdownMenuGroup>
+                                        <DropdownMenuItem 
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                startWordEditing(wordIndex);
+                                            }}
+                                        >
+                                            <Pen size={16} />
+                                            {t('edit-word')}
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleWordAdd(index, wordIndex)}>
+                                            <Plus size={16} />
+                                            {t('add-word')}
+                                        </DropdownMenuItem>
+                                    </DropdownMenuGroup>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        onClick={() => handleWordDelete(index, wordIndex)}
+                                        className={cn(
+                                            "flex items-center cursor-pointer",
+                                            "hover:bg-red-200 hover:text-red-600",
+                                            "focus:bg-red-200 focus:text-red-600"
+                                        )}
+                                    >
+                                        <Trash2 size={16} />
+                                        {t('remove-word')}
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         ))}
                     </div>
                 </div>

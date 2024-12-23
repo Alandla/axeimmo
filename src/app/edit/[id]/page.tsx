@@ -415,6 +415,8 @@ export default function VideoEditor() {
                         selectedSequenceIndex={selectedSequenceIndex} 
                         setSelectedSequenceIndex={setSelectedSequenceIndex} 
                         handleWordInputChange={handleWordInputChange} 
+                        handleWordAdd={() => {}}
+                        handleWordDelete={() => {}}
                         handleCutSequence={handleCutSequence}
                         onRegenerateAudio={handleRegenerateAudio}
                       />
@@ -491,7 +493,9 @@ export default function VideoEditor() {
                     index={index} 
                     selectedIndex={selectedSequenceIndex} 
                     setSelectedIndex={setSelectedSequenceIndex} 
-                    handleWordInputChange={handleWordInputChange} 
+                    handleWordInputChange={handleWordInputChange}
+                    handleWordAdd={() => {}}
+                    handleWordDelete={() => {}}
                     onCutSequence={handleCutSequence}
                     setActiveTabMobile={setActiveTabMobile}
                     isMobile={isMobile}
