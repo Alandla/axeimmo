@@ -14,7 +14,7 @@ import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { IVideo } from '@/src/types/video'
+import { IVideo, IWord } from '@/src/types/video'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
@@ -307,6 +307,65 @@ export default function VideoEditor() {
     }
   };
 
+  const handleWordDelete = (sequenceIndex: number, wordIndex: number) => {
+    if (video && video.video) {
+      const newSequences = [...video.video.sequences];
+      const sequence = newSequences[sequenceIndex];
+      
+      const wordToDelete = sequence.words[wordIndex];
+      const durationToAdd = wordToDelete.durationInFrames;
+      
+      if (wordIndex > 0) {
+        sequence.words[wordIndex - 1].durationInFrames += durationToAdd;
+      } else if (wordIndex < sequence.words.length - 1) {
+        sequence.words[wordIndex + 1].durationInFrames += durationToAdd;
+      }
+
+      sequence.words.splice(wordIndex, 1);
+
+      const newText = sequence.words.map(word => word.word).join(' ');
+      sequence.text = newText;
+
+      sequence.needsAudioRegeneration = true;
+      
+      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
+    }
+  };
+
+  const handleWordAdd = (sequenceIndex: number, wordIndex: number) => {
+    if (video && video.video) {
+      const newSequences = [...video.video.sequences];
+      const sequence = newSequences[sequenceIndex];
+      const previousWord = sequence.words[wordIndex];
+      
+      const halfDurationInFrames = Math.floor(previousWord.durationInFrames / 2);
+      const halfDuration = (previousWord.end - previousWord.start) / 2;
+
+      previousWord.durationInFrames = halfDurationInFrames;
+      previousWord.end = halfDuration + previousWord.start;
+
+      const newWord : IWord = {
+        word: ' ',
+        start: halfDuration + previousWord.start,
+        durationInFrames: halfDurationInFrames,
+        confidence: 1,
+        end: previousWord.end
+      };
+
+      sequence.words.splice(wordIndex + 1, 0, newWord);
+
+      const newText = sequence.words.map(word => word.word).join(' ');
+      sequence.text = newText;
+
+      sequence.needsAudioRegeneration = true;
+      
+      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
+      
+      return wordIndex + 1;
+    }
+    return -1;
+  };
+
   return (
     <>
     {isLoading && (
@@ -415,10 +474,11 @@ export default function VideoEditor() {
                         selectedSequenceIndex={selectedSequenceIndex} 
                         setSelectedSequenceIndex={setSelectedSequenceIndex} 
                         handleWordInputChange={handleWordInputChange} 
-                        handleWordAdd={() => {}}
-                        handleWordDelete={() => {}}
+                        handleWordAdd={handleWordAdd}
+                        handleWordDelete={handleWordDelete}
                         handleCutSequence={handleCutSequence}
                         onRegenerateAudio={handleRegenerateAudio}
+                        playerRef={playerRef}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
@@ -494,8 +554,8 @@ export default function VideoEditor() {
                     selectedIndex={selectedSequenceIndex} 
                     setSelectedIndex={setSelectedSequenceIndex} 
                     handleWordInputChange={handleWordInputChange}
-                    handleWordAdd={() => {}}
-                    handleWordDelete={() => {}}
+                    handleWordAdd={handleWordAdd}
+                    handleWordDelete={handleWordDelete}
                     onCutSequence={handleCutSequence}
                     setActiveTabMobile={setActiveTabMobile}
                     isMobile={isMobile}

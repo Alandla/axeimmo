@@ -15,7 +15,7 @@ export const Voices = ({voices, volume}: {voices: Voice[], volume: number}) => {
     <>
       {voices.map((voice) => {
         const element = (   
-          <Sequence key={voice.index} from={currentFrame} durationInFrames={voice.durationInFrames + 15}>
+          <Sequence key={voice.index} premountFor={120} from={currentFrame} durationInFrames={voice.durationInFrames + 15}>
             <Audio 
               src={voice.url}
               startFrom={0}

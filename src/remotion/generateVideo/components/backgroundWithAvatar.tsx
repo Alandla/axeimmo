@@ -40,7 +40,7 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration }: { sequence
             );
 
             mediaElements.push(
-                <Sequence key={index} from={currentFrame} durationInFrames={duration}>
+                <Sequence key={index} premountFor={120} from={currentFrame} durationInFrames={duration}>
                     <AbsoluteFill style={{ zIndex: zIndex }}>
                         {media.type === 'image' ? (
                             <Img

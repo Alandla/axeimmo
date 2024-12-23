@@ -18,6 +18,7 @@ import { Trash, RefreshCw } from "lucide-react"
 import { cn } from "@/src/lib/utils";
 import { useTranslations } from "next-intl";
 import AutoResizingInput from "../auto-resizing-input";
+import { PlayerRef } from "@remotion/player";
 
 interface SequenceProps {
   sequence: ISequence;
@@ -25,7 +26,7 @@ interface SequenceProps {
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
   handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void;
-  handleWordAdd: (sequenceIndex: number, wordIndex: number) => void;
+  handleWordAdd: (sequenceIndex: number, wordIndex: number) => number;
   handleWordDelete: (sequenceIndex: number, wordIndex: number) => void;
   onCutSequence: (cutIndex: number) => void;
   setActiveTabMobile?: (tab: string) => void;
@@ -33,6 +34,7 @@ interface SequenceProps {
   needsAudioRegeneration?: boolean;
   onRegenerateAudio?: (index: number) => void;
   onDeleteSequence?: (index: number) => void;
+  playerRef?: React.RefObject<PlayerRef>;
 }
 
 export default function Sequence({ 
@@ -48,6 +50,7 @@ export default function Sequence({
   isMobile = false,
   onRegenerateAudio = () => {},
   onDeleteSequence = () => {},
+  playerRef,
 }: SequenceProps) {
 
     const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -64,10 +67,6 @@ export default function Sequence({
     };
 
     const t = useTranslations('edit.sequence')
-
-    const onWordChange = (wordIndex: number, newWord: string) => {
-        handleWordInputChange(index, wordIndex, newWord)
-    }
 
     const startWordEditing = useCallback((wordIndex: number) => {
         setOpenDropdownIndex(null);
@@ -86,6 +85,48 @@ export default function Sequence({
             return;
         }
         setOpenDropdownIndex(open ? wordIndex : null);
+        setSelectedIndex(index);
+        setTimeout(() => {
+            if (playerRef?.current && sequence.words[wordIndex]) {
+                playerRef.current.seekTo(sequence.words[wordIndex].start * 60);
+            }
+        }, 50);
+    };
+
+    const handleAddWord = useCallback((wordIndex: number) => {
+        const newWordIndex = handleWordAdd(index, wordIndex);
+        if (newWordIndex !== -1) {
+            setTimeout(() => {
+                setIsEditing(true);
+                setEditingWordIndex(newWordIndex);
+                const element = wordRefs.current[newWordIndex];
+                if (element) {
+                    element.focus();
+                    const range = document.createRange();
+                    range.selectNodeContents(element);
+                    const selection = window.getSelection();
+                    if (selection) {
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+                }
+            }, 0);
+        }
+    }, [index, handleWordAdd]);
+
+    const handleKeyDown = (e: React.KeyboardEvent, wordIndex: number) => {
+        if (e.key === 'Enter' || (e.key === ' ' && isEditing)) {
+            e.preventDefault();
+            const target = e.currentTarget as HTMLDivElement;
+            handleWordInputChange(index, wordIndex, target.textContent || '');
+            setIsEditing(false);
+            setEditingWordIndex(null);
+            target.blur();
+
+            if (e.key === ' ') {
+                handleAddWord(wordIndex);
+            }
+        }
     };
 
     return (
@@ -196,6 +237,7 @@ export default function Sequence({
                                                 setIsEditing(false);
                                                 setEditingWordIndex(null);
                                             }}
+                                            onKeyDown={(e) => handleKeyDown(e, wordIndex)}
                                             className={cn(
                                                 "text-sm sm:text-base px-0.5 py-[0.1rem] sm:py-1",
                                                 "hover:ring-1 focus:ring-2 ring-primary rounded transition-all duration-200",
@@ -217,7 +259,7 @@ export default function Sequence({
                                             <Pen size={16} />
                                             {t('edit-word')}
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => handleWordAdd(index, wordIndex)}>
+                                        <DropdownMenuItem onClick={() => handleAddWord(wordIndex)}>
                                             <Plus size={16} />
                                             {t('add-word')}
                                         </DropdownMenuItem>
