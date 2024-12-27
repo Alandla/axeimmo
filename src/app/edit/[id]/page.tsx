@@ -9,12 +9,11 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
 import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2 } from 'lucide-react'
 import Link from 'next/link'
-import Sequence from '@/src/components/edit/sequence'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { IVideo, IWord } from '@/src/types/video'
+import { ISequence, IVideo, IWord } from '@/src/types/video'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
@@ -59,6 +58,7 @@ export default function VideoEditor() {
   const [isDirty, setIsDirty] = useState(false)
   
   const updateVideo = (newVideoData: any) => {
+    console.log("newVideoData", newVideoData)
     setVideo(newVideoData)
     setIsDirty(true)
   }
@@ -442,6 +442,113 @@ export default function VideoEditor() {
     }
   };
 
+  const handleAddSequence = (afterIndex: number) => {
+    if (!video?.video) return;
+
+    const newSequences = [...video.video.sequences];
+    const previousSequence = newSequences[afterIndex];
+    const defaultDuration = 3;
+    const defaultDurationInFrames = defaultDuration * 60;
+
+    // Gérer les voix
+    let lastVoiceIndex = 0;
+    if (video.video.audio?.voices) {
+      const newVoices = [...video.video.audio.voices];
+      const previousVoice = newVoices[previousSequence.audioIndex];
+      lastVoiceIndex = newVoices.length;
+
+      // Créer la nouvelle voix
+      const newVoice = {
+        url: "", // URL vide car pas encore générée
+        voiceId: previousVoice.voiceId,
+        index: lastVoiceIndex, // Utiliser l'index suivant le dernier
+        startOffset: 0,
+        start: previousVoice.end,
+        end: previousVoice.end + defaultDuration,
+        durationInFrames: defaultDurationInFrames
+      };
+
+      // Insérer la nouvelle voix après la voix précédente
+      newVoices.splice(previousSequence.audioIndex + 1, 0, newVoice);
+
+      // Mettre à jour les timings des voix suivantes
+      for (let i = previousSequence.audioIndex + 2; i < newVoices.length; i++) {
+        const voice = newVoices[i];
+        voice.start += defaultDuration;
+        voice.end += defaultDuration;
+      }
+
+      // Mettre à jour la durée audio totale
+      const newAudioDuration = (video.video.metadata.audio_duration || 0) + defaultDuration;
+
+      // Créer la nouvelle séquence
+      const newSequence: ISequence = {
+        words: [{
+          word: "Texte",
+          start: previousSequence.end,
+          end: previousSequence.end + defaultDuration,
+          confidence: 1,
+          durationInFrames: defaultDurationInFrames
+        }],
+        text: "Texte",
+        originalText: "Texte",
+        start: previousSequence.end,
+        end: previousSequence.end + defaultDuration,
+        durationInFrames: defaultDurationInFrames,
+        audioIndex: lastVoiceIndex,
+        needsAudioRegeneration: true
+      };
+
+      // Insérer la nouvelle séquence
+      newSequences.splice(afterIndex + 1, 0, newSequence);
+
+      // Mettre à jour les timings des séquences suivantes
+      for (let i = afterIndex + 2; i < newSequences.length; i++) {
+        const sequence = newSequences[i];
+        sequence.start += defaultDuration;
+        sequence.end += defaultDuration;
+        sequence.words = sequence.words.map(word => ({
+          ...word,
+          start: word.start + defaultDuration,
+          end: word.end + defaultDuration
+        }));
+      }
+
+      // Mettre à jour le state avec les nouvelles voix
+      updateVideo({
+        ...video,
+        video: {
+          ...video.video,
+          sequences: newSequences,
+          audio: {
+            ...video.video.audio,
+            voices: newVoices
+          },
+          metadata: {
+            ...video.video.metadata,
+            audio_duration: newAudioDuration
+          }
+        }
+      });
+    } else {
+      // Fallback si pas de voix (cas improbable)
+      updateVideo({
+        ...video,
+        video: {
+          ...video.video,
+          sequences: newSequences,
+          metadata: {
+            ...video.video.metadata,
+            audio_duration: (video.video.metadata.audio_duration || 0) + defaultDuration
+          }
+        }
+      });
+    }
+
+    // Sélectionner la nouvelle séquence
+    setSelectedSequenceIndex(afterIndex + 1);
+  };
+
   return (
     <>
     {isLoading && (
@@ -554,8 +661,9 @@ export default function VideoEditor() {
                         handleWordDelete={handleWordDelete}
                         handleCutSequence={handleCutSequence}
                         onRegenerateAudio={handleRegenerateAudio}
-                        playerRef={playerRef}
                         onDeleteSequence={handleDeleteSequence}
+                        onAddSequence={handleAddSequence}
+                        playerRef={playerRef}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
@@ -632,6 +740,7 @@ export default function VideoEditor() {
                 handleCutSequence={handleCutSequence}
                 onRegenerateAudio={handleRegenerateAudio}
                 onDeleteSequence={handleDeleteSequence}
+                onAddSequence={handleAddSequence}
                 playerRef={playerRef}
               />
             </TabsContent>

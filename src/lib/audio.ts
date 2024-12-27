@@ -13,7 +13,6 @@ export async function regenerateAudioForSequence(
   sequenceIndex: number
 ): Promise<RegenerateAudioResult> {
   const audioIndex = video?.video?.sequences[sequenceIndex].audioIndex;
-  console.log("audioIndex", audioIndex)
   const relatedSequences = video?.video?.sequences.filter(seq => seq.audioIndex === audioIndex);
   console.log("relatedSequences", relatedSequences)
   
@@ -44,7 +43,8 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
     let updatedVideo = {...video};
 
     let updatedSequences = updateSequenceTimings(relatedSequences, transcription.transcription.utterances[0].words);
-    updatedSequences = adjustSequenceTimings(updatedSequences, transcription.metadata.audio_duration);
+    const offset = relatedSequences[0].start;
+    updatedSequences = adjustSequenceTimings(updatedSequences, transcription.metadata.audio_duration + offset);
 
     let newSequences = [...updatedVideo?.video?.sequences || []];
     
@@ -55,7 +55,8 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
     );
 
     // Calculer la différence de durée
-    const oldDuration = (video?.video?.audio?.voices[audioIndex]?.end || 0) - (video?.video?.audio?.voices[audioIndex]?.start || 0);
+    const voice = video?.video?.audio?.voices.find(v => v.index === audioIndex);
+    const oldDuration = (voice?.end || 0) - (voice?.start || 0);
     const newDuration = transcription.metadata.audio_duration;
     const durationDifference = newDuration - oldDuration;
 
@@ -92,8 +93,7 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
         throw new Error('Video object is undefined');
     }
 
-    updatedVideo.video.metadata.audio_duration = duration;
-    updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, transcription.metadata.audio_duration);
+    updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, transcription.metadata.audio_duration, duration);
     
     updatedVideo = {
         ...updatedVideo,
@@ -110,6 +110,7 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
             sequences: newSequences
         }
     };
+    
 
     return updatedVideo;
 }
@@ -118,7 +119,8 @@ export function updateVideoWithNewAudio(
   video: IVideo,
   audioIndex: number,
   audioUrl: string,
-  audioDuration: number
+  audioDuration: number,
+  duration: number
 ): IVideo {
 
   if (!video?.video?.audio) {
@@ -127,12 +129,16 @@ export function updateVideoWithNewAudio(
 
   const durationInFrames = timeToFrames(audioDuration);
 
-  const newVoices = [...video.video.audio.voices];
-  newVoices[audioIndex] = {
-    ...newVoices[audioIndex],
-    url: audioUrl,
-    durationInFrames
-  };
+  const newVoices = video.video.audio.voices.map(voice => {
+    if (voice.index === audioIndex) {
+      return {
+        ...voice,
+        url: audioUrl,
+        durationInFrames
+      };
+    }
+    return voice;
+  });
 
   return {
     ...video,
@@ -141,6 +147,10 @@ export function updateVideoWithNewAudio(
       audio: {
         ...video.video.audio,
         voices: newVoices
+      },
+      metadata: {
+        ...video.video.metadata,
+        audio_duration: duration
       },
       sequences: video.video.sequences.map(seq => {
         if (seq.audioIndex === audioIndex) {
@@ -245,7 +255,9 @@ export function updateSequenceTimings(
       words: newWords,
       start: newWords[0].start,
       end: newWords[newWords.length - 1].end,
-      durationInFrames: duration
+      durationInFrames: duration,
+      originalText: sequence.text,
+      needsAudioRegeneration: false
     };
   });
 }

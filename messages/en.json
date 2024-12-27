@@ -188,12 +188,13 @@
         "description-regeneration-error": "An error occurred while regenerating the audio."
       },
       "sequence": {
+        "edit-word": "Edit word",
+        "add-word": "Add word",
+        "remove-word": "Remove word",
         "regeneration-needed": "Audio regeneration needed",
         "button-regenerate": "Regenerate audio",
         "button-delete": "Delete sequence",
-        "edit-word": "Edit word",
-        "add-word": "Add word",
-        "remove-word": "Remove word"
+        "add-sequence": "Add sequence"
       },
       "subtitle": {
         "title-presets": "Presets",

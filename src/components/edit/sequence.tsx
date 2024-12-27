@@ -215,7 +215,7 @@ export default function Sequence({
                                         disabled={!canDelete}
                                     >
                                         <Trash2 size={16} />
-                                        {canDelete ? t('button-delete') : t('button-delete-disabled')}
+                                        {t('button-delete')}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

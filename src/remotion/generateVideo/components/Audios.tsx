@@ -15,15 +15,18 @@ export const Voices = ({voices, volume}: {voices: Voice[], volume: number}) => {
   return (
     <>
       {voices.map((voice) => {
-        const element = (   
-          <Sequence key={voice.index} premountFor={120} from={currentFrame} durationInFrames={voice.durationInFrames + 15}>
-            <Audio 
-              src={voice.url}
-              startFrom={voice.startOffset ? voice.startOffset : 0}
-              volume={volume}
-            />
-          </Sequence>
-        );
+        let element = null;
+        if (voice.url) {
+          element = (   
+            <Sequence key={voice.index} from={currentFrame} durationInFrames={voice.durationInFrames + 15}>
+              <Audio 
+                src={voice.url}
+                startFrom={voice.startOffset ? voice.startOffset : 0}
+                volume={volume}
+              />
+            </Sequence>
+          );
+        }
         currentFrame += voice.durationInFrames;
         return element;
       })}
