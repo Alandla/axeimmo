@@ -167,6 +167,7 @@
       "lip-sync-export-message": "The lip-sync will only be displayed after export.",
       "unsaved": "Unsaved",
       "saved": "Saved",
+      "save": "Save",
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Subtitles",
       "audio-tabs-title": "Audio",

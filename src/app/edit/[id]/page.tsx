@@ -30,8 +30,9 @@ import AudioSettings from '@/src/components/edit/audio-settings'
 import Musics from '@/src/components/edit/musics'
 import ModalPricing from '@/src/components/modal/modal-pricing'
 import Sequences from '@/src/components/edit/sequences'
-import { regenerateAudioForSequence, updateSequenceTimings, updateVideoTimings, updateVideoWithNewAudio, waitForTranscription } from '@/src/lib/audio'
-import transcriptionMockup from '@/src/test/mockup/transcriptionRegenrateAudio.json'
+import { regenerateAudioForSequence, updateVideoTimings, waitForTranscription } from '@/src/lib/audio'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
+import { CommandShortcut } from '@/src/components/ui/command'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -381,11 +382,13 @@ export default function VideoEditor() {
     const sequencesWithSameAudio = newSequences.filter(seq => seq.audioIndex === audioIndex);
     const isFirst = sequencesWithSameAudio[0] === sequence;
     const isLast = sequencesWithSameAudio[sequencesWithSameAudio.length - 1] === sequence;
+    const isAlone = sequencesWithSameAudio.length === 1;
     
     if (!video.video.audio) return;
 
     const newAudio = [...video.video.audio.voices];
-    const audioToUpdate = newAudio[audioIndex];
+    const audioArrayIndex = newAudio.findIndex(audio => audio.index === audioIndex);
+    const audioToUpdate = newAudio[audioArrayIndex];
     
     if (isLast) {
         // Réduire la durée de l'audio
@@ -396,6 +399,14 @@ export default function VideoEditor() {
         // Ajuster le startOffset et la durée
         audioToUpdate.startOffset = (audioToUpdate.startOffset || 0) + (sequence.durationInFrames || 0);
         audioToUpdate.durationInFrames -= sequence.durationInFrames || 0;
+    }
+
+    if (isAlone) {
+        // Trouver l'index de l'audio à supprimer en utilisant audioIndex
+        const audioArrayIndex = newAudio.findIndex(audio => audio.index === audioIndex);
+        if (audioArrayIndex !== -1) {
+            newAudio.splice(audioArrayIndex, 1);
+        }
     }
     
     // Calculer la durée de la séquence à supprimer
@@ -459,7 +470,7 @@ export default function VideoEditor() {
     if (video.video.audio?.voices) {
       const newVoices = [...video.video.audio.voices];
       const previousVoice = newVoices[previousSequence.audioIndex];
-      lastVoiceIndex = newVoices.length;
+      lastVoiceIndex = Math.max(...newVoices.map(voice => voice.index)) + 1;
 
       // Créer la nouvelle voix
       const newVoice = {
@@ -472,8 +483,10 @@ export default function VideoEditor() {
         durationInFrames: defaultDurationInFrames
       };
 
+      // Trouver l'index dans la liste des voix qui correspond à l'index de la séquence précédente
+      const indexBefore = newVoices.findIndex(voice => voice.index === previousSequence.audioIndex);
       // Insérer la nouvelle voix après la voix précédente
-      newVoices.splice(previousSequence.audioIndex + 1, 0, newVoice);
+      newVoices.splice(indexBefore + 1, 0, newVoice);
 
       // Mettre à jour les timings des voix suivantes
       for (let i = previousSequence.audioIndex + 2; i < newVoices.length; i++) {
@@ -553,6 +566,21 @@ export default function VideoEditor() {
     setSelectedSequenceIndex(afterIndex + 1);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault(); // Empêche le comportement par défaut du navigateur
+        handleSaveVideo();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isDirty]); // Dépendances pour le useEffect
+
   return (
     <>
     {isLoading && (
@@ -616,16 +644,28 @@ export default function VideoEditor() {
             <div className="hidden sm:flex items-center space-x-2">
               <span className='text-sm text-muted-foreground'>{isDirty ? t('unsaved') : t('saved')}</span>
             </div>
-            <Button variant="outline" size="icon" onClick={handleSaveVideo}>
-                {isSaving ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                    <Save className="w-4 h-4" />
-                )}
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={handleSaveVideo}>
+                    {isSaving ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Save className="w-4 h-4" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className="flex items-center gap-2">
+                    <p>{t('save')}</p>
+                    <CommandShortcut>⌘S</CommandShortcut>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <Button onClick={() => setShowModalExport(true)}>
-                <Download className="w-4 h-4" />
-                {t('export-button')}
+              <Download className="w-4 h-4" />
+              {t('export-button')}
             </Button>
           </div>
         </div>

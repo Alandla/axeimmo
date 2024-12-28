@@ -215,9 +215,9 @@ export default function Sequence({
                                     <DropdownMenuItem
                                         onClick={() => onDeleteSequence(index)}
                                         className={cn(
-                                            "flex items-center",
+                                            "flex items-center text-destructive",
                                             canDelete 
-                                                ? "cursor-pointer hover:bg-red-200 hover:text-red-600 focus:bg-red-200 focus:text-red-600"
+                                                ? "cursor-pointer hover:bg-red-200 hover:text-destructive focus:bg-red-200 focus:text-destructive"
                                                 : "cursor-not-allowed opacity-50"
                                         )}
                                         disabled={!canDelete}
@@ -255,7 +255,7 @@ export default function Sequence({
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-6 w-6 text-destructive"
+                                            className="h-6 w-6 text-destructive hover:bg-red-200 hover:text-destructive"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleWordDelete(index, wordIndex);

@@ -155,9 +155,9 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
                                     handleDelete(subtitle.id);
                                 }}
                                 className={cn(
-                                    "flex items-center",
-                                    "hover:bg-red-200 hover:text-red-600",
-                                    "focus:bg-red-200 focus:text-red-600"
+                                    "flex items-center text-destructive",
+                                    "hover:bg-red-200 hover:text-destructive",
+                                    "focus:bg-red-200 focus:text-destructive"
                                 )}
                             >
                                 <Trash2 />
