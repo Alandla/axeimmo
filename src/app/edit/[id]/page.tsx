@@ -326,7 +326,11 @@ export default function VideoEditor() {
       const newText = sequence.words.map(word => word.word).join(' ');
       sequence.text = newText;
 
-      sequence.needsAudioRegeneration = true;
+      if (newText === sequence.originalText) {
+        sequence.needsAudioRegeneration = false;
+      } else {
+        sequence.needsAudioRegeneration = true;
+      }
       
       updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
     }
