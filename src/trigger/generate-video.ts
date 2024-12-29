@@ -94,7 +94,7 @@ export const generateVideoTask = task({
     logger.log(`[VOICE] Start voice generation...`)
     let sentences: ISentence[] = [];
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
@@ -211,7 +211,7 @@ export const generateVideoTask = task({
       progress: 0
     })
 
-    if (ctx.environment.type !== "PRODUCTION") {
+    if (ctx.environment.type !== "DEVELOPMENT") {
       let processedTranscriptions = 0;
       
       // Traiter les transcriptions par lots tout en maintenant l'ordre

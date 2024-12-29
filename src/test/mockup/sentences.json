@@ -2,361 +2,371 @@
     {
       "text": "Imaginez une berline électrique plus rapide qu'une Porsche Taycan, au prix d'une Tesla Model 3.",
       "index": 0,
-      "audioUrl": "https://media.hoox.video/c73c7843-cba4-49d5-8278-1a0927f71ccc.mp3",
+      "audioUrl": "https://media.hoox.video/32568e58-a1b7-4540-ad46-49627c33f1a0.mp3",
       "transcription": {
         "metadata": {
-          "billing_time": 5.250612,
-          "audio_duration": 5.250612,
-          "transcription_time": 13.296,
-          "number_of_distinct_channels": 1
+          "audio_duration": 5.093878,
+          "number_of_distinct_channels": 1,
+          "billing_time": 5.093878,
+          "transcription_time": 19.136
         },
         "transcription": {
           "languages": [
             "fr"
           ],
-          "full_transcript": "Imaginez une berline électrique plus rapide qu'une Porsche Taycan au prix d'une Tesla Model 3.",
           "utterances": [
             {
-              "end": 4.84981,
-              "text": "Imaginez une berline électrique plus rapide qu'une Porsche Taycan au prix d'une Tesla Model 3.",
-              "start": 0.1002,
-              "channel": 0,
+              "text": "Imaginez une berline électrique plus rapide qu'une Porsche Taycan,",
               "language": "fr",
-              "confidence": 0.94,
+              "start": 0.10024,
+              "end": 3.12761,
+              "confidence": 0.88,
+              "channel": 0,
               "words": [
                 {
-                  "end": 0.46093,
                   "word": "Imaginez",
-                  "start": 0.1002,
-                  "confidence": 0.88
+                  "start": 0.10024,
+                  "end": 0.56137,
+                  "confidence": 0.94
                 },
                 {
-                  "end": 0.60122,
                   "word": " une",
-                  "start": 0.48097,
-                  "confidence": 1
+                  "start": 0.64156,
+                  "end": 0.76185,
+                  "confidence": 0.99
                 },
                 {
-                  "end": 0.94191,
                   "word": " berline",
-                  "start": 0.62126,
-                  "confidence": 0.99
-                },
-                {
-                  "end": 1.36276,
-                  "word": " électrique",
-                  "start": 0.98199,
-                  "confidence": 0.97
-                },
-                {
-                  "end": 1.52308,
-                  "word": " plus",
-                  "start": 1.3828,
-                  "confidence": 0.88
-                },
-                {
-                  "end": 1.90385,
-                  "word": " rapide",
-                  "start": 1.56316,
+                  "start": 0.80195,
+                  "end": 1.14278,
                   "confidence": 1
                 },
                 {
-                  "end": 2.1243,
+                  "word": " électrique",
+                  "start": 1.24302,
+                  "end": 1.70415,
+                  "confidence": 0.98
+                },
+                {
+                  "word": " plus",
+                  "start": 1.76429,
+                  "end": 1.92468,
+                  "confidence": 1
+                },
+                {
+                  "word": " rapide",
+                  "start": 1.96478,
+                  "end": 2.26551,
+                  "confidence": 1
+                },
+                {
                   "word": " qu'une",
-                  "start": 1.92389,
-                  "confidence": 0.99
-                },
-                {
-                  "end": 2.44495,
-                  "word": " Porsche",
-                  "start": 2.16438,
-                  "confidence": 0.86
-                },
-                {
-                  "end": 2.98604,
-                  "word": " Taycan",
-                  "start": 2.52511,
-                  "confidence": 0.6
-                },
-                {
-                  "end": 3.26661,
-                  "word": " au",
-                  "start": 3.14637,
-                  "confidence": 0.97
-                },
-                {
-                  "end": 3.46702,
-                  "word": " prix",
-                  "start": 3.28665,
-                  "confidence": 0.75
-                },
-                {
-                  "end": 3.68746,
-                  "word": " d'une",
-                  "start": 3.5071,
+                  "start": 2.30561,
+                  "end": 2.48605,
                   "confidence": 0.92
                 },
                 {
-                  "end": 4.08827,
-                  "word": " Tesla",
-                  "start": 3.74758,
+                  "word": " Porsche",
+                  "start": 2.5061,
+                  "end": 2.74668,
+                  "confidence": 0.84
+                },
+                {
+                  "word": " Taycan,",
+                  "start": 2.78678,
+                  "end": 3.12761,
+                  "confidence": 0.53
+                }
+              ]
+            },
+            {
+              "text": "au prix d'une Tesla Model 3.",
+              "language": "fr",
+              "start": 3.38824,
+              "end": 4.81171,
+              "confidence": 0.88,
+              "channel": 0,
+              "words": [
+                {
+                  "word": " au",
+                  "start": 3.38824,
+                  "end": 3.50854,
                   "confidence": 0.99
                 },
                 {
-                  "end": 4.449,
-                  "word": " Model",
-                  "start": 4.16844,
-                  "confidence": 1
+                  "word": " prix",
+                  "start": 3.52859,
+                  "end": 3.70902,
+                  "confidence": 0.86
                 },
                 {
-                  "end": 4.84981,
+                  "word": " d'une",
+                  "start": 3.74912,
+                  "end": 3.90951,
+                  "confidence": 0.92
+                },
+                {
+                  "word": " Tesla",
+                  "start": 3.94961,
+                  "end": 4.23029,
+                  "confidence": 0.97
+                },
+                {
+                  "word": " Model",
+                  "start": 4.29044,
+                  "end": 4.53102,
+                  "confidence": 0.99
+                },
+                {
                   "word": " 3.",
-                  "start": 4.54921,
-                  "confidence": 0.8
+                  "start": 4.59117,
+                  "end": 4.81171,
+                  "confidence": 0.78
                 }
               ]
             }
-          ]
+          ],
+          "full_transcript": "Imaginez une berline électrique plus rapide qu'une Porsche Taycan, au prix d'une Tesla Model 3."
         }
       }
     },
     {
       "text": "La Xiaomi SU7 incarne l'ambition démesurée du géant chinois de la technologie.",
       "index": 1,
-      "audioUrl": "https://media.hoox.video/3346ca99-d9da-41a8-a36b-faf87b25f4a4.mp3",
+      "audioUrl": "https://media.hoox.video/19c9413f-aca5-40c9-806d-a3d714dfc270.mp3",
       "transcription": {
         "metadata": {
-          "billing_time": 5.32898,
-          "audio_duration": 5.32898,
-          "transcription_time": 6.689,
-          "number_of_distinct_channels": 1
+          "audio_duration": 4.493061,
+          "number_of_distinct_channels": 1,
+          "billing_time": 4.493061,
+          "transcription_time": 5.427
         },
         "transcription": {
           "languages": [
             "fr"
           ],
-          "full_transcript": "La Xiaomi SU7 incarne l'ambition démesurée du géant chinois de la technologie.",
           "utterances": [
             {
-              "end": 4.96839,
-              "text": "La Xiaomi SU7 incarne l'ambition démesurée du géant chinois de la technologie.",
-              "start": 0.08014,
-              "channel": 0,
+              "text": "La Xiaomi SU7T incarne l'ambition démesurée du géant chinois de la technologie.",
               "language": "fr",
-              "confidence": 0.96,
+              "start": 0.04015,
+              "end": 4.19541,
+              "confidence": 0.92,
+              "channel": 0,
               "words": [
                 {
-                  "end": 0.20034,
                   "word": "La",
-                  "start": 0.08014,
+                  "start": 0.04015,
+                  "end": 0.16059,
                   "confidence": 1
                 },
                 {
-                  "end": 0.60102,
                   "word": " Xiaomi",
-                  "start": 0.24041,
-                  "confidence": 0.66
+                  "start": 0.22081,
+                  "end": 0.52192,
+                  "confidence": 0.5
                 },
                 {
-                  "end": 1.04176,
-                  "word": " SU7",
-                  "start": 0.92156,
-                  "confidence": 0.9
-                },
-                {
-                  "end": 1.94328,
-                  "word": " incarne",
-                  "start": 1.52257,
+                  "word": " SU7T",
+                  "start": 0.74273,
+                  "end": 1.08398,
                   "confidence": 0.99
                 },
                 {
-                  "end": 2.50423,
+                  "word": " incarne",
+                  "start": 1.2245,
+                  "end": 1.54568,
+                  "confidence": 0.98
+                },
+                {
                   "word": " l'ambition",
-                  "start": 2.02342,
-                  "confidence": 0.95
+                  "start": 1.6059,
+                  "end": 2.06759,
+                  "confidence": 0.97
                 },
                 {
-                  "end": 3.12528,
                   "word": " démesurée",
-                  "start": 2.6044,
-                  "confidence": 0.92
+                  "start": 2.12782,
+                  "end": 2.64973,
+                  "confidence": 0.9
                 },
                 {
-                  "end": 3.26552,
                   "word": " du",
-                  "start": 3.14531,
+                  "start": 2.64973,
+                  "end": 2.77018,
                   "confidence": 1
                 },
                 {
-                  "end": 3.56602,
                   "word": " géant",
-                  "start": 3.30558,
-                  "confidence": 0.76
+                  "start": 2.85047,
+                  "end": 3.09135,
+                  "confidence": 0.91
                 },
                 {
-                  "end": 4.06687,
                   "word": " chinois",
-                  "start": 3.66619,
-                  "confidence": 0.89
+                  "start": 3.1315,
+                  "end": 3.43261,
+                  "confidence": 0.98
                 },
                 {
-                  "end": 4.18707,
                   "word": " de",
-                  "start": 4.06687,
+                  "start": 3.43261,
+                  "end": 3.53298,
                   "confidence": 1
                 },
                 {
-                  "end": 4.30727,
                   "word": " la",
-                  "start": 4.18707,
+                  "start": 3.5129,
+                  "end": 3.63335,
                   "confidence": 1
                 },
                 {
-                  "end": 4.96839,
                   "word": " technologie.",
-                  "start": 4.34734,
+                  "start": 3.65342,
+                  "end": 4.19541,
                   "confidence": 1
                 }
               ]
             }
-          ]
+          ],
+          "full_transcript": "La Xiaomi SU7T incarne l'ambition démesurée du géant chinois de la technologie."
         }
       }
     },
     {
       "text": "Avec son design épuré et ses lignes fluides, elle affiche une autonomie impressionnante de 800 kilomètres.",
       "index": 2,
-      "audioUrl": "https://media.hoox.video/3ff29d35-bfab-4464-ac91-eab6289c6dbc.mp3",
+      "audioUrl": "https://media.hoox.video/f9b0a96a-ae75-42ef-9a1a-22a078f61001.mp3",
       "transcription": {
         "metadata": {
-          "billing_time": 6.164898,
-          "audio_duration": 6.164898,
-          "transcription_time": 5.952,
-          "number_of_distinct_channels": 1
+          "audio_duration": 5.929796,
+          "number_of_distinct_channels": 1,
+          "billing_time": 5.929796,
+          "transcription_time": 7.132
         },
         "transcription": {
           "languages": [
             "fr"
           ],
-          "full_transcript": "Avec son design épuré et ses lignes fluides, elle affiche une autonomie impressionnante de 800 km.",
           "utterances": [
             {
-              "end": 2.2491,
               "text": "Avec son design épuré et ses lignes fluides,",
-              "start": 0.12049,
-              "channel": 0,
               "language": "fr",
-              "confidence": 0.96,
+              "start": 0.10014,
+              "end": 2.24308,
+              "confidence": 0.95,
+              "channel": 0,
               "words": [
                 {
-                  "end": 0.28114,
                   "word": "Avec",
-                  "start": 0.12049,
+                  "start": 0.10014,
+                  "end": 0.30041,
                   "confidence": 1
                 },
                 {
-                  "end": 0.42171,
                   "word": " son",
-                  "start": 0.30122,
-                  "confidence": 0.99
-                },
-                {
-                  "end": 0.76309,
-                  "word": " design",
-                  "start": 0.46187,
-                  "confidence": 0.85
-                },
-                {
-                  "end": 1.16471,
-                  "word": " épuré",
-                  "start": 0.80325,
-                  "confidence": 0.96
-                },
-                {
-                  "end": 1.46593,
-                  "word": " et",
-                  "start": 1.34544,
+                  "start": 0.34047,
+                  "end": 0.46063,
                   "confidence": 1
                 },
                 {
-                  "end": 1.6065,
-                  "word": " ses",
-                  "start": 1.48601,
+                  "word": " design",
+                  "start": 0.50069,
+                  "end": 0.8011,
+                  "confidence": 0.89
+                },
+                {
+                  "word": " épuré",
+                  "start": 0.84115,
+                  "end": 1.20165,
                   "confidence": 0.99
                 },
                 {
-                  "end": 1.86755,
-                  "word": " lignes",
-                  "start": 1.62658,
-                  "confidence": 0.93
+                  "word": " et",
+                  "start": 1.34184,
+                  "end": 1.46201,
+                  "confidence": 1
                 },
                 {
-                  "end": 2.2491,
+                  "word": " ses",
+                  "start": 1.46201,
+                  "end": 1.58217,
+                  "confidence": 0.87
+                },
+                {
+                  "word": " lignes",
+                  "start": 1.62223,
+                  "end": 1.80247,
+                  "confidence": 0.99
+                },
+                {
                   "word": " fluides,",
-                  "start": 1.90772,
-                  "confidence": 0.91
+                  "start": 1.8225,
+                  "end": 2.24308,
+                  "confidence": 0.94
                 }
               ]
             },
             {
-              "end": 5.5625,
               "text": "elle affiche une autonomie impressionnante de 800 km.",
-              "start": 2.5704,
-              "channel": 0,
               "language": "fr",
-              "confidence": 0.96,
+              "start": 2.66366,
+              "end": 5.40742,
+              "confidence": 0.95,
+              "channel": 0,
               "words": [
                 {
-                  "end": 2.69088,
                   "word": " elle",
-                  "start": 2.5704,
+                  "start": 2.66366,
+                  "end": 2.80385,
+                  "confidence": 0.96
+                },
+                {
+                  "word": " affiche",
+                  "start": 2.8439,
+                  "end": 3.2044,
+                  "confidence": 0.79
+                },
+                {
+                  "word": " une",
+                  "start": 3.22443,
+                  "end": 3.34459,
                   "confidence": 1
                 },
                 {
-                  "end": 3.01218,
-                  "word": " affiche",
-                  "start": 2.71097,
-                  "confidence": 0.91
-                },
-                {
-                  "end": 3.17283,
-                  "word": " une",
-                  "start": 3.05235,
-                  "confidence": 0.88
-                },
-                {
-                  "end": 3.67487,
                   "word": " autonomie",
-                  "start": 3.213,
-                  "confidence": 0.97
+                  "start": 3.40467,
+                  "end": 3.86531,
+                  "confidence": 1
                 },
                 {
-                  "end": 4.61868,
                   "word": " impressionnante",
-                  "start": 3.83551,
+                  "start": 3.94542,
+                  "end": 4.62635,
                   "confidence": 0.99
                 },
                 {
-                  "end": 4.79941,
                   "word": " de",
-                  "start": 4.67893,
-                  "confidence": 1
+                  "start": 4.62635,
+                  "end": 4.74652,
+                  "confidence": 0.99
                 },
                 {
-                  "end": 5.30144,
                   "word": " 800",
-                  "start": 4.9199,
-                  "confidence": 0.02
+                  "start": 4.78657,
+                  "end": 5.14707,
+                  "confidence": 0.17
                 },
                 {
-                  "end": 5.5625,
                   "word": " km.",
-                  "start": 5.30144,
-                  "confidence": 0.85
+                  "start": 5.16709,
+                  "end": 5.40742,
+                  "confidence": 0.99
                 }
               ]
             }
-          ]
+          ],
+          "full_transcript": "Avec son design épuré et ses lignes fluides, elle affiche une autonomie impressionnante de 800 km."
         }
       }
     }

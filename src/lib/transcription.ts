@@ -1,3 +1,4 @@
+import { logger } from "@trigger.dev/sdk/v3";
 import { ISequence, IWord } from "../types/video";
 
 interface Utterance {
@@ -102,13 +103,21 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
       }))
     }));
 
+    logger.info('Adjusted utterances', { adjustedUtterances });
+
     // Créer les séquences pour cette phrase
     const s: ISequence[] = splitIntoSequences(adjustedUtterances, sentences[i].index);
+
+    logger.info('Sequences', { s });
+
     finalSequences.push(...s);
 
     // Mettre à jour l'offset pour la prochaine phrase
     const lastUtterance = adjustedUtterances[adjustedUtterances.length - 1];
-    timeOffset += lastUtterance ? lastUtterance.end - lastUtterance.start : 0;
+    timeOffset = lastUtterance ? lastUtterance.end : 0;
+
+    logger.info('Time offset', { timeOffset });
+
   }
 
   return {
