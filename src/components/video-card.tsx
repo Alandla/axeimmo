@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useRef, useCallback } from 'react'
-import { MoreVertical, Pen, Edit, Trash2, Settings2, Video as VideoIcon } from 'lucide-react'
+import { MoreVertical, Pen, Edit, Trash2, Settings2, Video as VideoIcon, VideoOff } from 'lucide-react'
 import { formatDistanceToNow, Locale } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
 
@@ -41,13 +41,15 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
   const { data: session } = useSession()
 
   const { toast } = useToast();
+  const { setVideo } = useVideoToDeleteStore()
+  const { fetchUser } = useUsersStore()
+  
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(video.title);
-  const { setVideo } = useVideoToDeleteStore()
-  const inputRef = useRef<HTMLInputElement>(null);
-  const { fetchUser } = useUsersStore()
   const [creator, setCreator] = useState(video.creator)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDelete = (e: any) => {
     e.stopPropagation()
@@ -94,26 +96,46 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
     }
   }
 
+  const isOutdated = !video.video?.audio?.voices || video.video?.audio?.voices.length === 0
+
   return (
     <div className="relative">
       <div
         className="relative bg-muted aspect-[16/9] rounded-lg overflow-hidden"
       >
+        {isOutdated && (
+          <div className="absolute top-2 left-2 right-2 z-10 bg-black bg-opacity-75 text-white px-2 py-1 text-sm rounded-md text-center">
+            {t('video.outdated')}
+          </div>
+        )}
         {video.video?.thumbnail ? (
           <Image
             src={video.video.thumbnail}
             alt={video.title || ''}
             layout="fill"
             objectFit="cover"
+            className={cn(isOutdated && "opacity-50")}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-            <VideoIcon className="w-12 h-12 text-gray-400" />
+            {isOutdated ? (
+              <VideoOff className="w-12 h-12 text-gray-400" />
+            ) : (
+              <VideoIcon className="w-12 h-12 text-gray-400" />
+            )}
           </div>
         )}
-        <Link href={`/edit/${video.id}`} className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
-          <Pen className="text-white w-8 h-8" />
-        </Link>
+        {isOutdated ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+            <p className="text-white text-sm text-center px-4">
+              {t('video.outdated-help')}
+            </p>
+          </div>
+        ) : (
+          <Link href={`/edit/${video.id}`} className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+            <Pen className="text-white w-8 h-8" />
+          </Link>
+        )}
         <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 text-xs rounded-md">
           {formatDuration(video.video?.metadata?.audio_duration || 0)}
         </div>
@@ -177,8 +199,12 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href={`/edit/${video.id}`}>
+              <DropdownMenuItem 
+                asChild
+                disabled={isOutdated}
+                className={cn(isOutdated && "cursor-not-allowed opacity-50")}
+              >
+                <Link href={isOutdated ? "#" : `/edit/${video.id}`}>
                   <Edit />
                   {t('dropdown-menu.edit')}
                 </Link>

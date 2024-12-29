@@ -37,6 +37,10 @@
         "title-updated": "Titre mis à jour",
         "description-updated": "Ton titre a été mis à jour",
         "error-message": "Une erreur est survenue lors de la mise à jour du titre"
+      },
+      "video": {
+        "outdated": "Cette vidéo n'est plus disponible",
+        "outdated-help": "La vidéo ne respecte plus les conditions de la dernière mise à jour. Contactez l'assistance si vous souhaitez la recréer."
       }
     },
     "general-settings": {
@@ -854,7 +858,7 @@
         "14": "Choisir un avatar est possible. Ce n'est pas obligatoire, passe à la prochaine étape si tu veux.",
         "15": "Sélectionne un avatar pour ta vidéo si tu le souhaites, ou passe à l'étape suivante.",
         "16": "Tu peux choisir un avatar pour ta vidéo, mais ce n'est pas nécessaire. Passe à l'étape suivante si tu veux.",
-        "17": "Parfait ! Choisis un avatar pour représenter ta vid��o, ou avance sans.",
+        "17": "Parfait ! Choisis un avatar pour représenter ta vidéo, ou avance sans.",
         "18": "Maintenant, tu peux opter pour un avatar pour ta vidéo. Ce n'est pas obligatoire.",
         "19": "Sélectionne un avatar pour ta vidéo, ou passe à la prochaine étape si tu n'en as pas besoin.",
         "20": "Choisir un avatar est une option. Avance à l'étape suivante si tu préfères.",

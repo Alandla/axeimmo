@@ -37,6 +37,10 @@
         "title-updated": "Title updated",
         "description-updated": "Your video title has been updated",
         "error-message": "An error occurred while updating the title"
+      },
+      "video": {
+        "outdated": "This video is no longer available",
+        "outdated-help": "The video no longer meets the conditions of the latest update. Contact support if you want to recreate it."
       }
     },
     "general-settings": {
