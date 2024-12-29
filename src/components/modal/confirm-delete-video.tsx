@@ -10,9 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/components/ui/dialog"
-import { basicApiCall } from '@/src/lib/api'
 import { useVideoToDeleteStore } from '@/src/store/videoToDelete'
-import { useToast } from '@/src/hooks/use-toast'
 import { IVideo } from '@/src/types/video'
 
 interface ModalConfirmDeleteProps {
@@ -27,7 +25,6 @@ export default function ModalConfirmDelete({
   handleDeleteVideo,
 }: ModalConfirmDeleteProps) {
   const [isPending, setIsPending] = useState(false)
-  const { toast } = useToast()
   const { video } = useVideoToDeleteStore()
 
   const handleConfirm = async () => {
@@ -40,11 +37,9 @@ export default function ModalConfirmDelete({
   }
 
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent 
         className="sm:max-w-[425px]"
-        onEscapeKeyDown={() => setIsOpen(false)}
-        onInteractOutside={() => setIsOpen(false)}
       >
         <DialogHeader>
           <DialogTitle>Confirm deletion</DialogTitle>

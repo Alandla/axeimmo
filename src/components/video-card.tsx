@@ -47,10 +47,13 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
   const inputRef = useRef<HTMLInputElement>(null);
   const { fetchUser } = useUsersStore()
   const [creator, setCreator] = useState(video.creator)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-  const handleDelete = () => {
+  const handleDelete = (e: any) => {
+    e.stopPropagation()
     setVideo(video)
     setIsModalConfirmDeleteOpen(true)
+    setIsDropdownOpen(false)
   }
 
   const startEditing = useCallback(() => {
@@ -84,6 +87,7 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
   }, [editedTitle, video]);
 
   const handleDropdownOpen = async (isOpen: boolean) => {
+    setIsDropdownOpen(isOpen)
     if (isOpen && !creator.name && creator.id) {
       const userData = await fetchUser(creator.id)
       setCreator(userData)
@@ -140,7 +144,7 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
             {formatDistanceToNow(video.createdAt ? new Date(video.createdAt) : new Date(), { addSuffix: true, locale: session?.user?.options?.lang === 'en' ? enUS : fr })}
           </p>
         </div>
-        <DropdownMenu onOpenChange={handleDropdownOpen}>
+        <DropdownMenu open={isDropdownOpen} onOpenChange={handleDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
               <MoreVertical className="h-4 w-4" />
@@ -191,7 +195,10 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={handleDelete}
+              onSelect={(e) => {
+                e.preventDefault()
+                handleDelete(e)
+              }}
               className={cn(
                 "flex items-center cursor-pointer text-destructive",
                 "hover:bg-red-200 hover:text-destructive",
