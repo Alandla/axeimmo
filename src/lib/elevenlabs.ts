@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const MODEL = "eleven_multilingual_v2"
+const MODEL_TURBO = "eleven_flash_v2_5"
 
-export const createAudioTTS = async (voiceId: string, text: string, voiceSettings?: { stability: number, similarity_boost: number }, previousText?: string, nextText?: string) => {
+export const createAudioTTS = async (voiceId: string, text: string, voiceSettings?: { stability: number, similarity_boost: number }, turbo: boolean = false, previousText?: string, nextText?: string ) => {
     try {
 
         const options = {
@@ -16,7 +17,7 @@ export const createAudioTTS = async (voiceId: string, text: string, voiceSetting
 
         const data = {
             text: text,
-            model_id: MODEL,
+            model_id: turbo ? MODEL_TURBO : MODEL,
             voice_settings: {
                 stability: voiceSettings?.stability || 0.5,
                 similarity_boost: voiceSettings?.similarity_boost || 0.75,

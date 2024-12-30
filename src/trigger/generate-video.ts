@@ -135,7 +135,8 @@ export const generateVideoTask = task({
             const audioBuffer = await createAudioTTS(
               payload.voice.id,
               text.trim(),
-              payload.voice.voiceSettings
+              payload.voice.voiceSettings,
+              true
             );
             
             // Upload directement après la génération
@@ -160,7 +161,8 @@ export const generateVideoTask = task({
               const retryBuffer = await createAudioTTS(
                 payload.voice.id,
                 text.trim(),
-                payload.voice.voiceSettings
+                payload.voice.voiceSettings,
+                true
               );
 
               const audioUrl = await uploadToS3Audio(retryBuffer, 'medias-users');
@@ -188,7 +190,7 @@ export const generateVideoTask = task({
       // Trier les phrases par index
       sentences.sort((a, b) => a.index - b.index);
 
-      cost += calculateElevenLabsCost(payload.script);
+      cost += calculateElevenLabsCost(payload.script, true);
       
     } else if (avatarFile) {
       sentences.push({
