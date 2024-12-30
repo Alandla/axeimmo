@@ -214,7 +214,7 @@ export const generateVideoTask = task({
     if (ctx.environment.type !== "DEVELOPMENT") {
       let processedTranscriptions = 0;
       
-      // Traiter les transcriptions par lots tout en maintenant l'ordre
+      // On utilise un seul wait.for() pour contrôler le rythme global
       for (let i = 0; i < sentences.length; i += 3) {
         const batch = sentences.slice(i, Math.min(i + 3, sentences.length));
         
@@ -223,7 +223,6 @@ export const generateVideoTask = task({
           
           const transcriptionResponse = await createTranscription(sentence.audioUrl, sentence.text);
           const result = await pollTranscriptionStatus(transcriptionResponse.id);
-
 
           processedTranscriptions++
           await metadata.replace({
@@ -257,7 +256,7 @@ export const generateVideoTask = task({
 
     let { sequences, videoMetadata } = splitSentences(sentences);
     const lightTranscription = createLightTranscription(sequences);
-    const voices = extractVoiceSegments(sequences, sentences);
+    const voices = extractVoiceSegments(sequences, sentences, payload.voice.id);
 
     logger.info('Sequences', { sequences })
     logger.info('Light transcription', { lightTranscription })
@@ -546,18 +545,18 @@ const pollTranscriptionStatus = async (transcriptionId: string) => {
       const transcriptionStatus = await getTranscription(transcriptionId);
 
       if (transcriptionStatus.status === 'done') {
-        await metadata.replace({
-          name: Steps.TRANSCRIPTION,
-          progress: 100
-        })
         return transcriptionStatus;
       }
 
-      await wait.for({ seconds: delayBetweenAttempts });
+      logger.info(`Waiting for transcription [${attempts + 1}/${maxAttempts}]`, {
+        id: transcriptionId,
+        status: transcriptionStatus.status
+      });
+      await new Promise(resolve => setTimeout(resolve, delayBetweenAttempts * 1000));
       attempts++;
     } catch (error) {
       logger.error(`Error while getting transcription status: ${error}`);
-      await wait.for({ seconds: delayBetweenAttempts });
+      await new Promise(resolve => setTimeout(resolve, delayBetweenAttempts * 1000));
       attempts++;
     }
   }
