@@ -373,7 +373,7 @@ export const generateVideoTask = task({
 
     let keywords: any;
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       keywords = keywordsMock
     } else {
       const resultKeywords = await generateKeywords(lightTranscription)
@@ -395,7 +395,7 @@ export const generateVideoTask = task({
 
     logger.log(`[MEDIA] Search media...`);
 
-    if (ctx.environment.type === "PRODUCTION") {
+    if (ctx.environment.type === "DEVELOPMENT") {
       sequences = sequencesWithMediaMock as ISequence[]
     } else {
       const batchSize = 5;
@@ -435,7 +435,7 @@ export const generateVideoTask = task({
     /
     */
 
-    if (ctx.environment.type !== "PRODUCTION" && (payload.avatar || avatarFile)) {
+    if (ctx.environment.type !== "DEVELOPMENT" && (payload.avatar || avatarFile)) {
       logger.log(`[ANALYSIS] Starting media analysis...`);
       
       const mediasToAnalyze = sequences.map(seq => seq.media)
@@ -510,7 +510,7 @@ export const generateVideoTask = task({
           volume: 1,
           music: videoMusic ? {
             url: videoMusic.url,
-            volume: 0.10,
+            volume: 0.07,
             name: videoMusic.name,
             genre: videoMusic.genre
           } : undefined
