@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const MODEL = "eleven_flash_v2_5"
+const MODEL = "eleven_multilingual_v2"
 
 export const createAudioTTS = async (voiceId: string, text: string, voiceSettings?: { stability: number, similarity_boost: number }, previousText?: string, nextText?: string) => {
     try {
