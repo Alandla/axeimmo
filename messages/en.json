@@ -37,6 +37,10 @@
         "title-updated": "Title updated",
         "description-updated": "Your video title has been updated",
         "error-message": "An error occurred while updating the title"
+      },
+      "video": {
+        "outdated": "This video is no longer available",
+        "outdated-help": "The video no longer meets the conditions of the latest update. Contact support if you want to recreate it."
       }
     },
     "general-settings": {
@@ -162,10 +166,12 @@
     },
     "edit": {
       "loading-video-data": "Loading video data...",
+      "loading-regenerating-audio": "Regenerating audio...",
       "export-button": "Export",
       "lip-sync-export-message": "The lip-sync will only be displayed after export.",
       "unsaved": "Unsaved",
       "saved": "Saved",
+      "save": "Save",
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Subtitles",
       "audio-tabs-title": "Audio",
@@ -181,13 +187,26 @@
         "description-subtitle-saved": "The subtitle style has been saved.",
         "description-subtitle-error": "An error occurred while saving the subtitle style.",
         "description-not-enough-credits": "You don't have enough credits to export your video.",
-        "description-space-not-found": "The space was not found."
+        "description-space-not-found": "The space was not found.",
+        "title-regenerated": "Regenerating audio",
+        "description-regenerated": "The audio has been regenerated successfully.",
+        "description-regeneration-error": "An error occurred while regenerating the audio."
+      },
+      "sequence": {
+        "edit-word": "Edit word",
+        "add-word": "Add word",
+        "remove-word": "Remove word",
+        "regeneration-needed": "Audio regeneration needed",
+        "button-regenerate": "Regenerate audio",
+        "button-delete": "Delete sequence",
+        "add-sequence": "Add sequence"
       },
       "subtitle": {
         "title-presets": "Presets",
         "title-presets-space": "Space presets",
         "update": "Update",
-        "delete": "Delete"
+        "delete": "Delete",
+        "rename": "Rename"
       },
       "subtitle-settings": {
         "title": "Subtitle style",
@@ -356,7 +375,8 @@
         "podcasts": "Podcasts",
         "storytelling": "Storytelling",
         "journalism": "Journalism",
-        "entertainment": "Entertainment"
+        "entertainment": "Entertainment",
+        "tv": "TV"
       },
       "gender": {
         "male": "Male",

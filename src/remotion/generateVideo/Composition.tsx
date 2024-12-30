@@ -8,14 +8,17 @@ import { BackgroundWithAvatar } from './components/backgroundWithAvatar';
 import { Watermark } from './components/Watermark';
 import { SubtitlesDaniel } from './subtitles/daniel/subtitlesDaniel';
 import { SubtitlesModern } from './subtitles/modern/subtitlesModern';
+import { Voices } from './components/Audios';
 
 export const VideoGenerate = ({ data }: { data: any }) => {
 	if (!data || !data.video.sequences.length || data.video.sequences.length === 0) {
-        return <div>Loading...</div>;
+      return <div>Loading...</div>;
     }
+	
 	return (
 		<>
-			<Audio src={data.video.audio.url} volume={data.video.audio.volume} />
+			{ data.video.audio.url && <Audio src={data.video.audio.url} volume={data.video.audio.volume} /> }
+			{ data.video.audio.voices && <Voices voices={data.video.audio.voices} volume={data.video.audio.volume} /> }
 			{ data.video.audio.music && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
 			<Watermark />
 			{ data.video.avatar ? <BackgroundWithAvatar sequences={data.video.sequences} avatar={data.video.avatar} duration={data.video.metadata.audio_duration} /> : <MediaBackground sequences={data.video.sequences} /> }

@@ -8,6 +8,7 @@ const sequenceSchema = new mongoose.Schema({
   start: Number,
   end: Number,
   durationInFrames: Number,
+  audioIndex: Number,
   keywords: [{
     search: {
       type: String,

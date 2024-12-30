@@ -8,6 +8,7 @@ import { addCreditsToSpace, removeCreditsToSpace } from "../dao/spaceDao";
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
 import { calculateHeygenCost } from "../lib/cost";
+import { combineAudioVoices } from "./combine-audio";
 
 interface RenderStatus {
   status: string;
@@ -21,6 +22,7 @@ interface ExportVideoPayload {
   videoId: string
   exportId: string
 }
+
 
 export const exportVideoTask = task({
   id: "export-video",
@@ -47,11 +49,20 @@ export const exportVideoTask = task({
         throw new Error('Video not found');
       }
 
-      if (video.video?.avatar?.id && video.video?.audio?.url && !video.video?.avatar?.videoUrl) {
+      if (video.video?.avatar?.id && video.video?.audio?.voices && !video.video?.avatar?.videoUrl) {
+        logger.log("Combinaison des audios...");
+        const combinedAudio = await combineAudioVoices.triggerAndWait({ voices: video.video.audio.voices });
+        
+        if (!combinedAudio.ok) {
+          throw new Error('La combinaison des audios a échoué');
+        }
+
         logger.log("Génération de la vidéo avatar...");
-        const avatarResponse = await generateAvatarVideo(video.video.avatar, video.video.audio?.url);
+        const avatarResponse = await generateAvatarVideo(video.video.avatar, combinedAudio.output.url);
+
         logger.log("Avatar response", { avatarResponse });
         const avatarVideoUrl = await pollAvatarVideoStatus(avatarResponse.data.video_id);
+        
         logger.log("Avatar video response", { avatarVideoUrl });
 
         if (avatarVideoUrl) {

@@ -1,19 +1,32 @@
+import { logger } from "@trigger.dev/sdk/v3";
 import { ISequence, IWord } from "../types/video";
-
-interface Word {
-  word: string;
-  start: number;
-  end: number;
-  confidence: number;
-  durationInFrames?: number;
-}
 
 interface Utterance {
   text: string;
   words: IWord[];
   start: number;
   end: number;
+  audioIndex: number;
   // ... autres propriétés possibles
+}
+
+interface TranscriptionMetadata {
+  audio_duration: number;
+  number_of_distinct_channels: number;
+  billing_time: number;
+  transcription_time: number;
+}
+
+interface SplitSentencesResult {
+  sequences: ISequence[];
+  videoMetadata: TranscriptionMetadata;
+}
+
+export interface ISentence {
+  text?: string;
+  index: number;
+  audioUrl: string;
+  transcription?: any;
 }
 
 export interface LightTranscription {
@@ -21,7 +34,7 @@ export interface LightTranscription {
   text: string;
 }
 
-const timeToFrames = (time: number, fps: number = 60): number => Math.round(time * fps);
+export const timeToFrames = (time: number, fps: number = 60): number => Math.round(time * fps);
 
 export function createLightTranscription(sequences: ISequence[]): LightTranscription[] {
   return sequences.map((sequence, index) => ({
@@ -30,7 +43,7 @@ export function createLightTranscription(sequences: ISequence[]): LightTranscrip
   }));
 }
 
-export function splitIntoSequences(utterances: Utterance[], audioDuration: number): ISequence[] {
+export function splitIntoSequences(utterances: Utterance[], sentenceIndex: number): ISequence[] {
   const allWords = utterances.reduce((acc, utterance) => {
     return [...acc, ...utterance.words];
   }, [] as IWord[]);
@@ -47,19 +60,73 @@ export function splitIntoSequences(utterances: Utterance[], audioDuration: numbe
     const isLongEnough = duration >= 3;
 
     if ((isEndOfSentence && duration >= 1) || isLongEnough) {
-      sequences.push(createSequence(currentSequence));
+      sequences.push(createSequence(currentSequence, sentenceIndex));
       currentSequence = [];
     }
   }
 
   if (currentSequence.length > 0) {
-    sequences.push(createSequence(currentSequence));
+    sequences.push(createSequence(currentSequence, sentenceIndex));
   }
 
-  return adjustSequenceTimings(mergeShortSequences(sequences), audioDuration);
+  return mergeShortSequences(sequences);
 }
 
-function createSequence(words: IWord[]): ISequence {
+export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
+  const finalSequences: ISequence[] = [];
+  let timeOffset = 0;
+  
+  // Initialiser les métadonnées combinées
+  const combinedMetadata: TranscriptionMetadata = {
+    audio_duration: 0,
+    number_of_distinct_channels: 1,
+    billing_time: 0,
+    transcription_time: 0
+  };
+
+  for (let i = 0; i < sentences.length; i++) {
+    // Ajouter les métadonnées de la transcription courante
+    const currentMetadata = sentences[i].transcription.metadata;
+    combinedMetadata.audio_duration += currentMetadata.audio_duration;
+    combinedMetadata.billing_time += currentMetadata.billing_time;
+    combinedMetadata.transcription_time += currentMetadata.transcription_time;
+
+    // Ajuster les timings des utterances avec l'offset actuel
+    const adjustedUtterances = sentences[i].transcription.transcription.utterances.map((utterance: Utterance) => ({
+      ...utterance,
+      start: utterance.start + timeOffset,
+      end: utterance.end + timeOffset,
+      words: utterance.words.map(word => ({
+        ...word,
+        start: word.start + timeOffset,
+        end: word.end + timeOffset
+      }))
+    }));
+
+    logger.info('Adjusted utterances', { adjustedUtterances });
+
+    // Créer les séquences pour cette phrase
+    const s: ISequence[] = splitIntoSequences(adjustedUtterances, sentences[i].index);
+
+    logger.info('Sequences', { s });
+
+    finalSequences.push(...s);
+
+    // Mettre à jour l'offset pour la prochaine phrase
+    const lastUtterance = adjustedUtterances[adjustedUtterances.length - 1];
+    timeOffset = lastUtterance ? lastUtterance.end : 0;
+
+    logger.info('Time offset', { timeOffset });
+
+  }
+
+  return {
+    sequences: adjustSequenceTimings(finalSequences, combinedMetadata.audio_duration),
+    videoMetadata: combinedMetadata
+  };
+}
+
+function createSequence(words: IWord[], sentenceIndex: number): ISequence {
   const sequenceWords = words.map(word => ({
     ...word,
     word: word.word.trimStart()
@@ -69,11 +136,12 @@ function createSequence(words: IWord[]): ISequence {
     text: sequenceWords.map(w => w.word).join(' '),
     words: sequenceWords,
     start: sequenceWords[0].start,
-    end: sequenceWords[sequenceWords.length - 1].end
+    end: sequenceWords[sequenceWords.length - 1].end,
+    audioIndex: sentenceIndex
   };
 }
 
-function adjustSequenceTimings(sequences: ISequence[], audioDuration: number): ISequence[] {
+export function adjustSequenceTimings(sequences: ISequence[], audioDuration: number): ISequence[] {
   return sequences.map((sequence, index, allSequences) => {
     let durationTotal = 0;
     const words = [...sequence.words];
@@ -125,7 +193,8 @@ function mergeShortSequences(sequences: ISequence[]): ISequence[] {
           text: previous.text + current.text,
           words: [...previous.words, ...current.words],
           start: previous.start,
-          end: current.end
+          end: current.end,
+          audioIndex: previous.audioIndex
         };
         continue;
       }
@@ -135,4 +204,56 @@ function mergeShortSequences(sequences: ISequence[]): ISequence[] {
   }
 
   return result;
+}
+
+export function combineTranscriptions(sentences: any[]): any {
+  let combinedTranscription = {
+      metadata: {
+          audio_duration: 0,
+          number_of_distinct_channels: 1,
+          billing_time: 0,
+          transcription_time: 0
+      },
+      transcription: {
+          languages: ["fr"],
+          utterances: [] as any[],
+          full_transcript: ""
+      }
+  };
+
+  let timeOffset = 0;
+  let fullTranscript: any[] = [];
+
+  sentences.forEach(sentence => {
+      const trans = sentence.transcription;
+      
+      // Mettre à jour les métadonnées
+      combinedTranscription.metadata.audio_duration += trans.metadata.audio_duration;
+      combinedTranscription.metadata.billing_time += trans.metadata.billing_time;
+      combinedTranscription.metadata.transcription_time += trans.metadata.transcription_time;
+
+      // Ajuster les timings pour chaque utterance
+      trans.transcription.utterances.forEach((utterance: any) => {
+          const adjustedUtterance = {
+              ...utterance,
+              start: utterance.start + timeOffset,
+              end: utterance.end + timeOffset,
+              audioIndex: sentence.index,
+              words: utterance.words.map((word: any) => ({
+                  ...word,
+                  start: word.start + timeOffset,
+                  end: word.end + timeOffset
+              }))
+          };
+          combinedTranscription.transcription.utterances.push(adjustedUtterance);
+      });
+
+      fullTranscript.push(trans.transcription.full_transcript);
+      const lastUtterance = trans.transcription.utterances[trans.transcription.utterances.length - 1];
+      timeOffset += lastUtterance ? lastUtterance.end : 0;
+  });
+
+  combinedTranscription.transcription.full_transcript = fullTranscript.join(" ");
+
+  return combinedTranscription;
 }

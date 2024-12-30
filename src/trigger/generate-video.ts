@@ -1,6 +1,5 @@
 import { logger, metadata, task, wait } from "@trigger.dev/sdk/v3";
 import { Steps } from "../types/step";
-import { UploadedFile } from "../types/files";
 import { Voice } from "../types/voice";
 import { AvatarLook } from "../types/avatar";
 import { createAudioTTS } from "../lib/elevenlabs";
@@ -10,8 +9,9 @@ import { createTranscription, getTranscription } from "../lib/gladia";
 import transcriptionMock from "../test/mockup/transcriptionComplete.json";
 import keywordsMock from "../test/mockup/keywordsResponse.json";
 import sequencesWithMediaMock from "../test/mockup/sequencesWithMedia.json";
-import { createLightTranscription, splitIntoSequences } from "../lib/transcription";
-import { ffmpegExtractAudioSegments } from "./separate-audio";
+import sentencesMock from "../test/mockup/sentences.json";
+
+import { createLightTranscription, ISentence, splitSentences } from "../lib/transcription";
 import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
 import { mediaToMediaSpace, searchMediaForSequence } from "../service/media.service";
@@ -89,11 +89,10 @@ export const generateVideoTask = task({
     /   Get voice
     /
     */
-
-    let voiceUrl = ""
     const voiceFile: IMedia | undefined = payload.files?.find(file => file.usage === "voice");
 
     logger.log(`[VOICE] Start voice generation...`)
+    let sentences: ISentence[] = [];
 
     if (ctx.environment.type === "DEVELOPMENT") {
       await metadata.replace({
@@ -101,7 +100,7 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      voiceUrl = "https://media.hoox.video/db9b9f57-bd1a-42ac-8095-d28b7d52a4e4.mp3"
+      sentences = sentencesMock
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
@@ -111,7 +110,10 @@ export const generateVideoTask = task({
     } else if (voiceFile) {
       logger.log(`[VOICE] Voice file already uploaded`)
       logger.info('Voice file', { voiceFile })
-      voiceUrl = voiceFile.audio?.link || ""
+      sentences.push({
+        index: 0,
+        audioUrl: voiceFile.audio?.link || "",
+      })
     } else if (!avatarFile) {
       logger.log(`[VOICE] Generate voice with elevenlabs...`)
 
@@ -120,70 +122,82 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      // Découper le script en phrases
-      const sentences = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
-      const audioBuffers: Buffer[] = [];
-      let processedSentences = 0;
+      const rawSentences = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
+      let processedCount = 0;
 
       // Traiter les phrases par lots de 5
-      for (let i = 0; i < sentences.length; i += 5) {
-        const batch = sentences.slice(i, Math.min(i + 5, sentences.length));
+      for (let i = 0; i < rawSentences.length; i += 5) {
+        const batch = rawSentences.slice(i, Math.min(i + 5, rawSentences.length));
         
-        const batchPromises = batch.map(async (sentence, index) => {
-          const currentIndex = i + index;
-          const previousText = currentIndex > 0 ? sentences[currentIndex - 1] : undefined;
-          const nextText = currentIndex < sentences.length - 1 ? sentences[currentIndex + 1] : undefined;
-
+        const batchPromises = batch.map(async (text, batchIndex) => {
+          const globalIndex = i + batchIndex; // Index global pour maintenir l'ordre
           try {
             const audioBuffer = await createAudioTTS(
-              payload.voice.id, 
-              sentence.trim(), 
-              payload.voice.voiceSettings,
+              payload.voice.id,
+              text.trim(),
+              payload.voice.voiceSettings
             );
-            return { index: currentIndex, buffer: audioBuffer };
+            
+            // Upload directement après la génération
+            const audioUrl = await uploadToS3Audio(audioBuffer, 'medias-users');
+
+
+            processedCount++
+            await metadata.replace({
+              name: Steps.VOICE_GENERATION,
+              progress: Math.round((processedCount / rawSentences.length) * 100)
+            });
+            
+            return {
+              index: globalIndex,
+              text: text.trim(),
+              audioUrl
+            };
           } catch (error: any) {
             if (error.response?.status === 422) {
-              // Attendre 2 seconde et réessayer
               await wait.for({ seconds: 2 });
-              return await createAudioTTS(
-                payload.voice.id, 
-                sentence.trim(), 
-                payload.voice.voiceSettings,
+
+              const retryBuffer = await createAudioTTS(
+                payload.voice.id,
+                text.trim(),
+                payload.voice.voiceSettings
               );
+
+              const audioUrl = await uploadToS3Audio(retryBuffer, 'medias-users');
+
+              processedCount++
+              await metadata.replace({
+                name: Steps.VOICE_GENERATION,
+                progress: Math.round((processedCount / rawSentences.length) * 100)
+              });
+
+              return {
+                index: globalIndex,
+                text: text.trim(),
+                audioUrl
+              };
             }
             throw error;
           }
         });
 
         const batchResults = await Promise.all(batchPromises);
-        
-        // Trier les résultats par index et ajouter les buffers
-        batchResults
-          .sort((a, b) => a.index - b.index)
-          .forEach(result => audioBuffers.push(result.buffer));
-
-        processedSentences += batch.length;
-        await metadata.replace({
-          name: Steps.VOICE_GENERATION,
-          progress: Math.round((processedSentences / sentences.length) * 100)
-        });
+        sentences.push(...batchResults);
       }
 
-      // Combiner tous les buffers audio
-      const combinedBuffer = Buffer.concat(audioBuffers);
-      voiceUrl = await uploadToS3Audio(combinedBuffer, 'medias-users');
+      // Trier les phrases par index
+      sentences.sort((a, b) => a.index - b.index);
 
       cost += calculateElevenLabsCost(payload.script);
-
-      await metadata.replace({
-        name: Steps.VOICE_GENERATION,
-        progress: 100
-      });
+      
     } else if (avatarFile) {
-      voiceUrl = avatarFile.video?.link || ""
+      sentences.push({
+        index: 0,
+        audioUrl: avatarFile.video?.link || "",
+      })
     }
 
-    logger.log(`[VOICE] Voice URL: ${voiceUrl}`)
+    logger.info('Sentences', { sentences })
 
     /*
     /
@@ -197,32 +211,60 @@ export const generateVideoTask = task({
       progress: 0
     })
 
-    
-    let transcription: any;
+    if (ctx.environment.type !== "DEVELOPMENT") {
+      let processedTranscriptions = 0;
+      
+      // Traiter les transcriptions par lots tout en maintenant l'ordre
+      for (let i = 0; i < sentences.length; i += 3) {
+        const batch = sentences.slice(i, Math.min(i + 3, sentences.length));
+        
+        const transcriptionPromises = batch.map(async (sentence) => {
+          if (!sentence.audioUrl) throw new Error("Audio URL missing");
+          
+          const transcriptionResponse = await createTranscription(sentence.audioUrl, sentence.text);
+          const result = await pollTranscriptionStatus(transcriptionResponse.id);
 
-    if (ctx.environment.type === "DEVELOPMENT") {
-      transcription = transcriptionMock
-      await metadata.replace({
-        name: Steps.TRANSCRIPTION,
-        progress: 100
-      })
-    } else {
-      const createTranscriptionResponse = await createTranscription(voiceUrl);
-      let transcriptionData: any;
 
-      await pollTranscriptionStatus(createTranscriptionResponse.id)
-        .then((completedTranscription) => {
-          transcriptionData = completedTranscription;
-        })
-        .catch(logger.error);
+          processedTranscriptions++
+          await metadata.replace({
+            name: Steps.TRANSCRIPTION,
+            progress: Math.round((processedTranscriptions / sentences.length) * 100)
+          });
 
-      transcription = transcriptionData?.result;
+          return {
+            index: sentence.index,
+            result
+          };
+        });
+
+        const transcriptionResults = await Promise.all(transcriptionPromises);
+        
+        transcriptionResults.forEach(({ index, result }) => {
+          const sentence = sentences.find(s => s.index === index);
+          if (sentence) {
+            sentence.transcription = result.result;
+          }
+        });
+      }
     }
 
-    logger.info('Transcription', transcription)
+    /*
+    /
+    /   Clean transcription to get 2-3sec sequence separate and adjust words timing
+    /   Get Light JSON to send to AI and reduce cost
+    /
+    */
 
+    let { sequences, videoMetadata } = splitSentences(sentences);
+    const lightTranscription = createLightTranscription(sequences);
+    const voices = extractVoiceSegments(sequences, sentences);
+
+    logger.info('Sequences', { sequences })
+    logger.info('Light transcription', { lightTranscription })
+    logger.info('Voices', { voices })
+    
     if (!payload.script) {
-      const script = transcription.transcription.utterances.map((utterance: any) => utterance.text).join(' ');
+      const script = lightTranscription.map(item => item.text).join(' ');
       const startData = generateStartData(script).then((data) => {
         logger.info('Start data', data?.details)
         videoStyle = data?.details.style
@@ -239,40 +281,12 @@ export const generateVideoTask = task({
       })
     }
 
-    /*
-    /
-    /   Clean transcription to get 2-3sec sequence separate and adjust words timing
-    /   Get Light JSON to send to AI and reduce cost
-    /
-    */
-
-    let sequences = splitIntoSequences(transcription.transcription.utterances, transcription.metadata.audio_duration);
-    const lightTranscription = createLightTranscription(sequences);
-
-    logger.info('Sequences', { sequences })
-    logger.info('Light transcription', { lightTranscription })
-
     await metadata.replace({
       name: Steps.TRANSCRIPTION,
       progress: 100
     })
 
     logger.log(`[TRANSCRIPTION] Transcription done`)
-
-    /*
-    /
-    /   Extract audio segments
-    /
-    */
-
-    //const result = await ffmpegExtractAudioSegments.triggerAndWait({
-    //  audioUrl: voiceUrl,
-    //  sequences
-    //})
-
-    //if (result.ok) {
-    //  sequences = result.output
-    //}
 
     /*
     /
@@ -359,7 +373,7 @@ export const generateVideoTask = task({
 
     let keywords: any;
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (ctx.environment.type === "PRODUCTION") {
       keywords = keywordsMock
     } else {
       const resultKeywords = await generateKeywords(lightTranscription)
@@ -381,12 +395,12 @@ export const generateVideoTask = task({
 
     logger.log(`[MEDIA] Search media...`);
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (ctx.environment.type === "PRODUCTION") {
       sequences = sequencesWithMediaMock as ISequence[]
     } else {
-
       const batchSize = 5;
       const updatedSequences = [];
+
       for (let i = 0; i < sequences.length; i += batchSize) {
           const batch = sequences.slice(i, i + batchSize);
           const batchPromises = batch.map((sequence, idx) => {
@@ -421,7 +435,7 @@ export const generateVideoTask = task({
     /
     */
 
-    if (ctx.environment.type !== "DEVELOPMENT" && (payload.avatar || avatarFile)) {
+    if (ctx.environment.type !== "PRODUCTION" && (payload.avatar || avatarFile)) {
       logger.log(`[ANALYSIS] Starting media analysis...`);
       
       const mediasToAnalyze = sequences.map(seq => seq.media)
@@ -492,7 +506,7 @@ export const generateVideoTask = task({
       },
       video: {
         audio: {
-          url: voiceUrl,
+          voices: voices,
           volume: 1,
           music: videoMusic ? {
             url: videoMusic.url,
@@ -502,7 +516,7 @@ export const generateVideoTask = task({
           } : undefined
         },
         thumbnail: "",
-        metadata: transcription.metadata,
+        metadata: videoMetadata,
         sequences,
         avatar,
         subtitle: {
@@ -531,12 +545,7 @@ const pollTranscriptionStatus = async (transcriptionId: string) => {
     try {
       const transcriptionStatus = await getTranscription(transcriptionId);
 
-      if (transcriptionStatus.status === 'processing') {
-        await metadata.replace({
-          name: Steps.TRANSCRIPTION,
-          progress: attempts
-        })
-      } else if (transcriptionStatus.status === 'done') {
+      if (transcriptionStatus.status === 'done') {
         await metadata.replace({
           name: Steps.TRANSCRIPTION,
           progress: 100
@@ -619,4 +628,60 @@ const processBatchWithSieve = async (
     medias: updatedMedias,
     totalCost
   };
+}
+
+function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], voiceId?: string): {
+  index: number;
+  url: string;
+  start: number;
+  end: number;
+  durationInFrames: number;
+  voiceId?: string;
+}[] {
+  const voiceSegments = new Map<number, {
+    start: number;
+    end: number;
+    durationInFrames: number;
+    sequences: ISequence[];
+    voiceId?: string;
+  }>();
+
+  // Grouper les séquences par audioIndex
+  sequences.forEach(sequence => {
+    if (!voiceSegments.has(sequence.audioIndex)) {
+      voiceSegments.set(sequence.audioIndex, {
+        start: sequence.start,
+        end: sequence.end,
+        durationInFrames: sequence.durationInFrames || 0,
+        sequences: [sequence],
+        voiceId: voiceId || undefined
+      });
+    } else {
+      const current = voiceSegments.get(sequence.audioIndex)!;
+      current.end = sequence.end;
+      current.durationInFrames += sequence.durationInFrames || 0;
+      current.sequences.push(sequence);
+      current.voiceId = voiceId || undefined
+    }
+  });
+
+  // Convertir en tableau avec tous les segments
+  const result = Array.from(voiceSegments.entries()).map(([index, data]) => ({
+    index,
+    url: sentences[index].audioUrl,
+    start: data.start,
+    end: data.end,
+    durationInFrames: data.durationInFrames,
+    voiceId
+  }));
+
+  // Si aucun résultat, retourner au moins un segment par défaut
+  return result.length > 0 ? result : [{
+    index: 0,
+    url: '',
+    start: 0,
+    end: 0,
+    durationInFrames: 0,
+    voiceId
+  }];
 }

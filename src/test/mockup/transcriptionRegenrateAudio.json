@@ -1,0 +1,110 @@
+{
+    "metadata": {
+        "audio_duration": 4.545306,
+        "number_of_distinct_channels": 1,
+        "billing_time": 4.545306,
+        "transcription_time": 5.286
+    },
+    "transcription": {
+        "languages": [
+            "fr"
+        ],
+        "utterances": [
+            {
+                "text": "Imaginez la voiture essence plus lente qu'une Porsche au prix d'une Tesla Model 3.",
+                "language": "fr",
+                "start": 0.08009,
+                "end": 4.30503,
+                "confidence": 0.91,
+                "channel": 0,
+                "words": [
+                    {
+                        "word": "Imaginez",
+                        "start": 0.08009,
+                        "end": 0.50059,
+                        "confidence": 0.98
+                    },
+                    {
+                        "word": " la",
+                        "start": 0.50059,
+                        "end": 0.62073,
+                        "confidence": 1
+                    },
+                    {
+                        "word": " voiture",
+                        "start": 0.64075,
+                        "end": 1.06124,
+                        "confidence": 1
+                    },
+                    {
+                        "word": " essence",
+                        "start": 1.2014,
+                        "end": 1.58185,
+                        "confidence": 0.92
+                    },
+                    {
+                        "word": " plus",
+                        "start": 1.6219,
+                        "end": 1.76206,
+                        "confidence": 1
+                    },
+                    {
+                        "word": " lente",
+                        "start": 1.78208,
+                        "end": 2.10246,
+                        "confidence": 0.97
+                    },
+                    {
+                        "word": " qu'une",
+                        "start": 2.2226,
+                        "end": 2.42283,
+                        "confidence": 0.93
+                    },
+                    {
+                        "word": " Porsche",
+                        "start": 2.46288,
+                        "end": 2.84332,
+                        "confidence": 0.86
+                    },
+                    {
+                        "word": " au",
+                        "start": 2.88337,
+                        "end": 3.00351,
+                        "confidence": 0.99
+                    },
+                    {
+                        "word": " prix",
+                        "start": 3.04356,
+                        "end": 3.20374,
+                        "confidence": 0.76
+                    },
+                    {
+                        "word": " d'une",
+                        "start": 3.22377,
+                        "end": 3.40398,
+                        "confidence": 0.96
+                    },
+                    {
+                        "word": " Tesla",
+                        "start": 3.44403,
+                        "end": 3.74438,
+                        "confidence": 0.95
+                    },
+                    {
+                        "word": " Model",
+                        "start": 3.80445,
+                        "end": 4.06475,
+                        "confidence": 0.98
+                    },
+                    {
+                        "word": " 3.",
+                        "start": 4.12482,
+                        "end": 4.30503,
+                        "confidence": 0.82
+                    }
+                ]
+            }
+        ],
+        "full_transcript": "Imaginez la voiture essence plus lente qu'une Porsche au prix d'une Tesla Model 3."
+    }
+}

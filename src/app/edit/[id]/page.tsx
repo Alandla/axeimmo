@@ -9,19 +9,17 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
 import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2 } from 'lucide-react'
 import Link from 'next/link'
-import Sequence from '@/src/components/edit/sequence'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { IVideo } from '@/src/types/video'
+import { ISequence, IVideo, IWord } from '@/src/types/video'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
 import ModalConfirmExport from '@/src/components/modal/confirm-export'
 import { IExport } from '@/src/types/export'
 import { useToast } from '@/src/hooks/use-toast'
-import Panel1 from '@/src/components/edit/panel-1'
 import Subtitles from '@/src/components/edit/subtitles'
 import SubtitleSettings from '@/src/components/edit/subtitle-settings'
 import { ISpaceSubtitleStyle } from '@/src/types/space'
@@ -31,6 +29,10 @@ import { useSession } from 'next-auth/react'
 import AudioSettings from '@/src/components/edit/audio-settings'
 import Musics from '@/src/components/edit/musics'
 import ModalPricing from '@/src/components/modal/modal-pricing'
+import Sequences from '@/src/components/edit/sequences'
+import { regenerateAudioForSequence, updateVideoTimings, waitForTranscription } from '@/src/lib/audio'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
+import { CommandShortcut } from '@/src/components/ui/command'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -41,6 +43,7 @@ export default function VideoEditor() {
   const { setSubtitleStyles } = useSubtitleStyleStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
+  const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
@@ -56,18 +59,30 @@ export default function VideoEditor() {
   const [isDirty, setIsDirty] = useState(false)
   
   const updateVideo = (newVideoData: any) => {
+    console.log("newVideoData", newVideoData)
     setVideo(newVideoData)
     setIsDirty(true)
   }
 
   const handleWordInputChange = (sequenceIndex: number, wordIndex: number, newWord: string) => {
     if (video && video.video) {
-      const newSequences = [...video.video.sequences]
-      newSequences[sequenceIndex].words[wordIndex].word = newWord
-      newSequences[sequenceIndex].text = newSequences[sequenceIndex].words.map(word => word.word).join(' ')
-      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } })
+      const newSequences = [...video.video.sequences];
+      const sequence = newSequences[sequenceIndex];
+      
+      // Mettre à jour le mot
+      sequence.words[wordIndex].word = newWord;
+      
+      // Reconstruire le texte complet
+      const newText = sequence.words.map(word => word.word).join(' ');
+      sequence.text = newText;
+      
+      // Vérifier si le texte est différent de l'original
+      const needsRegeneration = newText !== sequence.originalText;
+      sequence.needsAudioRegeneration = needsRegeneration;
+      
+      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
     }
-  }
+  };
 
   const handleCutSequence = (cutIndex: number) => {
     console.log("cutIndex", cutIndex)
@@ -210,9 +225,19 @@ export default function VideoEditor() {
   useEffect(() => {
     const fetchVideo = async () => {
       try {
-        setIsLoading(true)
-        const response = await basicApiGetCall<IVideo>(`/video/${id}`)
-        setVideo(response)
+        setIsLoading(true);
+        const response = await basicApiGetCall<IVideo>(`/video/${id}`);
+        
+        // Ajouter originalText à chaque séquence si ce n'est pas déjà fait
+        if (response.video?.sequences) {
+          response.video.sequences = response.video.sequences.map(seq => ({
+            ...seq,
+            originalText: seq.text,
+            needsAudioRegeneration: false
+          }));
+        }
+        
+        setVideo(response);
       } catch (error) {
         console.error(error)
         toast({
@@ -221,14 +246,14 @@ export default function VideoEditor() {
           variant: 'destructive'
         })
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
     if (id) {
-      fetchVideo()
+      fetchVideo();
     }
-  }, [id])
+  }, [id]);
 
   useEffect(() => {
     if (video?.video?.sequences && selectedSequenceIndex >= 0 && selectedSequenceIndex < video.video.sequences.length) {
@@ -248,13 +273,321 @@ export default function VideoEditor() {
     }
   }, [])
 
+  const handleRegenerateAudio = async (sequenceIndex: number) => {
+    if (!video?.video) return;
+
+    setLoadingMessage('loading-regenerating-audio')
+    setIsLoading(true);
+
+    try {
+      const { audioUrl, transcriptionId } = await regenerateAudioForSequence(video, sequenceIndex);
+      const audioIndex = video.video.sequences[sequenceIndex].audioIndex;
+      const transcription = await waitForTranscription(transcriptionId);
+
+      //const audioUrl = "https://media.hoox.video/bce99061-dbd1-4232-95a2-8a6c6861b03a.mp3"
+      //const transcription = transcriptionMockup
+
+      let updatedVideo = updateVideoTimings(video, audioIndex, audioUrl, transcription);
+
+      updateVideo(updatedVideo);
+      
+      toast({
+        title: t('toast.title-regenerated'),
+        description: t('toast.description-regenerated'),
+        variant: 'confirm'
+      });
+    } catch (error) {
+      console.error('Error regenerating audio:', error);
+      toast({
+        title: t('toast.title-error'),
+        description: t('toast.description-regeneration-error'),
+        variant: 'destructive'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleWordDelete = (sequenceIndex: number, wordIndex: number) => {
+    if (video && video.video) {
+      const newSequences = [...video.video.sequences];
+      const sequence = newSequences[sequenceIndex];
+      
+      const wordToDelete = sequence.words[wordIndex];
+      const durationToAdd = wordToDelete.durationInFrames;
+      
+      if (wordIndex > 0) {
+        sequence.words[wordIndex - 1].durationInFrames += durationToAdd;
+      } else if (wordIndex < sequence.words.length - 1) {
+        sequence.words[wordIndex + 1].durationInFrames += durationToAdd;
+      }
+
+      sequence.words.splice(wordIndex, 1);
+
+      const newText = sequence.words.map(word => word.word).join(' ');
+      sequence.text = newText;
+
+      if (newText === sequence.originalText) {
+        sequence.needsAudioRegeneration = false;
+      } else {
+        sequence.needsAudioRegeneration = true;
+      }
+      
+      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
+    }
+  };
+
+  const handleWordAdd = (sequenceIndex: number, wordIndex: number) => {
+    if (video && video.video) {
+      const newSequences = [...video.video.sequences];
+      const sequence = newSequences[sequenceIndex];
+      const previousWord = sequence.words[wordIndex];
+      
+      const halfDurationInFrames = Math.floor(previousWord.durationInFrames / 2);
+      const halfDuration = (previousWord.end - previousWord.start) / 2;
+
+      previousWord.durationInFrames = halfDurationInFrames;
+      previousWord.end = halfDuration + previousWord.start;
+
+      const newWord : IWord = {
+        word: ' ',
+        start: halfDuration + previousWord.start,
+        durationInFrames: halfDurationInFrames,
+        confidence: 1,
+        end: previousWord.end
+      };
+
+      sequence.words.splice(wordIndex + 1, 0, newWord);
+
+      const newText = sequence.words.map(word => word.word).join(' ');
+      sequence.text = newText;
+
+      sequence.needsAudioRegeneration = true;
+      
+      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
+      
+      return wordIndex + 1;
+    }
+    return -1;
+  };
+
+  const handleDeleteSequence = (sequenceIndex: number) => {
+    if (!video?.video) return;
+
+    const sequence = video.video.sequences[sequenceIndex];
+    const audioIndex = sequence.audioIndex;
+    const newSequences = [...video.video.sequences];
+    
+    // Trouver toutes les séquences avec le même audioIndex
+    const sequencesWithSameAudio = newSequences.filter(seq => seq.audioIndex === audioIndex);
+    const isFirst = sequencesWithSameAudio[0] === sequence;
+    const isLast = sequencesWithSameAudio[sequencesWithSameAudio.length - 1] === sequence;
+    const isAlone = sequencesWithSameAudio.length === 1;
+    
+    if (!video.video.audio) return;
+
+    const newAudio = [...video.video.audio.voices];
+    const audioArrayIndex = newAudio.findIndex(audio => audio.index === audioIndex);
+    const audioToUpdate = newAudio[audioArrayIndex];
+    
+    if (isLast) {
+        // Réduire la durée de l'audio
+        audioToUpdate.durationInFrames -= sequence.durationInFrames || 0;
+    }
+    
+    if (isFirst) {
+        // Ajuster le startOffset et la durée
+        audioToUpdate.startOffset = (audioToUpdate.startOffset || 0) + (sequence.durationInFrames || 0);
+        audioToUpdate.durationInFrames -= sequence.durationInFrames || 0;
+    }
+
+    if (isAlone) {
+        // Trouver l'index de l'audio à supprimer en utilisant audioIndex
+        const audioArrayIndex = newAudio.findIndex(audio => audio.index === audioIndex);
+        if (audioArrayIndex !== -1) {
+            newAudio.splice(audioArrayIndex, 1);
+        }
+    }
+    
+    // Calculer la durée de la séquence à supprimer
+    const sequenceDuration = sequence.end - sequence.start;
+    
+    // Supprimer la séquence
+    newSequences.splice(sequenceIndex, 1);
+    
+    // Ajuster les timings de toutes les séquences suivantes
+    for (let i = sequenceIndex; i < newSequences.length; i++) {
+        const currentSequence = newSequences[i];
+        
+        // Ajuster les timings de la séquence
+        currentSequence.start -= sequenceDuration;
+        currentSequence.end -= sequenceDuration;
+        
+        // Ajuster les timings de chaque mot
+        currentSequence.words = currentSequence.words.map(word => ({
+            ...word,
+            start: word.start - sequenceDuration,
+            end: word.end - sequenceDuration
+        }));
+    }
+    
+    // Calculer la nouvelle durée audio totale
+    const newAudioDuration = (video.video.metadata.audio_duration || 0) - sequenceDuration;
+    
+    // Mettre à jour le state
+    updateVideo({
+        ...video,
+        video: {
+            ...video.video,
+            sequences: newSequences,
+            audio: {
+                ...video.video.audio,
+                voices: newAudio
+            },
+            metadata: {
+                ...video.video.metadata,
+                audio_duration: newAudioDuration
+            }
+        }
+    });
+    
+    // Mettre à jour l'index sélectionné si nécessaire
+    if (selectedSequenceIndex >= sequenceIndex) {
+        setSelectedSequenceIndex(Math.max(0, selectedSequenceIndex - 1));
+    }
+  };
+
+  const handleAddSequence = (afterIndex: number) => {
+    if (!video?.video) return;
+
+    const newSequences = [...video.video.sequences];
+    const previousSequence = newSequences[afterIndex];
+    const defaultDuration = 3;
+    const defaultDurationInFrames = defaultDuration * 60;
+
+    // Gérer les voix
+    let lastVoiceIndex = 0;
+    if (video.video.audio?.voices) {
+      const newVoices = [...video.video.audio.voices];
+      const previousVoice = newVoices[previousSequence.audioIndex];
+      lastVoiceIndex = Math.max(...newVoices.map(voice => voice.index)) + 1;
+
+      // Créer la nouvelle voix
+      const newVoice = {
+        url: "", // URL vide car pas encore générée
+        voiceId: previousVoice.voiceId,
+        index: lastVoiceIndex, // Utiliser l'index suivant le dernier
+        startOffset: 0,
+        start: previousVoice.end,
+        end: previousVoice.end + defaultDuration,
+        durationInFrames: defaultDurationInFrames
+      };
+
+      // Trouver l'index dans la liste des voix qui correspond à l'index de la séquence précédente
+      const indexBefore = newVoices.findIndex(voice => voice.index === previousSequence.audioIndex);
+      // Insérer la nouvelle voix après la voix précédente
+      newVoices.splice(indexBefore + 1, 0, newVoice);
+
+      // Mettre à jour les timings des voix suivantes
+      for (let i = previousSequence.audioIndex + 2; i < newVoices.length; i++) {
+        const voice = newVoices[i];
+        voice.start += defaultDuration;
+        voice.end += defaultDuration;
+      }
+
+      // Mettre à jour la durée audio totale
+      const newAudioDuration = (video.video.metadata.audio_duration || 0) + defaultDuration;
+
+      // Créer la nouvelle séquence
+      const newSequence: ISequence = {
+        words: [{
+          word: "Texte",
+          start: previousSequence.end,
+          end: previousSequence.end + defaultDuration,
+          confidence: 1,
+          durationInFrames: defaultDurationInFrames
+        }],
+        text: "Texte",
+        originalText: "Texte",
+        start: previousSequence.end,
+        end: previousSequence.end + defaultDuration,
+        durationInFrames: defaultDurationInFrames,
+        audioIndex: lastVoiceIndex,
+        needsAudioRegeneration: true
+      };
+
+      // Insérer la nouvelle séquence
+      newSequences.splice(afterIndex + 1, 0, newSequence);
+
+      // Mettre à jour les timings des séquences suivantes
+      for (let i = afterIndex + 2; i < newSequences.length; i++) {
+        const sequence = newSequences[i];
+        sequence.start += defaultDuration;
+        sequence.end += defaultDuration;
+        sequence.words = sequence.words.map(word => ({
+          ...word,
+          start: word.start + defaultDuration,
+          end: word.end + defaultDuration
+        }));
+      }
+
+      // Mettre à jour le state avec les nouvelles voix
+      updateVideo({
+        ...video,
+        video: {
+          ...video.video,
+          sequences: newSequences,
+          audio: {
+            ...video.video.audio,
+            voices: newVoices
+          },
+          metadata: {
+            ...video.video.metadata,
+            audio_duration: newAudioDuration
+          }
+        }
+      });
+    } else {
+      // Fallback si pas de voix (cas improbable)
+      updateVideo({
+        ...video,
+        video: {
+          ...video.video,
+          sequences: newSequences,
+          metadata: {
+            ...video.video.metadata,
+            audio_duration: (video.video.metadata.audio_duration || 0) + defaultDuration
+          }
+        }
+      });
+    }
+
+    // Sélectionner la nouvelle séquence
+    setSelectedSequenceIndex(afterIndex + 1);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault(); // Empêche le comportement par défaut du navigateur
+        handleSaveVideo();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isDirty]); // Dépendances pour le useEffect
+
   return (
     <>
     {isLoading && (
         <div className="fixed inset-0 bg-muted/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="text-center space-y-4">
             <Loader2 className="w-8 h-8 animate-spin mx-auto" />
-            <p className="text-lg font-medium">{t('loading-video-data')}</p>
+            <p className="text-lg font-medium">{t(loadingMessage)}</p>
           </div>
         </div>
     )}
@@ -311,16 +644,28 @@ export default function VideoEditor() {
             <div className="hidden sm:flex items-center space-x-2">
               <span className='text-sm text-muted-foreground'>{isDirty ? t('unsaved') : t('saved')}</span>
             </div>
-            <Button variant="outline" size="icon" onClick={handleSaveVideo}>
-                {isSaving ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                    <Save className="w-4 h-4" />
-                )}
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={handleSaveVideo}>
+                    {isSaving ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Save className="w-4 h-4" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className="flex items-center gap-2">
+                    <p>{t('save')}</p>
+                    <CommandShortcut>⌘S</CommandShortcut>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <Button onClick={() => setShowModalExport(true)}>
-                <Download className="w-4 h-4" />
-                {t('export-button')}
+              <Download className="w-4 h-4" />
+              {t('export-button')}
             </Button>
           </div>
         </div>
@@ -351,12 +696,18 @@ export default function VideoEditor() {
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="sequences">
-                      <Panel1 
+                      <Sequences 
                         sequences={video?.video?.sequences || []} 
                         selectedSequenceIndex={selectedSequenceIndex} 
                         setSelectedSequenceIndex={setSelectedSequenceIndex} 
                         handleWordInputChange={handleWordInputChange} 
-                        handleCutSequence={handleCutSequence} 
+                        handleWordAdd={handleWordAdd}
+                        handleWordDelete={handleWordDelete}
+                        handleCutSequence={handleCutSequence}
+                        onRegenerateAudio={handleRegenerateAudio}
+                        onDeleteSequence={handleDeleteSequence}
+                        onAddSequence={handleAddSequence}
+                        playerRef={playerRef}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
@@ -423,21 +774,19 @@ export default function VideoEditor() {
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="sequences">
-              <ScrollArea className="h-[calc(100vh-25rem)]">
-                {video?.video?.sequences && video?.video?.sequences.map((sequence, index) => (
-                  <Sequence 
-                    key={index}
-                    sequence={sequence} 
-                    index={index} 
-                    selectedIndex={selectedSequenceIndex} 
-                    setSelectedIndex={setSelectedSequenceIndex} 
-                    handleWordInputChange={handleWordInputChange} 
-                    onCutSequence={handleCutSequence}
-                    setActiveTabMobile={setActiveTabMobile}
-                    isMobile={isMobile}
-                  />
-                ))}
-              </ScrollArea>
+              <Sequences 
+                sequences={video?.video?.sequences || []} 
+                selectedSequenceIndex={selectedSequenceIndex} 
+                setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                handleWordInputChange={handleWordInputChange} 
+                handleWordAdd={handleWordAdd}
+                handleWordDelete={handleWordDelete}
+                handleCutSequence={handleCutSequence}
+                onRegenerateAudio={handleRegenerateAudio}
+                onDeleteSequence={handleDeleteSequence}
+                onAddSequence={handleAddSequence}
+                playerRef={playerRef}
+              />
             </TabsContent>
             <TabsContent value="subtitle">
               <ScrollArea className="h-[calc(100vh-25rem)] mx-2">

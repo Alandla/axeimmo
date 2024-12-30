@@ -40,7 +40,7 @@ export const MediaBackground = ({ sequences }: { sequences: any }) => {
                     );
 
                     element = (
-                        <Sequence key={index} from={currentFrame} durationInFrames={duration}>
+                        <Sequence key={index} premountFor={120} from={currentFrame} durationInFrames={duration}>
                             <AbsoluteFill>
                                 <Img
                                     src={file}
@@ -57,7 +57,7 @@ export const MediaBackground = ({ sequences }: { sequences: any }) => {
                 } else {
                     const file = media.video.link;
                     element = (
-                        <Sequence key={index} from={currentFrame} durationInFrames={duration}>
+                        <Sequence key={index} premountFor={120} from={currentFrame} durationInFrames={duration}>
                             <AbsoluteFill>
                                 <OffthreadVideo
                                     src={file}

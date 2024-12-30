@@ -11,9 +11,11 @@ export default function VideoPreview({ playerRef, video, isMobile }: { playerRef
 
     useEffect(() => {
         if (!video?.video?.sequences) return;
-
-        if (video.video.audio?.url) {
-          preloadAudio(video.video.audio.url);
+        
+        if (video.video.audio?.voices) {
+            video.video.audio.voices.forEach(voice => {
+                preloadAudio(voice.url);
+            });
         }
 
         if (video.video.audio?.music?.url) {

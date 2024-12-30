@@ -52,13 +52,15 @@ export interface ISequence {
   start: number;
   end: number;
   durationInFrames?: number;
-  audioUrl?: string;
+  audioIndex: number;
   keywords?: Array<{
     search: 'stock' | 'web';
     keyword: string;
     precision: 'hard' | 'normal' | 'easy';
   }>;
   media?: IMedia;
+  originalText?: string;
+  needsAudioRegeneration?: boolean;
 }
 
 export interface IVideo {
@@ -77,7 +79,15 @@ export interface IVideo {
     thumbnail: string;
     subtitle: any;
     audio?: {
-      url: string;
+      voices: {
+        url: string;
+        voiceId?: string;
+        index: number;
+        startOffset?: number;
+        start: number;
+        end: number;
+        durationInFrames: number;
+      }[];
       volume: number;
       music?: {
         name: string;

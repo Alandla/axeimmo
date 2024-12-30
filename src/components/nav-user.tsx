@@ -43,6 +43,7 @@ export function NavUser({
   
   const { isMobile } = useSidebar()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   let loading = false
 
   if (!user) {
@@ -59,12 +60,24 @@ export function NavUser({
     })
   }
 
+  const handleSettingsClick = () => {
+    setIsDrawerOpen(true)
+    setIsDropdownOpen(false)
+  }
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false)
+  }
+
   return (
     <>
-    <SettingsDrawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} user={user} />
+    <SettingsDrawer open={isDrawerOpen} onClose={handleDrawerClose} user={user} />
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu 
+          open={isDropdownOpen}
+          onOpenChange={setIsDropdownOpen}
+        >
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
@@ -112,18 +125,18 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onSelect={() => setIsDrawerOpen(true)}>
+              <DropdownMenuItem onSelect={handleSettingsClick}>
                 <Settings2 />
                 {t('user.settings')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={handleLogout}
+              onSelect={handleLogout}
               className={cn(
-                "flex items-center cursor-pointer",
-                "hover:bg-red-200 hover:text-red-600",
-                "focus:bg-red-200 focus:text-red-600"
+                "flex items-center cursor-pointer text-destructive",
+                "hover:bg-red-200 hover:text-destructive",
+                "focus:bg-red-200 focus:text-destructive"
               )}
             >
               <LogOut />
