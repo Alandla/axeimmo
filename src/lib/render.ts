@@ -1,4 +1,4 @@
-import { getRenderProgress, renderMediaOnLambda, speculateFunctionName } from '@remotion/lambda/client';
+import { getRenderProgress, renderMediaOnLambda, speculateFunctionName, renderStillOnLambda } from '@remotion/lambda/client';
 
 export const renderVideo = async (video: any) => {
     console.log("Rendering video, props:")
@@ -64,3 +64,30 @@ export const getProgress = async (renderId: string, bucketName: string) => {
     }
 
 }
+
+export const generateThumbnail = async (video: any) => {
+    try {
+        const result = await renderStillOnLambda({
+            region: "eu-west-3",
+            functionName: speculateFunctionName({
+                diskSizeInMb: 2048,
+                memorySizeInMb: 2048,
+                timeoutInSeconds: 60
+            }),
+            serveUrl: process.env.REMOTION_SERVE_URL || '',
+            composition: "videoGenerate",
+            scale: 0.5,
+            inputProps: {
+                data: video,
+            },
+            imageFormat: "jpeg",
+            frame: 10,
+            privacy: "public",
+        });
+
+        return result;
+    } catch (error) {
+        console.error("Error generating thumbnail:", error);
+        throw error;
+    }
+};

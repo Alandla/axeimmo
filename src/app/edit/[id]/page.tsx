@@ -88,22 +88,51 @@ export default function VideoEditor() {
     console.log("cutIndex", cutIndex)
   }
 
+  // Function to generate thumbnail through API
+  const generateThumbnailAsync = async () => {
+    try {
+      const thumbnail : any = await basicApiCall('/video/thumbnail', { video });
+      console.log("thumbnailUrl", thumbnail)
+      if (thumbnail && video) {
+        updateVideo({
+          ...video,
+          costToGenerate: video.costToGenerate + thumbnail.estimatedPrice,
+          video: {
+            ...video.video,
+            thumbnail: thumbnail.url
+          }
+        });
+        setIsDirty(false)
+      }
+    } catch (error) {
+      console.error("Failed to generate thumbnail:", error);
+    }
+  };
+
   const handleSaveVideo = async () => {
-    setIsSaving(true)
-    toast({
-      title: t('toast.title-saving'),
-      description: t('toast.description-saving'),
-      variant: 'loading'
-    })
-    await basicApiCall('/video/save', { video })
-    setIsDirty(false)
-    toast({
-      title: t('toast.title-saved'),
-      description: t('toast.description-saved'),
-      variant: 'confirm',
-    })
-    setIsSaving(false)
-  }
+    setIsSaving(true);
+    
+    try {
+
+      await basicApiCall('/video/save', { video, takeThumbnail: true });
+      
+      setIsDirty(false);
+      
+      toast({
+        title: t('toast.title-saved'),
+        description: t('toast.description-saved'),
+        variant: 'confirm',
+      });
+    } catch (error) {
+      toast({
+        title: t('toast.title-error'),
+        description: t('toast.description-save-error'),
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleSaveSubtitleStyle = async () => {
     try {

@@ -109,13 +109,43 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
           </div>
         )}
         {video.video?.thumbnail ? (
-          <Image
-            src={video.video.thumbnail}
-            alt={video.title || ''}
-            layout="fill"
-            objectFit="cover"
-            className={cn(isOutdated && "opacity-50")}
-          />
+          <div className="relative w-full h-full">
+            <div className="absolute inset-0 bg-black/90">
+              <Image
+                src={video.video.thumbnail}
+                alt=""
+                layout="fill"
+                objectFit="cover"
+                priority
+                className={cn(
+                  "blur-md scale-110",
+                  isOutdated && "opacity-50"
+                )}
+              />
+            </div>
+            <Image
+              src={video.video.thumbnail}
+              alt={video.title || ''}
+              layout="fill"
+              objectFit="contain"
+              priority
+              className={cn(
+                "relative z-10",
+                isOutdated && "opacity-50"
+              )}
+            />
+            {isOutdated ? (
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+                <p className="text-white text-sm text-center px-4">
+                  {t('video.outdated-help')}
+                </p>
+              </div>
+            ) : (
+              <Link href={`/edit/${video.id}`} className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+                <Pen className="text-white w-8 h-8" />
+              </Link>
+            )}
+          </div>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
             {isOutdated ? (
@@ -123,20 +153,20 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
             ) : (
               <VideoIcon className="w-12 h-12 text-gray-400" />
             )}
+            {isOutdated ? (
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+                <p className="text-white text-sm text-center px-4">
+                  {t('video.outdated-help')}
+                </p>
+              </div>
+            ) : (
+              <Link href={`/edit/${video.id}`} className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+                <Pen className="text-white w-8 h-8" />
+              </Link>
+            )}
           </div>
         )}
-        {isOutdated ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
-            <p className="text-white text-sm text-center px-4">
-              {t('video.outdated-help')}
-            </p>
-          </div>
-        ) : (
-          <Link href={`/edit/${video.id}`} className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
-            <Pen className="text-white w-8 h-8" />
-          </Link>
-        )}
-        <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 text-xs rounded-md">
+        <div className="absolute z-20 bottom-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 text-xs rounded-md">
           {formatDuration(video.video?.metadata?.audio_duration || 0)}
         </div>
       </div>

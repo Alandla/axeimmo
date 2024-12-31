@@ -26,6 +26,7 @@ import { Genre } from "../types/music";
 import { addMediasToSpace } from "../dao/spaceDao";
 import { IMediaSpace } from "../types/space";
 import { addVideoCountContact } from "../lib/loops";
+import { generateThumbnail } from "../lib/render";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -527,7 +528,37 @@ export const generateVideoTask = task({
       }
     }
 
-    await updateVideo(newVideo)
+    const thumbnail = await generateThumbnail(newVideo);
+
+    logger.info('Thumbnail URL', { thumbnail })
+
+    newVideo = {
+      ...newVideo,
+      costToGenerate: cost + thumbnail.estimatedPrice.accruedSoFar,
+      video: {
+        ...newVideo.video,
+        audio: {
+          voices: voices,
+          volume: 1,
+          music: videoMusic ? {
+            url: videoMusic.url,
+            volume: 0.07,
+            name: videoMusic.name,
+            genre: videoMusic.genre
+          } : undefined
+        },
+        thumbnail: thumbnail.url,
+        metadata: videoMetadata,
+        sequences,
+        avatar,
+        subtitle: {
+          name: subtitles[1].name,
+          style: subtitles[1].style,
+        }
+      }
+    }
+
+    newVideo = await updateVideo(newVideo)
 
     await addVideoCountContact(payload.userId)
 
