@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/src/lib/auth';
-import { updateVideo } from '@/src/dao/videoDao';
+import { getVideoById, updateVideo } from '@/src/dao/videoDao';
+import { generateThumbnail } from '@/src/lib/render';
+import { IVideo } from '@/src/types/video';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -13,9 +15,22 @@ export async function POST(req: NextRequest) {
 
   const params = await req.json();
 
-  const { video } = params;
+  const { video, takeThumbnail } = params;
 
   try {
+
+    if (takeThumbnail) {
+      const oldVideo = await getVideoById(video.id);
+
+      if (oldVideo && hasFirstSequenceChanged(oldVideo, video)) {
+        const thumbnail = await generateThumbnail(video);
+
+        if (thumbnail && video) {
+          video.costToGenerate += thumbnail.estimatedPrice.accruedSoFar;
+          video.video.thumbnail = thumbnail.url;
+        }
+      }
+    }
 
     await updateVideo(video);
 
@@ -25,3 +40,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Error saving video' }, { status: 500 })
   }
 }
+
+// New utility function to compare first sequences
+const hasFirstSequenceChanged = (oldVideo: IVideo, newVideo: IVideo): boolean => {
+  if (!oldVideo.video?.sequences[0] || !newVideo.video?.sequences[0]) return false;
+  
+  const oldSeq = oldVideo.video.sequences[0];
+  const newSeq = newVideo.video.sequences[0];
+  
+  // Compare relevant properties
+  return JSON.stringify({
+    text: oldSeq.text,
+    media: oldSeq.media,
+    words: oldSeq.words
+  }) !== JSON.stringify({
+    text: newSeq.text,
+    media: newSeq.media,
+    words: newSeq.words
+  });
+};

@@ -113,16 +113,9 @@ export default function VideoEditor() {
     setIsSaving(true);
     
     try {
-      const oldVideo = await basicApiGetCall<IVideo>(`/video/${id}`);
-      
-      // Check if first sequence has changed
-      if (video && hasFirstSequenceChanged(oldVideo, video)) {
-        // Launch thumbnail generation through API
-        await generateThumbnailAsync();
-      }
 
-      await basicApiCall('/video/save', { video });
-      console.log("video saved", video)
+      await basicApiCall('/video/save', { video, takeThumbnail: true });
+      
       setIsDirty(false);
       
       toast({
@@ -616,25 +609,6 @@ export default function VideoEditor() {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isDirty]); // Dépendances pour le useEffect
-
-  // New utility function to compare first sequences
-  const hasFirstSequenceChanged = (oldVideo: IVideo, newVideo: IVideo): boolean => {
-    if (!oldVideo.video?.sequences[0] || !newVideo.video?.sequences[0]) return false;
-    
-    const oldSeq = oldVideo.video.sequences[0];
-    const newSeq = newVideo.video.sequences[0];
-    
-    // Compare relevant properties
-    return JSON.stringify({
-      text: oldSeq.text,
-      media: oldSeq.media,
-      words: oldSeq.words
-    }) !== JSON.stringify({
-      text: newSeq.text,
-      media: newSeq.media,
-      words: newSeq.words
-    });
-  };
 
   return (
     <>
