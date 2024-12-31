@@ -7,7 +7,9 @@ const nextConfig = {
   images: {
     domains: [
       'files2.heygen.ai',
-      'images.pexels.com'
+      'images.pexels.com',
+      's3.eu-west-3.amazonaws.com',
+      'media.hoox.video'
     ],
   },
 };

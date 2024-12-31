@@ -88,22 +88,58 @@ export default function VideoEditor() {
     console.log("cutIndex", cutIndex)
   }
 
+  // Function to generate thumbnail through API
+  const generateThumbnailAsync = async () => {
+    try {
+      const thumbnail : any = await basicApiCall('/video/thumbnail', { video });
+      console.log("thumbnailUrl", thumbnail)
+      if (thumbnail && video) {
+        updateVideo({
+          ...video,
+          costToGenerate: video.costToGenerate + thumbnail.estimatedPrice,
+          video: {
+            ...video.video,
+            thumbnail: thumbnail.url
+          }
+        });
+        setIsDirty(false)
+      }
+    } catch (error) {
+      console.error("Failed to generate thumbnail:", error);
+    }
+  };
+
   const handleSaveVideo = async () => {
-    setIsSaving(true)
-    toast({
-      title: t('toast.title-saving'),
-      description: t('toast.description-saving'),
-      variant: 'loading'
-    })
-    await basicApiCall('/video/save', { video })
-    setIsDirty(false)
-    toast({
-      title: t('toast.title-saved'),
-      description: t('toast.description-saved'),
-      variant: 'confirm',
-    })
-    setIsSaving(false)
-  }
+    setIsSaving(true);
+    
+    try {
+      const oldVideo = await basicApiGetCall<IVideo>(`/video/${id}`);
+      
+      // Check if first sequence has changed
+      if (video && hasFirstSequenceChanged(oldVideo, video)) {
+        // Launch thumbnail generation through API
+        await generateThumbnailAsync();
+      }
+
+      await basicApiCall('/video/save', { video });
+      console.log("video saved", video)
+      setIsDirty(false);
+      
+      toast({
+        title: t('toast.title-saved'),
+        description: t('toast.description-saved'),
+        variant: 'confirm',
+      });
+    } catch (error) {
+      toast({
+        title: t('toast.title-error'),
+        description: t('toast.description-save-error'),
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleSaveSubtitleStyle = async () => {
     try {
@@ -580,6 +616,25 @@ export default function VideoEditor() {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isDirty]); // Dépendances pour le useEffect
+
+  // New utility function to compare first sequences
+  const hasFirstSequenceChanged = (oldVideo: IVideo, newVideo: IVideo): boolean => {
+    if (!oldVideo.video?.sequences[0] || !newVideo.video?.sequences[0]) return false;
+    
+    const oldSeq = oldVideo.video.sequences[0];
+    const newSeq = newVideo.video.sequences[0];
+    
+    // Compare relevant properties
+    return JSON.stringify({
+      text: oldSeq.text,
+      media: oldSeq.media,
+      words: oldSeq.words
+    }) !== JSON.stringify({
+      text: newSeq.text,
+      media: newSeq.media,
+      words: newSeq.words
+    });
+  };
 
   return (
     <>
