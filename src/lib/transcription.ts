@@ -87,7 +87,6 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
   for (let i = 0; i < sentences.length; i++) {
     // Ajouter les métadonnées de la transcription courante
     const currentMetadata = sentences[i].transcription.metadata;
-    combinedMetadata.audio_duration += currentMetadata.audio_duration;
     combinedMetadata.billing_time += currentMetadata.billing_time;
     combinedMetadata.transcription_time += currentMetadata.transcription_time;
 
@@ -120,8 +119,15 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
 
   }
 
+  const sequences = adjustSequenceTimings(finalSequences);
+
+  if (sequences.length > 0) {
+    const lastSequence = sequences[sequences.length - 1];
+    combinedMetadata.audio_duration = lastSequence.end;
+  }
+
   return {
-    sequences: adjustSequenceTimings(finalSequences, combinedMetadata.audio_duration),
+    sequences: sequences,
     videoMetadata: combinedMetadata
   };
 }
@@ -141,7 +147,7 @@ function createSequence(words: IWord[], sentenceIndex: number): ISequence {
   };
 }
 
-export function adjustSequenceTimings(sequences: ISequence[], audioDuration: number): ISequence[] {
+export function adjustSequenceTimings(sequences: ISequence[]): ISequence[] {
   return sequences.map((sequence, index, allSequences) => {
     let durationTotal = 0;
     const words = [...sequence.words];
@@ -161,9 +167,8 @@ export function adjustSequenceTimings(sequences: ISequence[], audioDuration: num
       lastWord.end = nextSequenceStart;
       sequence.end = nextSequenceStart;
     } else {
-      // Si c'est la dernière séquence, utiliser la durée totale de l'audio
-      lastWord.end = audioDuration;
-      sequence.end = audioDuration;
+      lastWord.end += 0.5;
+      sequence.end += 0.5;
     }
     
     lastWord.durationInFrames = timeToFrames(lastWord.end - lastWord.start);
