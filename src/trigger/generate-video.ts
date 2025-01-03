@@ -218,8 +218,8 @@ export const generateVideoTask = task({
       let processedTranscriptions = 0;
       
       // On utilise un seul wait.for() pour contrôler le rythme global
-      for (let i = 0; i < sentences.length; i += 3) {
-        const batch = sentences.slice(i, Math.min(i + 3, sentences.length));
+      for (let i = 0; i < sentences.length; i += 10) {
+        const batch = sentences.slice(i, Math.min(i + 10, sentences.length));
         
         const transcriptionPromises = batch.map(async (sentence) => {
           if (!sentence.audioUrl) throw new Error("Audio URL missing");

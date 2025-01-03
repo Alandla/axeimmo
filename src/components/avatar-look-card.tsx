@@ -71,7 +71,6 @@ export function AvatarLookCard({ look }: AvatarLookCardProps) {
           <div 
             className="mb-4 overflow-x-auto scrollbar-hide"
             onWheel={(e) => {
-              e.preventDefault();
               e.currentTarget.scrollLeft += e.deltaY;
             }}
           >

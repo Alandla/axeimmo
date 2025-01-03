@@ -439,7 +439,14 @@
         "comfortable": "Comfortable",
         "adventurous": "Adventurous",
         "lying": "Lying",
-        "educational": "Educational"
+        "educational": "Educational",
+        "UGC": "UGC",
+        "automotive": "Automotive",
+        "medical": "Medical",
+        "fitness": "Fitness",
+        "microphone": "Microphone",
+        "urban": "Urban",
+        "nature": "Nature"
       },
       "place": {
         "bedroom": "Bedroom",
@@ -468,7 +475,17 @@
         "gym": "Gym",
         "mountain": "Mountain",
         "sofa-casual": "Sofa casual",
-        "yoga-studio": "Yoga studio"
+        "yoga-studio": "Yoga studio",
+        "park": "Park",
+        "car": "Car",
+        "room": "Room",
+        "white-wall": "White wall",
+        "black-wall": "Black wall",
+        "salon": "Salon",
+        "kitchen": "Kitchen",
+        "garden": "Garden",
+        "street": "Street",
+        "balcony": "Balcony"
       },
       "gender": {
         "male": "Male",

@@ -21,7 +21,7 @@ function calculateXOffset(position: number): number {
  */
 export async function generateAvatarVideo(avatar: AvatarLook, audioUrl: string) {
   const xOffset = calculateXOffset(avatar.settings?.position ?? 50);
-  
+
   const response = await axios.post(
     'https://api.heygen.com/v2/video/generate',
     {
@@ -31,7 +31,7 @@ export async function generateAvatarVideo(avatar: AvatarLook, audioUrl: string) 
             type: "avatar",
             avatar_id: avatar.id,
             avatar_style: "normal",
-            scale: 3.17,
+            scale: avatar.format === 'horizontal' ? 3.17 : 1,
             offset: {
               x: xOffset,
               y: 0.0
