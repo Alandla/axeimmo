@@ -206,8 +206,25 @@ export function AvatarGridComponent() {
                 setSelectedGender(value)
                 handleFilters(filteredAvatars)
               }}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Genre" />
+                <SelectTrigger className="w-[100px] sm:w-[180px]">
+                  <SelectValue>
+                    {selectedGender === 'all' ? (
+                      <div className="flex items-center">
+                        <IconGenderMaleFemale className="w-4 h-4" />
+                        <span className="hidden sm:inline ml-1">{tCommon('all-m')}</span>
+                      </div>
+                    ) : selectedGender === 'male' ? (
+                      <div className="flex items-center">
+                        <IconGenderMale className="w-4 h-4 text-blue-500" />
+                        <span className="hidden sm:inline ml-1">{t('gender.male')}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center">
+                        <IconGenderFemale className="w-4 h-4 text-pink-500" />
+                        <span className="hidden sm:inline ml-1">{t('gender.female')}</span>
+                      </div>
+                    )}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">

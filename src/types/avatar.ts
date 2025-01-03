@@ -16,6 +16,7 @@ export type AvatarLook = {
     thumbnail?: string
     previewUrl?: string
     videoUrl?: string
+    format?: 'vertical' | 'horizontal'
     settings?: {
 		position: number
 	}

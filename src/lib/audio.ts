@@ -44,7 +44,7 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
 
     let updatedSequences = updateSequenceTimings(relatedSequences, transcription.transcription.utterances[0].words);
     const offset = relatedSequences[0].start;
-    updatedSequences = adjustSequenceTimings(updatedSequences, transcription.metadata.audio_duration + offset);
+    updatedSequences = adjustSequenceTimings(updatedSequences);
 
     let newSequences = [...updatedVideo?.video?.sequences || []];
     

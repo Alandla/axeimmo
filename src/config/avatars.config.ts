@@ -19,7 +19,7 @@ export const avatars: Avatar[] = [
             },
             {
                 id: 'Gala_standing_businesssofa_front_close',
-                name: 'Gala business-sofa Front 2',
+                name: 'Gala Business Sofa Front 2',
                 place: 'business-sofa',
                 tags: ['professional'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/8352487eb0e846449665f25823c2ea0a_38970/preview_talk_1.webp',
@@ -1606,5 +1606,1759 @@ export const avatars: Avatar[] = [
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/c05c1d7066a145189ac40c91e8c1faa6_39350/preview_video_talk_5.mp4'
             }
         ]
-    }
+    },
+    {
+        id: '41',
+        name: 'Oxana',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'athletic', 'wellness'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_target.webp',
+        looks: [
+            {
+                id: 'Oxana_standing_gym_front',
+                name: 'Oxana Gym Front 2',
+                place: 'gym',
+                tags: ['standing', 'athletic', 'energetic'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_video_target.mp4'
+            },
+            {
+                id: 'Oxana_sitting_gym_front',
+                name: 'Oxana Gym Front',
+                place: 'gym',
+                tags: ['sitting', 'athletic', 'focused'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/77c8e6b6c3174f1c91f9f6b4f3c07c3a_38710/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/77c8e6b6c3174f1c91f9f6b4f3c07c3a_38710/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Oxana_standing_office_front',
+                name: 'Oxana Office Front 2',
+                place: 'office',
+                tags: ['standing', 'professional', 'confident'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/316476fb812b42cfadd138761e861ca9_38070/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/316476fb812b42cfadd138761e861ca9_38070/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Oxana_sitting_office_front',
+                name: 'Oxana Office Front',
+                place: 'office',
+                tags: ['sitting', 'professional', 'executive'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/0fbdc079af804651aeef77c68b20a70f_38070/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/0fbdc079af804651aeef77c68b20a70f_38070/preview_video_target.mp4'
+            },
+            {
+                id: 'Oxana_standing_sofa_front',
+                name: 'Oxana Sofa Front 2',
+                place: 'sofa',
+                tags: ['standing', 'casual', 'welcoming'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/c2d94b111f744c9b9c782f6b304bd2aa_38280/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/c2d94b111f744c9b9c782f6b304bd2aa_38280/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Oxana_sitting_sofa_front',
+                name: 'Oxana Sofa Front',
+                place: 'sofa',
+                tags: ['sitting', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/fefb436423624173b15b894a6040e034_38280/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/fefb436423624173b15b894a6040e034_38280/preview_video_target.mp4'
+            },
+            {
+                id: 'Oxana_standing_yoga_front',
+                name: 'Oxana Yoga Front 2',
+                place: 'yoga-studio',
+                tags: ['standing', 'wellness', 'mindful'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/1eb7937698e5413dab36e496121dc4b5_38670/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/1eb7937698e5413dab36e496121dc4b5_38670/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Oxana_sitting_yoga_front',
+                name: 'Oxana Yoga Front',
+                place: 'yoga-studio',
+                tags: ['sitting', 'wellness', 'peaceful'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/dff28f22812d44c0be4ec48cf29198f7_38670/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/dff28f22812d44c0be4ec48cf29198f7_38670/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '42',
+        name: 'Patrizio',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'versatile', 'educational'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/46c6e9fe736d40d4bf8b89baafede4a5_38860/preview_talk_1.webp',
+        looks: [
+            {
+                id: 'Patrizio_standing_businesstraining_front',
+                name: 'Patrizio Business Training Front',
+                place: 'training-room',
+                tags: ['standing', 'professional', 'educational'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/46c6e9fe736d40d4bf8b89baafede4a5_38860/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/46c6e9fe736d40d4bf8b89baafede4a5_38860/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Patrizio_sitting_office_front',
+                name: 'Patrizio Office Front',
+                place: 'office',
+                tags: ['sitting', 'professional', 'executive'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/c8d2f5b65d084dea9004a1a1bfc17351_38860/preview_talk_2.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/c8d2f5b65d084dea9004a1a1bfc17351_38860/preview_video_talk_2.mp4'
+            },
+            {
+                id: 'Patrizio_sitting_sofa_front',
+                name: 'Patrizio Sofa Front',
+                place: 'sofa',
+                tags: ['sitting', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/94cf5b24a14f4b898643cf7f0f43fbe4_38860/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/94cf5b24a14f4b898643cf7f0f43fbe4_38860/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '43',
+        name: 'Piper',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['professional', 'educational', 'indoor', 'versatile'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/0dcdbd20783f4a2a9333bfbd7cce304e_38930/preview_talk_1.webp',
+        looks: [
+            {
+                id: 'Piper_sitting_businesssofa_front',
+                name: 'Piper Business Sofa Front',
+                place: 'business-sofa',
+                tags: ['sitting', 'professional', 'executive'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/0dcdbd20783f4a2a9333bfbd7cce304e_38930/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/0dcdbd20783f4a2a9333bfbd7cce304e_38930/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Piper_standing_education_front',
+                name: 'Piper Education Front',
+                place: 'education',
+                tags: ['standing', 'educational', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/2b48addfc8c6454eab8beb14c004e3eb_38930/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/2b48addfc8c6454eab8beb14c004e3eb_38930/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '44',
+        name: 'Rasmus',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['indoor', 'casual', 'versatile', 'approachable'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/37adfc229dae4acc929ba755bf88a665_38130/preview_talk_1.webp',
+        looks: [
+            {
+                id: 'Rasmus_sitting_lounge_front',
+                name: 'Rasmus Lounge Front 2',
+                place: 'lounge',
+                tags: ['sitting', 'casual', 'comfortable'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/37adfc229dae4acc929ba755bf88a665_38130/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/37adfc229dae4acc929ba755bf88a665_38130/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Rasmus_standing_lounge_front',
+                name: 'Rasmus Lounge Front',
+                place: 'lounge',
+                tags: ['standing', 'casual', 'welcoming'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/ad3bfd21175b46cf88b63c016e7aeac0_38130/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/ad3bfd21175b46cf88b63c016e7aeac0_38130/preview_video_target.mp4'
+            },
+            {
+                id: 'Rasmus_standing_sofa_front',
+                name: 'Rasmus Sofa Front 2',
+                place: 'sofa',
+                tags: ['standing', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/9e6f4d1c42a04599b6a743f2c89920b0_37970/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/9e6f4d1c42a04599b6a743f2c89920b0_37970/preview_video_target.mp4'
+            },
+            {
+                id: 'Rasmus_sitting_sofa_front',
+                name: 'Rasmus Sofa Front',
+                place: 'sofa',
+                tags: ['sitting', 'casual', 'comfortable'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/4113768e26354c7199130d8219517c2c_37970/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/4113768e26354c7199130d8219517c2c_37970/preview_video_talk_1.mp4'
+            }
+        ]
+    },
+    {
+        id: '45',
+        name: 'Ren',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['professional', 'versatile', 'indoor', 'approachable'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/65d19cdc69434a4797599255a6fdcba9_37790/preview_target.webp',
+        looks: [
+            {
+                id: 'Ren_sitting_office_front',
+                name: 'Ren Office Front 2',
+                place: 'office',
+                tags: ['sitting', 'professional', 'executive'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/65d19cdc69434a4797599255a6fdcba9_37790/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/65d19cdc69434a4797599255a6fdcba9_37790/preview_video_target.mp4'
+            },
+            {
+                id: 'Ren_standing_office_front',
+                name: 'Ren Office Front',
+                place: 'office',
+                tags: ['standing', 'professional', 'confident'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/11e57f2100ae4fc4b97cb99e7d23ad6a_37790/preview_talk_6.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/11e57f2100ae4fc4b97cb99e7d23ad6a_37790/preview_video_talk_6.mp4'
+            },
+            {
+                id: 'Ren_sitting_sofabusiness_front',
+                name: 'Ren Sofa Business Front',
+                place: 'sofa-business',
+                tags: ['sitting', 'professional', 'welcoming'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/21d6f432bc3a44baa5fb2612d1f4e600_37570/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/21d6f432bc3a44baa5fb2612d1f4e600_37570/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Ren_sitting_sofacasual_front',
+                name: 'Ren Sofa Casual Front 2',
+                place: 'sofa-casual',
+                tags: ['sitting', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/a3b007fa40a5427fbc92a1f1c3b18ca6_37820/preview_talk_2.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/a3b007fa40a5427fbc92a1f1c3b18ca6_37820/preview_video_talk_2.mp4'
+            },
+            {
+                id: 'Ren_standing_sofacasual_front',
+                name: 'Ren Sofa Casual Front',
+                place: 'sofa-casual',
+                tags: ['standing', 'casual', 'comfortable'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/18baef94e29f4f5b8d61e306437e50bf_37820/preview_talk_3.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/18baef94e29f4f5b8d61e306437e50bf_37820/preview_video_talk_3.mp4'
+            }
+        ]
+    },
+    {
+        id: '46',
+        name: 'Riley',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'casual', 'versatile'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/f01b66bbb9f541bc9eb296e04513584e_39170/preview_talk_1.webp',
+        looks: [
+            {
+                id: 'Riley_siting_casual_front',
+                name: 'Riley Casual Front',
+                place: 'casual',
+                tags: ['sitting', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/f01b66bbb9f541bc9eb296e04513584e_39170/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/f01b66bbb9f541bc9eb296e04513584e_39170/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Riley_sitting_office_front',
+                name: 'Riley Office Front',
+                place: 'office',
+                tags: ['sitting', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/f850e87f38bf4643ac17dadd574dc557_39170/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/f850e87f38bf4643ac17dadd574dc557_39170/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '47',
+        name: 'Roman',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['outdoor', 'athletic', 'energetic', 'fitness'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_target.webp',
+        looks: [
+            {
+                id: 'Roman_standing_outdoorsport_front',
+                name: 'Roman Outdoor Sport Front',
+                place: 'outdoor-sport',
+                tags: ['standing', 'athletic', 'energetic'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '48',
+        name: 'Scarlett',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['indoor', 'wellness', 'versatile', 'casual'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/3d5904b6fef640eebda2a4deea943492_39070/preview_talk_1.webp',
+        looks: [
+            {
+                id: 'Scarlett_sitting_couch2_front',
+                name: 'Scarlett Couch Front 2',
+                place: 'couch',
+                tags: ['sitting', 'casual', 'comfortable'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/3d5904b6fef640eebda2a4deea943492_39070/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/3d5904b6fef640eebda2a4deea943492_39070/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Scarlett_sitting_couch_front',
+                name: 'Scarlett Couch Front',
+                place: 'couch',
+                tags: ['sitting', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/d5920bf0d18a42148c6e40496df82108_39070/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/d5920bf0d18a42148c6e40496df82108_39070/preview_video_target.mp4'
+            },
+            {
+                id: 'Scarlett_siiting_fireplace_front',
+                name: 'Scarlett Fireplace Front',
+                place: 'fireplace',
+                tags: ['sitting', 'cozy', 'warm'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/47ce0a4dcbf34c99a9073b03dd88c2d8_39070/preview_talk_3.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/47ce0a4dcbf34c99a9073b03dd88c2d8_39070/preview_video_talk_3.mp4'
+            },
+            {
+                id: 'Scarlett_standing_hall_front',
+                name: 'Scarlett Hall Front',
+                place: 'hall',
+                tags: ['standing', 'welcoming', 'elegant'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/761c137b109e49a69991344904e2bf0a_39070/preview_talk_4.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/761c137b109e49a69991344904e2bf0a_39070/preview_video_talk_4.mp4'
+            },
+            {
+                id: 'Scarlett_sitting_yoga_front',
+                name: 'Scarlett Yoga Front',
+                place: 'yoga-studio',
+                tags: ['sitting', 'wellness', 'mindful'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/946f804908de47fda0b9bb71fc266e9e_39070/preview_talk_7.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/946f804908de47fda0b9bb71fc266e9e_39070/preview_video_talk_7.mp4'
+            }
+        ]
+    },
+    {
+        id: '49',
+        name: 'Sabine',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'executive'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/09ffd4a3fba04940a5ee89df873d1eed_37120/preview_talk_3.webp',
+        looks: [
+            {
+                id: 'Sabine_sitting_office_front',
+                name: 'Sabine Office Front 2',
+                place: 'office',
+                tags: ['sitting', 'professional', 'executive'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/09ffd4a3fba04940a5ee89df873d1eed_37120/preview_talk_3.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/09ffd4a3fba04940a5ee89df873d1eed_37120/preview_video_talk_3.mp4'
+            },
+            {
+                id: 'Sabine_standing_office_front',
+                name: 'Sabine Office Front',
+                place: 'office',
+                tags: ['standing', 'professional', 'confident'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/884f8cb7bf7f4be295519756d601e1c9_37120/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/884f8cb7bf7f4be295519756d601e1c9_37120/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '50',
+        name: 'Silas',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'business'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/a1ed8c71e4bf4e6cb9071d2b7cd71e4e_45660/preview_talk_1.webp',
+        looks: [
+            {
+                id: 'Silas_CustomerSupport_public',
+                name: 'Silas Customer Support',
+                place: 'customer-support',
+                tags: ['professional', 'helpful'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/a1ed8c71e4bf4e6cb9071d2b7cd71e4e_45660/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/a1ed8c71e4bf4e6cb9071d2b7cd71e4e_45660/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'SilasHR_public',
+                name: 'Silas HR',
+                place: 'hr-office',
+                tags: ['professional', 'business', 'corporate'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/582ee8fe072a48fda3bc68241aeff660_45660/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/582ee8fe072a48fda3bc68241aeff660_45660/preview_video_target.mp4'
+            },
+            {
+                id: 'Silas_sitting_lounge_front',
+                name: 'Silas Lounge Front',
+                place: 'lounge',
+                tags: ['sitting', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/896caa087e3d49ffa2e6d005976afa92_38940/preview_talk_3.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/896caa087e3d49ffa2e6d005976afa92_38940/preview_video_talk_3.mp4'
+            }
+        ]
+    },
+    {
+        id: '51',
+        name: 'Teodor',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'versatile', 'business'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/3c8a6b980667470da7417a65578438b6_38030/preview_talk_1.webp',
+        looks: [
+            {
+                id: 'Teodor_standing_office_front',
+                name: 'Teodor Office Front 2',
+                place: 'office',
+                tags: ['standing', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/3c8a6b980667470da7417a65578438b6_38030/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/3c8a6b980667470da7417a65578438b6_38030/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Teodor_sitting_office_front',
+                name: 'Teodor Office Front',
+                place: 'office',
+                tags: ['sitting', 'professional', 'executive'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/35eb79d55dae43c682a1226352b64553_38030/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/35eb79d55dae43c682a1226352b64553_38030/preview_video_target.mp4'
+            },
+            {
+                id: 'Teodor_standing_sofa_front',
+                name: 'Teodor Sofa Front 2',
+                place: 'sofa',
+                tags: ['standing', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/8010656f2fcb4da7bcd5ace4e71afa5e_38240/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/8010656f2fcb4da7bcd5ace4e71afa5e_38240/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Teodor_sitting_sofa_front',
+                name: 'Teodor Sofa Front',
+                place: 'sofa',
+                tags: ['sitting', 'casual', 'comfortable'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/a5007e956bf44558b1f1a031735c2f20_38240/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/a5007e956bf44558b1f1a031735c2f20_38240/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '52',
+        name: 'Timothy',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'casual', 'versatile'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/b2e3b88f48fe43a0a7f303f8ad6b08c2_39150/preview_talk_1.webp',
+        looks: [
+            {
+                id: 'Timothy_sitting_casual_front',
+                name: 'Timothy Casual Front',
+                place: 'casual',
+                tags: ['sitting', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/b2e3b88f48fe43a0a7f303f8ad6b08c2_39150/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/b2e3b88f48fe43a0a7f303f8ad6b08c2_39150/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Timothy_sitting_office_front',
+                name: 'Timothy Office Front',
+                place: 'office',
+                tags: ['sitting', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/8208663e1ab7412faa52ed38b4504442_39150/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/8208663e1ab7412faa52ed38b4504442_39150/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '53',
+        name: 'Veit',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'versatile', 'business'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/ee998336b07d4564aee85884dc0b402f_37160/preview_talk_3.webp',
+        looks: [
+            {
+                id: 'Veit_standing_office_front',
+                name: 'Veit Office Front',
+                place: 'office',
+                tags: ['standing', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/ee998336b07d4564aee85884dc0b402f_37160/preview_talk_3.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/ee998336b07d4564aee85884dc0b402f_37160/preview_video_talk_3.mp4'
+            },
+            {
+                id: 'Veit_sitting_sofa_front',
+                name: 'Veit Sofa Front',
+                place: 'sofa',
+                tags: ['sitting', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/be4edc2cba0c4723ac6145dfa2f7e37c_37160/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/be4edc2cba0c4723ac6145dfa2f7e37c_37160/preview_video_talk_1.mp4'
+            }
+        ]
+    },
+    {
+        id: '54',
+        name: 'Vernon',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'business'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/de79ab31586142f993dced04e5a29e7b_37680/preview_talk_2.webp',
+        looks: [
+            {
+                id: 'Vemon_standing_office_front',
+                name: 'Vernon Office Front 2',
+                place: 'office',
+                tags: ['standing', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/de79ab31586142f993dced04e5a29e7b_37680/preview_talk_2.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/de79ab31586142f993dced04e5a29e7b_37680/preview_video_talk_2.mp4'
+            },
+            {
+                id: 'Vemon_sitting_office_front',
+                name: 'Vernon Office Front',
+                place: 'office',
+                tags: ['sitting', 'professional', 'executive'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/9735e871f87648598d735dfda878775a_37680/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/9735e871f87648598d735dfda878775a_37680/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '55',
+        name: 'Verena',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'versatile', 'business'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/392967d6c52642a4968a8dd82572bd6c_37130/preview_target.webp',
+        looks: [
+            {
+                id: 'Verena_standing_office_front',
+                name: 'Verena Office Front',
+                place: 'office',
+                tags: ['standing', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/392967d6c52642a4968a8dd82572bd6c_37130/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/392967d6c52642a4968a8dd82572bd6c_37130/preview_video_target.mp4'
+            },
+            {
+                id: 'Verena_sitting_sofa_front',
+                name: 'Verena Sofa Front',
+                place: 'sofa',
+                tags: ['sitting', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/d42bc057bdbb44aabb7db78121032510_37130/preview_talk_2.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/d42bc057bdbb44aabb7db78121032510_37130/preview_video_talk_2.mp4'
+            }
+        ]
+    },
+    {
+        id: '56',
+        name: 'Vince',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'versatile', 'business', 'casual'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/c95be48f8f6e41bf83fa6e41212decbd_38890/preview_talk_2.webp',
+        looks: [
+            {
+                id: 'Vince_sitting_businesssofa_front',
+                name: 'Vince Business Sofa Front',
+                place: 'business-sofa',
+                tags: ['sitting', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/c95be48f8f6e41bf83fa6e41212decbd_38890/preview_talk_2.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/c95be48f8f6e41bf83fa6e41212decbd_38890/preview_video_talk_2.mp4'
+            },
+            {
+                id: 'Vince_standing_businesstraining_front',
+                name: 'Vince Business Training Front',
+                place: 'training-room',
+                tags: ['standing', 'professional', 'educational'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/0734f4397d5d45b380befb3aa5e22366_38890/preview_talk_3.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/0734f4397d5d45b380befb3aa5e22366_38890/preview_video_talk_3.mp4'
+            },
+            {
+                id: 'Vince_standing_sofacasual_front',
+                name: 'Vince Sofa Casual Front 2',
+                place: 'sofa-casual',
+                tags: ['standing', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/995711537c174575901529c0c235a061_38890/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/995711537c174575901529c0c235a061_38890/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Vince_sitting_sofacasual_front',
+                name: 'Vince Sofa Casual Front',
+                place: 'sofa-casual',
+                tags: ['sitting', 'casual', 'comfortable'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/cca4cbbd012b4f0e899c73d25e8bd192_38890/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/cca4cbbd012b4f0e899c73d25e8bd192_38890/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '57',
+        name: 'Martina',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'versatile', 'business'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/25257e48e8034131a3a055b234cd4683_38090/preview_talk_1.webp',
+        looks: [
+            {
+                id: 'Martina_standing_office_front',
+                name: 'Martina Office Front 2',
+                place: 'office',
+                tags: ['standing', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/25257e48e8034131a3a055b234cd4683_38090/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/25257e48e8034131a3a055b234cd4683_38090/preview_video_talk_1.mp4'
+            },
+            {
+                id: 'Martina_sitting_office_front',
+                name: 'Martina Office Front',
+                place: 'office',
+                tags: ['sitting', 'professional', 'executive'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/9712d1bcebed4c5d9869d36af796a532_38090/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/9712d1bcebed4c5d9869d36af796a532_38090/preview_video_target.mp4'
+            },
+            {
+                id: 'Martina_standing_sofa_front',
+                name: 'Martina Sofa Front 2',
+                place: 'sofa',
+                tags: ['standing', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/48b6894526c84bdda40330d3325df5fa_38790/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/48b6894526c84bdda40330d3325df5fa_38790/preview_video_target.mp4'
+            },
+            {
+                id: 'Martina_sitting_sofa_front',
+                name: 'Martina Sofa Front',
+                place: 'sofa',
+                tags: ['sitting', 'casual', 'comfortable'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/fd17e321d8bb460487ab34acf75eeae7_38300/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/fd17e321d8bb460487ab34acf75eeae7_38300/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '58',
+        name: 'Ann',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['indoor', 'professional', 'versatile', 'medical', 'casual'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/75e0a87b7fd94f0981ff398b593dd47f_45570/preview_talk_4.webp',
+        looks: [
+            {
+                id: 'Ann_Therapist_public',
+                name: 'Ann Therapist',
+                place: 'cabinet',
+                tags: ['standing', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/75e0a87b7fd94f0981ff398b593dd47f_45570/preview_talk_4.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/75e0a87b7fd94f0981ff398b593dd47f_45570/preview_video_talk_4.mp4'
+            },
+            {
+                id: 'Ann_Doctor_Standing2_public',
+                name: 'Ann Doctor Standing',
+                place: 'cabinet',
+                tags: ['standing', 'professional', 'medical'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/699a4c2995914d39b2cb311a930d7720_45570/preview_talk_3.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/699a4c2995914d39b2cb311a930d7720_45570/preview_video_talk_3.mp4'
+            },
+            {
+                id: 'Ann_Doctor_Sitting_public',
+                name: 'Ann Doctor Sitting',
+                place: 'cabinet',
+                tags: ['sitting', 'professional', 'medical'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/26de369b2d4443e586dedf27af1e0c1d_45570/preview_talk_1.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/26de369b2d4443e586dedf27af1e0c1d_45570/preview_video_talk_1.mp4'
+            }
+        ]
+    },
+    {
+        id: '59',
+        name: 'Ellie',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'sitting', 'casual'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/113eece852cd4d0eb70cfdfa612dd04b/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '113eece852cd4d0eb70cfdfa612dd04b',
+                name: 'Ellie Room',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'sitting', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/113eece852cd4d0eb70cfdfa612dd04b/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/113eece852cd4d0eb70cfdfa612dd04b/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'aa1c5c25306e4eccab0fa84f09b7e02c',
+                name: 'Ellie Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'sitting', 'outdoor'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/aa1c5c25306e4eccab0fa84f09b7e02c/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/aa1c5c25306e4eccab0fa84f09b7e02c/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'ac940201c32c4629aab9c926e4cd633b',
+                name: 'Ellie',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'standing', 'indoor'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/ac940201c32c4629aab9c926e4cd633b/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/ac940201c32c4629aab9c926e4cd633b/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '4355bd9b6b584276a0e13ee8bc560d91',
+                name: 'Ellie Room 2',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'standing'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/4355bd9b6b584276a0e13ee8bc560d91/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/4355bd9b6b584276a0e13ee8bc560d91/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '226a9dddcf394d14b4e9ca3a818ece29',
+                name: 'Ellie Headphone',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'sitting'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/226a9dddcf394d14b4e9ca3a818ece29/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/226a9dddcf394d14b4e9ca3a818ece29/full/2.2/preview_video_target.mp4'
+            },
+        ]
+    },
+    {
+        id: '60',
+        name: 'Nash',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'microphone'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/36818e88569b4df68fc1d1310bf20c42/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '36818e88569b4df68fc1d1310bf20c42',
+                name: 'Nash Microphone',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'microphone'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/36818e88569b4df68fc1d1310bf20c42/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/36818e88569b4df68fc1d1310bf20c42/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '9f7d0c9b13094fce8ea937568fb42409',
+                name: 'Nash',
+                place: 'outdoor',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/9f7d0c9b13094fce8ea937568fb42409/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/9f7d0c9b13094fce8ea937568fb42409/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '82452299a3674b0ab009ea8224273284',
+                name: 'Nash',
+                place: 'outdoor',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/82452299a3674b0ab009ea8224273284/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/82452299a3674b0ab009ea8224273284/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '17f6e526119b434e9099d49bc3e76f0e',
+                name: 'Nash',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/17f6e526119b434e9099d49bc3e76f0e/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/17f6e526119b434e9099d49bc3e76f0e/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'ae8df65281314abeb547a14687764e58',
+                name: 'Nash Microphone Outdoor',
+                place: 'outdoor',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'microphone'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/ae8df65281314abeb547a14687764e58/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/ae8df65281314abeb547a14687764e58/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '61',
+        name: 'Avery',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'professional'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/de3a4df978294974aeecba80a4b5e393/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: 'de3a4df978294974aeecba80a4b5e393',
+                name: 'Avery salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/de3a4df978294974aeecba80a4b5e393/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/de3a4df978294974aeecba80a4b5e393/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'eacc40bd7e64472786393f78b3353a55',
+                name: 'Avery salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'comfortable'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/eacc40bd7e64472786393f78b3353a55/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/eacc40bd7e64472786393f78b3353a55/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '7e41675b2f8144d5bf998b8e48400260',
+                name: 'Avery kitchen',
+                place: 'kitchen',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/7e41675b2f8144d5bf998b8e48400260/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/7e41675b2f8144d5bf998b8e48400260/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '8a99c97065274f65b1b32bc16a9afa2a',
+                name: 'Avery',
+                place: 'office',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional', 'business'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/8a99c97065274f65b1b32bc16a9afa2a/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/8a99c97065274f65b1b32bc16a9afa2a/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '18d5a9c4fbfe41978f15ee0e6f60f72f',
+                name: 'Avery garden',
+                place: 'garden',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/18d5a9c4fbfe41978f15ee0e6f60f72f/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/18d5a9c4fbfe41978f15ee0e6f60f72f/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '62',
+        name: 'Jayla',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'professional', 'casual', 'microphone'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/9453f7f874244aa4b50e1081b82fa854/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '9453f7f874244aa4b50e1081b82fa854',
+                name: 'Jayla White Wall Microphone',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional', 'microphone'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/9453f7f874244aa4b50e1081b82fa854/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/9453f7f874244aa4b50e1081b82fa854/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '7ce386b138b840bfbb650a7c85e3900f',
+                name: 'Jayla Salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/7ce386b138b840bfbb650a7c85e3900f/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/7ce386b138b840bfbb650a7c85e3900f/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'b68492bce41d4e0d8ae24f089a775fdc',
+                name: 'Jayla White Wall Standing',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'standing', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/b68492bce41d4e0d8ae24f089a775fdc/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/b68492bce41d4e0d8ae24f089a775fdc/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '192b93ace463434d81d31128f8cc8063',
+                name: 'Jayla Office Microphone',
+                place: 'office',
+                format: 'vertical', 
+                tags: ['UGC', 'indoor', 'professional', 'microphone'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/192b93ace463434d81d31128f8cc8063/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/192b93ace463434d81d31128f8cc8063/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '6b782b76dd5743a3bdf1e3a442cd98f2',
+                name: 'Jayla Kitchen',
+                place: 'kitchen',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/6b782b76dd5743a3bdf1e3a442cd98f2/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/6b782b76dd5743a3bdf1e3a442cd98f2/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '63',
+        name: 'Eliza',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'professional', 'casual', 'microphone'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/a07ce14a55a64cca8993c177332bce94/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: 'a07ce14a55a64cca8993c177332bce94',
+                name: 'Eliza White Wall',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/a07ce14a55a64cca8993c177332bce94/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/a07ce14a55a64cca8993c177332bce94/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '7ff6b07eb88f431ea1f3425baae7c13a',
+                name: 'Eliza White Wall 2',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/7ff6b07eb88f431ea1f3425baae7c13a/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/7ff6b07eb88f431ea1f3425baae7c13a/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '731c8f29fcad4b62bbce7bd93a808091',
+                name: 'Eliza Room',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/731c8f29fcad4b62bbce7bd93a808091/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/731c8f29fcad4b62bbce7bd93a808091/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '404b4738a040444c876f9bf9ccd12225',
+                name: 'Eliza Microphone',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional', 'microphone'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/404b4738a040444c876f9bf9ccd12225/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/404b4738a040444c876f9bf9ccd12225/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '242ea28f165648349df7fd00a72c4db0',
+                name: 'Eliza Kitchen',
+                place: 'kitchen',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/242ea28f165648349df7fd00a72c4db0/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/242ea28f165648349df7fd00a72c4db0/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '64',
+        name: 'Janelle',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'professional', 'casual', 'microphone'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/1a195cfcbcbb4d47b1a0bb9714f081e5/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '1a195cfcbcbb4d47b1a0bb9714f081e5',
+                name: 'Janelle Room',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/1a195cfcbcbb4d47b1a0bb9714f081e5/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/1a195cfcbcbb4d47b1a0bb9714f081e5/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '558a35de8ae24bfbbde96a16992e136b',
+                name: 'Janelle White Wall Microphone',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional', 'microphone'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/558a35de8ae24bfbbde96a16992e136b/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/558a35de8ae24bfbbde96a16992e136b/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'd72a3db98d5844769693e3143e17c26c',
+                name: 'Janelle Salon Microphone',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional', 'microphone'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/d72a3db98d5844769693e3143e17c26c/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/d72a3db98d5844769693e3143e17c26c/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '62e307c6ab014424a900854e801ef1fd',
+                name: 'Janelle Salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/62e307c6ab014424a900854e801ef1fd/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/62e307c6ab014424a900854e801ef1fd/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '540314bcb7f743dda50d629a3e0015d7',
+                name: 'Janelle Kitchen',
+                place: 'kitchen',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/540314bcb7f743dda50d629a3e0015d7/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/540314bcb7f743dda50d629a3e0015d7/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '65',
+        name: 'Belinda',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'professional', 'casual'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/56e51924bcca4f3c8d587875ee631b5b/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '56e51924bcca4f3c8d587875ee631b5b',
+                name: 'Belinda Room',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/56e51924bcca4f3c8d587875ee631b5b/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/56e51924bcca4f3c8d587875ee631b5b/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '1cc1bca44f5b42419e72d6c2f836fcfa',
+                name: 'Belinda White Wall',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/1cc1bca44f5b42419e72d6c2f836fcfa/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/1cc1bca44f5b42419e72d6c2f836fcfa/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'b45a5392c1494acaabdcee001f19d5bc',
+                name: 'Belinda Salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/b45a5392c1494acaabdcee001f19d5bc/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/b45a5392c1494acaabdcee001f19d5bc/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '66',
+        name: 'Jacob',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'casual', 'automotive'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/a98a5ba94a944244aab9906bfd061114/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: 'a98a5ba94a944244aab9906bfd061114',
+                name: 'Jacob Room',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/a98a5ba94a944244aab9906bfd061114/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/a98a5ba94a944244aab9906bfd061114/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '9789cd3620474ead8cc35226731df343',
+                name: 'Jacob Room 2',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/9789cd3620474ead8cc35226731df343/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/9789cd3620474ead8cc35226731df343/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'dcbdfbfa6eb44d928ddf05c8b4b5d104',
+                name: 'Jacob Salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/dcbdfbfa6eb44d928ddf05c8b4b5d104/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/dcbdfbfa6eb44d928ddf05c8b4b5d104/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '2b69c6bad0b543c8822092fd3fa2d712',
+                name: 'Jacob Salon 2',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/2b69c6bad0b543c8822092fd3fa2d712/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/2b69c6bad0b543c8822092fd3fa2d712/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'de47d2c7d2d849c68fc5dc77f0ecf836',
+                name: 'Jacob Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'automotive', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/de47d2c7d2d849c68fc5dc77f0ecf836/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/de47d2c7d2d849c68fc5dc77f0ecf836/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '67',
+        name: 'Ariella',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'professional', 'casual'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/367b6b8ffa354a8395ba12be810059ea/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '367b6b8ffa354a8395ba12be810059ea',
+                name: 'Ariella White Wall',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/367b6b8ffa354a8395ba12be810059ea/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/367b6b8ffa354a8395ba12be810059ea/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'ec53ef93068e4123b2c0fda66ad2c6f8',
+                name: 'Ariella White Wall 2',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/ec53ef93068e4123b2c0fda66ad2c6f8/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/ec53ef93068e4123b2c0fda66ad2c6f8/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '669e93e4fefc407baae96d5a8f01c7c2',
+                name: 'Ariella Room',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/669e93e4fefc407baae96d5a8f01c7c2/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/669e93e4fefc407baae96d5a8f01c7c2/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '447c50ca7dea4aa5af2e17e60ea2012c',
+                name: 'Ariella Kitchen',
+                place: 'kitchen',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/447c50ca7dea4aa5af2e17e60ea2012c/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/447c50ca7dea4aa5af2e17e60ea2012c/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'd3f55a1453014c09ac1d10e965f77575',
+                name: 'Ariella House',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/d3f55a1453014c09ac1d10e965f77575/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/d3f55a1453014c09ac1d10e965f77575/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '68',
+        name: 'Brody',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/4906bbce5e1a49d9936a59403c2c8efe/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '4906bbce5e1a49d9936a59403c2c8efe',
+                name: 'Brody Park',
+                place: 'park',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/4906bbce5e1a49d9936a59403c2c8efe/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/4906bbce5e1a49d9936a59403c2c8efe/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'd6efc8c226f947b79414b0306aa238cb',
+                name: 'Brody House',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/d6efc8c226f947b79414b0306aa238cb/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/d6efc8c226f947b79414b0306aa238cb/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'a7edd2116f2f4892bd395a364f455e6b',
+                name: 'Brody Stairs',
+                place: 'stairs',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'architectural'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/a7edd2116f2f4892bd395a364f455e6b/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/a7edd2116f2f4892bd395a364f455e6b/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'dc7f5f7b570741d38ec8bd1d06fd8acf',
+                name: 'Brody House 2',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/dc7f5f7b570741d38ec8bd1d06fd8acf/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/dc7f5f7b570741d38ec8bd1d06fd8acf/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '69',
+        name: 'Stella',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'automotive'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/ef1560c0741d45eabe17db5422fd9782/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: 'ef1560c0741d45eabe17db5422fd9782',
+                name: 'Stella Room',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/ef1560c0741d45eabe17db5422fd9782/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/ef1560c0741d45eabe17db5422fd9782/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'c3e6fa34528549109ebecec1391cf76e',
+                name: 'Stella Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'automotive', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/c3e6fa34528549109ebecec1391cf76e/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/c3e6fa34528549109ebecec1391cf76e/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '4b26a906fda847c2bfb359f804fd0294',
+                name: 'Stella Outdoor',
+                place: 'outdoor',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/4b26a906fda847c2bfb359f804fd0294/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/4b26a906fda847c2bfb359f804fd0294/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'da7e8857db194f719b362c894609beba',
+                name: 'Stella White Wall',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/da7e8857db194f719b362c894609beba/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/da7e8857db194f719b362c894609beba/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'c6fa801d6b424da28b04c304a90bb4e5',
+                name: 'Stella Garden',
+                place: 'garden',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/c6fa801d6b424da28b04c304a90bb4e5/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/c6fa801d6b424da28b04c304a90bb4e5/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '70',
+        name: 'Juliet',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'casual', 'automotive'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/4fbcacac90d04b39ba6dca67bcc0bf2a/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '4fbcacac90d04b39ba6dca67bcc0bf2a',
+                name: 'Juliet Room',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/4fbcacac90d04b39ba6dca67bcc0bf2a/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/4fbcacac90d04b39ba6dca67bcc0bf2a/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'e8a8a8edadd94be288095d1bbd1d2136',
+                name: 'Juliet House',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/e8a8a8edadd94be288095d1bbd1d2136/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/e8a8a8edadd94be288095d1bbd1d2136/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '5e997d21563f4e6497d1c713b811109b',
+                name: 'Juliet Room 2',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/5e997d21563f4e6497d1c713b811109b/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/5e997d21563f4e6497d1c713b811109b/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '8b76d27775f74edd9bc8aa190813e74f',
+                name: 'Juliet Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'automotive', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/8b76d27775f74edd9bc8aa190813e74f/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/8b76d27775f74edd9bc8aa190813e74f/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '790c4a1c2461416681595c29f286bfea',
+                name: 'Juliet Kitchen',
+                place: 'kitchen',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/790c4a1c2461416681595c29f286bfea/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/790c4a1c2461416681595c29f286bfea/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '71',
+        name: 'Becca',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'professional', 'microphone'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/f73a5b13a3ba4d3dbbd37f1437cfabbf/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: 'f73a5b13a3ba4d3dbbd37f1437cfabbf',
+                name: 'Becca Park',
+                place: 'park',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/f73a5b13a3ba4d3dbbd37f1437cfabbf/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/f73a5b13a3ba4d3dbbd37f1437cfabbf/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'e2f230e179334143b7da2dbbd49e5552',
+                name: 'Becca Garden',
+                place: 'garden',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/e2f230e179334143b7da2dbbd49e5552/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/e2f230e179334143b7da2dbbd49e5552/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '7767ff15bff74093b49c6fcb561c57ac',
+                name: 'Becca Salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/7767ff15bff74093b49c6fcb561c57ac/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/7767ff15bff74093b49c6fcb561c57ac/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '8f5e92d1df6b4c3da624534d9656d512',
+                name: 'Becca Salon Microphone',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional', 'microphone'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/8f5e92d1df6b4c3da624534d9656d512/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/8f5e92d1df6b4c3da624534d9656d512/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '72',
+        name: 'Tonya',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'automotive', 'microphone'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/fade5ca456604426ad66bcc97d24ddf9/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: 'fade5ca456604426ad66bcc97d24ddf9',
+                name: 'Tonya Room Microphone',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional', 'microphone'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/fade5ca456604426ad66bcc97d24ddf9/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/fade5ca456604426ad66bcc97d24ddf9/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '8e5f0fc0b714404bb3e61a8ef5bcb846',
+                name: 'Tonya House',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/8e5f0fc0b714404bb3e61a8ef5bcb846/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/8e5f0fc0b714404bb3e61a8ef5bcb846/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '7834701738b7470d88e6aa9eff948a61',
+                name: 'Tonya Street',
+                place: 'street',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'urban'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/7834701738b7470d88e6aa9eff948a61/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/7834701738b7470d88e6aa9eff948a61/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'd4fd7b2ca23b4fe5bd1304e1c85a90b9',
+                name: 'Tonya Couch',
+                place: 'couch',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/d4fd7b2ca23b4fe5bd1304e1c85a90b9/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/d4fd7b2ca23b4fe5bd1304e1c85a90b9/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'fe5ded95330048b5afc03bd1a1dde0b4',
+                name: 'Tonya Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'automotive', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/fe5ded95330048b5afc03bd1a1dde0b4/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/fe5ded95330048b5afc03bd1a1dde0b4/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '73',
+        name: 'Tim',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'automotive'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/205d677bd8a742b887c1eb84bf04a4cd/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '205d677bd8a742b887c1eb84bf04a4cd',
+                name: 'Tim House',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/205d677bd8a742b887c1eb84bf04a4cd/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/205d677bd8a742b887c1eb84bf04a4cd/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '214c3caef0144888bc67318fbc39ec34',
+                name: 'Tim Garden',
+                place: 'garden',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/214c3caef0144888bc67318fbc39ec34/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/214c3caef0144888bc67318fbc39ec34/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '59f18ca22144420b90e0aeb4221886ac',
+                name: 'Tim Cafe',
+                place: 'cafe',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/59f18ca22144420b90e0aeb4221886ac/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/59f18ca22144420b90e0aeb4221886ac/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '5c28b62d49994871b802c66a62959079',
+                name: 'Tim Cafe 2',
+                place: 'cafe',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/5c28b62d49994871b802c66a62959079/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/5c28b62d49994871b802c66a62959079/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '6d34d050b7794ff7801dc5acdee3410e',
+                name: 'Tim Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'automotive', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/6d34d050b7794ff7801dc5acdee3410e/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/6d34d050b7794ff7801dc5acdee3410e/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '74',
+        name: 'Lucas',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'automotive', 'professional'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/159c3167739842acb1644a4a985c950c/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '159c3167739842acb1644a4a985c950c',
+                name: 'Lucas Cafe',
+                place: 'cafe',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/159c3167739842acb1644a4a985c950c/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/159c3167739842acb1644a4a985c950c/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '220d54045019433182de54afa4145c9e',
+                name: 'Lucas Black Wall',
+                place: 'black-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/220d54045019433182de54afa4145c9e/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/220d54045019433182de54afa4145c9e/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '926e54d505ca4727ac3c435ff4713c36',
+                name: 'Lucas Park',
+                place: 'park',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/926e54d505ca4727ac3c435ff4713c36/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/926e54d505ca4727ac3c435ff4713c36/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '9ad468ef2ebd4a889572aa053a81fd60',
+                name: 'Lucas White Wall',
+                place: 'white-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/9ad468ef2ebd4a889572aa053a81fd60/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/9ad468ef2ebd4a889572aa053a81fd60/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'c29ff892caff4d50933dc778643a1076',
+                name: 'Lucas Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'automotive', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/c29ff892caff4d50933dc778643a1076/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/c29ff892caff4d50933dc778643a1076/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '75',
+        name: 'Kim',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'casual', 'fitness'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/1ed21535278f41e18b8adc37976443f1/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '1ed21535278f41e18b8adc37976443f1',
+                name: 'Kim Chair',
+                place: 'sofa',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/1ed21535278f41e18b8adc37976443f1/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/1ed21535278f41e18b8adc37976443f1/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'f36c72625d3246e49cb9896d3a5dd936',
+                name: 'Kim Gym',
+                place: 'gym',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'fitness', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/f36c72625d3246e49cb9896d3a5dd936/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/f36c72625d3246e49cb9896d3a5dd936/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '76',
+        name: 'Lea',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'automotive', 'professional'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/20a6b04271c44c63855e5e13ef96c708/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '20a6b04271c44c63855e5e13ef96c708',
+                name: 'Lea Couch',
+                place: 'couch',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/20a6b04271c44c63855e5e13ef96c708/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/20a6b04271c44c63855e5e13ef96c708/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '3313029fb31443b0b9a10b3c46eb905e',
+                name: 'Lea Black Wall',
+                place: 'black-wall',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/3313029fb31443b0b9a10b3c46eb905e/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/3313029fb31443b0b9a10b3c46eb905e/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '5efa75fc5fed4ef98bbc9964770107fd',
+                name: 'Lea House',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/5efa75fc5fed4ef98bbc9964770107fd/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/5efa75fc5fed4ef98bbc9964770107fd/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '7606ec9651e9454aae41cb293a4a6f93',
+                name: 'Lea Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'automotive', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/7606ec9651e9454aae41cb293a4a6f93/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/7606ec9651e9454aae41cb293a4a6f93/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'a322e4a9cb68424289fbce5459a04227',
+                name: 'Lea Street',
+                place: 'street',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'urban'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/a322e4a9cb68424289fbce5459a04227/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/a322e4a9cb68424289fbce5459a04227/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'a3f26c70331a483caf5c5db406acffd1',
+                name: 'Lea Street 2',
+                place: 'street',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'urban'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/a3f26c70331a483caf5c5db406acffd1/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/a3f26c70331a483caf5c5db406acffd1/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'bf8cef04aafb4584a3afb7a06a9846a7',
+                name: 'Lea Street 3',
+                place: 'street',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'urban'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/bf8cef04aafb4584a3afb7a06a9846a7/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/bf8cef04aafb4584a3afb7a06a9846a7/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'c17b0fd137024b08833f0d64d13e73b8',
+                name: 'Lea Balcony',
+                place: 'balcony',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'urban'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/c17b0fd137024b08833f0d64d13e73b8/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/c17b0fd137024b08833f0d64d13e73b8/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'e0816712d481406895289662b02c1e18',
+                name: 'Lea Street 4',
+                place: 'street',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'urban'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/e0816712d481406895289662b02c1e18/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/e0816712d481406895289662b02c1e18/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '77',
+        name: 'Gail',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'automotive'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/025dd308e3b74f05bd89b6f314246d3d/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '025dd308e3b74f05bd89b6f314246d3d',
+                name: 'Gail House',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/025dd308e3b74f05bd89b6f314246d3d/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/025dd308e3b74f05bd89b6f314246d3d/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'ad8fde8e5e68404aa62070c2230216e5',
+                name: 'Gail Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'automotive', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/ad8fde8e5e68404aa62070c2230216e5/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/ad8fde8e5e68404aa62070c2230216e5/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'cce15e0b65ea4d84a028f23e0982f933',
+                name: 'Gail Outside',
+                place: 'outdoor',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/cce15e0b65ea4d84a028f23e0982f933/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/cce15e0b65ea4d84a028f23e0982f933/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '78',
+        name: 'Daran',
+        gender: 'male',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual', 'automotive'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/2553123c83874e1fa8ea2757f19ffc26/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '2553123c83874e1fa8ea2757f19ffc26',
+                name: 'Daran Park',
+                place: 'park',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/2553123c83874e1fa8ea2757f19ffc26/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/2553123c83874e1fa8ea2757f19ffc26/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'b7206b34d2cd494fbf9000df7604ca26',
+                name: 'Daran Park 2',
+                place: 'park',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/b7206b34d2cd494fbf9000df7604ca26/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/b7206b34d2cd494fbf9000df7604ca26/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'cb0ac9a0f27946508cfe4dadf33fd7ef',
+                name: 'Daran House',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/cb0ac9a0f27946508cfe4dadf33fd7ef/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/cb0ac9a0f27946508cfe4dadf33fd7ef/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'd75e0f6aab184219864a19db74a42ab9',
+                name: 'Daran Park 3',
+                place: 'park',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/d75e0f6aab184219864a19db74a42ab9/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/d75e0f6aab184219864a19db74a42ab9/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'e6604b72b4e140708dba755896581c40',
+                name: 'Daran Car',
+                place: 'car',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'automotive', 'professional'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/e6604b72b4e140708dba755896581c40/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/e6604b72b4e140708dba755896581c40/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
+    {
+        id: '79',
+        name: 'Kelsey',
+        gender: 'female',
+        age: 'unknown',
+        tags: ['UGC', 'indoor', 'outdoor', 'casual'],
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/59a31b43ebfa4d638e04bcbfb41e090e/full/2.2/preview_target.webp',
+        looks: [
+            {
+                id: '59a31b43ebfa4d638e04bcbfb41e090e',
+                name: 'Kelsey Room',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/59a31b43ebfa4d638e04bcbfb41e090e/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/59a31b43ebfa4d638e04bcbfb41e090e/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'b6efba91da964ba38c5cf86aa7e6c0bc',
+                name: 'Kelsey House',
+                place: 'house',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/b6efba91da964ba38c5cf86aa7e6c0bc/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/b6efba91da964ba38c5cf86aa7e6c0bc/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: '8f8b29ecb39541ab9ff6d0e3ed306018',
+                name: 'Kelsey Salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual', 'relaxed'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/8f8b29ecb39541ab9ff6d0e3ed306018/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/8f8b29ecb39541ab9ff6d0e3ed306018/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'd1998efdb80049ad95f9bb61e18f4617',
+                name: 'Kelsey Garden',
+                place: 'garden',
+                format: 'vertical',
+                tags: ['UGC', 'outdoor', 'casual', 'nature'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/d1998efdb80049ad95f9bb61e18f4617/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/d1998efdb80049ad95f9bb61e18f4617/full/2.2/preview_video_target.mp4'
+            },
+            {
+                id: 'e0b071911f344958995372a6f63100e8',
+                name: 'Kelsey Room 2',
+                place: 'room',
+                format: 'vertical',
+                tags: ['UGC', 'indoor', 'casual'],
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/e0b071911f344958995372a6f63100e8/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/e0b071911f344958995372a6f63100e8/full/2.2/preview_video_target.mp4'
+            }
+        ]
+    },
 ]
