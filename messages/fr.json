@@ -339,6 +339,7 @@
       "duration": {
         "placeholder": "Durée de la vidéo",
         "options": {
+          "15-seconds": "15 secondes",
           "30-seconds": "30 secondes",
           "1-minute": "1 minute",
           "2-minutes": "2 minutes",

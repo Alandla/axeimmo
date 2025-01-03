@@ -17,6 +17,7 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, disabled, onChan
   const t = useTranslations('select.duration');
 
   const durationOptions: DurationOption[] = [
+    { name: t('options.15-seconds'), value: 234 },
     { name: t('options.30-seconds'), value: 468 },
     { name: t('options.1-minute'), value: 936 },
     { name: t('options.2-minutes'), value: 1872 },
