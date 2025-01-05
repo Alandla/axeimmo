@@ -17,7 +17,8 @@
     "breadcrumbs": {
       "Dashboard": "Tableau de bord",
       "Create": "Créer",
-      "Pricing": "Tarifs"
+      "Pricing": "Tarifs",
+      "Assets": "Médias"
     },
     "dashboard": {
       "title": "Tableau de bord"
@@ -953,6 +954,36 @@
         "27": "Voici l'évolution actuelle de la vidéo.",
         "28": "Voici la progression actuelle de la génération.",
         "29": "Voici le rapport de progrès sur la vidéo."
+      }
+    },
+    "assets": {
+      "title": "Médiathèque",
+      "more-options": "Plus d'options",
+      "dialog": {
+        "title": "Détails du média",
+        "name": "Nom",
+        "description": "Description",
+        "descriptions": "Descriptions",
+        "start": "Début",
+        "duration": "Durée",
+        "text": "Texte",
+        "save": "Sauvegarder",
+        "close": "Fermer",
+        "added-by": "Ajouté par {name} le {date}",
+        "unknown-user": "utilisateur inconnu"
+      },
+      "dropdown-menu": {
+        "details": "Voir les détails",
+        "rename": "Renommer",
+        "delete": "Supprimer"
+      },
+      "toast": {
+        "saved": "Sauvegardé",
+        "saved-description": "Les modifications ont été enregistrées avec succès",
+        "deleted": "Supprimé",
+        "deleted-description": "Le média a été supprimé avec succès",
+        "error": "Erreur",
+        "error-description": "Une erreur est survenue"
       }
     }
   }

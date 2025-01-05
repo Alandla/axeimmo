@@ -201,3 +201,23 @@ export const getUserSpaces = async (userId: string) => {
     throw error;
   }
 };
+
+export async function getSpaceByMediaId(mediaId: string) {
+  const space = await SpaceModel.findOne({ 'medias.media.id': mediaId });
+  return space;
+}
+
+export async function updateMedia(mediaId: string, updates: any) {
+  const space = await SpaceModel.findOneAndUpdate(
+    { 'medias.media.id': mediaId },
+    { $set: { 'medias.$.media': { ...updates } } },
+    { new: true }
+  );
+  
+  if (!space) {
+    throw new Error('Media not found');
+  }
+
+  const updatedMedia = space.medias.find((m: any) => m.media.id === mediaId);
+  return updatedMedia?.media;
+}
