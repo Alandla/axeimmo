@@ -59,7 +59,6 @@ export default function VideoEditor() {
   const [isDirty, setIsDirty] = useState(false)
   
   const updateVideo = (newVideoData: any) => {
-    console.log("newVideoData", newVideoData)
     setVideo(newVideoData)
     setIsDirty(true)
   }
@@ -92,7 +91,6 @@ export default function VideoEditor() {
   const generateThumbnailAsync = async () => {
     try {
       const thumbnail : any = await basicApiCall('/video/thumbnail', { video });
-      console.log("thumbnailUrl", thumbnail)
       if (thumbnail && video) {
         updateVideo({
           ...video,
