@@ -126,6 +126,7 @@
         "duration-1-max": "Maximum duration of 1 minute",
         "duration-3-max": "Maximum duration of 3 minutes",
         "duration-5-max": "Maximum duration of 5 minutes",
+        "watermark-removal": "Watermark removal",
         "subtitles": "Automatic subtitles",
         "voice": "High quality voice",
         "avatar": "Realistic avatar photo",
@@ -162,7 +163,10 @@
       "balance": "Balance",
       "export-button": "Export",
       "cancel-button": "Cancel",
-      "saving": "Saving..."
+      "saving": "Saving...",
+      "watermark-warning": "Warning: To remove the watermark from your video, you need to upgrade to a paid plan.",
+      "modal-pricing-title": "Remove the watermark",
+      "modal-pricing-description": "Upgrade to a paid plan to remove the Hoox watermark from your videos."
     },
     "edit": {
       "loading-video-data": "Loading video data...",

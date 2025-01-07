@@ -16,11 +16,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   console.log("GET /api/space/id by user: ", session.user.id);
 
   try {
-
-    const userIsInSpace: boolean = await isUserInSpace(session.user.id, params.id);
-
-    if (!userIsInSpace) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const isAdmin = session.user.email === "alan@hoox.video" || session.user.email === "maxime@hoox.video";
+    
+    if (!isAdmin) {
+      const userIsInSpace: boolean = await isUserInSpace(session.user.id, params.id);
+      if (!userIsInSpace) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
     }
 
     const space: ISpace = await getSpaceById(params.id)

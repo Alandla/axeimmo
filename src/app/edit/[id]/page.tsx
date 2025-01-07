@@ -33,6 +33,8 @@ import Sequences from '@/src/components/edit/sequences'
 import { regenerateAudioForSequence, updateVideoTimings, waitForTranscription } from '@/src/lib/audio'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
 import { CommandShortcut } from '@/src/components/ui/command'
+import { ISpace } from '@/src/types/space'
+import { PlanName } from '@/src/types/enums'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -47,6 +49,7 @@ export default function VideoEditor() {
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
+  const [showWatermark, setShowWatermark] = useState(true)
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -86,26 +89,6 @@ export default function VideoEditor() {
   const handleCutSequence = (cutIndex: number) => {
     console.log("cutIndex", cutIndex)
   }
-
-  // Function to generate thumbnail through API
-  const generateThumbnailAsync = async () => {
-    try {
-      const thumbnail : any = await basicApiCall('/video/thumbnail', { video });
-      if (thumbnail && video) {
-        updateVideo({
-          ...video,
-          costToGenerate: video.costToGenerate + thumbnail.estimatedPrice,
-          video: {
-            ...video.video,
-            thumbnail: thumbnail.url
-          }
-        });
-        setIsDirty(false)
-      }
-    } catch (error) {
-      console.error("Failed to generate thumbnail:", error);
-    }
-  };
 
   const handleSaveVideo = async () => {
     setIsSaving(true);
@@ -265,6 +248,15 @@ export default function VideoEditor() {
         }
         
         setVideo(response);
+
+        setIsLoading(false);
+
+        const spaceResponse = await basicApiGetCall<ISpace>(`/space/${response.spaceId}`);
+        console.log("spaceResponse", spaceResponse)
+        console.log("spaceResponse.plan.name", spaceResponse.plan.name)
+        console.log("PlanName.FREE", spaceResponse.plan.name === PlanName.FREE)
+        setShowWatermark(spaceResponse.plan.name === PlanName.FREE);
+
       } catch (error) {
         console.error(error)
         toast({
@@ -272,8 +264,6 @@ export default function VideoEditor() {
           description: t('error.description-loading'),
           variant: 'destructive'
         })
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -630,6 +620,7 @@ export default function VideoEditor() {
       spaceId={video?.spaceId || ''}
       setIsOpen={setShowModalExport}
       onExportVideo={onExportVideo}
+      showWatermark={showWatermark}
     />
     <div className="min-h-screen bg-muted overflow-hidden">
       {/* Header */}
@@ -770,7 +761,7 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
+              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} />}
           </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -782,7 +773,7 @@ export default function VideoEditor() {
           ref={previewRef}
           className={`sticky top-[57px] z-20 transition-all duration-300 h-96`}
         >
-          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
+          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} />}
         </div>
         <Card className="mt-4">
           <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>

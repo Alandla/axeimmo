@@ -6,7 +6,7 @@ import { preloadAudio, preloadImage, preloadVideo } from "@remotion/preload";
 import { AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export default function VideoPreview({ playerRef, video, isMobile }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null, isMobile: boolean }) {
+export default function VideoPreview({ playerRef, video, isMobile, showWatermark }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null, isMobile: boolean, showWatermark: boolean }) {
     const t = useTranslations('edit')
 
     useEffect(() => {
@@ -57,6 +57,7 @@ export default function VideoPreview({ playerRef, video, isMobile }: { playerRef
                     compositionHeight={1920}
                     inputProps={{
                         data: video,
+                        showWatermark
                     }}
                     controls
                     className="rounded-lg"

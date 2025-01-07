@@ -9,6 +9,7 @@ import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
 import { calculateHeygenCost } from "../lib/cost";
 import { combineAudioVoices } from "./combine-audio";
+import { getSpaceById } from "../dao/spaceDao";
 
 interface RenderStatus {
   status: string;
@@ -49,6 +50,9 @@ export const exportVideoTask = task({
         throw new Error('Video not found');
       }
 
+      const space = await getSpaceById(video.spaceId);
+      const showWatermark = space.plan.name === "FREE";
+
       if (video.video?.avatar?.id && video.video?.audio?.voices && !video.video?.avatar?.videoUrl) {
         logger.log("Combinaison des audios...");
         const combinedAudio = await combineAudioVoices.triggerAndWait({ voices: video.video.audio.voices });
@@ -73,7 +77,7 @@ export const exportVideoTask = task({
         }
       }
 
-      const render = await renderVideo(video);
+      const render = await renderVideo(video, showWatermark);
       await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
 
       const renderStatus : RenderStatus = await pollRenderStatus(render.renderId, render.bucketName);

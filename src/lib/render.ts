@@ -1,6 +1,6 @@
 import { getRenderProgress, renderMediaOnLambda, speculateFunctionName, renderStillOnLambda } from '@remotion/lambda/client';
 
-export const renderVideo = async (video: any) => {
+export const renderVideo = async (video: any, showWatermark: boolean = true) => {
     console.log("Rendering video, props:")
     console.log(video)
     return await renderMediaOnLambda({
@@ -14,6 +14,7 @@ export const renderVideo = async (video: any) => {
         composition: "videoGenerate",
         inputProps: {
             data: video,
+            showWatermark
         },
         chromiumOptions: {
             userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
