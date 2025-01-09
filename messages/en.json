@@ -966,7 +966,10 @@
         "save": "Save",
         "close": "Close",
         "added-by": "Added by {name} on {date}",
-        "unknown-user": "unknown user"
+        "unknown-user": "unknown user",
+        "tooltip-description": "Descriptions are used by the AI to automatically place media in the video",
+        "automatic-placement": "Automatic placement",
+        "automatic-placement-description": "Allow the AI to reuse this media automatically"
       },
       "dropdown-menu": {
         "details": "View details",

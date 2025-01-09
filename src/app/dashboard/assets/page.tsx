@@ -22,12 +22,23 @@ export interface MediaSpaceWithCreator extends IMediaSpace {
 
 export default function AssetsPage() {
   const t = useTranslations('assets')
-  const { data: session } = useSession()
   const { activeSpace } = useActiveSpaceStore()
   
   const [assets, setAssets] = useState<MediaSpaceWithCreator[]>([])
   const [selectedAsset, setSelectedAsset] = useState<MediaSpaceWithCreator | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const setMedia = (media: MediaSpaceWithCreator) => {
+    setAssets(prevAssets => {
+      const assetIndex = prevAssets.findIndex(a => a.id === media.id)
+      if (assetIndex === -1) return prevAssets
+      
+      const newAssets = [...prevAssets]
+      newAssets[assetIndex] = media
+      return newAssets
+    })
+    setSelectedAsset(media)
+  }
 
   useEffect(() => {
     const fetchAssets = async () => {
@@ -59,7 +70,9 @@ export default function AssetsPage() {
         {assets.map((asset) => (
           <AssetCard
             key={asset.media.id}
+            spaceId={activeSpace?.id || ''}
             mediaSpace={asset}
+            setMedia={setMedia}
             onClick={() => {
               setSelectedAsset(asset)
               setIsDialogOpen(true)
@@ -70,6 +83,7 @@ export default function AssetsPage() {
 
       <AssetDialog
         mediaSpace={selectedAsset}
+        setMedia={setMedia}
         open={isDialogOpen}
         onClose={() => {
           setIsDialogOpen(false)

@@ -55,7 +55,15 @@ const mediaSpaceSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    uploadedAt: Date
+    uploadedAt: Date,
+    autoPlacement: {
+      type: Boolean,
+      default: true
+    }
+  },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
   }
 )
 
@@ -89,5 +97,6 @@ const spaceSchema = new mongoose.Schema(
 );
 
 spaceSchema.plugin(toJSON);
+mediaSpaceSchema.plugin(toJSON);
 
 export default mongoose.models.Space || mongoose.model("Space", spaceSchema);

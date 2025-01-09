@@ -27,10 +27,12 @@ import { MediaSpaceWithCreator } from '../app/dashboard/assets/page'
 
 interface AssetCardProps {
   mediaSpace: MediaSpaceWithCreator
+  spaceId: string
+  setMedia: (media: MediaSpaceWithCreator) => void
   onClick: () => void
 }
 
-export default function AssetCard({ mediaSpace, onClick }: AssetCardProps) {
+export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick }: AssetCardProps) {
   const t = useTranslations('assets')
   const { data: session } = useSession()
   const { toast } = useToast()
@@ -39,7 +41,7 @@ export default function AssetCard({ mediaSpace, onClick }: AssetCardProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(mediaSpace.media.name)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [creator, setCreator] = useState(mediaSpace.creator)
+  const { media } = mediaSpace
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -59,13 +61,21 @@ export default function AssetCard({ mediaSpace, onClick }: AssetCardProps) {
     setIsEditing(false)
     if (editedName !== mediaSpace.media.name) {
       try {
+        const updatedSpaceMedia = {
+            ...mediaSpace,
+            media: {
+              ...mediaSpace.media,
+              name: editedName
+            }
+        }
+
+        setMedia(updatedSpaceMedia)
+
         await basicApiCall('/media/update', {
-          mediaId: mediaSpace.media.id,
-          updates: {
-            ...mediaSpace.media,
-            name: editedName
-          }
+          spaceId: spaceId,
+          mediaSpace: updatedSpaceMedia
         })
+
         toast({
           title: t('toast.saved'),
           description: t('toast.saved-description'),
@@ -81,7 +91,7 @@ export default function AssetCard({ mediaSpace, onClick }: AssetCardProps) {
         })
       }
     }
-  }, [editedName, mediaSpace.media, t, toast])
+  }, [editedName, mediaSpace.media])
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -107,23 +117,23 @@ export default function AssetCard({ mediaSpace, onClick }: AssetCardProps) {
 
   const handleDropdownOpen = async (isOpen: boolean) => {
     setIsDropdownOpen(isOpen)
-    if (isOpen && !creator.name && creator.id) {
-      const userData = await fetchUser(creator.id)
-      setCreator(userData)
+    if (isOpen && !mediaSpace.creator.name && mediaSpace.creator.id) {
+      const userData = await fetchUser(mediaSpace.creator.id)
+      setMedia({
+        ...mediaSpace,
+        creator: userData
+      })
     }
   }
-
-  const { media } = mediaSpace
-  const thumbnail = media.image?.link
 
   return (
     <div className="relative">
       <div className="relative bg-muted aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group" onClick={onClick}>
-        {thumbnail ? (
+        {media.image?.link ? (
           <div className="relative w-full h-full">
             <div className="absolute inset-0 bg-black/90">
               <Image
-                src={thumbnail}
+                src={media.image?.link}
                 alt=""
                 layout="fill"
                 objectFit="cover"
@@ -132,7 +142,7 @@ export default function AssetCard({ mediaSpace, onClick }: AssetCardProps) {
               />
             </div>
             <Image
-              src={thumbnail}
+              src={media.image?.link}
               alt={media.name || ''}
               layout="fill"
               objectFit="contain"
@@ -200,14 +210,14 @@ export default function AssetCard({ mediaSpace, onClick }: AssetCardProps) {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  {creator.image && <AvatarImage src={creator.image} alt={creator.name ?? ''} />}
-                  <AvatarFallback className="rounded-lg">{creator.name?.charAt(0) ?? ''}</AvatarFallback>
+                  {mediaSpace.creator.image && <AvatarImage src={mediaSpace.creator.image} alt={mediaSpace.creator.name ?? ''} />}
+                  <AvatarFallback className="rounded-lg">{mediaSpace.creator.name?.charAt(0) ?? ''}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  {!creator.name ? (
+                  {!mediaSpace.creator.name ? (
                     <div className="h-5 w-24 bg-muted animate-pulse rounded" />
                   ) : (
-                    <span className="truncate font-semibold">{creator.name}</span>
+                    <span className="truncate font-semibold">{mediaSpace.creator.name}</span>
                   )}
                   <span className="truncate text-xs">
                     {mediaSpace.uploadedAt ? new Date(mediaSpace.uploadedAt).toLocaleDateString() : ''}

@@ -970,7 +970,10 @@
         "save": "Sauvegarder",
         "close": "Fermer",
         "added-by": "Ajouté par {name} le {date}",
-        "unknown-user": "utilisateur inconnu"
+        "unknown-user": "utilisateur inconnu",
+        "tooltip-description": "Les descriptions sont utilisées par l'IA pour placer automatiquement les médias dans la vidéo",
+        "automatic-placement": "Placement automatique",
+        "automatic-placement-description": "Permettre à l'IA de réutiliser automatiquement ce média"
       },
       "dropdown-menu": {
         "details": "Voir les détails",

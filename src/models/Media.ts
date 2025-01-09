@@ -35,7 +35,10 @@ const mediaSchema = new mongoose.Schema({
           type: Number,
           required: false,
         },
-        text: String
+        text: {
+          type: String,
+          default: ''
+        }
       }
     ],
     video: {

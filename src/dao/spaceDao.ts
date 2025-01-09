@@ -202,22 +202,40 @@ export const getUserSpaces = async (userId: string) => {
   }
 };
 
-export async function getSpaceByMediaId(mediaId: string) {
-  const space = await SpaceModel.findOne({ 'medias.media.id': mediaId });
-  return space;
-}
+export async function updateMedia(spaceId: string, mediaId: string, updates: any) {
+  try {
+    return await executeWithRetry(async () => {
 
-export async function updateMedia(mediaId: string, updates: any) {
-  const space = await SpaceModel.findOneAndUpdate(
-    { 'medias.media.id': mediaId },
-    { $set: { 'medias.$.media': { ...updates } } },
-    { new: true }
-  );
-  
-  if (!space) {
-    throw new Error('Media not found');
+      const testfind = await SpaceModel.findOne({ _id: spaceId, 'medias._id': mediaId });
+      console.log("testfind", testfind)
+
+      const space = await SpaceModel.findOneAndUpdate(
+        { 
+          _id: spaceId, 
+          'medias._id': mediaId 
+        },
+        { 
+          $set: { 'medias.$.media': updates }
+        },
+        { 
+          new: true,
+          runValidators: true
+        }
+      );
+
+      if (!space) {
+        throw new Error('Space or media not found');
+      }
+
+      const updatedMedia = space.medias.find((m: any) => m.id === mediaId);
+      if (!updatedMedia) {
+        throw new Error('Updated media not found');
+      }
+
+      return updatedMedia;
+    });
+  } catch (error) {
+    console.error("Error while updating media: ", error);
+    throw error;
   }
-
-  const updatedMedia = space.medias.find((m: any) => m.media.id === mediaId);
-  return updatedMedia?.media;
 }
