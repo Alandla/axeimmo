@@ -259,7 +259,7 @@ export const generateVideoTask = task({
 
     let { sequences, videoMetadata } = splitSentences(sentences);
     const lightTranscription = createLightTranscription(sequences);
-    const voices = extractVoiceSegments(sequences, sentences, payload.voice.id);
+    const voices = extractVoiceSegments(sequences, sentences, payload.voice ? payload.voice.id : undefined);
 
     logger.info('Sequences', { sequences })
     logger.info('Light transcription', { lightTranscription })
