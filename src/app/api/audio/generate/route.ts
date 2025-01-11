@@ -2,7 +2,7 @@ import { auth } from '@/src/lib/auth';
 import { NextRequest, NextResponse } from "next/server";
 import { createAudioTTS } from "@/src/lib/elevenlabs";
 import { uploadToS3Audio } from "@/src/lib/r2";
-import { voices } from '@/src/config/voices.config';
+import { voicesConfig } from '@/src/config/voices.config';
 import { calculateElevenLabsCost } from '@/src/lib/cost';
 import { createTranscription, getTranscription } from '@/src/lib/gladia';
 
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     try {
 
-        const voice = voices.find(voice => voice.id === voiceId);
+        const voice = voicesConfig.find(voice => voice.id === voiceId);
         const audioBuffer = await createAudioTTS(voiceId, text, voice?.voiceSettings);
 
         const audioUrl = await uploadToS3Audio(audioBuffer, 'medias-users');

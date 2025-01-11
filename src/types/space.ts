@@ -1,5 +1,7 @@
+import { Avatar } from "./avatar";
 import { MemberRole, PlanName, SubscriptionType } from "./enums";
 import { IMedia } from "./video";
+import { Voice } from "./voice";
 
 
 export interface IMember {
@@ -45,4 +47,6 @@ export interface ISpace {
   plan: IPlan;
   credits: number;
   subtitleStyle: ISpaceSubtitleStyle[];
+  avatars: Avatar[];
+  voices: Voice[];
 }

@@ -173,6 +173,32 @@ export const getSpaceById = async (spaceId: string) => {
   }
 }
 
+export const getSpaceVoices = async (spaceId: string) => {
+  try {
+    const space = await SpaceModel.findById(spaceId);
+    if (!space) {
+      throw new Error('Espace non trouvé');
+    }
+    return space.voices;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export const getSpaceAvatars = async (spaceId: string) => {
+  try {
+    const space = await SpaceModel.findById(spaceId);
+    if (!space) {
+      throw new Error('Espace non trouvé');
+    }
+    return space.avatars;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export const getUserSpaces = async (userId: string) => {
   try {
     return await executeWithRetry(async () => {

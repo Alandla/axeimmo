@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from "@/src/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Button } from "@/src/components/ui/button"
@@ -9,7 +9,7 @@ import { Badge } from "@/src/components/ui/badge"
 import { Check } from "lucide-react"
 import { useTranslations } from 'next-intl'
 import { Voice } from '../types/voice'
-import { accentFlags, voices } from '../config/voices.config'
+import { accentFlags, voicesConfig } from '../config/voices.config'
 import {
   Pagination,
   PaginationContent,
@@ -20,6 +20,8 @@ import {
   PaginationPrevious
 } from "@/src/components/ui/pagination"
 import { cn } from "@/src/lib/utils"
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { getSpaceVoices } from '../service/space.service'
 
 export function VoicesGridComponent() {
   const t = useTranslations('voices')
@@ -32,6 +34,9 @@ export function VoicesGridComponent() {
   const [playingVoice, setPlayingVoice] = useState<{ voice: Voice | null, audio: HTMLAudioElement | null }>({ voice: null, audio: null })
   const voicesPerPage = 6
   const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [voices, setVoices] = useState<Voice[]>(voicesConfig)
+
+  const { activeSpace } = useActiveSpaceStore()
 
   // Obtenir tous les tags uniques
   const allTags = Array.from(new Set(voices.flatMap(voice => voice.tags)))
@@ -50,6 +55,19 @@ export function VoicesGridComponent() {
   const indexOfFirstVoice = indexOfLastVoice - voicesPerPage
   const currentVoices = filteredVoices.slice(indexOfFirstVoice, indexOfLastVoice)
   const totalPages = Math.ceil(filteredVoices.length / voicesPerPage)
+
+  useEffect(() => {
+    const fetchSpaceVoices = async () => {
+        if (activeSpace?.id) {
+            const spaceVoices : Voice[] = await getSpaceVoices(activeSpace.id)
+            setVoices([...spaceVoices, ...voices]);
+        }
+    }
+
+    if (activeSpace) {
+        fetchSpaceVoices()
+    }
+}, [activeSpace])
 
   const togglePlay = (voice: Voice) => {
     if (voice.previewUrl) {

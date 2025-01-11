@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from "@/src/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Button } from "@/src/components/ui/button"
@@ -8,7 +8,7 @@ import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } fro
 import { Badge } from "@/src/components/ui/badge"
 import { Check } from "lucide-react"
 import { useTranslations } from 'next-intl'
-import { avatars } from '../config/avatars.config'
+import { avatarsConfig } from '../config/avatars.config'
 import { Avatar, AvatarLook } from '../types/avatar'
 import { AvatarCard } from './avatar-card'
 import { AvatarLookCard } from './avatar-look-card'
@@ -25,6 +25,8 @@ import {
   PaginationPrevious,
 } from "@/src/components/ui/pagination"
 import { cn } from '@/src/lib/utils'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { getSpaceAvatars } from '../service/space.service'
 
 export function AvatarGridComponent() {
   const t = useTranslations('avatars')
@@ -38,6 +40,9 @@ export function AvatarGridComponent() {
   const avatarsPerPage = 6
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null)
+  const [avatars, setAvatars] = useState<Avatar[]>(avatarsConfig)
+
+  const { activeSpace } = useActiveSpaceStore()
 
   // Ajouter l'état pour la pagination des looks
   const [currentLookPage, setCurrentLookPage] = useState(1)
@@ -45,6 +50,22 @@ export function AvatarGridComponent() {
 
   // Obtenir tous les tags uniques
   const allTags = Array.from(new Set(avatars.flatMap(avatar => avatar.tags)))
+
+  useEffect(() => {
+    const fetchSpaceAvatars = async () => {
+        if (activeSpace?.id) {
+            const spaceAvatars : Avatar[] = await getSpaceAvatars(activeSpace.id)
+            console.log(spaceAvatars)
+            if (spaceAvatars.length > 0) {
+              setAvatars([...spaceAvatars, ...avatars]);
+            }
+        }
+    }
+
+    if (activeSpace) {
+        fetchSpaceAvatars()
+    }
+}, [activeSpace])
 
   // Filtrer les voix
   const filteredAvatars = avatars.filter(avatar => {

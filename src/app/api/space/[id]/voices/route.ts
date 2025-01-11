@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/src/lib/auth';
 import { isUserInSpace } from '@/src/dao/userDao';
-import { ISpace } from '@/src/types/space';
-import { getSpaceById } from '@/src/dao/spaceDao';
+import { getSpaceVoices } from '@/src/dao/spaceDao';
+import { Voice } from '@/src/types/voice';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await auth();
@@ -14,22 +14,16 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   console.log("GET /api/space/id/voices by user: ", session.user.id);
 
   try {
-    const isAdmin = session.user.email === "alan@hoox.video" || session.user.email === "maxime@hoox.video";
-    
-    if (!isAdmin) {
-      const userIsInSpace: boolean = await isUserInSpace(session.user.id, params.id);
-      if (!userIsInSpace) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
+
+    const userIsInSpace: boolean = await isUserInSpace(session.user.id, params.id);
+
+    if (!userIsInSpace) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const space: ISpace = await getSpaceById(params.id)
+    const voices: Voice[] = await getSpaceVoices(params.id)
 
-    if (!space) {
-      return NextResponse.json({ error: "Space not found" }, { status: 404 });
-    }
-
-    return NextResponse.json({ data: space })
+    return NextResponse.json({ data: voices })
   } catch (error) {
     console.error('Error adding subtitle style:', error)
     return NextResponse.json({ error: 'Error adding subtitle style' }, { status: 500 })

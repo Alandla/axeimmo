@@ -1,6 +1,6 @@
 import { Avatar } from "../types/avatar";
 
-export const avatars: Avatar[] = [
+export const avatarsConfig: Avatar[] = [
     {
         id: '1',
         name: 'Gala',
@@ -16,63 +16,7 @@ export const avatars: Avatar[] = [
                 tags: ['lying'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/a58cfb99694d483ea8d84dad75e67312_38970/preview_talk_3.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/a58cfb99694d483ea8d84dad75e67312_38970/preview_video_talk_3.mp4'
-            },
-            {
-                id: 'Gala_standing_businesssofa_front_close',
-                name: 'Gala Business Sofa Front 2',
-                place: 'business-sofa',
-                tags: ['professional'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/8352487eb0e846449665f25823c2ea0a_38970/preview_talk_1.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/8352487eb0e846449665f25823c2ea0a_38970/preview_video_talk_1.mp4'
-            },
-            {
-                id: 'Gala_sitting_businesssofa_front',
-                name: 'Gala business-sofa Front 3',
-                place: 'business-sofa',
-                tags: ['professional'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/d56a50a2f56f47798d25a3ad193b911f_38970/preview_talk_10.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/d56a50a2f56f47798d25a3ad193b911f_38970/preview_video_talk_10.mp4'
-            },
-            {
-                id: 'Gala_standing_businesssofa_front',
-                name: 'Gala business-sofa Front',
-                place: 'business-sofa',
-                tags: ['professional'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/96a78a5d17d04e75adc4b53a89eb3fe4_38970/preview_talk_7.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/96a78a5d17d04e75adc4b53a89eb3fe4_38970/preview_video_talk_7.mp4'
-            },
-            {
-                id: 'Gala_sitting_office_front',
-                name: 'Gala Office Front',
-                place: 'office',
-                tags: ['professional'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/025975fe53df4ae3bcb08e98ef7ce01c_38970/preview_talk_12.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/025975fe53df4ae3bcb08e98ef7ce01c_38970/preview_video_talk_12.mp4'
-            },
-            {
-                id: 'Gala_sitting_sofa_front_close',
-                name: 'Gala Sofa Front 2',
-                place: 'sofa',
-                tags: ['cossy'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/59efeb8f6b244693bd9d60f2094c8e4e_38970/preview_talk_6.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/59efeb8f6b244693bd9d60f2094c8e4e_38970/preview_video_talk_6.mp4'
-            },
-            {
-                id: 'Gala_lying_sofa_front',
-                name: 'Gala Sofa Front 3',
-                place: 'sofa',
-                tags: ['cossy'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/33bb4fd328e447f38484e426b43424cb_38970/preview_talk_2.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/33bb4fd328e447f38484e426b43424cb_38970/preview_video_talk_2.mp4'
-            },
-            {
-                id: 'Gala_sitting_sofa_front',
-                name: 'Gala Sofa Front',
-                place: 'sofa',
-                tags: ['cossy'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/babf386c73c541169ba57087cc1c4cd7_38970/preview_talk_4.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/babf386c73c541169ba57087cc1c4cd7_38970/preview_video_talk_4.mp4'
-            },
+            }
         ]
     },
     {
