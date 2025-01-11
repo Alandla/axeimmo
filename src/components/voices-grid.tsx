@@ -19,9 +19,10 @@ import {
   PaginationNext,
   PaginationPrevious
 } from "@/src/components/ui/pagination"
-import { cn } from "@/src/lib/utils"
+import { cn, getMostFrequentString } from "@/src/lib/utils"
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { getSpaceVoices } from '../service/space.service'
+import { useCreationStore } from '../store/creationStore'
 
 export function VoicesGridComponent() {
   const t = useTranslations('voices')
@@ -36,7 +37,8 @@ export function VoicesGridComponent() {
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [voices, setVoices] = useState<Voice[]>(voicesConfig)
 
-  const { activeSpace } = useActiveSpaceStore()
+  const { activeSpace, lastUsedParameters } = useActiveSpaceStore()
+  const { setSelectedVoice } = useCreationStore()
 
   // Obtenir tous les tags uniques
   const allTags = Array.from(new Set(voices.flatMap(voice => voice.tags)))
@@ -57,11 +59,31 @@ export function VoicesGridComponent() {
   const totalPages = Math.ceil(filteredVoices.length / voicesPerPage)
 
   useEffect(() => {
-    const fetchSpaceVoices = async () => {
+    const fetchSpaceVoices = async (lastUsed? : String | undefined) => {
         if (activeSpace?.id) {
             const spaceVoices : Voice[] = await getSpaceVoices(activeSpace.id)
-            setVoices([...spaceVoices, ...voices]);
+            if (spaceVoices.length > 0) {
+              setVoices([...spaceVoices, ...voices]);
+              if (lastUsed) {
+                const voice = voicesConfig.find((voice) => voice.id === lastUsed);
+                if (voice) {
+                  setSelectedVoice(voice);
+                }
+              }
+            }
         }
+    }
+
+    let lastUsed : String | undefined
+    if (lastUsedParameters) {
+      const mostFrequent = getMostFrequentString(lastUsedParameters.voices)
+      if (mostFrequent) {
+        lastUsed = mostFrequent
+        const voice = voicesConfig.find((voice) => voice.id === mostFrequent);
+        if (voice) {
+          setSelectedVoice(voice);
+        }
+      }
     }
 
     if (activeSpace) {

@@ -38,13 +38,13 @@ export const templates = [
       ],
     },
     {
-        name: "modern",
-        optionsAvailable: [
-          "secondLine",
-          "animation",
-          "shadow",
-        ],
-      },
+      name: "modern",
+      optionsAvailable: [
+        "secondLine",
+        "animation",
+        "shadow",
+      ],
+    },
 ]
 
 export const subtitles = [

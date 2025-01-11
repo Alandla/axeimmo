@@ -43,9 +43,9 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
 );
 
 export function AvatarCard({ avatar, onClick }: { avatar: Avatar; onClick: () => void }) {
-    const { selectedAvatar } = useCreationStore()
+    const { selectedAvatarName } = useCreationStore()
     const t = useTranslations('avatars')
-    const isSelected = selectedAvatar?.name === avatar.name;
+    const isSelected = selectedAvatarName === avatar.name;
 
   return (
     <Card 

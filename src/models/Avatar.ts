@@ -4,7 +4,7 @@ import toJSON from './plugins/toJSON';
 const avatarSchema = new mongoose.Schema({
     id: {
       type: String,
-      required: true, // Assurez-vous que chaque avatar a une ID unique
+      required: true,
     },
     name: {
       type: String,

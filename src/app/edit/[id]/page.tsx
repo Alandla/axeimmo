@@ -35,6 +35,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/
 import { CommandShortcut } from '@/src/components/ui/command'
 import { ISpace } from '@/src/types/space'
 import { PlanName } from '@/src/types/enums'
+import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
+import { subtitles } from '@/src/config/subtitles.config'
+import { getMostFrequentString } from '@/src/lib/utils'
+import { space } from 'postcss/lib/list'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -43,6 +47,7 @@ export default function VideoEditor() {
   const t = useTranslations('edit')
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
+  const { lastUsedParameters, setLastUsedParameters } = useActiveSpaceStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
@@ -249,13 +254,46 @@ export default function VideoEditor() {
         
         setVideo(response);
 
+        const setMostUsed = response?.video?.subtitle.name === "Bold"
+        let lastUseSubtitleFind = false
+
+        if (response.video && setMostUsed && lastUsedParameters?.subtitles) {
+          const mostFrequent = getMostFrequentString(lastUsedParameters.subtitles)
+          if (mostFrequent && mostFrequent !== response.video?.subtitle.name) {
+            const subtitle = subtitles.find((subtitle) => subtitle.name === mostFrequent);
+            if (subtitle) {
+              lastUseSubtitleFind = true
+              response.video.subtitle = subtitle
+            }
+          }
+        }
+
         setIsLoading(false);
 
         const spaceResponse = await basicApiGetCall<ISpace>(`/space/${response.spaceId}`);
-        console.log("spaceResponse", spaceResponse)
-        console.log("spaceResponse.plan.name", spaceResponse.plan.name)
-        console.log("PlanName.FREE", spaceResponse.plan.name === PlanName.FREE)
         setShowWatermark(spaceResponse.plan.name === PlanName.FREE);
+        setSubtitleStyles(spaceResponse.subtitleStyle)
+
+        if (lastUsedParameters?.subtitles === undefined) {
+          setLastUsedParameters(spaceResponse.lastUsed)
+        }
+
+        if (response.video && setMostUsed && !lastUseSubtitleFind) {
+          const mostFrequent = getMostFrequentString(spaceResponse.lastUsed.subtitles)
+          const subtitle = spaceResponse.subtitleStyle.find((subtitle) => subtitle.name === mostFrequent);
+          if (subtitle) {
+            lastUseSubtitleFind = true
+            response.video.subtitle = subtitle
+          } else {
+            const subtitleConfig = subtitles.find((subtitle) => subtitle.name === mostFrequent);
+            if (subtitleConfig) {
+              lastUseSubtitleFind = true
+              response.video.subtitle = subtitleConfig
+            }
+          }
+        }
+
+        setVideo(response)
 
       } catch (error) {
         console.error(error)
@@ -284,6 +322,7 @@ export default function VideoEditor() {
     }
 
     checkIsMobile()
+
     window.addEventListener('resize', checkIsMobile)
     return () => {
       window.removeEventListener('resize', checkIsMobile)

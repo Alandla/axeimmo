@@ -46,17 +46,21 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
 
 interface AvatarLookCardProps {
   look: AvatarLook
+  avatarName: String
 }
 
-export function AvatarLookCard({ look }: AvatarLookCardProps) {
-  const { selectedAvatar, setSelectedAvatar } = useCreationStore()
-  const isSelected = selectedAvatar?.id === look.id;
+export function AvatarLookCard({ look, avatarName }: AvatarLookCardProps) {
+  const { selectedLook, setSelectedLook, setSelectedAvatarName } = useCreationStore()
+  const isSelected = selectedLook?.id === look.id;
   const t = useTranslations('avatars')
 
   return (
     <Card 
       className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
-      onClick={() => setSelectedAvatar(look)}
+      onClick={() => {
+        setSelectedLook(look)
+        setSelectedAvatarName(avatarName)
+      }}
     >
       {isSelected && (
         <div className="absolute top-4 right-2 transition-all duration-150">
@@ -91,7 +95,7 @@ export function AvatarLookCard({ look }: AvatarLookCardProps) {
               height={720}
             />
           </div>
-          <PreviewModal previewUrl={look.previewUrl || ''} avatarName={selectedAvatar?.name || ''} lookPlace={t(`place.${look.place}`)}>
+          <PreviewModal previewUrl={look.previewUrl || ''} avatarName={selectedLook?.name || ''} lookPlace={t(`place.${look.place}`)}>
             <Button
               variant="outline"
               size="sm"

@@ -6,7 +6,7 @@ import { uploadFiles } from './upload.service'
 import { IMedia } from '../types/video'
 
 export const startGeneration = async (userId: string, spaceId: string) => {
-  const { files, script, selectedVoice, selectedAvatar, setSteps } = useCreationStore.getState()
+  const { files, script, selectedVoice, selectedLook, setSteps } = useCreationStore.getState()
   
   const updateStepProgress = (stepName: string, progress: number) => {
     const currentSteps = useCreationStore.getState().steps
@@ -29,7 +29,7 @@ export const startGeneration = async (userId: string, spaceId: string) => {
     files: uploadedFiles,
     script: script,
     voice: selectedVoice,
-    avatar: selectedAvatar,
+    avatar: selectedLook,
     userId: userId,
     spaceId: spaceId
   }

@@ -1,5 +1,5 @@
-import { ISpace, SimpleSpace } from "../types/space";
-import { basicApiGetCall } from "../lib/api";
+import { ILastUsed, ISpace, SimpleSpace } from "../types/space";
+import { basicApiCall, basicApiGetCall } from "../lib/api";
 import { Voice } from "../types/voice";
 import { Avatar } from "../types/avatar";
 
@@ -39,3 +39,29 @@ export async function getSpaceAvatars(id: string): Promise<Avatar[]> {
         return [];
     }
 }
+
+export async function getSpaceLastUsed(id: string): Promise<ILastUsed | null> {
+    try {
+        const response = await basicApiGetCall<ILastUsed>(`/space/${id}/lastUsed`)
+        return response
+    } catch (error) {
+        console.error("Error fetching spaces:", error);
+        return null;
+    }
+}
+
+export async function addLastUsed(id:string, voiceId?: string, avatarId?: string, subtitleId?: string): Promise<Avatar[]> {
+    try {
+        const response = await basicApiCall<Avatar[]>(`/space/addLastUsed`, {
+            spaceId: id,
+            voiceId,
+            avatarId,
+            subtitleId
+          }
+        )
+        return response
+    } catch (error) {
+        console.error("Error fetching spaces:", error);
+        return [];
+    }
+} 

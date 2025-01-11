@@ -24,7 +24,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/src/components/ui/pagination"
-import { cn } from '@/src/lib/utils'
+import { cn, getMostFrequentString } from '@/src/lib/utils'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { getSpaceAvatars } from '../service/space.service'
 
@@ -32,7 +32,7 @@ export function AvatarGridComponent() {
   const t = useTranslations('avatars')
   const tCommon = useTranslations('common')
 
-  const { selectedVoice } = useCreationStore()
+  const { selectedVoice, setSelectedLook } = useCreationStore()
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedGender, setSelectedGender] = useState<string>(selectedVoice?.gender || 'all')
@@ -42,7 +42,7 @@ export function AvatarGridComponent() {
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null)
   const [avatars, setAvatars] = useState<Avatar[]>(avatarsConfig)
 
-  const { activeSpace } = useActiveSpaceStore()
+  const { activeSpace, lastUsedParameters } = useActiveSpaceStore()
 
   // Ajouter l'état pour la pagination des looks
   const [currentLookPage, setCurrentLookPage] = useState(1)
@@ -52,22 +52,45 @@ export function AvatarGridComponent() {
   const allTags = Array.from(new Set(avatars.flatMap(avatar => avatar.tags)))
 
   useEffect(() => {
-    const fetchSpaceAvatars = async () => {
+    const fetchSpaceAvatars = async (lastUsed? : String | undefined) => {
         if (activeSpace?.id) {
             const spaceAvatars : Avatar[] = await getSpaceAvatars(activeSpace.id)
-            console.log(spaceAvatars)
             if (spaceAvatars.length > 0) {
               setAvatars([...spaceAvatars, ...avatars]);
+              if (lastUsed) {
+                const avatar = spaceAvatars.find((avatar) => avatar.id === lastUsed);
+                if (avatar) {
+                  const look = avatar.looks.find(l => l.id === lastUsed);
+                  if (look) {
+                    setSelectedLook(look);
+                  }
+                }
+              }
             }
         }
     }
 
+    let lastUsed : String | undefined
+    if (lastUsedParameters) {
+      const mostFrequent = getMostFrequentString(lastUsedParameters.avatars)
+      if (mostFrequent && mostFrequent === "999") {
+        lastUsed = mostFrequent
+        const avatar = avatarsConfig.find((avatar) => avatar.looks.some(look => look.id === lastUsed));
+        if (avatar) {
+          const look = avatar.looks.find(l => l.id === lastUsed);
+          if (look) {
+            setSelectedLook(look);
+          }
+        }
+      }
+    }
+
     if (activeSpace) {
-        fetchSpaceAvatars()
+        fetchSpaceAvatars(lastUsed)
     }
 }, [activeSpace])
 
-  // Filtrer les voix
+  // Filtrer les avatars
   const filteredAvatars = avatars.filter(avatar => {
     const matchesSearch = avatar.name.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesGender = selectedGender === 'all' ? true : avatar.gender === selectedGender
@@ -75,7 +98,7 @@ export function AvatarGridComponent() {
     return matchesSearch && matchesGender && matchesTags
   })
 
-  // Calculer les voix pour la page courante
+  // Calculer les avatars pour la page courante
   const indexOfLastAvatar = currentPage * avatarsPerPage
   const indexOfFirstAvatar = indexOfLastAvatar - avatarsPerPage
   const currentAvatars = filteredAvatars.slice(indexOfFirstAvatar, indexOfLastAvatar)
@@ -317,6 +340,7 @@ export function AvatarGridComponent() {
               <AvatarLookCard
                 key={look.id}
                 look={look}
+                avatarName={activeAvatar.name}
               />
             ))
           ) : (

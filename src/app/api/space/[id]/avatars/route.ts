@@ -1,11 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { auth } from '@/src/lib/auth';
 import { isUserInSpace } from '@/src/dao/userDao';
-import { getSpaceAvatars, getSpaceVoices } from '@/src/dao/spaceDao';
-import { Voice } from '@/src/types/voice';
-import { Avatar } from '@/src/types/avatar';
+import { getSpaceById } from '@/src/dao/spaceDao';
+import { ISpace } from '@/src/types/space';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET({ params }: { params: { id: string } }) {
   const session = await auth();
 
   if (!session || !session.user || !session.user.id) {
@@ -22,9 +21,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const avatars: Avatar[] = await getSpaceAvatars(params.id)
+    const space: ISpace = await getSpaceById(params.id)
 
-    return NextResponse.json({ data: avatars })
+    if (!space) {
+      return NextResponse.json({ error: "Space not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ data: space.avatars })
   } catch (error) {
     console.error('Error adding subtitle style:', error)
     return NextResponse.json({ error: 'Error adding subtitle style' }, { status: 500 })

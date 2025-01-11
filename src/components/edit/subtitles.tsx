@@ -21,19 +21,6 @@ export default function Subtitles({ video, setSubtitleStyle, setActiveTabMobile,
         }
     };
 
-    useEffect(() => {
-        const fetchSpaceSubtitleStyles = async () => {
-            if (video?.spaceId && !subtitleStyles) {
-                const spaceSubtitleStyles = await basicApiGetCall<ISpaceSubtitleStyle[]>(`/space/${video.spaceId}/getSubtitleStyles`)
-                setSubtitleStyles(spaceSubtitleStyles)
-            }
-        }
-
-        if (video?.spaceId) {
-            fetchSpaceSubtitleStyles()
-        }
-    }, [video])
-
     const updateSubtitleStyle = async (subtitleStyleId: string, subtitleStyle: ISpaceSubtitleStyle) => {
         const response : ISpaceSubtitleStyle[]= await basicApiCall(`/space/subtitleStyle/update`, { spaceId: video.spaceId, subtitleStyleId, subtitleStyle })
         if (response) {

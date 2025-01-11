@@ -27,6 +27,7 @@ import { addMediasToSpace } from "../dao/spaceDao";
 import { IMediaSpace } from "../types/space";
 import { addVideoCountContact } from "../lib/loops";
 import { generateThumbnail } from "../lib/render";
+import { addLastUsed } from "../service/space.service";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -527,6 +528,8 @@ export const generateVideoTask = task({
         }
       }
     }
+
+    addLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999") //999 when undefined for not select avatar when user don't use it
 
     const thumbnail = await generateThumbnail(newVideo);
 
