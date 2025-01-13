@@ -238,6 +238,7 @@ export const updateSpaceLastUsed = async (
       space.lastUsed = { voices, avatars, subtitles };
 
       await space.save();
+      return space;
     });
   } catch (error) {
     console.error("Error while updating space last used: ", error);

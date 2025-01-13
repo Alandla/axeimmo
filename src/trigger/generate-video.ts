@@ -530,7 +530,7 @@ export const generateVideoTask = task({
       }
     }
 
-    const space : ISpace | undefined = await addLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
+    const space : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
 
     let subtitle = subtitles[1]
     if (space && space.lastUsed?.subtitles) {
