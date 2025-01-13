@@ -4,13 +4,12 @@ import { getVideoById, updateVideo } from "../dao/videoDao";
 import { getProgress, renderVideo } from "../lib/render";
 import { uploadImageFromUrlToS3 } from "../lib/r2";
 import { IVideo } from "../types/video";
-import { addCreditsToSpace, removeCreditsToSpace } from "../dao/spaceDao";
+import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
 import { calculateHeygenCost } from "../lib/cost";
 import { combineAudioVoices } from "./combine-audio";
 import { getSpaceById } from "../dao/spaceDao";
-import { addLastUsed } from "../service/space.service";
 
 interface RenderStatus {
   status: string;
@@ -51,7 +50,7 @@ export const exportVideoTask = task({
         throw new Error('Video not found');
       }
 
-      addLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name)
+      updateSpaceLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name)
 
       const space = await getSpaceById(video.spaceId);
       const showWatermark = space.plan.name === "FREE";

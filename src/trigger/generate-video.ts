@@ -27,7 +27,6 @@ import { addMediasToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
 import { IMediaSpace, ISpace } from "../types/space";
 import { addVideoCountContact } from "../lib/loops";
 import { generateThumbnail } from "../lib/render";
-import { addLastUsed } from "../service/space.service";
 import { getMostFrequentString } from "../lib/utils";
 
 interface GenerateVideoPayload {
@@ -125,7 +124,30 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      const rawSentences = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
+      const sentencesCut = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
+      const rawSentences = [];
+      
+      for (let i = 0; i < sentencesCut.length; i++) {
+        const currentSentence = sentencesCut[i].trim();
+        
+        // Vérifier si c'est la dernière phrase
+        if (i === sentencesCut.length - 1) {
+          rawSentences.push(currentSentence);
+          continue;
+        }
+        
+        // Compter les mots de la phrase suivante
+        const nextSentence = sentencesCut[i + 1].trim();
+        const nextSentenceWordCount = nextSentence.split(/\s+/).length;
+        
+        if (nextSentenceWordCount < 4) {
+          // Combiner avec la phrase suivante
+          rawSentences.push(currentSentence + ' ' + nextSentence);
+          i++; // Sauter la phrase suivante
+        } else {
+          rawSentences.push(currentSentence);
+        }
+      }
       let processedCount = 0;
 
       // Traiter les phrases par lots de 5
