@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/src/lib/auth';
 import { isUserInSpace } from '@/src/dao/userDao';
 import { getSpaceById } from '@/src/dao/spaceDao';
 import { ISpace } from '@/src/types/space';
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await auth();
 
   if (!session || !session.user || !session.user.id) {
