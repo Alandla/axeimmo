@@ -1,6 +1,13 @@
+import { Avatar } from "./avatar";
 import { MemberRole, PlanName, SubscriptionType } from "./enums";
 import { IMedia } from "./video";
+import { Voice } from "./voice";
 
+export interface ILastUsed {
+  voices: string[],
+  avatars: string[],
+  subtitles: string[],
+}
 
 export interface IMember {
   userId: string;
@@ -45,4 +52,7 @@ export interface ISpace {
   plan: IPlan;
   credits: number;
   subtitleStyle: ISpaceSubtitleStyle[];
+  avatars: Avatar[];
+  voices: Voice[];
+  lastUsed: ILastUsed
 }

@@ -1,6 +1,6 @@
 import { Avatar } from "../types/avatar";
 
-export const avatars: Avatar[] = [
+export const avatarsConfig: Avatar[] = [
     {
         id: '1',
         name: 'Gala',
@@ -72,7 +72,7 @@ export const avatars: Avatar[] = [
                 tags: ['cossy'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/babf386c73c541169ba57087cc1c4cd7_38970/preview_talk_4.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/babf386c73c541169ba57087cc1c4cd7_38970/preview_video_talk_4.mp4'
-            },
+            }
         ]
     },
     {

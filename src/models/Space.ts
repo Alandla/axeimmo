@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
 import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
 import mediaSchema from "./Media";
+import avatarSchema from "./Avatar";
+import voiceSchema from "./Voice";
+import { subtitles } from "../config/subtitles.config";
 
 // Schéma pour les membres
 const memberSchema = new mongoose.Schema({
@@ -80,7 +83,14 @@ const spaceSchema = new mongoose.Schema(
           type: Object
         }
       }
-    ]
+    ],
+    avatars: [avatarSchema],
+    voices: [voiceSchema],
+    lastUsed: {
+      voices: [],
+      avatars: [],
+      subtitles: []
+    }
   },
   {
     timestamps: true,

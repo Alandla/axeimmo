@@ -10,7 +10,8 @@ type CreationStore = {
   files: FileToUpload[]
   totalCost: number
   creationStep: CreationStep
-  selectedAvatar: AvatarLook | null
+  selectedLook: AvatarLook | null
+  selectedAvatarName: String | null
   selectedVoice: Voice | null
   steps: Step[]
   setScript: (script: string) => void
@@ -19,7 +20,8 @@ type CreationStore = {
   addToTotalCost: (cost: number) => void
   setCreationStep: (step: CreationStep) => void
   setSelectedVoice: (voice: Voice | null) => void
-  setSelectedAvatar: (avatar: AvatarLook | null) => void
+  setSelectedAvatarName: (id: String | null) => void
+  setSelectedLook: (avatar: AvatarLook | null) => void
   addStep: (step: Step) => void
   setSteps: (steps: Step[]) => void
   resetSteps: () => void
@@ -31,7 +33,8 @@ export const useCreationStore = create<CreationStore>((set) => ({
   totalCost: 0,
   creationStep: CreationStep.START,
   selectedVoice: null,
-  selectedAvatar: null,
+  selectedLook: null,
+  selectedAvatarName: null,
   steps: [],
   setScript: (script) => set({ script }),
   setFiles: (files) => set({ files }),
@@ -39,7 +42,8 @@ export const useCreationStore = create<CreationStore>((set) => ({
   addToTotalCost: (cost) => set((state) => ({ totalCost: state.totalCost + cost })),
   setCreationStep: (step) => set({ creationStep: step }),
   setSelectedVoice: (voice) => set({ selectedVoice: voice }),
-  setSelectedAvatar: (avatar) => set({ selectedAvatar: avatar }),
+  setSelectedLook: (avatar) => set({ selectedLook: avatar }),
+  setSelectedAvatarName: (name) => set({ selectedAvatarName: name }),
   addStep: (step) => set((state) => ({ steps: [...state.steps, step] })),
   setSteps: (steps) => set({ steps }),
   resetSteps: () => set({ steps: [] })

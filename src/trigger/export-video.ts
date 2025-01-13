@@ -10,6 +10,7 @@ import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
 import { calculateHeygenCost } from "../lib/cost";
 import { combineAudioVoices } from "./combine-audio";
 import { getSpaceById } from "../dao/spaceDao";
+import { addLastUsed } from "../service/space.service";
 
 interface RenderStatus {
   status: string;
@@ -45,10 +46,12 @@ export const exportVideoTask = task({
         await removeCreditsToSpace(exportData.spaceId, exportData.creditCost);
       }
 
-      const video = await getVideoById(videoId);
+      const video : IVideo | null = await getVideoById(videoId);
       if (!video) {
         throw new Error('Video not found');
       }
+
+      addLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name)
 
       const space = await getSpaceById(video.spaceId);
       const showWatermark = space.plan.name === "FREE";

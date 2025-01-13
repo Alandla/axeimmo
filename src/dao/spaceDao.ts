@@ -201,3 +201,46 @@ export const getUserSpaces = async (userId: string) => {
     throw error;
   }
 };
+
+export const updateSpaceLastUsed = async (
+  spaceId: string,
+  voiceId?: string | null,
+  avatarId?: string | null,
+  subtitleId?: string | null
+) => {
+  try {
+    return await executeWithRetry(async () => {
+      const space = await SpaceModel.findById(spaceId);
+      
+      if (!space) throw new Error("Space not found");
+
+      let { voices, avatars, subtitles } = space.lastUsed;
+  
+      if (voiceId) {
+        voices.push(voiceId);
+        if (voices.length > 5) {
+          voices.pop();
+        }
+      }
+      if (avatarId) {
+        avatars.push(avatarId);
+        if (avatars.length > 5) {
+          avatars.pop();
+        }
+      }
+      if (subtitleId) {
+        subtitles.push(subtitleId);
+        if (subtitles.length > 5) {
+          subtitles.pop();
+        }
+      }
+
+      space.lastUsed = { voices, avatars, subtitles };
+
+      await space.save();
+    });
+  } catch (error) {
+    console.error("Error while updating space last used: ", error);
+    throw error;
+  }
+};

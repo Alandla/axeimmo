@@ -1,6 +1,6 @@
 import { Voice } from '../types/voice'
 
-export const voices: Voice[] = [
+export const voicesConfig: Voice[] = [
   {
     id: '21m00Tcm4TlvDq8ikWAM',
     name: 'Rachel',
