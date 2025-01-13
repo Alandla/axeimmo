@@ -1,3 +1,5 @@
+import { ISpaceSubtitleStyle } from "../types/space"
+
 export const templates = [
     {
       name: "simple",
@@ -47,7 +49,7 @@ export const templates = [
     },
 ]
 
-export const subtitles = [
+export const subtitles : ISpaceSubtitleStyle[] = [
     {
         id: '1',
         name: 'Simple',

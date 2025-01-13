@@ -50,9 +50,9 @@ export async function getSpaceLastUsed(id: string): Promise<ILastUsed | null> {
     }
 }
 
-export async function addLastUsed(id:string, voiceId?: string, avatarId?: string, subtitleId?: string): Promise<Avatar[]> {
+export async function addLastUsed(id:string, voiceId?: string, avatarId?: string, subtitleId?: string): Promise<ISpace | undefined> {
     try {
-        const response = await basicApiCall<Avatar[]>(`/space/addLastUsed`, {
+        const response = await basicApiCall<ISpace>(`/space/addLastUsed`, {
             spaceId: id,
             voiceId,
             avatarId,
@@ -62,6 +62,6 @@ export async function addLastUsed(id:string, voiceId?: string, avatarId?: string
         return response
     } catch (error) {
         console.error("Error fetching spaces:", error);
-        return [];
+        return undefined;
     }
 } 

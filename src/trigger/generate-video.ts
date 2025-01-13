@@ -23,11 +23,12 @@ import { analyzeSimpleVideoWithSieve, analyzeVideoWithSieve, getAnalysisResult, 
 import { applyShowBrollToSequences, ShowBrollResult, simplifyMedia, simplifySequences } from "../lib/analyse";
 import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
-import { addMediasToSpace } from "../dao/spaceDao";
-import { IMediaSpace } from "../types/space";
+import { addMediasToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
+import { IMediaSpace, ISpace } from "../types/space";
 import { addVideoCountContact } from "../lib/loops";
 import { generateThumbnail } from "../lib/render";
 import { addLastUsed } from "../service/space.service";
+import { getMostFrequentString } from "../lib/utils";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -529,8 +530,24 @@ export const generateVideoTask = task({
       }
     }
 
-    addLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999") //999 when undefined for not select avatar when user don't use it
+    const space : ISpace | undefined = await addLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
 
+    let subtitle = subtitles[1]
+    if (space && space.lastUsed?.subtitles) {
+      const mostFrequent = getMostFrequentString(space.lastUsed.subtitles)
+      if (mostFrequent) {
+        const subtitleFind = subtitles.find((subtitle) => subtitle.name === mostFrequent);
+        if (subtitleFind) {
+          subtitle = subtitleFind;
+        } else {
+          const subtitleFindFromSpace = space.subtitleStyle.find((subtitle) => subtitle.name === mostFrequent);
+          if (subtitleFindFromSpace) {
+            subtitle = subtitleFindFromSpace;
+          }
+        }
+      }
+    }
+    
     const thumbnail = await generateThumbnail(newVideo);
 
     logger.info('Thumbnail URL', { thumbnail })
@@ -555,8 +572,8 @@ export const generateVideoTask = task({
         sequences,
         avatar,
         subtitle: {
-          name: subtitles[1].name,
-          style: subtitles[1].style,
+          name: subtitle.name,
+          style: subtitle.style,
         }
       }
     }
