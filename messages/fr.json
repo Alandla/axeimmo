@@ -490,7 +490,9 @@
         "kitchen": "Cuisine",
         "garden": "Jardin",
         "street": "Rue",
-        "balcony": "Balcon"
+        "balcony": "Balcon",
+        "stadium": "Stade",
+        "library": "Librairie"
       },
       "gender": {
         "male": "Masculin",
