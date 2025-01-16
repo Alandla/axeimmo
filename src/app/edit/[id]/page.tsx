@@ -100,7 +100,7 @@ export default function VideoEditor() {
     
     try {
 
-      await basicApiCall('/video/save', { video, takeThumbnail: true });
+      await basicApiCall('/video/save', { video });
       
       setIsDirty(false);
       
