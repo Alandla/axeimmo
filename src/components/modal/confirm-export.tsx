@@ -43,6 +43,7 @@ export default function ModalConfirmExport({
     setIsPending(true)
     const exportId = await onExportVideo()
     if (exportId) {
+      await new Promise(resolve => setTimeout(resolve, 500))
       window.open(`/export/${exportId}`, '_blank')
     }
     setIsPending(false)
