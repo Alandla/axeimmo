@@ -11,7 +11,7 @@ const groq = createGroq({
 export const generateBrollDisplay = async (sequences: SimpleSequence[]) => {
     try {
         const result = await generateText({
-            model: groq('llama-3.1-70b-versatile'),
+            model: groq('llama-3.2-90b-vision-preview'),
             messages: [
                 {
                     role: "user",
@@ -116,7 +116,7 @@ export const generateBrollDisplay = async (sequences: SimpleSequence[]) => {
 export const generateStartData = async (script: string) => {
     try {
         const result = await generateText({
-            model: groq('llama-3.1-70b-versatile'),
+            model: groq('llama-3.3-70b-versatile'),
             messages: [
                 {
                     role: "user",
@@ -135,6 +135,7 @@ export const generateStartData = async (script: string) => {
                             "- Create a short, catchy title that summarizes the main idea of the video" +
                             "- The title should be no more than 7 words long" +
                             "- Ensure it's engaging and relevant to the content" +
+                            "- It must be in the same language as the script" +
                             "" +
                             "For the style/genre/emotion:" +
                             "- Choose one option from the following predefined list that best matches the overall tone and content of the video:" +
