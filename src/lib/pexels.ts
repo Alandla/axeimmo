@@ -95,10 +95,10 @@ export const getBestQualityVideo = (videos: any[]) => {
   
     if (!hdVideos || hdVideos.length === 0) return null;
   
-    // Objectif de hauteur pour une vidéo 1080p
-    const targetHeight = 1920;
-  
-    // Trier les vidéos HD par proximité avec la hauteur cible (1920 pour 1080p)
+    // Déterminer si la vidéo est verticale ou horizontale et définir la hauteur cible
+    const firstVideo = hdVideos[0];
+    const targetHeight = firstVideo.height > firstVideo.width ? 1920 : 1080;
+
     hdVideos.sort((a, b) => {
       const diffA = Math.abs(a.height - targetHeight);
       const diffB = Math.abs(b.height - targetHeight);
