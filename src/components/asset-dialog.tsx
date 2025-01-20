@@ -155,14 +155,12 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
               ) : null}
             </div>
 
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="text-sm text-muted-foreground mt-2 mb-4">
               {t('dialog.added-by', { 
                 name: mediaSpace.creator.name || t('dialog.unknown-user'),
                 date: uploadDate
               })}
             </p>
-
-            <Separator className="my-8" />
 
             <div className="space-y-4">
               <div>
@@ -178,7 +176,7 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
                 />
               </div>
 
-              <div className="flex items-center justify-between space-x-2">
+              {/* <div className="flex items-center justify-between space-x-2">
                 <div className="space-y-0.5">
                   <Label htmlFor="auto-placement" className="text-sm font-medium flex items-center gap-1">
                     <Sparkles className="h-3 w-3" />
@@ -193,7 +191,7 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
                   checked={autoPlacement}
                   onCheckedChange={setAutoPlacement}
                 />
-              </div>
+              </div> */}
             </div>
 
             <div className="mt-4">

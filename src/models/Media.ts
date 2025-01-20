@@ -28,8 +28,8 @@ const mediaSchema = new mongoose.Schema({
       default: 0,
     },
     name: String,
-    description: [
-      {
+    description: {
+      type: [{
         start: Number,
         duration: {
           type: Number,
@@ -39,8 +39,9 @@ const mediaSchema = new mongoose.Schema({
           type: String,
           default: ''
         }
-      }
-    ],
+      }],
+      default: [{ start: 0, text: '' }]
+    },
     video: {
       id: String,
       quality: String,

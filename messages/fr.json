@@ -3,6 +3,15 @@
       "all-f": "Toutes",
       "all-m": "Tous"
     },
+    "modals": {
+      "confirm-delete": {
+        "title": "Confirmer la suppression",
+        "description": "Êtes-vous sûr de vouloir supprimer {name} ? Cette action est irréversible.",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "deleting": "Suppression..."
+      }
+    },
     "login": {
       "title": "Connectez-vous à votre compte",
       "welcome": "Bienvenue ! Sélectionnez une méthode pour continuer.",

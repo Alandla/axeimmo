@@ -11,28 +11,28 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/components/ui/dialog"
-import { useVideoToDeleteStore } from '@/src/store/videoToDelete'
-import { IVideo } from '@/src/types/video'
+import { MediaSpaceWithCreator } from '@/src/app/dashboard/assets/page'
 
-interface ModalConfirmDeleteProps {
+interface ModalConfirmDeleteAssetProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  handleDeleteVideo: (video: IVideo) => void
+  mediaSpace: MediaSpaceWithCreator | null
+  handleDeleteAsset: (mediaSpace: MediaSpaceWithCreator) => void
 }
 
-export default function ModalConfirmDelete({
+export default function ModalConfirmDeleteAsset({
   isOpen,
   setIsOpen,
-  handleDeleteVideo,
-}: ModalConfirmDeleteProps) {
+  mediaSpace,
+  handleDeleteAsset,
+}: ModalConfirmDeleteAssetProps) {
   const t = useTranslations('modals.confirm-delete')
   const [isPending, setIsPending] = useState(false)
-  const { video } = useVideoToDeleteStore()
 
   const handleConfirm = async () => {
     setIsPending(true)
-    if (video) {
-      handleDeleteVideo(video)
+    if (mediaSpace) {
+      handleDeleteAsset(mediaSpace)
     }
     setIsPending(false)
     setIsOpen(false)
@@ -46,7 +46,7 @@ export default function ModalConfirmDelete({
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>
-            {t('description', { name: video?.title })}
+            {t('description ', { name: mediaSpace?.media.name })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end">
@@ -70,4 +70,4 @@ export default function ModalConfirmDelete({
       </DialogContent>
     </Dialog>
   )
-}
+} 

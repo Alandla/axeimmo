@@ -72,11 +72,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       icon: Home,
     },
     {
-      name: `${t('links.videos')}`,
-      url: "/dashboard/videos",
-      icon: Video,
-    },
-    {
       name: `${t('links.assets')}`,
       url: "/dashboard/assets",
       icon: ImageIcon,

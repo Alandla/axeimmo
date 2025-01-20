@@ -9,6 +9,8 @@ import { useUsersStore } from '@/src/store/creatorUserVideo'
 import AssetCard from '@/src/components/asset-card'
 import AssetDialog from '@/src/components/asset-dialog'
 import { IMediaSpace } from '@/src/types/space'
+import VideoCardSkeleton from '@/src/components/video-card-skeleton'
+import { ImageOff } from 'lucide-react'
 
 interface User {
   id: string
@@ -27,6 +29,7 @@ export default function AssetsPage() {
   const [assets, setAssets] = useState<MediaSpaceWithCreator[]>([])
   const [selectedAsset, setSelectedAsset] = useState<MediaSpaceWithCreator | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const setMedia = (media: MediaSpaceWithCreator) => {
     setAssets(prevAssets => {
@@ -57,6 +60,7 @@ export default function AssetsPage() {
             }
           }))
           setAssets(processedAssets.reverse())
+          setIsLoading(false)
         }
       }
     }
@@ -67,18 +71,32 @@ export default function AssetsPage() {
   return (
     <>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
-        {assets.map((asset) => (
-          <AssetCard
-            key={asset.media.id}
-            spaceId={activeSpace?.id || ''}
-            mediaSpace={asset}
-            setMedia={setMedia}
-            onClick={() => {
-              setSelectedAsset(asset)
-              setIsDialogOpen(true)
-            }}
-          />
-        ))}
+        {isLoading ? (
+          Array.from({ length: 8 }).map((_, index) => (
+            <VideoCardSkeleton key={index} />
+          ))
+        ) : assets.length === 0 ? (
+          <div className="col-span-full flex flex-col items-center justify-center py-20">
+            <ImageOff className="w-12 h-12 text-gray-400 mb-4" />
+            <h2 className="text-2xl font-semibold mb-2">{t('no-videos')}</h2>
+            <p className="text-gray-500 mb-6 text-center">
+              {t('no-videos-description')}
+            </p>
+          </div>
+        ) : (
+          assets.map((asset) => (
+            <AssetCard
+              key={asset.media.id}
+              spaceId={activeSpace?.id || ''}
+              mediaSpace={asset}
+              setMedia={setMedia}
+              onClick={() => {
+                setSelectedAsset(asset)
+                setIsDialogOpen(true)
+              }}
+            />
+          ))
+        )}
       </div>
 
       <AssetDialog

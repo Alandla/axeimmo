@@ -984,5 +984,14 @@
         "error": "Error",
         "error-description": "An error occurred"
       }
+    },
+    "modals": {
+      "confirm-delete": {
+        "title": "Confirm deletion",
+        "description": "Are you sure you want to delete {name}? This action is irreversible.",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "deleting": "Deleting..."
+      }
     }
   }
