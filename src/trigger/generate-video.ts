@@ -23,10 +23,11 @@ import { analyzeSimpleVideoWithSieve, analyzeVideoWithSieve, getAnalysisResult, 
 import { applyShowBrollToSequences, ShowBrollResult, simplifyMedia, simplifySequences } from "../lib/analyse";
 import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
-import { addMediasToSpace } from "../dao/spaceDao";
-import { IMediaSpace } from "../types/space";
+import { addMediasToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
+import { IMediaSpace, ISpace } from "../types/space";
 import { addVideoCountContact } from "../lib/loops";
 import { generateThumbnail } from "../lib/render";
+import { getMostFrequentString } from "../lib/utils";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -43,7 +44,7 @@ export const generateVideoTask = task({
   machine: {
     preset: "medium-1x"
   },
-  maxDuration: 300, // Stop executing after 300 secs (5 mins) of compute
+  maxDuration: 600, // Stop executing after 300 secs (5 mins) of compute
   run: async (payload: GenerateVideoPayload, { ctx }) => {
 
     let cost = 0
@@ -123,7 +124,30 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      const rawSentences = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
+      const sentencesCut = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
+      const rawSentences = [];
+      
+      for (let i = 0; i < sentencesCut.length; i++) {
+        const currentSentence = sentencesCut[i].trim();
+        
+        // Vérifier si c'est la dernière phrase
+        if (i === sentencesCut.length - 1) {
+          rawSentences.push(currentSentence);
+          continue;
+        }
+        
+        // Compter les mots de la phrase suivante
+        const nextSentence = sentencesCut[i + 1].trim();
+        const nextSentenceWordCount = nextSentence.split(/\s+/).length;
+        
+        if (nextSentenceWordCount < 4) {
+          // Combiner avec la phrase suivante
+          rawSentences.push(currentSentence + ' ' + nextSentence);
+          i++; // Sauter la phrase suivante
+        } else {
+          rawSentences.push(currentSentence);
+        }
+      }
       let processedCount = 0;
 
       // Traiter les phrases par lots de 5
@@ -259,7 +283,7 @@ export const generateVideoTask = task({
 
     let { sequences, videoMetadata } = splitSentences(sentences);
     const lightTranscription = createLightTranscription(sequences);
-    const voices = extractVoiceSegments(sequences, sentences, payload.voice.id);
+    const voices = extractVoiceSegments(sequences, sentences, payload.voice ? payload.voice.id : undefined);
 
     logger.info('Sequences', { sequences })
     logger.info('Light transcription', { lightTranscription })
@@ -528,6 +552,24 @@ export const generateVideoTask = task({
       }
     }
 
+    const space : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
+
+    let subtitle = subtitles[1]
+    if (space && space.lastUsed?.subtitles) {
+      const mostFrequent = getMostFrequentString(space.lastUsed.subtitles)
+      if (mostFrequent) {
+        const subtitleFind = subtitles.find((subtitle) => subtitle.name === mostFrequent);
+        if (subtitleFind) {
+          subtitle = subtitleFind;
+        } else {
+          const subtitleFindFromSpace = space.subtitleStyle.find((subtitle) => subtitle.name === mostFrequent);
+          if (subtitleFindFromSpace) {
+            subtitle = subtitleFindFromSpace;
+          }
+        }
+      }
+    }
+    
     const thumbnail = await generateThumbnail(newVideo);
 
     logger.info('Thumbnail URL', { thumbnail })
@@ -552,8 +594,8 @@ export const generateVideoTask = task({
         sequences,
         avatar,
         subtitle: {
-          name: subtitles[1].name,
-          style: subtitles[1].style,
+          name: subtitle.name,
+          style: subtitle.style,
         }
       }
     }

@@ -28,7 +28,7 @@ export const plans: Plan[] = [
     features: [
       'feature.1-member',
       'feature.duration-1-max',
-      'feature.subtitles',
+      'feature.watermark-removal',
       'feature.voice',
       'feature.avatar',
     ]

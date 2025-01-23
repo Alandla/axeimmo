@@ -18,7 +18,7 @@ export const formatSubtitles = (
 		durationInFrames: number;
 	}[] = [];
 
-	let startInFrame = 0;
+	let startInFrame = Math.round(sequences[0].start*60) || 0;
 	let mode = style?.mode || 'twoLines';
 
 	if (mode === 'word') {
@@ -178,7 +178,7 @@ export const SubtitlesModern = ({ subtitleSequences, style }: { subtitleSequence
 		return sub;
 	}, [subtitleSequences, style]);
 
-    let currentFrame = 0;
+    let currentFrame = Math.round(subtitleSequences[0].words[0].startInFrames) || 0;
     
 	return (
 		<>

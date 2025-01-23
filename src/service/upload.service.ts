@@ -6,88 +6,81 @@ export const uploadFiles = async (
     files: FileToUpload[], 
     updateStepProgress?: (stepName: string, progress: number) => void
 ) => {
-    let uploadedFiles: IMedia[] = []
     try {
         let completedFiles = 0
         const totalFiles = files.length
 
-        // Upload tous les fichiers en parallèle avec suivi de progression
-        const uploadPromises = files.map(async (fileToUpload) => 
-            getMediaUrlFromFileByPresignedUrl(fileToUpload.file)
-            .then(async (url) => {
-                completedFiles++
-                if (updateStepProgress) {
-                    const totalProgress = Math.round((completedFiles / totalFiles) * 100)
-                    updateStepProgress("MEDIA_UPLOAD", totalProgress)
-                }
+        // Utiliser Promise.all avec map pour collecter les résultats
+        const results = await Promise.all(files.map(async (fileToUpload) => {
+            const url = await getMediaUrlFromFileByPresignedUrl(fileToUpload.file)
+            
+            completedFiles++
+            if (updateStepProgress) {
+                const totalProgress = Math.round((completedFiles / totalFiles) * 100)
+                updateStepProgress("MEDIA_UPLOAD", totalProgress)
+            }
 
-                let image
-                let video
-                let audio
-                
-                if (fileToUpload.type === "video") {
+            let image, video, audio
+            
+            if (fileToUpload.type === "video") {
 
-                    const thumbnail : any = await basicApiCall("/trigger/generateMediaThumbnail", {
-                        url: url?.mediaUrl
-                    })
-
-                    const { thumbnailUrl, imageId } = thumbnail.output
-
-                    const dimensionsVideo = await getVideoDimensions(url?.mediaUrl)
-                    const dimensionsImage = await getImageDimensions(thumbnailUrl)
-
-                    video = {
-                        id: url?.mediaId,
-                        file_type: fileToUpload.file.type,
-                        size: fileToUpload.file.size,
-                        width: dimensionsVideo.width,
-                        height: dimensionsVideo.height,
-                        link: url?.mediaUrl,
-                    }
-
-                    image = {
-                        id: imageId,
-                        width: dimensionsImage.width,
-                        height: dimensionsImage.height,
-                        link: thumbnailUrl
-                    }
-                } else if (fileToUpload.type === "image") {
-
-                    const dimensionsImage = await getImageDimensions(url?.mediaUrl)
-
-                    image = {
-                        id: url?.mediaId,
-                        width: dimensionsImage.width,
-                        height: dimensionsImage.height,
-                        link: url?.mediaUrl
-                    }
-                } else if (fileToUpload.type === "audio") {
-                    audio = {
-                        id: url?.mediaId,
-                        link: url?.mediaUrl
-                    }
-                }
-
-                uploadedFiles.push({
-                    type: fileToUpload.type,
-                    usage: fileToUpload.usage,
-                    name: fileToUpload.file.name,
-                    ...{image, video, audio}
+                const thumbnail : any = await basicApiCall("/trigger/generateMediaThumbnail", {
+                    url: url?.mediaUrl
                 })
-            })
-        )
 
-        // Attendre que tous les uploads soient terminés
-        await Promise.all(uploadPromises)
+                const { thumbnailUrl, imageId } = thumbnail.output
 
+                const dimensionsVideo = await getVideoDimensions(url?.mediaUrl)
+                const dimensionsImage = await getImageDimensions(thumbnailUrl)
+
+                video = {
+                    id: url?.mediaId,
+                    file_type: fileToUpload.file.type,
+                    size: fileToUpload.file.size,
+                    width: dimensionsVideo.width,
+                    height: dimensionsVideo.height,
+                    link: url?.mediaUrl,
+                }
+
+                image = {
+                    id: imageId,
+                    width: dimensionsImage.width,
+                    height: dimensionsImage.height,
+                    link: thumbnailUrl
+                }
+            } else if (fileToUpload.type === "image") {
+
+                const dimensionsImage = await getImageDimensions(url?.mediaUrl)
+
+                image = {
+                    id: url?.mediaId,
+                    width: dimensionsImage.width,
+                    height: dimensionsImage.height,
+                    link: url?.mediaUrl
+                }
+            } else if (fileToUpload.type === "audio") {
+                audio = {
+                    id: url?.mediaId,
+                    link: url?.mediaUrl
+                }
+            }
+
+            return {
+                type: fileToUpload.type,
+                usage: fileToUpload.usage,
+                name: fileToUpload.file.name,
+                ...{image, video, audio}
+            }
+        }))
+
+        return results.filter(Boolean) // Filtrer les résultats null éventuels
     } catch (error) {
         console.error('Erreur lors de l\'upload:', error)
         if (updateStepProgress) {
             updateStepProgress("MEDIA_UPLOAD", 0)
         }
+        return []
     }
-
-    return uploadedFiles
 }
 
 export const getMediaUrlFromFileByPresignedUrl = async (file: File) => {

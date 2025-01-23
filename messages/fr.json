@@ -136,6 +136,7 @@
         "duration-1-max": "Durée maximale de 1 minute",
         "duration-3-max": "Durée maximale de 3 minutes",
         "duration-5-max": "Durée maximale de 5 minutes",
+        "watermark-removal": "Suppression du filigrane",
         "subtitles": "Sous titres automatiques",
         "voice": "Voix de hautes qualités",
         "avatar": "Avatar photo réaliste",
@@ -172,7 +173,10 @@
       "balance": "Solde",
       "export-button": "Exporter",
       "cancel-button": "Annuler",
-      "saving": "Sauvegarde..."
+      "saving": "Sauvegarde...",
+      "watermark-warning": "Attention : Pour supprimer le filigrane de votre vidéo, vous devez passer à un plan payant.",
+      "modal-pricing-title": "Retirez le filigrane",
+      "modal-pricing-description": "Passez à un plan payant pour retirer le filigrane Hoox de vos vidéos."
     },
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",
@@ -496,7 +500,9 @@
         "kitchen": "Cuisine",
         "garden": "Jardin",
         "street": "Rue",
-        "balcony": "Balcon"
+        "balcony": "Balcon",
+        "stadium": "Stade",
+        "library": "Librairie"
       },
       "gender": {
         "male": "Masculin",

@@ -33,6 +33,12 @@ import Sequences from '@/src/components/edit/sequences'
 import { regenerateAudioForSequence, updateVideoTimings, waitForTranscription } from '@/src/lib/audio'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
 import { CommandShortcut } from '@/src/components/ui/command'
+import { ISpace } from '@/src/types/space'
+import { PlanName } from '@/src/types/enums'
+import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
+import { subtitles } from '@/src/config/subtitles.config'
+import { getMostFrequentString } from '@/src/lib/utils'
+import { space } from 'postcss/lib/list'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -41,12 +47,14 @@ export default function VideoEditor() {
   const t = useTranslations('edit')
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
+  const { lastUsedParameters, setLastUsedParameters } = useActiveSpaceStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
+  const [showWatermark, setShowWatermark] = useState(true)
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -59,7 +67,6 @@ export default function VideoEditor() {
   const [isDirty, setIsDirty] = useState(false)
   
   const updateVideo = (newVideoData: any) => {
-    console.log("newVideoData", newVideoData)
     setVideo(newVideoData)
     setIsDirty(true)
   }
@@ -88,33 +95,12 @@ export default function VideoEditor() {
     console.log("cutIndex", cutIndex)
   }
 
-  // Function to generate thumbnail through API
-  const generateThumbnailAsync = async () => {
-    try {
-      const thumbnail : any = await basicApiCall('/video/thumbnail', { video });
-      console.log("thumbnailUrl", thumbnail)
-      if (thumbnail && video) {
-        updateVideo({
-          ...video,
-          costToGenerate: video.costToGenerate + thumbnail.estimatedPrice,
-          video: {
-            ...video.video,
-            thumbnail: thumbnail.url
-          }
-        });
-        setIsDirty(false)
-      }
-    } catch (error) {
-      console.error("Failed to generate thumbnail:", error);
-    }
-  };
-
   const handleSaveVideo = async () => {
     setIsSaving(true);
     
     try {
 
-      await basicApiCall('/video/save', { video, takeThumbnail: true });
+      await basicApiCall('/video/save', { video });
       
       setIsDirty(false);
       
@@ -256,8 +242,7 @@ export default function VideoEditor() {
       try {
         setIsLoading(true);
         const response = await basicApiGetCall<IVideo>(`/video/${id}`);
-        
-        // Ajouter originalText à chaque séquence si ce n'est pas déjà fait
+
         if (response.video?.sequences) {
           response.video.sequences = response.video.sequences.map(seq => ({
             ...seq,
@@ -267,6 +252,14 @@ export default function VideoEditor() {
         }
         
         setVideo(response);
+        setIsLoading(false);
+
+        const spaceResponse = await basicApiGetCall<ISpace>(`/space/${response.spaceId}`);
+        setShowWatermark(spaceResponse.plan.name === PlanName.FREE);
+        setSubtitleStyles(spaceResponse.subtitleStyle)
+
+        setVideo(response)
+
       } catch (error) {
         console.error(error)
         toast({
@@ -274,8 +267,6 @@ export default function VideoEditor() {
           description: t('error.description-loading'),
           variant: 'destructive'
         })
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -296,6 +287,7 @@ export default function VideoEditor() {
     }
 
     checkIsMobile()
+
     window.addEventListener('resize', checkIsMobile)
     return () => {
       window.removeEventListener('resize', checkIsMobile)
@@ -632,6 +624,7 @@ export default function VideoEditor() {
       spaceId={video?.spaceId || ''}
       setIsOpen={setShowModalExport}
       onExportVideo={onExportVideo}
+      showWatermark={showWatermark}
     />
     <div className="min-h-screen bg-muted overflow-hidden">
       {/* Header */}
@@ -772,7 +765,7 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
+              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} />}
           </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -784,7 +777,7 @@ export default function VideoEditor() {
           ref={previewRef}
           className={`sticky top-[57px] z-20 transition-all duration-300 h-96`}
         >
-          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
+          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} />}
         </div>
         <Card className="mt-4">
           <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>

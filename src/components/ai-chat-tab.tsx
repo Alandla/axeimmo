@@ -16,7 +16,7 @@ interface DurationOption {
 }
 
 export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, handleConfirmVoice }: { creationStep: CreationStep, sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleConfirmVoice: () => void }) {
-    const { files, selectedVoice, selectedAvatar, setFiles } = useCreationStore()
+    const { files, selectedVoice, selectedLook, setFiles } = useCreationStore()
     const [inputMessage, setInputMessage] = useState('')
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
     const [isDragging, setIsDragging] = useState(false);
@@ -242,7 +242,7 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
               </>
           ) : creationStep === CreationStep.AVATAR ? (
             <>
-              {selectedAvatar ? (
+              {selectedLook ? (
                 <Button className="w-full" onClick={handleConfirmAvatar}>
                   <Check />{files.some(file => file.usage === 'media') ? t('next-step') : t('start-generation')}
                 </Button>

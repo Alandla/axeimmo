@@ -4,11 +4,12 @@ import { getVideoById, updateVideo } from "../dao/videoDao";
 import { getProgress, renderVideo } from "../lib/render";
 import { uploadImageFromUrlToS3 } from "../lib/r2";
 import { IVideo } from "../types/video";
-import { addCreditsToSpace, removeCreditsToSpace } from "../dao/spaceDao";
+import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
 import { calculateHeygenCost } from "../lib/cost";
 import { combineAudioVoices } from "./combine-audio";
+import { getSpaceById } from "../dao/spaceDao";
 
 interface RenderStatus {
   status: string;
@@ -44,10 +45,15 @@ export const exportVideoTask = task({
         await removeCreditsToSpace(exportData.spaceId, exportData.creditCost);
       }
 
-      const video = await getVideoById(videoId);
+      const video : IVideo | null = await getVideoById(videoId);
       if (!video) {
         throw new Error('Video not found');
       }
+
+      updateSpaceLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name)
+
+      const space = await getSpaceById(video.spaceId);
+      const showWatermark = space.plan.name === "FREE";
 
       if (video.video?.avatar?.id && video.video?.audio?.voices && !video.video?.avatar?.videoUrl) {
         logger.log("Combinaison des audios...");
@@ -73,7 +79,7 @@ export const exportVideoTask = task({
         }
       }
 
-      const render = await renderVideo(video);
+      const render = await renderVideo(video, showWatermark);
       await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
 
       const renderStatus : RenderStatus = await pollRenderStatus(render.renderId, render.bucketName);

@@ -20,6 +20,8 @@ import { GenerationProgress } from './generation-progress'
 import { startGeneration } from '../service/generation.service'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { useRouter } from 'next/navigation'
+import { ILastUsed } from '@/src/types/space'
+import { getSpaceLastUsed } from '../service/space.service'
 
 enum MessageType {
   TEXT = 'text',
@@ -38,8 +40,8 @@ interface Message {
 }
 
 export function AiChat() {
-  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedAvatar, selectedVoice, files, addStep, resetSteps } = useCreationStore()
-  const { activeSpace } = useActiveSpaceStore()
+  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps } = useCreationStore()
+  const { activeSpace, setLastUsedParameters } = useActiveSpaceStore()
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [creationStep, setCreationStep] = useState(CreationStep.START)
@@ -198,7 +200,7 @@ export function AiChat() {
     let messageUser1 = '';
     let messageUser2 = '';
     let messageAi = '';
-    if (selectedAvatar) {
+    if (selectedLook) {
       messageUser1 = getRandomMessage('user-select-avatar', { "name": selectedVoice?.name || '' });
       addStep({ id: 5, name: Steps.ANALYZE_NEW_MEDIA, state: StepState.PENDING, progress: 0 })
     } else {
@@ -299,6 +301,22 @@ export function AiChat() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    const fetchLastUsed = async () => {
+        if (activeSpace?.id) {
+            const lastUsed : ILastUsed | null = await getSpaceLastUsed(activeSpace.id)
+            console.log(lastUsed)
+            if (lastUsed) {
+              setLastUsedParameters(lastUsed)
+            }
+        }
+    }
+
+    if (activeSpace) {
+        fetchLastUsed()
+    }
+}, [activeSpace])
 
   return (
     <div className="flex flex-col h-full">

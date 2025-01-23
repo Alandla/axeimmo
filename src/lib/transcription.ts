@@ -85,37 +85,38 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
   };
 
   for (let i = 0; i < sentences.length; i++) {
-    // Ajouter les métadonnées de la transcription courante
-    const currentMetadata = sentences[i].transcription.metadata;
-    combinedMetadata.billing_time += currentMetadata.billing_time;
-    combinedMetadata.transcription_time += currentMetadata.transcription_time;
+    if (sentences[i].transcription) {
+      const currentMetadata = sentences[i].transcription.metadata;
+      combinedMetadata.billing_time += currentMetadata.billing_time;
+      combinedMetadata.transcription_time += currentMetadata.transcription_time;
 
-    // Ajuster les timings des utterances avec l'offset actuel
-    const adjustedUtterances = sentences[i].transcription.transcription.utterances.map((utterance: Utterance) => ({
-      ...utterance,
-      start: utterance.start + timeOffset,
-      end: utterance.end + timeOffset,
-      words: utterance.words.map(word => ({
-        ...word,
-        start: word.start + timeOffset,
-        end: word.end + timeOffset
-      }))
-    }));
+      // Ajuster les timings des utterances avec l'offset actuel
+      const adjustedUtterances = sentences[i].transcription.transcription.utterances.map((utterance: Utterance) => ({
+        ...utterance,
+        start: utterance.start + timeOffset,
+        end: utterance.end + timeOffset,
+        words: utterance.words.map(word => ({
+          ...word,
+          start: word.start + timeOffset,
+          end: word.end + timeOffset
+        }))
+      }));
 
-    logger.info('Adjusted utterances', { adjustedUtterances });
+      logger.info('Adjusted utterances', { adjustedUtterances });
 
-    // Créer les séquences pour cette phrase
-    const s: ISequence[] = splitIntoSequences(adjustedUtterances, sentences[i].index);
+      // Créer les séquences pour cette phrase
+      const s: ISequence[] = splitIntoSequences(adjustedUtterances, sentences[i].index);
 
-    logger.info('Sequences', { s });
+      logger.info('Sequences', { s });
 
-    finalSequences.push(...s);
+      finalSequences.push(...s);
 
-    // Mettre à jour l'offset pour la prochaine phrase
-    const lastUtterance = adjustedUtterances[adjustedUtterances.length - 1];
-    timeOffset = lastUtterance ? lastUtterance.end : 0;
+      // Mettre à jour l'offset pour la prochaine phrase
+      const lastUtterance = adjustedUtterances[adjustedUtterances.length - 1];
+      timeOffset = lastUtterance ? lastUtterance.end : 0;
 
-    logger.info('Time offset', { timeOffset });
+      logger.info('Time offset', { timeOffset });
+    }
 
   }
 

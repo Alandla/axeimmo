@@ -20,6 +20,9 @@ export const addUserIdToContact = async (userId: string, email: string) => {
 export const addVideoCountContact = async (userId: string) => {
   const contact = await loops.findContact({ userId });
   console.log(contact)
+  if (contact.length === 0) {
+    return;
+  }
   const result = await loops.updateContact(contact[0].email, {
     videosCount: contact[0]?.videosCount ? Number(contact[0].videosCount) + 1 : 1
   });

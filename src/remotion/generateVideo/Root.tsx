@@ -22,7 +22,8 @@ export const RemotionRoot = () => {
 				width={1080}
 				height={1920}
 				defaultProps={{
-					data: result
+					data: result,
+					showWatermark: true
 				}}
 				calculateMetadata={calculateMetadata}
 			/>
