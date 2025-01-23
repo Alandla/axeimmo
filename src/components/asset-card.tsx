@@ -9,7 +9,6 @@ import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { useToast } from '@/src/hooks/use-toast'
 import { basicApiCall } from '@/src/lib/api'
-import { IMediaSpace } from '@/src/types/space'
 import { useUsersStore } from '@/src/store/creatorUserVideo'
 import { Button } from './ui/button'
 import { Avatar, AvatarFallback } from './ui/avatar'
@@ -25,15 +24,17 @@ import {
 } from "./ui/dropdown-menu"
 import { MediaSpaceWithCreator } from '../app/dashboard/assets/page'
 import ModalConfirmDeleteAsset from './modal/confirm-delete-asset'
+import { IMedia } from '../types/video'
 
 interface AssetCardProps {
   mediaSpace: MediaSpaceWithCreator
   spaceId: string
   setMedia: (media: MediaSpaceWithCreator) => void
   onClick: () => void
+  onDelete?: (media: IMedia) => void
 }
 
-export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick }: AssetCardProps) {
+export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDelete }: AssetCardProps) {
   const t = useTranslations('assets')
   const { data: session } = useSession()
   const { toast } = useToast()
@@ -89,19 +90,22 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick }: As
         setEditedName(mediaSpace.media.name)
         toast({
           title: t('toast.error'),
-          description: t('toast.error-description'),
+          description: t('toast.error-saved-description'),
           variant: "destructive",
         })
       }
     }
   }, [editedName, mediaSpace.media])
 
-  const handleDelete = async (mediaToDelete: MediaSpaceWithCreator) => {
+  const handleDelete = async (mediaToDelete: IMedia) => {
     try {
       await basicApiCall('/media/delete', {
-        mediaId: mediaToDelete.media.id,
+        media: mediaToDelete,
         spaceId: spaceId
       })
+
+      onDelete?.(mediaToDelete)
+      
       toast({
         title: t('toast.deleted'),
         description: t('toast.deleted-description'),
@@ -111,7 +115,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick }: As
       console.error('Error deleting media:', error)
       toast({
         title: t('toast.error'),
-        description: t('toast.error-description'),
+        description: t('toast.error-deleted-description'),
         variant: "destructive",
       })
     }
@@ -263,7 +267,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick }: As
       <ModalConfirmDeleteAsset
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
-        mediaSpace={mediaSpace}
+        media={mediaSpace.media}
         handleDeleteAsset={handleDelete}
       />
     </>

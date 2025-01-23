@@ -155,6 +155,7 @@ export const deleteMediaFromSpace = async (spaceId: string, media: IMedia) => {
       const space = await getSpaceById(spaceId);
       space.medias = space.medias.filter((m: any) => m.media._id.toString() !== media.id);
       await space.save();
+      return space.medias;
     });
   } catch (error) {
     console.error("Error while deleting media from space: ", error);

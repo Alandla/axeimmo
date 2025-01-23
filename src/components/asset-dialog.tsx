@@ -136,7 +136,7 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
         </SheetHeader>
 
         <ScrollArea className="flex-1">
-          <div className="pr-4">
+          <div className="">
             <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
               {mediaSpace.media.type === 'video' ? (
                 <video

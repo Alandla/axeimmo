@@ -955,6 +955,8 @@
     "assets": {
       "title": "Media Library",
       "more-options": "More options",
+      "no-assets": "No assets",
+      "no-assets-description": "You don't have any assets yet.",
       "dialog": {
         "title": "Media Details",
         "name": "Name",
@@ -982,7 +984,9 @@
         "deleted": "Deleted",
         "deleted-description": "Media has been deleted successfully",
         "error": "Error",
-        "error-description": "An error occurred"
+        "error-description": "An error occurred",
+        "error-deleted-description": "An error occurred while deleting the media",
+        "error-saved-description": "An error occurred while saving the changes"
       }
     },
     "modals": {

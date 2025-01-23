@@ -995,7 +995,8 @@
         "deleted": "Supprimé",
         "deleted-description": "Le média a été supprimé avec succès",
         "error": "Erreur",
-        "error-description": "Une erreur est survenue"
+        "error-deleted-description": "Une erreur est survenue lors de la suppression du média",
+        "error-saved-description": "Une erreur est survenue lors de la sauvegarde des modifications"
       }
     }
   }

@@ -1,16 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { basicApiCall } from '@/src/lib/api'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
-import { useUsersStore } from '@/src/store/creatorUserVideo'
 import AssetCard from '@/src/components/asset-card'
 import AssetDialog from '@/src/components/asset-dialog'
 import { IMediaSpace } from '@/src/types/space'
 import VideoCardSkeleton from '@/src/components/video-card-skeleton'
 import { ImageOff } from 'lucide-react'
+import { IMedia } from '@/src/types/video'
 
 interface User {
   id: string
@@ -42,6 +41,10 @@ export default function AssetsPage() {
     })
     setSelectedAsset(media)
   }
+
+  const handleDeleteAsset = (deletedMedia: IMedia) => {
+    setAssets(prevAssets => prevAssets.filter(asset => asset.media.id !== deletedMedia.id));
+  };
 
   useEffect(() => {
     const fetchAssets = async () => {
@@ -78,9 +81,9 @@ export default function AssetsPage() {
         ) : assets.length === 0 ? (
           <div className="col-span-full flex flex-col items-center justify-center py-20">
             <ImageOff className="w-12 h-12 text-gray-400 mb-4" />
-            <h2 className="text-2xl font-semibold mb-2">{t('no-videos')}</h2>
+            <h2 className="text-2xl font-semibold mb-2">{t('no-assets')}</h2>
             <p className="text-gray-500 mb-6 text-center">
-              {t('no-videos-description')}
+              {t('no-assets-description')}
             </p>
           </div>
         ) : (
@@ -90,6 +93,7 @@ export default function AssetsPage() {
               spaceId={activeSpace?.id || ''}
               mediaSpace={asset}
               setMedia={setMedia}
+              onDelete={handleDeleteAsset}
               onClick={() => {
                 setSelectedAsset(asset)
                 setIsDialogOpen(true)
@@ -105,7 +109,6 @@ export default function AssetsPage() {
         open={isDialogOpen}
         onClose={() => {
           setIsDialogOpen(false)
-          setSelectedAsset(null)
         }}
       />
     </>

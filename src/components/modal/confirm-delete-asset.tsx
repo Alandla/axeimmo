@@ -12,18 +12,19 @@ import {
   DialogTitle,
 } from "@/src/components/ui/dialog"
 import { MediaSpaceWithCreator } from '@/src/app/dashboard/assets/page'
+import { IMedia } from '@/src/types/video'
 
 interface ModalConfirmDeleteAssetProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  mediaSpace: MediaSpaceWithCreator | null
-  handleDeleteAsset: (mediaSpace: MediaSpaceWithCreator) => void
+  media: IMedia | null
+  handleDeleteAsset: (media: IMedia) => Promise<void>
 }
 
 export default function ModalConfirmDeleteAsset({
   isOpen,
   setIsOpen,
-  mediaSpace,
+  media,
   handleDeleteAsset,
 }: ModalConfirmDeleteAssetProps) {
   const t = useTranslations('modals.confirm-delete')
@@ -31,8 +32,8 @@ export default function ModalConfirmDeleteAsset({
 
   const handleConfirm = async () => {
     setIsPending(true)
-    if (mediaSpace) {
-      handleDeleteAsset(mediaSpace)
+    if (media) {
+      await handleDeleteAsset(media)
     }
     setIsPending(false)
     setIsOpen(false)
@@ -46,7 +47,7 @@ export default function ModalConfirmDeleteAsset({
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>
-            {t('description ', { name: mediaSpace?.media.name })}
+            {t('description', { name: media?.name })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end">
