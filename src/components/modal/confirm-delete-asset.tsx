@@ -11,7 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/components/ui/dialog"
-import { MediaSpaceWithCreator } from '@/src/app/dashboard/assets/page'
 import { IMedia } from '@/src/types/video'
 
 interface ModalConfirmDeleteAssetProps {

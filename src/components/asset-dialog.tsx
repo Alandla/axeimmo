@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { Save, X, Clock, Loader2, Info, Text, Sparkle, Sparkles, FileText } from 'lucide-react'
+import { Save, X, Clock, Loader2, Text, FileText } from 'lucide-react'
 import { useToast } from '@/src/hooks/use-toast'
 import { basicApiCall } from '@/src/lib/api'
 import { Button } from './ui/button'
@@ -16,9 +16,6 @@ import { Textarea } from './ui/textarea'
 import { Badge } from './ui/badge'
 import { ScrollArea } from './ui/scroll-area'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
-import { Switch } from './ui/switch'
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
-import { Separator } from './ui/separator'
 
 interface AssetDialogProps {
   mediaSpace: MediaSpaceWithCreator | null

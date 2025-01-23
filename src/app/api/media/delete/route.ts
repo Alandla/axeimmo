@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/src/lib/auth';
 import { deleteMediaFromSpace } from '@/src/dao/spaceDao';
 import { deleteFromS3, getKeyFromUrl } from '@/src/lib/r2';
-import { IMediaSpace, ISpace } from '@/src/types/space';
+import { IMediaSpace } from '@/src/types/space';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
