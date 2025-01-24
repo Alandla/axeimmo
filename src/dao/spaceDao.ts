@@ -155,6 +155,7 @@ export const deleteMediaFromSpace = async (spaceId: string, media: IMedia) => {
       const space = await getSpaceById(spaceId);
       space.medias = space.medias.filter((m: any) => m.media._id.toString() !== media.id);
       await space.save();
+      return space.medias;
     });
   } catch (error) {
     console.error("Error while deleting media from space: ", error);
@@ -245,3 +246,41 @@ export const updateSpaceLastUsed = async (
     throw error;
   }
 };
+
+export async function updateMedia(spaceId: string, mediaId: string, updates: any) {
+  try {
+    return await executeWithRetry(async () => {
+
+      const testfind = await SpaceModel.findOne({ _id: spaceId, 'medias._id': mediaId });
+      console.log("testfind", testfind)
+
+      const space = await SpaceModel.findOneAndUpdate(
+        { 
+          _id: spaceId, 
+          'medias._id': mediaId 
+        },
+        { 
+          $set: { 'medias.$.media': updates }
+        },
+        { 
+          new: true,
+          runValidators: true
+        }
+      );
+
+      if (!space) {
+        throw new Error('Space or media not found');
+      }
+
+      const updatedMedia = space.medias.find((m: any) => m.id === mediaId);
+      if (!updatedMedia) {
+        throw new Error('Updated media not found');
+      }
+
+      return updatedMedia;
+    });
+  } catch (error) {
+    console.error("Error while updating media: ", error);
+    throw error;
+  }
+}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/src/lib/auth';
 import { deleteMediaFromSpace } from '@/src/dao/spaceDao';
 import { deleteFromS3, getKeyFromUrl } from '@/src/lib/r2';
+import { IMediaSpace } from '@/src/types/space';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   try {
 
-    await deleteMediaFromSpace(spaceId, media);
+    const medias : IMediaSpace[] = await deleteMediaFromSpace(spaceId, media);
 
     if (media.image?.link) {
       const keyImage = await getKeyFromUrl(media.image.link)
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
       await deleteFromS3(keyAudio, 'medias-users')
     }
 
-    return NextResponse.json({ data: "Medias deleted" })
+    return NextResponse.json({ data: medias })
   } catch (error) {
     console.error('Error deleting media:', error)
     return NextResponse.json({ error: 'Error deleting media' }, { status: 500 })

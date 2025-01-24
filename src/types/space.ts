@@ -30,9 +30,11 @@ export interface IPlan {
 }
 
 export interface IMediaSpace {
+  id?: string;
   media: IMedia;
   uploadedBy: string;
   uploadedAt: Date;
+  autoPlacement?: boolean;
 }
 
 export interface SimpleSpace {

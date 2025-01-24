@@ -30,12 +30,12 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
     fetchAssets()
   }, [])
 
-  const onDeleteMedia = async (mediaId: string) => {
+  const onDeleteMedia = async (media: IMedia) => {
     toast({
       title: t('toast.deleting-file'),
       description: t('toast.deleting-file-description')
     })
-    const updatedAssets = assets.filter(asset => asset.media.id !== mediaId);
+    const updatedAssets = assets.filter(asset => asset.media.id !== media.id);
     setAssets(updatedAssets);
     toast({
       title: t('toast.file-deleted'),
@@ -114,7 +114,7 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
       </Button>
       <div className="mt-4 columns-3 gap-2">
           {assets && assets.map((asset, index) => (
-              <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} media={asset.media} source='web' canRemove={true} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
+              <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} spaceId={spaceId} media={asset.media} source='web' canRemove={true} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
           ))}
       </div>
     </>

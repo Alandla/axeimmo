@@ -17,7 +17,8 @@
     "breadcrumbs": {
       "Dashboard": "Dashboard",
       "Create": "Create",
-      "Pricing": "Pricing"
+      "Pricing": "Pricing",
+      "Assets": "Assets"
     },
     "dashboard": {
       "title": "Dashboard"
@@ -955,6 +956,52 @@
         "27": "Here is the current evolution of the video.",
         "28": "Here is the current progression of the generation.",
         "29": "Here is the progress report on the video."
+      }
+    },
+    "assets": {
+      "title": "Media Library",
+      "more-options": "More options",
+      "no-assets": "No assets",
+      "no-assets-description": "You don't have any assets yet.",
+      "dialog": {
+        "title": "Media Details",
+        "name": "Name",
+        "description": "Description",
+        "descriptions": "Descriptions",
+        "start": "Start",
+        "duration": "Duration",
+        "text": "Text",
+        "save": "Save",
+        "close": "Close",
+        "added-by": "Added by {name} on {date}",
+        "unknown-user": "unknown user",
+        "tooltip-description": "Descriptions are used by the AI to automatically place media in the video",
+        "automatic-placement": "Automatic placement",
+        "automatic-placement-description": "Allow the AI to reuse this media automatically"
+      },
+      "dropdown-menu": {
+        "details": "View details",
+        "rename": "Rename",
+        "delete": "Delete"
+      },
+      "toast": {
+        "saved": "Saved",
+        "saved-description": "Changes have been saved successfully",
+        "deleted": "Deleted",
+        "deleted-description": "Media has been deleted successfully",
+        "error": "Error",
+        "error-description": "An error occurred",
+        "error-deleted-description": "An error occurred while deleting the media",
+        "error-saved-description": "An error occurred while saving the changes"
+      }
+    },
+    "modals": {
+      "confirm-delete": {
+        "title": "Confirm deletion",
+        "description": "Are you sure you want to delete {name}? This action is irreversible.",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "deleting": "Deleting..."
       }
     }
   }
