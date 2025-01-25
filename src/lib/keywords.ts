@@ -1,6 +1,5 @@
 import { createGroq } from "@ai-sdk/groq";
 import { generateText } from "ai";
-import { calculateAnthropicCost } from "./cost";
 
 const groq = createGroq({
     apiKey: process.env.GROQ_API_KEY
@@ -9,7 +8,7 @@ const groq = createGroq({
 export const generateKeywords = async (sequences: any) => {
     try {
         const result = await generateText({
-            model: groq('llama-3.1-70b-versatile'),
+            model: groq('llama-3.3-70b-versatile'),
             prompt:
                 "You are an experienced video editor tasked with generating keywords for illustrating sequences in a video script. These keywords will be used to search for stock footage or web images to match the content of each sequence. Your goal is to create descriptive, searchable keywords that will yield appropriate visual results." +
                 "" +
