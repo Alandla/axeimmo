@@ -39,7 +39,7 @@
     "@remotion/layout-utils": "4.0.236",
     "@remotion/player": "4.0.236",
     "@remotion/preload": "4.0.236",
-    "@trigger.dev/sdk": "3.3.10",
+    "@trigger.dev/sdk": "3.3.12",
     "@types/canvas-confetti": "^1.6.4",
     "ai": "^3.4.33",
     "axios": "^1.7.7",
@@ -74,7 +74,7 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
-    "@trigger.dev/build": "3.3.10",
+    "@trigger.dev/build": "3.3.12",
     "@types/fluent-ffmpeg": "^2.1.27",
     "@types/node": "^20",
     "@types/react": "^18",
