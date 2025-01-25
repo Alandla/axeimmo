@@ -50,6 +50,9 @@ export const generateVideoTask = task({
     let cost = 0
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
+
+    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+
     let videoStyle: string | undefined;
 
     logger.log("Generating video...", { payload, ctx });
@@ -96,7 +99,7 @@ export const generateVideoTask = task({
     logger.log(`[VOICE] Start voice generation...`)
     let sentences: ISentence[] = [];
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (isDevelopment) {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
@@ -238,7 +241,7 @@ export const generateVideoTask = task({
       progress: 0
     })
 
-    if (ctx.environment.type !== "DEVELOPMENT") {
+    if (!isDevelopment) {
       let processedTranscriptions = 0;
       
       // On utilise un seul wait.for() pour contrôler le rythme global
@@ -399,16 +402,16 @@ export const generateVideoTask = task({
 
     let keywords: any;
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (isDevelopment) {
       keywords = keywordsMock
     } else {
       const resultKeywords = await generateKeywords(lightTranscription)
-      keywords = resultKeywords?.keywords
+      keywords = resultKeywords?.keywords || []
 
       cost += resultKeywords?.cost || 0
 
-      logger.info('Keywords', resultKeywords?.keywords)
-      logger.info('Cost', { cost: resultKeywords?.cost })
+      logger.info('Keywords', { keywords: resultKeywords?.keywords || [] })
+      logger.info('Cost', { cost: resultKeywords?.cost || 0 })
     }
 
     logger.log(`[KEYWORDS] Keywords done`)
@@ -421,7 +424,7 @@ export const generateVideoTask = task({
 
     logger.log(`[MEDIA] Search media...`);
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (isDevelopment) {
       sequences = sequencesWithMediaMock as ISequence[]
     } else {
       const batchSize = 5;
@@ -461,7 +464,7 @@ export const generateVideoTask = task({
     /
     */
 
-    if (ctx.environment.type !== "DEVELOPMENT" && (payload.avatar || avatarFile)) {
+    if (!isDevelopment && (payload.avatar || avatarFile)) {
       logger.log(`[ANALYSIS] Starting media analysis...`);
       
       const mediasToAnalyze = sequences.map(seq => seq.media)
@@ -651,7 +654,7 @@ const processBatchWithSieve = async (
 ) => {
   const {
     isDetailedAnalysis = false,
-    batchSize = 3,
+    batchSize = 10,
     onProgress
   } = options;
 

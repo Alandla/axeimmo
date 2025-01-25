@@ -62,7 +62,7 @@ export function VoicesGridComponent() {
     const fetchSpaceVoices = async (lastUsed? : String | undefined) => {
         if (activeSpace?.id) {
             const spaceVoices : Voice[] = await getSpaceVoices(activeSpace.id)
-            if (spaceVoices.length > 0) {
+            if (spaceVoices && spaceVoices.length > 0) {
               setVoices([...spaceVoices, ...voices]);
               if (lastUsed) {
                 const voice = voicesConfig.find((voice) => voice.id === lastUsed);

@@ -55,7 +55,7 @@ export function AvatarGridComponent() {
     const fetchSpaceAvatars = async (lastUsed? : String | undefined) => {
         if (activeSpace?.id) {
             const spaceAvatars : Avatar[] = await getSpaceAvatars(activeSpace.id)
-            if (spaceAvatars.length > 0) {
+            if (spaceAvatars && spaceAvatars.length > 0) {
               setAvatars([...spaceAvatars, ...avatars]);
               if (lastUsed) {
                 const avatar = spaceAvatars.find((avatar) => avatar.id === lastUsed);
