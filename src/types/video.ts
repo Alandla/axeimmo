@@ -45,13 +45,13 @@ export interface IMedia {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-export interface ISequence {
-  words: IWord[];
-  text: string;
+export interface IDefaultSequence {
+  type?: 'default'; // optionnel, sera 'default' si non spécifié
   start: number;
   end: number;
   durationInFrames?: number;
+  words: IWord[];
+  text: string;
   audioIndex: number;
   keywords?: Array<{
     search: 'stock' | 'web';
@@ -62,6 +62,15 @@ export interface ISequence {
   originalText?: string;
   needsAudioRegeneration?: boolean;
 }
+export interface ITransitionSequence {
+  type: 'transition';
+  durationInFrames?: number;
+  video: string;
+  thumbnail: string;
+  fullAt?: number;
+}
+
+export type ISequence = IDefaultSequence | ITransitionSequence;
 
 export interface IVideo {
   id?: string;
