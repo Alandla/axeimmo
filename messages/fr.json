@@ -215,6 +215,10 @@
         "button-delete": "Supprimer la séquence",
         "add-sequence": "Ajouter une séquence"
       },
+      "transition": {
+        "transition": "Transition",
+        "delete": "Supprimer la transition"
+      },
       "subtitle": {
         "title-presets": "Presets",
         "title-presets-space": "Presets de l'espace",

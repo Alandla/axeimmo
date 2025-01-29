@@ -206,6 +206,10 @@
         "button-delete": "Delete sequence",
         "add-sequence": "Add sequence"
       },
+      "transition": {
+        "transition": "Transition",
+        "delete": "Delete transition"
+      },
       "subtitle": {
         "title-presets": "Presets",
         "title-presets-space": "Space presets",

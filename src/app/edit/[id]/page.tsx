@@ -47,11 +47,11 @@ export default function VideoEditor() {
   const t = useTranslations('edit')
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
-  const { lastUsedParameters, setLastUsedParameters } = useActiveSpaceStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
+  const [selectedTransitionIndex, setSelectedTransitionIndex] = useState<number>(-1)
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
   const [showWatermark, setShowWatermark] = useState(true)
@@ -587,6 +587,21 @@ export default function VideoEditor() {
     setSelectedSequenceIndex(afterIndex + 1);
   };
 
+  const handleDeleteTransition = (index: number) => {
+    if (!video?.video?.transitions) return;
+
+    const newTransitions = [...video.video.transitions];
+    newTransitions.splice(index, 1);
+
+    updateVideo({
+      ...video,
+      video: {
+        ...video.video,
+        transitions: newTransitions
+      }
+    });
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 's') {
@@ -720,14 +735,18 @@ export default function VideoEditor() {
                     <TabsContent value="sequences">
                       <Sequences 
                         sequences={video?.video?.sequences || []} 
+                        transitions={video?.video?.transitions}
                         selectedSequenceIndex={selectedSequenceIndex} 
+                        selectedTransitionIndex={selectedTransitionIndex}
                         setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                        setSelectedTransitionIndex={setSelectedTransitionIndex}
                         handleWordInputChange={handleWordInputChange} 
                         handleWordAdd={handleWordAdd}
                         handleWordDelete={handleWordDelete}
                         handleCutSequence={handleCutSequence}
                         onRegenerateAudio={handleRegenerateAudio}
                         onDeleteSequence={handleDeleteSequence}
+                        onDeleteTransition={handleDeleteTransition}
                         onAddSequence={handleAddSequence}
                         playerRef={playerRef}
                       />
@@ -796,19 +815,25 @@ export default function VideoEditor() {
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="sequences">
-              <Sequences 
-                sequences={video?.video?.sequences || []} 
-                selectedSequenceIndex={selectedSequenceIndex} 
-                setSelectedSequenceIndex={setSelectedSequenceIndex} 
-                handleWordInputChange={handleWordInputChange} 
-                handleWordAdd={handleWordAdd}
-                handleWordDelete={handleWordDelete}
-                handleCutSequence={handleCutSequence}
-                onRegenerateAudio={handleRegenerateAudio}
-                onDeleteSequence={handleDeleteSequence}
-                onAddSequence={handleAddSequence}
-                playerRef={playerRef}
-              />
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                <Sequences 
+                  sequences={video?.video?.sequences || []} 
+                  transitions={video?.video?.transitions}
+                  selectedSequenceIndex={selectedSequenceIndex} 
+                  selectedTransitionIndex={selectedTransitionIndex}
+                  setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                  setSelectedTransitionIndex={setSelectedTransitionIndex}
+                  handleWordInputChange={handleWordInputChange} 
+                  handleWordAdd={handleWordAdd}
+                  handleWordDelete={handleWordDelete}
+                  handleCutSequence={handleCutSequence}
+                  onRegenerateAudio={handleRegenerateAudio}
+                  onDeleteSequence={handleDeleteSequence}
+                  onDeleteTransition={handleDeleteTransition}
+                  onAddSequence={handleAddSequence}
+                  playerRef={playerRef}
+                />
+              </ScrollArea>
             </TabsContent>
             <TabsContent value="subtitle">
               <ScrollArea className="h-[calc(100vh-25rem)] mx-2">

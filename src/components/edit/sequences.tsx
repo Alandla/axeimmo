@@ -1,6 +1,7 @@
-import { ISequence } from "@/src/types/video";
+import { ISequence, ITransition } from "@/src/types/video";
 import { ScrollArea } from "../ui/scroll-area";
 import Sequence from "./sequence";
+import Transition from "./transition";
 import { PlayerRef } from "@remotion/player";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
@@ -10,32 +11,50 @@ import React from "react";
 
 interface SequencesProps {
     sequences: ISequence[];
+    transitions?: ITransition[];
     selectedSequenceIndex: number;
+    selectedTransitionIndex?: number;
     setSelectedSequenceIndex: (index: number) => void;
+    setSelectedTransitionIndex?: (index: number) => void;
     handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void;
     handleWordAdd: (sequenceIndex: number, wordIndex: number) => number;
     handleWordDelete: (sequenceIndex: number, wordIndex: number) => void;
     handleCutSequence: (cutIndex: number) => void;
     onRegenerateAudio: (index: number) => void;
     onDeleteSequence: (index: number) => void;
+    onDeleteTransition: (index: number) => void;
     onAddSequence: (afterIndex: number) => void;
     playerRef?: React.RefObject<PlayerRef>;
 }
 
 export default function Sequences({ 
     sequences, 
-    selectedSequenceIndex, 
-    setSelectedSequenceIndex, 
+    transitions = [],
+    selectedSequenceIndex,
+    selectedTransitionIndex,
+    setSelectedSequenceIndex,
+    setSelectedTransitionIndex,
     handleWordInputChange, 
     handleWordAdd, 
     handleWordDelete, 
     handleCutSequence, 
     onRegenerateAudio,
     onDeleteSequence,
+    onDeleteTransition,
     onAddSequence,
     playerRef,
 }: SequencesProps) {
     const t = useTranslations('edit.sequence');
+
+    const handleTransitionClick = (index: number) => {
+        setSelectedTransitionIndex?.(index);
+        setSelectedSequenceIndex(-1); // Désélectionne la séquence
+    };
+
+    const handleSequenceClick = (index: number) => {
+        setSelectedSequenceIndex(index);
+        setSelectedTransitionIndex?.(-1); // Désélectionne la transition
+    };
 
     return (
         <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
@@ -46,7 +65,7 @@ export default function Sequences({
                             sequence={sequence} 
                             index={index} 
                             selectedIndex={selectedSequenceIndex} 
-                            setSelectedIndex={setSelectedSequenceIndex}
+                            setSelectedIndex={handleSequenceClick}
                             handleWordInputChange={handleWordInputChange}
                             handleWordAdd={handleWordAdd}
                             handleWordDelete={handleWordDelete}
@@ -56,7 +75,19 @@ export default function Sequences({
                             canDelete={isSequenceDeletable(sequences, index)}
                             playerRef={playerRef}
                         />
-                        {index === selectedSequenceIndex && isLastSequenceWithAudioIndex(sequences, index) && (
+                        {transitions.map((transition, transitionIndex) => 
+                            transition.indexSequenceBefore === index && (
+                                <Transition
+                                    key={`transition-${transitionIndex}`}
+                                    transition={transition}
+                                    index={transitionIndex}
+                                    selectedIndex={selectedTransitionIndex}
+                                    setSelectedIndex={handleTransitionClick}
+                                    onDeleteTransition={onDeleteTransition}
+                                />
+                            )
+                        )}
+                        {(index === selectedSequenceIndex || (selectedTransitionIndex !== undefined && transitions.find((t, i) => i === selectedTransitionIndex && t.indexSequenceBefore === index))) && isLastSequenceWithAudioIndex(sequences, index) && (
                             <motion.div
                                 initial={{ opacity: 0, y: -20, height: 0 }}
                                 animate={{ opacity: 1, y: 0, height: "auto" }}

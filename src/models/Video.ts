@@ -34,6 +34,15 @@ const videoSchema = new mongoose.Schema({
     }],
     video: {
       thumbnail: String,
+      transitions: [{
+        indexSequenceBefore: Number,
+        durationInFrames: Number,
+        video: String,
+        thumbnail: String,
+        sound: String,
+        volume: Number,
+        fullAt: Number,
+      }],
       audio: {
         voices: [{
           url: String,

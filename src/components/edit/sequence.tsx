@@ -181,7 +181,7 @@ export default function Sequence({
                 {/* Contenu à droite de l'image */}
                 <div className="flex-1 sm:space-y-2 ml-4">
                     <div className="flex items-center justify-between gap-2">
-                        <Badge variant="outline">
+                        <Badge variant={selectedIndex === index ? "default" : "outline"}>
                             <Clock className="w-3 h-3 mr-1" />
                             {((sequence.end - sequence.start)).toFixed(2)}
                         </Badge>

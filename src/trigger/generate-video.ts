@@ -15,7 +15,7 @@ import { createLightTranscription, ISentence, splitSentences } from "../lib/tran
 import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
 import { mediaToMediaSpace, searchMediaForSequence } from "../service/media.service";
-import { IDefaultSequence, IMedia, ISequence, IVideo } from "../types/video";
+import { IMedia, ISequence, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
 import { generateBrollDisplay, generateStartData, matchMediaToSequences } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
@@ -466,10 +466,8 @@ export const generateVideoTask = task({
 
     if (!isDevelopment && (payload.avatar || avatarFile)) {
       logger.log(`[ANALYSIS] Starting media analysis...`);
-
-      const sequencesToAnalyze : IDefaultSequence[] = sequences.filter(seq => seq.type === 'default') as IDefaultSequence[]
       
-      const mediasToAnalyze = sequencesToAnalyze.map(seq => seq.media)
+      const mediasToAnalyze = sequences.map(seq => seq.media)
         .filter((media): media is IMedia => 
           !!media && !media.description // On ne garde que les médias sans description
         );
@@ -485,7 +483,7 @@ export const generateVideoTask = task({
       });
 
       sequences = sequences.map(seq => {
-        if (seq.type === 'default' && seq.media) {
+        if (seq.media) {
           const analyzedMedia = analyzedMedias.find(m => 
             (m.video?.id === seq.media?.video?.id) || 
             (m.image?.id === seq.media?.image?.id)
@@ -727,23 +725,20 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
 
   // Grouper les séquences par audioIndex
   sequences.forEach(sequence => {
-    if (sequence.type === 'default') {
-      const defaultSequence = sequence as IDefaultSequence;
-      if (!voiceSegments.has(defaultSequence.audioIndex)) {
-        voiceSegments.set(defaultSequence.audioIndex, {
-          start: defaultSequence.start,
-          end: defaultSequence.end,
-          durationInFrames: defaultSequence.durationInFrames || 0,
-          sequences: [defaultSequence],
-          voiceId: voiceId || undefined
-        });
-      } else {
-        const current = voiceSegments.get(defaultSequence.audioIndex)!;
-        current.end = defaultSequence.end;
-        current.durationInFrames += defaultSequence.durationInFrames || 0;
-        current.sequences.push(defaultSequence);
-        current.voiceId = voiceId || undefined
-      }
+    if (!voiceSegments.has(sequence.audioIndex)) {
+      voiceSegments.set(sequence.audioIndex, {
+        start: sequence.start,
+        end: sequence.end,
+        durationInFrames: sequence.durationInFrames || 0,
+        sequences: [sequence],
+        voiceId: voiceId || undefined
+      });
+    } else {
+      const current = voiceSegments.get(sequence.audioIndex)!;
+      current.end = sequence.end;
+      current.durationInFrames += sequence.durationInFrames || 0;
+      current.sequences.push(sequence);
+      current.voiceId = voiceId || undefined
     }
   });
 
