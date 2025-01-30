@@ -217,7 +217,11 @@
       },
       "transition": {
         "transition": "Transition",
-        "delete": "Supprimer la transition"
+        "sound": "Son",
+        "delete": "Supprimer la transition",
+        "category": {
+          "film-burn": "Film burn"
+        }
       },
       "subtitle": {
         "title-presets": "Presets",

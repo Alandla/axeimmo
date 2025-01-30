@@ -35,10 +35,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/
 import { CommandShortcut } from '@/src/components/ui/command'
 import { ISpace } from '@/src/types/space'
 import { PlanName } from '@/src/types/enums'
-import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
-import { subtitles } from '@/src/config/subtitles.config'
-import { getMostFrequentString } from '@/src/lib/utils'
-import { space } from 'postcss/lib/list'
+import TransitionSettings from '@/src/components/edit/transition-settings'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -776,6 +773,9 @@ export default function VideoEditor() {
                 <ScrollArea className="h-[calc(100vh-5rem)]">
                   {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
                     <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
+                  )}
+                  {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                    <TransitionSettings video={video} transition={video.video.transitions[selectedTransitionIndex]} transitionIndex={selectedTransitionIndex} spaceId={video.spaceId} />
                   )}
                 </ScrollArea>
               )}

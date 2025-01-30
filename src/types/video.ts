@@ -64,13 +64,14 @@ export interface ISequence {
 }
 
 export interface ITransition {
-  indexSequenceBefore: number;
+  indexSequenceBefore?: number;
   video: string;
   thumbnail: string;
-  sound: string;
-  volume: number;
+  sound?: string;
+  volume?: number;
   fullAt?: number;
   durationInFrames?: number;
+  category?: string;
 }
 
 export interface IVideo {

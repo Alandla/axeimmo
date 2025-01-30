@@ -10,7 +10,7 @@ export const Transitions = ({sequences, transitions}: {sequences: ISequence[], t
         
         // Calculer le total des frames des séquences précédentes
         const totalFramesBefore = sequences
-          .slice(0, transition.indexSequenceBefore + 1)
+          .slice(0, (transition.indexSequenceBefore ?? 0) + 1)
           .reduce((acc, seq) => acc + (seq.durationInFrames || 0), 0);
         
         // Calculer le moment où la transition doit commencer
