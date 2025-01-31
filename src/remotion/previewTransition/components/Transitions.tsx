@@ -5,10 +5,10 @@ export const timeToFrames = (time: number, fps: number = 60): number => Math.rou
 
 export const Transitions = ({transition}: {transition: ITransition}) => {
   
-  const startAt = 10 - (transition.fullAt || 0);
+  const startAt = 30 - (transition.fullAt || 0);
   return (
     <>
-        <Sequence from={startAt} durationInFrames={transition.durationInFrames}>
+        <Sequence from={startAt} durationInFrames={transition.durationInFrames} premountFor={20}>
           <Video
             src={transition.video}
             volume={0}
@@ -16,7 +16,8 @@ export const Transitions = ({transition}: {transition: ITransition}) => {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              mixBlendMode: 'lighten'
+              mixBlendMode: 'lighten',
+              zIndex: 3
             }}
           />
         </Sequence>

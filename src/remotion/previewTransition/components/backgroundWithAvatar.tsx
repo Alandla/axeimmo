@@ -15,9 +15,9 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration, transition }
             const media = d.media;
             let duration = 0;
             if (index === 0) {
-                duration = transition.fullAt || 0 + 10;
+                duration = 30 + (transition.fullAt || 0);
             } else {
-                duration = transition.durationInFrames || 0;
+                duration = 30 + (transition.durationInFrames || 0);
             }
             let mediaHeight = 100;
             let zIndex = 0;

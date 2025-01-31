@@ -1,4 +1,5 @@
-import { ITransition } from "../types/video"
+import { ITransition } from "../type/transition"
+
 
 export const transitions : ITransition[] = [
     {
@@ -22,12 +23,10 @@ export const sounds = [
         name: "Burn Fizzle",
         url: "https://assets.hoox.video/Film%20Burn%20Fizzle.wav",
         category: "film-burn",
-        soundPeakAt: 0
     },
     {
         name: "Click 1",
         url: "https://assets.hoox.video/Clicks.mp3",
         category: "click",
-        soundPeakAt: 26
     }
 ]

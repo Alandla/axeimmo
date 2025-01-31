@@ -20,7 +20,7 @@ export const Transitions = ({sequences, transitions}: {sequences: ISequence[], t
         console.log(startAt)
 
         return (
-          <Sequence key={index} from={startAt} durationInFrames={transition.durationInFrames}>
+          <Sequence key={index} from={startAt} durationInFrames={transition.durationInFrames} premountFor={20}>
             {/* Vidéo de transition */}
             <Video
               src={transition.video}
@@ -29,7 +29,8 @@ export const Transitions = ({sequences, transitions}: {sequences: ISequence[], t
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                mixBlendMode: 'lighten'
+                mixBlendMode: 'lighten',
+                zIndex: 3
               }}
             />
             

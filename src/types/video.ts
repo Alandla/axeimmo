@@ -69,6 +69,7 @@ export interface ITransition {
   thumbnail: string;
   sound?: string;
   volume?: number;
+  soundPeakAt?: number;
   fullAt?: number;
   durationInFrames?: number;
   category?: string;

@@ -1,10 +1,10 @@
 import { Composition } from 'remotion';
 import { PreviewTransition } from './Composition';
-import result from '../../test/mockup/videoResultStoryblocks.json';
-import { transitions } from '@/src/config/transitions.config';
+import result from '../../test/mockup/videoResultTransition.json';
+import { transitions } from './config/transitions.config';
 
 const calculateMetadata = ({props}: {props: any}) => {
-	const duration = props.transition.durationInFrames + 10 + (props.transition.fullAt || 0);
+	const duration = props.transition.durationInFrames + 30 + (props.transition.fullAt || 0);
 	return {
 	  durationInFrames: duration,
 	};

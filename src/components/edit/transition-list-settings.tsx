@@ -56,7 +56,7 @@ function TransitionPreview({ transitionItem, isSelected, previewSequences, video
       <Player
         ref={playerRef}
         component={PreviewTransition}
-        durationInFrames={500}
+        durationInFrames={(transitionItem.durationInFrames || 500) + 30 + (transitionItem.fullAt || 0)}
         compositionWidth={400}
         compositionHeight={400}
         fps={60}
