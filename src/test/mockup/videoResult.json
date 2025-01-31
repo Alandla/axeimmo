@@ -27,9 +27,10 @@
         "durationInFrames": 98,
         "video": "https://assets.hoox.video/Film%20Burn%20Red%20Burn.mp4",
         "thumbnail": "https://assets.hoox.video/film-burn-red-thumbnail.png",
-        "sound": "https://assets.hoox.video/Film%20Burn%20Fizzle.wav",
-        "volume": 0.5,
+        "sound": "https://assets.hoox.video/Clicks.mp3",
+        "volume": 1,
         "fullAt": 14,
+        "soundPeakAt": 26,
         "_id": {
           "$oid": "67966237917d475d210949fe"
         }

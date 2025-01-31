@@ -15,31 +15,31 @@ export const Transitions = ({sequences, transitions}: {sequences: ISequence[], t
         
         // Calculer le moment où la transition doit commencer
         const startAt = totalFramesBefore - (transition.fullAt || 0);
-
-        console.log(totalFramesBefore)
-        console.log(startAt)
+        const soundStartAt = totalFramesBefore - (transition.soundPeakAt || 0);
 
         return (
-          <Sequence key={index} from={startAt} durationInFrames={transition.durationInFrames} premountFor={20}>
-            {/* Vidéo de transition */}
-            <Video
-              src={transition.video}
-              volume={0} // La vidéo n'a pas de son car on utilise un fichier audio séparé
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                mixBlendMode: 'lighten',
-                zIndex: 3
-              }}
-            />
-            
-            {/* Audio de transition */}
-            <Audio
-              src={transition.sound}
-              volume={transition.volume}
-            />
-          </Sequence>
+          <>
+            <Sequence key={index} from={startAt} durationInFrames={transition.durationInFrames} premountFor={20}>
+              {/* Vidéo de transition */}
+              <Video
+                src={transition.video}
+                volume={0} // La vidéo n'a pas de son car on utilise un fichier audio séparé
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  mixBlendMode: 'lighten',
+                  zIndex: 3
+                }}
+              />
+            </Sequence>
+            <Sequence key={`sound-${index}`} from={soundStartAt} durationInFrames={transition.durationInFrames} premountFor={20}>
+              <Audio
+                src={transition.sound}
+                volume={transition.volume}
+              />
+            </Sequence>
+          </>
         );
       })}
     </>
