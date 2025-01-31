@@ -1,17 +1,28 @@
 import { ITransition } from "@/src/types/video";
-import { CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
 import TransitionListSettings from "./transition-list-settings";
+import TransitionMusics from "./transition-musics";
 
-export default function TransitionSettings({ video, transition, transitionIndex, spaceId, updateTransition }: { 
-  video: any, 
-  transition: ITransition, 
-  transitionIndex: number, 
-  spaceId: string,
-  updateTransition: (transitionIndex: number, newTransition: ITransition) => void 
-}) {
+interface TransitionSettingsProps {
+  video: any;
+  transition: ITransition;
+  transitionIndex: number;
+  spaceId: string;
+  updateTransition: (transitionIndex: number, newTransition: ITransition) => void;
+}
+
+export default function TransitionSettings({ 
+  video, 
+  transition, 
+  transitionIndex, 
+  spaceId,
+  updateTransition 
+}: TransitionSettingsProps) {
   const t = useTranslations('edit.transition')
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   return (
     <>
@@ -24,6 +35,7 @@ export default function TransitionSettings({ video, transition, transitionIndex,
             <TabsTrigger value="transition">{t('transition')}</TabsTrigger>
             <TabsTrigger value="sound">{t('sound')}</TabsTrigger>
           </TabsList>
+
           <TabsContent value="transition">
             <TransitionListSettings 
               video={video} 
@@ -31,13 +43,22 @@ export default function TransitionSettings({ video, transition, transitionIndex,
               transitionIndex={transitionIndex} 
               spaceId={spaceId}
               updateTransition={updateTransition}
+              selectedCategories={selectedCategories}
+              setSelectedCategories={setSelectedCategories}
             />
           </TabsContent>
+
           <TabsContent value="sound">
-            Music settings
+            <TransitionMusics 
+              transition={transition}
+              transitionIndex={transitionIndex}
+              updateTransition={updateTransition}
+              selectedCategories={selectedCategories}
+              setSelectedCategories={setSelectedCategories}
+            />
           </TabsContent>
         </Tabs>
       </CardContent>
     </>
-  )
+  );
 }

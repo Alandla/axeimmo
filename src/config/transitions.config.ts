@@ -13,6 +13,19 @@ export const transitions : ITransition[] = [
         video: "https://assets.hoox.video/Transition%20verte.mp4",
         thumbnail: "https://assets.hoox.video/transition-vert-thumbnail.png",
         fullAt: 17,
+        category: "click",
+    },
+]
+
+export const sounds = [
+    {
+        name: "Burn Fizzle",
+        url: "https://assets.hoox.video/Film%20Burn%20Fizzle.wav",
         category: "film-burn",
     },
+    {
+        name: "Click 1",
+        url: "https://assets.hoox.video/Clicks.mp3",
+        category: "click",
+    }
 ]
