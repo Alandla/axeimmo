@@ -4,15 +4,15 @@ export const transitions : ITransition[] = [
     {
         durationInFrames: 98,
         video: "https://assets.hoox.video/Film%20Burn%20Red%20Burn.mp4",
-        thumbnail: "https://images.pexels.com/videos/6645810/asian-asian-cuisine-asian-food-bbq-6645810.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+        thumbnail: "https://assets.hoox.video/film-burn-red-thumbnail.png",
         fullAt: 14,
         category: "film-burn",
     },
     {
-        durationInFrames: 98,
-        video: "https://assets.hoox.video/Film%20Burn%20Red%20Burn.mp4",
-        thumbnail: "https://images.pexels.com/videos/6645810/asian-asian-cuisine-asian-food-bbq-6645810.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-        fullAt: 14,
+        durationInFrames: 30,
+        video: "https://assets.hoox.video/Transition%20verte.mp4",
+        thumbnail: "https://assets.hoox.video/transition-vert-thumbnail.png",
+        fullAt: 17,
         category: "film-burn",
     },
 ]

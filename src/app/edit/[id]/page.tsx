@@ -13,7 +13,7 @@ import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { ISequence, IVideo, IWord } from '@/src/types/video'
+import { ISequence, IVideo, IWord, ITransition } from '@/src/types/video'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
@@ -599,6 +599,20 @@ export default function VideoEditor() {
     });
   };
 
+  const handleUpdateTransition = (transitionIndex: number, newTransition: ITransition) => {
+    if (video && video.video && video.video.transitions) {
+      const newTransitions = [...video.video.transitions];
+      newTransitions[transitionIndex] = newTransition;
+      updateVideo({
+        ...video,
+        video: {
+          ...video.video,
+          transitions: newTransitions
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 's') {
@@ -775,7 +789,13 @@ export default function VideoEditor() {
                     <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
                   )}
                   {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
-                    <TransitionSettings video={video} transition={video.video.transitions[selectedTransitionIndex]} transitionIndex={selectedTransitionIndex} spaceId={video.spaceId} />
+                    <TransitionSettings 
+                      video={video} 
+                      transition={video.video.transitions[selectedTransitionIndex]} 
+                      transitionIndex={selectedTransitionIndex} 
+                      spaceId={video.spaceId}
+                      updateTransition={handleUpdateTransition}
+                    />
                   )}
                 </ScrollArea>
               )}

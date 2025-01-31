@@ -4,7 +4,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useTranslations } from "next-intl";
 import TransitionListSettings from "./transition-list-settings";
 
-export default function TransitionSettings({ video, transition, transitionIndex, spaceId }: { video: any, transition: ITransition, transitionIndex: number, spaceId: string }) {
+export default function TransitionSettings({ video, transition, transitionIndex, spaceId, updateTransition }: { 
+  video: any, 
+  transition: ITransition, 
+  transitionIndex: number, 
+  spaceId: string,
+  updateTransition: (transitionIndex: number, newTransition: ITransition) => void 
+}) {
   const t = useTranslations('edit.transition')
 
   return (
@@ -19,7 +25,13 @@ export default function TransitionSettings({ video, transition, transitionIndex,
             <TabsTrigger value="sound">{t('sound')}</TabsTrigger>
           </TabsList>
           <TabsContent value="transition">
-            <TransitionListSettings video={video} transition={transition} transitionIndex={transitionIndex} spaceId={spaceId} />
+            <TransitionListSettings 
+              video={video} 
+              transition={transition} 
+              transitionIndex={transitionIndex} 
+              spaceId={spaceId}
+              updateTransition={updateTransition}
+            />
           </TabsContent>
           <TabsContent value="sound">
             Music settings

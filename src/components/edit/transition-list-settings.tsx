@@ -7,11 +7,33 @@ import { PreviewTransition } from "@/src/remotion/previewTransition/Composition"
 import { Check } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { Badge } from "../ui/badge";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/src/components/ui/pagination"
 
-export default function TransitionListSettings({ video, transition, transitionIndex, spaceId }: { video: any, transition: ITransition, transitionIndex: number, spaceId: string }) {
+export default function TransitionListSettings({ 
+  video, 
+  transition, 
+  transitionIndex, 
+  spaceId,
+  updateTransition 
+}: { 
+  video: any, 
+  transition: ITransition, 
+  transitionIndex: number, 
+  spaceId: string,
+  updateTransition: (transitionIndex: number, newTransition: ITransition) => void 
+}) {
   const t = useTranslations('edit.transition')
-  const [selectedTransition, setSelectedTransition] = useState<ITransition | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const transitionsPerPage = 9;
 
   // Obtenir toutes les catégories uniques
   const allCategories = Array.from(new Set(transitions.map(t => t.category).filter((category): category is string => typeof category === 'string')));
@@ -21,6 +43,7 @@ export default function TransitionListSettings({ video, transition, transitionIn
       ? selectedCategories.filter(c => c !== category)
       : [...selectedCategories, category];
     setSelectedCategories(newCategories);
+    setCurrentPage(1); // Réinitialiser la page lors du changement de catégorie
   };
 
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -36,6 +59,53 @@ export default function TransitionListSettings({ video, transition, transitionIn
   const filteredTransitions = transitions.filter(t => 
     selectedCategories.length === 0 || (typeof t.category === 'string' && selectedCategories.includes(t.category))
   );
+
+  // Calculer les transitions pour la page courante
+  const indexOfLastTransition = currentPage * transitionsPerPage;
+  const indexOfFirstTransition = indexOfLastTransition - transitionsPerPage;
+  const currentTransitions = filteredTransitions.slice(indexOfFirstTransition, indexOfLastTransition);
+  const totalPages = Math.ceil(filteredTransitions.length / transitionsPerPage);
+
+  const handleTransitionSelect = (transitionItem: ITransition) => {
+    const newTransition = {
+      ...transition,
+      video: transitionItem.video,
+      thumbnail: transitionItem.thumbnail,
+      fullAt: transitionItem.fullAt,
+      durationInFrames: transitionItem.durationInFrames,
+    };
+    updateTransition(transitionIndex, newTransition);
+  };
+
+  // Fonction pour générer les numéros de page à afficher
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const totalPagesToShow = 5;
+    const halfWay = Math.floor(totalPagesToShow / 2);
+    
+    let startPage = Math.max(currentPage - halfWay, 1);
+    let endPage = Math.min(startPage + totalPagesToShow - 1, totalPages);
+    
+    if (endPage - startPage + 1 < totalPagesToShow) {
+      startPage = Math.max(endPage - totalPagesToShow + 1, 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    return {
+      numbers: pageNumbers,
+      showStartEllipsis: startPage > 1,
+      showEndEllipsis: endPage < totalPages
+    };
+  };
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <>
@@ -60,8 +130,8 @@ export default function TransitionListSettings({ video, transition, transitionIn
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        {filteredTransitions.map((transitionItem, index) => {
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        {currentTransitions.map((transitionItem, index) => {
           const playerRef = useRef<PlayerRef>(null);
           const [isHovering, setIsHovering] = useState(false);
 
@@ -91,7 +161,7 @@ export default function TransitionListSettings({ video, transition, transitionIn
                 )}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
-                onClick={() => setSelectedTransition(transitionItem)}
+                onClick={() => handleTransitionSelect(transitionItem)}
               >
                 {isSelected && (
                   <Check className="h-4 w-4 text-primary absolute top-2 right-2 z-10" />
@@ -124,6 +194,68 @@ export default function TransitionListSettings({ video, transition, transitionIn
           );
         })}
       </div>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious 
+              showText={true}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className={cn(
+                "cursor-pointer",
+                currentPage === 1 && "pointer-events-none opacity-50"
+              )}
+            />
+          </PaginationItem>
+
+          {getPageNumbers().showStartEllipsis && (
+            <>
+              <PaginationItem>
+                <PaginationLink onClick={() => handlePageChange(1)}>
+                  1
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            </>
+          )}
+
+          {getPageNumbers().numbers.map((pageNumber) => (
+            <PaginationItem key={pageNumber}>
+              <PaginationLink
+                isActive={currentPage === pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+              >
+                {pageNumber}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          {getPageNumbers().showEndEllipsis && (
+            <>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink onClick={() => handlePageChange(totalPages)}>
+                  {totalPages}
+                </PaginationLink>
+              </PaginationItem>
+            </>
+          )}
+
+          <PaginationItem>
+            <PaginationNext 
+              showText={true}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className={cn(
+                "cursor-pointer",
+                currentPage === totalPages && "pointer-events-none opacity-50"
+              )}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </>
   )
 }

@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { AbsoluteFill, Sequence, OffthreadVideo, Img, interpolate, useCurrentFrame, Loop, Video } from "remotion";
 import { AvatarLook } from "../type/avatar";
+import { ITransition } from "@/src/types/video";
 
-export const BackgroundWithAvatar = ({ sequences, avatar, duration }: { sequences: any, avatar: AvatarLook, duration: number }) => {
+export const BackgroundWithAvatar = ({ sequences, avatar, duration, transition }: { sequences: any, avatar: AvatarLook, duration: number, transition: ITransition }) => {
     const frame = useCurrentFrame();
 
     const { backgroundHeight, mediaElements } = useMemo(() => {
@@ -12,7 +13,12 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration }: { sequence
 
         sequences.forEach((d: any, index: number) => {
             const media = d.media;
-            const duration = d.durationInFrames;
+            let duration = 0;
+            if (index === 0) {
+                duration = transition.fullAt || 0 + 10;
+            } else {
+                duration = transition.durationInFrames || 0;
+            }
             let mediaHeight = 100;
             let zIndex = 0;
 
