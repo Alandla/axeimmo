@@ -38,7 +38,7 @@ export default function Transition({
       className="cursor-pointer"
       onClick={() => setSelectedIndex?.(index)}
     >
-      <Card className={`m-2 transition-card relative h-11 overflow-hidden ${isSelected ? 'border-primary' : ''}`}>
+      <Card className={`m-2 transition-card relative h-11 overflow-hidden ${isSelected ? 'ring-2 ring-primary' : ''}`}>
         <div 
           className="absolute inset-0 w-full h-full mix-blend-difference bg-cover bg-center"
           style={{ backgroundImage: `url(${transition.thumbnail})`}}

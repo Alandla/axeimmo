@@ -204,7 +204,9 @@
         "regeneration-needed": "Audio regeneration needed",
         "button-regenerate": "Regenerate audio",
         "button-delete": "Delete sequence",
-        "add-sequence": "Add sequence"
+        "add-sequence": "Add sequence",
+        "add": "Add",
+        "add-transition": "Add a transition"
       },
       "transition": {
         "transition": "Transition",

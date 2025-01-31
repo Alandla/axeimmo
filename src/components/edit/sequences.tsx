@@ -8,6 +8,8 @@ import { Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import React from "react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { ListVideo, Wand2 } from "lucide-react";
 
 interface SequencesProps {
     sequences: ISequence[];
@@ -24,6 +26,7 @@ interface SequencesProps {
     onDeleteSequence: (index: number) => void;
     onDeleteTransition: (index: number) => void;
     onAddSequence: (afterIndex: number) => void;
+    onAddTransition?: (afterIndex: number) => void;
     playerRef?: React.RefObject<PlayerRef>;
 }
 
@@ -42,6 +45,7 @@ export default function Sequences({
     onDeleteSequence,
     onDeleteTransition,
     onAddSequence,
+    onAddTransition,
     playerRef,
 }: SequencesProps) {
     const t = useTranslations('edit.sequence');
@@ -54,6 +58,14 @@ export default function Sequences({
     const handleSequenceClick = (index: number) => {
         setSelectedSequenceIndex(index);
         setSelectedTransitionIndex?.(-1); // Désélectionne la transition
+    };
+
+    const hasTransitionAfterSequence = (sequenceIndex: number) => {
+        return transitions.some(t => t.indexSequenceBefore === sequenceIndex);
+    };
+
+    const canAddSequence = (index: number) => {
+        return isLastSequenceWithAudioIndex(sequences, index);
     };
 
     return (
@@ -87,7 +99,7 @@ export default function Sequences({
                                 />
                             )
                         )}
-                        {(index === selectedSequenceIndex || (selectedTransitionIndex !== undefined && transitions.find((t, i) => i === selectedTransitionIndex && t.indexSequenceBefore === index))) && isLastSequenceWithAudioIndex(sequences, index) && (
+                        {(index === selectedSequenceIndex || (selectedTransitionIndex !== undefined && transitions.find((t, i) => i === selectedTransitionIndex && t.indexSequenceBefore === index))) && (
                             <motion.div
                                 initial={{ opacity: 0, y: -20, height: 0 }}
                                 animate={{ opacity: 1, y: 0, height: "auto" }}
@@ -95,14 +107,49 @@ export default function Sequences({
                                 transition={{ duration: 0.3, delay: 0.1 }}
                                 className="mx-2 my-1"
                             >
-                                <Button 
-                                    variant="outline" 
-                                    className="w-full flex items-center justify-center gap-2"
-                                    onClick={() => onAddSequence(index)}
-                                >
-                                    <Plus className="w-4 h-4" />
-                                    {t('add-sequence')}
-                                </Button>
+                                {canAddSequence(index) ? (
+                                    hasTransitionAfterSequence(index) ? (
+                                        <Button 
+                                            variant="outline" 
+                                            className="w-full flex items-center justify-center gap-2"
+                                            onClick={() => onAddSequence(index)}
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                            {t('add-sequence')}
+                                        </Button>
+                                    ) : (
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button 
+                                                    variant="outline" 
+                                                    className="w-full flex items-center justify-center gap-2"
+                                                >
+                                                    <Plus className="w-4 h-4" />
+                                                    {t('add')}
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-[var(--radix-dropdown-trigger-width)]">
+                                                <DropdownMenuItem onClick={() => onAddSequence(index)} className="flex items-center gap-2">
+                                                    <ListVideo className="w-4 h-4" />
+                                                    {t('add-sequence')}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => onAddTransition?.(index)} className="flex items-center gap-2">
+                                                    <Wand2 className="w-4 h-4" />
+                                                    {t('add-transition')}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    )
+                                ) : !hasTransitionAfterSequence(index) ? (
+                                    <Button 
+                                        variant="outline" 
+                                        className="w-full flex items-center justify-center gap-2"
+                                        onClick={() => onAddTransition?.(index)}
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                        {t('add-transition')}
+                                    </Button>
+                                ) : null}
                             </motion.div>
                         )}
                         {index > selectedSequenceIndex && (

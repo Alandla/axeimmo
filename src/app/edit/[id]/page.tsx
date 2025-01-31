@@ -36,6 +36,7 @@ import { CommandShortcut } from '@/src/components/ui/command'
 import { ISpace } from '@/src/types/space'
 import { PlanName } from '@/src/types/enums'
 import TransitionSettings from '@/src/components/edit/transition-settings'
+import { transitions as defaultTransitions, sounds as defaultSounds } from '@/src/config/transitions.config'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -276,7 +277,13 @@ export default function VideoEditor() {
     if (video?.video?.sequences && selectedSequenceIndex >= 0 && selectedSequenceIndex < video.video.sequences.length) {
       playerRef.current?.seekTo(video.video.sequences[selectedSequenceIndex].start * 60)
     }
-  }, [selectedSequenceIndex])
+
+    if (video?.video?.transitions && selectedTransitionIndex >= 0 && selectedTransitionIndex < video.video.transitions.length) {
+      const transitionIndex = video.video.transitions[selectedTransitionIndex].indexSequenceBefore ?? 0;
+      const sequenceBefore = video.video.sequences[transitionIndex];
+      playerRef.current?.seekTo((sequenceBefore.end * 60) - (video.video.transitions[selectedTransitionIndex].fullAt ?? 0));
+    }
+  }, [selectedSequenceIndex, selectedTransitionIndex])
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -392,6 +399,15 @@ export default function VideoEditor() {
   const handleDeleteSequence = (sequenceIndex: number) => {
     if (!video?.video) return;
 
+    const newTransitions = [...(video.video.transitions || [])];
+
+    // Mettre à jour les indexSequenceBefore des transitions
+    newTransitions.forEach(transition => {
+      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore > sequenceIndex) {
+        transition.indexSequenceBefore -= 1;
+      }
+    });
+
     const sequence = video.video.sequences[sequenceIndex];
     const audioIndex = sequence.audioIndex;
     const newSequences = [...video.video.sequences];
@@ -458,6 +474,7 @@ export default function VideoEditor() {
         video: {
             ...video.video,
             sequences: newSequences,
+            transitions: newTransitions,
             audio: {
                 ...video.video.audio,
                 voices: newAudio
@@ -479,6 +496,15 @@ export default function VideoEditor() {
     if (!video?.video) return;
 
     const newSequences = [...video.video.sequences];
+    const newTransitions = [...(video.video.transitions || [])];
+
+    // Mettre à jour les indexSequenceBefore des transitions
+    newTransitions.forEach(transition => {
+      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore > afterIndex) {
+        transition.indexSequenceBefore += 1;
+      }
+    });
+
     const previousSequence = newSequences[afterIndex];
     const defaultDuration = 3;
     const defaultDurationInFrames = defaultDuration * 60;
@@ -555,6 +581,7 @@ export default function VideoEditor() {
         video: {
           ...video.video,
           sequences: newSequences,
+          transitions: newTransitions,
           audio: {
             ...video.video.audio,
             voices: newVoices
@@ -572,6 +599,7 @@ export default function VideoEditor() {
         video: {
           ...video.video,
           sequences: newSequences,
+          transitions: newTransitions,
           metadata: {
             ...video.video.metadata,
             audio_duration: (video.video.metadata.audio_duration || 0) + defaultDuration
@@ -580,14 +608,17 @@ export default function VideoEditor() {
       });
     }
 
-    // Sélectionner la nouvelle séquence
     setSelectedSequenceIndex(afterIndex + 1);
+    setSelectedTransitionIndex(-1);
   };
 
   const handleDeleteTransition = (index: number) => {
     if (!video?.video?.transitions) return;
 
     const newTransitions = [...video.video.transitions];
+    const transitionToDelete = newTransitions[index];
+    const sequenceIndex = transitionToDelete.indexSequenceBefore ?? 0;
+    
     newTransitions.splice(index, 1);
 
     updateVideo({
@@ -597,6 +628,9 @@ export default function VideoEditor() {
         transitions: newTransitions
       }
     });
+    
+    setSelectedTransitionIndex(-1);
+    setSelectedSequenceIndex(sequenceIndex + 1);
   };
 
   const handleUpdateTransition = (transitionIndex: number, newTransition: ITransition) => {
@@ -611,6 +645,31 @@ export default function VideoEditor() {
         }
       });
     }
+  };
+
+  const handleAddTransition = (afterIndex: number) => {
+    if (!video?.video) return;
+
+    const newTransitions = [...(video.video.transitions || [])];
+    const defaultTransition = {
+      ...defaultTransitions[0],
+      indexSequenceBefore: afterIndex,
+      volume: 0.5,
+      sound: defaultSounds[0].url
+    };
+
+    newTransitions.push(defaultTransition);
+
+    setSelectedTransitionIndex(newTransitions.length - 1);
+    setSelectedSequenceIndex(-1);
+
+    updateVideo({
+      ...video,
+      video: {
+        ...video.video,
+        transitions: newTransitions
+      }
+    });
   };
 
   useEffect(() => {
@@ -759,6 +818,7 @@ export default function VideoEditor() {
                         onDeleteSequence={handleDeleteSequence}
                         onDeleteTransition={handleDeleteTransition}
                         onAddSequence={handleAddSequence}
+                        onAddTransition={handleAddTransition}
                         playerRef={playerRef}
                       />
                     </TabsContent>
@@ -851,6 +911,7 @@ export default function VideoEditor() {
                   onDeleteSequence={handleDeleteSequence}
                   onDeleteTransition={handleDeleteTransition}
                   onAddSequence={handleAddSequence}
+                  onAddTransition={handleAddTransition}
                   playerRef={playerRef}
                 />
               </ScrollArea>
