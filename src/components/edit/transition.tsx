@@ -21,6 +21,8 @@ interface TransitionProps {
   onDeleteTransition: (index: number) => void;
   selectedIndex?: number;
   setSelectedIndex?: (index: number) => void;
+  setActiveTabMobile?: (tab: string) => void;
+  isMobile?: boolean;
 }
 
 export default function Transition({ 
@@ -29,11 +31,20 @@ export default function Transition({
   sequenceThumbnail,
   onDeleteTransition,
   selectedIndex,
-  setSelectedIndex
+  setSelectedIndex,
+  setActiveTabMobile,
+  isMobile
 }: TransitionProps) {
   const t = useTranslations('edit.transition')
 
   const isSelected = selectedIndex === index;
+
+  const handleEdit = () => {
+    if (isMobile && setActiveTabMobile) {
+      setActiveTabMobile('settings-transition');
+    }
+    setSelectedIndex?.(index);
+  };
 
   return (
     <motion.div
@@ -66,14 +77,18 @@ export default function Transition({
                 align="end"
                 sideOffset={4}
             >
-                <DropdownMenuItem 
-                    onClick={() => setSelectedIndex?.(index)}
-                    className="cursor-pointer"
-                >
-                    <Pen size={16} />
-                    {t('edit')}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                {isMobile && (
+                    <>
+                        <DropdownMenuItem 
+                            onClick={handleEdit}
+                            className="cursor-pointer"
+                        >
+                            <Pen size={16} />
+                            {t('edit')}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                    </>
+                )}
                 <DropdownMenuItem
                     className={cn(
                     "flex items-center text-destructive cursor-pointer hover:bg-red-200 hover:text-destructive focus:bg-red-200 focus:text-destructive"

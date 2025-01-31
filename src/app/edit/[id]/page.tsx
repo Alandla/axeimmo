@@ -823,10 +823,14 @@ export default function VideoEditor() {
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
-                      <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} />
+                      <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
+                        <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} />
+                      </ScrollArea>
                     </TabsContent>
                     <TabsContent value="audio">
-                      <Musics video={video} updateAudioSettings={updateAudioSettings} />
+                      <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
+                        <Musics video={video} updateAudioSettings={updateAudioSettings} />
+                      </ScrollArea>
                     </TabsContent>
                 </Tabs>
               </div>
@@ -903,6 +907,8 @@ export default function VideoEditor() {
                   selectedTransitionIndex={selectedTransitionIndex}
                   setSelectedSequenceIndex={setSelectedSequenceIndex} 
                   setSelectedTransitionIndex={setSelectedTransitionIndex}
+                  setActiveTabMobile={setActiveTabMobile}
+                  isMobile={isMobile}
                   handleWordInputChange={handleWordInputChange} 
                   handleWordAdd={handleWordAdd}
                   handleWordDelete={handleWordDelete}
@@ -930,6 +936,19 @@ export default function VideoEditor() {
               <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
                 {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
                   <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
+                )}
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-transition">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                  <TransitionSettings 
+                    video={video} 
+                    transition={video.video.transitions[selectedTransitionIndex]} 
+                    transitionIndex={selectedTransitionIndex} 
+                    spaceId={video.spaceId}
+                    updateTransition={handleUpdateTransition}
+                  />
                 )}
               </ScrollArea>
             </TabsContent>

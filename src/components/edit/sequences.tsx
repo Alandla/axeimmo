@@ -18,6 +18,8 @@ interface SequencesProps {
     selectedTransitionIndex?: number;
     setSelectedSequenceIndex: (index: number) => void;
     setSelectedTransitionIndex?: (index: number) => void;
+    setActiveTabMobile?: (tab: string) => void;
+    isMobile?: boolean;
     handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void;
     handleWordAdd: (sequenceIndex: number, wordIndex: number) => number;
     handleWordDelete: (sequenceIndex: number, wordIndex: number) => void;
@@ -37,6 +39,8 @@ export default function Sequences({
     selectedTransitionIndex,
     setSelectedSequenceIndex,
     setSelectedTransitionIndex,
+    setActiveTabMobile,
+    isMobile,
     handleWordInputChange, 
     handleWordAdd, 
     handleWordDelete, 
@@ -78,6 +82,8 @@ export default function Sequences({
                             index={index} 
                             selectedIndex={selectedSequenceIndex} 
                             setSelectedIndex={handleSequenceClick}
+                            setActiveTabMobile={setActiveTabMobile}
+                            isMobile={isMobile}
                             handleWordInputChange={handleWordInputChange}
                             handleWordAdd={handleWordAdd}
                             handleWordDelete={handleWordDelete}
@@ -96,6 +102,8 @@ export default function Sequences({
                                     sequenceThumbnail={sequence.media?.image?.link || ""}
                                     selectedIndex={selectedTransitionIndex}
                                     setSelectedIndex={handleTransitionClick}
+                                    setActiveTabMobile={setActiveTabMobile}
+                                    isMobile={isMobile}
                                     onDeleteTransition={onDeleteTransition}
                                 />
                             )

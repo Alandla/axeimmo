@@ -215,70 +215,68 @@ export default function TransitionListSettings({
         })}
       </div>
 
-      {totalPages > 1 && (
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious 
-                showText={true}
-                onClick={() => handlePageChange(currentPage - 1)}
-                className={cn(
-                  "cursor-pointer",
-                  currentPage === 1 && "pointer-events-none opacity-50"
-                )}
-              />
-            </PaginationItem>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious 
+              showText={true}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className={cn(
+                "cursor-pointer",
+                currentPage === 1 && "pointer-events-none opacity-50"
+              )}
+            />
+          </PaginationItem>
 
-            {getPageNumbers().showStartEllipsis && (
-              <>
-                <PaginationItem>
-                  <PaginationLink onClick={() => handlePageChange(1)}>
-                    1
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-              </>
-            )}
-
-            {getPageNumbers().numbers.map((pageNumber) => (
-              <PaginationItem key={pageNumber}>
-                <PaginationLink
-                  isActive={currentPage === pageNumber}
-                  onClick={() => handlePageChange(pageNumber)}
-                >
-                  {pageNumber}
+          {getPageNumbers().showStartEllipsis && (
+            <>
+              <PaginationItem>
+                <PaginationLink onClick={() => handlePageChange(1)}>
+                  1
                 </PaginationLink>
               </PaginationItem>
-            ))}
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            </>
+          )}
 
-            {getPageNumbers().showEndEllipsis && (
-              <>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink onClick={() => handlePageChange(totalPages)}>
-                    {totalPages}
-                  </PaginationLink>
-                </PaginationItem>
-              </>
-            )}
-
-            <PaginationItem>
-              <PaginationNext 
-                showText={true}
-                onClick={() => handlePageChange(currentPage + 1)}
-                className={cn(
-                  "cursor-pointer",
-                  currentPage === totalPages && "pointer-events-none opacity-50"
-                )}
-              />
+          {getPageNumbers().numbers.map((pageNumber) => (
+            <PaginationItem key={pageNumber}>
+              <PaginationLink
+                isActive={currentPage === pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+              >
+                {pageNumber}
+              </PaginationLink>
             </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      )}
+          ))}
+
+          {getPageNumbers().showEndEllipsis && (
+            <>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink onClick={() => handlePageChange(totalPages)}>
+                  {totalPages}
+                </PaginationLink>
+              </PaginationItem>
+            </>
+          )}
+
+          <PaginationItem>
+            <PaginationNext 
+              showText={true}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className={cn(
+                "cursor-pointer",
+                currentPage === totalPages && "pointer-events-none opacity-50"
+              )}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </>
   );
 }
