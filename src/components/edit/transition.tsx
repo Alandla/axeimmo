@@ -1,7 +1,7 @@
 import { ITransition } from "@/src/types/video";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Clock, MoreVertical, Trash2 } from "lucide-react";
+import { Clock, MoreVertical, Pen, Trash2 } from "lucide-react";
 import { motion } from 'framer-motion';
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
@@ -9,6 +9,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { cn } from "@/src/lib/utils";
@@ -16,6 +17,7 @@ import { cn } from "@/src/lib/utils";
 interface TransitionProps {
   transition: ITransition;
   index: number;
+  sequenceThumbnail: string;
   onDeleteTransition: (index: number) => void;
   selectedIndex?: number;
   setSelectedIndex?: (index: number) => void;
@@ -24,6 +26,7 @@ interface TransitionProps {
 export default function Transition({ 
   transition,
   index,
+  sequenceThumbnail,
   onDeleteTransition,
   selectedIndex,
   setSelectedIndex
@@ -40,11 +43,15 @@ export default function Transition({
     >
       <Card className={`m-2 transition-card relative h-11 overflow-hidden ${isSelected ? 'ring-2 ring-primary' : ''}`}>
         <div 
-          className="absolute inset-0 w-full h-full mix-blend-difference bg-cover bg-center"
+          className="absolute inset-0 w-full h-11 mix-blend-lighten bg-center z-10"
           style={{ backgroundImage: `url(${transition.thumbnail})`}}
         />
+        <div 
+          className="absolute inset-0 w-full h-11 bg-center blur-sm scale-125"
+          style={{ backgroundImage: `url(${sequenceThumbnail})`}}
+        />
         <CardContent className="flex items-center justify-between p-2 relative z-10">
-          <Badge variant={isSelected ? "default" : "outline"} className={cn(!isSelected && "bg-white bg-opacity-50")}>
+          <Badge variant="outline" className={"bg-white"}>
             {t('transition')} {index + 1}
           </Badge>
 
@@ -54,19 +61,31 @@ export default function Transition({
                     <MoreVertical className="w-4 h-4" />
                 </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                className={cn(
-                  "flex items-center text-destructive cursor-pointer hover:bg-red-200 hover:text-destructive focus:bg-red-200 focus:text-destructive"
-                )}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteTransition(index);
-                }}
-              >
-                <Trash2 className="h-4 w-4" />
-                {t('delete')}
-              </DropdownMenuItem>
+            <DropdownMenuContent
+                className="w-[--radix-dropdown-menu-trigger-width] min-w-48 rounded-lg"
+                align="end"
+                sideOffset={4}
+            >
+                <DropdownMenuItem 
+                    onClick={() => setSelectedIndex?.(index)}
+                    className="cursor-pointer"
+                >
+                    <Pen size={16} />
+                    {t('edit')}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    className={cn(
+                    "flex items-center text-destructive cursor-pointer hover:bg-red-200 hover:text-destructive focus:bg-red-200 focus:text-destructive"
+                    )}
+                    onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteTransition(index);
+                    }}
+                >
+                    <Trash2 className="h-4 w-4" />
+                    {t('delete')}
+                </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </CardContent>

@@ -93,6 +93,7 @@ export default function Sequences({
                                     key={`transition-${transitionIndex}`}
                                     transition={transition}
                                     index={transitionIndex}
+                                    sequenceThumbnail={sequence.media?.image?.link || ""}
                                     selectedIndex={selectedTransitionIndex}
                                     setSelectedIndex={handleTransitionClick}
                                     onDeleteTransition={onDeleteTransition}

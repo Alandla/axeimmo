@@ -215,12 +215,14 @@
         "button-delete": "Supprimer la séquence",
         "add-sequence": "Ajouter une séquence",
         "add": "Ajouter",
-        "add-transition": "Ajouter une transition"
+        "add-transition": "Ajouter une transition",
+        "edit": "Modifier la séquence"
       },
       "transition": {
         "transition": "Transition",
         "sound": "Son",
         "delete": "Supprimer la transition",
+        "edit": "Modifier la transition",
         "category": {
           "film-burn": "Film burn"
         }

@@ -206,12 +206,14 @@
         "button-delete": "Delete sequence",
         "add-sequence": "Add sequence",
         "add": "Add",
-        "add-transition": "Add a transition"
+        "add-transition": "Add a transition",
+        "edit": "Edit sequence"
       },
       "transition": {
         "transition": "Transition",
         "sound": "Sound",
         "delete": "Delete transition",
+        "edit": "Edit transition",
         "category": {
           "film-burn": "Film burn"
         }

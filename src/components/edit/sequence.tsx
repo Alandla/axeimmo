@@ -211,6 +211,13 @@ export default function Sequence({
                                         <RefreshCw size={16} />
                                         {t('button-regenerate')}
                                     </DropdownMenuItem>
+                                    <DropdownMenuItem 
+                                        onClick={() => setSelectedIndex?.(index)}
+                                        className="cursor-pointer"
+                                    >
+                                        <Pen size={16} />
+                                        {t('edit')}
+                                    </DropdownMenuItem>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem
                                         onClick={() => onDeleteSequence(index)}

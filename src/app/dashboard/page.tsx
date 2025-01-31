@@ -30,7 +30,6 @@ export default function Dashboard() {
   const [videos, setVideos] = useState<VideoWithCreator[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] = useState(false)
-  const { video, setVideo } = useVideoToDeleteStore()
   const { activeSpace } = useActiveSpaceStore()
 
   useEffect(() => {
