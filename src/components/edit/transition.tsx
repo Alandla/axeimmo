@@ -1,10 +1,9 @@
 import { ITransition } from "@/src/types/video";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Clock, MoreVertical, Pen, Trash2 } from "lucide-react";
+import { MoreVertical, Pen, Trash2 } from "lucide-react";
 import { motion } from 'framer-motion';
 import { useTranslations } from "next-intl";
-import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,

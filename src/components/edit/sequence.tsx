@@ -1,7 +1,7 @@
 import { ISequence } from "@/src/types/video";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
-import { Clock, Edit, FileImage, Scissors, AlertTriangle, MoreVertical, Trash2, Plus, Pen } from "lucide-react";
+import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen } from "lucide-react";
 import { motion } from 'framer-motion';
 import React, { useRef, useState, useCallback } from "react";
 import { Badge } from "../ui/badge";
@@ -9,15 +9,13 @@ import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
-import { Trash, RefreshCw } from "lucide-react"
+import { RefreshCw } from "lucide-react"
 import { cn } from "@/src/lib/utils";
 import { useTranslations } from "next-intl";
-import AutoResizingInput from "../auto-resizing-input";
 import { PlayerRef } from "@remotion/player";
 
 interface SequenceProps {

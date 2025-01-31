@@ -1,6 +1,5 @@
 import { subtitles } from "@/src/config/subtitles.config"
 import Subtitle from "./subtitle"
-import { useEffect, useState } from "react"
 import { ISpaceSubtitleStyle } from "@/src/types/space"
 import { basicApiCall, basicApiGetCall } from "@/src/lib/api"
 import { useSubtitleStyleStore } from "@/src/store/subtitlesStyleSore"
