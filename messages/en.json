@@ -215,7 +215,18 @@
         "delete": "Delete transition",
         "edit": "Edit transition",
         "category": {
-          "film-burn": "Film burn"
+          "film-burn": "Film burn",
+          "click": "Click",
+          "Analog VHS": "Analog VHS",
+          "Flares": "Flares",
+          "Dynamic Light": "Dynamic Light",
+          "Burnt Film": "Burnt Film",
+          "Neon Glitch": "Neon Glitch",
+          "Retro Slide": "Retro Slide",
+          "Vintage Film": "Vintage Film",
+          "X-Ray": "X-Ray",
+          "Signal": "Signal",
+          "Old Film": "Old Film"
         }
       },
       "subtitle": {

@@ -1,5 +1,6 @@
-import { ITransition } from '@/src/types/video';
+
 import { Sequence, Video } from 'remotion';
+import { ITransition } from '../type/transition';
 
 export const timeToFrames = (time: number, fps: number = 60): number => Math.round(time * fps);
 
@@ -16,7 +17,7 @@ export const Transitions = ({transition}: {transition: ITransition}) => {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              mixBlendMode: 'lighten',
+              mixBlendMode: transition.mode,
               zIndex: 3
             }}
           />

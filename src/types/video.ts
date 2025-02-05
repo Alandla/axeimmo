@@ -73,6 +73,7 @@ export interface ITransition {
   fullAt?: number;
   durationInFrames?: number;
   category?: string;
+  mode?: 'hard-light' | 'lighten';
 }
 
 export interface IVideo {

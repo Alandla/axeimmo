@@ -41,41 +41,45 @@ function TransitionPreview({ transitionItem, isSelected, previewSequences, video
   }, [isHovering]);
 
   return (
-    <div 
-      className={cn(
-        "aspect-square relative overflow-hidden rounded-lg border cursor-pointer",
-        isSelected && "border-primary"
-      )}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-      onClick={onSelect}
-    >
-      {isSelected && (
-        <Check className="h-4 w-4 text-primary absolute top-2 right-2 z-10" />
-      )}
-      <Player
-        ref={playerRef}
-        component={PreviewTransition}
-        durationInFrames={(transitionItem.durationInFrames || 500) + 30 + (transitionItem.fullAt || 0)}
-        compositionWidth={400}
-        compositionHeight={400}
-        fps={60}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-        inputProps={{
-          data: {
-            video: {
-              ...video.video,
-              sequences: previewSequences
-            }
-          },
-          transition: transitionItem
-        }}
-        loop
-        controls={false}
-      />
+    <div className="relative w-full pt-[100%]">
+      <div 
+        className={cn(
+          "absolute inset-0 border rounded-lg overflow-hidden hover:cursor-pointer",
+          isSelected && "border-primary"
+        )}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        onClick={onSelect}
+      >
+        {isSelected && (
+          <Check className="h-4 w-4 text-primary absolute top-2 right-2 z-10" />
+        )}
+        <Player
+          ref={playerRef}
+          component={PreviewTransition}
+          durationInFrames={(transitionItem.durationInFrames || 500) + 30 + (transitionItem.fullAt || 0)}
+          compositionWidth={400}
+          compositionHeight={400}
+          fps={60}
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            inset: 0,
+          }}
+          inputProps={{
+            data: {
+              video: {
+                ...video.video,
+                sequences: previewSequences
+              }
+            },
+            transition: transitionItem
+          }}
+          loop
+          controls={false}
+        />
+      </div>
     </div>
   );
 }
@@ -101,7 +105,14 @@ export default function TransitionListSettings({
 }: TransitionListSettingsProps) {
   const t = useTranslations('edit.transition')
   const [currentPage, setCurrentPage] = useState(1);
-  const transitionsPerPage = 9;
+  const transitionsPerPage = 12;
+
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (e.deltaY !== 0) {
+      e.currentTarget.scrollLeft += e.deltaY;
+    }
+  };
 
   // Obtenir toutes les catégories uniques
   const allCategories = Array.from(new Set(transitions.map(t => t.category).filter((category): category is string => typeof category === 'string')));
@@ -112,13 +123,6 @@ export default function TransitionListSettings({
       : [...selectedCategories, category];
     setSelectedCategories(newCategories);
     setCurrentPage(1); // Réinitialiser la page lors du changement de catégorie
-  };
-
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (e.deltaY !== 0) {
-      e.currentTarget.scrollLeft += e.deltaY;
-    }
   };
 
   // Filtrer les transitions selon les catégories sélectionnées
@@ -174,109 +178,114 @@ export default function TransitionListSettings({
   };
 
   return (
-    <>
-      <div 
-        className="overflow-x-auto scrollbar-hide mb-4"
-        onWheel={handleWheel}
-      >
-        <div className="flex gap-2">
-          {allCategories.map(category => (
-            <Badge
-              key={category}
-              variant={selectedCategories.includes(category) ? "default" : "outline"}
-              className="cursor-pointer whitespace-nowrap"
-              onClick={() => toggleCategory(category)}
-            >
-              {selectedCategories.includes(category) && (
-                <Check className="w-3 h-3 mr-1" />
+    <div className="w-full">
+      <div className="w-full overflow-hidden">
+        <div 
+          className="w-full overflow-x-auto scrollbar-hide mb-4"
+          onWheel={handleWheel}
+        >
+          <div className="flex gap-2 flex-nowrap">
+            {allCategories.map(category => (
+              <Badge
+                key={category}
+                variant={selectedCategories.includes(category) ? "default" : "outline"}
+                className="cursor-pointer shrink-0 whitespace-nowrap"
+                onClick={() => toggleCategory(category)}
+              >
+                {selectedCategories.includes(category) && (
+                  <Check className="w-3 h-3 mr-1" />
+                )}
+                {t(`category.${category}`)}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        <div className="w-full">
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            {currentTransitions.map((transitionItem, index) => {
+              const previewSequences = video.video.sequences.slice(transition.indexSequenceBefore || 0, (transition.indexSequenceBefore || 0) + 2);
+              const isSelected = transition.video === transitionItem.video;
+
+              return (
+                <TransitionPreview
+                  key={index}
+                  transitionItem={transitionItem}
+                  isSelected={isSelected}
+                  previewSequences={previewSequences}
+                  video={video}
+                  onSelect={() => handleTransitionSelect(transitionItem)}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="w-full">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  showText={true}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className={cn(
+                    "cursor-pointer",
+                    currentPage === 1 && "pointer-events-none opacity-50"
+                  )}
+                />
+              </PaginationItem>
+
+              {getPageNumbers().showStartEllipsis && (
+                <>
+                  <PaginationItem>
+                    <PaginationLink onClick={() => handlePageChange(1)}>
+                      1
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                </>
               )}
-              {t(`category.${category}`)}
-            </Badge>
-          ))}
+
+              {getPageNumbers().numbers.map((pageNumber) => (
+                <PaginationItem key={pageNumber}>
+                  <PaginationLink
+                    isActive={currentPage === pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              {getPageNumbers().showEndEllipsis && (
+                <>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink onClick={() => handlePageChange(totalPages)}>
+                      {totalPages}
+                    </PaginationLink>
+                  </PaginationItem>
+                </>
+              )}
+
+              <PaginationItem>
+                <PaginationNext 
+                  showText={true}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className={cn(
+                    "cursor-pointer",
+                    currentPage === totalPages && "pointer-events-none opacity-50"
+                  )}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
-
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        {currentTransitions.map((transitionItem, index) => {
-          const previewSequences = video.video.sequences.slice(transition.indexSequenceBefore || 0, (transition.indexSequenceBefore || 0) + 2);
-          const isSelected = transition.video === transitionItem.video;
-
-          return (
-            <div key={index}>
-              <TransitionPreview
-                transitionItem={transitionItem}
-                isSelected={isSelected}
-                previewSequences={previewSequences}
-                video={video}
-                onSelect={() => handleTransitionSelect(transitionItem)}
-              />
-            </div>
-          );
-        })}
-      </div>
-
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious 
-              showText={true}
-              onClick={() => handlePageChange(currentPage - 1)}
-              className={cn(
-                "cursor-pointer",
-                currentPage === 1 && "pointer-events-none opacity-50"
-              )}
-            />
-          </PaginationItem>
-
-          {getPageNumbers().showStartEllipsis && (
-            <>
-              <PaginationItem>
-                <PaginationLink onClick={() => handlePageChange(1)}>
-                  1
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-            </>
-          )}
-
-          {getPageNumbers().numbers.map((pageNumber) => (
-            <PaginationItem key={pageNumber}>
-              <PaginationLink
-                isActive={currentPage === pageNumber}
-                onClick={() => handlePageChange(pageNumber)}
-              >
-                {pageNumber}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-
-          {getPageNumbers().showEndEllipsis && (
-            <>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink onClick={() => handlePageChange(totalPages)}>
-                  {totalPages}
-                </PaginationLink>
-              </PaginationItem>
-            </>
-          )}
-
-          <PaginationItem>
-            <PaginationNext 
-              showText={true}
-              onClick={() => handlePageChange(currentPage + 1)}
-              className={cn(
-                "cursor-pointer",
-                currentPage === totalPages && "pointer-events-none opacity-50"
-              )}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </>
+    </div>
   );
 }

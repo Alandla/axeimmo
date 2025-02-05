@@ -1,9 +1,10 @@
-import { ITransition, ISequence } from '@/src/types/video';
+
 import {Audio, Sequence, Video} from 'remotion';
+import { ITransition } from '../type/transition';
 
 export const timeToFrames = (time: number, fps: number = 60): number => Math.round(time * fps);
 
-export const Transitions = ({sequences, transitions}: {sequences: ISequence[], transitions: ITransition[]}) => {
+export const Transitions = ({sequences, transitions}: {sequences: any[], transitions: ITransition[]}) => {
   return (
     <>
       {transitions.map((transition, index) => {
@@ -28,7 +29,7 @@ export const Transitions = ({sequences, transitions}: {sequences: ISequence[], t
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  mixBlendMode: 'lighten',
+                  mixBlendMode: transition.mode,
                   zIndex: 3
                 }}
               />

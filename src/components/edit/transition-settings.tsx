@@ -29,7 +29,7 @@ export default function TransitionSettings({
       <CardHeader className="p-2 sm:p-6">
         <CardTitle>Transition {transitionIndex + 1}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">
+      <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0 max-w-full overflow-hidden">
         <Tabs defaultValue="transition">
           <TabsList className="grid w-full grid-cols-2 mb-4">
             <TabsTrigger value="transition">{t('transition')}</TabsTrigger>

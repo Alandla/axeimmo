@@ -42,6 +42,11 @@ const videoSchema = new mongoose.Schema({
         sound: String,
         volume: Number,
         fullAt: Number,
+        mode: {
+          type: String,
+          enum: ['hard-light', 'lighten'],
+          default: 'hard-light'
+        }
       }],
       audio: {
         voices: [{
