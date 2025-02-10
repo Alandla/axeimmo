@@ -8,7 +8,7 @@ export const renderVideo = async (video: any, showWatermark: boolean = true) => 
         functionName: speculateFunctionName({
             diskSizeInMb: 10240,
             memorySizeInMb: 2048,
-            timeoutInSeconds: 600
+            timeoutInSeconds: 1200
         }),
         serveUrl: process.env.REMOTION_SERVE_URL || '',
         composition: "videoGenerate",
