@@ -12,12 +12,7 @@ export const MediaBackground = ({ sequences, transition }: { sequences: any, tra
                 if (!media) {
                     return null;
                 }
-                let duration = 0;
-                if (index === 0) {
-                    duration = 30 + (transition.fullAt || 0);
-                } else {
-                    duration = 30 + (transition.durationInFrames || 0);
-                }
+                let duration = 50;
 
                 let element;
 

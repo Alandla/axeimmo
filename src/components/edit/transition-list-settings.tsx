@@ -56,8 +56,8 @@ function TransitionPreview({ transitionItem, isSelected, previewSequences, video
         )}
         <Player
           ref={playerRef}
-          component={PreviewTransition}
-          durationInFrames={(transitionItem.durationInFrames || 500) + 30 + (transitionItem.fullAt || 0)}
+            component={PreviewTransition}
+            durationInFrames={100}
           compositionWidth={400}
           compositionHeight={400}
           fps={60}
@@ -143,6 +143,7 @@ export default function TransitionListSettings({
       thumbnail: transitionItem.thumbnail,
       fullAt: transitionItem.fullAt,
       durationInFrames: transitionItem.durationInFrames,
+      mode: transitionItem.mode
     };
     updateTransition(transitionIndex, newTransition);
   };

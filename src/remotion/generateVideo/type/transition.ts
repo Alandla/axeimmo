@@ -1,5 +1,3 @@
-type MixBlendMode = 'normal' | 'multiply' | 'screen' | 'overlay' | 'darken' | 'lighten' | 'color-dodge' | 'color-burn' | 'hard-light' | 'soft-light' | 'difference' | 'exclusion' | 'hue' | 'saturation' | 'color' | 'luminosity';
-
 export interface ITransition {
 	indexSequenceBefore?: number;
 	video: string;
@@ -10,6 +8,6 @@ export interface ITransition {
 	fullAt?: number;
 	durationInFrames?: number;
 	category?: string;
-	mode?: MixBlendMode;
-  }
+	mode: string;
+}
   

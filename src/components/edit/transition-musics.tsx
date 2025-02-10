@@ -41,7 +41,7 @@ export default function TransitionMusics({
   const [currentPage, setCurrentPage] = useState(1);
   const [playingSound, setPlayingSound] = useState<{ name: string, audio: HTMLAudioElement | null }>({ name: '', audio: null });
   const [volume, setVolume] = useState(transition.volume || 1);
-  const soundsPerPage = 6;
+  const soundsPerPage = 14;
 
   // Obtenir toutes les catégories uniques
   const allCategories = Array.from(new Set(sounds.map(s => s.category).filter((category): category is string => typeof category === 'string')));

@@ -216,6 +216,7 @@
         "edit": "Edit transition",
         "category": {
           "film-burn": "Film burn",
+          "Burning paper": "Burning paper",
           "click": "Click",
           "Analog VHS": "Analog VHS",
           "Flares": "Flares",
@@ -226,7 +227,12 @@
           "Vintage Film": "Vintage Film",
           "X-Ray": "X-Ray",
           "Signal": "Signal",
-          "Old Film": "Old Film"
+          "Old Film": "Old Film",
+          "Swoosh": "Swoosh",
+          "Glitch": "Glitch",
+          "Impact": "Impact",
+          "Friction": "Friction",
+          "Grunge": "Grunge"
         }
       },
       "subtitle": {

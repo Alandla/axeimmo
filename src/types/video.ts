@@ -62,7 +62,6 @@ export interface ISequence {
   originalText?: string;
   needsAudioRegeneration?: boolean;
 }
-
 export interface ITransition {
   indexSequenceBefore?: number;
   video: string;
@@ -73,7 +72,7 @@ export interface ITransition {
   fullAt?: number;
   durationInFrames?: number;
   category?: string;
-  mode?: 'hard-light' | 'lighten';
+  mode?: string;
 }
 
 export interface IVideo {

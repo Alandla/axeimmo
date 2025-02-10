@@ -13,12 +13,7 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration, transition }
 
         sequences.forEach((d: any, index: number) => {
             const media = d.media;
-            let duration = 0;
-            if (index === 0) {
-                duration = 30 + (transition.fullAt || 0);
-            } else {
-                duration = 30 + (transition.durationInFrames || 0);
-            }
+            let duration = 50;
             let mediaHeight = 100;
             let zIndex = 0;
 
