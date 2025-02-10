@@ -51,7 +51,7 @@ export const generateVideoTask = task({
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
 

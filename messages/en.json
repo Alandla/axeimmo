@@ -204,7 +204,36 @@
         "regeneration-needed": "Audio regeneration needed",
         "button-regenerate": "Regenerate audio",
         "button-delete": "Delete sequence",
-        "add-sequence": "Add sequence"
+        "add-sequence": "Add sequence",
+        "add": "Add",
+        "add-transition": "Add a transition",
+        "edit": "Edit sequence"
+      },
+      "transition": {
+        "transition": "Transition",
+        "sound": "Sound",
+        "delete": "Delete transition",
+        "edit": "Edit transition",
+        "category": {
+          "film-burn": "Film burn",
+          "Burning paper": "Burning paper",
+          "click": "Click",
+          "Analog VHS": "Analog VHS",
+          "Flares": "Flares",
+          "Dynamic Light": "Dynamic Light",
+          "Burnt Film": "Burnt Film",
+          "Neon Glitch": "Neon Glitch",
+          "Retro Slide": "Retro Slide",
+          "Vintage Film": "Vintage Film",
+          "X-Ray": "X-Ray",
+          "Signal": "Signal",
+          "Old Film": "Old Film",
+          "Swoosh": "Swoosh",
+          "Glitch": "Glitch",
+          "Impact": "Impact",
+          "Friction": "Friction",
+          "Grunge": "Grunge"
+        }
       },
       "subtitle": {
         "title-presets": "Presets",

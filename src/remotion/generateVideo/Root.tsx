@@ -1,6 +1,6 @@
 import { Composition } from 'remotion';
 import { VideoGenerate } from './Composition';
-import result from '../../test/mockup/videoResultStoryblocks.json';
+import result from '../../test/mockup/videoResult.json';
 
 const calculateMetadata = ({props}: {props: any}) => {
 	console.log(props)

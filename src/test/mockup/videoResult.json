@@ -1,3088 +1,2061 @@
 {
-  "_id": {
-    "$oid": "6737db919cb04c2d0b7816c9"
+  "spaceId": {
+    "$oid": "6781605a50bf8f3d953e470c"
   },
   "state": {
     "type": "done"
   },
-  "runId": "run_5c86pru7n1g222a13tsym",
+  "runId": "run_cpxheea1423zh3xw5cm62",
   "history": [
     {
       "step": "CREATE",
+      "user": {
+        "$oid": "6781605950bf8f3d953e470b"
+      },
       "date": {
-        "$date": "2024-11-15T23:38:57.513Z"
+        "$date": "2025-01-26T16:25:39.807Z"
       },
       "_id": {
-        "$oid": "6737db919cb04c2d0b7816ca"
+        "$oid": "67966203917d475d210949e0"
       }
     }
   ],
   "video": {
-    "audioUrl": "https://media.hoox.video/2070cf26-1edb-41aa-9653-bb54940abaf1.mp3",
-    "thumbnail": "",
-    "metadata": {
-      "audio_duration": 67.970612,
-      "number_of_distinct_channels": 1,
-      "billing_time": 67.970612,
-      "transcription_time": 16.081
+    "transitions": [
+      {
+        "indexSequenceBefore": 2,
+        "durationInFrames": 98,
+        "video": "https://assets.hoox.video/Film%20Burn%20Red%20Burn.mp4",
+        "thumbnail": "https://assets.hoox.video/film-burn-red-thumbnail.png",
+        "sound": "https://assets.hoox.video/Clicks.mp3",
+        "volume": 1,
+        "fullAt": 14,
+        "soundPeakAt": 26,
+        "_id": {
+          "$oid": "67966237917d475d210949fe"
+        }
+      }
+    ],
+    "audio": {
+      "music": {
+        "url": "https://music.hoox.video/holidays-in-miami-background-tropical-house-music-for-video-40-second-264697.mp3",
+        "volume": 0.07,
+        "name": "Holidays in Miami",
+        "genre": "Informative"
+      },
+      "voices": [
+        {
+          "url": "https://media.hoox.video/281e4874-afb5-4307-907e-b3f1c92d5f61.mp3",
+          "index": 0,
+          "start": 0.08028,
+          "end": 3.03045,
+          "durationInFrames": 177,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094a9c"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/dd569d62-5742-4083-b39a-d991c3132181.mp3",
+          "index": 1,
+          "start": 3.03045,
+          "end": 7.9982,
+          "durationInFrames": 295,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094a9d"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/720b217d-588b-44c9-b012-ca1f56c8301e.mp3",
+          "index": 2,
+          "start": 7.9982,
+          "end": 12.05359,
+          "durationInFrames": 244,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094a9e"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/bcf269ca-58fd-468c-a66d-1c8a4a78e006.mp3",
+          "index": 3,
+          "start": 12.05359,
+          "end": 15.82133,
+          "durationInFrames": 225,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094a9f"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/5e6290f6-71ef-4076-ade0-ec5ac760633b.mp3",
+          "index": 4,
+          "start": 15.82133,
+          "end": 19.109189999999998,
+          "durationInFrames": 197,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa0"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/d55a31f1-ba20-4e17-9d1c-ec150ad41575.mp3",
+          "index": 5,
+          "start": 19.109189999999998,
+          "end": 22.49255,
+          "durationInFrames": 205,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa1"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/7fe3ed47-179f-414d-bc81-bb77d7a952a1.mp3",
+          "index": 6,
+          "start": 22.49255,
+          "end": 25.95238,
+          "durationInFrames": 207,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa2"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/8e43c286-3b69-4458-8b7c-6b9e478bd516.mp3",
+          "index": 7,
+          "start": 25.95238,
+          "end": 31.052180000000003,
+          "durationInFrames": 307,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa3"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/4c0e91d1-6e27-4072-8ce2-141bf4b7c380.mp3",
+          "index": 8,
+          "start": 31.052180000000003,
+          "end": 33.306540000000005,
+          "durationInFrames": 135,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa4"
+          }
+        }
+      ],
+      "volume": 1
     },
+    "subtitle": {
+      "name": "Daniel",
+      "style": {
+        "template": "daniel",
+        "fontFamily": "Arial",
+        "fontWeight": "800",
+        "fontSize": 80,
+        "color": "#ffffff",
+        "isItalic": false,
+        "isPunctuation": true,
+        "isUppercase": false,
+        "mode": "twoLines",
+        "position": 50,
+        "shadow": {
+          "isActive": true,
+          "size": 1,
+          "color": "#000000"
+        }
+      }
+    },
+    "metadata": {
+      "audio_duration": 33.306540000000005,
+      "number_of_distinct_channels": 1,
+      "billing_time": 35.213063,
+      "transcription_time": 144.317
+    },
+    "thumbnail": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-25y8be5225/renders/0ne7a50zmh/out.jpeg",
     "sequences": [
       {
         "words": [
           {
-            "word": "Un",
-            "start": 0.10004,
-            "end": 0.24011,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d1"
-            }
-          },
-          {
-            "word": "enfant",
-            "start": 0.24011,
-            "end": 0.58026,
-            "confidence": 1,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d2"
-            }
-          },
-          {
-            "word": "harcelé",
-            "start": 0.58026,
-            "end": 1.16052,
-            "confidence": 0.83,
-            "durationInFrames": 35,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d3"
-            }
-          },
-          {
-            "word": "devient",
-            "start": 1.16052,
-            "end": 1.52068,
+            "word": "Saviez-vous",
+            "start": 0.08028,
+            "end": 0.50174,
             "confidence": 0.99,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d4"
-            }
-          },
-          {
-            "word": "l'homme",
-            "start": 1.52068,
-            "end": 1.76078,
-            "confidence": 0.92,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d5"
-            }
-          },
-          {
-            "word": "le",
-            "start": 1.76078,
-            "end": 1.90085,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d6"
-            }
-          },
-          {
-            "word": "plus",
-            "start": 1.90085,
-            "end": 2.08093,
-            "confidence": 0.86,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d7"
-            }
-          },
-          {
-            "word": "riche",
-            "start": 2.08093,
-            "end": 2.42108,
-            "confidence": 0.96,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d8"
-            }
-          },
-          {
-            "word": "du",
-            "start": 2.42108,
-            "end": 2.60116,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d9"
-            }
-          },
-          {
-            "word": "monde.",
-            "start": 2.60116,
-            "end": 3.42152,
-            "confidence": 1,
-            "durationInFrames": 49,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816da"
-            }
-          }
-        ],
-        "text": "Un enfant harcelé devient l'homme le plus riche du monde.",
-        "start": 0.10004,
-        "end": 3.42152,
-        "durationInFrames": 198,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Wealthy person",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816db"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Rich man",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816dc"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Success",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816dd"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 2048,
-          "video": {
-            "id": "11228508",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 13165471,
-            "width": 2048,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/10295414/10295414-hd_2048_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "10295414",
-            "link": "https://images.pexels.com/videos/10295414/administration-adopted-adult-art-10295414.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7816de"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7816d0"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Né",
-            "start": 3.42152,
-            "end": 3.74166,
-            "confidence": 0.55,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e0"
-            }
-          },
-          {
-            "word": "en",
-            "start": 3.74166,
-            "end": 3.90173,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e1"
-            }
-          },
-          {
-            "word": "Afrique",
-            "start": 3.90173,
-            "end": 4.18186,
-            "confidence": 1,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e2"
-            }
-          },
-          {
-            "word": "du",
-            "start": 4.18186,
-            "end": 4.38195,
-            "confidence": 1,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e3"
-            }
-          },
-          {
-            "word": "Sud",
-            "start": 4.38195,
-            "end": 4.62205,
-            "confidence": 1,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e4"
-            }
-          },
-          {
-            "word": "en",
-            "start": 4.62205,
-            "end": 4.76212,
-            "confidence": 0.99,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e5"
-            }
-          },
-          {
-            "word": "1971,",
-            "start": 4.76212,
-            "end": 6.86305,
-            "confidence": 0.06,
-            "durationInFrames": 126,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e6"
-            }
-          }
-        ],
-        "text": "Né en Afrique du Sud en 1971,",
-        "start": 3.42152,
-        "end": 6.86305,
-        "durationInFrames": 206,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "African savannah",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e7"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "South Africa",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e8"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Africa",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e9"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 2160,
-          "width": 4096,
-          "video": {
-            "id": "4839969",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 32951660,
-            "width": 4096,
-            "height": 2160,
-            "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/11025493/11025493-hd_4096_2160_30fps.mp4"
-          },
-          "image": {
-            "id": "11025493",
-            "link": "https://images.pexels.com/videos/11025493/pexels-photo-11025493.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7816ea"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7816df"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Elon",
-            "start": 6.86305,
-            "end": 7.00311,
-            "confidence": 0,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ec"
-            }
-          },
-          {
-            "word": "Musk",
-            "start": 7.00311,
-            "end": 7.14318,
-            "confidence": 0.1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ed"
-            }
-          },
-          {
-            "word": "a",
-            "start": 7.14318,
-            "end": 7.30325,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ee"
-            }
-          },
-          {
-            "word": "connu",
-            "start": 7.30325,
-            "end": 7.60338,
-            "confidence": 0.97,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ef"
-            }
-          },
-          {
-            "word": "une",
-            "start": 7.60338,
-            "end": 7.78346,
-            "confidence": 0.95,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f0"
-            }
-          },
-          {
-            "word": "enfance",
-            "start": 7.78346,
-            "end": 8.40374,
-            "confidence": 0.87,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f1"
-            }
-          },
-          {
-            "word": "difficile.",
-            "start": 8.40374,
-            "end": 9.64429,
-            "confidence": 0.95,
-            "durationInFrames": 74,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f2"
-            }
-          }
-        ],
-        "text": "Elon Musk a connu une enfance difficile.",
-        "start": 6.86305,
-        "end": 9.64429,
-        "durationInFrames": 166,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Childhood home",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f3"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Difficult childhood",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f4"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Childhood",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f5"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1920,
-          "width": 1080,
-          "video": {
-            "id": "9434379",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 7102084,
-            "width": 1080,
-            "height": 1920,
-            "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/4896507/4896507-hd_1080_1920_30fps.mp4"
-          },
-          "image": {
-            "id": "4896507",
-            "link": "https://images.pexels.com/videos/4896507/pexels-photo-4896507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 1080,
-            "height": 1920
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7816f6"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7816eb"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Victime",
-            "start": 9.64429,
-            "end": 10.18453,
-            "confidence": 1,
-            "durationInFrames": 32,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f8"
-            }
-          },
-          {
-            "word": "de",
-            "start": 10.18453,
-            "end": 10.44464,
-            "confidence": 1,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f9"
-            }
-          },
-          {
-            "word": "harcèlement",
-            "start": 10.44464,
-            "end": 11.00489,
-            "confidence": 0.91,
-            "durationInFrames": 34,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fa"
-            }
-          },
-          {
-            "word": "scolaire,",
-            "start": 11.00489,
-            "end": 11.66519,
-            "confidence": 0.99,
-            "durationInFrames": 40,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fb"
-            }
-          },
-          {
-            "word": "il",
-            "start": 11.66519,
-            "end": 11.82526,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fc"
-            }
-          },
-          {
-            "word": "trouve",
-            "start": 11.82526,
-            "end": 12.40552,
-            "confidence": 0.99,
-            "durationInFrames": 35,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fd"
-            }
-          },
-          {
-            "word": "refuge",
-            "start": 12.40552,
-            "end": 13.00578,
-            "confidence": 0.94,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fe"
-            }
-          }
-        ],
-        "text": "Victime de harcèlement scolaire, il trouve refuge",
-        "start": 9.64429,
-        "end": 13.00578,
-        "durationInFrames": 203,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Bullied child",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ff"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "School bullying",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781700"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Bullying",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781701"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 1920,
-          "video": {
-            "id": "10814191",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 4320945,
-            "width": 1920,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/8411069/8411069-hd_1920_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "8411069",
-            "link": "https://images.pexels.com/videos/8411069/pexels-photo-8411069.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 1920,
-            "height": 1080
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b781702"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7816f7"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "dans",
-            "start": 13.00578,
-            "end": 13.16585,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781704"
-            }
-          },
-          {
-            "word": "les",
-            "start": 13.16585,
-            "end": 13.32592,
-            "confidence": 0.98,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781705"
-            }
-          },
-          {
-            "word": "livres",
-            "start": 13.32592,
-            "end": 14.00623,
-            "confidence": 0.99,
-            "durationInFrames": 41,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781706"
-            }
-          },
-          {
-            "word": "et",
-            "start": 14.00623,
-            "end": 14.26634,
-            "confidence": 1,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781707"
-            }
-          },
-          {
-            "word": "l'informatique.",
-            "start": 14.26634,
-            "end": 15.40685,
-            "confidence": 0.97,
-            "durationInFrames": 68,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781708"
-            }
-          }
-        ],
-        "text": "dans les livres et l'informatique.",
-        "start": 13.00578,
-        "end": 15.40685,
-        "durationInFrames": 145,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Child reading book",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781709"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Child on computer",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78170a"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Learning",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78170b"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1920,
-          "width": 1080,
-          "video": {
-            "id": "10448278",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 5689966,
-            "width": 1080,
-            "height": 1920,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/7494784/7494784-hd_1080_1920_30fps.mp4"
-          },
-          "image": {
-            "id": "7494784",
-            "link": "https://images.pexels.com/videos/7494784/apartment-art-baby-bed-7494784.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78170c"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b781703"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "A",
-            "start": 15.40685,
-            "end": 15.56692,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78170e"
-            }
-          },
-          {
-            "word": "12",
-            "start": 15.56692,
-            "end": 15.84705,
-            "confidence": 0.51,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78170f"
-            }
-          },
-          {
-            "word": "ans,",
-            "start": 15.84705,
-            "end": 16.22721,
-            "confidence": 0.94,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781710"
-            }
-          },
-          {
-            "word": "il",
-            "start": 16.22721,
-            "end": 16.4273,
-            "confidence": 1,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781711"
-            }
-          },
-          {
-            "word": "crée",
-            "start": 16.4273,
-            "end": 16.90752,
-            "confidence": 0.98,
-            "durationInFrames": 29,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781712"
-            }
-          },
-          {
-            "word": "et",
-            "start": 16.90752,
-            "end": 17.0876,
-            "confidence": 0.91,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781713"
-            }
-          },
-          {
-            "word": "vend",
-            "start": 17.0876,
-            "end": 17.48777,
-            "confidence": 0.69,
-            "durationInFrames": 24,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781714"
-            }
-          },
-          {
-            "word": "son",
-            "start": 17.48777,
-            "end": 17.70787,
-            "confidence": 1,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781715"
-            }
-          },
-          {
-            "word": "premier",
-            "start": 17.70787,
-            "end": 18.12806,
-            "confidence": 0.95,
             "durationInFrames": 25,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781716"
+              "$oid": "67966237917d475d210949f0"
             }
           },
           {
-            "word": "jeu",
-            "start": 18.12806,
-            "end": 18.42819,
-            "confidence": 0.99,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781717"
-            }
-          },
-          {
-            "word": "vidéo.",
-            "start": 18.42819,
-            "end": 19.18853,
-            "confidence": 0.93,
-            "durationInFrames": 46,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781718"
-            }
-          }
-        ],
-        "text": "A 12 ans, il crée et vend son premier jeu vidéo.",
-        "start": 15.40685,
-        "end": 19.18853,
-        "durationInFrames": 228,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Child coding",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781719"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Video game development",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78171a"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Gaming",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78171b"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 2048,
-          "video": {
-            "id": "11165468",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 9379106,
-            "width": 2048,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/9783697/9783697-hd_2048_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "9783697",
-            "link": "https://images.pexels.com/videos/9783697/abstract-adult-analogue-backlit-9783697.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78171c"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78170d"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "A",
-            "start": 19.18853,
-            "end": 19.32859,
-            "confidence": 0.99,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78171e"
-            }
-          },
-          {
-            "word": "17",
-            "start": 19.32859,
-            "end": 19.68875,
-            "confidence": 0.29,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78171f"
-            }
-          },
-          {
-            "word": "ans,",
-            "start": 19.68875,
-            "end": 19.80881,
-            "confidence": 0.96,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781720"
-            }
-          },
-          {
-            "word": "il",
-            "start": 19.80881,
-            "end": 19.98889,
+            "word": "que",
+            "start": 0.50174,
+            "end": 0.70244,
             "confidence": 1,
-            "durationInFrames": 11,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781721"
+              "$oid": "67966237917d475d210949f1"
             }
           },
           {
-            "word": "quitte",
-            "start": 19.98889,
-            "end": 20.249,
-            "confidence": 1,
+            "word": "chaque",
+            "start": 0.70244,
+            "end": 0.96335,
+            "confidence": 0.97,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781722"
-            }
-          },
-          {
-            "word": "son",
-            "start": 20.249,
-            "end": 20.42908,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781723"
+              "$oid": "67966237917d475d210949f2"
             }
           },
           {
             "word": "pays",
-            "start": 20.42908,
-            "end": 20.70921,
-            "confidence": 1,
+            "start": 0.96335,
+            "end": 1.24432,
+            "confidence": 0.98,
             "durationInFrames": 17,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781724"
+              "$oid": "67966237917d475d210949f3"
             }
           },
           {
-            "word": "pour",
-            "start": 20.70921,
-            "end": 20.84927,
-            "confidence": 0.91,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781725"
-            }
-          },
-          {
-            "word": "le",
-            "start": 20.84927,
-            "end": 20.98933,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781726"
-            }
-          },
-          {
-            "word": "Canada,",
-            "start": 20.98933,
-            "end": 21.70965,
-            "confidence": 0.94,
-            "durationInFrames": 43,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781727"
-            }
-          },
-          {
-            "word": "dormant",
-            "start": 21.70965,
-            "end": 22.08982,
-            "confidence": 0.9,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781728"
-            }
-          },
-          {
-            "word": "chez",
-            "start": 22.08982,
-            "end": 22.22988,
-            "confidence": 0.93,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781729"
-            }
-          }
-        ],
-        "text": "A 17 ans, il quitte son pays pour le Canada, dormant chez",
-        "start": 19.18853,
-        "end": 22.22988,
-        "durationInFrames": 182,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Plane taking off",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78172a"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Airport departure",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78172b"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Travel",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78172c"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1920,
-          "width": 1080,
-          "video": {
-            "id": "9442112",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 24413741,
-            "width": 1080,
-            "height": 1920,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/4686173/4686173-hd_1080_1920_30fps.mp4"
-          },
-          "image": {
-            "id": "4686173",
-            "link": "https://images.pexels.com/videos/4686173/pexels-photo-4686173.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78172d"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78171d"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "des",
-            "start": 22.22988,
-            "end": 22.34994,
+            "word": "cache",
+            "start": 1.24432,
+            "end": 1.50523,
             "confidence": 0.99,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78172f"
-            }
-          },
-          {
-            "word": "cousins",
-            "start": 22.34994,
-            "end": 22.91019,
-            "confidence": 0.93,
-            "durationInFrames": 34,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781730"
-            }
-          },
-          {
-            "word": "et",
-            "start": 22.91019,
-            "end": 23.09027,
-            "confidence": 0.95,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781731"
-            }
-          },
-          {
-            "word": "enchaînant",
-            "start": 23.09027,
-            "end": 23.55047,
-            "confidence": 0.93,
-            "durationInFrames": 28,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781732"
-            }
-          },
-          {
-            "word": "les",
-            "start": 23.55047,
-            "end": 23.71054,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781733"
-            }
-          },
-          {
-            "word": "petits",
-            "start": 23.71054,
-            "end": 24.03068,
-            "confidence": 1,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781734"
-            }
-          },
-          {
-            "word": "boulots.",
-            "start": 24.03068,
-            "end": 24.71099,
-            "confidence": 0.63,
-            "durationInFrames": 41,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781735"
-            }
-          }
-        ],
-        "text": "des cousins et enchaînant les petits boulots.",
-        "start": 22.22988,
-        "end": 24.71099,
-        "durationInFrames": 150,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Relative's home",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781736"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Living with relatives",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781737"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Family",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781738"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 2048,
-          "width": 1080,
-          "video": {
-            "id": "10454620",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 6227377,
-            "width": 1080,
-            "height": 2048,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7491797/7491797-hd_1080_2048_25fps.mp4"
-          },
-          "image": {
-            "id": "7491797",
-            "link": "https://images.pexels.com/videos/7491797/pexels-photo-7491797.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 4096
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b781739"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78172e"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Après",
-            "start": 24.71099,
-            "end": 24.95109,
-            "confidence": 1,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173b"
-            }
-          },
-          {
-            "word": "ses",
-            "start": 24.95109,
-            "end": 25.15118,
-            "confidence": 0.86,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173c"
-            }
-          },
-          {
-            "word": "études,",
-            "start": 25.15118,
-            "end": 25.73144,
-            "confidence": 1,
-            "durationInFrames": 35,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173d"
-            }
-          },
-          {
-            "word": "il",
-            "start": 25.73144,
-            "end": 25.89151,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173e"
-            }
-          },
-          {
-            "word": "lance",
-            "start": 25.89151,
-            "end": 26.41174,
-            "confidence": 0.94,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173f"
-            }
-          },
-          {
-            "word": "Zip2.",
-            "start": 26.41174,
-            "end": 27.07204,
-            "confidence": 0.21,
-            "durationInFrames": 40,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781740"
-            }
-          }
-        ],
-        "text": "Après ses études, il lance Zip2.",
-        "start": 24.71099,
-        "end": 27.07204,
-        "durationInFrames": 142,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Startup office",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781741"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "New business",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781742"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Entrepreneurship",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781743"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 1920,
-          "video": {
-            "id": "9955311",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 3451422,
-            "width": 1920,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/6194002/6194002-hd_1920_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "6194002",
-            "link": "https://images.pexels.com/videos/6194002/african-african-american-brainstorming-business-6194002.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b781744"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78173a"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Sa",
-            "start": 27.07204,
-            "end": 27.212120000000002,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781746"
-            }
-          },
-          {
-            "word": "première",
-            "start": 27.212120000000002,
-            "end": 27.65237,
-            "confidence": 0.99,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781747"
-            }
-          },
-          {
-            "word": "entreprise",
-            "start": 27.65237,
-            "end": 28.27272,
-            "confidence": 1,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781748"
-            }
-          },
-          {
-            "word": "qu'il",
-            "start": 28.27272,
-            "end": 28.49284,
-            "confidence": 0.94,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781749"
-            }
-          },
-          {
-            "word": "revend",
-            "start": 28.49284,
-            "end": 28.793010000000002,
-            "confidence": 0.86,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174a"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 28.793010000000002,
-            "end": 28.973110000000002,
-            "confidence": 0.99,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174b"
-            }
-          },
-          {
-            "word": "307",
-            "start": 28.973110000000002,
-            "end": 29.69351,
-            "confidence": 0,
-            "durationInFrames": 43,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174c"
-            }
-          },
-          {
-            "word": "millions",
-            "start": 29.69351,
-            "end": 30.01369,
-            "confidence": 0.88,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174d"
-            }
-          },
-          {
-            "word": "de",
-            "start": 30.01369,
-            "end": 30.19379,
-            "confidence": 0.95,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174e"
-            }
-          }
-        ],
-        "text": "Sa première entreprise qu'il revend pour 307 millions de",
-        "start": 27.07204,
-        "end": 30.19379,
-        "durationInFrames": 186,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Money transfer",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174f"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Business deal",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781750"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Success",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781751"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 1920,
-          "video": {
-            "id": "9640388",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 6783937,
-            "width": 1920,
-            "height": 1080,
-            "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/5220473/5220473-hd_1920_1080_30fps.mp4"
-          },
-          "image": {
-            "id": "5220473",
-            "link": "https://images.pexels.com/videos/5220473/pexels-photo-5220473.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b781752"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b781745"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "dollars.",
-            "start": 30.19379,
-            "end": 31.11431,
-            "confidence": 0.75,
-            "durationInFrames": 55,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781754"
-            }
-          },
-          {
-            "word": "Il",
-            "start": 31.11431,
-            "end": 31.25439,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781755"
-            }
-          },
-          {
-            "word": "crée",
-            "start": 31.25439,
-            "end": 31.51453,
-            "confidence": 0.97,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781756"
+              "$oid": "67966237917d475d210949f4"
             }
           },
           {
-            "word": "ensuite",
-            "start": 31.51453,
-            "end": 32.27496,
+            "word": "des",
+            "start": 1.50523,
+            "end": 1.64572,
             "confidence": 1,
-            "durationInFrames": 46,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781757"
+              "$oid": "67966237917d475d210949f5"
             }
           },
           {
-            "word": "X.com",
-            "start": 32.27496,
-            "end": 32.99536,
-            "confidence": 0.54,
-            "durationInFrames": 43,
+            "word": "trésors",
+            "start": 1.64572,
+            "end": 2.04711,
+            "confidence": 0.96,
+            "durationInFrames": 24,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781758"
+              "$oid": "67966237917d475d210949f6"
             }
           },
           {
-            "word": "qui",
-            "start": 32.99536,
-            "end": 33.15545,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781759"
-            }
-          },
-          {
-            "word": "devient",
-            "start": 33.15545,
-            "end": 33.775800000000004,
+            "word": "gustatifs",
+            "start": 2.04711,
+            "end": 2.64921,
             "confidence": 0.98,
-            "durationInFrames": 37,
+            "durationInFrames": 36,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78175a"
+              "$oid": "67966237917d475d210949f7"
+            }
+          },
+          {
+            "word": "uniques ?",
+            "start": 2.64921,
+            "end": 3.03045,
+            "confidence": 0.97,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "67966237917d475d210949f8"
             }
           }
         ],
-        "text": "dollars. Il crée ensuite X.com qui devient",
-        "start": 30.19379,
-        "end": 33.775800000000004,
-        "durationInFrames": 215,
+        "text": "Saviez-vous que chaque pays cache des trésors gustatifs uniques ?",
+        "start": 0.08028,
+        "end": 3.03045,
+        "durationInFrames": 177,
+        "audioIndex": 0,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Online payment",
+            "keyword": "food market",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78175b"
+              "$oid": "67966237917d475d210949f9"
             }
           },
           {
             "search": "stock",
-            "keyword": "Financial transaction",
+            "keyword": "cuisine variety",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78175c"
+              "$oid": "67966237917d475d210949fa"
             }
           },
           {
             "search": "stock",
-            "keyword": "Finance",
+            "keyword": "food",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78175d"
+              "$oid": "67966237917d475d210949fb"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d210949fd"
+              }
+            }
+          ],
           "video": {
-            "id": "10475293",
-            "quality": "hd",
+            "id": "13012107",
+            "quality": null,
             "file_type": "video/mp4",
-            "size": 5949327,
+            "size": 8516544,
             "width": 1080,
             "height": 1920,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7567357/7567357-hd_1080_1920_25fps.mp4"
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/30356623/13012107_1080_1920_30fps.mp4"
           },
           "image": {
-            "id": "7567357",
-            "link": "https://images.pexels.com/videos/7567357/adult-african-african-american-black-7567357.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "id": "30356623",
+            "link": "https://images.pexels.com/videos/30356623/4-k-video-4k-asian-street-food-30356623.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
             "width": 1080,
             "height": 1920
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b78175e"
+            "$oid": "67966299a73850b876774b66"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b781753"
+          "$oid": "67966237917d475d210949ef"
         }
       },
       {
         "words": [
           {
-            "word": "Paypal,",
-            "start": 33.775800000000004,
-            "end": 34.39615,
-            "confidence": 0.77,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781760"
-            }
-          },
-          {
-            "word": "revendu",
-            "start": 34.39615,
-            "end": 34.83639,
-            "confidence": 0.99,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781761"
-            }
-          },
-          {
-            "word": "à",
-            "start": 34.83639,
-            "end": 35.016490000000005,
-            "confidence": 0.99,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781762"
-            }
-          },
-          {
-            "word": "eBay",
-            "start": 35.016490000000005,
-            "end": 35.33667,
-            "confidence": 0.49,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781763"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 35.33667,
-            "end": 35.51677,
-            "confidence": 0.98,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781764"
-            }
-          },
-          {
-            "word": "1,5",
-            "start": 35.51677,
-            "end": 35.65685,
-            "confidence": 0.17,
+            "word": "La",
+            "start": 3.03045,
+            "end": 3.1706700000000003,
+            "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781765"
+              "$oid": "67966237917d475d210949ff"
             }
           },
           {
-            "word": "milliard.",
-            "start": 35.65685,
-            "end": 37.43785,
-            "confidence": 0.92,
-            "durationInFrames": 107,
+            "word": "cuisine",
+            "start": 3.1706700000000003,
+            "end": 3.4911600000000003,
+            "confidence": 0.94,
+            "durationInFrames": 19,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781766"
+              "$oid": "67966237917d475d21094a00"
+            }
+          },
+          {
+            "word": "thaïlandaise",
+            "start": 3.4911600000000003,
+            "end": 4.032,
+            "confidence": 0.89,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "67966237917d475d21094a01"
+            }
+          },
+          {
+            "word": "mélange",
+            "start": 4.032,
+            "end": 4.39255,
+            "confidence": 1,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "67966237917d475d21094a02"
+            }
+          },
+          {
+            "word": "parfaitement",
+            "start": 4.39255,
+            "end": 4.87329,
+            "confidence": 0.96,
+            "durationInFrames": 29,
+            "_id": {
+              "$oid": "67966237917d475d21094a03"
+            }
+          },
+          {
+            "word": "le",
+            "start": 4.87329,
+            "end": 5.03354,
+            "confidence": 1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a04"
+            }
+          },
+          {
+            "word": "sucré,",
+            "start": 5.03354,
+            "end": 5.57437,
+            "confidence": 1,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "67966237917d475d21094a05"
+            }
+          },
+          {
+            "word": "l'acide",
+            "start": 5.57437,
+            "end": 6.11521,
+            "confidence": 0.83,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "67966237917d475d21094a06"
             }
           }
         ],
-        "text": "Paypal, revendu à eBay pour 1,5 milliard.",
-        "start": 33.775800000000004,
-        "end": 37.43785,
-        "durationInFrames": 219,
+        "text": "La cuisine thaïlandaise mélange parfaitement le sucré, l'acide",
+        "start": 3.03045,
+        "end": 6.11521,
+        "durationInFrames": 184,
+        "audioIndex": 1,
         "keywords": [
           {
-            "search": "web",
-            "keyword": "eBay logo",
+            "search": "stock",
+            "keyword": "thai street food",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781767"
+              "$oid": "67966237917d475d21094a07"
             }
           },
           {
             "search": "stock",
-            "keyword": "Company acquisition",
+            "keyword": "asian cooking",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781768"
+              "$oid": "67966237917d475d21094a08"
             }
           },
           {
             "search": "stock",
-            "keyword": "Business growth",
+            "keyword": "spicy food",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781769"
+              "$oid": "67966237917d475d21094a09"
             }
           }
         ],
         "media": {
-          "type": "image",
-          "name": "Introducing the eBay Marketplace Integration | Akeneo",
-          "height": 1707,
-          "width": 2560,
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a0b"
+              }
+            }
+          ],
+          "video": {
+            "id": "12595262",
+            "quality": null,
+            "file_type": "video/mp4",
+            "size": 9435469,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/29162754/12595262_1920_1080_25fps.mp4"
+          },
           "image": {
-            "id": "img-1731713948921-82fdyl6z8",
-            "link": "https://www.akeneo.com/wp-content/uploads/2024/10/AdobeStock_283674568_Editorial_Use_Only-scaled.jpeg",
-            "width": 2560,
-            "height": 1707
+            "id": "29162754",
+            "link": "https://images.pexels.com/videos/29162754/asia-asian-asian-food-coconut-29162754.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b78176a"
+            "$oid": "67966299a73850b876774b74"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b78175f"
+          "$oid": "67966237917d475d210949fe"
         }
       },
       {
         "words": [
           {
-            "word": "Mais",
-            "start": 37.43785,
-            "end": 37.59794,
-            "confidence": 0.85,
-            "durationInFrames": 10,
+            "word": "et",
+            "start": 6.11521,
+            "end": 6.235390000000001,
+            "confidence": 0.99,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78176c"
+              "$oid": "67966237917d475d21094a0d"
             }
           },
           {
-            "word": "Musk",
-            "start": 37.59794,
-            "end": 37.8781,
-            "confidence": 0.52,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78176d"
-            }
-          },
-          {
-            "word": "ne",
-            "start": 37.8781,
-            "end": 38.03818,
+            "word": "le",
+            "start": 6.235390000000001,
+            "end": 6.37561,
             "confidence": 1,
-            "durationInFrames": 10,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78176e"
+              "$oid": "67966237917d475d21094a0e"
             }
           },
           {
-            "word": "s'arrête",
-            "start": 38.03818,
-            "end": 38.37838,
-            "confidence": 0.93,
+            "word": "piquant",
+            "start": 6.37561,
+            "end": 6.71614,
+            "confidence": 0.87,
             "durationInFrames": 20,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78176f"
-            }
-          },
-          {
-            "word": "pas",
-            "start": 38.37838,
-            "end": 38.51845,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781770"
-            }
-          },
-          {
-            "word": "là,",
-            "start": 38.51845,
-            "end": 38.878659999999996,
-            "confidence": 1,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781771"
-            }
-          },
-          {
-            "word": "il",
-            "start": 38.878659999999996,
-            "end": 39.018730000000005,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781772"
-            }
-          },
-          {
-            "word": "investit",
-            "start": 39.018730000000005,
-            "end": 39.499,
-            "confidence": 0.93,
-            "durationInFrames": 29,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781773"
-            }
-          },
-          {
-            "word": "sa",
-            "start": 39.499,
-            "end": 39.65909,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781774"
-            }
-          },
-          {
-            "word": "fortune",
-            "start": 39.65909,
-            "end": 40.09934,
-            "confidence": 1,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781775"
+              "$oid": "67966237917d475d21094a0f"
             }
           },
           {
             "word": "dans",
-            "start": 40.09934,
-            "end": 40.23942,
-            "confidence": 1,
+            "start": 6.71614,
+            "end": 6.85635,
+            "confidence": 0.9,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781776"
+              "$oid": "67966237917d475d21094a10"
             }
           },
           {
             "word": "des",
-            "start": 40.23942,
-            "end": 40.3795,
+            "start": 6.85635,
+            "end": 6.99657,
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781777"
+              "$oid": "67966237917d475d21094a11"
             }
           },
           {
-            "word": "projets",
-            "start": 40.3795,
-            "end": 40.83975,
-            "confidence": 0.92,
-            "durationInFrames": 28,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781778"
-            }
-          }
-        ],
-        "text": "Mais Musk ne s'arrête pas là, il investit sa fortune dans des projets",
-        "start": 37.43785,
-        "end": 40.83975,
-        "durationInFrames": 204,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Investment portfolio",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781779"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Business investment",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78177a"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Investment",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78177b"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 2048,
-          "video": {
-            "id": "9852074",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 20038496,
-            "width": 2048,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/5909908/5909908-hd_2048_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "5909908",
-            "link": "https://images.pexels.com/videos/5909908/pexels-photo-5909908.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78177c"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78176b"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "ambitieux.",
-            "start": 40.83975,
-            "end": 41.72025,
-            "confidence": 0.95,
-            "durationInFrames": 53,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78177e"
-            }
-          },
-          {
-            "word": "Tesla",
-            "start": 41.72025,
-            "end": 42.10046,
-            "confidence": 0.85,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78177f"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 42.10046,
-            "end": 42.36061,
-            "confidence": 0.99,
+            "word": "plats",
+            "start": 6.99657,
+            "end": 7.256970000000001,
+            "confidence": 0.9,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781780"
+              "$oid": "67966237917d475d21094a12"
             }
           },
           {
-            "word": "révolutionner",
-            "start": 42.36061,
-            "end": 42.96094,
+            "word": "comme",
+            "start": 7.256970000000001,
+            "end": 7.41722,
+            "confidence": 0.95,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a13"
+            }
+          },
+          {
+            "word": "le",
+            "start": 7.41722,
+            "end": 7.55743,
             "confidence": 0.99,
-            "durationInFrames": 36,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781781"
+              "$oid": "67966237917d475d21094a14"
             }
           },
           {
-            "word": "l'automobile,",
-            "start": 42.96094,
-            "end": 43.66133,
-            "confidence": 0.93,
-            "durationInFrames": 42,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781782"
-            }
-          },
-          {
-            "word": "SpaceX",
-            "start": 43.66133,
-            "end": 44.40175,
+            "word": "pad",
+            "start": 7.55743,
+            "end": 7.75774,
             "confidence": 0.77,
-            "durationInFrames": 44,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781783"
+              "$oid": "67966237917d475d21094a15"
+            }
+          },
+          {
+            "word": "thai.",
+            "start": 7.75774,
+            "end": 7.9982,
+            "confidence": 0.49,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67966237917d475d21094a16"
             }
           }
         ],
-        "text": "ambitieux. Tesla pour révolutionner l'automobile, SpaceX",
-        "start": 40.83975,
-        "end": 44.40175,
-        "durationInFrames": 214,
+        "text": "et le piquant dans des plats comme le pad thai.",
+        "start": 6.11521,
+        "end": 7.9982,
+        "durationInFrames": 111,
+        "audioIndex": 1,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Electric car",
+            "keyword": "pad thai dish",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781784"
-            }
-          },
-          {
-            "search": "web",
-            "keyword": "Tesla logo",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781785"
+              "$oid": "67966237917d475d21094a17"
             }
           },
           {
             "search": "stock",
-            "keyword": "Innovation",
+            "keyword": "noodle stir fry",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67966237917d475d21094a18"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "asian noodles",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781786"
+              "$oid": "67966237917d475d21094a19"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1080,
-          "width": 1920,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a1b"
+              }
+            }
+          ],
           "video": {
-            "id": "9267619",
+            "id": "10119430",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 42928058,
-            "width": 1920,
-            "height": 1080,
+            "size": 6008438,
+            "width": 1080,
+            "height": 1920,
             "fps": 30,
-            "link": "https://videos.pexels.com/video-files/2053100/2053100-hd_1920_1080_30fps.mp4"
+            "link": "https://videos.pexels.com/video-files/6645810/6645810-hd_1080_1920_30fps.mp4"
           },
           "image": {
-            "id": "2053100",
-            "link": "https://images.pexels.com/videos/2053100/free-video-2053100.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
+            "id": "6645810",
+            "link": "https://images.pexels.com/videos/6645810/asian-asian-cuisine-asian-food-bbq-6645810.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 1080,
+            "height": 1920
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b781787"
+            "$oid": "67966299a73850b876774b84"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b78177d"
+          "$oid": "67966237917d475d21094a0c"
         }
       },
       {
         "words": [
           {
-            "word": "pour",
-            "start": 44.40175,
-            "end": 44.60186,
-            "confidence": 0.92,
-            "durationInFrames": 12,
+            "word": "Au",
+            "start": 7.9982,
+            "end": 8.11866,
+            "confidence": 1,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781789"
+              "$oid": "67966237917d475d21094a1d"
             }
           },
           {
-            "word": "conquérir",
-            "start": 44.60186,
-            "end": 45.122150000000005,
+            "word": "Mexique,",
+            "start": 8.11866,
+            "end": 8.68081,
             "confidence": 0.9,
-            "durationInFrames": 31,
+            "durationInFrames": 34,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178a"
-            }
-          },
-          {
-            "word": "l'espace.",
-            "start": 45.122150000000005,
-            "end": 46.08269,
-            "confidence": 0.95,
-            "durationInFrames": 58,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178b"
-            }
-          }
-        ],
-        "text": "pour conquérir l'espace.",
-        "start": 44.40175,
-        "end": 46.08269,
-        "durationInFrames": 101,
-        "keywords": [
-          {
-            "search": "web",
-            "keyword": "SpaceX logo",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178c"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Space exploration",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178d"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Space",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178e"
-            }
-          }
-        ],
-        "media": {
-          "type": "image",
-          "name": "Symbol SpaceX Logo Iron-on Sticker (heat transfer) – Customisation ...",
-          "height": 943,
-          "width": 2048,
-          "image": {
-            "id": "img-1731713950757-jbby700t2",
-            "link": "https://customisation.club/cdn/shop/products/IMG_20210513_092943_dcca2bb0-8fd1-430f-aa96-39d3f41846fb_1024x1024@2x.jpg?v=1682789860",
-            "width": 2048,
-            "height": 943
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78178f"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b781788"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Malgré",
-            "start": 46.08269,
-            "end": 46.42288,
-            "confidence": 0.93,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781791"
+              "$oid": "67966237917d475d21094a1e"
             }
           },
           {
             "word": "les",
-            "start": 46.42288,
-            "end": 46.60298,
-            "confidence": 1,
-            "durationInFrames": 11,
+            "start": 8.68081,
+            "end": 8.84142,
+            "confidence": 0.98,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781792"
+              "$oid": "67966237917d475d21094a1f"
             }
           },
           {
-            "word": "échecs",
-            "start": 46.60298,
-            "end": 46.96318,
-            "confidence": 0.84,
-            "durationInFrames": 22,
+            "word": "tacos",
+            "start": 8.84142,
+            "end": 9.26303,
+            "confidence": 0.86,
+            "durationInFrames": 25,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781793"
+              "$oid": "67966237917d475d21094a20"
             }
           },
           {
             "word": "et",
-            "start": 46.96318,
-            "end": 47.02322,
-            "confidence": 0.83,
-            "durationInFrames": 4,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781794"
-            }
-          },
-          {
-            "word": "les",
-            "start": 47.02322,
-            "end": 47.143280000000004,
-            "confidence": 0.81,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781795"
-            }
-          },
-          {
-            "word": "critiques,",
-            "start": 47.143280000000004,
-            "end": 47.803650000000005,
-            "confidence": 0.91,
-            "durationInFrames": 40,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781796"
-            }
-          },
-          {
-            "word": "sa",
-            "start": 47.803650000000005,
-            "end": 47.98375,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781797"
-            }
-          },
-          {
-            "word": "persévérance",
-            "start": 47.98375,
-            "end": 48.80421,
+            "start": 9.26303,
+            "end": 9.40356,
             "confidence": 0.99,
-            "durationInFrames": 49,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781798"
+              "$oid": "67966237917d475d21094a21"
             }
           },
           {
-            "word": "paie.",
-            "start": 48.80421,
-            "end": 49.34452,
-            "confidence": 0.67,
-            "durationInFrames": 32,
+            "word": "molles",
+            "start": 9.40356,
+            "end": 9.70471,
+            "confidence": 0.53,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781799"
-            }
-          }
-        ],
-        "text": "Malgré les échecs et les critiques, sa persévérance paie.",
-        "start": 46.08269,
-        "end": 49.34452,
-        "durationInFrames": 196,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Perseverance",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78179a"
+              "$oid": "67966237917d475d21094a22"
             }
           },
           {
-            "search": "stock",
-            "keyword": "Overcoming obstacles",
-            "precision": "NORMAL",
+            "word": "révèlent",
+            "start": 9.70471,
+            "end": 10.246780000000001,
+            "confidence": 0.92,
+            "durationInFrames": 33,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78179b"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Success",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78179c"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 2048,
-          "video": {
-            "id": "9596061",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 65530055,
-            "width": 2048,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/5013967/5013967-hd_2048_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "5013967",
-            "link": "https://images.pexels.com/videos/5013967/pexels-photo-5013967.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78179d"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b781790"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Tesla",
-            "start": 49.34452,
-            "end": 49.70472,
-            "confidence": 0.91,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78179f"
-            }
-          },
-          {
-            "word": "devient",
-            "start": 49.70472,
-            "end": 50.08493,
-            "confidence": 0.99,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a0"
-            }
-          },
-          {
-            "word": "leader",
-            "start": 50.08493,
-            "end": 50.60522,
-            "confidence": 0.74,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a1"
+              "$oid": "67966237917d475d21094a23"
             }
           },
           {
             "word": "des",
-            "start": 50.60522,
-            "end": 50.7453,
+            "start": 10.246780000000001,
+            "end": 10.44754,
             "confidence": 1,
-            "durationInFrames": 8,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a2"
+              "$oid": "67966237917d475d21094a24"
             }
           },
           {
-            "word": "voitures",
-            "start": 50.7453,
-            "end": 51.16554,
-            "confidence": 0.95,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a3"
-            }
-          },
-          {
-            "word": "électriques.",
-            "start": 51.16554,
-            "end": 51.96598,
-            "confidence": 0.95,
-            "durationInFrames": 48,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a4"
-            }
-          }
-        ],
-        "text": "Tesla devient leader des voitures électriques.",
-        "start": 49.34452,
-        "end": 51.96598,
-        "durationInFrames": 157,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Electric car market",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a5"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Tesla car",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a6"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Leadership",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a7"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1920,
-          "width": 1080,
-          "video": {
-            "id": "12038850",
-            "quality": null,
-            "file_type": "video/mp4",
-            "size": 58931446,
-            "width": 1080,
-            "height": 1920,
-            "fps": 50,
-            "link": "https://videos.pexels.com/video-files/26967507/12038850_1080_1920_50fps.mp4"
-          },
-          "image": {
-            "id": "26967507",
-            "link": "https://images.pexels.com/videos/26967507/asia-driving-sunny-day-26967507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817a8"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78179e"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "SpaceX",
-            "start": 51.96598,
-            "end": 52.60634,
-            "confidence": 0.77,
-            "durationInFrames": 38,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817aa"
-            }
-          },
-          {
-            "word": "réussit",
-            "start": 52.60634,
-            "end": 53.126630000000006,
-            "confidence": 0.94,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ab"
-            }
-          },
-          {
-            "word": "là",
-            "start": 53.126630000000006,
-            "end": 53.26671,
+            "word": "siècles",
+            "start": 10.44754,
+            "end": 10.80892,
             "confidence": 1,
-            "durationInFrames": 8,
+            "durationInFrames": 22,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ac"
-            }
-          },
-          {
-            "word": "où",
-            "start": 53.26671,
-            "end": 53.4268,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ad"
-            }
-          },
-          {
-            "word": "les",
-            "start": 53.4268,
-            "end": 53.58689,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ae"
-            }
-          },
-          {
-            "word": "géants",
-            "start": 53.58689,
-            "end": 53.907070000000004,
-            "confidence": 0.92,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817af"
+              "$oid": "67966237917d475d21094a25"
             }
           },
           {
             "word": "de",
-            "start": 53.907070000000004,
-            "end": 54.02714,
+            "start": 10.80892,
+            "end": 10.94946,
             "confidence": 1,
-            "durationInFrames": 7,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b0"
+              "$oid": "67966237917d475d21094a26"
             }
           },
           {
-            "word": "l'aérospatiale",
-            "start": 54.02714,
-            "end": 54.90763,
-            "confidence": 0.85,
-            "durationInFrames": 53,
+            "word": "tradition",
+            "start": 10.94946,
+            "end": 11.49152,
+            "confidence": 1,
+            "durationInFrames": 33,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b1"
-            }
-          },
-          {
-            "word": "échouent.",
-            "start": 54.90763,
-            "end": 55.64816,
-            "confidence": 0.7,
-            "durationInFrames": 44,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b2"
+              "$oid": "67966237917d475d21094a27"
             }
           }
         ],
-        "text": "SpaceX réussit là où les géants de l'aérospatiale échouent.",
-        "start": 51.96598,
-        "end": 55.64816,
-        "durationInFrames": 220,
+        "text": "Au Mexique, les tacos et molles révèlent des siècles de tradition",
+        "start": 7.9982,
+        "end": 11.49152,
+        "durationInFrames": 210,
+        "audioIndex": 2,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "SpaceX rocket",
+            "keyword": "mexican tacos",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b3"
+              "$oid": "67966237917d475d21094a28"
             }
           },
           {
             "search": "stock",
-            "keyword": "Space achievement",
+            "keyword": "latin food",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b4"
+              "$oid": "67966237917d475d21094a29"
             }
           },
           {
             "search": "stock",
-            "keyword": "Innovation",
+            "keyword": "tacos",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b5"
+              "$oid": "67966237917d475d21094a2a"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a2c"
+              }
+            }
+          ],
           "video": {
-            "id": "6195758",
+            "id": "10831193",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 1815527,
+            "size": 5152340,
             "width": 1080,
             "height": 1920,
             "fps": 24,
-            "link": "https://videos.pexels.com/video-files/14618955/14618955-hd_1080_1920_24fps.mp4"
+            "link": "https://videos.pexels.com/video-files/8448095/8448095-hd_1080_1920_24fps.mp4"
           },
           "image": {
-            "id": "14618955",
-            "link": "https://images.pexels.com/videos/14618955/cosmos-earth-jupiter-milky-way-14618955.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
+            "id": "8448095",
+            "link": "https://images.pexels.com/videos/8448095/adult-beer-bread-cheese-8448095.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 1080,
+            "height": 1920
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817b6"
+            "$oid": "67966299a73850b876774b95"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817a9"
+          "$oid": "67966237917d475d21094a1c"
         }
       },
       {
         "words": [
           {
-            "word": "En",
-            "start": 55.64816,
-            "end": 55.80847,
-            "confidence": 0.88,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b8"
-            }
-          },
-          {
-            "word": "2022,",
-            "start": 55.80847,
-            "end": 56.73028,
-            "confidence": 0,
-            "durationInFrames": 55,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b9"
-            }
-          },
-          {
-            "word": "il",
-            "start": 56.73028,
-            "end": 56.890589999999996,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ba"
-            }
-          },
-          {
-            "word": "rachète",
-            "start": 56.890589999999996,
-            "end": 57.29138,
-            "confidence": 0.94,
-            "durationInFrames": 24,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817bb"
-            }
-          },
-          {
-            "word": "Twitter",
-            "start": 57.29138,
-            "end": 57.85248,
-            "confidence": 0.67,
+            "word": "culinaire.",
+            "start": 11.49152,
+            "end": 12.05359,
+            "confidence": 0.98,
             "durationInFrames": 34,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817bc"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 57.85248,
-            "end": 58.07291,
-            "confidence": 0.99,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817bd"
-            }
-          },
-          {
-            "word": "44",
-            "start": 58.07291,
-            "end": 58.67409,
-            "confidence": 0,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817be"
-            }
-          },
-          {
-            "word": "milliards",
-            "start": 58.67409,
-            "end": 59.11495,
-            "confidence": 0.84,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817bf"
+              "$oid": "67966237917d475d21094a2e"
             }
           }
         ],
-        "text": "En 2022, il rachète Twitter pour 44 milliards",
-        "start": 55.64816,
-        "end": 59.11495,
-        "durationInFrames": 208,
-        "keywords": [
-          {
-            "search": "web",
-            "keyword": "Twitter logo",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c0"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Company acquisition",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c1"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Business growth",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c2"
-            }
-          }
-        ],
-        "media": {
-          "type": "image",
-          "name": "Flip Elon the Bird: How to Turn the X App Icon Back Into Twitter's ...",
-          "height": 2160,
-          "width": 3840,
-          "image": {
-            "id": "img-1731713951247-dsthdr9sv",
-            "link": "https://i.pcmag.com/imagery/articles/06HGiNuO9nzcBSyomWSg6e2-30..v1690990974.jpg",
-            "width": 3840,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817c3"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817b7"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "de",
-            "start": 59.11495,
-            "end": 59.25523,
-            "confidence": 0.98,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c5"
-            }
-          },
-          {
-            "word": "dollars.",
-            "start": 59.25523,
-            "end": 60.03676,
-            "confidence": 0.85,
-            "durationInFrames": 47,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c6"
-            }
-          },
-          {
-            "word": "De",
-            "start": 60.03676,
-            "end": 60.177029999999995,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c7"
-            }
-          },
-          {
-            "word": "l'enfant",
-            "start": 60.177029999999995,
-            "end": 60.53774,
-            "confidence": 0.92,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c8"
-            }
-          },
-          {
-            "word": "solitaire",
-            "start": 60.53774,
-            "end": 61.05876,
-            "confidence": 0.97,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c9"
-            }
-          },
-          {
-            "word": "au",
-            "start": 61.05876,
-            "end": 61.19904,
-            "confidence": 0.99,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ca"
-            }
-          },
-          {
-            "word": "visionnaire",
-            "start": 61.19904,
-            "end": 61.72006,
-            "confidence": 0.95,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817cb"
-            }
-          },
-          {
-            "word": "controversé,",
-            "start": 61.72006,
-            "end": 62.601789999999994,
-            "confidence": 1,
-            "durationInFrames": 53,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817cc"
-            }
-          }
-        ],
-        "text": "de dollars. De l'enfant solitaire au visionnaire controversé,",
-        "start": 59.11495,
-        "end": 62.601789999999994,
-        "durationInFrames": 208,
+        "text": "culinaire.",
+        "start": 11.49152,
+        "end": 12.05359,
+        "durationInFrames": 34,
+        "audioIndex": 2,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Visionary leader",
+            "keyword": "traditional mexican dish",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817cd"
+              "$oid": "67966237917d475d21094a2f"
             }
           },
           {
             "search": "stock",
-            "keyword": "Controversial figure",
+            "keyword": "mexican culture",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ce"
+              "$oid": "67966237917d475d21094a30"
             }
           },
           {
             "search": "stock",
-            "keyword": "Leadership",
+            "keyword": "latin culture",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817cf"
+              "$oid": "67966237917d475d21094a31"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a33"
+              }
+            }
+          ],
           "video": {
-            "id": "10354483",
+            "id": "10831578",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 4850361,
+            "size": 4594256,
             "width": 1080,
             "height": 1920,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7224726/7224726-hd_1080_1920_25fps.mp4"
+            "fps": 24,
+            "link": "https://videos.pexels.com/video-files/8448193/8448193-hd_1080_1920_24fps.mp4"
           },
           "image": {
-            "id": "7224726",
-            "link": "https://images.pexels.com/videos/7224726/pexels-photo-7224726.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
+            "id": "8448193",
+            "link": "https://images.pexels.com/videos/8448193/bowl-bread-cheese-chef-8448193.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 1080,
+            "height": 1920
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817d0"
+            "$oid": "67966299a73850b876774b9c"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817c4"
+          "$oid": "67966237917d475d21094a2d"
         }
       },
       {
         "words": [
           {
-            "word": "Musk",
-            "start": 62.601789999999994,
-            "end": 63.00257,
-            "confidence": 0.78,
-            "durationInFrames": 24,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d2"
-            }
-          },
-          {
-            "word": "prouve",
-            "start": 63.00257,
-            "end": 63.38332,
-            "confidence": 0.99,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d3"
-            }
-          },
-          {
-            "word": "qu'avec",
-            "start": 63.38332,
-            "end": 63.663869999999996,
-            "confidence": 0.99,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d4"
-            }
-          },
-          {
-            "word": "de",
-            "start": 63.663869999999996,
-            "end": 63.80414,
+            "word": "Le",
+            "start": 12.05359,
+            "end": 12.19388,
             "confidence": 1,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d5"
+              "$oid": "67966237917d475d21094a35"
             }
           },
           {
-            "word": "l'ambition",
-            "start": 63.80414,
-            "end": 64.30512999999999,
-            "confidence": 0.93,
-            "durationInFrames": 30,
+            "word": "Japon",
+            "start": 12.19388,
+            "end": 12.51454,
+            "confidence": 0.96,
+            "durationInFrames": 19,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d6"
+              "$oid": "67966237917d475d21094a36"
+            }
+          },
+          {
+            "word": "nous",
+            "start": 12.51454,
+            "end": 12.6949,
+            "confidence": 0.95,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67966237917d475d21094a37"
+            }
+          },
+          {
+            "word": "éblouit",
+            "start": 12.6949,
+            "end": 13.09573,
+            "confidence": 0.94,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67966237917d475d21094a38"
+            }
+          },
+          {
+            "word": "avec",
+            "start": 13.09573,
+            "end": 13.31618,
+            "confidence": 1,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "67966237917d475d21094a39"
+            }
+          },
+          {
+            "word": "ses",
+            "start": 13.31618,
+            "end": 13.45646,
+            "confidence": 0.85,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d21094a3a"
+            }
+          },
+          {
+            "word": "sushis",
+            "start": 13.45646,
+            "end": 13.85728,
+            "confidence": 0.7,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67966237917d475d21094a3b"
             }
           },
           {
             "word": "et",
-            "start": 64.30512999999999,
-            "end": 64.40532,
-            "confidence": 1,
-            "durationInFrames": 6,
+            "start": 13.85728,
+            "end": 14.017610000000001,
+            "confidence": 0.78,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d7"
+              "$oid": "67966237917d475d21094a3c"
             }
           },
           {
-            "word": "du",
-            "start": 64.40532,
-            "end": 64.5456,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d8"
-            }
-          },
-          {
-            "word": "travail,",
-            "start": 64.5456,
-            "end": 65.06662,
-            "confidence": 0.98,
+            "word": "ramens",
+            "start": 14.017610000000001,
+            "end": 14.53868,
+            "confidence": 0.73,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d9"
+              "$oid": "67966237917d475d21094a3d"
             }
           },
           {
-            "word": "tout",
-            "start": 65.06662,
-            "end": 65.24697,
-            "confidence": 0.99,
-            "durationInFrames": 11,
+            "word": "alliant",
+            "start": 14.53868,
+            "end": 14.83929,
+            "confidence": 0.88,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817da"
+              "$oid": "67966237917d475d21094a3e"
             }
           },
           {
-            "word": "est",
-            "start": 65.24697,
-            "end": 65.38725,
-            "confidence": 0.95,
+            "word": "fraîcheur",
+            "start": 14.83929,
+            "end": 15.32028,
+            "confidence": 0.81,
+            "durationInFrames": 29,
+            "_id": {
+              "$oid": "67966237917d475d21094a3f"
+            }
+          },
+          {
+            "word": "et",
+            "start": 15.32028,
+            "end": 15.46057,
+            "confidence": 0.75,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817db"
+              "$oid": "67966237917d475d21094a40"
             }
           },
           {
-            "word": "possible.",
-            "start": 65.38725,
-            "end": 66.14874,
-            "confidence": 0.96,
-            "durationInFrames": 46,
+            "word": "umami.",
+            "start": 15.46057,
+            "end": 15.82133,
+            "confidence": 0.98,
+            "durationInFrames": 22,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817dc"
+              "$oid": "67966237917d475d21094a41"
             }
           }
         ],
-        "text": "Musk prouve qu'avec de l'ambition et du travail, tout est possible.",
-        "start": 62.601789999999994,
-        "end": 66.14874,
-        "durationInFrames": 212,
+        "text": "Le Japon nous éblouit avec ses sushis et ramens alliant fraîcheuret umami.",
+        "start": 12.05359,
+        "end": 15.82133,
+        "durationInFrames": 225,
+        "audioIndex": 3,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Ambition",
+            "keyword": "sushi rolls",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817dd"
+              "$oid": "67966237917d475d21094a42"
             }
           },
           {
             "search": "stock",
-            "keyword": "Hard work",
+            "keyword": "japanese cuisine",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817de"
+              "$oid": "67966237917d475d21094a43"
             }
           },
           {
             "search": "stock",
-            "keyword": "Success",
+            "keyword": "raw fish",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817df"
+              "$oid": "67966237917d475d21094a44"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a46"
+              }
+            }
+          ],
           "video": {
-            "id": "10635372",
+            "id": "10995497",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 5183853,
+            "size": 3465328,
             "width": 1080,
             "height": 1920,
-            "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/7969484/7969484-hd_1080_1920_30fps.mp4"
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/8908409/8908409-hd_1080_1920_25fps.mp4"
           },
           "image": {
-            "id": "7969484",
-            "link": "https://images.pexels.com/videos/7969484/pexels-photo-7969484.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "id": "8908409",
+            "link": "https://images.pexels.com/videos/8908409/asian-close-up-cooking-delicious-8908409.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 1080,
+            "height": 1920
+          },
+          "_id": {
+            "$oid": "67966299a73850b876774baf"
+          }
+        },
+        "_id": {
+          "$oid": "67966237917d475d21094a34"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "L'Inde",
+            "start": 15.82133,
+            "end": 16.12203,
+            "confidence": 0.78,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "67966237917d475d21094a48"
+            }
+          },
+          {
+            "word": "nous",
+            "start": 16.12203,
+            "end": 16.26236,
+            "confidence": 0.94,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d21094a49"
+            }
+          },
+          {
+            "word": "transporte",
+            "start": 16.26236,
+            "end": 16.88381,
+            "confidence": 1,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "67966237917d475d21094a4a"
+            }
+          },
+          {
+            "word": "avec",
+            "start": 16.88381,
+            "end": 17.08427,
+            "confidence": 1,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67966237917d475d21094a4b"
+            }
+          },
+          {
+            "word": "ses",
+            "start": 17.08427,
+            "end": 17.24465,
+            "confidence": 0.89,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a4c"
+            }
+          },
+          {
+            "word": "curies",
+            "start": 17.24465,
+            "end": 17.5253,
+            "confidence": 0.95,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "67966237917d475d21094a4d"
+            }
+          },
+          {
+            "word": "parfumées",
+            "start": 17.5253,
+            "end": 18.14675,
+            "confidence": 0.91,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "67966237917d475d21094a4e"
+            }
+          },
+          {
+            "word": "et",
+            "start": 18.14675,
+            "end": 18.30713,
+            "confidence": 1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a4f"
+            }
+          },
+          {
+            "word": "ses",
+            "start": 18.30713,
+            "end": 18.44746,
+            "confidence": 0.95,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d21094a50"
+            }
+          },
+          {
+            "word": "nannes",
+            "start": 18.44746,
+            "end": 18.74816,
+            "confidence": 0.82,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "67966237917d475d21094a51"
+            }
+          },
+          {
+            "word": "moelleux.",
+            "start": 18.74816,
+            "end": 19.109189999999998,
+            "confidence": 0.8,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "67966237917d475d21094a52"
+            }
+          }
+        ],
+        "text": "L'Inde nous transporte avec ses curies parfumées et ses nannes moelleux.",
+        "start": 15.82133,
+        "end": 19.109189999999998,
+        "durationInFrames": 197,
+        "audioIndex": 4,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "indian curries",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67966237917d475d21094a53"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "spicy indian food",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67966237917d475d21094a54"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "curry",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67966237917d475d21094a55"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a57"
+              }
+            }
+          ],
+          "video": {
+            "id": "11087887",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 5053759,
+            "width": 1080,
+            "height": 1920,
+            "fps": 23.97599983215332,
+            "link": "https://videos.pexels.com/video-files/9346259/9346259-hd_1080_1920_24fps.mp4"
+          },
+          "image": {
+            "id": "9346259",
+            "link": "https://images.pexels.com/videos/9346259/pexels-photo-9346259.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
             "width": 2160,
             "height": 3840
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817e0"
+            "$oid": "67966299a73850b876774bc0"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817d1"
+          "$oid": "67966237917d475d21094a47"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "La",
+            "start": 19.109189999999998,
+            "end": 19.2703,
+            "confidence": 0.99,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a59"
+            }
+          },
+          {
+            "word": "Méditerranée",
+            "start": 19.2703,
+            "end": 19.914759999999998,
+            "confidence": 0.98,
+            "durationInFrames": 39,
+            "_id": {
+              "$oid": "67966237917d475d21094a5a"
+            }
+          },
+          {
+            "word": "nous",
+            "start": 19.914759999999998,
+            "end": 20.09602,
+            "confidence": 0.9,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67966237917d475d21094a5b"
+            }
+          },
+          {
+            "word": "régale",
+            "start": 20.09602,
+            "end": 20.45852,
+            "confidence": 1,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "67966237917d475d21094a5c"
+            }
+          },
+          {
+            "word": "de",
+            "start": 20.45852,
+            "end": 20.65992,
+            "confidence": 0.99,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67966237917d475d21094a5d"
+            }
+          },
+          {
+            "word": "ses",
+            "start": 20.65992,
+            "end": 20.82103,
+            "confidence": 0.95,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a5e"
+            }
+          },
+          {
+            "word": "meds",
+            "start": 20.82103,
+            "end": 21.243959999999998,
+            "confidence": 0.76,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67966237917d475d21094a5f"
+            }
+          },
+          {
+            "word": "colorés",
+            "start": 21.243959999999998,
+            "end": 21.78772,
+            "confidence": 0.98,
+            "durationInFrames": 33,
+            "_id": {
+              "$oid": "67966237917d475d21094a60"
+            }
+          },
+          {
+            "word": "et",
+            "start": 21.78772,
+            "end": 21.948829999999997,
+            "confidence": 1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a61"
+            }
+          },
+          {
+            "word": "savoureux.",
+            "start": 21.948829999999997,
+            "end": 22.49255,
+            "confidence": 0.95,
+            "durationInFrames": 33,
+            "_id": {
+              "$oid": "67966237917d475d21094a62"
+            }
+          }
+        ],
+        "text": "La Méditerranée nous régale de ses meds colorés et savoureux.",
+        "start": 19.109189999999998,
+        "end": 22.49255,
+        "durationInFrames": 205,
+        "audioIndex": 5,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "mediterranean salad",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67966237917d475d21094a63"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "greek food",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67966237917d475d21094a64"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "healthy food",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67966237917d475d21094a65"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a67"
+              }
+            }
+          ],
+          "video": {
+            "id": "10948174",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 3941772,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/8768892/8768892-hd_1920_1080_25fps.mp4"
+          },
+          "image": {
+            "id": "8768892",
+            "link": "https://images.pexels.com/videos/8768892/pexels-photo-8768892.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67966299a73850b876774bd0"
+          }
+        },
+        "_id": {
+          "$oid": "67966237917d475d21094a58"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Au",
+            "start": 22.49255,
+            "end": 22.63336,
+            "confidence": 0.97,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d21094a69"
+            }
+          },
+          {
+            "word": "Brésil,",
+            "start": 22.63336,
+            "end": 23.03568,
+            "confidence": 1,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67966237917d475d21094a6a"
+            }
+          },
+          {
+            "word": "la",
+            "start": 23.03568,
+            "end": 23.19661,
+            "confidence": 0.99,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a6b"
+            }
+          },
+          {
+            "word": "feijoada",
+            "start": 23.19661,
+            "end": 23.63916,
+            "confidence": 0.74,
+            "durationInFrames": 27,
+            "_id": {
+              "$oid": "67966237917d475d21094a6c"
+            }
+          },
+          {
+            "word": "et",
+            "start": 23.63916,
+            "end": 23.73974,
+            "confidence": 0.99,
+            "durationInFrames": 6,
+            "_id": {
+              "$oid": "67966237917d475d21094a6d"
+            }
+          },
+          {
+            "word": "les",
+            "start": 23.73974,
+            "end": 23.88055,
+            "confidence": 0.98,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d21094a6e"
+            }
+          },
+          {
+            "word": "churascos",
+            "start": 23.88055,
+            "end": 24.50415,
+            "confidence": 0.67,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "67966237917d475d21094a6f"
+            }
+          },
+          {
+            "word": "célèbrent",
+            "start": 24.50415,
+            "end": 25.0674,
+            "confidence": 0.8,
+            "durationInFrames": 34,
+            "_id": {
+              "$oid": "67966237917d475d21094a70"
+            }
+          },
+          {
+            "word": "la",
+            "start": 25.0674,
+            "end": 25.22832,
+            "confidence": 1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a71"
+            }
+          },
+          {
+            "word": "convivialité.",
+            "start": 25.22832,
+            "end": 25.95238,
+            "confidence": 1,
+            "durationInFrames": 43,
+            "_id": {
+              "$oid": "67966237917d475d21094a72"
+            }
+          }
+        ],
+        "text": "Au Brésil, la feijoada et les churascos célèbrent la convivialité.",
+        "start": 22.49255,
+        "end": 25.95238,
+        "durationInFrames": 207,
+        "audioIndex": 6,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "brazilian feijoada",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67966237917d475d21094a73"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "latin american food",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67966237917d475d21094a74"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "grilled meat",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67966237917d475d21094a75"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a77"
+              }
+            }
+          ],
+          "video": {
+            "id": "9542315",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 25140699,
+            "width": 1920,
+            "height": 1080,
+            "fps": 23.97599983215332,
+            "link": "https://videos.pexels.com/video-files/4602188/4602188-hd_1920_1080_24fps.mp4"
+          },
+          "image": {
+            "id": "4602188",
+            "link": "https://images.pexels.com/videos/4602188/font-style-vertical-align-inherit-sao-paulo-font-font-font-style-vertical-align-inherit-entardecer-4602188.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67966299a73850b876774be0"
+          }
+        },
+        "_id": {
+          "$oid": "67966237917d475d21094a68"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Ces",
+            "start": 25.95238,
+            "end": 26.113,
+            "confidence": 0.73,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a79"
+            }
+          },
+          {
+            "word": "cuisines",
+            "start": 26.113,
+            "end": 26.53461,
+            "confidence": 0.9,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67966237917d475d21094a7a"
+            }
+          },
+          {
+            "word": "racontent",
+            "start": 26.53461,
+            "end": 27.05661,
+            "confidence": 0.88,
+            "durationInFrames": 31,
+            "_id": {
+              "$oid": "67966237917d475d21094a7b"
+            }
+          },
+          {
+            "word": "des",
+            "start": 27.05661,
+            "end": 27.21723,
+            "confidence": 1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a7c"
+            }
+          },
+          {
+            "word": "histoires",
+            "start": 27.21723,
+            "end": 27.79946,
+            "confidence": 1,
+            "durationInFrames": 35,
+            "_id": {
+              "$oid": "67966237917d475d21094a7d"
+            }
+          },
+          {
+            "word": "millénaires",
+            "start": 27.79946,
+            "end": 28.60253,
+            "confidence": 0.87,
+            "durationInFrames": 48,
+            "_id": {
+              "$oid": "67966237917d475d21094a7e"
+            }
+          },
+          {
+            "word": "et",
+            "start": 28.60253,
+            "end": 28.76315,
+            "confidence": 0.98,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a7f"
+            }
+          },
+          {
+            "word": "unissent",
+            "start": 28.76315,
+            "end": 29.28515,
+            "confidence": 0.84,
+            "durationInFrames": 31,
+            "_id": {
+              "$oid": "67966237917d475d21094a80"
+            }
+          }
+        ],
+        "text": "Ces cuisines racontent des histoires millénaires et unissent",
+        "start": 25.95238,
+        "end": 29.28515,
+        "durationInFrames": 200,
+        "audioIndex": 7,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "cultural heritage",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67966237917d475d21094a81"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "food tradition",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67966237917d475d21094a82"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "cuisine",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67966237917d475d21094a83"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a85"
+              }
+            }
+          ],
+          "video": {
+            "id": "13022985",
+            "quality": null,
+            "file_type": "video/mp4",
+            "size": 177612965,
+            "width": 1920,
+            "height": 1080,
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/30387272/13022985_1920_1080_30fps.mp4"
+          },
+          "image": {
+            "id": "30387272",
+            "link": "https://images.pexels.com/videos/30387272/4k-aerial-aerial-aerial-by-drone-aerial-photography-30387272.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "67966299a73850b876774bee"
+          }
+        },
+        "_id": {
+          "$oid": "67966237917d475d21094a78"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "les",
+            "start": 29.28515,
+            "end": 29.44577,
+            "confidence": 1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a87"
+            }
+          },
+          {
+            "word": "peuples",
+            "start": 29.44577,
+            "end": 30.007920000000002,
+            "confidence": 0.97,
+            "durationInFrames": 34,
+            "_id": {
+              "$oid": "67966237917d475d21094a88"
+            }
+          },
+          {
+            "word": "autour",
+            "start": 30.007920000000002,
+            "end": 30.48977,
+            "confidence": 0.99,
+            "durationInFrames": 29,
+            "_id": {
+              "$oid": "67966237917d475d21094a89"
+            }
+          },
+          {
+            "word": "d'une",
+            "start": 30.48977,
+            "end": 30.690530000000003,
+            "confidence": 0.94,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67966237917d475d21094a8a"
+            }
+          },
+          {
+            "word": "table.",
+            "start": 30.690530000000003,
+            "end": 31.052180000000003,
+            "confidence": 1,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "67966237917d475d21094a8b"
+            }
+          }
+        ],
+        "text": "les peuples autour d'une table.",
+        "start": 29.28515,
+        "end": 31.052180000000003,
+        "durationInFrames": 107,
+        "audioIndex": 7,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "people eating together",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67966237917d475d21094a8c"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "family dinner",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67966237917d475d21094a8d"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "meal time",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67966237917d475d21094a8e"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a90"
+              }
+            }
+          ],
+          "video": {
+            "id": "9298208",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 19009882,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/3198163/3198163-hd_1920_1080_25fps.mp4"
+          },
+          "image": {
+            "id": "3198163",
+            "link": "https://images.pexels.com/videos/3198163/free-video-3198163.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "67966299a73850b876774bf9"
+          }
+        },
+        "_id": {
+          "$oid": "67966237917d475d21094a86"
         }
       },
       {
         "words": [
           {
             "word": "Partagez",
-            "start": 66.14874,
-            "end": 66.56956,
-            "confidence": 0.96,
+            "start": 31.052180000000003,
+            "end": 31.47565,
+            "confidence": 1,
             "durationInFrames": 25,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e2"
+              "$oid": "67966237917d475d21094a92"
             }
           },
           {
-            "word": "votre",
-            "start": 66.56956,
-            "end": 66.78999999999999,
-            "confidence": 0.92,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e3"
-            }
-          },
-          {
-            "word": "avis",
-            "start": 66.78999999999999,
-            "end": 66.97035,
-            "confidence": 0.76,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e4"
-            }
-          },
-          {
-            "word": "en",
-            "start": 66.97035,
-            "end": 67.11063,
+            "word": "vos",
+            "start": 31.47565,
+            "end": 31.6168,
             "confidence": 0.99,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e5"
+              "$oid": "67966237917d475d21094a93"
             }
           },
           {
-            "word": "commentaire.",
-            "start": 67.11063,
-            "end": 67.970612,
-            "confidence": 0.99,
-            "durationInFrames": 52,
+            "word": "plates",
+            "start": 31.6168,
+            "end": 31.858780000000003,
+            "confidence": 0.78,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e6"
+              "$oid": "67966237917d475d21094a94"
+            }
+          },
+          {
+            "word": "préférées",
+            "start": 31.858780000000003,
+            "end": 32.36291,
+            "confidence": 0.82,
+            "durationInFrames": 30,
+            "_id": {
+              "$oid": "67966237917d475d21094a95"
+            }
+          },
+          {
+            "word": "ci-dessous.",
+            "start": 32.36291,
+            "end": 33.306540000000005,
+            "confidence": 0.74,
+            "durationInFrames": 57,
+            "_id": {
+              "$oid": "67966237917d475d21094a96"
             }
           }
         ],
-        "text": "Partagez votre avis en commentaire.",
-        "start": 66.14874,
-        "end": 67.970612,
-        "durationInFrames": 109,
+        "text": "Partagez vos plates préférées ci-dessous.",
+        "start": 31.052180000000003,
+        "end": 33.306540000000005,
+        "durationInFrames": 135,
+        "audioIndex": 8,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Comment section",
+            "keyword": "social media food post",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e7"
+              "$oid": "67966237917d475d21094a97"
             }
           },
           {
             "search": "stock",
-            "keyword": "Online discussion",
+            "keyword": "food sharing",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e8"
+              "$oid": "67966237917d475d21094a98"
             }
           },
           {
             "search": "stock",
-            "keyword": "Feedback",
+            "keyword": "online food",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e9"
+              "$oid": "67966237917d475d21094a99"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 2048,
-          "width": 1080,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a9b"
+              }
+            }
+          ],
           "video": {
-            "id": "9437634",
+            "id": "10828646",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 20625690,
-            "width": 1080,
-            "height": 2048,
+            "size": 33550411,
+            "width": 2048,
+            "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/5075219/5075219-hd_1080_2048_25fps.mp4"
+            "link": "https://videos.pexels.com/video-files/8440515/8440515-hd_2048_1080_25fps.mp4"
           },
           "image": {
-            "id": "5075219",
-            "link": "https://images.pexels.com/videos/5075219/pexels-photo-5075219.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 4096
+            "id": "8440515",
+            "link": "https://images.pexels.com/videos/8440515/pexels-photo-8440515.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817ea"
+            "$oid": "67966299a73850b876774c04"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817e1"
+          "$oid": "67966237917d475d21094a91"
         }
       }
     ]
   },
   "createdAt": {
-    "$date": "2024-11-15T23:38:57.748Z"
+    "$date": "2025-01-26T16:25:39.846Z"
   },
   "updatedAt": {
-    "$date": "2024-11-15T23:39:11.660Z"
+    "$date": "2025-01-26T16:28:09.307Z"
   },
   "__v": 0,
   "isNews": false,
   "style": "Informative",
-  "title": "Mockup Script Example",
-  "costToGenerate": 0
+  "title": "Trésors gustatifs uniques",
+  "costToGenerate": 0.10079
 }

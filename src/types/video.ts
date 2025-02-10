@@ -62,6 +62,18 @@ export interface ISequence {
   originalText?: string;
   needsAudioRegeneration?: boolean;
 }
+export interface ITransition {
+  indexSequenceBefore?: number;
+  video: string;
+  thumbnail: string;
+  sound?: string;
+  volume?: number;
+  soundPeakAt?: number;
+  fullAt?: number;
+  durationInFrames?: number;
+  category?: string;
+  mode?: string;
+}
 
 export interface IVideo {
   id?: string;
@@ -103,6 +115,7 @@ export interface IVideo {
       transcription_time: number;
     };
     sequences: ISequence[];
+    transitions?: ITransition[];
     avatar?: AvatarLook
   };
   history?: {

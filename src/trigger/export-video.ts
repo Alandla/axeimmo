@@ -41,16 +41,15 @@ export const exportVideoTask = task({
 
       logger.log("Export data", { exportData });
 
-      if (ctx.attempt.number === 1) {
-        await removeCreditsToSpace(exportData.spaceId, exportData.creditCost);
-      }
-
       const video : IVideo | null = await getVideoById(videoId);
       if (!video) {
         throw new Error('Video not found');
       }
 
-      updateSpaceLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name)
+      if (ctx.attempt.number === 1) {
+        await removeCreditsToSpace(exportData.spaceId, exportData.creditCost);
+        updateSpaceLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name)
+      }
 
       const space = await getSpaceById(video.spaceId);
       const showWatermark = space.plan.name === "FREE";

@@ -13,7 +13,7 @@ import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { ISequence, IVideo, IWord } from '@/src/types/video'
+import { ISequence, IVideo, IWord, ITransition } from '@/src/types/video'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
@@ -35,7 +35,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/
 import { CommandShortcut } from '@/src/components/ui/command'
 import { ISpace } from '@/src/types/space'
 import { PlanName } from '@/src/types/enums'
-import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
+import TransitionSettings from '@/src/components/edit/transition-settings'
+import { transitions as defaultTransitions, sounds as defaultSounds } from '@/src/config/transitions.config'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -44,11 +45,11 @@ export default function VideoEditor() {
   const t = useTranslations('edit')
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
-  const { lastUsedParameters, setLastUsedParameters } = useActiveSpaceStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
+  const [selectedTransitionIndex, setSelectedTransitionIndex] = useState<number>(-1)
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
   const [showWatermark, setShowWatermark] = useState(true)
@@ -276,7 +277,13 @@ export default function VideoEditor() {
     if (video?.video?.sequences && selectedSequenceIndex >= 0 && selectedSequenceIndex < video.video.sequences.length) {
       playerRef.current?.seekTo(video.video.sequences[selectedSequenceIndex].start * 60)
     }
-  }, [selectedSequenceIndex])
+
+    if (video?.video?.transitions && selectedTransitionIndex >= 0 && selectedTransitionIndex < video.video.transitions.length) {
+      const transitionIndex = video.video.transitions[selectedTransitionIndex].indexSequenceBefore ?? 0;
+      const sequenceBefore = video.video.sequences[transitionIndex];
+      playerRef.current?.seekTo((sequenceBefore.end * 60) - (video.video.transitions[selectedTransitionIndex].fullAt ?? 0));
+    }
+  }, [selectedSequenceIndex, selectedTransitionIndex])
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -392,6 +399,15 @@ export default function VideoEditor() {
   const handleDeleteSequence = (sequenceIndex: number) => {
     if (!video?.video) return;
 
+    const newTransitions = [...(video.video.transitions || [])];
+
+    // Mettre à jour les indexSequenceBefore des transitions
+    newTransitions.forEach(transition => {
+      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore > sequenceIndex) {
+        transition.indexSequenceBefore -= 1;
+      }
+    });
+
     const sequence = video.video.sequences[sequenceIndex];
     const audioIndex = sequence.audioIndex;
     const newSequences = [...video.video.sequences];
@@ -458,6 +474,7 @@ export default function VideoEditor() {
         video: {
             ...video.video,
             sequences: newSequences,
+            transitions: newTransitions,
             audio: {
                 ...video.video.audio,
                 voices: newAudio
@@ -479,6 +496,15 @@ export default function VideoEditor() {
     if (!video?.video) return;
 
     const newSequences = [...video.video.sequences];
+    const newTransitions = [...(video.video.transitions || [])];
+
+    // Mettre à jour les indexSequenceBefore des transitions
+    newTransitions.forEach(transition => {
+      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore > afterIndex) {
+        transition.indexSequenceBefore += 1;
+      }
+    });
+
     const previousSequence = newSequences[afterIndex];
     const defaultDuration = 3;
     const defaultDurationInFrames = defaultDuration * 60;
@@ -555,6 +581,7 @@ export default function VideoEditor() {
         video: {
           ...video.video,
           sequences: newSequences,
+          transitions: newTransitions,
           audio: {
             ...video.video.audio,
             voices: newVoices
@@ -572,6 +599,7 @@ export default function VideoEditor() {
         video: {
           ...video.video,
           sequences: newSequences,
+          transitions: newTransitions,
           metadata: {
             ...video.video.metadata,
             audio_duration: (video.video.metadata.audio_duration || 0) + defaultDuration
@@ -580,8 +608,68 @@ export default function VideoEditor() {
       });
     }
 
-    // Sélectionner la nouvelle séquence
     setSelectedSequenceIndex(afterIndex + 1);
+    setSelectedTransitionIndex(-1);
+  };
+
+  const handleDeleteTransition = (index: number) => {
+    if (!video?.video?.transitions) return;
+
+    const newTransitions = [...video.video.transitions];
+    const transitionToDelete = newTransitions[index];
+    const sequenceIndex = transitionToDelete.indexSequenceBefore ?? 0;
+    
+    newTransitions.splice(index, 1);
+
+    updateVideo({
+      ...video,
+      video: {
+        ...video.video,
+        transitions: newTransitions
+      }
+    });
+    
+    setSelectedTransitionIndex(-1);
+    setSelectedSequenceIndex(sequenceIndex + 1);
+  };
+
+  const handleUpdateTransition = (transitionIndex: number, newTransition: ITransition) => {
+    if (video && video.video && video.video.transitions) {
+      const newTransitions = [...video.video.transitions];
+      newTransitions[transitionIndex] = newTransition;
+      updateVideo({
+        ...video,
+        video: {
+          ...video.video,
+          transitions: newTransitions
+        }
+      });
+    }
+  };
+
+  const handleAddTransition = (afterIndex: number) => {
+    if (!video?.video) return;
+
+    const newTransitions = [...(video.video.transitions || [])];
+    const defaultTransition = {
+      ...defaultTransitions[0],
+      indexSequenceBefore: afterIndex,
+      volume: 0.5,
+      sound: defaultSounds[0].url
+    };
+
+    newTransitions.push(defaultTransition);
+
+    setSelectedTransitionIndex(newTransitions.length - 1);
+    setSelectedSequenceIndex(-1);
+
+    updateVideo({
+      ...video,
+      video: {
+        ...video.video,
+        transitions: newTransitions
+      }
+    });
   };
 
   useEffect(() => {
@@ -717,23 +805,32 @@ export default function VideoEditor() {
                     <TabsContent value="sequences">
                       <Sequences 
                         sequences={video?.video?.sequences || []} 
+                        transitions={video?.video?.transitions}
                         selectedSequenceIndex={selectedSequenceIndex} 
+                        selectedTransitionIndex={selectedTransitionIndex}
                         setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                        setSelectedTransitionIndex={setSelectedTransitionIndex}
                         handleWordInputChange={handleWordInputChange} 
                         handleWordAdd={handleWordAdd}
                         handleWordDelete={handleWordDelete}
                         handleCutSequence={handleCutSequence}
                         onRegenerateAudio={handleRegenerateAudio}
                         onDeleteSequence={handleDeleteSequence}
+                        onDeleteTransition={handleDeleteTransition}
                         onAddSequence={handleAddSequence}
+                        onAddTransition={handleAddTransition}
                         playerRef={playerRef}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
-                      <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} />
+                      <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
+                        <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} />
+                      </ScrollArea>
                     </TabsContent>
                     <TabsContent value="audio">
-                      <Musics video={video} updateAudioSettings={updateAudioSettings} />
+                      <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
+                        <Musics video={video} updateAudioSettings={updateAudioSettings} />
+                      </ScrollArea>
                     </TabsContent>
                 </Tabs>
               </div>
@@ -754,6 +851,15 @@ export default function VideoEditor() {
                 <ScrollArea className="h-[calc(100vh-5rem)]">
                   {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
                     <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
+                  )}
+                  {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                    <TransitionSettings 
+                      video={video} 
+                      transition={video.video.transitions[selectedTransitionIndex]} 
+                      transitionIndex={selectedTransitionIndex} 
+                      spaceId={video.spaceId}
+                      updateTransition={handleUpdateTransition}
+                    />
                   )}
                 </ScrollArea>
               )}
@@ -793,19 +899,28 @@ export default function VideoEditor() {
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="sequences">
-              <Sequences 
-                sequences={video?.video?.sequences || []} 
-                selectedSequenceIndex={selectedSequenceIndex} 
-                setSelectedSequenceIndex={setSelectedSequenceIndex} 
-                handleWordInputChange={handleWordInputChange} 
-                handleWordAdd={handleWordAdd}
-                handleWordDelete={handleWordDelete}
-                handleCutSequence={handleCutSequence}
-                onRegenerateAudio={handleRegenerateAudio}
-                onDeleteSequence={handleDeleteSequence}
-                onAddSequence={handleAddSequence}
-                playerRef={playerRef}
-              />
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                <Sequences 
+                  sequences={video?.video?.sequences || []} 
+                  transitions={video?.video?.transitions}
+                  selectedSequenceIndex={selectedSequenceIndex} 
+                  selectedTransitionIndex={selectedTransitionIndex}
+                  setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                  setSelectedTransitionIndex={setSelectedTransitionIndex}
+                  setActiveTabMobile={setActiveTabMobile}
+                  isMobile={isMobile}
+                  handleWordInputChange={handleWordInputChange} 
+                  handleWordAdd={handleWordAdd}
+                  handleWordDelete={handleWordDelete}
+                  handleCutSequence={handleCutSequence}
+                  onRegenerateAudio={handleRegenerateAudio}
+                  onDeleteSequence={handleDeleteSequence}
+                  onDeleteTransition={handleDeleteTransition}
+                  onAddSequence={handleAddSequence}
+                  onAddTransition={handleAddTransition}
+                  playerRef={playerRef}
+                />
+              </ScrollArea>
             </TabsContent>
             <TabsContent value="subtitle">
               <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
@@ -821,6 +936,19 @@ export default function VideoEditor() {
               <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
                 {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
                   <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
+                )}
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-transition">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                  <TransitionSettings 
+                    video={video} 
+                    transition={video.video.transitions[selectedTransitionIndex]} 
+                    transitionIndex={selectedTransitionIndex} 
+                    spaceId={video.spaceId}
+                    updateTransition={handleUpdateTransition}
+                  />
                 )}
               </ScrollArea>
             </TabsContent>

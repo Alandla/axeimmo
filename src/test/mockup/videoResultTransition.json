@@ -1,0 +1,520 @@
+{
+  "spaceId": {
+    "$oid": "6781605a50bf8f3d953e470c"
+  },
+  "state": {
+    "type": "done"
+  },
+  "runId": "run_cpxheea1423zh3xw5cm62",
+  "history": [
+    {
+      "step": "CREATE",
+      "user": {
+        "$oid": "6781605950bf8f3d953e470b"
+      },
+      "date": {
+        "$date": "2025-01-26T16:25:39.807Z"
+      },
+      "_id": {
+        "$oid": "67966203917d475d210949e0"
+      }
+    }
+  ],
+  "video": {
+    "transitions": [
+      {
+        "indexSequenceBefore": 2,
+        "durationInFrames": 98,
+        "video": "https://assets.hoox.video/Film%20Burn%20Red%20Burn.mp4",
+        "thumbnail": "https://assets.hoox.video/film-burn-red-thumbnail.png",
+        "sound": "https://assets.hoox.video/Film%20Burn%20Fizzle.wav",
+        "volume": 0.5,
+        "fullAt": 14,
+        "_id": {
+          "$oid": "67966237917d475d210949fe"
+        }
+      }
+    ],
+    "audio": {
+      "music": {
+        "url": "https://music.hoox.video/holidays-in-miami-background-tropical-house-music-for-video-40-second-264697.mp3",
+        "volume": 0.07,
+        "name": "Holidays in Miami",
+        "genre": "Informative"
+      },
+      "voices": [
+        {
+          "url": "https://media.hoox.video/281e4874-afb5-4307-907e-b3f1c92d5f61.mp3",
+          "index": 0,
+          "start": 0.08028,
+          "end": 3.03045,
+          "durationInFrames": 177,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094a9c"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/dd569d62-5742-4083-b39a-d991c3132181.mp3",
+          "index": 1,
+          "start": 3.03045,
+          "end": 7.9982,
+          "durationInFrames": 295,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094a9d"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/720b217d-588b-44c9-b012-ca1f56c8301e.mp3",
+          "index": 2,
+          "start": 7.9982,
+          "end": 12.05359,
+          "durationInFrames": 244,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094a9e"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/bcf269ca-58fd-468c-a66d-1c8a4a78e006.mp3",
+          "index": 3,
+          "start": 12.05359,
+          "end": 15.82133,
+          "durationInFrames": 225,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094a9f"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/5e6290f6-71ef-4076-ade0-ec5ac760633b.mp3",
+          "index": 4,
+          "start": 15.82133,
+          "end": 19.109189999999998,
+          "durationInFrames": 197,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa0"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/d55a31f1-ba20-4e17-9d1c-ec150ad41575.mp3",
+          "index": 5,
+          "start": 19.109189999999998,
+          "end": 22.49255,
+          "durationInFrames": 205,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa1"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/7fe3ed47-179f-414d-bc81-bb77d7a952a1.mp3",
+          "index": 6,
+          "start": 22.49255,
+          "end": 25.95238,
+          "durationInFrames": 207,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa2"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/8e43c286-3b69-4458-8b7c-6b9e478bd516.mp3",
+          "index": 7,
+          "start": 25.95238,
+          "end": 31.052180000000003,
+          "durationInFrames": 307,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa3"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/4c0e91d1-6e27-4072-8ce2-141bf4b7c380.mp3",
+          "index": 8,
+          "start": 31.052180000000003,
+          "end": 33.306540000000005,
+          "durationInFrames": 135,
+          "voiceId": "AmMsHJaCw4BtwV3KoUXF",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67966237917d475d21094aa4"
+          }
+        }
+      ],
+      "volume": 1
+    },
+    "subtitle": {
+      "name": "Daniel",
+      "style": {
+        "template": "daniel",
+        "fontFamily": "Arial",
+        "fontWeight": "800",
+        "fontSize": 80,
+        "color": "#ffffff",
+        "isItalic": false,
+        "isPunctuation": true,
+        "isUppercase": false,
+        "mode": "twoLines",
+        "position": 50,
+        "shadow": {
+          "isActive": true,
+          "size": 1,
+          "color": "#000000"
+        }
+      }
+    },
+    "metadata": {
+      "audio_duration": 33.306540000000005,
+      "number_of_distinct_channels": 1,
+      "billing_time": 35.213063,
+      "transcription_time": 144.317
+    },
+    "thumbnail": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-25y8be5225/renders/0ne7a50zmh/out.jpeg",
+    "sequences": [
+      {
+        "words": [
+          {
+            "word": "La",
+            "start": 3.03045,
+            "end": 3.1706700000000003,
+            "confidence": 1,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d210949ff"
+            }
+          },
+          {
+            "word": "cuisine",
+            "start": 3.1706700000000003,
+            "end": 3.4911600000000003,
+            "confidence": 0.94,
+            "durationInFrames": 19,
+            "_id": {
+              "$oid": "67966237917d475d21094a00"
+            }
+          },
+          {
+            "word": "thaïlandaise",
+            "start": 3.4911600000000003,
+            "end": 4.032,
+            "confidence": 0.89,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "67966237917d475d21094a01"
+            }
+          },
+          {
+            "word": "mélange",
+            "start": 4.032,
+            "end": 4.39255,
+            "confidence": 1,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "67966237917d475d21094a02"
+            }
+          },
+          {
+            "word": "parfaitement",
+            "start": 4.39255,
+            "end": 4.87329,
+            "confidence": 0.96,
+            "durationInFrames": 29,
+            "_id": {
+              "$oid": "67966237917d475d21094a03"
+            }
+          },
+          {
+            "word": "le",
+            "start": 4.87329,
+            "end": 5.03354,
+            "confidence": 1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a04"
+            }
+          },
+          {
+            "word": "sucré,",
+            "start": 5.03354,
+            "end": 5.57437,
+            "confidence": 1,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "67966237917d475d21094a05"
+            }
+          },
+          {
+            "word": "l'acide",
+            "start": 5.57437,
+            "end": 6.11521,
+            "confidence": 0.83,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "67966237917d475d21094a06"
+            }
+          }
+        ],
+        "text": "La cuisine thaïlandaise mélange parfaitement le sucré, l'acide",
+        "start": 3.03045,
+        "end": 6.11521,
+        "durationInFrames": 184,
+        "audioIndex": 1,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "thai street food",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67966237917d475d21094a07"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "asian cooking",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67966237917d475d21094a08"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "spicy food",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67966237917d475d21094a09"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a0b"
+              }
+            }
+          ],
+          "video": {
+            "id": "12595262",
+            "quality": null,
+            "file_type": "video/mp4",
+            "size": 9435469,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/29162754/12595262_1920_1080_25fps.mp4"
+          },
+          "image": {
+            "id": "29162754",
+            "link": "https://images.pexels.com/videos/29162754/asia-asian-asian-food-coconut-29162754.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67966299a73850b876774b74"
+          }
+        },
+        "_id": {
+          "$oid": "67966237917d475d210949fe"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "et",
+            "start": 6.11521,
+            "end": 6.235390000000001,
+            "confidence": 0.99,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "67966237917d475d21094a0d"
+            }
+          },
+          {
+            "word": "le",
+            "start": 6.235390000000001,
+            "end": 6.37561,
+            "confidence": 1,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d21094a0e"
+            }
+          },
+          {
+            "word": "piquant",
+            "start": 6.37561,
+            "end": 6.71614,
+            "confidence": 0.87,
+            "durationInFrames": 20,
+            "_id": {
+              "$oid": "67966237917d475d21094a0f"
+            }
+          },
+          {
+            "word": "dans",
+            "start": 6.71614,
+            "end": 6.85635,
+            "confidence": 0.9,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d21094a10"
+            }
+          },
+          {
+            "word": "des",
+            "start": 6.85635,
+            "end": 6.99657,
+            "confidence": 1,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d21094a11"
+            }
+          },
+          {
+            "word": "plats",
+            "start": 6.99657,
+            "end": 7.256970000000001,
+            "confidence": 0.9,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "67966237917d475d21094a12"
+            }
+          },
+          {
+            "word": "comme",
+            "start": 7.256970000000001,
+            "end": 7.41722,
+            "confidence": 0.95,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67966237917d475d21094a13"
+            }
+          },
+          {
+            "word": "le",
+            "start": 7.41722,
+            "end": 7.55743,
+            "confidence": 0.99,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67966237917d475d21094a14"
+            }
+          },
+          {
+            "word": "pad",
+            "start": 7.55743,
+            "end": 7.75774,
+            "confidence": 0.77,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67966237917d475d21094a15"
+            }
+          },
+          {
+            "word": "thai.",
+            "start": 7.75774,
+            "end": 7.9982,
+            "confidence": 0.49,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67966237917d475d21094a16"
+            }
+          }
+        ],
+        "text": "et le piquant dans des plats comme le pad thai.",
+        "start": 6.11521,
+        "end": 7.9982,
+        "durationInFrames": 111,
+        "audioIndex": 1,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "pad thai dish",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67966237917d475d21094a17"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "noodle stir fry",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67966237917d475d21094a18"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "asian noodles",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67966237917d475d21094a19"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "",
+              "_id": {
+                "$oid": "67966237917d475d21094a1b"
+              }
+            }
+          ],
+          "video": {
+            "id": "10119430",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 6008438,
+            "width": 1080,
+            "height": 1920,
+            "fps": 30,
+            "link": "https://videos.pexels.com/video-files/6645810/6645810-hd_1080_1920_30fps.mp4"
+          },
+          "image": {
+            "id": "6645810",
+            "link": "https://images.pexels.com/videos/6645810/asian-asian-cuisine-asian-food-bbq-6645810.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 1080,
+            "height": 1920
+          },
+          "_id": {
+            "$oid": "67966299a73850b876774b84"
+          }
+        },
+        "_id": {
+          "$oid": "67966237917d475d21094a0c"
+        }
+      }
+    ]
+  },
+  "createdAt": {
+    "$date": "2025-01-26T16:25:39.846Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-26T16:28:09.307Z"
+  },
+  "__v": 0,
+  "isNews": false,
+  "style": "Informative",
+  "title": "Trésors gustatifs uniques",
+  "costToGenerate": 0.10079
+}

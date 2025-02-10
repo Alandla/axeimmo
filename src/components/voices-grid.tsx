@@ -177,7 +177,6 @@ export function VoicesGridComponent() {
 
   return (
     <div className="space-y-4 mt-4">
-      <div>
       <div className="flex gap-4 items-center">
         <Input
           placeholder={t('search')}
@@ -281,7 +280,6 @@ export function VoicesGridComponent() {
             </Badge>
           ))}
         </div>
-      </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">

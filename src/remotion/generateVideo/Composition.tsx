@@ -9,11 +9,14 @@ import { Watermark } from './components/Watermark';
 import { SubtitlesDaniel } from './subtitles/daniel/subtitlesDaniel';
 import { SubtitlesModern } from './subtitles/modern/subtitlesModern';
 import { Voices } from './components/Audios';
+import { Transitions } from './components/Transitions';
 
 export const VideoGenerate = ({ data, showWatermark = true }: { data: any, showWatermark?: boolean }) => {
 	if (!data || !data.video.sequences.length || data.video.sequences.length === 0) {
       return <div>Loading...</div>;
     }
+
+	console.log(data.video.transitions)
 	
 	return (
 		<>
@@ -22,6 +25,7 @@ export const VideoGenerate = ({ data, showWatermark = true }: { data: any, showW
 			{ data.video.audio.music && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
 			{showWatermark && <Watermark />}
 			{ data.video.avatar ? <BackgroundWithAvatar sequences={data.video.sequences} avatar={data.video.avatar} duration={data.video.metadata.audio_duration} /> : <MediaBackground sequences={data.video.sequences} /> }
+			{ data.video.transitions && <Transitions sequences={data.video.sequences} transitions={data.video.transitions} /> }
 			{ data.video.subtitle.style.template === 'bold' && <SubtitlesBold subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
 			{ data.video.subtitle.style.template === 'simple' && <SubtitlesSimple subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
 			{ data.video.subtitle.style.template === 'background' && <SubtitlesBackground subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }

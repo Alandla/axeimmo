@@ -161,7 +161,7 @@
       "title-completed": "Export terminée !",
       "message-failed": "Une erreur est survenue lors de l'exportation de ta vidéo. Veuillez réessayer.",
       "retry-export": "Réessayer l'exportation",
-      "processing": "Quelques secondes à attendre pendant que nous traitons ton chef d'oeuvre...",
+      "processing": "Quelques secondes à attendre pendant que nous traitons ton chef d'œuvre...",
       "waiting-to-start": "En attente de démarrer l'exportation...",
       "download-video": "Télécharger la vidéo",
       "back-to-dashboard": "Retour au tableau de bord"
@@ -213,7 +213,36 @@
         "regeneration-needed": "Régénération audio nécessaire",
         "button-regenerate": "Regénérer l'audio",
         "button-delete": "Supprimer la séquence",
-        "add-sequence": "Ajouter une séquence"
+        "add-sequence": "Ajouter une séquence",
+        "add": "Ajouter",
+        "add-transition": "Ajouter une transition",
+        "edit": "Modifier la séquence"
+      },
+      "transition": {
+        "transition": "Transition",
+        "sound": "Son",
+        "delete": "Supprimer la transition",
+        "edit": "Modifier la transition",
+        "category": {
+          "film-burn": "Film brûlé",
+          "Burning paper": "Papier brûlé",
+          "click": "Click",
+          "Analog VHS": "VHS analogique",
+          "Flares": "Flamboyant",
+          "Dynamic Light": "Lumière dynamique",
+          "Burnt Film": "Film brûlé",
+          "Neon Glitch": "Glitch neon",
+          "Retro Slide": "Slide retro",
+          "Vintage Film": "Film vintage",
+          "X-Ray": "X-Ray",
+          "Signal": "Signal",
+          "Old Film": "Film ancien",
+          "Swoosh": "Swoosh",
+          "Glitch": "Glitch",
+          "Impact": "Impact",
+          "Friction": "Friction",
+          "Grunge": "Grunge"
+        }
       },
       "subtitle": {
         "title-presets": "Presets",
