@@ -309,7 +309,7 @@ export default function VideoEditor() {
       const audioIndex = video.video.sequences[sequenceIndex].audioIndex;
       const transcription = await waitForTranscription(transcriptionId);
 
-      //const audioUrl = "https://media.hoox.video/bce99061-dbd1-4232-95a2-8a6c6861b03a.mp3"
+      //const audioUrl = "https://media.hoox.video/843f1d10-4866-4a0b-954e-7de347d826ba.mp3"
       //const transcription = transcriptionMockup
 
       let updatedVideo = updateVideoTimings(video, audioIndex, audioUrl, transcription);

@@ -1,9 +1,9 @@
 {
     "metadata": {
-        "audio_duration": 4.545306,
+        "audio_duration": 8.777143,
         "number_of_distinct_channels": 1,
-        "billing_time": 4.545306,
-        "transcription_time": 5.286
+        "billing_time": 8.777143,
+        "transcription_time": 14.956
     },
     "transcription": {
         "languages": [
@@ -11,100 +11,218 @@
         ],
         "utterances": [
             {
-                "text": "Imaginez la voiture essence plus lente qu'une Porsche au prix d'une Tesla Model 3.",
+                "text": "Tu le sais,",
                 "language": "fr",
-                "start": 0.08009,
-                "end": 4.30503,
-                "confidence": 0.91,
+                "start": 0.06806,
+                "end": 0.46862000000000004,
+                "confidence": 0.93,
                 "channel": 0,
                 "words": [
                     {
-                        "word": "Imaginez",
-                        "start": 0.08009,
-                        "end": 0.50059,
-                        "confidence": 0.98
-                    },
-                    {
-                        "word": " la",
-                        "start": 0.50059,
-                        "end": 0.62073,
+                        "word": "Tu",
+                        "start": 0.06806,
+                        "end": 0.18822,
                         "confidence": 1
                     },
                     {
-                        "word": " voiture",
-                        "start": 0.64075,
-                        "end": 1.06124,
+                        "word": " le",
+                        "start": 0.18822,
+                        "end": 0.30839,
+                        "confidence": 0.88
+                    },
+                    {
+                        "word": " sais,",
+                        "start": 0.32842000000000005,
+                        "end": 0.46862000000000004,
+                        "confidence": 0.93
+                    }
+                ]
+            },
+            {
+                "text": "cette petite habitude qui peut sembler anodine,",
+                "language": "fr",
+                "start": 0.50867,
+                "end": 2.71177,
+                "confidence": 0.93,
+                "channel": 0,
+                "words": [
+                    {
+                        "word": " cette",
+                        "start": 0.50867,
+                        "end": 0.68893,
                         "confidence": 1
                     },
                     {
-                        "word": " essence",
-                        "start": 1.2014,
-                        "end": 1.58185,
-                        "confidence": 0.92
-                    },
-                    {
-                        "word": " plus",
-                        "start": 1.6219,
-                        "end": 1.76206,
+                        "word": " petite",
+                        "start": 0.70896,
+                        "end": 0.9693200000000001,
                         "confidence": 1
                     },
                     {
-                        "word": " lente",
-                        "start": 1.78208,
-                        "end": 2.10246,
+                        "word": " habitude",
+                        "start": 1.00938,
+                        "end": 1.45,
+                        "confidence": 1
+                    },
+                    {
+                        "word": " qui",
+                        "start": 1.47002,
+                        "end": 1.59019,
+                        "confidence": 1
+                    },
+                    {
+                        "word": " peut",
+                        "start": 1.61022,
+                        "end": 1.75042,
                         "confidence": 0.97
                     },
                     {
-                        "word": " qu'une",
-                        "start": 2.2226,
-                        "end": 2.42283,
-                        "confidence": 0.93
-                    },
-                    {
-                        "word": " Porsche",
-                        "start": 2.46288,
-                        "end": 2.84332,
-                        "confidence": 0.86
-                    },
-                    {
-                        "word": " au",
-                        "start": 2.88337,
-                        "end": 3.00351,
+                        "word": " sembler",
+                        "start": 1.79047,
+                        "end": 2.07087,
                         "confidence": 0.99
                     },
                     {
-                        "word": " prix",
-                        "start": 3.04356,
-                        "end": 3.20374,
-                        "confidence": 0.76
-                    },
+                        "word": " anodine,",
+                        "start": 2.17101,
+                        "end": 2.71177,
+                        "confidence": 1
+                    }
+                ]
+            },
+            {
+                "text": "mais pour autant qui,",
+                "language": "fr",
+                "start": 3.53292,
+                "end": 4.69455,
+                "confidence": 0.93,
+                "channel": 0,
+                "words": [
                     {
-                        "word": " d'une",
-                        "start": 3.22377,
-                        "end": 3.40398,
-                        "confidence": 0.96
-                    },
-                    {
-                        "word": " Tesla",
-                        "start": 3.44403,
-                        "end": 3.74438,
+                        "word": " mais",
+                        "start": 3.53292,
+                        "end": 3.77326,
                         "confidence": 0.95
                     },
                     {
-                        "word": " Model",
-                        "start": 3.80445,
-                        "end": 4.06475,
-                        "confidence": 0.98
+                        "word": " pour",
+                        "start": 3.95351,
+                        "end": 4.113729999999999,
+                        "confidence": 0.93
                     },
                     {
-                        "word": " 3.",
-                        "start": 4.12482,
-                        "end": 4.30503,
+                        "word": " autant",
+                        "start": 4.193849999999999,
+                        "end": 4.494269999999999,
+                        "confidence": 0.96
+                    },
+                    {
+                        "word": " qui,",
+                        "start": 4.5543499999999995,
+                        "end": 4.69455,
+                        "confidence": 0.97
+                    }
+                ]
+            },
+            {
+                "text": "sans qu'on s'en rende compte,",
+                "language": "fr",
+                "start": 4.91486,
+                "end": 6.0164,
+                "confidence": 0.93,
+                "channel": 0,
+                "words": [
+                    {
+                        "word": " sans",
+                        "start": 4.91486,
+                        "end": 5.07508,
+                        "confidence": 0.6
+                    },
+                    {
+                        "word": " qu'on",
+                        "start": 5.095109999999999,
+                        "end": 5.235309999999999,
+                        "confidence": 0.4
+                    },
+                    {
+                        "word": " s'en",
+                        "start": 5.295389999999999,
+                        "end": 5.415559999999999,
+                        "confidence": 0.5
+                    },
+                    {
+                        "word": " rende",
+                        "start": 5.475639999999999,
+                        "end": 5.6559,
+                        "confidence": 1
+                    },
+                    {
+                        "word": " compte,",
+                        "start": 5.715979999999999,
+                        "end": 6.0164,
+                        "confidence": 1
+                    }
+                ]
+            },
+            {
+                "text": "peut freiner une idée ou même une conversation.",
+                "language": "fr",
+                "start": 6.09652,
+                "end": 8.419780000000001,
+                "confidence": 0.93,
+                "channel": 0,
+                "words": [
+                    {
+                        "word": " peut",
+                        "start": 6.09652,
+                        "end": 6.2367099999999995,
+                        "confidence": 0.94
+                    },
+                    {
+                        "word": " freiner",
+                        "start": 6.27677,
+                        "end": 6.63727,
                         "confidence": 0.82
+                    },
+                    {
+                        "word": " une",
+                        "start": 6.69736,
+                        "end": 6.81753,
+                        "confidence": 1
+                    },
+                    {
+                        "word": " idée",
+                        "start": 6.85758,
+                        "end": 7.17803,
+                        "confidence": 1
+                    },
+                    {
+                        "word": " ou",
+                        "start": 7.278169999999999,
+                        "end": 7.398339999999999,
+                        "confidence": 0.87
+                    },
+                    {
+                        "word": " même",
+                        "start": 7.47845,
+                        "end": 7.658709999999999,
+                        "confidence": 1
+                    },
+                    {
+                        "word": " une",
+                        "start": 7.658709999999999,
+                        "end": 7.77888,
+                        "confidence": 0.91
+                    },
+                    {
+                        "word": " conversation.",
+                        "start": 7.81893,
+                        "end": 8.419780000000001,
+                        "confidence": 0.99
                     }
                 ]
             }
         ],
-        "full_transcript": "Imaginez la voiture essence plus lente qu'une Porsche au prix d'une Tesla Model 3."
+        "full_transcript": "Tu le sais, cette petite habitude qui peut sembler anodine, mais pour autant qui, sans qu'on s'en rende compte, peut freiner une idée ou même une conversation."
     }
 }
