@@ -29,6 +29,7 @@ interface SequencesProps {
     onDeleteTransition: (index: number) => void;
     onAddSequence: (afterIndex: number) => void;
     onAddTransition?: (afterIndex: number) => void;
+    onUpdateDuration: (index: number, newDuration: number) => void;
     playerRef?: React.RefObject<PlayerRef>;
 }
 
@@ -50,6 +51,7 @@ export default function Sequences({
     onDeleteTransition,
     onAddSequence,
     onAddTransition,
+    onUpdateDuration,
     playerRef,
 }: SequencesProps) {
     const t = useTranslations('edit.sequence');
@@ -84,12 +86,14 @@ export default function Sequences({
                             setSelectedIndex={handleSequenceClick}
                             setActiveTabMobile={setActiveTabMobile}
                             isMobile={isMobile}
+                            isLastSequenceWithAudioIndex={isLastSequenceWithAudioIndex(sequences, index)}
                             handleWordInputChange={handleWordInputChange}
                             handleWordAdd={handleWordAdd}
                             handleWordDelete={handleWordDelete}
                             onCutSequence={handleCutSequence}
                             onRegenerateAudio={onRegenerateAudio}
                             onDeleteSequence={onDeleteSequence}
+                            onUpdateDuration={onUpdateDuration}
                             canDelete={isSequenceDeletable(sequences, index)}
                             playerRef={playerRef}
                         />

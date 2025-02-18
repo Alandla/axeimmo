@@ -633,6 +633,83 @@ export default function VideoEditor() {
     setSelectedSequenceIndex(sequenceIndex + 1);
   };
 
+  const handleUpdateDuration = (sequenceIndex: number, newDuration: number) => {
+    if (!video?.video) return;
+
+    const newSequences = [...video.video.sequences];
+    const sequence = newSequences[sequenceIndex];
+    const newEnd = sequence.start + newDuration;
+    const timeDiff = newEnd - sequence.end;
+
+    // Mettre à jour le end de la séquence
+    sequence.end = newEnd;
+
+    // Mettre à jour le end et la durationInFrames du dernier mot
+    const lastWord = sequence.words[sequence.words.length - 1];
+    const oldWordDurationInFrames = lastWord.durationInFrames;
+    lastWord.end = newEnd;
+    lastWord.durationInFrames = Math.round((lastWord.end - lastWord.start) * 60);
+    
+    // Calculer la différence de durationInFrames
+    const durationInFramesDiff = lastWord.durationInFrames - oldWordDurationInFrames;
+    
+    // Mettre à jour la durationInFrames de la séquence
+    sequence.durationInFrames = (sequence.durationInFrames || 0) + durationInFramesDiff;
+
+    // Mettre à jour toutes les séquences suivantes
+    for (let i = sequenceIndex + 1; i < newSequences.length; i++) {
+        const currentSequence = newSequences[i];
+        
+        // Mettre à jour start et end de la séquence
+        currentSequence.start += timeDiff;
+        currentSequence.end += timeDiff;
+        
+        // Mettre à jour start et end de tous les mots
+        currentSequence.words = currentSequence.words.map(word => ({
+            ...word,
+            start: word.start + timeDiff,
+            end: word.end + timeDiff
+        }));
+    }
+
+    let updatedVoices;
+    // Mettre à jour la voix correspondante
+    if (video.video.audio?.voices) {
+        updatedVoices = [...video.video.audio.voices];
+        const voiceIndex = updatedVoices.findIndex(voice => voice.index === sequence.audioIndex);
+        
+        if (voiceIndex !== -1) {
+            const voice = updatedVoices[voiceIndex];
+            voice.end += timeDiff;
+            voice.durationInFrames = voice.durationInFrames + durationInFramesDiff;
+
+            // Mettre à jour les timings des voix suivantes
+            for (let i = voiceIndex + 1; i < updatedVoices.length; i++) {
+                updatedVoices[i].start += timeDiff;
+                updatedVoices[i].end += timeDiff;
+            }
+        }
+    }
+
+    updateVideo({
+      ...video,
+      video: {
+          ...video.video,
+          sequences: newSequences,
+          ...(updatedVoices && {
+              audio: {
+                  ...video.video.audio,
+                  voices: updatedVoices
+              }
+          }),
+          metadata: {
+              ...video.video.metadata,
+              audio_duration: newSequences[newSequences.length - 1].end
+          }
+      }
+    });
+  };
+
   const handleUpdateTransition = (transitionIndex: number, newTransition: ITransition) => {
     if (video && video.video && video.video.transitions) {
       const newTransitions = [...video.video.transitions];
@@ -819,6 +896,7 @@ export default function VideoEditor() {
                         onDeleteTransition={handleDeleteTransition}
                         onAddSequence={handleAddSequence}
                         onAddTransition={handleAddTransition}
+                        onUpdateDuration={handleUpdateDuration}
                         playerRef={playerRef}
                       />
                     </TabsContent>
@@ -858,7 +936,7 @@ export default function VideoEditor() {
                       transition={video.video.transitions[selectedTransitionIndex]} 
                       transitionIndex={selectedTransitionIndex} 
                       spaceId={video.spaceId}
-                      updateTransition={handleUpdateTransition}
+                      updateTransition={handleDeleteTransition}
                     />
                   )}
                 </ScrollArea>
@@ -918,6 +996,7 @@ export default function VideoEditor() {
                   onDeleteTransition={handleDeleteTransition}
                   onAddSequence={handleAddSequence}
                   onAddTransition={handleAddTransition}
+                  onUpdateDuration={handleUpdateDuration}
                   playerRef={playerRef}
                 />
               </ScrollArea>
@@ -947,7 +1026,7 @@ export default function VideoEditor() {
                     transition={video.video.transitions[selectedTransitionIndex]} 
                     transitionIndex={selectedTransitionIndex} 
                     spaceId={video.spaceId}
-                    updateTransition={handleUpdateTransition}
+                    updateTransition={handleDeleteTransition}
                   />
                 )}
               </ScrollArea>

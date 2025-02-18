@@ -59,6 +59,7 @@ export default function VideoPreview({ playerRef, video, isMobile, showWatermark
                         data: video,
                         showWatermark
                     }}
+                    numberOfSharedAudioTags={12}
                     controls
                     className="rounded-lg"
                     style={{

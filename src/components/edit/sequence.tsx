@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import React, { useRef, useState, useCallback } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,9 +30,11 @@ interface SequenceProps {
   onCutSequence: (cutIndex: number) => void;
   setActiveTabMobile?: (tab: string) => void;
   isMobile?: boolean;
+  isLastSequenceWithAudioIndex: boolean;
   needsAudioRegeneration?: boolean;
   onRegenerateAudio?: (index: number) => void;
   onDeleteSequence?: (index: number) => void;
+  onUpdateDuration?: (index: number, newDuration: number) => void;
   playerRef?: React.RefObject<PlayerRef>;
   canDelete: boolean;
 }
@@ -47,8 +50,10 @@ export default function Sequence({
   onCutSequence,
   setActiveTabMobile,
   isMobile = false,
+  isLastSequenceWithAudioIndex,
   onRegenerateAudio = () => {},
   onDeleteSequence = () => {},
+  onUpdateDuration = () => {},
   playerRef,
   canDelete,
 }: SequenceProps) {
@@ -57,6 +62,7 @@ export default function Sequence({
     const [isEditing, setIsEditing] = useState(false);
     const [editingWordIndex, setEditingWordIndex] = useState<number | null>(null);
     const t = useTranslations('edit.sequence')
+    const [duration, setDuration] = useState(sequence.end - sequence.start);
 
     const focusWord = useCallback((wordIndex: number) => {
         setTimeout(() => {
@@ -138,6 +144,28 @@ export default function Sequence({
         };
     }, [handleClickOutside]);
 
+    const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setDuration(parseFloat(value) || 0);
+    };
+
+    const handleDurationBlur = () => {
+        const lastWord = sequence.words[sequence.words.length - 1];
+        const minDuration = lastWord.start - sequence.start;
+        
+        let finalDuration = Math.max(duration, minDuration);
+        finalDuration = parseFloat(finalDuration.toFixed(2));
+        
+        setDuration(finalDuration);
+        onUpdateDuration(index, finalDuration);
+    };
+
+    const handleDurationKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.currentTarget.blur();
+        }
+    };
+
     return (
         <>
         <motion.div
@@ -179,10 +207,58 @@ export default function Sequence({
                 {/* Contenu à droite de l'image */}
                 <div className="flex-1 sm:space-y-2 ml-4">
                     <div className="flex items-center justify-between gap-2">
-                        <Badge variant={selectedIndex === index ? "default" : "outline"}>
-                            <Clock className="w-3 h-3 mr-1" />
-                            {((sequence.end - sequence.start)).toFixed(2)}
-                        </Badge>
+                        {isLastSequenceWithAudioIndex ? (
+                            <DropdownMenu modal={false}>
+                                <DropdownMenuTrigger asChild>
+                                    <Button 
+                                        variant="ghost"
+                                        className={cn(
+                                            "inline-flex items-center rounded-md border px-1.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 h-auto",
+                                        )}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                        }}
+                                    >
+                                        <Clock className="!w-3 !h-3" />
+                                        {duration.toFixed(2)}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent 
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="w-[--radix-dropdown-menu-trigger-width] max-w-32 rounded-lg p-2"
+                                    side="bottom"
+                                    align="start"
+                                    sideOffset={5}
+                                >
+                                    <Input
+                                        type="number"
+                                        value={duration}
+                                        step={0.1}
+                                        min={sequence.words[sequence.words.length - 1].start - sequence.start}
+                                        onChange={handleDurationChange}
+                                        onKeyDown={handleDurationKeyDown}
+                                        onBlur={handleDurationBlur}
+                                        className="w-full border-none focus:ring-0 text-sm"
+                                        onClick={(e) => e.stopPropagation()}
+                                        autoFocus
+                                    />
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        ) : (
+                            <Button 
+                                variant="ghost"
+                                className={cn(
+                                    "inline-flex items-center rounded-md border px-1.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 h-auto opacity-50 cursor-not-allowed"
+                                )}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                }}
+                                disabled={true}
+                            >
+                                <Clock className="!w-3 !h-3" />
+                                {duration.toFixed(2)}
+                            </Button>
+                        )}
 
                         <div className="flex items-center gap-2">
                             {sequence.needsAudioRegeneration && (
