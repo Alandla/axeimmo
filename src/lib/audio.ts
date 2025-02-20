@@ -14,7 +14,7 @@ export async function regenerateAudioForSequence(
 ): Promise<RegenerateAudioResult> {
   const audioIndex = video?.video?.sequences[sequenceIndex].audioIndex;
   const relatedSequences = video?.video?.sequences.filter(seq => seq.audioIndex === audioIndex);
-  console.log("relatedSequences", relatedSequences)
+  const audio = video?.video?.audio?.voices.find(voice => voice.index === audioIndex);
   
   if (!relatedSequences || audioIndex === undefined) {
     throw new Error('No related sequences found');
@@ -27,7 +27,7 @@ export async function regenerateAudioForSequence(
 
   const res = await basicApiCall('/audio/generate', {
     text: completeText,
-    voiceId: video?.video?.audio?.voices[audioIndex].voiceId,
+    voiceId: audio?.voiceId,
     spaceId: video?.spaceId
   });
 
