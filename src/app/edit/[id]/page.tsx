@@ -936,7 +936,7 @@ export default function VideoEditor() {
                       transition={video.video.transitions[selectedTransitionIndex]} 
                       transitionIndex={selectedTransitionIndex} 
                       spaceId={video.spaceId}
-                      updateTransition={handleDeleteTransition}
+                      updateTransition={handleUpdateTransition}
                     />
                   )}
                 </ScrollArea>
@@ -1026,7 +1026,7 @@ export default function VideoEditor() {
                     transition={video.video.transitions[selectedTransitionIndex]} 
                     transitionIndex={selectedTransitionIndex} 
                     spaceId={video.spaceId}
-                    updateTransition={handleDeleteTransition}
+                    updateTransition={handleUpdateTransition}
                   />
                 )}
               </ScrollArea>
