@@ -513,8 +513,10 @@ export default function VideoEditor() {
     let lastVoiceIndex = 0;
     if (video.video.audio?.voices) {
       const newVoices = [...video.video.audio.voices];
-      const previousVoice = newVoices[previousSequence.audioIndex];
+      const previousVoice = newVoices.find(voice => voice.index === previousSequence.audioIndex);
       lastVoiceIndex = Math.max(...newVoices.map(voice => voice.index)) + 1;
+
+      if (!previousVoice) return;
 
       // Créer la nouvelle voix
       const newVoice = {
