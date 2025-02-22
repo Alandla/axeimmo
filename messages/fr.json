@@ -1003,6 +1003,8 @@
     "assets": {
       "title": "Médiathèque",
       "more-options": "Plus d'options",
+      "no-assets": "Aucun média",
+      "no-assets-description": "Vous n'avez pas encore de média.",
       "dialog": {
         "title": "Détails du média",
         "name": "Nom",
