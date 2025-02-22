@@ -5,13 +5,17 @@ const client = new Groq({
 });
 
 export const generateKeywords = async (sequences: any) => {
-    try {
-        const completion = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-                {
-                    role: "user", 
-                    content: `You are an experienced video editor tasked with generating keywords for illustrating sequences in a video script. These keywords will be used to search for stock footage or web images to match the content of each sequence. Your goal is to create descriptive, searchable keywords that will yield appropriate visual results.
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+        try {
+            const completion = await client.chat.completions.create({
+                model: "llama-3.3-70b-versatile",
+                messages: [
+                    {
+                        role: "user", 
+                        content: `You are an experienced video editor tasked with generating keywords for illustrating sequences in a video script. These keywords will be used to search for stock footage or web images to match the content of each sequence. Your goal is to create descriptive, searchable keywords that will yield appropriate visual results.
 
 Here is the video script you'll be working with:
 
@@ -97,30 +101,41 @@ Your final output should be a valid JSON array, structured as follows:
 
 Remember to focus on creating keywords that will yield appropriate stock video results for the majority of searches. Only use the "web" search method for specific proper names or trademarks that are unlikely to be found in a stock library.
 
-Now, please proceed with analyzing the video script and generating keywords for each sequence.`
-                }
-            ],
-            temperature: 1,
-            stream: false,
-            response_format: { type: "json_object" }
-        });
+Now, please proceed with analyzing the video script and generating keywords for each sequence.
 
-        if (!completion.choices[0].message.content) {
-            throw new Error("No response from Groq");
+IMPORTANT: Make sure to generate valid JSON with proper syntax. Double check all brackets and quotes.`
+                    }
+                ],
+                temperature: 1,
+                stream: false,
+                response_format: { type: "json_object" }
+            });
+
+            if (!completion.choices[0].message.content) {
+                throw new Error("No response from Groq");
+            }
+
+            console.log("Completion", completion);
+
+            const jsonResponse = JSON.parse(completion.choices[0].message.content || "");
+
+            const data = {
+                keywords: jsonResponse.sequences,
+                cost: 0
+            }
+
+            return data;
+        } catch (error: any) {
+            attempts++;
+            console.error(`Attempt ${attempts} failed:`, error);
+
+            if (attempts === maxAttempts) {
+                console.error("Maximum attempts reached. Returning null.");
+                return null;
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
         }
-
-        console.log("Completion", completion);
-
-        const jsonResponse = JSON.parse(completion.choices[0].message.content || "");
-
-        const data = {
-            keywords: jsonResponse.sequences,
-            cost: 0
-        }
-
-        return data;
-    } catch (error) {
-        console.error(error)
-        return null
     }
+    return null;
 }
