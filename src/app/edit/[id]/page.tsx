@@ -63,6 +63,7 @@ export default function VideoEditor() {
   const [modalPricingTitle, setModalPricingTitle] = useState('')
   const [modalPricingDescription, setModalPricingDescription] = useState('')
   const [isDirty, setIsDirty] = useState(false)
+  const [hasExistingReview, setHasExistingReview] = useState(false)
   
   const updateVideo = (newVideoData: any) => {
     setVideo(newVideoData)
@@ -236,7 +237,7 @@ export default function VideoEditor() {
   }, [video, isDirty])
 
   useEffect(() => {
-    const fetchVideo = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
         const response = await basicApiGetCall<IVideo>(`/video/${id}`);
@@ -254,22 +255,24 @@ export default function VideoEditor() {
 
         const spaceResponse = await basicApiGetCall<ISpace>(`/space/${response.spaceId}`);
         setShowWatermark(spaceResponse.plan.name === PlanName.FREE);
-        setSubtitleStyles(spaceResponse.subtitleStyle)
+        setSubtitleStyles(spaceResponse.subtitleStyle);
 
-        setVideo(response)
+        // Vérifier si une review existe déjà
+        const reviewResponse = await basicApiGetCall(`/reviews/${id}`);
+        setHasExistingReview(!!reviewResponse);
 
       } catch (error) {
-        console.error(error)
+        console.error(error);
         toast({
           title: t('error.title'),
           description: t('error.description-loading'),
           variant: 'destructive'
-        })
+        });
       }
     };
 
     if (id) {
-      fetchVideo();
+      fetchData();
     }
   }, [id]);
 
@@ -948,7 +951,7 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} />}
+              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} hasExistingReview={hasExistingReview} />}
           </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -960,7 +963,7 @@ export default function VideoEditor() {
           ref={previewRef}
           className={`sticky top-[57px] z-20 transition-all duration-300 h-96`}
         >
-          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} />}
+          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} hasExistingReview={hasExistingReview} />}
         </div>
         <Card className="mt-4">
           <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>

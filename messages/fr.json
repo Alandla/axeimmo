@@ -191,6 +191,17 @@
       "audio-tabs-title": "Audio",
       "modal-pricing-not-enough-credits": "Pas assez de crédits",
       "modal-pricing-description-not-enough-credits": "Tu n'as pas assez de crédits pour exporter ta vidéo, passe à un plan supérieur pour exporter ta vidéo.",
+      "review": {
+        "title": "Comment avez-vous trouvé la vidéo ?",
+        "details-title": "Qu'est ce qui ne vous a plu ?",
+        "placeholder": "Donner nous plus de détails...",
+        "toast": {
+          "thank-you": "Merci !",
+          "feedback-received": "Votre avis a bien été pris en compte.",
+          "error": "Erreur",
+          "error-message": "Une erreur est survenue lors de l'envoi de votre avis."
+        }
+      },
       "toast": {
         "title-error": "Erreur",
         "title-saving": "Sauvegarde de la vidéo...",

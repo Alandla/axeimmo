@@ -1,13 +1,17 @@
 import { VideoGenerate } from "@/src/remotion/generateVideo/Composition";
 import { IVideo } from "@/src/types/video";
 import { Player, PlayerRef } from "@remotion/player";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { preloadAudio, preloadImage, preloadVideo } from "@remotion/preload";
 import { AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ReviewFloating } from "@/src/components/ReviewFloating";
 
-export default function VideoPreview({ playerRef, video, isMobile, showWatermark }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null, isMobile: boolean, showWatermark: boolean }) {
-    const t = useTranslations('edit')
+export default function VideoPreview({ playerRef, video, isMobile, showWatermark, hasExistingReview }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null, isMobile: boolean, showWatermark: boolean, hasExistingReview: boolean }) {
+    const t = useTranslations('edit');
+    const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
+    const [showReview, setShowReview] = useState(false);
+    const [hasInteractedWithReview, setHasInteractedWithReview] = useState(false);
 
     useEffect(() => {
         if (!video?.video?.sequences) return;
@@ -48,6 +52,34 @@ export default function VideoPreview({ playerRef, video, isMobile, showWatermark
         });
     }, []);
 
+    useEffect(() => {
+        const { current } = playerRef;
+        if (!current) return;
+
+        const playListener = () => {
+            setHasStartedPlaying(true);
+        };
+
+        const pauseListener = () => {
+            if (hasStartedPlaying && !hasInteractedWithReview && !hasExistingReview) {
+                setShowReview(true);
+            }
+        };
+
+        current.addEventListener('play', playListener);
+        current.addEventListener('pause', pauseListener);
+
+        return () => {
+            current.removeEventListener('play', playListener);
+            current.removeEventListener('pause', pauseListener);
+        };
+    }, [playerRef, hasStartedPlaying, hasInteractedWithReview, hasExistingReview]);
+
+    const handleCloseReview = () => {
+        setShowReview(false);
+        setHasInteractedWithReview(true);
+    };
+
     return (
         <div className={`h-full flex flex-col items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
             {video?.video?.avatar && (
@@ -80,8 +112,16 @@ export default function VideoPreview({ playerRef, video, isMobile, showWatermark
                         objectFit: 'contain',
                         maxHeight: '100%',
                     }}
+                    autoPlay={false}
+                    renderLoading={() => null}
                 />
             </div>
+            {showReview && video?.id && !hasExistingReview && (
+                <ReviewFloating
+                    videoId={video.id}
+                    onClose={handleCloseReview}
+                />
+            )}
         </div>
     )
 }

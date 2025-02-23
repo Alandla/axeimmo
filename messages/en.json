@@ -182,6 +182,17 @@
       "audio-tabs-title": "Audio",
       "modal-pricing-not-enough-credits": "Not enough credits",
       "modal-pricing-description-not-enough-credits": "You don't have enough credits to export your video, upgrade to a higher plan to export your video.",
+      "review": {
+        "title": "How did you find the video ?",
+        "details-title": "What didn't you like ?",
+        "placeholder": "Give us more details...",
+        "toast": {
+          "thank-you": "Thank you !",
+          "feedback-received": "Your feedback has been taken into account.",
+          "error": "Error",
+          "error-message": "An error occurred while sending your feedback."
+        }
+      },
       "toast": {
         "title-error": "Error",
         "title-saving": "Saving the video...",
