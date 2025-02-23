@@ -15,8 +15,6 @@ export const VideoGenerate = ({ data, showWatermark = true }: { data: any, showW
 	if (!data || !data.video.sequences.length || data.video.sequences.length === 0) {
       return <div>Loading...</div>;
     }
-
-	console.log(data.video.transitions)
 	
 	return (
 		<>
