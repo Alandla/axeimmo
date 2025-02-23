@@ -32,13 +32,12 @@ export async function POST(req: Request) {
   try {
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    console.log("POST /api/stripe/createCheckout by user: ", session?.user?.id);
+
+    let user;
+    if (session && session.user && session.user.id) {
+      user = await getUserById(session.user.id);
     }
-
-    console.log("POST /api/stripe/createCheckout by user: ", session.user.id);
-
-    const user = await getUserById(session.user.id);
 
     const { priceId, mode, couponId, successUrl, cancelUrl, spaceId } = params;
 
@@ -54,8 +53,6 @@ export async function POST(req: Request) {
       // If user is logged in, this will automatically prefill Checkout data like email and/or credit card for faster checkout
       user,
     });
-
-    console.log("URL de session Stripe:", stripeSessionURL);
 
     if (!stripeSessionURL) {
       console.error("L'URL de session Stripe est undefined");
