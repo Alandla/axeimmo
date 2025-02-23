@@ -5,6 +5,8 @@ import { AvatarLook } from "../types/avatar";
 import { createAudioTTS } from "../lib/elevenlabs";
 import { uploadToS3Audio } from "../lib/r2";
 import { createTranscription, getTranscription } from "../lib/gladia";
+import { transitions, sounds } from "../config/transitions.config";
+import { ITransition, ISequence } from "../types/video";
 
 import transcriptionMock from "../test/mockup/transcriptionComplete.json";
 import keywordsMock from "../test/mockup/keywordsResponse.json";
@@ -15,7 +17,7 @@ import { createLightTranscription, ISentence, splitSentences } from "../lib/tran
 import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
 import { mediaToMediaSpace, searchMediaForSequence } from "../service/media.service";
-import { IMedia, ISequence, IVideo } from "../types/video";
+import { IMedia, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
 import { generateBrollDisplay, generateStartData, matchMediaToSequences } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
@@ -527,6 +529,42 @@ export const generateVideoTask = task({
       videoMusic = matchingMusics[Math.floor(Math.random() * matchingMusics.length)]
     }
 
+    // Ajouter les transitions automatiques
+    const burntFilmTransitions = transitions.filter((t: ITransition) => t.category === "Burnt Film");
+    const transitionSoundIndexes = [14, 15, 18, 19, 27, 31, 47];
+    const transitionSounds = sounds.filter((_: any, index: number) => transitionSoundIndexes.includes(index));
+
+    const lastSequencesOfAudio = new Map<number, number>();
+    sequences.forEach((seq: ISequence, index: number) => {
+      if (seq.audioIndex !== undefined) {
+        lastSequencesOfAudio.set(seq.audioIndex, index);
+      }
+    });
+
+    // Delete last element because we don't want to add a transition at the end of the video
+    const maxAudioIndex = Math.max(...Array.from(lastSequencesOfAudio.keys()));
+    lastSequencesOfAudio.delete(maxAudioIndex);
+
+    // Créer les transitions
+    const autoTransitions = Array.from(lastSequencesOfAudio.entries()).map(([_, sequenceIndex]) => {
+      const randomTransition = burntFilmTransitions[Math.floor(Math.random() * burntFilmTransitions.length)];
+      const randomSound = transitionSounds[Math.floor(Math.random() * transitionSounds.length)];
+
+      return {
+        indexSequenceBefore: sequenceIndex,
+        durationInFrames: randomTransition.durationInFrames || 0,
+        video: randomTransition.video,
+        thumbnail: randomTransition.thumbnail,
+        sound: randomSound.url,
+        volume: 0.15,
+        fullAt: randomTransition.fullAt || 0,
+        category: randomTransition.category,
+        mode: randomTransition.mode
+      };
+    });
+
+    logger.info('Auto transitions', { autoTransitions })
+
     newVideo = {
       ...newVideo,
       costToGenerate: cost + ctx.run.baseCostInCents,
@@ -544,6 +582,7 @@ export const generateVideoTask = task({
             genre: videoMusic.genre
           } : undefined
         },
+        transitions: autoTransitions,
         thumbnail: "",
         metadata: videoMetadata,
         sequences,
@@ -572,7 +611,7 @@ export const generateVideoTask = task({
         }
       }
     }
-    
+
     const thumbnail = await generateThumbnail(newVideo);
 
     logger.info('Thumbnail URL', { thumbnail })

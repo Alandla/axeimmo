@@ -28,6 +28,15 @@ export default function VideoPreview({ playerRef, video, isMobile, showWatermark
           preloadVideo(video.video.avatar.previewUrl);
         }
 
+        if (video.video.transitions) {
+            video.video.transitions.forEach(transition => {
+                preloadVideo(transition.video);
+                if (transition.sound) {
+                    preloadAudio(transition.sound);
+                }
+            });
+        }
+
         video.video.sequences.forEach(sequence => {
             if (sequence.media) {
                 if (sequence.media.type === 'video' && sequence.media.video?.link) {

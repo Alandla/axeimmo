@@ -810,7 +810,7 @@ export const sounds = [
         name: "Fast Swipe",
         url: "https://assets.hoox.video/Fast%20Swipe.wav",
         category: "Swoosh",
-        soundPeakAt: 15
+        soundPeakAt: 5
     },
     {
         name: "Fright",
@@ -828,13 +828,13 @@ export const sounds = [
         name: "Hard Swipe",
         url: "https://assets.hoox.video/Hard%20Swipe.wav",
         category: "Swoosh",
-        soundPeakAt: 15
+        soundPeakAt: 9
     },
     {
         name: "Hard",
         url: "https://assets.hoox.video/Hard.wav",
         category: "Swoosh",
-        soundPeakAt: 15
+        soundPeakAt: 5
     },
     {
         name: "Hole Loop",
@@ -882,7 +882,7 @@ export const sounds = [
         name: "Right",
         url: "https://assets.hoox.video/Right.wav",
         category: "Swoosh",
-        soundPeakAt: 15
+        soundPeakAt: 4
     },
     {
         name: "Rise",
@@ -906,7 +906,7 @@ export const sounds = [
         name: "Soft Wipe",
         url: "https://assets.hoox.video/Soft%20Wipe.wav",
         category: "Swoosh",
-        soundPeakAt: 15
+        soundPeakAt: 8
     },
     {
         name: "Swipe",
@@ -1002,7 +1002,7 @@ export const sounds = [
         name: "Impact 1",
         url: "https://assets.hoox.video/11_Impact.wav",
         category: "Impact",
-        soundPeakAt: 20
+        soundPeakAt: 23
     },
     {
         name: "Impact 2",
