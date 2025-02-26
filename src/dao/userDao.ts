@@ -98,7 +98,7 @@ export const addDefaultDataToUser = async (userId: string) => {
       user.createdAt = new Date();
       user.updatedAt = new Date();
       user.options = {
-        lang: "fr",
+        lang: "en",
       };
       await user.save();
     });

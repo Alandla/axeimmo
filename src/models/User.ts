@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
     options: {
       lang: {
         type: String,
-        default: "fr",
+        default: "en",
         validate: {
           validator: (v: string) => ["en", "fr"].includes(v),
           message: "Language must be either 'en' or 'fr'",
