@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         const data = new StreamData();
         
         const result = await streamText({
-            model: anthropic('claude-3-5-sonnet-20241022'),
+            model: anthropic('claude-3-7-sonnet-20250219'),
             prompt:
                 "Generate a script for a video, depending on the subject of the video." +
                 "" + 
