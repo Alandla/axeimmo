@@ -2,10 +2,10 @@ import { PlanName } from "../types/enums";
 import { Plan } from "../types/plan";
 
 export const discount = {
-    active: true,
-    mode: "all", // "year" or "month" or "all"
-    reduction: 0.7,
-    couponId: process.env.NODE_ENV === "development" ? "U4LfTMD1": "lwHMUSmY"
+  active: true,
+  mode: "all", // "year" or "month" or "all"
+  reduction: 0.8,
+  couponId: process.env.NODE_ENV === "development" ? "1prfCTD9": "LFuOJEsa"
 }
 
 export const plans: Plan[] = [

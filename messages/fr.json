@@ -123,8 +123,8 @@
       "need-custom-plan": "Besoin d'un plan personnalisé ? Contactez-nous pour une solution sur mesure.",
       "contact-sales": "Contactez-nous",
       "discount": {
-        "title": "Offre Bêta Test",
-        "description": "Profitez de notre tarif exclusif pendant la phase bêta.",
+        "title": "Offre de lancement",
+        "description": "Offre limitée - 20% de réduction sur tous les plans",
         "days": "jours",
         "hours": "heures",
         "minutes": "mins"
