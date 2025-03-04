@@ -85,7 +85,7 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration }: { sequence
                                     width: '100%',
                                     height: `${backgroundHeight}%`,
                                     objectFit: 'cover',
-                                    objectPosition: `${avatar.settings?.position ? avatar.settings?.position : 50}% ${100 - 80}%`,
+                                    objectPosition: `${avatar.settings?.position ? avatar.settings?.position : 50}% ${avatar.settings?.verticalPosition ? avatar.settings.verticalPosition : 20}%`,
                                     position: 'absolute',
                                     bottom: 0,
                                 }}
@@ -100,7 +100,7 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration }: { sequence
                                         width: '100%',
                                         height: `${backgroundHeight}%`,
                                         objectFit: 'cover',
-                                        objectPosition: `${avatar.settings?.position ? avatar.settings?.position : 50}% ${100 - 80}%`,
+                                        objectPosition: `${avatar.settings?.position ? avatar.settings?.position : 50}% ${avatar.settings?.verticalPosition ? avatar.settings.verticalPosition : 20}%`,
                                         position: 'absolute',
                                         bottom: 0,
                                     }}

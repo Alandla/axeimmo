@@ -3119,7 +3119,11 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC', 'indoor', 'fitness', 'professional'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/f36c72625d3246e49cb9896d3a5dd936/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/f36c72625d3246e49cb9896d3a5dd936/full/2.2/preview_video_target.mp4'
+                previewUrl: 'https://assets.hoox.video/kim-gym-avatar.mp4',
+                settings: {
+                    position: 50,
+                    verticalPosition: 30
+                }
             }
         ]
     },

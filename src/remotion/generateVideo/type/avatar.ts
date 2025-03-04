@@ -7,6 +7,7 @@ export type AvatarLook = {
     previewUrl: string
 	videoUrl?: string
 	settings?: {
-		position: number
+		position: number  // Position horizontale (en pourcentage)
+		verticalPosition?: number  // Position verticale (en pourcentage)
 	}
 }

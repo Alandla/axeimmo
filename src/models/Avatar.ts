@@ -40,6 +40,7 @@ const avatarSchema = new mongoose.Schema({
         format: { type: String, enum: ['vertical', 'horizontal'] },
         settings: {
           position: Number,
+          verticalPosition: Number,
         },
       },
     ],

@@ -93,7 +93,8 @@ const videoSchema = new mongoose.Schema({
           enum: ['vertical', 'horizontal']
         },
         settings: {
-          position: Number
+          position: Number,
+          verticalPosition: Number,
         }
       }
     },
