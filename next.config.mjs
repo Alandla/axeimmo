@@ -12,6 +12,12 @@ const nextConfig = {
       'media.hoox.video'
     ],
   },
+  // Configuration pour supprimer les console.log en production
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
 };
  
 export default withNextIntl(nextConfig);
