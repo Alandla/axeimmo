@@ -5,5 +5,6 @@ declare module 'next-auth' {
     options?: {
         lang?: string
     }
+    checkAffiliate?: boolean
   }
 }

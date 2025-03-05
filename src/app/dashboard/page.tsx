@@ -13,6 +13,7 @@ import Link from "next/link"
 import { useTranslations } from "next-intl";
 import { Sparkles, VideoOff } from "lucide-react"
 import { Button } from "@/src/components/ui/button";
+import AffiliateTracker from "@/src/lib/referral";
 
 interface User {
   id: string;
@@ -81,6 +82,7 @@ export default function Dashboard() {
 
   return (
     <>
+      <AffiliateTracker />
       <ModalConfirmDelete isOpen={isModalConfirmDeleteOpen} setIsOpen={setIsModalConfirmDeleteOpen} handleDeleteVideo={handleDeleteVideo} />
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
         {isLoading ? (

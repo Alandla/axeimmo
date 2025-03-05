@@ -8,4 +8,5 @@ export interface IUser {
     lang: string;
   };
   spaces: string[];
+  checkAffiliate?: boolean;
 }

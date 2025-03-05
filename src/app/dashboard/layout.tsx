@@ -6,7 +6,6 @@ import {
   SidebarTrigger,
 } from "@/src/components/ui/sidebar"
 import { TooltipProvider } from "@/src/components/ui/tooltip"
-import { useSession } from "next-auth/react"
 import { BreadcrumbDashboard } from "@/src/components/breadcrumb-dashboard";
 import { auth } from "@/src/lib/auth"
 import { redirect } from "next/navigation"

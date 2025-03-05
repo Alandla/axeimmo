@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { getLocale } from "next-intl/server";
 import ClientLayout from "../components/layout-client";
+import ToltScript from "../components/ToltScript";
 
 export const viewport = {
   // Will use the primary color of your theme to show a nice theme color in the URL bar of supported browsers
@@ -34,6 +35,9 @@ export default async function RootLayout({ children }: Readonly<{children: React
 
   return (
     <html lang={locale} data-theme={config.colors.theme} >
+      <head>
+        <ToltScript />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

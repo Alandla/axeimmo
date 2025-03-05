@@ -33,6 +33,8 @@ export default function PricingPage() {
         const priceId = isAnnual ? plan.priceId.annual : plan.priceId.month;
         const price = priceId.euros;
         
+        const toltReferral = typeof window !== 'undefined' && window.tolt_referral ? window.tolt_referral : undefined;
+        
         const url: string = await basicApiCall('/stripe/createCheckout', {
           priceId: price,
           spaceId: activeSpace?.id,
@@ -40,6 +42,7 @@ export default function PricingPage() {
           couponId: discount.active ? discount.couponId : undefined,
           successUrl: window.location.href,
           cancelUrl: window.location.href,
+          toltReferral: toltReferral, // Ajouter le tolt_referral à la requête
         })
 
         window.location.href = url;

@@ -113,7 +113,7 @@ export default function Page() {
         
         {/* Footer */}
         <div className="flex justify-between text-sm text-gray-500 w-full">
-          <p>{tFooter('rights')}</p>
+          <p>{tFooter('rights').replace('2024', new Date().getFullYear().toString())}</p>
           <div>
             <Link href="/privacy-policy" className="hover:underline">{tFooter('privacy')}</Link>
             <span className="mx-2">|</span>

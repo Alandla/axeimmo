@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       user = await getUserById(session.user.id);
     }
 
-    const { priceId, mode, couponId, successUrl, cancelUrl, spaceId } = params;
+    const { priceId, mode, couponId, successUrl, cancelUrl, spaceId, toltReferral } = params;
 
     const stripeSessionURL = await createCheckout({
       priceId,
@@ -48,6 +48,7 @@ export async function POST(req: Request) {
       successUrl,
       couponId,
       cancelUrl,
+      toltReferral,
       // If user is logged in, it will pass the user ID to the Stripe Session so it can be retrieved in the webhook later
       clientReferenceId: user?._id?.toString(),
       // If user is logged in, this will automatically prefill Checkout data like email and/or credit card for faster checkout
