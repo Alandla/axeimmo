@@ -45,7 +45,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (user.options === undefined) {
           const contactProperties = {
             firstName: user.name,
-            videosCount: 0
+            videosCount: 0,
+            videosExported: 0
           };
           await createContact(user.email, contactProperties);
         }

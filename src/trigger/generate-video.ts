@@ -27,7 +27,7 @@ import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
 import { addMediasToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
 import { IMediaSpace, ISpace } from "../types/space";
-import { addVideoCountContact } from "../lib/loops";
+import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { generateThumbnail } from "../lib/render";
 import { getMostFrequentString } from "../lib/utils";
 
@@ -656,7 +656,11 @@ export const generateVideoTask = task({
 
     newVideo = await updateVideo(newVideo)
 
-    await addVideoCountContact(payload.userId)
+    const user = await addVideoCountContact(payload.userId)
+
+    if (user && user.videosCount === 0) {
+      await sendCreatedVideoEvent({ email: user.email, videoId: newVideo.id || "" })
+    }
 
     return {
       videoId: newVideo.id,

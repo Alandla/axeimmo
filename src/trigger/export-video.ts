@@ -4,12 +4,13 @@ import { getVideoById, updateVideo } from "../dao/videoDao";
 import { getProgress, renderVideo } from "../lib/render";
 import { uploadImageFromUrlToS3 } from "../lib/r2";
 import { IVideo } from "../types/video";
-import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
+import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
 import { calculateHeygenCost } from "../lib/cost";
 import { combineAudioVoices } from "./combine-audio";
-import { getSpaceById } from "../dao/spaceDao";
+import { addVideoExportedContact, sendExportedVideoEmail } from "../lib/loops";
+import UserModel from "../models/User";
 
 interface RenderStatus {
   status: string;
@@ -115,6 +116,43 @@ export const exportVideoTask = task({
           downloadUrl: renderStatus.videoUrl,
           renderCost: renderStatus.costs + ctx.run.costInCents
         })
+
+        try {
+          logger.info('Sending emails to space users');
+
+          const space = await getSpaceById(video.spaceId);
+          
+          if (space && space.members && space.members.length > 0) {
+            const userIds = space.members.map((member: any) => member.userId);
+            const users = await UserModel.find({ _id: { $in: userIds } });
+            
+            if (users && users.length > 0) {
+              const emailPromises = users.map(async (user: any) => {
+                if (user.email) {
+                  sendExportedVideoEmail({
+                    email: user.email,
+                    userName: (user.name || '').split(' ')[0],
+                    videoName: video.title || '',
+                    thumbnailUrl: video.video?.thumbnail || '',
+                    exportId
+                  });
+                  return addVideoExportedContact(user.id);
+                }
+                return null;
+              });
+              await Promise.all(emailPromises);
+              logger.info('Mails sent successfully');
+            } else {
+              logger.warn('No user found for this space');
+            }
+          } else {
+            logger.warn('Space not found or no members in the space');
+          }
+        } catch (emailError) {
+          const errorMessage = emailError instanceof Error ? emailError.message : String(emailError);
+          logger.error('Error while sending emails', { error: errorMessage });
+        }
+        
         return { success: true, videoUrl: renderStatus.videoUrl };
       }
 
