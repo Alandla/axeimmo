@@ -85,7 +85,7 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
   };
 
   for (let i = 0; i < sentences.length; i++) {
-    if (sentences[i].transcription) {
+    if (sentences[i].transcription.transcription.utterances.length > 0) {
       const currentMetadata = sentences[i].transcription.metadata;
       combinedMetadata.billing_time += currentMetadata.billing_time;
       combinedMetadata.transcription_time += currentMetadata.transcription_time;

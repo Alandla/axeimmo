@@ -53,7 +53,7 @@ export const generateVideoTask = task({
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
 
@@ -129,38 +129,46 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      const sentencesCut = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
+      const sentencesCut = payload.script
+        .replace(/\.\.\./g, '___ELLIPSIS___') // Remplace temporary points of ellipsis
+        .match(/[^.!?]+[.!?]+/g) || [payload.script];
+      
+      // Restore ellipsis
+      const processedSentencesCut = sentencesCut.map(sentence => 
+        sentence.replace(/___ELLIPSIS___/g, '...')
+      );
+      
       const rawSentences = [];
       
-      for (let i = 0; i < sentencesCut.length; i++) {
-        const currentSentence = sentencesCut[i].trim();
+      for (let i = 0; i < processedSentencesCut.length; i++) {
+        const currentSentence = processedSentencesCut[i].trim();
         
-        // Vérifier si c'est la dernière phrase
-        if (i === sentencesCut.length - 1) {
+        // Check if it's the last sentence
+        if (i === processedSentencesCut.length - 1) {
           rawSentences.push(currentSentence);
           continue;
         }
         
-        // Compter les mots de la phrase suivante
-        const nextSentence = sentencesCut[i + 1].trim();
+        // Count the words of the next sentence
+        const nextSentence = processedSentencesCut[i + 1].trim();
         const nextSentenceWordCount = nextSentence.split(/\s+/).length;
         
         if (nextSentenceWordCount < 4) {
-          // Combiner avec la phrase suivante
+          // Combine with the next sentence
           rawSentences.push(currentSentence + ' ' + nextSentence);
-          i++; // Sauter la phrase suivante
+          i++; // Skip the next sentence
         } else {
           rawSentences.push(currentSentence);
         }
       }
       let processedCount = 0;
 
-      // Traiter les phrases par lots de 5
+      // Process sentences by batches of 5
       for (let i = 0; i < rawSentences.length; i += 5) {
         const batch = rawSentences.slice(i, Math.min(i + 5, rawSentences.length));
         
         const batchPromises = batch.map(async (text, batchIndex) => {
-          const globalIndex = i + batchIndex; // Index global pour maintenir l'ordre
+          const globalIndex = i + batchIndex; // Global index to maintain order
           try {
             const audioBuffer = await createAudioTTS(
               payload.voice.id,
@@ -169,7 +177,7 @@ export const generateVideoTask = task({
               true
             );
             
-            // Upload directement après la génération
+            // Upload directly after generation
             const audioUrl = await uploadToS3Audio(audioBuffer, 'medias-users');
 
 
@@ -611,6 +619,10 @@ export const generateVideoTask = task({
         }
       }
     }
+
+    const videoUpdated = await updateVideo(newVideo)
+
+    logger.info('Video updated', { videoUpdated })
 
     const thumbnail = await generateThumbnail(newVideo);
 
