@@ -1,0 +1,164 @@
+[
+  {
+    "text": "Ceci est un exemple de script mockup.",
+    "index": 0,
+    "audioUrl": "https://media.hoox.video/8ce026c3-ec20-45d8-9452-5f3a324716b1.mp3",
+    "transcription": {
+      "text": "Ceci est un exemple de script mockup.",
+      "language_code": "fr",
+      "segments": [
+        {
+          "end": 1.72,
+          "text": " Ceci est un exemple de script mockup.",
+          "start": 0.12,
+          "words": [
+            {
+              "end": 0.28,
+              "word": " Ceci",
+              "start": 0.12,
+              "confidence": 0.978759765625
+            },
+            {
+              "end": 0.38,
+              "word": " est",
+              "start": 0.28,
+              "confidence": 0.9990234375
+            },
+            {
+              "end": 0.48,
+              "word": " un",
+              "start": 0.38,
+              "confidence": 0.99755859375
+            },
+            {
+              "end": 0.82,
+              "word": " exemple",
+              "start": 0.48,
+              "confidence": 0.998046875
+            },
+            {
+              "end": 1.04,
+              "word": " de",
+              "start": 0.82,
+              "confidence": 0.99658203125
+            },
+            {
+              "end": 1.34,
+              "word": " script",
+              "start": 1.04,
+              "confidence": 0.8369140625
+            },
+            {
+              "end": 1.72,
+              "word": " mockup.",
+              "start": 1.34,
+              "confidence": 0.697021484375
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "text": "Il contient plusieurs lignes.",
+    "index": 1,
+    "audioUrl": "https://media.hoox.video/d306d23d-70da-4eab-bce9-0be0d56c2881.mp3",
+    "transcription": {
+      "text": "Il contient plusieurs lignes.",
+      "language_code": "fr",
+      "segments": [
+        {
+          "end": 1.08,
+          "text": " Il contient plusieurs lignes.",
+          "start": 0,
+          "words": [
+            {
+              "end": 0.14,
+              "word": " Il",
+              "start": 0,
+              "confidence": 0.8876953125
+            },
+            {
+              "end": 0.4,
+              "word": " contient",
+              "start": 0.18,
+              "confidence": 0.999755859375
+            },
+            {
+              "end": 0.66,
+              "word": " plusieurs",
+              "start": 0.4,
+              "confidence": 1
+            },
+            {
+              "end": 1.08,
+              "word": " lignes.",
+              "start": 0.66,
+              "confidence": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "text": "Pour tester le comportement de l'interface.",
+    "index": 2,
+    "audioUrl": "https://media.hoox.video/b3439f7f-7e1d-4435-bb9d-75e0410acf1a.mp3",
+    "transcription": {
+      "text": "Pour tester le comportement de l'interface.",
+      "language_code": "fr",
+      "segments": [
+        {
+          "end": 1.66,
+          "text": " Pour tester le comportement de l'interface.",
+          "start": 0,
+          "words": [
+            {
+              "end": 0.16,
+              "word": " Pour",
+              "start": 0,
+              "confidence": 0.053131103515625
+            },
+            {
+              "end": 0.42,
+              "word": " tester",
+              "start": 0.24,
+              "confidence": 0.9990234375
+            },
+            {
+              "end": 0.6,
+              "word": " le",
+              "start": 0.44,
+              "confidence": 0.9970703125
+            },
+            {
+              "end": 1.04,
+              "word": " comportement",
+              "start": 0.6,
+              "confidence": 0.999755859375
+            },
+            {
+              "end": 1.16,
+              "word": " de",
+              "start": 1.04,
+              "confidence": 0.99853515625
+            },
+            {
+              "end": 1.22,
+              "word": " l",
+              "start": 1.16,
+              "confidence": 1
+            },
+            {
+              "end": 1.66,
+              "word": "'interface.",
+              "start": 1.22,
+              "confidence": 0.9996744791666666
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

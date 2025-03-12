@@ -4,7 +4,7 @@ import { Voice } from "../types/voice";
 import { AvatarLook } from "../types/avatar";
 import { createAudioTTS } from "../lib/elevenlabs";
 import { uploadToS3Audio } from "../lib/r2";
-import { createTranscription, getTranscription } from "../lib/gladia";
+import { createSieveTranscription, pollSieveTranscriptionStatus, SieveTranscriptionResult } from "../lib/sieve";
 import { transitions, sounds } from "../config/transitions.config";
 import { ITransition, ISequence } from "../types/video";
 
@@ -12,6 +12,8 @@ import transcriptionMock from "../test/mockup/transcriptionComplete.json";
 import keywordsMock from "../test/mockup/keywordsResponse.json";
 import sequencesWithMediaMock from "../test/mockup/sequencesWithMedia.json";
 import sentencesMock from "../test/mockup/sentences.json";
+import sentencesNoTranscriptionMock from "../test/mockup/sentencesNoTranscription.json";
+import sentencesWithNewTranscriptionMock from "../test/mockup/sentencesWithNewTranscription.json";
 
 import { createLightTranscription, ISentence, splitSentences } from "../lib/transcription";
 import { generateKeywords } from "../lib/keywords";
@@ -53,7 +55,7 @@ export const generateVideoTask = task({
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
 
@@ -76,7 +78,6 @@ export const generateVideoTask = task({
 
     if (payload.script) {
       const startData = generateStartData(payload.script).then((data) => {
-        logger.info('Start data', data?.details)
         videoStyle = data?.details.style
         newVideo = {
           title: data?.details.title,
@@ -107,7 +108,7 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      sentences = sentencesMock
+      sentences = sentencesWithNewTranscriptionMock
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
@@ -254,30 +255,42 @@ export const generateVideoTask = task({
     if (!isDevelopment) {
       let processedTranscriptions = 0;
       
-      // On utilise un seul wait.for() pour contrôler le rythme global
-      for (let i = 0; i < sentences.length; i += 10) {
-        const batch = sentences.slice(i, Math.min(i + 10, sentences.length));
+      // Traitement par lots pour limiter la concurrence
+      for (let i = 0; i < sentences.length; i += 25) {
+        const batch = sentences.slice(i, Math.min(i + 25, sentences.length));
         
-        const transcriptionPromises = batch.map(async (sentence) => {
-          if (!sentence.audioUrl) throw new Error("Audio URL missing");
-          
-          const transcriptionResponse = await createTranscription(sentence.audioUrl, sentence.text);
-          const result = await pollTranscriptionStatus(transcriptionResponse.id);
-
-          processedTranscriptions++
-          await metadata.replace({
-            name: Steps.TRANSCRIPTION,
-            progress: Math.round((processedTranscriptions / sentences.length) * 100)
-          });
-
-          return {
-            index: sentence.index,
-            result
-          };
-        });
-
-        const transcriptionResults = await Promise.all(transcriptionPromises);
+        // Créer d'abord tous les jobs de transcription
+        const transcriptionJobs = await Promise.all(
+          batch.map(async (sentence) => {
+            if (!sentence.audioUrl) throw new Error("Audio URL missing");
+            
+            const transcriptionId = await createSieveTranscription(sentence.audioUrl, sentence.text);
+            return {
+              index: sentence.index,
+              jobId: transcriptionId
+            };
+          })
+        );
         
+        // Ensuite, attendre les résultats de tous les jobs en parallèle
+        const transcriptionResults = await Promise.all(
+          transcriptionJobs.map(async (job) => {
+            const result = await pollSieveTranscriptionStatus(job.jobId);
+            
+            processedTranscriptions++;
+            await metadata.replace({
+              name: Steps.TRANSCRIPTION,
+              progress: Math.round((processedTranscriptions / sentences.length) * 100)
+            });
+            
+            return {
+              index: job.index,
+              result
+            };
+          })
+        );
+        
+        // Mettre à jour les phrases avec les résultats de transcription
         transcriptionResults.forEach(({ index, result }) => {
           const sentence = sentences.find(s => s.index === index);
           if (sentence) {
@@ -293,6 +306,8 @@ export const generateVideoTask = task({
     /   Get Light JSON to send to AI and reduce cost
     /
     */
+
+    logger.info('Sentences with transcription', { sentences })
 
     let { sequences, videoMetadata } = splitSentences(sentences);
     const lightTranscription = createLightTranscription(sequences);
@@ -667,35 +682,6 @@ export const generateVideoTask = task({
     }
   },
 });
-
-const pollTranscriptionStatus = async (transcriptionId: string) => {
-  let attempts = 0;
-  const maxAttempts = 100;
-  const delayBetweenAttempts = 2;
-
-  while (attempts < maxAttempts) {
-    try {
-      const transcriptionStatus = await getTranscription(transcriptionId);
-
-      if (transcriptionStatus.status === 'done') {
-        return transcriptionStatus;
-      }
-
-      logger.info(`Waiting for transcription [${attempts + 1}/${maxAttempts}]`, {
-        id: transcriptionId,
-        status: transcriptionStatus.status
-      });
-      await new Promise(resolve => setTimeout(resolve, delayBetweenAttempts * 1000));
-      attempts++;
-    } catch (error) {
-      logger.error(`Error while getting transcription status: ${error}`);
-      await new Promise(resolve => setTimeout(resolve, delayBetweenAttempts * 1000));
-      attempts++;
-    }
-  }
-
-  throw new Error('Nombre maximum de tentatives atteint sans obtenir un statut "done" pour la transcription.');
-};
 
 interface ProcessBatchOptions {
   isDetailedAnalysis?: boolean;

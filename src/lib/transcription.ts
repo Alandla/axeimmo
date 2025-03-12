@@ -12,9 +12,7 @@ interface Utterance {
 
 interface TranscriptionMetadata {
   audio_duration: number;
-  number_of_distinct_channels: number;
-  billing_time: number;
-  transcription_time: number;
+  language: string;
 }
 
 interface SplitSentencesResult {
@@ -75,27 +73,16 @@ export function splitIntoSequences(utterances: Utterance[], sentenceIndex: numbe
 export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
   const finalSequences: ISequence[] = [];
   let timeOffset = 0;
-  
-  // Initialiser les métadonnées combinées
-  const combinedMetadata: TranscriptionMetadata = {
-    audio_duration: 0,
-    number_of_distinct_channels: 1,
-    billing_time: 0,
-    transcription_time: 0
-  };
 
   for (let i = 0; i < sentences.length; i++) {
-    if (sentences[i].transcription.transcription.utterances.length > 0) {
-      const currentMetadata = sentences[i].transcription.metadata;
-      combinedMetadata.billing_time += currentMetadata.billing_time;
-      combinedMetadata.transcription_time += currentMetadata.transcription_time;
+    if (sentences[i].transcription.segments.length > 0) {
 
       // Ajuster les timings des utterances avec l'offset actuel
-      const adjustedUtterances = sentences[i].transcription.transcription.utterances.map((utterance: Utterance) => ({
-        ...utterance,
-        start: utterance.start + timeOffset,
-        end: utterance.end + timeOffset,
-        words: utterance.words.map(word => ({
+      const adjustedUtterances = sentences[i].transcription.segments.map((segment: Utterance) => ({
+        ...segment,
+        start: segment.start + timeOffset,
+        end: segment.end + timeOffset,
+        words: segment.words.map(word => ({
           ...word,
           start: word.start + timeOffset,
           end: word.end + timeOffset
@@ -122,14 +109,19 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
 
   const sequences = adjustSequenceTimings(finalSequences);
 
+  const metadata: TranscriptionMetadata = {
+    audio_duration: 0,
+    language: sentences[0].transcription.language_code
+  };
+
   if (sequences.length > 0) {
     const lastSequence = sequences[sequences.length - 1];
-    combinedMetadata.audio_duration = lastSequence.end;
+    metadata.audio_duration = lastSequence.end;
   }
 
   return {
     sequences: sequences,
-    videoMetadata: combinedMetadata
+    videoMetadata: metadata
   };
 }
 

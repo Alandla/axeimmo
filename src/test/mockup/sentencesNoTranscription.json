@@ -1,0 +1,17 @@
+[
+  {
+    "text": "Ceci est un exemple de script mockup.",
+    "index": 0,
+    "audioUrl": "https://media.hoox.video/8ce026c3-ec20-45d8-9452-5f3a324716b1.mp3"
+  },
+  {
+    "text": "Il contient plusieurs lignes.",
+    "index": 1,
+    "audioUrl": "https://media.hoox.video/d306d23d-70da-4eab-bce9-0be0d56c2881.mp3"
+  },
+  {
+    "text": "Pour tester le comportement de l'interface.",
+    "index": 2,
+    "audioUrl": "https://media.hoox.video/b3439f7f-7e1d-4435-bb9d-75e0410acf1a.mp3"
+  }
+]

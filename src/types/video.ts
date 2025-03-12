@@ -110,9 +110,7 @@ export interface IVideo {
     }
     metadata: {
       audio_duration: number;
-      number_of_distinct_channels: number;
-      billing_time: number;
-      transcription_time: number;
+      language: string;
     };
     sequences: ISequence[];
     transitions?: ITransition[];
