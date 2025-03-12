@@ -39,6 +39,7 @@ const avatarSchema = new mongoose.Schema({
         videoUrl: String,
         format: { type: String, enum: ['vertical', 'horizontal'] },
         settings: {
+          heygenType: { type: String, enum: ['avatar', 'talking_photo'] },
           position: Number,
           verticalPosition: Number,
         },

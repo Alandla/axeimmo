@@ -18,7 +18,8 @@ export type AvatarLook = {
     videoUrl?: string
     format?: 'vertical' | 'horizontal'
     settings?: {
-		position: number  // Position horizontale (en pourcentage)
+        heygenType?: 'avatar' | 'talking_photo'
+		position?: number  // Position horizontale (en pourcentage)
 		verticalPosition?: number  // Position verticale (en pourcentage)
 	}
 }
