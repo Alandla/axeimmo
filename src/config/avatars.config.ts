@@ -98,7 +98,7 @@ export const avatarsConfig: Avatar[] = [
         thumbnail: 'https://files2.heygen.ai/avatar/v3/46a6229dd75b449d9ec884bd0a992943/full/2.2/preview_target.webp',
         looks: [
             {
-                id: '46a6229dd75b449d9ec884bd0a992943',
+                id: 'bb968145e14841bda0fc99a94c24456c',
                 name: 'Aria Room',
                 place: 'room',
                 format: 'vertical',
