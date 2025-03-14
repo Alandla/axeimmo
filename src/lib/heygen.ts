@@ -28,7 +28,7 @@ export async function generateAvatarVideo(avatar: AvatarLook, audioUrl: string) 
       video_inputs: [
         {
           character: {
-            type: avatar.settings?.heygenType,
+            type: avatar.settings?.heygenType || 'avatar',
             ...(avatar.settings?.heygenType === 'talking_photo' ? { talking_photo_id: avatar.id } : { avatar_id: avatar.id }),
             scale: avatar.format === 'vertical' ? 1 : 3.17,
             offset: {
