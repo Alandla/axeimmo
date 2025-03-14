@@ -18,7 +18,7 @@ export default function DiscountBanner() {
   }, [])
 
   function calculateTimeLeft() {
-    const difference = +new Date("2025-03-15") - +new Date()
+    const difference = +new Date("2025-03-30") - +new Date()
     let timeLeft: { [key: string]: number } = {}
 
     if (difference > 0) {
