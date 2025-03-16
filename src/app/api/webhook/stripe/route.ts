@@ -8,6 +8,7 @@ import { createPrivateSpaceForUser, getSpaceById, removeCreditsToSpace, setCredi
 import { plans } from "@/src/config/plan.config";
 import { IPlan, ISpace } from "@/src/types/space";
 import { SubscriptionType } from "@/src/types/enums";
+import { trackOrderFacebook } from "@/src/lib/facebook";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -48,9 +49,12 @@ export async function POST(req: Request) {
         const priceId = session?.line_items?.data[0]?.price?.id;
         const userId = event.data.object.client_reference_id;
         const spaceId = session?.metadata?.spaceId;
+        const fbc = session?.metadata?.fbc;
+        const fbp = session?.metadata?.fbp;
 
         const customerEmail = event.data.object.customer_details?.email;
         const customerName = event.data.object.customer_details?.name;
+        const priceAmount = session?.amount_total ? session.amount_total / 100 : 0;
 
         const priceData = await stripe.prices.retrieve(priceId as string);
         const productData = await stripe.products.retrieve(priceData.product as string);
@@ -103,6 +107,8 @@ export async function POST(req: Request) {
         }
 
         await updateSpacePlan(spaceId as string, planSpace);
+        
+        trackOrderFacebook(user?.email, session?.invoice as string, session?.subscription as string, user?.id?.toString(), priceAmount, fbc, fbp);
 
         // Extra: send email with user link, product page, etc...
         // try {

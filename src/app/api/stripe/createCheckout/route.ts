@@ -1,5 +1,6 @@
 import { getUserById } from "@/src/dao/userDao";
 import { auth } from "@/src/lib/auth";
+import { trackAddToCartFacebook } from "@/src/lib/facebook";
 import { createCheckout } from "@/src/lib/stripe";
 import { NextResponse } from "next/server";
 
@@ -39,7 +40,9 @@ export async function POST(req: Request) {
       user = await getUserById(session.user.id);
     }
 
-    const { priceId, mode, couponId, successUrl, cancelUrl, spaceId, toltReferral } = params;
+    const { priceId, mode, couponId, successUrl, cancelUrl, spaceId, toltReferral, fbc, fbp } = params;
+
+    trackAddToCartFacebook(user?.email, user?.id?.toString(), fbc, fbp);
 
     const stripeSessionURL = await createCheckout({
       priceId,
@@ -53,6 +56,8 @@ export async function POST(req: Request) {
       clientReferenceId: user?._id?.toString(),
       // If user is logged in, this will automatically prefill Checkout data like email and/or credit card for faster checkout
       user,
+      fbc,
+      fbp,
     });
 
     if (!stripeSessionURL) {

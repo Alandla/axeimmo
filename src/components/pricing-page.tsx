@@ -19,6 +19,15 @@ import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import Link from 'next/link'
 import DiscountBanner from './discount-banner'
 
+function getCookie(name: string) {
+  let cookie: { [key: string]: string } = {};
+  document.cookie.split(';').forEach(function(el) {
+    let [k,v] = el.split('=');
+    cookie[k.trim()] = v;
+  })
+  return cookie[name];
+}
+
 export default function PricingPage() {
   const tPlan = useTranslations('plan')
   const tPricing = useTranslations('pricing')
@@ -34,6 +43,8 @@ export default function PricingPage() {
         const price = priceId.euros;
         
         const toltReferral = typeof window !== 'undefined' && window.tolt_referral ? window.tolt_referral : undefined;
+        const fbc = getCookie("_fbc") || undefined;
+        const fbp = getCookie("_fbp") || undefined;
         
         const url: string = await basicApiCall('/stripe/createCheckout', {
           priceId: price,
@@ -43,6 +54,8 @@ export default function PricingPage() {
           successUrl: window.location.href,
           cancelUrl: window.location.href,
           toltReferral: toltReferral, // Ajouter le tolt_referral à la requête
+          fbc: fbc,
+          fbp: fbp,
         })
 
         window.location.href = url;

@@ -7,6 +7,7 @@ import { Toaster } from "@/src/components/ui/toaster";
 import { CrispChat } from "./crisp-chat";
 import MicrosoftClarity from "./metrics/MicrosoftClarity";
 import GoogleAnalytics from "./metrics/GoogleAnalytics";
+import FacebookPixel from "./metrics/Facebook";
 
 const ClientLayout = async ({ children }: { children: React.ReactNode }) => {
   const messages = await getMessages();
@@ -14,6 +15,7 @@ const ClientLayout = async ({ children }: { children: React.ReactNode }) => {
     <>
       {process.env.NODE_ENV !== 'development' && <MicrosoftClarity />}
       {process.env.NODE_ENV !== 'development' && <GoogleAnalytics />}
+      {process.env.NODE_ENV !== 'development' && <FacebookPixel />}
       <SessionProvider>
         <NextIntlClientProvider messages={messages}>
           <Toaster />

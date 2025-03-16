@@ -4,6 +4,7 @@ import { IUser } from "../types/user";
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { basicApiCall } from '@/src/lib/api';
+import { trackSignUpFacebook } from '@/src/lib/facebook';
 
 // Étendre l'interface Window pour inclure tolt
 declare global {
@@ -64,6 +65,23 @@ export function AffiliateTracker() {
         if (window.tolt && session.user?.email) {
           window.tolt.signup(session.user.email);
           console.log('Tolt signup tracked for:', session.user.email);
+        }
+        
+        // Récupérer les cookies Facebook (fbc et fbp) s'ils existent
+        const getCookie = (name: string): string | null => {
+          if (typeof document === 'undefined') return null;
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+          return null;
+        };
+        
+        const fbc = getCookie('_fbc');
+        const fbp = getCookie('_fbp');
+        
+        // Suivre l'inscription sur Facebook si les cookies sont disponibles
+        if (session.user?.email && session.user?.id && fbc && fbp) {
+          await trackSignUpFacebook(session.user.email, session.user.id, fbc, fbp);
         }
         
         let updateData: Partial<IUser> = {};
