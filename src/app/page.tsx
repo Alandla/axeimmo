@@ -43,8 +43,8 @@ export default function Page() {
     const result = await signIn('http-email', { email: email, redirect: false })
     if (result?.error) {
       toast({
-        title: 'Error',
-        description: 'Tu n\'as pas accès à la bêta',
+        title: t('error-title'),
+        description: t('error-description'),
         variant: 'destructive',
       })
       setLoading(false);

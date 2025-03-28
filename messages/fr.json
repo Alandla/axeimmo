@@ -21,7 +21,9 @@
       "orContinueWith": "Ou continuez avec",
       "checkEmail": "Vérifie tes mails",
       "emailSent": "Un email de vérification a été envoyé à l'adresse indiquée.",
-      "openGmail": "Ouvrir Gmail"
+      "openGmail": "Ouvrir Gmail",
+      "error-title": "Erreur",
+      "error-description": "Une erreur est survenue lors de la connexion. Veuillez réessayer."
     },
     "breadcrumbs": {
       "Dashboard": "Tableau de bord",

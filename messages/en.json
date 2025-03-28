@@ -12,7 +12,9 @@
       "orContinueWith": "Or continue with",
       "checkEmail": "Check your emails",
       "emailSent": "A verification email has been sent to the address indicated.",
-      "openGmail": "Open Gmail"
+      "openGmail": "Open Gmail",
+      "error-title": "Error",
+      "error-description": "An error occurred while signing in. Please try again."
     },
     "breadcrumbs": {
       "Dashboard": "Dashboard",
