@@ -25,13 +25,8 @@ export const plans: Plan[] = [
         dollars: process.env.NODE_ENV === "development" ? "price_1R6XtpD0Qr1zHqqnrXbs0lxG" : "price_1R6XvvD0Qr1zHqqnSdM5OmFC",
       },
     },
-    features: [
-      'feature.1-member',
-      'feature.watermark-removal',
-      'feature.duration-1-max',
-      'feature.voice-1',
-      'feature.avatar-1',
-    ]
+    users: 1,
+    maxVideoDuration: 1,
   },
   {
     name: PlanName.PRO,
@@ -49,13 +44,8 @@ export const plans: Plan[] = [
             dollars: process.env.NODE_ENV === "development" ? "price_1R5AwAD0Qr1zHqqns7ebzcjd" : "price_1R6XwwD0Qr1zHqqnQYnsZbRT",
         },
     },
-    features: [
-        'feature.2-members',
-        'feature.duration-3-max',
-        'feature.brand-kit',
-        'feature.voice-2',
-        'feature.avatar-2',
-    ],
+    users: 2,
+    maxVideoDuration: 3,
     popular: true
   },
   {
@@ -74,12 +64,7 @@ export const plans: Plan[] = [
             dollars: process.env.NODE_ENV === "development" ? "price_1R5AwbD0Qr1zHqqniklVk7Vp" : "price_1R6XwyD0Qr1zHqqnS7hI9Xh8",
         },
     },
-    features: [
-      'feature.5-members',
-      'feature.duration-5-max',
-      'feature.voice-cloning',
-      'feature.voice-3',
-      'feature.save-template'
-    ]
+    users: 5,
+    maxVideoDuration: 5,
   }
 ]
