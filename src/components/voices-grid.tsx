@@ -188,11 +188,11 @@ export function VoicesGridComponent() {
           setSelectedAccent(value)
           handleFilters(filteredVoices)
         }}>
-          <SelectTrigger className="w-[120px] sm:w-[180px]">
+          <SelectTrigger className="w-[100px] sm:w-[180px]">
             <SelectValue>
               {selectedAccent === 'all' ? (
                 <div className="flex items-center">
-                  <span>🌍</span>
+                  <span className="mr-1">🌍</span>
                   <span className="hidden sm:inline ml-1">{tCommon('all-f')}</span>
                 </div>
               ) : (
@@ -205,7 +205,7 @@ export function VoicesGridComponent() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              <span className="mr-1">🌍</span> {tCommon('all-f')}
+              <span className="mr-1">🌍</span> {t('accent.all')}
             </SelectItem>
             {Array.from(new Set(voices.map(v => v.accent))).map(accent => (
               <SelectItem key={accent} value={accent} onClick={() => removeSelectedAccent(accent)}>

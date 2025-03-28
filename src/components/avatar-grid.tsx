@@ -177,7 +177,7 @@ export function AvatarGridComponent() {
 
   const getPageNumbers = () => {
     const pageNumbers = []
-    const totalPagesToShow = 5
+    const totalPagesToShow = 3
     const halfWay = Math.floor(totalPagesToShow / 2)
     
     let startPage = Math.max(currentPage - halfWay, 1)

@@ -116,9 +116,9 @@
       "everything-in": "Tout ce qui est inclus dans",
       "plus": "plus",
       "credits": "crédits",
-      "250-credits": "250 crédits = 25 minutes de vidéo",
-      "1000-credits": "1000 crédits = 1h40 de vidéo",
-      "3000-credits": "3000 crédits = 5 heures de vidéo",
+      "150-credits": "150 crédits = 15 minutes de vidéo",
+      "400-credits": "400 crédits = 40 minutes de vidéo",
+      "800-credits": "800 crédits = 1h20 de vidéo",
       "custom": "Personnalisé",
       "need-custom-plan": "Besoin d'un plan personnalisé ? Contactez-nous pour une solution sur mesure.",
       "contact-sales": "Contactez-nous",
@@ -138,8 +138,11 @@
         "duration-5-max": "Durée maximale de 5 minutes",
         "watermark-removal": "Suppression du filigrane",
         "subtitles": "Sous titres automatiques",
-        "voice": "Voix de hautes qualités",
-        "avatar": "Avatar photo réaliste",
+        "voice-1": "20 Voix de haute qualité",
+        "voice-2": "+100 Voix de haute qualité",
+        "voice-3": "+120 Voix de haute qualité",
+        "avatar-1": "88 Avatars réalistes",
+        "avatar-2": "+150 Avatars réalistes",
         "create-article": "Créer une vidéo à partir d'un article",
         "add-media": "Ajoutes automatiquement tes medias",
         "brand-kit": "Kit de marque",
@@ -151,7 +154,7 @@
     "plan": {
       "FREE": "Gratuit",
       "PRO": "Pro",
-      "CREATOR": "Créateur",
+      "START": "Start",
       "ENTREPRISE": "Entreprise"
     },
     "export": {
@@ -215,7 +218,9 @@
         "description-space-not-found": "L'espace n'a pas été trouvé.",
         "title-regenerated": "Regénération de l'audio",
         "description-regenerated": "L'audio a été regénéré avec succès.",
-        "description-regeneration-error": "Une erreur est survenue lors de la regénération de l'audio."
+        "description-regeneration-error": "Une erreur est survenue lors de la regénération de l'audio.",
+        "description-premium-voice-error": "Cette voix n'est disponible que dans les plans payants. Mettez à niveau votre abonnement pour y accéder.",
+        "description-premium-avatar-error": "Cet avatar n'est disponible que dans les plans payants. Mettez à niveau votre abonnement pour y accéder."
       },
       "sequence": {
         "edit-word": "Editer le mot",
@@ -405,6 +410,10 @@
       "search": "Rechercher une voix..",
       "listen": "Écouter",
       "pause": "Pause",
+      "toast": {
+        "title-error": "Plan payant requis",
+        "description-premium-error": "Cette voix n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder."
+      },
       "tags": {
         "narrator": "Narrateur",
         "documentary": "Documentaire",
@@ -431,13 +440,16 @@
         "storytelling": "Storytelling",
         "journalism": "Journalisme",
         "entertainment": "Divertissement",
-        "tv": "TV"
+        "tv": "TV",
+        "sales": "Ventes",
+        "podcast": "Podcast"
       },
       "gender": {
         "male": "Masculin",
         "female": "Féminin"
       },
       "accent": {
+        "all": "Tous les accents",
         "french": "Français",
         "quebecois": "Québécois",
         "spanish": "Espagnol",
@@ -449,12 +461,26 @@
         "irish": "Irlandais",
         "german": "Allemand",
         "swedish": "Suédois",
-        "canadian": "Canadien"
+        "canadian": "Canadien",
+        "brazilian": "Brésilien",
+        "portuguese": "Portugais",
+        "croatian": "Croate",
+        "nigerian": "Nigérian",
+        "egyptian": "Égyptien",
+        "indian": "Indien",
+        "italian": "Italien",
+        "latin american": "Américain latino",
+        "arabic": "Arabe",
+        "peninsular": "Espagnol peninsulaire"
       }
     },
     "avatars": {
       "search": "Rechercher un avatar..",
       "preview": "Prévisualiser",
+      "toast": {
+        "title-error": "Plan payant requis",
+        "description-premium-error": "Cet avatar n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder."
+      },
       "tags": {
         "professional": "Professionnel",
         "cossy": "Cossy",

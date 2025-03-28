@@ -139,6 +139,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['UGC'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/3c91c09e694e4ee28db498e54a1284d6/full/2.2/preview_target.webp',
         looks: [
             {
@@ -447,6 +448,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['UGC'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/bbf8d733ced94fa0b5ff8c3ae8f6f50d/full/2.2/preview_target.webp',
         looks: [
             {
@@ -689,6 +691,7 @@ export const avatarsConfig: Avatar[] = [
         gender: "female",
         age: "unknown",
         tags: ["UGC"],
+        premium: true,
         thumbnail: "https://files2.heygen.ai/avatar/v3/20b58d3530d94ca3a0f02fb2bf6ad51b/full/2.2/preview_target.webp",
         looks: [
             {
@@ -887,6 +890,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['UGC'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/b1dd1eb063a048e996c107e0fc554f28/full/2.2/preview_target.webp',
         looks: [
             {
@@ -906,7 +910,7 @@ export const avatarsConfig: Avatar[] = [
     {
         id: '131',
         name: 'Lian',
-        gender: 'female',
+        gender: 'male',
         age: 'unknown',
         tags: ['UGC'],
         thumbnail: 'https://files2.heygen.ai/avatar/v3/6f99710ddca64707ad0ed42624eb7b21/full/2.2/preview_target.webp',
@@ -1214,7 +1218,7 @@ export const avatarsConfig: Avatar[] = [
     {
         id: '145',
         name: 'Sammy',
-        gender: 'male',
+        gender: 'female',
         age: 'unknown',
         tags: ['UGC'],
         thumbnail: 'https://files2.heygen.ai/avatar/v3/0805a22fc9c5479c8a52ff54b6af6025/full/2.2/preview_target.webp',
@@ -1239,6 +1243,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['UGC'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/5b48223e82a048608d656bcbda7a6914/full/2.2/preview_target.webp',
         looks: [
             {
@@ -1283,6 +1288,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['UGC'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/1fb5ad4aac6d43cd8dbde92a88b1e8e7/full/2.2/preview_target.webp',
         looks: [
             {
@@ -1371,6 +1377,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['UGC'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/e71598fdf3984397bdb7b8acb0a829f3/full/2.2/preview_target.webp',
         looks: [
             {
@@ -1437,6 +1444,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['UGC'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/dde4d18777a24601840e0aa9ea25ed9d/full/2.2/preview_target.webp',
         looks: [
             {
@@ -1481,6 +1489,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['UGC'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/e729d730ae3747f690668e12dc1843ae/full/2.2/preview_target.webp',
         looks: [
             {
@@ -1701,6 +1710,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['UGC'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/cb96d191eb064d68a3b73d11872b9142/full/2.2/preview_target.webp',
         looks: [
             {
@@ -1723,6 +1733,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['outdoor', 'professional', 'cossy'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/8352487eb0e846449665f25823c2ea0a_38970/preview_talk_1.webp',
         looks: [
             {
@@ -1797,6 +1808,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'casual'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/ea333829d88c4fc8b6d08e8baf80297a_37140/preview_talk_3.webp',
         looks: [
             {
@@ -1829,6 +1841,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/52491deef4b242c2898192f07743d4ce_36750/preview_target.webp',
         looks: [
             {
@@ -1871,6 +1884,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'casual', 'modern'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/767af13a47a1455da7d18b7e5de39eea_39190/preview_talk_1.webp',
         looks: [
             {
@@ -1897,6 +1911,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'tech-savvy', 'versatile'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/f27279aef6934f7684abc2f73dd38bfd_38820/preview_talk_1.webp',
         looks: [
             {
@@ -1963,6 +1978,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'dynamic', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/ea847ee0ca44468fb6119d16396bf8f1_37890/preview_target.webp',
         looks: [
             {
@@ -2005,6 +2021,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'elegant', 'versatile'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/e2b628b892a740efbde8a8bf9371d410_37860/preview_talk_2.webp',
         looks: [
             {
@@ -2047,6 +2064,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'charismatic', 'modern'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/aab1172d472e474e98a85e262dab0dae_38050/preview_talk_1.webp',
         looks: [
             {
@@ -2089,6 +2107,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'multicultural', 'sophisticated'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/c37a49d797a94e038a72b25d000b887f_36860/preview_talk_1.webp',
         looks: [
             {
@@ -2131,6 +2150,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'elegant', 'multicultural'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/7c8b23fdc76245949ce9faff8dbfcdbc_37600/preview_target.webp',
         looks: [
             {
@@ -2173,6 +2193,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'wellness', 'versatile', 'dynamic'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/0233ba6aea01411ab07ddafbf97886f2_39260/preview_talk_2.webp',
         looks: [
             {
@@ -2231,6 +2252,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'expressive', 'modern'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/463208b6cad140d2b263535826838e3a_39240/preview_target.webp',
         looks: [
             {
@@ -2257,6 +2279,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'multicultural', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/a8b8b04207104269b45867d8911cc5ae_36840/preview_target.webp',
         looks: [
             {
@@ -2299,6 +2322,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['outdoor', 'casual', 'friendly', 'natural'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/d1686261ff904a379b032b8f41ed0628_37480/preview_talk_1.webp',
         looks: [
             {
@@ -2333,6 +2357,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'elegant', 'confident'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/f66130157ead439eb05bcf63b0469163_37110/preview_target.webp',
         looks: [
             {
@@ -2359,6 +2384,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['outdoor', 'dynamic', 'versatile', 'energetic'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/33fda333525e41b4bbff63fe17169507_39530/preview_target.webp',
         looks: [
             {
@@ -2393,6 +2419,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['outdoor', 'versatile', 'casual', 'natural'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/51d99b18bdec4ad39b58ca10b9973473_38510/preview_target.webp',
         looks: [
             {
@@ -2435,6 +2462,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'versatile', 'dynamic', 'professional'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/391d7595784140d0b627958c1c93aff1_39290/preview_talk_2.webp',
         looks: [
             {
@@ -2493,6 +2521,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'versatile', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/d018125159b44e01847bc192c85a2e8b_36800/preview_talk_1.webp',
         looks: [
             {
@@ -2535,6 +2564,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'elegant', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/2ecb3781b0b1420f8244d7ac13f00407_37150/preview_target.webp',
         looks: [
             {
@@ -2561,6 +2591,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['outdoor', 'versatile', 'active', 'professional'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/5ee7536c7271417a971f08a55efcfa91_38320/preview_talk_1.webp',
         looks: [
             {
@@ -2603,6 +2634,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['versatile', 'professional', 'outdoor', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/203425112ca0467990d1b2327ab394b6_39010/preview_talk_5.webp',
         looks: [
             {
@@ -2637,6 +2669,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['versatile', 'dynamic', 'casual', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/70ad59514ade40fb96740b0f2ce14304_39510/preview_target.webp',
         looks: [
             {
@@ -2679,6 +2712,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'elegant', 'versatile'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/80f65ad6ce5f4e85b3489a663008b130_37440/preview_talk_1.webp',
         looks: [
             {
@@ -2721,6 +2755,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'casual', 'friendly', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/9b3158190121468c92b74fd59cb2a349_38110/preview_talk_1.webp',
         looks: [
             {
@@ -2763,6 +2798,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['versatile', 'athletic', 'outdoor', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/812e4c922e0d4ba0b2c5a21a0dd43fb1_39100/preview_target.webp',
         looks: [
             {
@@ -2797,6 +2833,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['athletic', 'energetic', 'professional', 'expressive'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/e66b500dd5034538835f52a71a6cae66_38730/preview_target.webp',
         looks: [
             {
@@ -2823,6 +2860,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['professional', 'versatile', 'approachable', 'indoor'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/88e941fd3b90448aa1366e3839a126a4_37750/preview_talk_5.webp',
         looks: [
             {
@@ -2857,6 +2895,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['professional', 'versatile', 'approachable', 'indoor'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/251ff4bcc6b8474991c9922146f73093_38910/preview_talk_1.webp',
         looks: [
             {
@@ -2891,6 +2930,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['athletic', 'wellness', 'peaceful', 'mindful'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/01bf1b75c57e4c99b143b1d185beb21c_38690/preview_talk_1.webp',
         looks: [
             {
@@ -2917,6 +2957,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['versatile', 'athletic', 'professional', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/cc0dc576a0b249759f8e26fd892e1a76_39540/preview_target.webp',
         looks: [
             {
@@ -2951,6 +2992,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['versatile', 'professional', 'casual', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/67f5c5d34f304271a3d25de529ce669b_38490/preview_talk_1.webp',
         looks: [
             {
@@ -2993,6 +3035,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['professional', 'versatile', 'approachable', 'indoor'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/25257e48e8034131a3a055b234cd4683_38090/preview_talk_1.webp',
         looks: [
             {
@@ -3035,6 +3078,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['professional', 'versatile', 'approachable', 'indoor'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/c4434f25263b4de48eafe838338272fe_37420/preview_talk_1.webp',
         looks: [
             {
@@ -3077,6 +3121,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['athletic', 'versatile', 'energetic', 'professional'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/5316bfe35e3a41a99af40650698e8ca4_39520/preview_target.webp',
         looks: [
             {
@@ -3103,6 +3148,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['professional', 'versatile', 'approachable', 'indoor'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/69d07b8f02194765befda0c2d2a9588d_37730/preview_talk_7.webp',
         looks: [
             {
@@ -3145,6 +3191,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['casual', 'versatile', 'approachable', 'outdoor'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/c18ac00b6a8c422c89aab25bf0182da3_37460/preview_talk_1.webp',
         looks: [
             {
@@ -3179,6 +3226,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['professional', 'versatile', 'outdoor', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/216fc0bd22ce4456a7565d6ce3793125_39020/preview_talk_7.webp',
         looks: [
             {
@@ -3221,6 +3269,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['professional', 'versatile', 'approachable', 'indoor'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/673145fb1fa34b59a438db24b700fb08_37800/preview_talk_6.webp',
         looks: [
             {
@@ -3271,6 +3320,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['professional', 'versatile', 'approachable', 'indoor'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/32c5fd108f364c178cf538819f9ddc44_39350/preview_target.webp',
         looks: [
             {
@@ -3329,6 +3379,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'athletic', 'wellness'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_target.webp',
         looks: [
             {
@@ -3403,6 +3454,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'versatile', 'educational'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/46c6e9fe736d40d4bf8b89baafede4a5_38860/preview_talk_1.webp',
         looks: [
             {
@@ -3437,6 +3489,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['professional', 'educational', 'indoor', 'versatile'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/0dcdbd20783f4a2a9333bfbd7cce304e_38930/preview_talk_1.webp',
         looks: [
             {
@@ -3463,6 +3516,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'casual', 'versatile', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/37adfc229dae4acc929ba755bf88a665_38130/preview_talk_1.webp',
         looks: [
             {
@@ -3505,6 +3559,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['professional', 'versatile', 'indoor', 'approachable'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/65d19cdc69434a4797599255a6fdcba9_37790/preview_target.webp',
         looks: [
             {
@@ -3555,6 +3610,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'casual', 'versatile'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/f01b66bbb9f541bc9eb296e04513584e_39170/preview_talk_1.webp',
         looks: [
             {
@@ -3581,6 +3637,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['outdoor', 'athletic', 'energetic', 'fitness'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_target.webp',
         looks: [
             {
@@ -3599,6 +3656,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'wellness', 'versatile', 'casual'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/3d5904b6fef640eebda2a4deea943492_39070/preview_talk_1.webp',
         looks: [
             {
@@ -3649,6 +3707,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'executive'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/09ffd4a3fba04940a5ee89df873d1eed_37120/preview_talk_3.webp',
         looks: [
             {
@@ -3675,6 +3734,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'business'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/a1ed8c71e4bf4e6cb9071d2b7cd71e4e_45660/preview_talk_1.webp',
         looks: [
             {
@@ -3709,6 +3769,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'versatile', 'business'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/3c8a6b980667470da7417a65578438b6_38030/preview_talk_1.webp',
         looks: [
             {
@@ -3751,6 +3812,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'casual', 'versatile'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/b2e3b88f48fe43a0a7f303f8ad6b08c2_39150/preview_talk_1.webp',
         looks: [
             {
@@ -3777,6 +3839,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'versatile', 'business'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/ee998336b07d4564aee85884dc0b402f_37160/preview_talk_3.webp',
         looks: [
             {
@@ -3803,6 +3866,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'business'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/de79ab31586142f993dced04e5a29e7b_37680/preview_talk_2.webp',
         looks: [
             {
@@ -3829,6 +3893,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'versatile', 'business'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/392967d6c52642a4968a8dd82572bd6c_37130/preview_target.webp',
         looks: [
             {
@@ -3855,6 +3920,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['indoor', 'professional', 'versatile', 'business', 'casual'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/c95be48f8f6e41bf83fa6e41212decbd_38890/preview_talk_2.webp',
         looks: [
             {
@@ -3897,6 +3963,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'versatile', 'business'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/25257e48e8034131a3a055b234cd4683_38090/preview_talk_1.webp',
         looks: [
             {
@@ -3939,6 +4006,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['indoor', 'professional', 'versatile', 'medical', 'casual'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/75e0a87b7fd94f0981ff398b593dd47f_45570/preview_talk_4.webp',
         looks: [
             {
@@ -4028,6 +4096,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['UGC', 'indoor', 'outdoor', 'casual', 'microphone'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/36818e88569b4df68fc1d1310bf20c42/full/2.2/preview_target.webp',
         looks: [
             {
@@ -4450,6 +4519,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['UGC', 'indoor', 'outdoor', 'casual'],
+        premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/4906bbce5e1a49d9936a59403c2c8efe/full/2.2/preview_target.webp',
         looks: [
             {

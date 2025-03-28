@@ -1,6 +1,6 @@
 'use client'
 
-import { Play, Pause, Check } from 'lucide-react'
+import { Play, Pause, Check, Rocket } from 'lucide-react'
 import { Button } from "@/src/components/ui/button"
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
@@ -8,6 +8,10 @@ import { accentFlags } from '../config/voices.config'
 import { useTranslations } from 'next-intl'
 import { Voice } from '../types/voice'
 import { useCreationStore } from '../store/creationStore'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { PlanName } from '../types/enums'
+import { useToast } from '../hooks/use-toast'
+import Link from 'next/link'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -45,14 +49,38 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
 
 export function VoiceCard({ voice, playingVoice, onPreviewVoice }: { voice: Voice, playingVoice: {voice: Voice | null, audio: HTMLAudioElement | null}, onPreviewVoice: (voice: Voice) => void }) {
     const { selectedVoice, setSelectedVoice } = useCreationStore()
+    const { activeSpace } = useActiveSpaceStore()
+    const { toast } = useToast()
     const t = useTranslations('voices')
+    const pricingT = useTranslations('pricing')
+    const planT = useTranslations('plan')
     const isSelected = selectedVoice?.id === voice.id;
+    
+    const handleVoiceSelection = () => {
+      if ((voice.plan === PlanName.PRO && activeSpace?.planName !== PlanName.PRO && activeSpace?.planName !== PlanName.ENTREPRISE) || (voice.plan === PlanName.ENTREPRISE && activeSpace?.planName !== PlanName.ENTREPRISE)) {
+        toast({
+          variant: "premium",
+          title: t('toast.title-error'),
+          description: t('toast.description-premium-error', { plan: planT(voice.plan) }),
+          action: (
+            <Link href="/dashboard/pricing" target="_blank">
+              <Button variant="outline" className="border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688] hover:text-white mt-2 w-full">
+                <Rocket className="h-4 w-4" />
+                {pricingT('upgrade')}
+              </Button>
+            </Link>
+          )
+        })
+        return
+      }
+      setSelectedVoice(voice)
+    }
 
   return (
     <Card 
       key={voice.id} 
       className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`} 
-      onClick={() => setSelectedVoice(voice)}
+      onClick={handleVoiceSelection}
     >
       {isSelected && (
         <div className="absolute top-4 right-2 transition-all duration-150">
@@ -68,6 +96,11 @@ export function VoiceCard({ voice, playingVoice, onPreviewVoice }: { voice: Voic
               <IconGenderFemale className="h-5 w-5 mr-2 text-pink-500" />
             )}
             <h3 className="text-lg font-semibold">{voice.name}</h3>
+            {(voice.plan === PlanName.ENTREPRISE || voice.plan === PlanName.PRO) && (
+              <Badge variant="secondary" className="ml-2 bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white text-xs border-none shadow-sm font-semibold">
+                {planT(voice.plan)}
+              </Badge>
+            )}
           </div>
           <div 
             className="mb-4 overflow-x-auto scrollbar-hide"
@@ -92,7 +125,10 @@ export function VoiceCard({ voice, playingVoice, onPreviewVoice }: { voice: Voic
           variant="outline"
           size="sm"
           className="w-full"
-          onClick={() => onPreviewVoice(voice)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onPreviewVoice(voice);
+          }}
         >
           {playingVoice.voice?.id === voice.id ? (
             <>

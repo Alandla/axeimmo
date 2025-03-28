@@ -1,3 +1,5 @@
+import { PlanName } from "./enums"
+
 export type Voice = {
     id: string
     name: string
@@ -7,6 +9,7 @@ export type Voice = {
     accent: string
     tags: string[]
     previewUrl: string
+    plan: PlanName
     voiceSettings?: {
         stability: number
         similarity_boost: number

@@ -1,12 +1,17 @@
 'use client'
 
-import { Check } from 'lucide-react'
+import { Check, Gem, Rocket } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
+import { Button } from "@/src/components/ui/button"
 import { useTranslations } from 'next-intl'
 import { useCreationStore } from '../store/creationStore'
 import { Avatar } from '../types/avatar'
 import Image from 'next/image'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { PlanName } from '../types/enums'
+import { useToast } from '../hooks/use-toast'
+import Link from 'next/link'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -44,14 +49,37 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
 
 export function AvatarCard({ avatar, onClick }: { avatar: Avatar; onClick: () => void }) {
     const { selectedAvatarName } = useCreationStore()
+    const { activeSpace } = useActiveSpaceStore()
+    const { toast } = useToast()
     const t = useTranslations('avatars')
+    const pricingT = useTranslations('pricing')
     const isSelected = selectedAvatarName === avatar.name;
+
+    const handleAvatarSelection = () => {
+      if (avatar.premium && activeSpace?.planName === PlanName.FREE) {
+        toast({
+          variant: "premium",
+          title: t('toast.title-error'),
+          description: t('toast.description-premium-error', { plan: 'Pro' }),
+          action: (
+            <Link href="/dashboard/pricing" target="_blank">
+              <Button variant="outline" className="border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688] hover:text-white mt-2 w-full">
+                <Rocket className="h-4 w-4" />
+                {pricingT('upgrade')}
+              </Button>
+            </Link>
+          )
+        })
+        return
+      }
+      onClick()
+    }
 
   return (
     <Card 
       key={avatar.id} 
       className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
-      onClick={onClick}
+      onClick={handleAvatarSelection}
     >
       {isSelected && (
         <div className="absolute top-4 right-2 transition-all duration-150">
@@ -67,6 +95,11 @@ export function AvatarCard({ avatar, onClick }: { avatar: Avatar; onClick: () =>
               <IconGenderFemale className="h-5 w-5 mr-2 text-pink-500" />
             )}
             <h3 className="text-lg font-semibold">{avatar.name}</h3>
+            {avatar.premium && (
+              <Badge variant="secondary" className="ml-2 bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white text-xs border-none shadow-sm font-medium">
+                Pro
+              </Badge>
+            )}
           </div>
           <div 
             className="mb-4 overflow-x-auto scrollbar-hide"

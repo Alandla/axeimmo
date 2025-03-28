@@ -8,6 +8,7 @@ export const connectMongo = async () => {
   }
 
   if (isConnected) {
+    console.log('Mongodb already connected');
     return;
   }
 
@@ -21,9 +22,9 @@ export const connectMongo = async () => {
 
     await mongoose.connect(process.env.MONGODB_URI, options);
     isConnected = true;
-    console.log('Connexion MongoDB établie');
+    console.log('Mongodb connected');
   } catch (error) {
-    console.error('Erreur de connexion MongoDB:', error);
+    console.error('Mongodb connection error:', error);
     throw error;
   }
 };

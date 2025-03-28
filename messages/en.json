@@ -107,9 +107,9 @@
       "everything-in": "Everything included in",
       "plus": "plus",
       "credits": "credits",
-      "250-credits": "250 credits = 25 minutes of video",
-      "1000-credits": "1000 credits = 1h40 of video",
-      "3000-credits": "3000 credits = 5 hours of video",
+      "150-credits": "150 credits = 15 minutes of video",
+      "400-credits": "400 credits = 40 minutes of video",
+      "800-credits": "800 credits = 1h20 of video",
       "custom": "Custom",
       "need-custom-plan": "Need a custom plan ? Contact us for a tailored solution.",
       "contact-sales": "Contact us",
@@ -129,8 +129,11 @@
         "duration-5-max": "Maximum duration of 5 minutes",
         "watermark-removal": "Watermark removal",
         "subtitles": "Automatic subtitles",
-        "voice": "High quality voice",
-        "avatar": "Realistic avatar",
+        "voice-1": "20 High quality voice",
+        "voice-2": "+100 High quality voice",
+        "voice-3": "+120 High quality voice",
+        "avatar-1": "88 Realistic avatar",
+        "avatar-2": "+150 Realistic avatar",
         "create-article": "Create a video from an article",
         "add-media": "Automatically add your media",
         "brand-kit": "Brand kit",
@@ -142,7 +145,7 @@
     "plan": {
       "FREE": "Free",
       "PRO": "Pro",
-      "CREATOR": "Creator",
+      "START": "Start",
       "ENTREPRISE": "Entreprise"
     },
     "export": {
@@ -206,7 +209,9 @@
         "description-space-not-found": "The space was not found.",
         "title-regenerated": "Regenerating audio",
         "description-regenerated": "The audio has been regenerated successfully.",
-        "description-regeneration-error": "An error occurred while regenerating the audio."
+        "description-regeneration-error": "An error occurred while regenerating the audio.",
+        "description-premium-voice-error": "This voice is only available in paid plans. Upgrade your subscription to access it.",
+        "description-premium-avatar-error": "This avatar is only available in paid plans. Upgrade your subscription to access it."
       },
       "sequence": {
         "edit-word": "Edit word",
@@ -396,6 +401,10 @@
       "search": "Search a voice..",
       "listen": "Listen",
       "pause": "Pause",
+      "toast": {
+        "title-error": "Paid plan required",
+        "description-premium-error": "This voice is only available in paid plans. You need the {plan} plan to access it."
+      },
       "tags": {
         "narrator": "Narrator",
         "documentary": "Documentary",
@@ -422,13 +431,16 @@
         "storytelling": "Storytelling",
         "journalism": "Journalism",
         "entertainment": "Entertainment",
-        "tv": "TV"
+        "tv": "TV",
+        "sales": "Sales",
+        "podcast": "Podcast"
       },
       "gender": {
         "male": "Male",
         "female": "Female"
       },
       "accent": {
+        "all": "All accents",
         "french": "French",
         "quebecois": "Quebecois",
         "spanish": "Spanish",
@@ -440,12 +452,26 @@
         "irish": "Irish",
         "german": "German",
         "swedish": "Swedish",
-        "canadian": "Canadian"
+        "canadian": "Canadian",
+        "brazilian": "Brazilian",
+        "portuguese": "Portuguese",
+        "croatian": "Croatian",
+        "nigerian": "Nigerian",
+        "egyptian": "Egyptian",
+        "indian": "Indian",
+        "italian": "Italian",
+        "latin american": "Latin American",
+        "arabic": "Arabic",
+        "peninsular": "Peninsular"
       }
     },
     "avatars": {
       "search": "Search an avatar..",
       "preview": "Preview",
+      "toast": {
+        "title-error": "Paid plan required",
+        "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it."
+      },
       "tags": {
         "professional": "Professional",
         "cossy": "Cossy",

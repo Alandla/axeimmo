@@ -1,3 +1,4 @@
+import { PlanName } from '../types/enums'
 import { Voice } from '../types/voice'
 
 export const voicesConfig: Voice[] = [
@@ -9,7 +10,30 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['narration'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/21m00Tcm4TlvDq8ikWAM/df6788f9-5c96-470d-8312-aab3b3d8f50a.mp3'
+  },
+  {
+    id: 'CwhRBWXzGAHq8TQ4Fs17',
+    name: 'Roger',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['social_media'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/CwhRBWXzGAHq8TQ4Fs17/58ee3ff5-f6f2-4628-93b8-e38eb31806b0.mp3'
+  },
+  {
+    id: 'FGY2WhTYpPnrIDTdsKH5',
+    name: 'Laura',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['social_media'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/FGY2WhTYpPnrIDTdsKH5/67341759-ad08-41a5-be6e-de12fe448618.mp3'
   },
   {
     id: '29vD33N1CtxCmqQRPOHJ',
@@ -19,6 +43,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['news'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/29vD33N1CtxCmqQRPOHJ/e8b52a3f-9732-440f-b78a-16d5e26407a1.mp3'
   },
   {
@@ -29,7 +54,19 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['video-game'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/2EiwWnXFnvU5JabPnv8n/65d80f52-703f-4cae-a91d-75d4e200ed02.mp3'
+  },
+  {
+    id: 'SAz9YHcvj6GT2YYXdXww',
+    name: 'River',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['social_media'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SAz9YHcvj6GT2YYXdXww/e6c95f0b-2227-491a-b3d7-2249240decb7.mp3'
   },
   {
     id: 'AmMsHJaCw4BtwV3KoUXF',
@@ -39,6 +76,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['news', 'video-game'],
+    plan: PlanName.PRO,
     voiceSettings: {
         stability: 0.8,
         similarity_boost: 0.69
@@ -53,25 +91,12 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['story'],
+    plan: PlanName.PRO,
     voiceSettings: {
         stability: 0.99,
         similarity_boost: 0.90
     },
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/hv6gVog5LgtIUX88Nmq8/tx8rwfCue7TqWMKmoWLv.mp3'
-  },
-  {
-    id: 'F1toM6PcP54s45kOOAyV',
-    name: 'Emma',
-    language: 'french',
-    accent: 'french',
-    gender: 'female',
-    age: 'middle aged',
-    tags: ['social_media'],
-    voiceSettings: {
-        stability: 0.52,
-        similarity_boost: 0.67
-    },
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/koOonD4HAsSMVyHuP4QTaatQ9cA2/voices/F1toM6PcP54s45kOOAyV/MXFPpZ9ofNwrZ8kY0wXJ.mp3'
   },
   {
     id: 'IHngRooVccHyPqB4uQkG',
@@ -81,6 +106,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['social_media'],
+    plan: PlanName.ENTREPRISE,
     voiceSettings: {
         stability: 0.52,
         similarity_boost: 0.67
@@ -95,7 +121,30 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['story'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/wyZnrAs18zdIj8UgFSV8/DriAKIJgOzTr1mTMinLI.mp3'
+  },
+  {
+    id: 'D7dkYvH17OKLgp4SLulf',
+    name: 'Diego',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['advertising'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/D7dkYvH17OKLgp4SLulf/Fi93KkolvadvCJVGsgqE.mp3'
+  },
+  {
+    id: 'ThT5KcBeYPX3keUQqHPh',
+    name: 'Dorothy',
+    language: 'english',
+    accent: 'british',
+    gender: 'female',
+    age: 'young',
+    tags: ['children_stories'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ThT5KcBeYPX3keUQqHPh/981f0855-6598-48d2-9f8f-b6d92fbbe3fc.mp3'
   },
   {
     id: 'KmqhNPEmmOndTBOPk4mJ',
@@ -105,6 +154,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['children_stories'],
+    plan: PlanName.PRO,
     voiceSettings: {
         stability: 0.42,
         similarity_boost: 0.75
@@ -112,24 +162,26 @@ export const voicesConfig: Voice[] = [
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/Zj9ZLb9VaXcqr3nC8n9J55ADmaB2/voices/KmqhNPEmmOndTBOPk4mJ/Q2N4SM2u9Rc5dlcx4ZvR.mp3'
   },
   {
-    id: 'XRxOSfsrfY33DhTprCzb',
+    id: 'dllHSct4GokGc1AH9JwT',
     name: 'Haseeb',
     language: 'french',
     accent: 'canadian',
     gender: 'male',
     age: 'young',
-    tags: ['informative_educational'],
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/XRxOSfsrfY33DhTprCzb/y7l4IIhcBY4ZC3Kr8QfZ.mp3'
+    tags: ['entertainment'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/dllHSct4GokGc1AH9JwT/JXj5A2pcLMsfU01VbiHN.mp3'
   },
   {
-    id: 'GYzIdoKkRyANjBvkKYfO',
+    id: 'MNKK2Wl2wbbsEPQTHZGt',
     name: 'Margaux',
     language: 'french',
     accent: 'french',
     gender: 'female',
     age: 'middle aged',
-    tags: ['story'],
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/koOonD4HAsSMVyHuP4QTaatQ9cA2/voices/GYzIdoKkRyANjBvkKYfO/F6Ki8lSK0OPDdnJXsEBQ.mp3'
+    tags: ['story', 'social_media', 'conversational'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/koOonD4HAsSMVyHuP4QTaatQ9cA2/voices/MNKK2Wl2wbbsEPQTHZGt/cBESg5mfxRaw8hEM3XnT.mp3'
   },
   {
     id: 'TnnHlREp9UyW7nQDycZx',
@@ -139,6 +191,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['advertising'],
+    plan: PlanName.ENTREPRISE,
     voiceSettings: {
         stability: 1,
         similarity_boost: 0.75
@@ -153,6 +206,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['news'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/5Q0t7uMcjvnagumLfvZi/1094515a-b080-4282-aac7-b1b8a553a3a8.mp3'
   },
   {
@@ -163,6 +217,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['narration'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/AZnzlk1XvdvUeBnXmlld/508e12d0-a7f7-4d86-a0d3-f3884ff353ed.mp3'
   },
   {
@@ -173,6 +228,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['video-game'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/CYw3kZ02Hs0563khs1Fj/872cb056-45d3-419e-b5c6-de2b387a93a0.mp3'
   },
   {
@@ -183,6 +239,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'old',
     tags: ['video-game'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/D38z5RcWu1voky8WS1ja/a470ba64-1e72-46d9-ba9d-030c4155e2d2.mp3'
   },
   {
@@ -193,6 +250,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['news'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/EXAVITQu4vr4xnSDxMaL/6851ec91-9950-471f-8586-357c52539069.mp3'
   },
   {
@@ -203,6 +261,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['narration'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ErXwobaYiN019PkySvjV/ee9ac367-91ee-4a56-818a-2bd1a9dbe83a.mp3'
   },
   {
@@ -213,6 +272,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['meditation'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/GBv7mTt0atIp3Br8iCZE/98542988-5267-4148-9a9e-baa8c4f14644.mp3'
   },
   {
@@ -223,6 +283,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['conversational'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/IKne3meq5aSn9XLyUdCD/102de6f2-22ed-43e0-a1f1-111fa75c5481.mp3'
   },
   {
@@ -233,6 +294,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['narration'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/JBFqnCBsd6RMkjVDRZzb/e6206d1a-0721-4787-aafb-06a6e705cac5.mp3'
   },
   {
@@ -243,6 +305,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['meditation'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/LcfcDJNUP1GQjkzn1xUU/e4b994b7-9713-4238-84f3-add8fccaaccd.mp3'
   },
   {
@@ -253,6 +316,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['narration', 'news'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/MF3mGyEYCl7XYWbV9V6O/d8ecadea-9e48-4e5d-868a-2ec3d7397861.mp3'
   },
   {
@@ -263,6 +327,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['characters'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/N2lVS1w4EtoT3dr4eOWO/ac833bd8-ffda-4938-9ebc-b0f99ca25481.mp3'
   },
   {
@@ -273,6 +338,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['video-game'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ODq5zmih8GrVes37Dizd/0ebec87a-2569-4976-9ea5-0170854411a9.mp3'
   },
   {
@@ -283,6 +349,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['video-game'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SOYHLrjzK2X1ezoPC6cr/86d178f6-f4b6-4e0e-85be-3de19f490794.mp3'
   },
   {
@@ -293,17 +360,8 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['narration'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/TX3LPaxmHKxFdv7VOQHJ/63148076-6363-42db-aea8-31424308b92c.mp3'
-  },
-  {
-    id: 'ThT5KcBeYPX3keUQqHPh',
-    name: 'Dorothy',
-    language: 'english',
-    accent: 'british',
-    gender: 'female',
-    age: 'young',
-    tags: ['children_stories'],
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ThT5KcBeYPX3keUQqHPh/981f0855-6598-48d2-9f8f-b6d92fbbe3fc.mp3'
   },
   {
     id: 'TxGEqnHWrfWFTfGW9XjX',
@@ -313,6 +371,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['narration'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/TxGEqnHWrfWFTfGW9XjX/3ae2fc71-d5f9-4769-bb71-2a43633cd186.mp3'
   },
   {
@@ -323,6 +382,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['narration'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/VR6AewLTigWG4xSOukaG/316050b7-c4e0-48de-acf9-a882bb7fc43b.mp3'
   },
   {
@@ -333,6 +393,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['characters'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/XB0fDUnXU5powFXDhCwa/942356dc-f10d-4d89-bda5-4f8505ee038b.mp3'
   },
   {
@@ -343,6 +404,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'middle aged',
     tags: ['news'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/Xb7hH8MSUJpSbSDYk0k2/d10f7534-11f6-41fe-a012-2de1e482d336.mp3'
   },
   {
@@ -353,6 +415,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'middle aged',
     tags: ['narration'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/XrExE9yKIg1WjnnlVkGX/b930e18d-6b4d-466e-bab2-0ae97c6d8535.mp3'
   },
   {
@@ -363,6 +426,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'old',
     tags: ['news'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ZQe5CZNOzWyzPSCn5a3c/35734112-7b72-48df-bc2f-64d5ab2f791b.mp3'
   },
   {
@@ -373,6 +437,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['news'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/Zlb1dXrM653N07WRdFW3/daa22039-8b09-4c65-b59f-c79c48646a72.mp3'
   },
   {
@@ -383,6 +448,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['narration'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/bVMeCyTHy58xNoL34h3p/66c47d58-26fd-4b30-8a06-07952116a72c.mp3'
   },
   {
@@ -393,6 +459,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['social_media'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/bIHbv24MWmeRgasZH58o/8caf8f3d-ad29-4980-af41-53f20c72d7a4.mp3'
   },
   {
@@ -403,6 +470,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['conversational', 'advertising'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/cgSgspJ2msm6clMCkdW9/56a97bf8-b69b-448f-846c-c3a11683d45a.mp3'
   },
   {
@@ -413,7 +481,19 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['conversational'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/cjVigY5qzO86Huf0OWal/d098fda0-6456-4030-b3d8-63aa048c9070.mp3'
+  },
+  {
+    id: 'qlfxsYlCv09qu8y6PkmY',
+    name: 'Sébastien',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['advertising'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/IDjAiYAPz8WIBA9QLchInFTST2K2/voices/qlfxsYlCv09qu8y6PkmY/IUx8b3i3dkhJvQekActS.mp3'
   },
   {
     id: 'flq6f7yk4E4fJM5XTYuZ',
@@ -423,6 +503,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'old',
     tags: ['audiobook'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/flq6f7yk4E4fJM5XTYuZ/c6431a82-f7d2-4905-b8a4-a631960633d6.mp3'
   },
   {
@@ -433,6 +514,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['ASMR'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/g5CIjZEefAph4nQFvHAz/26acfa99-fdec-43b8-b2ee-e49e75a3ac16.mp3'
   },
   {
@@ -443,6 +525,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['animation'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/jBpfuIE2acCO8z3wKNLl/3a7e4339-78fa-404e-8d10-c3ef5587935b.mp3'
   },
   {
@@ -453,6 +536,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['social_media'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/jsCqWAovK2LkecY7zXl4/8e1f5240-556e-4fd5-892c-25df9ea3b593.mp3'
   },
   {
@@ -463,6 +547,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['story'],
+    plan: PlanName.ENTREPRISE,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/y8FeN9lFTEmQOYCaE07F/9bxoWAk64KX3ReXWWxzF.mp3'
   },
   {
@@ -473,6 +558,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['social_media', 'entertainment'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/yl2ZDV1MzN4HbQJbMihG/TxJIOexqYqCv1Dzexs6Y.mp3'
   },
   {
@@ -483,6 +569,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['documentary', 'tv'],
+    plan: PlanName.ENTREPRISE,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/wcGcDDfRHvH6LR9p07u4/MwCrcs1GOzSgvpRzteGO.mp3'
   },
   {
@@ -493,6 +580,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'middle aged',
     tags: ['news', 'social_media'],
+    plan: PlanName.ENTREPRISE,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/cRXPVHkjb5YtcgDRqlqIZ9N7AdP2/voices/7H4vk4UjjbKDZiGTgH8K/tmQekACAPn5p2i4Z4Jtu.mp3'
   },
   {
@@ -503,6 +591,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['entertainment'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/LhidVU2Rn4OyolheNv4hiKZPyJj1/voices/rpw80tAFDqIOQ0Ve2QVJ/9a88462c-d0be-4d15-8443-fbf1c5fa7da7.mp3'
   },
   {
@@ -513,6 +602,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['narration'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/ohItIVrXTBI80RrUECOD/9mwgJwmYqekI6JTMJTcv.mp3'
   },
   {
@@ -523,6 +613,7 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'young',
     tags: ['narration', 'educational'],
+    plan: PlanName.PRO,
     voiceSettings: {
         stability: 0.52,
         similarity_boost: 1
@@ -537,6 +628,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'middle aged',
     tags: ['social_media'],
+    plan: PlanName.START,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/9BWtsMINqrJLrRacOk9x/405766b8-1f4e-4d3c-aba1-6f25333823ec.mp3'
   },
   {
@@ -547,6 +639,7 @@ export const voicesConfig: Voice[] = [
     gender: 'female',
     age: 'young',
     tags: ['journalism', 'entertainment'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ZAS4o4vI8aVeceS8bWmtpuSYDqM2/voices/FpvROcY4IGWevepmBWO2/bS9p4qTvVCRqxuIqhvk3.mp3'
   },
   {
@@ -557,7 +650,734 @@ export const voicesConfig: Voice[] = [
     gender: 'male',
     age: 'middle aged',
     tags: ['audiobooks', 'podcasts', 'storytelling'],
+    plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/PBm6YPbx7WbrxFTZwj3E/D8U7C2MgPxZt3MVgeFjn.mp3'
+  },
+  {
+    id: 'hPrNlxoc73WWsa2Bn4Xl',
+    name: 'Jessica',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/hPrNlxoc73WWsa2Bn4Xl/1ac32982-cda7-45e9-a8ae-1dc7e0654c7e.mp3'
+  },
+  {
+    id: 'pNInz6obpgDQGcFmaJgB',
+    name: 'Adam',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['audiobook', 'documentary'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pNInz6obpgDQGcFmaJgB/00a07690-41ef-4b37-9877-3521877fb517.mp3'
+  },
+  {
+    id: 'zcAOhNBS3c14rBihAFp1',
+    name: 'Lucas',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration', 'podcast'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/UeKvUoSIoHPIPa1EC4SF7awTS1O2/voices/zcAOhNBS3c14rBihAFp1/c0c8eb52-57f4-4e0c-bbb1-4132c68583bc.mp3'
+  },
+  {
+    id: 'XpgPp3EWdH9jutj6iYCG',
+    name: 'Juliette',
+    language: 'french',
+    accent: 'french',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration', 'storytelling'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/XpgPp3EWdH9jutj6iYCG/u0ahKTZK04PQzfRFMYNT.mp3'
+  },
+  {
+    id: 'Lj1QjnOhnCRYdZ1z41yA',
+    name: 'Max',
+    language: 'german',
+    accent: 'german',
+    gender: 'male',
+    age: 'young',
+    tags: ['news', 'documentary'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/Lj1QjnOhnCRYdZ1z41yA/NXGVXlbtcwI6fTuGHO5H.mp3'
+  },
+  {
+    id: 'WuBPEavIaQB56EnsGvFh',
+    name: 'Eryn',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['news', 'documentary'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/DdUt6lVFfrUOSikHrCbs3tesMgE2/voices/WuBPEavIaQB56EnsGvFh/3TZ2U2i8QlJlMuv3IEwF.mp3'
+  },
+  {
+    id: 'DbbNuBL7lf62XwY7arQb',
+    name: 'Hugo',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'young',
+    tags: ['advertising'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/CnqbtUuTI7c3c9tg8rabjLsxs392/voices/DbbNuBL7lf62XwY7arQb/SWJaCUjKugbzdtfB3K5g.mp3'
+  },
+  {
+    id: 'exxAZVMfY4Qs7F9CS1oN',
+    name: 'Mikulai',
+    language: 'english',
+    accent: 'croatian',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/nhgk7oBcbxQC2q60UkxTfqILyJH2/voices/exxAZVMfY4Qs7F9CS1oN/85e5d7bf-1951-40ad-a895-aa36315a5eb9.mp3'
+  },
+  {
+    id: '991lF4hc0xxfec4Y6B0i',
+    name: 'Henry',
+    language: 'english',
+    accent: 'british',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/xkeMToCFOISTDezVTilP578UL8P2/voices/991lF4hc0xxfec4Y6B0i/nRrBNvwlFicCbjCwWpDU.mp3'
+  },
+  {
+    id: 'GBp66gF5eXCkPPSbXSDf',
+    name: 'Fabien',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/7ucN3eeqpmVgx1aioqv50fxHYUy1/voices/GBp66gF5eXCkPPSbXSDf/0Idsn9IUbSjsPV0e8Blp.mp3'
+  },
+  {
+    id: 'it5NMxoQQ2INIh4XcO44',
+    name: 'Fisayo',
+    language: 'english',
+    accent: 'nigerian',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/yQsdngW2YfNcf21J76ZoeHWYWlF3/voices/it5NMxoQQ2INIh4XcO44/614c998f-9650-481e-bf2c-82c07d198c14.mp3'
+  },
+  {
+    id: 'byWOh4ohcovt7I8koF2I',
+    name: 'Alejandro',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ek2hAMyYf2bduef0Kx4Devyliyp1/voices/byWOh4ohcovt7I8koF2I/opQmsRyg7lcWOXCp1VNS.mp3'
+  },
+  {
+    id: 'aUTn6mevnrM9pqtesisb',
+    name: 'Aaliyah',
+    language: 'hindi',
+    accent: 'indian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/qi0SL35A2VgBnfV6EJ3InVfTK4D3/voices/aUTn6mevnrM9pqtesisb/a6cf4206-bc5e-43d0-9a71-1f33871a7e97.mp3'
+  },
+  {
+    id: 'rB5Qp6YdOmuEtJFRdSQ4',
+    name: 'Heraldo',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/7rRTLlFFfFWXTG0i2PYea6PMKxU2/voices/rB5Qp6YdOmuEtJFRdSQ4/cfd147f4-f9e1-45f1-a809-4f21f08ce2ec.mp3'
+  },
+  {
+    id: 'QQpLisLueobAksl21CaK',
+    name: 'Vanna Isaia',
+    language: 'italian',
+    accent: 'italian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/WIxLfUzQwDefgXJDitEOMmWvdky1/voices/QQpLisLueobAksl21CaK/Q7fFitaSyjYwxx1sJ1dO.mp3'
+  },
+  {
+    id: '58SnLsdWOv994RNKXLhV',
+    name: 'Dan',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/DFCSpya3TkNqWrV1PUbXKdcCAXH3/voices/58SnLsdWOv994RNKXLhV/246660cf-85b1-443c-816c-307f9f4c1e54.mp3'
+  },
+  {
+    id: 'mFgXOmlOfXfr6suoQkRH',
+    name: 'Frances',
+    language: 'english',
+    accent: 'irish',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/bb3RJYk3MKfoNRCBCd7fDI6pfIg2/voices/mFgXOmlOfXfr6suoQkRH/614ee365-8e51-4545-93a7-0a3338c765f0.mp3'
+  },
+  {
+    id: '75toWT7xwWkf5F7xSBgK',
+    name: 'omgpvoice',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/0Pp4sLTnuHaJOE5r0xCjhGZGHCI2/voices/75toWT7xwWkf5F7xSBgK/0a04be0f-d6c3-427e-ad5e-40b92c8cda74.mp3'
+  },
+  {
+    id: '8lbMAldPdNgaVy6tKwSs',
+    name: 'Mario',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ER39kT6PRBRm3Mn1puxCf29gDk22/voices/8lbMAldPdNgaVy6tKwSs/HchxVOKW4Gmw7VJt85y0.mp3'
+  },
+  {
+    id: 'CiACFqHhFCzosBy47F4a',
+    name: 'Kyle',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/IW0luuLA0rfha0Idd9mNs5vD30J2/voices/CiACFqHhFCzosBy47F4a/abce7301-fdd2-466f-9ac2-4dffbb51c65d.mp3'
+  },
+  {
+    id: 'orF2qy9215xjwqqxqsWW',
+    name: 'Rafael',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'male',
+    age: 'old',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/sU82YAs205U4voRAto2MQACX1a12/voices/orF2qy9215xjwqqxqsWW/SJmtVEhMG2bXkGRJXG69.mp3'
+  },
+  {
+    id: 'dyLJ4nCukg4AOgAVlUR7',
+    name: 'Eli',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['entertainment'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/sU82YAs205U4voRAto2MQACX1a12/voices/orF2qy9215xjwqqxqsWW/SJmtVEhMG2bXkGRJXG69.mp3'
+  },
+  {
+    id: 'DveEBhc92f63T1jcpWTx',
+    name: 'Waverly',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/RQNbgmuTlWUvhm0Mnm1nSsI0qXE3/voices/DveEBhc92f63T1jcpWTx/stv26KZlmXKsA8l3NixT.mp3'
+  },
+  {
+    id: 'FWCNEHwbQhB1Da2r1GKI',
+    name: 'Shane',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ozMB8jrBVqbaUOJusn3iJTWV1FJ3/voices/FWCNEHwbQhB1Da2r1GKI/c165f1c0-28c3-4726-8270-84be1fc4a629.mp3'
+  },
+  {
+    id: 'QASMHppTyiZ0ijhb7hy0',
+    name: 'Olympe',
+    language: 'french',
+    accent: 'french',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ozMB8jrBVqbaUOJusn3iJTWV1FJ3/voices/FWCNEHwbQhB1Da2r1GKI/c165f1c0-28c3-4726-8270-84be1fc4a629.mp3'
+  },
+  {
+    id: '7898AMdRTtesf0Y9zS54',
+    name: 'Lightsey',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration', 'audiobook', 'storytelling'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/7EAbDygyLsTi646EvIhijaFsquf1/voices/7898AMdRTtesf0Y9zS54/MqkGnRhMH2DhZRwdZc3M.mp3'
+  },
+  {
+    id: 'rKTMR3hvTUh1jUArWIh4',
+    name: 'Mike',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration', 'podcast'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/94k6h2pxysYlEdIuLK0DMiLix0a2/voices/rKTMR3hvTUh1jUArWIh4/a7a521f3-8725-4cab-8dfb-902449e62242.mp3'
+  },
+  {
+    id: 'VCgLBmBjldJmfphyB8sZ',
+    name: 'Liam',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'young',
+    tags: ['social_media', 'storytelling'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/vVdW5WhvW0YA35KQmbv3XvRnAAg2/voices/VCgLBmBjldJmfphyB8sZ/MGNzMBHZI3BIDAE8cz38.mp3'
+  },
+  {
+    id: '1cvhXKE3uxgoijz9BMLU',
+    name: 'Marcus',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['social_media'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/YaCZfgbNdKPjxtvOo6e847AKrkM2/voices/1cvhXKE3uxgoijz9BMLU/fb68f4e2-b114-4bc4-8620-755f7e00e751.mp3'
+  },
+  {
+    id: '6MoEUz34rbRrmmyxgRm4',
+    name: 'Manav',
+    language: 'hindi',
+    accent: 'indian',
+    gender: 'male',
+    age: 'young',
+    tags: ['conversational'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/workspace/514d94e9241c48e8b7905375729c436f/voices/6MoEUz34rbRrmmyxgRm4/Y9GHbV3PIZPdGgq1nSLz.mp3'
+  },
+  {
+    id: 'PukfMNJEERXCYO1uNJbI',
+    name: 'Miles',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'young',
+    tags: ['social_media'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/dlrXfcY3xqTyGXIAqZjfLJUoUAL2/voices/PukfMNJEERXCYO1uNJbI/fXcBAKB5ddnNFuheNM4U.mp3'
+  },
+  {
+    id: 'FZkK3TvQ0pjyDmT8fzIW',
+    name: 'Bunty',
+    language: 'hindi',
+    accent: 'indian',
+    gender: 'male',
+    age: 'young',
+    tags: ['social_media', 'storytelling'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/workspace/ed9b05e6324c457685490352e9a1ec90/voices/FZkK3TvQ0pjyDmT8fzIW/opgBS6JEyrQnlsYlwCAj.mp3'
+  },
+  {
+    id: 'WHC0PNPIwjx2cCk34Hm8',
+    name: 'Madeleine',
+    language: 'german',
+    accent: 'german',
+    gender: 'female',
+    age: 'young',
+    tags: ['social_media', 'podcast', 'advertising', 'narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/JkMtMybti7dSnGjkDsVqAkUgccE3/voices/WHC0PNPIwjx2cCk34Hm8/vvnYVCeh4YA8zTuebOrd.mp3'
+  },
+  {
+    id: 'iKX6IXB415Hh5bn2eNhP',
+    name: 'David',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['documentary', 'narration', 'educational'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/eFmYIzNi7fVTAUiSkCFaPtNH8aQ2/voices/iKX6IXB415Hh5bn2eNhP/w1paVoAT8XGE71VHcaAi.mp3'
+  },
+  {
+    id: 'picHqyHNqhfEq8cHUtCG',
+    name: 'Frederick',
+    language: 'german',
+    accent: 'german',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['advertising', 'entertainment'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/aWnKUw0pyjYMNaT9LJ1L6nH5r693/voices/picHqyHNqhfEq8cHUtCG/rCq7wjrmSgaSRm9ANnOo.mp3'
+  },
+  {
+    id: 'nr2EGJNe96rzn9FRlTId',
+    name: 'Yann',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration', 'podcast'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/KRHAVxDRPlRdjFaDHHWJQ0ClANE3/voices/nr2EGJNe96rzn9FRlTId/FvRYCe5PxmBMtHs8eNPV.mp3'
+  },
+  {
+    id: 'cTNP6ZM2mLTKj2BFhxEh',
+    name: 'Paul',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['podcast', 'journalism', 'documentary'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/koOonD4HAsSMVyHuP4QTaatQ9cA2/voices/cTNP6ZM2mLTKj2BFhxEh/fKLDrLD7nN8vSAKXkhzD.mp3'
+  },
+  {
+    id: '9ebwxABSgElm9wISOP0J',
+    name: 'Iris Romantic',
+    language: 'spanish',
+    accent: 'latin american',
+    gender: 'female',
+    age: 'young',
+    tags: ['entertainment', 'narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/jtTYnERxVfShx33UbofXQyQtghT2/voices/9ebwxABSgElm9wISOP0J/lPvHUX1sZYz0XxPX7Bk5.mp3'
+  },
+  {
+    id: '5OnMHwgTFgvPVwE8jP6B',
+    name: 'Anaïs',
+    language: 'french',
+    accent: 'french',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['informative_educational', 'podcast', 'news'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/FyWpm6xUx8PZjvR3q3SsYEXjmlj1/voices/5OnMHwgTFgvPVwE8jP6B/hyOFlAxqmCLW3fVQQMAG.mp3'
+  },
+  {
+    id: 'nbiTBaMRdSobTQJDzIWm',
+    name: 'Antoine',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['informative_educational', 'narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/QkxEr0aPYcYgv9cCEfhUocIlVTJ3/voices/nbiTBaMRdSobTQJDzIWm/owCEge25nCYClDypQDDy.mp3'
+  },
+  {
+    id: 'ViSNE020Z1wEV4uZomv5',
+    name: 'Alain',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration', 'storytelling'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/s3weMIU8KcfFYrHmAQsazlF1M1o2/voices/ViSNE020Z1wEV4uZomv5/b953bac3-d2fd-4f6d-b1e8-701e09d1c374.mp3'
+  },
+  {
+    id: 'meAbY2VpJkt1q46qk56T',
+    name: 'Hoda',
+    language: 'arabic',
+    accent: 'egyptian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration', 'conversational'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/k3cwQyUC1jgnRz4wTDCaJg9CSPj2/voices/meAbY2VpJkt1q46qk56T/Agu3vmW6cBTB6JmqrZKO.mp3'
+  },
+  {
+    id: 'JlPfrZoXeAKnNaogINHc',
+    name: 'Matthew',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['conversational', 'narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/Ebw6aIoLNBYbnP45ZSB5aHxmIAo2/voices/JlPfrZoXeAKnNaogINHc/KrEtDHvmgBd4TNe42CkZ.mp3'
+  },
+  {
+    id: 'BNgbHR0DNeZixGQVzloa',
+    name: 'David',
+    language: 'english',
+    accent: 'british',
+    gender: 'male',
+    age: 'old',
+    tags: ['narration', 'storytelling'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/BNgbHR0DNeZixGQVzloa/40VSLvxrLAkmQgyrEA4t.mp3'
+  },
+  {
+    id: 'SaqYcK3ZpDKBAImA8AdW',
+    name: 'Jane',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['social_media', 'narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/8RYUsFHsalUXjwVG0LjhNwH1j022/voices/SaqYcK3ZpDKBAImA8AdW/KOywtby6BYBzQUyFHwHK.mp3'
+  },
+  {
+    id: 'Dt2jDzhoZC0pZw5bmy2S',
+    name: 'Emilia',
+    language: 'german',
+    accent: 'german',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/P6pUmq42X5NZv0RV97gQ0XrmuXL2/voices/Dt2jDzhoZC0pZw5bmy2S/bbed96aa-bdaf-409c-8fd4-f3af1a33447d.mp3'
+  },
+  {
+    id: 'xctasy8XvGp2cVO9HL9k',
+    name: 'Allison',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['entertainment', 'news'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/xctasy8XvGp2cVO9HL9k/lsPc4Rdz6UBSdl9vu10A.mp3'
+  },
+  {
+    id: 'NDeNvFOosDh4L0JoDYIq',
+    name: 'José',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['news', 'entertainment'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/IgwDilkCraOI2af1CUCpv8HWGFt1/voices/NDeNvFOosDh4L0JoDYIq/5ed4032e-6181-49f1-975e-dedf1420303a.mp3'
+  },
+  {
+    id: 'nPczCjzI2devNBz1zQrb',
+    name: 'Brian',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/nPczCjzI2devNBz1zQrb/2dd3e72c-4fd3-42f1-93ea-abc5d4e5aa1d.mp3'
+  },
+  {
+    id: 'onwK4e9ZLuTAKqWW03F9',
+    name: 'Daniel',
+    language: 'english',
+    accent: 'british',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['news'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/onwK4e9ZLuTAKqWW03F9/7eee0236-1a72-4b86-b303-5dcadc007ba9.mp3'
+  },
+  {
+    id: 'pFZP5JQG7iQjIQuC4Bku',
+    name: 'Lily',
+    language: 'english',
+    accent: 'british',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pFZP5JQG7iQjIQuC4Bku/89b68b35-b3dd-4348-a84a-a3c13a3c2b30.mp3'
+  },
+  {
+    id: 'pqHfZKP75CvOlQylNhV4',
+    name: 'Bill',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'old',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pqHfZKP75CvOlQylNhV4/d782b3ff-84ba-4029-848c-acf01285524d.mp3'
+  },
+  {
+    id: 'dY1Qa8xkWbp1fM5ny2Lo',
+    name: 'Eliott',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/dY1Qa8xkWbp1fM5ny2Lo/Y6nHnD37GVdHFr4H0wIo.mp3'
+  },
+  {
+    id: 'glDtoWIoIgk38YbycCwG',
+    name: 'Clara',
+    language: 'french',
+    accent: 'french',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['entertainment'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/glDtoWIoIgk38YbycCwG/UlDuroynnWOO94VjqAlF.mp3'
+  },
+  {
+    id: 'x8FWrDHAK5xiFTJLpnHq',
+    name: 'Carla',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'young',
+    tags: ['social_media', 'sales'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/k9WcK5Z5XAXJknnN0IuLUYC1r5F2/voices/x8FWrDHAK5xiFTJLpnHq/zrpZge3z9EV0l2X3Utua.mp3'
+  },
+  {
+    id: 'oWAxZDx7w5VEj9dCyTzz',
+    name: 'Grace',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/oWAxZDx7w5VEj9dCyTzz/84a36d1c-e182-41a8-8c55-dbdd15cd6e72.mp3'
+  },
+  {
+    id: 'pMsXgVXv3BLzUgSXRplE',
+    name: 'Serena',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pMsXgVXv3BLzUgSXRplE/d61f18ed-e5b0-4d0b-a33c-5c6e7e33b053.mp3'
+  },
+  {
+    id: 'piTKgcLEGmPE4e6mEKli',
+    name: 'Nicole',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['ASMR'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/piTKgcLEGmPE4e6mEKli/c269a54a-e2bc-44d0-bb46-4ed2666d6340.mp3'
+  },
+  {
+    id: 't0jbNlBVZ17f02VDIeMI',
+    name: 'Jessie',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'old',
+    tags: ['characters'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/t0jbNlBVZ17f02VDIeMI/e26939e3-61a4-4872-a41d-33922cfbdcdc.mp3'
+  },
+  {
+    id: 'yoZ06aMxZJJ28mfd3POQ',
+    name: 'Sam',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/yoZ06aMxZJJ28mfd3POQ/b017ad02-8d18-4456-ad92-55c85ecf6363.mp3'
+  },
+  {
+    id: 'z9fAnlkpzviPz146aGWa',
+    name: 'Glinda',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['characters'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/z9fAnlkpzviPz146aGWa/cbc60443-7b61-4ebb-b8e1-5c03237ea01d.mp3'
+  },
+  {
+    id: 'zcAOhNBS3c14rBihAFp1',
+    name: 'Giovanni',
+    language: 'english',
+    accent: 'italian',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/zcAOhNBS3c14rBihAFp1/e7410f8f-4913-4cb8-8907-784abee5aff8.mp3'
+  },
+  {
+    id: 'zrHiDhphv9ZnVXBqCLjz',
+    name: 'Mimi',
+    language: 'english',
+    accent: 'swedish',
+    gender: 'female',
+    age: 'young',
+    tags: ['animation', 'children_stories'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/zrHiDhphv9ZnVXBqCLjz/decbf20b-0f57-4fac-985b-a4f0290ebfc4.mp3'
+  },
+  {
+    id: 'iP95p4xoKVk53GoZ742B',
+    name: 'Chris',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['conversational'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/iP95p4xoKVk53GoZ742B/3f4bde72-cc48-40dd-829f-57fbf906f4d7.mp3'
+  },
+  {
+    id: 'b6nVfb3l2zshrLZTvqbs',
+    name: 'Ilona',
+    language: 'french',
+    accent: 'french',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration', 'social_media'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/irKqfkQeyjUF43rcPLuZQ7UAbpn2/voices/b6nVfb3l2zshrLZTvqbs/aDmlO46A7chafGRQAEy5.mp3'
+  },
+  {
+    id: 'NYC9WEgkq1u4jiqBseQ9',
+    name: 'Russell',
+    language: 'english',
+    accent: 'british',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['entertainment', 'news', 'documentary'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/NYC9WEgkq1u4jiqBseQ9/cK07157YMomRml8se448.mp3'
   }
 ]
 
@@ -572,5 +1392,14 @@ export const accentFlags: Record<string, string> = {
   'australian': '🇦🇺',
   'irish': '🇮🇪',
   'german': '🇩🇪',
-  'swedish': '🇸🇪'
+  'swedish': '🇸🇪',
+  'croatian': '🇭🇷',
+  'nigerian': '🇳🇬',
+  'indian': '🇮🇳',
+  'italian': '🇮🇹',
+  'latin american': '🇲🇽',
+  'egyptian': '🇪🇬',
+  'arabic': '🇸🇦',
+  'peninsular': '🇪🇸',
+  'brazilian': '🇧🇷'
 }

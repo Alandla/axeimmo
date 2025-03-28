@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Star, Heart, Diamond, Check, Gem, ArrowRight, Info, Loader2, Phone, PhoneCall } from 'lucide-react'
+import { Star, Heart, Diamond, Check, Gem, Info, Loader2, PhoneCall, ChevronRight } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -92,7 +92,7 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:max-w-7xl">
+    <div className="container my-auto mx-auto px-4 sm:max-w-7xl">
       {discount.active && (
         <DiscountBanner />
       )}
@@ -162,7 +162,7 @@ export default function PricingPage() {
                 </div>
                 <div className="flex gap-2">
                   <span className="text-4xl font-bold">{Math.floor(discountedPrice)}€</span>
-                  <div className="flex flex-col text-sm">
+                  <div className="flex flex-col text-sm -space-y-1">
                     <span className={`line-through ${savePercentage > 0 ? '' : 'opacity-0'}`}>{plan.monthlyPrice}€</span>
                     <span className="text-sm text-muted-foreground">/{tPricing('month')}{isAnnual && `, ${tPricing('billed-annually')}`}</span>
                   </div>
@@ -171,7 +171,7 @@ export default function PricingPage() {
               <CardContent>
                 <Button 
                   className={`w-full mb-4 ${
-                    plan.name === PlanName.CREATOR 
+                    plan.name === PlanName.START 
                       ? 'bg-white text-black border border-gray-300 hover:bg-gray-100' 
                       : plan.popular 
                         ? 'bg-white text-black hover:bg-gray-100' 
@@ -184,13 +184,13 @@ export default function PricingPage() {
                   {loadingPlan === plan.name ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <ArrowRight className="w-4 h-4" />
+                    <ChevronRight className="w-4 h-4" />
                   )}
                 </Button>
                 <div className="border-t my-4" />
                 <div className="mb-4">
-                  <h3 className="font-medium mb-1">{tPricing('features')}</h3>
-                  {plan.name !== PlanName.CREATOR ? (
+                  <h3 className="font-semibold mb-1">{tPricing('features')}</h3>
+                  {plan.name !== PlanName.START ? (
                     <p className="text-sm text-muted-foreground">
                       {tPricing('everything-in')} {tPlan(plans[plans.findIndex(p => p.name === plan.name) - 1].name)}, {tPricing('plus')}:
                     </p>
@@ -212,9 +212,9 @@ export default function PricingPage() {
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>
-                                {plan.credits === 250 && tPricing('250-credits')}
-                                {plan.credits === 1000 && tPricing('1000-credits')}
-                                {plan.credits === 3000 && tPricing('3000-credits')}
+                                {plan.credits === 150 && tPricing('150-credits')}
+                                {plan.credits === 400 && tPricing('400-credits')}
+                                {plan.credits === 800 && tPricing('800-credits')}
                               </p>
                             </TooltipContent>
                           </Tooltip>
