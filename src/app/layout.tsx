@@ -27,6 +27,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Hoox",
   description: "Hoox application",
+  robots: "noindex, nofollow",
 };
 
 export default async function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
