@@ -16,7 +16,7 @@ export const getVideoById = async (id: string): Promise<IVideo | null> => {
 export const getVideosBySpaceId = async (spaceId: string): Promise<IVideo[]> => {
   try {
     return await executeWithRetry(async () => {
-      const videos = await Video.find({ spaceId });
+      const videos = await Video.find({ spaceId, archived: { $ne: true } });
       return videos.map(video => video.toJSON());
     });
   } catch (error: any) {
@@ -38,10 +38,10 @@ export const updateVideo = async (videoData: IVideo): Promise<IVideo> => {
 export const deleteVideo = async (videoId: string): Promise<void> => {
   try {
     await executeWithRetry(async () => {
-      await Video.findByIdAndDelete(videoId);
+      await Video.findByIdAndUpdate(videoId, { archived: true });
     });
   } catch (error: any) {
-    throw new Error(`Erreur lors de la suppression de la vidéo: ${error.message}`);
+    throw new Error(`Erreur lors de l'archivage de la vidéo: ${error.message}`);
   }
 }
 

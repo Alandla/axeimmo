@@ -4,6 +4,7 @@ import { useCreationStore } from '../store/creationStore'
 import { Steps, StepState } from '../types/step'
 import { uploadFiles } from './upload.service'
 import { IMedia } from '../types/video'
+import { useVideosStore } from '../store/videosStore'
 
 export const startGeneration = async (userId: string, spaceId: string) => {
   const { files, script, selectedVoice, selectedLook, setSteps } = useCreationStore.getState()
@@ -67,6 +68,15 @@ export const startGeneration = async (userId: string, spaceId: string) => {
       lastStep = run.metadata?.name as Steps
       if (run.status === "COMPLETED") {
         videoId = run.output?.videoId as string
+
+        if (videoId && spaceId) {
+          try {
+            await useVideosStore.getState().fetchVideos(spaceId, true);
+          } catch (e) {
+            console.error('Erreur lors de la mise à jour du cache vidéo:', e);
+          }
+        }
+        
         break
       }
     }

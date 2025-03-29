@@ -79,6 +79,7 @@ export interface IVideo {
   id?: string;
   spaceId: string; // MongoDB ObjectId as string
   costToGenerate?: number;
+  archived?: boolean;
   state: {
     type: 'pending' | 'generating' | 'done' | 'exporting' | 'error';
     message?: string;

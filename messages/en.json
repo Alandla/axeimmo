@@ -39,7 +39,11 @@
       "toast": {
         "title-updated": "Title updated",
         "description-updated": "Your video title has been updated",
-        "error-message": "An error occurred while updating the title"
+        "error-message": "An error occurred while updating the title",
+        "title-video-deleted": "Video deleted",
+        "description-video-deleted": "Your video has been deleted",
+        "error-video-deleted": "An error occurred while deleting the video",
+        "error-title": "Error"
       },
       "video": {
         "outdated": "This video is no longer available",

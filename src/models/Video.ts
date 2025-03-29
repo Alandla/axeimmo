@@ -8,6 +8,10 @@ const videoSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId, // Référence à un espace
       ref: 'Space',
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
     state: {
       type: {
         type: String,
