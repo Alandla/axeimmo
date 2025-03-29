@@ -4,10 +4,10 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
-import { Camera, Settings2, User2, Languages, Save, Loader2, X } from 'lucide-react'
+import { Camera, User2, Languages, Save, Loader2, X } from 'lucide-react'
 import { User } from "next-auth"
 import { basicApiCall } from "../lib/api"
-import { useLocale, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 import { IUser } from "../types/user"
 import { getMediaUrlFromFileByPresignedUrl } from "../service/upload.service"
 
