@@ -22,7 +22,6 @@ export function GeneralSettings({ user }: { user: User }) {
   const [originalName, setOriginalName] = useState(user.name || '')
   const [originalLanguage, setOriginalLanguage] = useState(user.options?.lang || 'en')
   const [originalAvatarUrl, setOriginalAvatarUrl] = useState(user.image || undefined)
-  const locale = useLocale()
   const [isUploading, setIsUploading] = useState(false)
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
