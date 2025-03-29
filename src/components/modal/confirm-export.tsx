@@ -16,6 +16,7 @@ import { useTranslations } from 'next-intl'
 import { SimpleSpace } from '@/src/types/space'
 import { getSpaceById } from '@/src/service/space.service'
 import ModalPricing from './modal-pricing'
+import { useRouter } from 'next/navigation'
 
 interface ModalConfirmExportProps {
   cost: number
@@ -38,13 +39,14 @@ export default function ModalConfirmExport({
   const [space, setSpace] = useState<SimpleSpace | null>(null)
   const [showModalPricing, setShowModalPricing] = useState(false)
   const t = useTranslations('export-modal')
+  const router = useRouter()
 
   const handleConfirm = async () => {
     setIsPending(true)
     const exportId = await onExportVideo()
     if (exportId) {
       await new Promise(resolve => setTimeout(resolve, 500))
-      window.open(`/export/${exportId}`, '_blank')
+      router.push(`/export/${exportId}`)
     }
     setIsPending(false)
     setIsOpen(false)
