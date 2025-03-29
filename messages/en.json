@@ -410,7 +410,11 @@
       "placeholder": {
         "start": "A video about ...",
         "edit-script": "Could you modify the script to ..."
-      }
+      },
+      "loading": "Loading...",
+      "limit-reached-title": "Video Limit Reached",
+      "limit-reached-description": "With the free plan, you are limited to 3 videos. Upgrade your plan to create additional videos.",
+      "upgrade-plan": "Upgrade Plan"
     },
     "select": {
       "duration": {

@@ -419,7 +419,11 @@
       "placeholder": {
         "start": "Une vidéo qui parle de ...",
         "edit-script": "Est-ce que tu pourrais modifier le script pour ..."
-      }
+      },
+      "loading": "Chargement...",
+      "limit-reached-title": "Limite de vidéos atteinte",
+      "limit-reached-description": "Avec le plan gratuit, tu es limité à 3 vidéos. Mettez à niveau ton abonnement pour créer des vidéos supplémentaires.",
+      "upgrade-plan": "Passer à un plan supérieur"
     },
     "select": {
       "duration": {

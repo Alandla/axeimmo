@@ -2,12 +2,12 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useTranslations } from "next-intl"
-import { Check, Pencil, Clock } from 'lucide-react'
+import { Check, Pencil, Clock, AlertCircle, Rocket } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { useSession } from 'next-auth/react'
 import { generateScript, improveScript, readStream } from '../lib/stream'
 import { getArticleContentFromUrl } from '../lib/article'
-import { CreationStep } from '../types/enums'
+import { CreationStep, PlanName } from '../types/enums'
 import { Textarea } from './ui/textarea'
 import { AiChatTab } from './ai-chat-tab'
 import { Button } from './ui/button'
@@ -19,9 +19,11 @@ import { Steps, StepState } from '../types/step'
 import { GenerationProgress } from './generation-progress'
 import { startGeneration } from '../service/generation.service'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { useVideosStore } from '../store/videosStore'
 import { useRouter } from 'next/navigation'
 import { ILastUsed } from '@/src/types/space'
 import { getSpaceLastUsed } from '../service/space.service'
+import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 
 enum MessageType {
   TEXT = 'text',
@@ -42,13 +44,45 @@ interface Message {
 export function AiChat() {
   const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps } = useCreationStore()
   const { activeSpace, setLastUsedParameters } = useActiveSpaceStore()
+  const { videosBySpace, fetchVideos } = useVideosStore()
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [creationStep, setCreationStep] = useState(CreationStep.START)
+  const [hasFreePlanReachedLimit, setHasFreePlanReachedLimit] = useState(false)
   const { data: session } = useSession()
   const t = useTranslations('ai');
   const tAi = useTranslations('ai-chat');
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  // Vérifier le nombre de vidéos pour le plan gratuit
+  useEffect(() => {
+    const checkVideoLimit = async () => {
+      if (!activeSpace || activeSpace.planName !== PlanName.FREE) {
+        return;
+      }
+
+      try {
+        // Récupérer les vidéos depuis le store ou l'API
+        let videos = videosBySpace.get(activeSpace.id);
+        
+        if (!videos) {
+          // Si le store est vide, charger depuis l'API
+          videos = await fetchVideos(activeSpace.id);
+        }
+        
+        // Vérifier si l'utilisateur a atteint la limite de 3 vidéos
+        if (videos && videos.length >= 3) {
+          setHasFreePlanReachedLimit(true);
+        } else {
+          setHasFreePlanReachedLimit(false);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la vérification du nombre de vidéos:", error);
+      }
+    };
+    
+    checkVideoLimit();
+  }, [activeSpace]);
 
   const handleSendMessage = (message: string, duration: number) => {
     if (creationStep === CreationStep.START) {
@@ -319,8 +353,29 @@ export function AiChat() {
 }, [activeSpace])
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col justify-center items-center p-4">
+    <div className="flex flex-col h-full relative">
+      {hasFreePlanReachedLimit && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full m-4">
+            <Alert variant="destructive" className="mb-3">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>{t('limit-reached-title')}</AlertTitle>
+              <AlertDescription>
+                {t('limit-reached-description')}
+              </AlertDescription>
+            </Alert>
+            <Button 
+              variant="default" 
+              onClick={() => router.push('/dashboard/pricing')}
+              className="w-full"
+            >
+              <Rocket className="h-4 w-4" />
+              {t('upgrade-plan')}
+            </Button>
+          </div>
+        </div>
+      )}
+      <div className={`flex-1 flex flex-col justify-center items-center p-4 ${hasFreePlanReachedLimit ? 'pointer-events-none' : ''}`}>
         {messages.length === 0 ? (
           <div className="w-full max-w-md">
             <div className="text-center mb-8">
@@ -394,7 +449,13 @@ export function AiChat() {
             ))}
           </div>
         )}
-        <AiChatTab creationStep={creationStep} sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} handleConfirmVoice={handleConfirmVoice} />
+        <AiChatTab 
+          creationStep={creationStep} 
+          sendMessage={handleSendMessage} 
+          handleConfirmAvatar={handleConfirmAvatar} 
+          handleConfirmVoice={handleConfirmVoice}
+          isDisabled={hasFreePlanReachedLimit}
+        />
       </div>
     </div>
   )
