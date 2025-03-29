@@ -127,6 +127,11 @@
       "max-duration": "Maximum duration of",
       "minute": "minute",
       "soon": "Soon",
+      "premium-toast": {
+        "title": "Premium plan required",
+        "description": "This feature requires a paid plan. You need the {plan} plan to access it.",
+        "button": "Upgrade"
+      },
       "discount": {
         "title": "Launch Offer",
         "description": "Limited time offer - Get 20% off on all plans",
@@ -288,6 +293,7 @@
       "subtitle-settings": {
         "title": "Subtitle style",
         "save-button": "Save",
+        "save-button-tooltip": "Feature available with Pro and Enterprise plans",
         "title-subtitle-style-saved": "Subtitle style saved",
         "description-subtitle-style-saved": "The subtitle style has been saved.",
         "italic": "Italic",

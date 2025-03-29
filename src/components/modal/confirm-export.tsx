@@ -79,7 +79,7 @@ export default function ModalConfirmExport({
                 <p><b>{t('cost')}:</b> {cost} credits</p>
                 <p><b>{t('balance')}:</b> {space?.credits} credits</p>
               </div>
-              {!showWatermark && (
+              {showWatermark && (
                 <Alert 
                   variant="destructive" 
                   className="cursor-pointer mt-2"

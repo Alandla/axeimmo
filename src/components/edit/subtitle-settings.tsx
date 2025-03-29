@@ -21,9 +21,12 @@ import { Slider } from "@/src/components/ui/slider"
 import { Switch } from "@/src/components/ui/switch"
 import { templates } from "@/src/config/subtitles.config"
 import SelectFonts from "../ui/select/select-fonts"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
+import { Badge } from "@/src/components/ui/badge"
 
 export default function SubtitleSettings({ video, updateSubtitleStyle, handleSaveSubtitleStyle, isMobile = false }: { video: any, updateSubtitleStyle: any, handleSaveSubtitleStyle: any, isMobile?: boolean}) {
   const t = useTranslations('edit.subtitle-settings')
+  
   const [isSaving, setIsSaving] = useState(false)
 
   const updateStyle = (updates: Partial<typeof video.video.subtitle.style>) => {
@@ -109,10 +112,24 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
       <CardHeader className="p-2 sm:p-6">
         <div className="flex justify-between items-center">
           <CardTitle>{t('title')}</CardTitle>
-          <Button size="sm" onClick={onSaveSubtitleStyle} disabled={isSaving}>
-            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save size={18} />}
-            {t('save-button')}
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button size="sm" onClick={onSaveSubtitleStyle} disabled={isSaving}>
+                  {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save size={18} />}
+                  {t('save-button')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white border-none">
+                    Pro
+                  </Badge>
+                  <p>{t('save-button-tooltip')}</p>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </CardHeader>
       <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">

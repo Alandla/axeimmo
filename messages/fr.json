@@ -136,6 +136,10 @@
       "max-duration": "Durée maximale de",
       "minute": "minute",
       "soon": "Bientôt",
+      "premium-toast": {
+        "title": "Plan payant requis",
+        "description": "Cette fonctionnalité nécessite un plan payant. Vous avez besoin du plan {plan} pour y accéder."
+      },
       "discount": {
         "title": "Offre de lancement",
         "description": "Offre limitée - 20% de réduction sur tous les plans",
@@ -297,6 +301,7 @@
       "subtitle-settings": {
         "title": "Style de sous-titre",
         "save-button": "Sauvegarder",
+        "save-button-tooltip": "Fonctionnalité réservée aux abonnements Pro et Entreprise",
         "title-subtitle-style-saved": "Style de sous-titre sauvegardé",
         "description-subtitle-style-saved": "Le style de sous-titre a été sauvegardé.",
         "italic": "Italique",

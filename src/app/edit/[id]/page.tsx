@@ -7,7 +7,7 @@ import { Card } from "@/src/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/src/components/ui/breadcrumb"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
-import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2 } from 'lucide-react'
+import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2, Rocket } from 'lucide-react'
 import Link from 'next/link'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
@@ -37,12 +37,16 @@ import { ISpace } from '@/src/types/space'
 import { PlanName } from '@/src/types/enums'
 import TransitionSettings from '@/src/components/edit/transition-settings'
 import { transitions as defaultTransitions, sounds as defaultSounds } from '@/src/config/transitions.config'
+import { usePremiumToast } from '@/src/utils/premium-toast'
 
 export default function VideoEditor() {
   const { id } = useParams()
   const { data: session } = useSession()
   const { toast } = useToast()
   const t = useTranslations('edit')
+  const pricingT = useTranslations('pricing')
+  const planT = useTranslations('plan')
+  const { showPremiumToast } = usePremiumToast()
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
 
@@ -53,6 +57,7 @@ export default function VideoEditor() {
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
   const [showWatermark, setShowWatermark] = useState(true)
+  const [planName, setPlanName] = useState<PlanName>(PlanName.FREE)
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -121,6 +126,16 @@ export default function VideoEditor() {
 
   const handleSaveSubtitleStyle = async () => {
     try {
+      // Vérifier si l'utilisateur a un plan Pro ou Entreprise
+      if (planName !== PlanName.PRO && planName !== PlanName.ENTREPRISE) {
+        showPremiumToast(
+          pricingT('premium-toast.title'),
+          pricingT('premium-toast.description', { plan: planT(PlanName.PRO) }),
+          pricingT('upgrade')
+        );
+        return;
+      }
+
       const subtitleStyle : ISpaceSubtitleStyle[] = await basicApiCall("/space/addSubtitleStyle", { spaceId: video?.spaceId || '', subtitleStyle: video?.video?.subtitle?.style })
       setSubtitleStyles(subtitleStyle)
       toast({
@@ -256,7 +271,8 @@ export default function VideoEditor() {
         const spaceResponse = await basicApiGetCall<ISpace>(`/space/${response.spaceId}`);
         setShowWatermark(spaceResponse.plan.name === PlanName.FREE);
         setSubtitleStyles(spaceResponse.subtitleStyle);
-
+        setPlanName(spaceResponse.plan.name);
+        
         // Vérifier si une review existe déjà
         const reviewResponse = await basicApiGetCall(`/reviews/${id}`);
         setHasExistingReview(!!reviewResponse);

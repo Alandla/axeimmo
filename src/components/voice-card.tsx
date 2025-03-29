@@ -10,8 +10,7 @@ import { Voice } from '../types/voice'
 import { useCreationStore } from '../store/creationStore'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { PlanName } from '../types/enums'
-import { useToast } from '../hooks/use-toast'
-import Link from 'next/link'
+import { usePremiumToast } from '@/src/utils/premium-toast'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -50,7 +49,7 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
 export function VoiceCard({ voice, playingVoice, onPreviewVoice }: { voice: Voice, playingVoice: {voice: Voice | null, audio: HTMLAudioElement | null}, onPreviewVoice: (voice: Voice) => void }) {
     const { selectedVoice, setSelectedVoice } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
-    const { toast } = useToast()
+    const { showPremiumToast } = usePremiumToast()
     const t = useTranslations('voices')
     const pricingT = useTranslations('pricing')
     const planT = useTranslations('plan')
@@ -58,19 +57,11 @@ export function VoiceCard({ voice, playingVoice, onPreviewVoice }: { voice: Voic
     
     const handleVoiceSelection = () => {
       if ((voice.plan === PlanName.PRO && activeSpace?.planName !== PlanName.PRO && activeSpace?.planName !== PlanName.ENTREPRISE) || (voice.plan === PlanName.ENTREPRISE && activeSpace?.planName !== PlanName.ENTREPRISE)) {
-        toast({
-          variant: "premium",
-          title: t('toast.title-error'),
-          description: t('toast.description-premium-error', { plan: planT(voice.plan) }),
-          action: (
-            <Link href="/dashboard/pricing" target="_blank">
-              <Button variant="outline" className="border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688] hover:text-white mt-2 w-full">
-                <Rocket className="h-4 w-4" />
-                {pricingT('upgrade')}
-              </Button>
-            </Link>
-          )
-        })
+        showPremiumToast(
+          t('toast.title-error'),
+          t('toast.description-premium-error', { plan: planT(voice.plan) }),
+          pricingT('upgrade')
+        );
         return
       }
       setSelectedVoice(voice)

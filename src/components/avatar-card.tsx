@@ -10,8 +10,7 @@ import { Avatar } from '../types/avatar'
 import Image from 'next/image'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { PlanName } from '../types/enums'
-import { useToast } from '../hooks/use-toast'
-import Link from 'next/link'
+import { usePremiumToast } from '@/src/utils/premium-toast'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -50,26 +49,18 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
 export function AvatarCard({ avatar, onClick }: { avatar: Avatar; onClick: () => void }) {
     const { selectedAvatarName } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
-    const { toast } = useToast()
+    const { showPremiumToast } = usePremiumToast()
     const t = useTranslations('avatars')
     const pricingT = useTranslations('pricing')
     const isSelected = selectedAvatarName === avatar.name;
 
     const handleAvatarSelection = () => {
       if (avatar.premium && activeSpace?.planName === PlanName.FREE) {
-        toast({
-          variant: "premium",
-          title: t('toast.title-error'),
-          description: t('toast.description-premium-error', { plan: 'Pro' }),
-          action: (
-            <Link href="/dashboard/pricing" target="_blank">
-              <Button variant="outline" className="border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688] hover:text-white mt-2 w-full">
-                <Rocket className="h-4 w-4" />
-                {pricingT('upgrade')}
-              </Button>
-            </Link>
-          )
-        })
+        showPremiumToast(
+          t('toast.title-error'),
+          t('toast.description-premium-error', { plan: 'Pro' }),
+          pricingT('upgrade')
+        );
         return
       }
       onClick()
