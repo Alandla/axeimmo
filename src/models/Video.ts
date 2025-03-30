@@ -81,9 +81,7 @@ const videoSchema = new mongoose.Schema({
       },
       metadata: {
         audio_duration: Number,
-        number_of_distinct_channels: Number,
-        billing_time: Number,
-        transcription_time: Number,
+        language: String,
       },
       sequences: [sequenceSchema],
       avatar: {

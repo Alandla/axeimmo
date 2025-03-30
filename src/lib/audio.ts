@@ -143,9 +143,7 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
           subtitle: updatedVideo?.video?.subtitle || {},
           metadata: updatedVideo?.video?.metadata || {
               audio_duration: 0,
-              number_of_distinct_channels: 0,
-              billing_time: 0,
-              transcription_time: 0
+              language: 'en'
           },
           sequences: newSequences
       }

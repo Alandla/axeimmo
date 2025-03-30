@@ -1,5 +1,7 @@
 import { logger } from "@trigger.dev/sdk/v3";
 import { ISequence, IWord } from "../types/video";
+import axios from "axios";
+import FormData from "form-data";
 
 interface Utterance {
   text: string;
@@ -12,9 +14,7 @@ interface Utterance {
 
 interface TranscriptionMetadata {
   audio_duration: number;
-  number_of_distinct_channels: number;
-  billing_time: number;
-  transcription_time: number;
+  language: string;
 }
 
 interface SplitSentencesResult {
@@ -43,10 +43,8 @@ export function createLightTranscription(sequences: ISequence[]): LightTranscrip
   }));
 }
 
-export function splitIntoSequences(utterances: Utterance[], sentenceIndex: number): ISequence[] {
-  const allWords = utterances.reduce((acc, utterance) => {
-    return [...acc, ...utterance.words];
-  }, [] as IWord[]);
+export function splitIntoSequences(utterances: Utterance, sentenceIndex: number): ISequence[] {
+  const allWords = utterances.words;
 
   const sequences: ISequence[] = [];
   let currentSequence: IWord[] = [];
@@ -75,45 +73,32 @@ export function splitIntoSequences(utterances: Utterance[], sentenceIndex: numbe
 export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
   const finalSequences: ISequence[] = [];
   let timeOffset = 0;
-  
-  // Initialiser les métadonnées combinées
-  const combinedMetadata: TranscriptionMetadata = {
-    audio_duration: 0,
-    number_of_distinct_channels: 1,
-    billing_time: 0,
-    transcription_time: 0
-  };
 
   for (let i = 0; i < sentences.length; i++) {
-    if (sentences[i].transcription.transcription.utterances.length > 0) {
-      const currentMetadata = sentences[i].transcription.metadata;
-      combinedMetadata.billing_time += currentMetadata.billing_time;
-      combinedMetadata.transcription_time += currentMetadata.transcription_time;
+    if (sentences[i].transcription.words.length > 0) {
 
       // Ajuster les timings des utterances avec l'offset actuel
-      const adjustedUtterances = sentences[i].transcription.transcription.utterances.map((utterance: Utterance) => ({
-        ...utterance,
-        start: utterance.start + timeOffset,
-        end: utterance.end + timeOffset,
-        words: utterance.words.map(word => ({
+      const adjusted = {
+        ...sentences[i].transcription,
+        start: sentences[i].transcription.start + timeOffset,
+        end: sentences[i].transcription.end + timeOffset,
+        words: sentences[i].transcription.words.map((word: any) => ({
           ...word,
           start: word.start + timeOffset,
           end: word.end + timeOffset
         }))
-      }));
+      }
 
-      logger.info('Adjusted utterances', { adjustedUtterances });
+      logger.info('Adjusted utterances', { adjusted });
 
       // Créer les séquences pour cette phrase
-      const s: ISequence[] = splitIntoSequences(adjustedUtterances, sentences[i].index);
+      const s: ISequence[] = splitIntoSequences(adjusted, sentences[i].index);
 
       logger.info('Sequences', { s });
 
       finalSequences.push(...s);
 
-      // Mettre à jour l'offset pour la prochaine phrase
-      const lastUtterance = adjustedUtterances[adjustedUtterances.length - 1];
-      timeOffset = lastUtterance ? lastUtterance.end : 0;
+      timeOffset = adjusted.end;
 
       logger.info('Time offset', { timeOffset });
     }
@@ -122,14 +107,19 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
 
   const sequences = adjustSequenceTimings(finalSequences);
 
+  const metadata: TranscriptionMetadata = {
+    audio_duration: 0,
+    language: sentences[0].transcription.language_code
+  };
+
   if (sequences.length > 0) {
     const lastSequence = sequences[sequences.length - 1];
-    combinedMetadata.audio_duration = lastSequence.end;
+    metadata.audio_duration = lastSequence.end;
   }
 
   return {
     sequences: sequences,
-    videoMetadata: combinedMetadata
+    videoMetadata: metadata
   };
 }
 
@@ -262,4 +252,92 @@ export function combineTranscriptions(sentences: any[]): any {
   combinedTranscription.transcription.full_transcript = fullTranscript.join(" ");
 
   return combinedTranscription;
+}
+
+/**
+ * Récupère la transcription d'un fichier audio à partir d'une URL
+ * @param audioUrl URL du fichier audio à transcrire
+ * @param text Texte optionnel pour guider la transcription
+ * @returns La transcription du fichier audio
+ */
+export const getTranscription = async (audioUrl: string, text?: string) => {
+    try {
+        // Télécharger le fichier audio depuis l'URL
+        const audioResponse = await axios.get(audioUrl, { responseType: 'arraybuffer' });
+        
+        // Créer un FormData pour envoyer le fichier
+        const formData = new FormData();
+        formData.append('file', Buffer.from(audioResponse.data), {
+            filename: 'audio.mp3',
+            contentType: 'audio/mpeg'
+        });
+        formData.append('model', 'whisper-large-v3');
+        
+        if (text) {
+            formData.append('prompt', text);
+        }
+        
+        formData.append('response_format', 'verbose_json');
+        formData.append('language', 'fr');
+        formData.append('timestamp_granularities[]', 'word');
+        
+        // Utiliser axios pour faire une requête directe à l'API Groq avec FormData
+        const response = await axios.post(
+            'https://api.groq.com/openai/v1/audio/transcriptions',
+            formData,
+            {
+                headers: {
+                    'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+                    ...formData.getHeaders()
+                }
+            }
+        );
+
+        return {
+            text: response.data.text,
+            raw: response.data
+        };
+    } catch (error: any) {
+        console.error("Erreur de transcription Groq:", error.response?.data || error.message);
+        return null;
+    }
+}
+
+/**
+ * Transcrit toutes les sentences en parallèle et ajoute les résultats aux sentences
+ * @param sentences Liste des sentences à transcrire
+ * @returns Les sentences avec les résultats de transcription
+ */
+export const transcribeAllSentences = async (sentences: ISentence[]) => {
+    try {
+        const transcriptionPromises = sentences.map(sentence => 
+            getTranscription(sentence.audioUrl, sentence.text)
+        );
+
+        const transcriptionResults = await Promise.all(transcriptionPromises);
+
+        return sentences.map((sentence, index) => {
+            const transcriptionResult = transcriptionResults[index];
+            
+            if (!transcriptionResult) {
+                return sentence;
+            }
+
+            const words = transcriptionResult.raw.words
+            
+            return {
+                ...sentence,
+                transcription: {
+                  text: transcriptionResult.text,
+                  language: transcriptionResult.raw.language,
+                  start: words.length > 0 ? words[0].start : 0,
+                  end: words.length > 0 ? words[words.length - 1].end : 0,
+                  words: words
+                }
+            };
+        });
+    } catch (error: any) {
+        console.error("Erreur lors de la transcription des sentences:", error);
+        return sentences; // En cas d'erreur, on retourne les sentences inchangées
+    }
 }

@@ -1,17 +1,7 @@
 import axios from 'axios';
 import { logger } from "@trigger.dev/sdk/v3";
 
-
 const SIEVE_API_URL = 'https://mango.sievedata.com/v2';
-
-interface SieveJobResponse {
-    id: string;
-    status: string;
-    outputs?: Array<{
-        data: string;
-    }>;
-    error?: string;
-}
 
 export interface SieveCostResponse {
     cost: number;
