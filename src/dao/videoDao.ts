@@ -35,6 +35,28 @@ export const updateVideo = async (videoData: IVideo): Promise<IVideo> => {
   }
 }
 
+export const updateVideoThumbnail = async (videoId: string, thumbnailUrl: string, additionalCost: number): Promise<IVideo | null> => {
+  try {
+    return await executeWithRetry(async () => {
+      const video = await Video.findByIdAndUpdate(
+        videoId,
+        { 
+          $set: { 
+            "video.thumbnail": thumbnailUrl 
+          },
+          $inc: { 
+            costToGenerate: additionalCost 
+          }
+        },
+        { new: true }
+      );
+      return video?.toJSON();
+    });
+  } catch (error: any) {
+    throw new Error(`Erreur lors de la mise à jour de la vignette: ${error.message}`);
+  }
+}
+
 export const deleteVideo = async (videoId: string): Promise<void> => {
   try {
     await executeWithRetry(async () => {

@@ -620,13 +620,15 @@
       }
     },
     "generation": {
-      "MEDIA_UPLOAD": "Upload des fichiers",
+      "QUEUE": "En attente de démarrage",
+      "MEDIA_UPLOAD": "Téléchargement des medias",
       "VOICE_GENERATION": "Génération de la voix",
       "TRANSCRIPTION": "Transcription",
       "AVATAR_GENERATION": "Génération de l'avatar",
-      "SEARCH_MEDIA": "Recherche des médias",
+      "SEARCH_MEDIA": "Recherche de médias",
       "ANALYZE_YOUR_MEDIA": "Analyse de vos médias",
-      "ANALYZE_NEW_MEDIA": "Analyse du contenu ajouté",
+      "ANALYZE_NEW_MEDIA": "Analyse de nouveaux médias",
+      "REDIRECTING": "Sauvegarde et redirection vers l'éditeur",
       "error-message": "Erreur, veuillez contacter le support."
     },
     "space": {

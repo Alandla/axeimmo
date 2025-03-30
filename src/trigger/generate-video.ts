@@ -14,7 +14,7 @@ import sentencesMock from "../test/mockup/sentences.json";
 import sentencesNoTranscriptionMock from "../test/mockup/sentencesNoTranscription.json";
 import sentencesWithNewTranscriptionMock from "../test/mockup/sentencesWithNewTranscription.json";
 
-import { createLightTranscription, ISentence, splitSentences, transcribeAllSentences } from "../lib/transcription";
+import { createLightTranscription, getTranscription, ISentence, splitSentences } from "../lib/transcription";
 import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
 import { mediaToMediaSpace, searchMediaForSequence } from "../service/media.service";
@@ -255,10 +255,49 @@ export const generateVideoTask = task({
 
     if (!isDevelopment) {
       try {
-        sentences = await transcribeAllSentences(sentences);
-        logger.info('Sentences transcribed with Groq', { sentences });
+        const totalSentences = sentences.length;
+        let transcribedCount = 0;
+
+        const transcriptionPromises = sentences.map(async (sentence, index) => {
+          try {
+            const transcriptionResult = await getTranscription(sentence.audioUrl, sentence.text);
+            
+            if (!transcriptionResult) {
+              return sentence;
+            }
+            
+            transcribedCount++;
+
+            await metadata.replace({
+              name: Steps.TRANSCRIPTION,
+              progress: Math.round((transcribedCount / totalSentences) * 100)
+            });
+            
+            logger.info(`Transcription ${index + 1}/${totalSentences} completed`);
+            
+            const words = transcriptionResult.raw.words;
+            
+            return {
+              ...sentence,
+              transcription: {
+                text: transcriptionResult.text,
+                language: transcriptionResult.raw.language,
+                start: words.length > 0 ? words[0].start : 0,
+                end: words.length > 0 ? words[words.length - 1].end : 0,
+                words: words
+              }
+            };
+          } catch (error) {
+            logger.error(`Error transcribing sentence ${index}:`, { errorMessage: error instanceof Error ? error.message : String(error) });
+            return sentence;
+          }
+        });
+
+        sentences = await Promise.all(transcriptionPromises);
+        
+        logger.info('All sentences transcribed with Groq', { totalCount: sentences.length });
       } catch (error) {
-        logger.error('Error transcribing sentences with Groq', { error });
+        logger.error('Error in transcription process', { errorMessage: error instanceof Error ? error.message : String(error) });
       }
     }
 
@@ -552,6 +591,24 @@ export const generateVideoTask = task({
 
     logger.info('Auto transitions', { autoTransitions })
 
+    const space : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
+
+    let subtitle = subtitles[1]
+    if (space && space.lastUsed?.subtitles) {
+      const mostFrequent = getMostFrequentString(space.lastUsed.subtitles)
+      if (mostFrequent) {
+        const subtitleFind = subtitles.find((subtitle) => subtitle.name === mostFrequent);
+        if (subtitleFind) {
+          subtitle = subtitleFind;
+        } else {
+          const subtitleFindFromSpace = space.subtitleStyle.find((subtitle) => subtitle.name === mostFrequent);
+          if (subtitleFindFromSpace) {
+            subtitle = subtitleFindFromSpace;
+          }
+        }
+      }
+    }
+
     newVideo = {
       ...newVideo,
       costToGenerate: cost + ctx.run.baseCostInCents,
@@ -571,58 +628,6 @@ export const generateVideoTask = task({
         },
         transitions: autoTransitions,
         thumbnail: "",
-        metadata: videoMetadata,
-        sequences,
-        avatar,
-        subtitle: {
-          name: subtitles[1].name,
-          style: subtitles[1].style,
-        }
-      }
-    }
-
-    const space : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
-
-    let subtitle = subtitles[1]
-    if (space && space.lastUsed?.subtitles) {
-      const mostFrequent = getMostFrequentString(space.lastUsed.subtitles)
-      if (mostFrequent) {
-        const subtitleFind = subtitles.find((subtitle) => subtitle.name === mostFrequent);
-        if (subtitleFind) {
-          subtitle = subtitleFind;
-        } else {
-          const subtitleFindFromSpace = space.subtitleStyle.find((subtitle) => subtitle.name === mostFrequent);
-          if (subtitleFindFromSpace) {
-            subtitle = subtitleFindFromSpace;
-          }
-        }
-      }
-    }
-
-    const videoUpdated = await updateVideo(newVideo)
-
-    logger.info('Video updated', { videoUpdated })
-
-    const thumbnail = await generateThumbnail(newVideo);
-
-    logger.info('Thumbnail URL', { thumbnail })
-
-    newVideo = {
-      ...newVideo,
-      costToGenerate: cost + thumbnail.estimatedPrice.accruedSoFar,
-      video: {
-        ...newVideo.video,
-        audio: {
-          voices: voices,
-          volume: 1,
-          music: videoMusic ? {
-            url: videoMusic.url,
-            volume: 0.07,
-            name: videoMusic.name,
-            genre: videoMusic.genre
-          } : undefined
-        },
-        thumbnail: thumbnail.url,
         metadata: videoMetadata,
         sequences,
         avatar,

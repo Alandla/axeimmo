@@ -21,11 +21,11 @@ export const startGeneration = async (userId: string, spaceId: string) => {
 
   let uploadedFiles: IMedia[] = []
   if (files.length > 0) {
-    console.log("files", files)
     updateStepProgress("MEDIA_UPLOAD", 0)
     uploadedFiles = await uploadFiles(files, updateStepProgress)
   }
-
+  updateStepProgress(Steps.QUEUE, 20)
+  
   const options = {
     files: uploadedFiles,
     script: script,
@@ -37,7 +37,7 @@ export const startGeneration = async (userId: string, spaceId: string) => {
 
   //Start generation task
   const { runId, publicAccessToken } = await basicApiCall("/trigger/startGeneration", { options }) as { runId: string, publicAccessToken: string }
-
+  
   //Access to the generation task
   auth.configure({
     accessToken: publicAccessToken,
@@ -46,7 +46,7 @@ export const startGeneration = async (userId: string, spaceId: string) => {
   let videoId = ''
 
   //Subscribe to the generation task
-  let lastStep;
+  let lastStep = Steps.QUEUE;
   try {
     for await (const run of runs.subscribeToRun(runId)) {
       
@@ -83,6 +83,16 @@ export const startGeneration = async (userId: string, spaceId: string) => {
   } catch (error) {
     console.error('Generation error:', error)
     return null
+  }
+
+  updateStepProgress(Steps.REDIRECTING, 20)
+
+  if (videoId) {
+    try {
+      basicApiCall("/video/generateThumbnail", { videoId });
+    } catch (e) {
+      console.error('Error generating thumbnail:', e);
+    }
   }
 
   return videoId

@@ -612,13 +612,15 @@
       }
     },
     "generation": {
-      "MEDIA_UPLOAD": "Upload files",
+      "QUEUE": "Waiting to start",
+      "MEDIA_UPLOAD": "Media upload",
       "VOICE_GENERATION": "Voice generation",
       "TRANSCRIPTION": "Transcription",
       "AVATAR_GENERATION": "Avatar generation",
-      "SEARCH_MEDIA": "Search media",
-      "ANALYZE_YOUR_MEDIA": "Analyze your media",
-      "ANALYZE_NEW_MEDIA": "Analyze added media",
+      "SEARCH_MEDIA": "Media search",
+      "ANALYZE_YOUR_MEDIA": "Analyzing your media",
+      "ANALYZE_NEW_MEDIA": "Analyzing new media",
+      "REDIRECTING": "Saving and redirecting to editor",
       "error-message": "Error, please contact support."
     },
     "space": {
