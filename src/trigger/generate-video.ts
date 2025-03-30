@@ -4,7 +4,6 @@ import { Voice } from "../types/voice";
 import { AvatarLook } from "../types/avatar";
 import { createAudioTTS } from "../lib/elevenlabs";
 import { uploadToS3Audio } from "../lib/r2";
-import { createSieveTranscription, pollSieveTranscriptionStatus, SieveTranscriptionResult } from "../lib/sieve";
 import { transitions, sounds } from "../config/transitions.config";
 import { ITransition, ISequence } from "../types/video";
 
