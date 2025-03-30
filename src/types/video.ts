@@ -4,7 +4,7 @@ export interface IWord {
   word: string;
   start: number;
   end: number;
-  confidence: number;
+  confidence?: number;
   durationInFrames: number;
 }
 

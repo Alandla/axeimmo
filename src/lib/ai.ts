@@ -1,6 +1,5 @@
 import { createGroq } from "@ai-sdk/groq";
 import { generateText } from "ai";
-import { calculateAnthropicCost } from "./cost";
 import { SimpleMedia, SimpleSequence } from "./analyse";
 import { LightTranscription } from "./transcription";
 import { logger } from "@trigger.dev/sdk/v3";

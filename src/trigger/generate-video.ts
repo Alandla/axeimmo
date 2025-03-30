@@ -15,7 +15,7 @@ import sentencesMock from "../test/mockup/sentences.json";
 import sentencesNoTranscriptionMock from "../test/mockup/sentencesNoTranscription.json";
 import sentencesWithNewTranscriptionMock from "../test/mockup/sentencesWithNewTranscription.json";
 
-import { createLightTranscription, ISentence, splitSentences } from "../lib/transcription";
+import { createLightTranscription, ISentence, splitSentences, transcribeAllSentences } from "../lib/transcription";
 import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
 import { mediaToMediaSpace, searchMediaForSequence } from "../service/media.service";
@@ -55,7 +55,7 @@ export const generateVideoTask = task({
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "PRODUCTION"
+    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
 
     let videoStyle: string | undefined;
 
@@ -108,7 +108,7 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      sentences = sentencesWithNewTranscriptionMock
+      sentences = sentencesNoTranscriptionMock
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
@@ -238,6 +238,8 @@ export const generateVideoTask = task({
       })
     }
 
+    logger.log(`[VOICE] Voice generation done`)
+
     logger.info('Sentences', { sentences })
 
     /*
@@ -253,52 +255,15 @@ export const generateVideoTask = task({
     })
 
     if (!isDevelopment) {
-      let processedTranscriptions = 0;
-      
-      // Traitement par lots pour limiter la concurrence
-      for (let i = 0; i < sentences.length; i += 25) {
-        const batch = sentences.slice(i, Math.min(i + 25, sentences.length));
-        
-        // Créer d'abord tous les jobs de transcription
-        const transcriptionJobs = await Promise.all(
-          batch.map(async (sentence) => {
-            if (!sentence.audioUrl) throw new Error("Audio URL missing");
-            
-            const transcriptionId = await createSieveTranscription(sentence.audioUrl, sentence.text);
-            return {
-              index: sentence.index,
-              jobId: transcriptionId
-            };
-          })
-        );
-        
-        // Ensuite, attendre les résultats de tous les jobs en parallèle
-        const transcriptionResults = await Promise.all(
-          transcriptionJobs.map(async (job) => {
-            const result = await pollSieveTranscriptionStatus(job.jobId);
-            
-            processedTranscriptions++;
-            await metadata.replace({
-              name: Steps.TRANSCRIPTION,
-              progress: Math.round((processedTranscriptions / sentences.length) * 100)
-            });
-            
-            return {
-              index: job.index,
-              result
-            };
-          })
-        );
-        
-        // Mettre à jour les phrases avec les résultats de transcription
-        transcriptionResults.forEach(({ index, result }) => {
-          const sentence = sentences.find(s => s.index === index);
-          if (sentence) {
-            sentence.transcription = result.result;
-          }
-        });
+      try {
+        sentences = await transcribeAllSentences(sentences);
+        logger.info('Sentences transcribed with Groq', { sentences });
+      } catch (error) {
+        logger.error('Error transcribing sentences with Groq', { error });
       }
     }
+
+    logger.log(`[TRANSCRIPTION] Transcription done`)
 
     /*
     /
