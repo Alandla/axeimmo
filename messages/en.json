@@ -866,7 +866,11 @@
         "22": "it's time for creation.",
         "23": "we can move to the generation.",
         "24": "let's launch the final production.",
-        "25": "let's start the creation process."
+        "25": "let's start the creation process.",
+        "26": "let's start the video generation.",
+        "27": "I confirm the start of the production.",
+        "28": "let's start the video generation.",
+        "29": "it's time to start the generation."
       },
       "user-next-step": {
         "0": "we can move to the next step.",
