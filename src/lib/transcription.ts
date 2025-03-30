@@ -278,7 +278,6 @@ export const getTranscription = async (audioUrl: string, text?: string) => {
         }
         
         formData.append('response_format', 'verbose_json');
-        formData.append('language', 'fr');
         formData.append('timestamp_granularities[]', 'word');
         
         // Utiliser axios pour faire une requête directe à l'API Groq avec FormData

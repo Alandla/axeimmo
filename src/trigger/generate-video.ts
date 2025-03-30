@@ -273,7 +273,7 @@ export const generateVideoTask = task({
               progress: Math.round((transcribedCount / totalSentences) * 100)
             });
             
-            logger.info(`Transcription ${index + 1}/${totalSentences} completed`);
+            logger.info(`Transcription ${index + 1}/${totalSentences} completed`, { transcriptionResult });
             
             const words = transcriptionResult.raw.words;
             
