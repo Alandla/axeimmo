@@ -95,7 +95,6 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
       const s: ISequence[] = splitIntoSequences(adjusted, sentences[i].index);
 
       logger.info('Sequences', { s });
-
       finalSequences.push(...s);
 
       timeOffset = adjusted.end;
@@ -157,9 +156,6 @@ export function adjustSequenceTimings(sequences: ISequence[]): ISequence[] {
       const nextSequenceStart = allSequences[index + 1].start;
       lastWord.end = nextSequenceStart;
       sequence.end = nextSequenceStart;
-    } else {
-      lastWord.end += 0.5;
-      sequence.end += 0.5;
     }
     
     lastWord.durationInFrames = timeToFrames(lastWord.end - lastWord.start);

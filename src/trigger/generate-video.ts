@@ -29,7 +29,6 @@ import { Genre } from "../types/music";
 import { addMediasToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
 import { IMediaSpace, ISpace } from "../types/space";
 import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
-import { generateThumbnail } from "../lib/render";
 import { getMostFrequentString } from "../lib/utils";
 
 interface GenerateVideoPayload {
@@ -635,6 +634,37 @@ export const generateVideoTask = task({
           name: subtitle.name,
           style: subtitle.style,
         }
+      }
+    }
+
+    // Add time to the end of the video to ensure a smooth transition
+    if (newVideo.video && newVideo.video.sequences.length > 0) {
+      // Add 0.5 second to the last sequence
+      const lastSequenceIndex = newVideo.video.sequences.length - 1;
+      const lastSequence = newVideo.video.sequences[lastSequenceIndex];
+      lastSequence.end += 0.5;
+      
+      // Add 0.5 second to the last word of the last sequence
+      if (lastSequence.words && lastSequence.words.length > 0) {
+        const lastWordIndex = lastSequence.words.length - 1;
+        lastSequence.words[lastWordIndex].end += 0.5;
+        lastSequence.words[lastWordIndex].durationInFrames = (lastSequence.words[lastWordIndex].durationInFrames || 0) + 30;
+      }
+      
+      // Add 30 frames to the duration in frames of the last sequence
+      lastSequence.durationInFrames = (lastSequence.durationInFrames || 0) + 30;
+      
+      // Add 0.5 second to the total video duration
+      if (newVideo.video.metadata) {
+        newVideo.video.metadata.audio_duration = (newVideo.video.metadata.audio_duration || 0) + 0.5;
+      }
+      
+      // Add 0.5 second to the last audio
+      if (newVideo.video.audio && newVideo.video.audio.voices && newVideo.video.audio.voices.length > 0) {
+        const lastVoiceIndex = newVideo.video.audio.voices.length - 1;
+        const lastVoice = newVideo.video.audio.voices[lastVoiceIndex];
+        lastVoice.end = (lastVoice.end || 0) + 0.5;
+        lastVoice.durationInFrames = (lastVoice.durationInFrames || 0) + 30;
       }
     }
 

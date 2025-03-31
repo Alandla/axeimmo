@@ -30,7 +30,7 @@ import AudioSettings from '@/src/components/edit/audio-settings'
 import Musics from '@/src/components/edit/musics'
 import ModalPricing from '@/src/components/modal/modal-pricing'
 import Sequences from '@/src/components/edit/sequences'
-import { regenerateAudioForSequence, updateVideoTimings, waitForTranscription } from '@/src/lib/audio'
+import { getTranscription, regenerateAudioForSequence, updateVideoTimings } from '@/src/lib/audio'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
 import { CommandShortcut } from '@/src/components/ui/command'
 import { ISpace } from '@/src/types/space'
@@ -324,9 +324,9 @@ export default function VideoEditor() {
     setIsLoading(true);
 
     try {
-      const { audioUrl, transcriptionId } = await regenerateAudioForSequence(video, sequenceIndex);
+      const { audioUrl } = await regenerateAudioForSequence(video, sequenceIndex);
       const audioIndex = video.video.sequences[sequenceIndex].audioIndex;
-      const transcription = await waitForTranscription(transcriptionId);
+      const transcription = await getTranscription(audioUrl);
 
       //const audioUrl = "https://media.hoox.video/843f1d10-4866-4a0b-954e-7de347d826ba.mp3"
       //const transcription = transcriptionMockup

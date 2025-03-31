@@ -35,16 +35,11 @@ export async function POST(req: NextRequest) {
 
         const audioUrl = await uploadToS3Audio(audioBuffer, 'medias-users');
 
-        const createdTranscription = await createTranscription(audioUrl, text);
-
-        console.log("createdTranscription", createdTranscription)
-
         const cost = calculateElevenLabsCost(text, false);
 
         const data = {
             audioUrl,
             cost,
-            transcriptionId: createdTranscription.id,
         }
 
         return NextResponse.json({ data });
