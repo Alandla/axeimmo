@@ -4,7 +4,6 @@ import { createAudioTTS } from "@/src/lib/elevenlabs";
 import { uploadToS3Audio } from "@/src/lib/r2";
 import { voicesConfig } from '@/src/config/voices.config';
 import { calculateElevenLabsCost } from '@/src/lib/cost';
-import { createTranscription, getTranscription } from '@/src/lib/gladia';
 import { getSpaceById } from '@/src/dao/spaceDao';
 import { ISpace } from '@/src/types/space';
 
