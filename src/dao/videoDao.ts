@@ -13,11 +13,17 @@ export const getVideoById = async (id: string): Promise<IVideo | null> => {
   }
 }
 
-export const getVideosBySpaceId = async (spaceId: string): Promise<IVideo[]> => {
+export const getVideosBySpaceId = async (spaceId: string): Promise<{ videos: IVideo[], totalCount: number }> => {
   try {
     return await executeWithRetry(async () => {
-      const videos = await Video.find({ spaceId, archived: { $ne: true } });
-      return videos.map(video => video.toJSON());
+      const [videos, totalCount] = await Promise.all([
+        Video.find({ spaceId, archived: { $ne: true } }),
+        Video.countDocuments({ spaceId })
+      ]);
+      return {
+        videos: videos.map(video => video.toJSON()),
+        totalCount
+      };
     });
   } catch (error: any) {
     throw new Error(`Erreur lors de la récupération des vidéos: ${error.message}`);

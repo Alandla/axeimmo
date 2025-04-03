@@ -44,7 +44,7 @@ interface Message {
 export function AiChat() {
   const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps } = useCreationStore()
   const { activeSpace, setLastUsedParameters } = useActiveSpaceStore()
-  const { videosBySpace, fetchVideos } = useVideosStore()
+  const { totalVideoCountBySpace, fetchVideos } = useVideosStore()
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [creationStep, setCreationStep] = useState(CreationStep.START)
@@ -63,15 +63,16 @@ export function AiChat() {
 
       try {
         // Récupérer les vidéos depuis le store ou l'API
-        let videos = videosBySpace.get(activeSpace.id);
+        let totalVideoCount = totalVideoCountBySpace.get(activeSpace.id);
         
-        if (!videos) {
+        if (!totalVideoCount) {
           // Si le store est vide, charger depuis l'API
-          videos = await fetchVideos(activeSpace.id);
+          const { totalCount } = await fetchVideos(activeSpace.id);
+          totalVideoCount = totalCount;
         }
         
         // Vérifier si l'utilisateur a atteint la limite de 3 vidéos
-        if (videos && videos.length >= 3) {
+        if (totalVideoCount >= 3) {
           setHasFreePlanReachedLimit(true);
         } else {
           setHasFreePlanReachedLimit(false);

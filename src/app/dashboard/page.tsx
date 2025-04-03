@@ -54,7 +54,7 @@ export default function Dashboard() {
 
         const videosFromApi = await fetchVideos(activeSpace.id, true);
 
-        setVideos(videosFromApi);
+        setVideos(videosFromApi.videos);
         setIsLoading(false);
       } catch (error) {
         console.error('Erreur lors du chargement des vidéos:', error);

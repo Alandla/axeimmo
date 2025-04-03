@@ -3,36 +3,42 @@ import { IVideo } from '../types/video'
 import { VideoWithCreator } from '@/src/app/dashboard/page'
 import { basicApiCall } from '@/src/lib/api'
 
+interface ApiResponse {
+  videos: any[];
+  totalCount: number;
+}
+
 interface VideosStoreState {
-  // Stockage des vidéos par spaceId
   videosBySpace: Map<string, VideoWithCreator[]>
-  
-  // Fonction pour définir les vidéos d'un espace
-  setVideos: (spaceId: string, videos: VideoWithCreator[]) => void
-  
-  // Fonction pour récupérer les vidéos d'un espace
-  fetchVideos: (spaceId: string, forceRefresh?: boolean) => Promise<VideoWithCreator[]>
+  totalVideoCountBySpace: Map<string, number>
+  setVideos: (spaceId: string, videos: VideoWithCreator[], totalCount?: number) => void
+  fetchVideos: (spaceId: string, forceRefresh?: boolean) => Promise<{ videos: VideoWithCreator[], totalCount: number }>
 }
 
 export const useVideosStore = create<VideosStoreState>((set, get) => ({
   videosBySpace: new Map(),
+  totalVideoCountBySpace: new Map(),
   
-  setVideos: (spaceId: string, videos: VideoWithCreator[]) => {
+  setVideos: (spaceId: string, videos: VideoWithCreator[], totalCount?: number) => {
     set(state => {
       const newVideosBySpace = new Map(state.videosBySpace);
+      const newTotalVideoCountBySpace = new Map(state.totalVideoCountBySpace);
       newVideosBySpace.set(spaceId, videos);
-      return { videosBySpace: newVideosBySpace };
+      if (totalCount) {
+        newTotalVideoCountBySpace.set(spaceId, totalCount);
+      }
+      return { 
+        videosBySpace: newVideosBySpace,
+        totalVideoCountBySpace: newTotalVideoCountBySpace
+      };
     });
   },
   
   fetchVideos: async (spaceId: string) => {
-    
     try {
-      // Récupérer les vidéos depuis l'API
-      const rawVideos: any[] = await basicApiCall('/space/getVideos', { spaceId });
-      
-      // Traiter les vidéos
-      const processedVideos = rawVideos.map(video => {
+      const { videos, totalCount } = await basicApiCall<ApiResponse>('/space/getVideos', { spaceId });
+
+      const processedVideos = videos.map(video => {
         const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
         const userId = createEvent?.user;
         
@@ -45,18 +51,18 @@ export const useVideosStore = create<VideosStoreState>((set, get) => ({
           }
         };
       });
-      
-      // Mettre à jour le store
+
       const sortedVideos = processedVideos.reverse();
-      get().setVideos(spaceId, sortedVideos);
+      get().setVideos(spaceId, sortedVideos, totalCount);
       
-      return sortedVideos;
+      return { videos: sortedVideos, totalCount };
     } catch (error) {
       console.error('Erreur lors de la récupération des vidéos:', error);
 
       const cachedVideos = get().videosBySpace.get(spaceId);
-      if (cachedVideos) {
-        return cachedVideos;
+      const cachedTotalCount = get().totalVideoCountBySpace.get(spaceId);
+      if (cachedVideos && cachedTotalCount !== undefined) {
+        return { videos: cachedVideos, totalCount: cachedTotalCount };
       }
 
       throw error;
