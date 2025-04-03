@@ -20,8 +20,12 @@ export default function Page() {
   const router = useRouter()
 
   useEffect(() => {
-    if (session) {
-      router.push('/dashboard')
+    if (session?.user) {
+      if (!session.user.hasFinishedOnboarding) {
+        router.push('/onboarding')
+      } else {
+        router.push('/dashboard')
+      }
     }
   }, [session, router])
 

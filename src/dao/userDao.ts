@@ -7,7 +7,8 @@ export const createUser = async (user: User) => {
   try {
     return await executeWithRetry(async () => {
       const initUserData = {
-        name: user.name,
+        name: user.name?.split(" ")[0] || "",
+        firstName: user.name?.split(" ")[1] || "",
         email: user.email,
         image: user.image,
         createdAt: new Date(),

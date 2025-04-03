@@ -1,10 +1,29 @@
 import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
 
+// Schéma pour les données d'onboarding
+const onboardingDataSchema = new mongoose.Schema({
+  role: String,
+  discoveryChannel: String,
+  companyName: String,
+  website: String,
+  goal: String,
+  companyType: String,
+  companySize: String,
+  salesType: String,
+  companyMission: String,
+  companyGoals: String,
+  additionalInfo: String,
+}, { _id: false });
+
 // USER SCHEMA
 const userSchema = new mongoose.Schema(
   {
     name: {
+      type: String,
+      trim: true,
+    },
+    firstName: {
       type: String,
       trim: true,
     },
@@ -37,6 +56,14 @@ const userSchema = new mongoose.Schema(
       },
     ],
     checkAffiliate: {
+      type: Boolean,
+      default: false,
+    },
+    onboardingData: {
+      type: onboardingDataSchema,
+      default: null,
+    },
+    hasFinishedOnboarding: {
       type: Boolean,
       default: false,
     },

@@ -6,5 +6,6 @@ declare module 'next-auth' {
         lang?: string
     }
     checkAffiliate?: boolean
+    hasFinishedOnboarding?: boolean
   }
 }
