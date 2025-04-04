@@ -2,22 +2,23 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Star, Heart, Diamond, Check, Gem, Info, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight } from 'lucide-react'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/src/components/ui/tooltip"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card'
 import { Button } from '@/src/components/ui/button'
 import { useTranslations } from 'next-intl'
 import { PlanName } from '../types/enums'
 import { discount, plans } from '../config/plan.config'
 import { Plan } from '../types/plan'
-import { basicApiCall } from '../lib/api'
+import { basicApiCall, basicApiGetCall } from '../lib/api'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import Link from 'next/link'
 import DiscountBanner from './discount-banner'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select"
 
 // Définition des fonctionnalités avec leurs catégories pour remplacer plan.features
 export const features = [
@@ -195,9 +196,25 @@ export default function PricingPage() {
   const { activeSpace } = useActiveSpaceStore()
   const [sliderWidth, setSliderWidth] = useState(0)
   const [sliderLeft, setSliderLeft] = useState(0)
+  const [currency, setCurrency] = useState("USD")
   
   const monthlyRef = useRef<HTMLButtonElement>(null)
   const annuallyRef = useRef<HTMLButtonElement>(null)
+  
+  useEffect(() => {
+    async function detectUserCurrency() {
+      try {
+        const { recommendedCurrency } = await basicApiGetCall<{ recommendedCurrency: string }>('/geolocation');
+        if (recommendedCurrency) {
+          setCurrency(recommendedCurrency);
+        }
+      } catch (error) {
+        console.error("Error detecting user currency:", error);
+      }
+    }
+    
+    detectUserCurrency();
+  }, []);
   
   useEffect(() => {
     // Mettre à jour la position et la largeur du fond en fonction de l'option sélectionnée
@@ -210,12 +227,17 @@ export default function PricingPage() {
     }
   }, [isAnnual])
 
+  const getCurrencySymbol = () => {
+    return currency === "EUR" ? "€" : "$";
+  }
+
   const handlePayment = async (plan: Plan) => {
     try {
       setLoadingPlan(plan.name);
       if (activeSpace?.planName === PlanName.FREE) {
         const priceId = isAnnual ? plan.priceId.annual : plan.priceId.month;
-        const price = priceId.euros;
+
+        const price = currency === "EUR" ? priceId.euros : priceId.dollars;
         
         const toltReferral = typeof window !== 'undefined' && window.tolt_referral ? window.tolt_referral : undefined;
         
@@ -292,7 +314,10 @@ export default function PricingPage() {
         </Link>
       </div>
 
-      <div className="mb-8 text-center">
+      <div className="mb-8 flex justify-between items-center">
+        <div className="hidden md:block w-[100px]">
+          {/* Empty div to balance the layout on desktop */}
+        </div>
         <div className="inline-flex items-center rounded-full border p-1 relative">
           <div 
             className="absolute top-1 bottom-1 rounded-full bg-primary transition-all duration-300 ease-in-out"
@@ -322,6 +347,21 @@ export default function PricingPage() {
               {tPricing('20-off')}
             </span>
           </button>
+        </div>
+        <div className="w-[100px]">
+          <Select
+            value={currency}
+            onValueChange={setCurrency}
+            defaultValue="USD"
+          >
+            <SelectTrigger className="w-[100px]">
+              <SelectValue placeholder="Devise" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="EUR">EUR (€)</SelectItem>
+              <SelectItem value="USD">USD ($)</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -365,9 +405,9 @@ export default function PricingPage() {
                     <CardTitle>{tPlan(plan.name)}</CardTitle>
                   </div>
                   <div className="flex gap-2">
-                    <span className="text-4xl font-bold">{Math.floor(discountedPrice)}€</span>
+                    <span className="text-4xl font-bold">{Math.floor(discountedPrice)}{getCurrencySymbol()}</span>
                     <div className="flex flex-col text-sm -space-y-1">
-                      <span className={`line-through ${savePercentage > 0 ? '' : 'opacity-0'}`}>{plan.monthlyPrice}€</span>
+                      <span className={`line-through ${savePercentage > 0 ? '' : 'opacity-0'}`}>{plan.monthlyPrice}{getCurrencySymbol()}</span>
                       <span className="text-sm text-muted-foreground">/{tPricing('month')}{isAnnual && `, ${tPricing('billed-annually')}`}</span>
                     </div>
                   </div>

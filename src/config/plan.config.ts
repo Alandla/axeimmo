@@ -18,11 +18,11 @@ export const plans: Plan[] = [
     priceId: {
       month: { 
         euros: process.env.NODE_ENV === "development" ? "price_1R6XrvD0Qr1zHqqnLPT9g4BF" : "price_1R6XvsD0Qr1zHqqnz0NQiI4L",
-        dollars: process.env.NODE_ENV === "development" ? "price_1R6XrvD0Qr1zHqqnLPT9g4BF" : "price_1R6XvsD0Qr1zHqqnz0NQiI4L",
+        dollars: process.env.NODE_ENV === "development" ? "price_1R9xBzD0Qr1zHqqnnQYsJw9Q" : "price_1R9xIZD0Qr1zHqqnmajg3MvG",
       },
       annual: {
-        euros: process.env.NODE_ENV === "development" ? "price_1R6XtpD0Qr1zHqqnrXbs0lxG" : "price_1R6XvvD0Qr1zHqqnSdM5OmFC",
-        dollars: process.env.NODE_ENV === "development" ? "price_1R6XtpD0Qr1zHqqnrXbs0lxG" : "price_1R6XvvD0Qr1zHqqnSdM5OmFC",
+        euros: process.env.NODE_ENV === "development" ? "price_1R9xDOD0Qr1zHqqnAN37CWFN" : "price_1R9xJBD0Qr1zHqqnMLECPxNs",
+        dollars: process.env.NODE_ENV === "development" ? "price_1R9xDbD0Qr1zHqqnml4AATHb" : "price_1R9xJKD0Qr1zHqqnoyr4zPxw",
       },
     },
     users: 1,
@@ -37,11 +37,11 @@ export const plans: Plan[] = [
     priceId: {
         month: {
             euros: process.env.NODE_ENV === "development" ? "price_1R5Au9D0Qr1zHqqnwu1SThl7" : "price_1R6Xw0D0Qr1zHqqnkcpYlQTP",
-            dollars: process.env.NODE_ENV === "development" ? "price_1R5Au9D0Qr1zHqqnwu1SThl7" : "price_1R6Xw0D0Qr1zHqqnkcpYlQTP",
+            dollars: process.env.NODE_ENV === "development" ? "price_1R9xEUD0Qr1zHqqnoZmgaZnE" : "price_1R9xKMD0Qr1zHqqnMaVmO7qe",
         },
         annual: {
-            euros: process.env.NODE_ENV === "development" ? "price_1R5AwAD0Qr1zHqqns7ebzcjd" : "price_1R6XwwD0Qr1zHqqnQYnsZbRT",
-            dollars: process.env.NODE_ENV === "development" ? "price_1R5AwAD0Qr1zHqqns7ebzcjd" : "price_1R6XwwD0Qr1zHqqnQYnsZbRT",
+            euros: process.env.NODE_ENV === "development" ? "price_1R9xEvD0Qr1zHqqnHVEoSqBd" : "price_1R9xKbD0Qr1zHqqns1pjZ4jr",
+            dollars: process.env.NODE_ENV === "development" ? "price_1R9xF2D0Qr1zHqqnAw3tBdzg" : "price_1R9xKrD0Qr1zHqqnmL8zmvD2",
         },
     },
     users: 2,
@@ -57,11 +57,11 @@ export const plans: Plan[] = [
     priceId: {
         month: {
             euros: process.env.NODE_ENV === "development" ? "price_1R5AuYD0Qr1zHqqnC0aVFLmN" : "price_1R6XwsD0Qr1zHqqnxSzXWLST",
-            dollars: process.env.NODE_ENV === "development" ? "price_1R5AuYD0Qr1zHqqnC0aVFLmN" : "price_1R6XwsD0Qr1zHqqnxSzXWLST",
+            dollars: process.env.NODE_ENV === "development" ? "price_1R9xFjD0Qr1zHqqnQ4ZALCYG" : "price_1R9xLPD0Qr1zHqqn0rB635DR",
         },
         annual: {
-            euros: process.env.NODE_ENV === "development" ? "price_1R5AwbD0Qr1zHqqniklVk7Vp" : "price_1R6XwyD0Qr1zHqqnS7hI9Xh8",
-            dollars: process.env.NODE_ENV === "development" ? "price_1R5AwbD0Qr1zHqqniklVk7Vp" : "price_1R6XwyD0Qr1zHqqnS7hI9Xh8",
+            euros: process.env.NODE_ENV === "development" ? "price_1R9xG9D0Qr1zHqqnraJ93qd6" : "price_1R9xMrD0Qr1zHqqnLS5SXneL",
+            dollars: process.env.NODE_ENV === "development" ? "price_1R9xGMD0Qr1zHqqnLluVzRZU" : "price_1R9xMyD0Qr1zHqqnlADC8BdC",
         },
     },
     users: 5,
