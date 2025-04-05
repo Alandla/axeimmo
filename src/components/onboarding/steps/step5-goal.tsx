@@ -1,22 +1,20 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useOnboardingStore } from "@/src/store/onboardingStore"
 
 interface Step5Props {
-  formData: {
-    goal: string
-  }
-  updateFormData: (data: Partial<{ goal: string }>) => void
-  onSelect: () => void
   errors?: Record<string, boolean>
 }
 
-const goals = ["Organic growth", "Ads creation", "UGC", "Monetization", "Faceless Content"]
+const goals = ["Organic growth", "Ads creation", "Brand Awareness", "Lead Generation", "Faceless Content"]
 
-export default function Step5Goal({ formData, updateFormData, onSelect, errors = {} }: Step5Props) {
+export default function Step5Goal({ errors = {} }: Step5Props) {
+  const { data, updateData, goToNextStep } = useOnboardingStore();
+
   const handleSelect = (goal: string) => {
-    updateFormData({ goal })
-    onSelect()
+    updateData({ goal })
+    goToNextStep()
   }
 
   return (
@@ -30,23 +28,14 @@ export default function Step5Goal({ formData, updateFormData, onSelect, errors =
           <button
             key={goal}
             onClick={() => handleSelect(goal)}
-            className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all ${
-              formData.goal === goal
+            className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all duration-200 transform hover:scale-[1.02] ${
+              data.goal === goal
                 ? "border-black bg-black text-white"
                 : errors.goal
                   ? "border-red-500 hover:border-red-600"
                   : "border-gray-200 hover:border-gray-300"
             }`}
           >
-            {formData.goal === goal && (
-              <motion.div
-                layoutId="selectedGoal"
-                className="absolute inset-0 bg-black"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            )}
             <span className="relative z-10">{goal}</span>
           </button>
         ))}

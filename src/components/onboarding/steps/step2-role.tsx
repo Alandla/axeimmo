@@ -1,22 +1,21 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useOnboardingStore } from "@/src/store/onboardingStore"
+import { useRouter } from "next/navigation"
 
 interface Step2Props {
-  formData: {
-    role: string
-  }
-  updateFormData: (data: Partial<{ role: string }>) => void
-  onSelect: () => void
   errors?: Record<string, boolean>
 }
 
 const roles = ["Owner", "Marketing", "Sales", "Social Media", "Communication"]
 
-export default function Step2Role({ formData, updateFormData, onSelect, errors = {} }: Step2Props) {
+export default function Step2Role({ errors = {} }: Step2Props) {
+  const { data, updateData, goToNextStep } = useOnboardingStore();
+
   const handleSelect = (role: string) => {
-    updateFormData({ role })
-    onSelect()
+    updateData({ role })
+    goToNextStep()
   }
 
   return (
@@ -30,23 +29,14 @@ export default function Step2Role({ formData, updateFormData, onSelect, errors =
           <button
             key={role}
             onClick={() => handleSelect(role)}
-            className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all ${
-              formData.role === role
+            className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all duration-200 transform hover:scale-[1.02] ${
+              data.role === role
                 ? "border-black bg-black text-white"
                 : errors.role
                   ? "border-red-500 hover:border-red-600"
                   : "border-gray-200 hover:border-gray-300"
             }`}
           >
-            {formData.role === role && (
-              <motion.div
-                layoutId="selectedRole"
-                className="absolute inset-0 bg-black"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            )}
             <span className="relative z-10">{role}</span>
           </button>
         ))}

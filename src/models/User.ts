@@ -2,19 +2,25 @@ import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
 
 // Schéma pour les données d'onboarding
-const onboardingDataSchema = new mongoose.Schema({
-  role: String,
-  discoveryChannel: String,
-  companyName: String,
-  website: String,
-  goal: String,
-  companyType: String,
-  companySize: String,
-  salesType: String,
-  companyMission: String,
-  companyGoals: String,
-  additionalInfo: String,
-}, { _id: false });
+const onboardingDataSchema = new mongoose.Schema(
+  {
+    role: String,
+    discoveryChannel: String,
+    companyName: String,
+    website: String,
+    goal: String,
+    companyType: String,
+    companySize: String,
+    salesType: String,
+    companyMission: String,
+    companyGoals: String,
+    companyTarget: String,
+  },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+  }
+);
 
 // USER SCHEMA
 const userSchema = new mongoose.Schema(

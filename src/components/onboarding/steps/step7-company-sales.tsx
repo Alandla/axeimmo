@@ -1,22 +1,20 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useOnboardingStore } from "@/src/store/onboardingStore"
 
-interface Step6Props {
-  formData: {
-    salesType: string
-  }
-  updateFormData: (data: Partial<{ salesType: string }>) => void
-  onSelect: () => void
+interface Step7Props {
   errors?: Record<string, boolean>
 }
 
-const salesTypes = ["Products", "Services", "Nothing"]
+const salesTypes = ["Products", "Services", "Software", "Nothing"]
 
-export default function Step6CompanySales({ formData, updateFormData, onSelect, errors = {} }: Step6Props) {
-  const handleSelect = (type: string) => {
-    updateFormData({ salesType: type })
-    onSelect()
+export default function Step7CompanySales({ errors = {} }: Step7Props) {
+  const { data, updateData, goToNextStep } = useOnboardingStore();
+
+  const handleSelect = (salesType: string) => {
+    updateData({ salesType })
+    goToNextStep()
   }
 
   return (
@@ -25,20 +23,20 @@ export default function Step6CompanySales({ formData, updateFormData, onSelect, 
 
       {errors.salesType && <p className="text-xs text-red-500">Please select what you sell</p>}
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {salesTypes.map((type) => (
           <button
             key={type}
             onClick={() => handleSelect(type)}
             className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all ${
-              formData.salesType === type
+              data.salesType === type
                 ? "border-black bg-black text-white"
                 : errors.salesType
                   ? "border-red-500 hover:border-red-600"
                   : "border-gray-200 hover:border-gray-300"
             }`}
           >
-            {formData.salesType === type && (
+            {data.salesType === type && (
               <motion.div
                 layoutId="selectedSalesType"
                 className="absolute inset-0 bg-black"

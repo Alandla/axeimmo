@@ -2,29 +2,27 @@
 
 import { motion } from "framer-motion"
 import { Slider } from "@/src/components/ui/slider"
+import { useOnboardingStore } from "@/src/store/onboardingStore"
 
-interface Step5Props {
-  formData: {
-    companyType: string
-    companySize: string
-  }
-  updateFormData: (data: Partial<{ companyType: string; companySize: string }>) => void
+interface Step6Props {
   errors?: Record<string, boolean>
 }
 
-const companyTypes = ["Agency", "Brand", "Entrepreneur", "Content Creator"]
+const companyTypes = ["Agency", "E-commerce", "SaaS", "Content Creator", "Non-profit", "Other"]
 const companySizes = ["Solo", "2-10", "11-50", "51-100", "+100"]
 
-export default function Step5CompanyType({ formData, updateFormData, errors = {} }: Step5Props) {
+export default function Step6CompanyType({ errors = {} }: Step6Props) {
+  const { data, updateData } = useOnboardingStore();
+
   const handleSelectType = (type: string) => {
-    updateFormData({ companyType: type })
+    updateData({ companyType: type })
   }
 
   const handleSizeChange = (value: number[]) => {
-    updateFormData({ companySize: companySizes[value[0]] })
+    updateData({ companySize: companySizes[value[0]] })
   }
 
-  const currentSizeIndex = companySizes.findIndex((size) => size === formData.companySize)
+  const currentSizeIndex = companySizes.findIndex((size) => size === data.companySize)
 
   return (
     <div className="space-y-8">
@@ -39,14 +37,14 @@ export default function Step5CompanyType({ formData, updateFormData, errors = {}
               key={type}
               onClick={() => handleSelectType(type)}
               className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all ${
-                formData.companyType === type
+                data.companyType === type
                   ? "border-black bg-black text-white"
                   : errors.companyType
                     ? "border-red-500 hover:border-red-600"
                     : "border-gray-200 hover:border-gray-300"
               }`}
             >
-              {formData.companyType === type && (
+              {data.companyType === type && (
                 <motion.div
                   layoutId="selectedType"
                   className="absolute inset-0 bg-black"
@@ -73,7 +71,7 @@ export default function Step5CompanyType({ formData, updateFormData, errors = {}
             className="w-full"
           />
 
-          <div className="text-2xl font-bold">{formData.companySize}</div>
+          <div className="text-2xl font-bold">{data.companySize}</div>
         </div>
       </div>
     </div>

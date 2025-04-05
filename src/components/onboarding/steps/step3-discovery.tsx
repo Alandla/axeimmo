@@ -1,22 +1,20 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useOnboardingStore } from "@/src/store/onboardingStore"
 
 interface Step3Props {
-  formData: {
-    discoveryChannel: string
-  }
-  updateFormData: (data: Partial<{ discoveryChannel: string }>) => void
-  onSelect: () => void
   errors?: Record<string, boolean>
 }
 
 const channels = ["Linkedin", "Youtube", "X", "Instagram", "TikTok", "Google", "Friends", "Other"]
 
-export default function Step3Discovery({ formData, updateFormData, onSelect, errors = {} }: Step3Props) {
+export default function Step3Discovery({ errors = {} }: Step3Props) {
+  const { data, updateData, goToNextStep } = useOnboardingStore();
+
   const handleSelect = (channel: string) => {
-    updateFormData({ discoveryChannel: channel })
-    onSelect()
+    updateData({ discoveryChannel: channel })
+    goToNextStep()
   }
 
   return (
@@ -30,23 +28,14 @@ export default function Step3Discovery({ formData, updateFormData, onSelect, err
           <button
             key={channel}
             onClick={() => handleSelect(channel)}
-            className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all ${
-              formData.discoveryChannel === channel
+            className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all duration-200 transform hover:scale-[1.02] ${
+              data.discoveryChannel === channel
                 ? "border-black bg-black text-white"
                 : errors.discoveryChannel
                   ? "border-red-500 hover:border-red-600"
                   : "border-gray-200 hover:border-gray-300"
             }`}
           >
-            {formData.discoveryChannel === channel && (
-              <motion.div
-                layoutId="selectedChannel"
-                className="absolute inset-0 bg-black"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            )}
             <span className="relative z-10">{channel}</span>
           </button>
         ))}
