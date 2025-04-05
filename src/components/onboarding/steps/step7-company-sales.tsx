@@ -36,15 +36,6 @@ export default function Step7CompanySales({ errors = {} }: Step7Props) {
                   : "border-gray-200 hover:border-gray-300"
             }`}
           >
-            {dataCompany.salesType === type && (
-              <motion.div
-                layoutId="selectedSalesType"
-                className="absolute inset-0 bg-black"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            )}
             <span className="relative z-10">{type}</span>
           </button>
         ))}

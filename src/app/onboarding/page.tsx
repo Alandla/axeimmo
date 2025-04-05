@@ -162,7 +162,7 @@ export default function OnboardingPage() {
             </AnimatePresence>
 
             {!isCompleted && (
-              <div className="flex justify-between mt-8 pt-4 border-t border-gray-100">
+              <div className="flex justify-between mt-4">
                 <button
                   onClick={prevStep}
                   className={`px-4 py-2 rounded-md border border-gray-200 text-sm font-medium flex items-center transition-opacity duration-300 gap-2 ${currentStep === 1 ? "opacity-0" : ""}`}
