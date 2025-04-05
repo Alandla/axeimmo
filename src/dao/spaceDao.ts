@@ -284,3 +284,21 @@ export async function updateMedia(spaceId: string, mediaId: string, updates: any
     throw error;
   }
 }
+
+export const updateSpaceDetails = async (spaceId: string, details: Record<string, any>) => {
+  try {
+    return await executeWithRetry(async () => {
+      const space = await SpaceModel.findByIdAndUpdate(
+        spaceId, 
+        { $set: { details } }, 
+        { new: true }
+      );
+      
+      if (!space) throw new Error("Space not found");
+      return space.details;
+    });
+  } catch (error) {
+    console.error("Error while updating space details: ", error);
+    throw error;
+  }
+};

@@ -1,122 +1,176 @@
 import { create } from 'zustand'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
+import { ICompanyDetails } from '@/src/types/space'
+import { updateSpaceDetails } from '@/src/service/space.service'
+import { updateOnboarding } from '../service/user.service'
 
-export interface OnboardingData {
+// Les données qui seront stockées sur l'utilisateur
+export interface UserOnboardingData {
   // Informations personnelles
   name: string
   firstName: string
   role: string
   discoveryChannel: string
+  goal: string
+}
 
-  // Informations sur l'entreprise
+// Les données qui seront stockées sur le Space
+export interface CompanyOnboardingData {
   companyName: string
   website: string
-  goal: string
   companyType: string
   companySize: string
   salesType: string
   companyMission: string
-  companyGoals: string
   companyTarget: string
+  companyNeeds: string
 }
 
 interface OnboardingStore {
   // États
-  data: OnboardingData
+  dataUser: UserOnboardingData
+  dataCompany: CompanyOnboardingData
   isLoading: boolean
   hasCompleted: boolean
   currentStep: number
   errors: Record<string, boolean>
+  websiteValid: boolean
+  companyInfo: any | null
+  isLoadingCompanyInfo: boolean
   
   // Actions
   initStore: () => Promise<void>
-  updateData: (newData: Partial<OnboardingData>) => void
+  updateUserData: (newData: Partial<UserOnboardingData>) => void
+  updateCompanyData: (newData: Partial<CompanyOnboardingData>) => void
+  setWebsiteValid: (isValid: boolean) => void
+  fetchCompanyInfo: (website: string) => Promise<void>
   saveData: (isComplete?: boolean) => Promise<boolean>
   setCurrentStep: (step: number) => void
   goToNextStep: () => void
   goToPreviousStep: () => void
   validateCurrentStep: () => boolean
-  calculateCurrentStep: () => number
+  calculateCurrentStep: (userData?: Partial<UserOnboardingData>, companyData?: Partial<CompanyOnboardingData>) => number
   getStepCategory: () => string
   resetErrors: () => void
 }
 
 // Valeurs par défaut
-const defaultData: OnboardingData = {
+const defaultUserData: UserOnboardingData = {
   name: "",
   firstName: "",
   role: "",
   discoveryChannel: "",
+  goal: ""
+}
+
+const defaultCompanyData: CompanyOnboardingData = {
   companyName: "",
   website: "",
-  goal: "",
   companyType: "",
   companySize: "2-10",
   salesType: "",
   companyMission: "",
-  companyGoals: "",
+  companyNeeds: "",
   companyTarget: ""
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   // États initiaux
-  data: { ...defaultData },
+  dataUser: { ...defaultUserData },
+  dataCompany: { ...defaultCompanyData },
   isLoading: true,
   hasCompleted: false,
   currentStep: 1,
   errors: {},
+  websiteValid: true,
+  companyInfo: null,
+  isLoadingCompanyInfo: false,
   
   // Initialisation du store avec les données existantes du serveur
   initStore: async () => {
     set({ isLoading: true });
     
     try {
-      const response = await basicApiGetCall<{
+      const { hasFinishedOnboarding, userData, spaceDetails } = await basicApiGetCall<{
         hasFinishedOnboarding: boolean;
-        onboardingData: OnboardingData | null;
+        userData: UserOnboardingData;
+        spaceDetails?: ICompanyDetails;
       }>("/user/onboarding");
       
-      if (response.hasFinishedOnboarding) {
+      if (hasFinishedOnboarding) {
         set({ hasCompleted: true });
       }
       
-      if (response.onboardingData) {
-        const data = response.onboardingData;
-        const calculatedStep = get().calculateCurrentStep();
-        
-        set({ 
-          data, 
-          currentStep: calculatedStep,
-          hasCompleted: response.hasFinishedOnboarding
-        });
-      }
+      const calculatedStep = get().calculateCurrentStep(
+        { ...defaultUserData, ...userData }, 
+        { ...defaultCompanyData, ...spaceDetails as Partial<CompanyOnboardingData> }
+      );
+      
+      set({ 
+        dataUser: { ...defaultUserData, ...userData },
+        dataCompany: { ...defaultCompanyData, ...spaceDetails as Partial<CompanyOnboardingData> },
+        currentStep: calculatedStep,
+        hasCompleted: hasFinishedOnboarding
+      });
     } catch (error) {
-      console.error("Erreur lors du chargement des données d'onboarding:", error);
+      console.error("Error while loading onboarding data:", error);
     } finally {
       set({ isLoading: false });
     }
   },
   
-  // Mise à jour des données locales
-  updateData: (newData) => {
-    console.log("newData", newData)
+  // Mise à jour des données utilisateur
+  updateUserData: (newData) => {
     set(state => ({ 
-      data: { ...state.data, ...newData },
+      dataUser: { ...state.dataUser, ...newData },
       errors: {} // Réinitialiser les erreurs lors d'une mise à jour
     }));
+  },
+  
+  // Mise à jour des données d'entreprise
+  updateCompanyData: (newData) => {
+    set(state => ({ 
+      dataCompany: { ...state.dataCompany, ...newData },
+      errors: {} // Réinitialiser les erreurs lors d'une mise à jour
+    }));
+  },
+  
+  // Mise à jour de la validité du site web
+  setWebsiteValid: (isValid) => {
+    set({ websiteValid: isValid });
+  },
+  
+  // Récupération des informations d'entreprise à partir de l'URL du site web
+  fetchCompanyInfo: async (website) => {
+    if (!website) return;
+    
+    set({ isLoadingCompanyInfo: true });
+    
+    try {
+      const response = await basicApiCall<{ data: any }>("/user/company-info", { website });
+      
+      if (response.data) {
+        set({ companyInfo: response.data });
+        console.log("Données d'entreprise récupérées:", response.data);
+      }
+    } catch (error) {
+      console.error("Error while fetching company info:", error);
+    } finally {
+      set({ isLoadingCompanyInfo: false });
+    }
   },
   
   // Sauvegarde des données sur le serveur
   saveData: async (isComplete = false) => {
     try {
-      // Création d'un objet propre pour l'API
-      const cleanData = { ...get().data };
-      console.log("cleanData", cleanData)
-      
-      await basicApiCall("/user/onboarding", {
-        onboardingData: cleanData,
-        hasFinishedOnboarding: isComplete
-      });
+      const { dataUser, dataCompany } = get();
+
+      const userResponse = await updateOnboarding(dataUser, isComplete);
+
+      if (userResponse && userResponse.spaces && userResponse.spaces.length > 0) {
+        const spaceId = userResponse.spaces[0]; // Premier espace de l'utilisateur
+        await updateSpaceDetails(spaceId, dataCompany);
+      }
       
       if (isComplete) {
         set({ hasCompleted: true });
@@ -124,7 +178,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       
       return true;
     } catch (error) {
-      console.error("Erreur lors de la sauvegarde des données d'onboarding:", error);
+      console.error("Error while saving onboarding data:", error);
       return false;
     }
   },
@@ -133,7 +187,13 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   setCurrentStep: (step) => set({ currentStep: step }),
   
   goToNextStep: () => {
-    const { currentStep, saveData } = get();
+    const { currentStep, saveData, dataCompany, fetchCompanyInfo } = get();
+    
+    // Si nous sommes à l'étape 4 (informations sur l'entreprise) et qu'il y a un site web valide,
+    // récupérer les informations de l'entreprise en arrière-plan
+    if (currentStep === 4 && dataCompany.website) {
+      fetchCompanyInfo(dataCompany.website);
+    }
     
     const nextStep = currentStep + 1;
     const totalSteps = 8;
@@ -152,31 +212,32 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   
   // Validation de l'étape courante
   validateCurrentStep: () => {
-    const { currentStep, data } = get();
+    const { currentStep, dataUser, dataCompany, websiteValid } = get();
     const newErrors: Record<string, boolean> = {};
     
     switch (currentStep) {
       case 1:
-        if (!data.name.trim()) newErrors.name = true;
-        if (!data.firstName.trim()) newErrors.firstName = true;
+        if (!dataUser.name.trim()) newErrors.name = true;
+        if (!dataUser.firstName.trim()) newErrors.firstName = true;
         break;
       case 2:
-        if (!data.role) newErrors.role = true;
+        if (!dataUser.role) newErrors.role = true;
         break;
       case 3:
-        if (!data.discoveryChannel) newErrors.discoveryChannel = true;
+        if (!dataUser.discoveryChannel) newErrors.discoveryChannel = true;
         break;
       case 4:
-        if (!data.companyName.trim()) newErrors.companyName = true;
+        if (!dataCompany.companyName.trim()) newErrors.companyName = true;
+        if (dataCompany.website && !websiteValid) newErrors.website = true;
         break;
       case 5:
-        if (!data.goal) newErrors.goal = true;
+        if (!dataUser.goal) newErrors.goal = true;
         break;
       case 6:
-        if (!data.companyType) newErrors.companyType = true;
+        if (!dataCompany.companyType) newErrors.companyType = true;
         break;
       case 7:
-        if (!data.salesType) newErrors.salesType = true;
+        if (!dataCompany.salesType) newErrors.salesType = true;
         break;
       // Étape 8: tous les champs sont optionnels
     }
@@ -186,29 +247,31 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   },
   
   // Calcul de l'étape en fonction des données remplies
-  calculateCurrentStep: () => {
-    const { data } = get();
+  calculateCurrentStep: (userData?: Partial<UserOnboardingData>, companyData?: Partial<CompanyOnboardingData>) => {
+    const { dataUser, dataCompany } = get();
+    const user = userData ? { ...dataUser, ...userData } : dataUser;
+    const company = companyData ? { ...dataCompany, ...companyData } : dataCompany;
     
     // Étape 1: Informations personnelles
-    if (!data.name || !data.firstName) return 1;
+    if (!user.name || !user.firstName) return 1;
     
     // Étape 2: Rôle
-    if (!data.role) return 2;
+    if (!user.role) return 2;
     
     // Étape 3: Découverte
-    if (!data.discoveryChannel) return 3;
+    if (!user.discoveryChannel) return 3;
     
     // Étape 4: Informations sur l'entreprise
-    if (!data.companyName) return 4;
+    if (!company.companyName) return 4;
     
     // Étape 5: Objectif
-    if (!data.goal) return 5;
+    if (!user.goal) return 5;
     
     // Étape 6: Type d'entreprise
-    if (!data.companyType) return 6;
+    if (!company.companyType) return 6;
     
     // Étape 7: Type de ventes
-    if (!data.salesType) return 7;
+    if (!company.salesType) return 7;
     
     // Étape 8: Détails de l'entreprise (optionnels)
     return 8;

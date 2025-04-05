@@ -26,14 +26,11 @@ export default function OnboardingPage() {
   
   // Utilisation du store zustand pour l'onboarding
   const {
-    data,
     isLoading,
     currentStep,
     errors,
     hasCompleted,
     initStore,
-    updateData,
-    saveData,
     validateCurrentStep,
     goToNextStep,
     goToPreviousStep,

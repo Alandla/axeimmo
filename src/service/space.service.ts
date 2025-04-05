@@ -64,4 +64,17 @@ export async function addLastUsed(id:string, voiceId?: string, avatarId?: string
         console.error("Error fetching spaces:", error);
         return undefined;
     }
+}
+
+export async function updateSpaceDetails(id: string, details: Record<string, any>): Promise<any> {
+    try {
+        const response = await basicApiCall<any>('/space/details', {
+            spaceId: id,
+            details
+        });
+        return response;
+    } catch (error) {
+        console.error("Error updating space details:", error);
+        throw error;
+    }
 } 

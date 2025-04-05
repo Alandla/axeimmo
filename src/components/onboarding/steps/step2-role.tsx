@@ -11,10 +11,10 @@ interface Step2Props {
 const roles = ["Owner", "Marketing", "Sales", "Social Media", "Communication"]
 
 export default function Step2Role({ errors = {} }: Step2Props) {
-  const { data, updateData, goToNextStep } = useOnboardingStore();
+  const { dataUser, updateUserData, goToNextStep } = useOnboardingStore();
 
   const handleSelect = (role: string) => {
-    updateData({ role })
+    updateUserData({ role })
     goToNextStep()
   }
 
@@ -30,7 +30,7 @@ export default function Step2Role({ errors = {} }: Step2Props) {
             key={role}
             onClick={() => handleSelect(role)}
             className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all duration-200 transform hover:scale-[1.02] ${
-              data.role === role
+              dataUser.role === role
                 ? "border-black bg-black text-white"
                 : errors.role
                   ? "border-red-500 hover:border-red-600"

@@ -7,7 +7,7 @@ import { useOnboardingStore } from "@/src/store/onboardingStore"
 interface Step8Props {}
 
 export default function Step8CompanyDetails({}: Step8Props) {
-  const { data, updateData } = useOnboardingStore();
+  const { dataCompany, updateCompanyData } = useOnboardingStore();
 
   return (
     <div className="space-y-6">
@@ -20,8 +20,8 @@ export default function Step8CompanyDetails({}: Step8Props) {
           </Label>
           <Textarea
             id="companyMission"
-            value={data.companyMission}
-            onChange={(e) => updateData({ companyMission: e.target.value })}
+            value={dataCompany.companyMission}
+            onChange={(e) => updateCompanyData({ companyMission: e.target.value })}
             placeholder="Describe your company's mission..."
             rows={3}
           />
@@ -33,8 +33,8 @@ export default function Step8CompanyDetails({}: Step8Props) {
           </Label>
           <Textarea
             id="companyGoals"
-            value={data.companyGoals}
-            onChange={(e) => updateData({ companyGoals: e.target.value })}
+            value={dataCompany.companyTarget}
+            onChange={(e) => updateCompanyData({ companyTarget: e.target.value })}
             placeholder="Describe your goals..."
             rows={3}
           />
@@ -42,13 +42,13 @@ export default function Step8CompanyDetails({}: Step8Props) {
 
         <div className="space-y-2">
           <Label htmlFor="additionalInfo">
-            What are your main goals with our platform?<span className="text-xs text-gray-500">(Optional)</span>
+            What makes you want to use Hoox?<span className="text-xs text-gray-500">(Optional)</span>
           </Label>
           <Textarea
             id="additionalInfo"
-            value={data.companyGoals}
-            onChange={(e) => updateData({ companyGoals: e.target.value })}
-            placeholder="Additional information..."
+            value={dataCompany.companyNeeds}
+            onChange={(e) => updateCompanyData({ companyNeeds: e.target.value })}
+            placeholder="Describe how Hoox can help you to achieve your goals..."
             rows={3}
           />
         </div>

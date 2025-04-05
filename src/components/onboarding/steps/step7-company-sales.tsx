@@ -10,10 +10,10 @@ interface Step7Props {
 const salesTypes = ["Products", "Services", "Software", "Nothing"]
 
 export default function Step7CompanySales({ errors = {} }: Step7Props) {
-  const { data, updateData, goToNextStep } = useOnboardingStore();
+  const { dataCompany, updateCompanyData, goToNextStep } = useOnboardingStore();
 
   const handleSelect = (salesType: string) => {
-    updateData({ salesType })
+    updateCompanyData({ salesType })
     goToNextStep()
   }
 
@@ -29,14 +29,14 @@ export default function Step7CompanySales({ errors = {} }: Step7Props) {
             key={type}
             onClick={() => handleSelect(type)}
             className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all ${
-              data.salesType === type
+              dataCompany.salesType === type
                 ? "border-black bg-black text-white"
                 : errors.salesType
                   ? "border-red-500 hover:border-red-600"
                   : "border-gray-200 hover:border-gray-300"
             }`}
           >
-            {data.salesType === type && (
+            {dataCompany.salesType === type && (
               <motion.div
                 layoutId="selectedSalesType"
                 className="absolute inset-0 bg-black"

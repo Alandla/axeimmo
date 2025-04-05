@@ -46,6 +46,17 @@ export interface SimpleSpace {
   userRole?: string;
 }
 
+export interface ICompanyDetails {
+  companyName?: string;
+  website?: string;
+  companyType?: string;
+  companySize?: string;
+  salesType?: string;
+  companyMission?: string;
+  companyTarget?: string;
+  companyNeeds?: string;
+}
+
 export interface ISpace {
   id: string;
   name: string;
@@ -53,6 +64,7 @@ export interface ISpace {
   medias: IMediaSpace[];
   plan: IPlan;
   credits: number;
+  details?: ICompanyDetails;
   subtitleStyle: ISpaceSubtitleStyle[];
   avatars: Avatar[];
   voices: Voice[];

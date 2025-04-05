@@ -12,17 +12,17 @@ const companyTypes = ["Agency", "E-commerce", "SaaS", "Content Creator", "Non-pr
 const companySizes = ["Solo", "2-10", "11-50", "51-100", "+100"]
 
 export default function Step6CompanyType({ errors = {} }: Step6Props) {
-  const { data, updateData } = useOnboardingStore();
+  const { dataCompany, updateCompanyData } = useOnboardingStore();
 
   const handleSelectType = (type: string) => {
-    updateData({ companyType: type })
+    updateCompanyData({ companyType: type })
   }
 
   const handleSizeChange = (value: number[]) => {
-    updateData({ companySize: companySizes[value[0]] })
+    updateCompanyData({ companySize: companySizes[value[0]] })
   }
 
-  const currentSizeIndex = companySizes.findIndex((size) => size === data.companySize)
+  const currentSizeIndex = companySizes.findIndex((size) => size === dataCompany.companySize)
 
   return (
     <div className="space-y-8">
@@ -37,14 +37,14 @@ export default function Step6CompanyType({ errors = {} }: Step6Props) {
               key={type}
               onClick={() => handleSelectType(type)}
               className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all ${
-                data.companyType === type
+                dataCompany.companyType === type
                   ? "border-black bg-black text-white"
                   : errors.companyType
                     ? "border-red-500 hover:border-red-600"
                     : "border-gray-200 hover:border-gray-300"
               }`}
             >
-              {data.companyType === type && (
+              {dataCompany.companyType === type && (
                 <motion.div
                   layoutId="selectedType"
                   className="absolute inset-0 bg-black"
@@ -71,7 +71,7 @@ export default function Step6CompanyType({ errors = {} }: Step6Props) {
             className="w-full"
           />
 
-          <div className="text-2xl font-bold">{data.companySize}</div>
+          <div className="text-2xl font-bold">{dataCompany.companySize}</div>
         </div>
       </div>
     </div>

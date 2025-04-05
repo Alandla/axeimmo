@@ -1,27 +1,6 @@
 import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
 
-// Schéma pour les données d'onboarding
-const onboardingDataSchema = new mongoose.Schema(
-  {
-    role: String,
-    discoveryChannel: String,
-    companyName: String,
-    website: String,
-    goal: String,
-    companyType: String,
-    companySize: String,
-    salesType: String,
-    companyMission: String,
-    companyGoals: String,
-    companyTarget: String,
-  },
-  {
-    timestamps: true,
-    toJSON: { virtuals: true },
-  }
-);
-
 // USER SCHEMA
 const userSchema = new mongoose.Schema(
   {
@@ -65,9 +44,17 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    onboardingData: {
-      type: onboardingDataSchema,
-      default: null,
+    role: {
+      type: String,
+      required: false,
+    },
+    discoveryChannel: {
+      type: String,
+      required: false,
+    },
+    goal: {
+      type: String,
+      required: false,
     },
     hasFinishedOnboarding: {
       type: Boolean,
@@ -91,6 +78,4 @@ const userSchema = new mongoose.Schema(
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
-
-export default User;
+export default mongoose.models.User || mongoose.model("User", userSchema);

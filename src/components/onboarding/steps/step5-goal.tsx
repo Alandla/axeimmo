@@ -10,10 +10,10 @@ interface Step5Props {
 const goals = ["Organic growth", "Ads creation", "Brand Awareness", "Lead Generation", "Faceless Content"]
 
 export default function Step5Goal({ errors = {} }: Step5Props) {
-  const { data, updateData, goToNextStep } = useOnboardingStore();
+  const { dataUser, updateUserData, goToNextStep } = useOnboardingStore();
 
   const handleSelect = (goal: string) => {
-    updateData({ goal })
+    updateUserData({ goal })
     goToNextStep()
   }
 
@@ -29,7 +29,7 @@ export default function Step5Goal({ errors = {} }: Step5Props) {
             key={goal}
             onClick={() => handleSelect(goal)}
             className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all duration-200 transform hover:scale-[1.02] ${
-              data.goal === goal
+              dataUser.goal === goal
                 ? "border-black bg-black text-white"
                 : errors.goal
                   ? "border-red-500 hover:border-red-600"

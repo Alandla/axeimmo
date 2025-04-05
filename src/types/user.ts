@@ -1,17 +1,3 @@
-export interface OnboardingData {
-  role: string;
-  discoveryChannel: string;
-  companyName: string;
-  website: string;
-  goal: string;
-  companyType: string;
-  companySize: string;
-  salesType: string;
-  companyMission: string;
-  companyGoals: string;
-  additionalInfo: string;
-}
-
 export interface IUser {
   id: string;
   name: string;
@@ -24,6 +10,8 @@ export interface IUser {
   };
   spaces: string[];
   checkAffiliate?: boolean;
-  onboardingData?: OnboardingData;
+  goal: string;
+  discoveryChannel: string;
+  role: string;
   hasFinishedOnboarding: boolean;
 }

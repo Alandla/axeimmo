@@ -9,7 +9,7 @@ interface Step1Props {
 }
 
 export default function Step1PersonalInfo({ errors = {} }: Step1Props) {
-  const { data, updateData } = useOnboardingStore();
+  const { dataUser, updateUserData } = useOnboardingStore();
 
   return (
     <div className="space-y-6">
@@ -22,8 +22,8 @@ export default function Step1PersonalInfo({ errors = {} }: Step1Props) {
           </Label>
           <Input
             id="name"
-            value={data.name}
-            onChange={(e) => updateData({ name: e.target.value })}
+            value={dataUser.name}
+            onChange={(e) => updateUserData({ name: e.target.value })}
             placeholder="Name"
             className={errors.name ? "border-red-500" : ""}
           />
@@ -36,8 +36,8 @@ export default function Step1PersonalInfo({ errors = {} }: Step1Props) {
           </Label>
           <Input
             id="firstName"
-            value={data.firstName}
-            onChange={(e) => updateData({ firstName: e.target.value })}
+            value={dataUser.firstName}
+            onChange={(e) => updateUserData({ firstName: e.target.value })}
             placeholder="First Name"
             className={errors.firstName ? "border-red-500" : ""}
           />
