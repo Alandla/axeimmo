@@ -112,6 +112,10 @@ const spaceSchema = new mongoose.Schema(
     ],
     avatars: [avatarSchema],
     voices: [voiceSchema],
+    videoIdeas: {
+      type: [String],
+      default: []
+    },
     lastUsed: {
       voices: [],
       avatars: [],

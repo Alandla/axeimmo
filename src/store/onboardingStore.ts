@@ -24,6 +24,7 @@ export interface CompanyOnboardingData {
   companyMission: string
   companyTarget: string
   companyNeeds: string
+  videoIdeas?: string[]
 }
 
 interface OnboardingStore {
@@ -37,6 +38,9 @@ interface OnboardingStore {
   websiteValid: boolean
   companyInfo: any | null
   isLoadingCompanyInfo: boolean
+  spaceId: string | null
+  lastFetchedWebsite: string
+  fetchingCompanyData: boolean
   
   // Actions
   initStore: () => Promise<void>
@@ -71,7 +75,8 @@ const defaultCompanyData: CompanyOnboardingData = {
   salesType: "",
   companyMission: "",
   companyNeeds: "",
-  companyTarget: ""
+  companyTarget: "",
+  videoIdeas: []
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
@@ -85,16 +90,20 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   websiteValid: true,
   companyInfo: null,
   isLoadingCompanyInfo: false,
+  spaceId: null,
+  lastFetchedWebsite: "",
+  fetchingCompanyData: false,
   
   // Initialisation du store avec les données existantes du serveur
   initStore: async () => {
     set({ isLoading: true });
     
     try {
-      const { hasFinishedOnboarding, userData, spaceDetails } = await basicApiGetCall<{
+      const { hasFinishedOnboarding, userData, spaceDetails, spaceId } = await basicApiGetCall<{
         hasFinishedOnboarding: boolean;
         userData: UserOnboardingData;
         spaceDetails?: ICompanyDetails;
+        spaceId?: string;
       }>("/user/onboarding");
       
       if (hasFinishedOnboarding) {
@@ -110,7 +119,8 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
         dataUser: { ...defaultUserData, ...userData },
         dataCompany: { ...defaultCompanyData, ...spaceDetails as Partial<CompanyOnboardingData> },
         currentStep: calculatedStep,
-        hasCompleted: hasFinishedOnboarding
+        hasCompleted: hasFinishedOnboarding,
+        spaceId: spaceId || null
       });
     } catch (error) {
       console.error("Error while loading onboarding data:", error);
@@ -143,33 +153,64 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   // Récupération des informations d'entreprise à partir de l'URL du site web
   fetchCompanyInfo: async (website) => {
     if (!website) return;
+
+    console.log("Fetching company info for website:", website);
     
-    set({ isLoadingCompanyInfo: true });
+    set({ isLoadingCompanyInfo: true, lastFetchedWebsite: website, fetchingCompanyData: true });
     
     try {
-      const response = await basicApiCall<{ data: any }>("/user/company-info", { website });
+      const response : any = await basicApiCall("/search/company", { website });
       
-      if (response.data) {
-        set({ companyInfo: response.data });
-        console.log("Données d'entreprise récupérées:", response.data);
+      if (response) {
+        console.log("Company info", response);
+
+        const companyData = {
+          companyMission: response.mission || get().dataCompany.companyMission,
+          companyTarget: response.audience || get().dataCompany.companyTarget,
+          companyNeeds: response.need || get().dataCompany.companyNeeds,
+          videoIdeas: response.ideas || get().dataCompany.videoIdeas
+        };
+
+        set(state => ({
+          dataCompany: {
+            ...state.dataCompany,
+            ...companyData
+          }
+        }));
+
+        const { spaceId } = get();
+        if (spaceId) {
+          try {
+            await updateSpaceDetails(spaceId, companyData);
+            console.log("Détails du space mis à jour avec les données d'entreprise");
+          } catch (error) {
+            console.error("Erreur lors de la mise à jour des détails du space:", error);
+          }
+        }
       }
     } catch (error) {
       console.error("Error while fetching company info:", error);
     } finally {
-      set({ isLoadingCompanyInfo: false });
+      set({ isLoadingCompanyInfo: false, fetchingCompanyData: false });
     }
   },
   
   // Sauvegarde des données sur le serveur
   saveData: async (isComplete = false) => {
     try {
-      const { dataUser, dataCompany } = get();
+      const { dataUser, dataCompany, spaceId } = get();
 
       const userResponse = await updateOnboarding(dataUser, isComplete);
 
       if (userResponse && userResponse.spaces && userResponse.spaces.length > 0) {
-        const spaceId = userResponse.spaces[0]; // Premier espace de l'utilisateur
-        await updateSpaceDetails(spaceId, dataCompany);
+        const currentSpaceId = spaceId || userResponse.spaces[0]; // Utiliser le spaceId stocké ou le premier espace de l'utilisateur
+        
+        // Mettre à jour le spaceId dans le store si nécessaire
+        if (!spaceId) {
+          set({ spaceId: currentSpaceId });
+        }
+        
+        await updateSpaceDetails(currentSpaceId, dataCompany);
       }
       
       if (isComplete) {
@@ -187,11 +228,16 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   setCurrentStep: (step) => set({ currentStep: step }),
   
   goToNextStep: () => {
-    const { currentStep, saveData, dataCompany, fetchCompanyInfo } = get();
+    const { currentStep, saveData, dataCompany, fetchCompanyInfo, lastFetchedWebsite } = get();
     
     // Si nous sommes à l'étape 4 (informations sur l'entreprise) et qu'il y a un site web valide,
-    // récupérer les informations de l'entreprise en arrière-plan
-    if (currentStep === 4 && dataCompany.website) {
+    // récupérer les informations de l'entreprise en arrière-plan uniquement si le site a changé
+    if (currentStep === 4 && 
+        dataCompany.website && 
+        dataCompany.website !== lastFetchedWebsite && 
+        !dataCompany.companyMission && 
+        !dataCompany.companyTarget && 
+        !dataCompany.companyNeeds) {
       fetchCompanyInfo(dataCompany.website);
     }
     

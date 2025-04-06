@@ -285,12 +285,18 @@ export async function updateMedia(spaceId: string, mediaId: string, updates: any
   }
 }
 
-export const updateSpaceDetails = async (spaceId: string, details: Record<string, any>) => {
+export const updateSpaceDetails = async (spaceId: string, details: Record<string, any>, videoIdeas?: string[]) => {
   try {
     return await executeWithRetry(async () => {
+      const updateData: any = { details };
+      
+      if (videoIdeas !== undefined) {
+        updateData.videoIdeas = videoIdeas;
+      }
+      
       const space = await SpaceModel.findByIdAndUpdate(
         spaceId, 
-        { $set: { details } }, 
+        { $set: updateData }, 
         { new: true }
       );
       

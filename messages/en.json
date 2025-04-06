@@ -1112,5 +1112,15 @@
         "delete": "Delete",
         "deleting": "Deleting..."
       }
+    },
+    "onboarding": {
+      "thank-you": {
+        "title": "Thank you!",
+        "description": "Your onboarding is complete. We're excited to have you on board and can't wait to help you achieve your goals."
+      },
+      "pricing": {
+        "title": "Welcome, let's have a look at our plans that best suit your needs",
+        "continue-free-trial": "Continue with free trial"
+      }
     }
   }

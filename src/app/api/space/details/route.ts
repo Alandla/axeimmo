@@ -26,7 +26,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const updatedDetails = await updateSpaceDetails(spaceId, details);
+    const { videoIdeas, ...restDetails } = details;
+    
+    const updatedDetails = await updateSpaceDetails(
+      spaceId, 
+      restDetails, 
+      videoIdeas !== undefined ? videoIdeas : undefined
+    );
 
     return NextResponse.json({ data: updatedDetails });
   } catch (error) {

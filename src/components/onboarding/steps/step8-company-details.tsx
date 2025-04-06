@@ -3,15 +3,26 @@
 import { Textarea } from "@/src/components/ui/textarea"
 import { Label } from "@/src/components/ui/label"
 import { useOnboardingStore } from "@/src/store/onboardingStore"
+import { Globe } from "lucide-react";
+import { TextShimmer } from "@/src/components/ui/text-shimmer";
 
 interface Step8Props {}
 
 export default function Step8CompanyDetails({}: Step8Props) {
-  const { dataCompany, updateCompanyData } = useOnboardingStore();
+  const { dataCompany, updateCompanyData, fetchingCompanyData } = useOnboardingStore();
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Tell us more about your company</h2>
+
+      {fetchingCompanyData && (
+        <div className="bg-blue-50 text-blue-600 px-3 py-2 rounded-md text-sm mb-4 flex items-center gap-2">
+          <Globe className="w-3 h-3" />
+          <TextShimmer className="text-blue-700" duration={1.5}>
+            We are fetching your company website...
+          </TextShimmer>
+        </div>
+      )}
 
       <div className="space-y-6">
         <div className="space-y-2">
@@ -24,6 +35,7 @@ export default function Step8CompanyDetails({}: Step8Props) {
             onChange={(e) => updateCompanyData({ companyMission: e.target.value })}
             placeholder="Describe your company's mission..."
             rows={3}
+            disabled={fetchingCompanyData}
           />
         </div>
 
@@ -37,6 +49,7 @@ export default function Step8CompanyDetails({}: Step8Props) {
             onChange={(e) => updateCompanyData({ companyTarget: e.target.value })}
             placeholder="Describe your goals..."
             rows={3}
+            disabled={fetchingCompanyData}
           />
         </div>
 
@@ -50,6 +63,7 @@ export default function Step8CompanyDetails({}: Step8Props) {
             onChange={(e) => updateCompanyData({ companyNeeds: e.target.value })}
             placeholder="Describe how Hoox can help you to achieve your goals..."
             rows={3}
+            disabled={fetchingCompanyData}
           />
         </div>
       </div>

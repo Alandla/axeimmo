@@ -1110,5 +1110,15 @@
         "error-deleted-description": "Une erreur est survenue lors de la suppression du média",
         "error-saved-description": "Une erreur est survenue lors de la sauvegarde des modifications"
       }
+    },
+    "onboarding": {
+      "thank-you": {
+        "title": "Merci !",
+        "description": "Votre intégration est terminée. Nous sommes ravis de vous compter parmi nous et avons hâte de vous aider à atteindre vos objectifs."
+      },
+      "pricing": {
+        "title": "Choisissez votre plan",
+        "continue-free-trial": "Continuer avec l'essai gratuit"
+      }
     }
   }

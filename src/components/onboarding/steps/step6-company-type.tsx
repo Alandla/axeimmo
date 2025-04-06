@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { Slider } from "@/src/components/ui/slider"
 import { useOnboardingStore } from "@/src/store/onboardingStore"
 

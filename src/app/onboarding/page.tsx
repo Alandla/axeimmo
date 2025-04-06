@@ -47,9 +47,7 @@ export default function OnboardingPage() {
     if (session?.user) {
       // Initialisation du store avec les données du serveur
       initStore().then(() => {
-        if (hasCompleted) {
-          router.push("/dashboard")
-        }
+        // Ne pas rediriger automatiquement
       }).catch(error => {
         console.error("Erreur lors de l'initialisation:", error)
         toast({
@@ -67,10 +65,6 @@ export default function OnboardingPage() {
     if (validateCurrentStep()) {
       goToNextStep()
       setAttemptedNext(false)
-      
-      if (currentStep + 1 > totalSteps) {
-        router.push("/dashboard")
-      }
       return true
     }
     return false

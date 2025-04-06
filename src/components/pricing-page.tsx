@@ -187,7 +187,7 @@ export const features = [
   },
 ];
 
-export default function PricingPage() {
+export default function PricingPage({ isSimplified = false }: { isSimplified?: boolean }) {
   const tPlan = useTranslations('plan')
   const tPricing = useTranslations('pricing')
   const [isAnnual, setIsAnnual] = useState(false)
@@ -278,19 +278,21 @@ export default function PricingPage() {
   return (
     <div className="container my-auto mx-auto px-4 sm:max-w-7xl">
       
-      {discount.active && (
+      {discount.active && !isSimplified && (
         <DiscountBanner />
       )}
 
-      <div className="flex justify-end mb-6">
-        <Link 
-          href="https://www.hoox.video/compare-plans"
-          target="_blank"
-          className="inline-flex items-center text-primary hover:text-primary/80 gap-1 text-sm font-medium"
-        >
-          {tPricing('see-detailed-comparison')} <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
+      {!isSimplified && (
+        <div className="flex justify-end mb-6">
+          <Link 
+            href="https://www.hoox.video/compare-plans"
+            target="_blank"
+            className="inline-flex items-center text-primary hover:text-primary/80 gap-1 text-sm font-medium"
+          >
+            {tPricing('see-detailed-comparison')} <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      )}
 
       <div className="mb-8 text-center">
         <div className="inline-flex items-center rounded-full border p-1 relative">
@@ -510,27 +512,29 @@ export default function PricingPage() {
         })}
       </div>
 
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader className="flex-row items-center gap-4">
-          <div className="p-2 bg-gray-100 rounded-lg">
-            <Diamond className="h-6 w-6 text-[#FB5688]" />
-          </div>
-          <div>
-            <CardTitle>{tPricing('custom')}</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              {tPricing('need-custom-plan')}
-            </p>
-          </div>
-        </CardHeader>
-        <CardFooter>
-          <Link href="https://calendar.app.google/FHm4qKBiq43Cr8oK9" target='_blank' className="w-full">
-            <Button variant="outline" className="w-full">
-              {tPricing('contact-sales')}
-              <PhoneCall className="w-4 h-4 ml-2" />
-            </Button>
-          </Link>
-        </CardFooter>
-      </Card>
+      {!isSimplified && (
+        <Card className="max-w-2xl mx-auto">
+          <CardHeader className="flex-row items-center gap-4">
+            <div className="p-2 bg-gray-100 rounded-lg">
+              <Diamond className="h-6 w-6 text-[#FB5688]" />
+            </div>
+            <div>
+              <CardTitle>{tPricing('custom')}</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                {tPricing('need-custom-plan')}
+              </p>
+            </div>
+          </CardHeader>
+          <CardFooter>
+            <Link href="https://calendar.app.google/FHm4qKBiq43Cr8oK9" target='_blank' className="w-full">
+              <Button variant="outline" className="w-full">
+                {tPricing('contact-sales')}
+                <PhoneCall className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </CardFooter>
+        </Card>
+      )}
     </div>
   )
 }

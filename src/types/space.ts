@@ -68,5 +68,6 @@ export interface ISpace {
   subtitleStyle: ISpaceSubtitleStyle[];
   avatars: Avatar[];
   voices: Voice[];
+  videoIdeas: string[];
   lastUsed: ILastUsed
 }
