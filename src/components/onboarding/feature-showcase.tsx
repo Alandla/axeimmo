@@ -7,18 +7,17 @@ import { motion, AnimatePresence } from "framer-motion"
 const features = [
   {
     title: "Simple edit",
-    description: "Never been easier to edit a video",
-    image: "/feature-1.png",
+    description: "Never been easier to edit a video with our intuitive editor",
+    image: "/onboarding/onboarding-edit.png",
   },
   {
-    title: "Smart automation",
-    description: "AI-powered tools to speed up your workflow",
-    image: "/feature-2.png",
+    title: "Video automation",
+    description: "Generate engaging videos in minutes without any editing skills",
+    image: "/onboarding/onboarding-create.png",
   },
   {
-    title: "Team collaboration",
-    description: "Work together seamlessly on projects",
-    image: "/feature-3.png",
+    title: "Game changer",
+    description: "All our users see an improvement in their workflow and results",
   },
 ]
 
@@ -46,9 +45,18 @@ export default function FeatureShowcase() {
         // If progress is complete, move to next feature
         if (newProgress >= 100) {
           clearInterval(animationRef.current as NodeJS.Timeout)
+          
+          // Détermine explicitement la prochaine fonctionnalité
           setTimeout(() => {
-            setCurrentFeature((prev) => (prev + 1) % features.length)
+            if (currentFeature === 0) {
+              setCurrentFeature(1) // De "Simple edit" à "Smart automation"
+            } else if (currentFeature === 1) {
+              setCurrentFeature(2) // De "Smart automation" à "Team collaboration"
+            } else {
+              setCurrentFeature(0) // De "Team collaboration" retour à "Simple edit"
+            }
           }, 200) // Small delay before changing feature
+          
           return 100
         }
 
@@ -65,15 +73,15 @@ export default function FeatureShowcase() {
   }, [currentFeature])
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="bg-gray-950 rounded-lg pl-4 pt-4 h-64 overflow-hidden">
+      <div className="flex items-center gap-2 mb-4 pr-4">
         {features.map((_, index) => (
           <div key={index} className={`h-1 rounded-full relative ${index === currentFeature ? "flex-grow" : "w-6"}`}>
-            <div className="absolute inset-0 bg-gray-600 rounded-full" />
+            <div className="absolute inset-0 bg-gray-600 rounded-full will-change-transform" />
 
             {index === currentFeature && (
               <motion.div
-                className="absolute inset-0 bg-white rounded-full origin-left"
+                className="absolute inset-0 bg-white rounded-full origin-left will-change-transform"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: progress / 100 }}
                 transition={{ duration: 0.1, ease: "linear" }}
@@ -90,18 +98,21 @@ export default function FeatureShowcase() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
+          className="overflow-hidden"
         >
-          <h3 className="text-xl font-bold">{features[currentFeature].title}</h3>
-          <p className="text-sm text-gray-400">{features[currentFeature].description}</p>
+          <h3 className="text-xl font-bold pr-4">{features[currentFeature].title}</h3>
+          <p className="text-sm text-gray-400 pr-4">{features[currentFeature].description}</p>
 
-          <div className="mt-4 rounded-lg overflow-hidden">
-            <Image
-              src={features[currentFeature].image || "/placeholder.svg"}
-              alt={features[currentFeature].title}
-              width={240}
-              height={160}
-              className="w-full h-auto"
-            />
+          <div className="mt-6 rounded-lg overflow-hidden -mr-4">
+            {features[currentFeature].image && (
+              <Image
+                src={features[currentFeature].image}
+                alt={features[currentFeature].title}
+                width={320}
+                height={213}
+                className="w-[calc(100%+2rem)] h-auto"
+              />
+            )}
           </div>
         </motion.div>
       </AnimatePresence>

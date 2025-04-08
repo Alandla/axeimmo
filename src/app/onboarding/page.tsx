@@ -57,7 +57,7 @@ export default function OnboardingPage() {
         })
       })
     }
-  }, [session, router, toast, initStore, hasCompleted])
+  }, [session])
 
   const nextStep = () => {
     setAttemptedNext(true)

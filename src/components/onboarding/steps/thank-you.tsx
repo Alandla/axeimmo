@@ -2,7 +2,7 @@
 
 import { ArrowRight, CheckCircle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import confetti from "canvas-confetti"
 import PricingPage from "@/src/components/pricing-page"
 import { Button } from "@/src/components/ui/button"
@@ -11,7 +11,6 @@ import { useTranslations } from "next-intl"
 
 export default function ThankYou() {
   const [showPricing, setShowPricing] = useState(false)
-  const [showTrialButton, setShowTrialButton] = useState(false)
   const t = useTranslations('onboarding')
 
   // Déclencher les confettis à l'affichage du composant
@@ -52,15 +51,9 @@ export default function ThankYou() {
     const timerPricing = setTimeout(() => {
       setShowPricing(true);
     }, 3000);
-    
-    // Afficher le bouton de continuation après 5 secondes (2 secondes après les plans)
-    const timerButton = setTimeout(() => {
-      setShowTrialButton(true);
-    }, 5000);
 
     return () => {
       clearTimeout(timerPricing);
-      clearTimeout(timerButton);
     };
   }, []);
 
