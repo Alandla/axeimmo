@@ -415,6 +415,7 @@
       "no-avatar": "Je n'ai pas besoin d'avatar, étape suivante",
       "no-avatar-generation": "Je n'ai pas besoin d'avatar, commencer la génération",
       "start-generation": "Commencer la génération",
+      "need-ideas": "Besoin d'idées ?",
       "select-to-start": {
         "title": "Avant de commencer, tu dois ",
         "need-prompt": "avoir un prompt ou un fichier voix/avatar",

@@ -44,6 +44,7 @@ export interface SimpleSpace {
   credits: number;
   planName: PlanName;
   userRole?: string;
+  videoIdeas?: string[];
 }
 
 export interface ICompanyDetails {

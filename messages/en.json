@@ -407,6 +407,7 @@
       "no-avatar": "I don't need an avatar, next step",
       "no-avatar-generation": "I don't need an avatar, start generation",
       "start-generation": "Start generation",
+      "need-ideas": "Need ideas ?",
       "select-to-start": {
         "title": "Before starting, you must ",
         "need-prompt": "have a prompt or a voice/avatar file",

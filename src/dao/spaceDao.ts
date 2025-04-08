@@ -182,10 +182,11 @@ export const getUserSpaces = async (userId: string) => {
 
       const spaces = await SpaceModel.find(
         { _id: { $in: user.spaces } },
-        'name plan credits members'
+        'name plan credits members videoIdeas'
       );
 
       return spaces.map((space) => {
+        console.log("space", space);
         const userRole = space.members.find((member: any) => member.userId.toString() === userId)?.roles;
         return {
           id: space._id,
@@ -194,6 +195,7 @@ export const getUserSpaces = async (userId: string) => {
           credits: space.credits,
           creditsPerMonth: space.plan.creditsMonth,
           userRole: userRole,
+          videoIdeas: space.videoIdeas,
         };
       });
     });

@@ -27,12 +27,16 @@ export async function POST(req: NextRequest) {
     }
 
     const { videoIdeas, ...restDetails } = details;
+
+    console.log("videoIdeas", videoIdeas);
     
     const updatedDetails = await updateSpaceDetails(
       spaceId, 
       restDetails, 
       videoIdeas !== undefined ? videoIdeas : undefined
     );
+
+    console.log("updatedDetails", updatedDetails);
 
     return NextResponse.json({ data: updatedDetails });
   } catch (error) {

@@ -4,9 +4,7 @@ import { ICompanyDetails } from '@/src/types/space'
 import { updateSpaceDetails } from '@/src/service/space.service'
 import { updateOnboarding } from '../service/user.service'
 
-// Les données qui seront stockées sur l'utilisateur
 export interface UserOnboardingData {
-  // Informations personnelles
   name: string
   firstName: string
   role: string
@@ -14,7 +12,6 @@ export interface UserOnboardingData {
   goal: string
 }
 
-// Les données qui seront stockées sur le Space
 export interface CompanyOnboardingData {
   companyName: string
   website: string
@@ -28,7 +25,6 @@ export interface CompanyOnboardingData {
 }
 
 interface OnboardingStore {
-  // États
   dataUser: UserOnboardingData
   dataCompany: CompanyOnboardingData
   isLoading: boolean
@@ -41,8 +37,7 @@ interface OnboardingStore {
   spaceId: string | null
   lastFetchedWebsite: string
   fetchingCompanyData: boolean
-  
-  // Actions
+
   initStore: () => Promise<void>
   updateUserData: (newData: Partial<UserOnboardingData>) => void
   updateCompanyData: (newData: Partial<CompanyOnboardingData>) => void
@@ -58,7 +53,6 @@ interface OnboardingStore {
   resetErrors: () => void
 }
 
-// Valeurs par défaut
 const defaultUserData: UserOnboardingData = {
   name: "",
   firstName: "",
@@ -80,7 +74,6 @@ const defaultCompanyData: CompanyOnboardingData = {
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
-  // États initiaux
   dataUser: { ...defaultUserData },
   dataCompany: { ...defaultCompanyData },
   isLoading: true,
@@ -93,8 +86,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   spaceId: null,
   lastFetchedWebsite: "",
   fetchingCompanyData: false,
-  
-  // Initialisation du store avec les données existantes du serveur
+
   initStore: async () => {
     set({ isLoading: true });
     
@@ -128,29 +120,25 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       set({ isLoading: false });
     }
   },
-  
-  // Mise à jour des données utilisateur
+
   updateUserData: (newData) => {
     set(state => ({ 
       dataUser: { ...state.dataUser, ...newData },
-      errors: {} // Réinitialiser les erreurs lors d'une mise à jour
+      errors: {}
     }));
   },
   
-  // Mise à jour des données d'entreprise
   updateCompanyData: (newData) => {
     set(state => ({ 
       dataCompany: { ...state.dataCompany, ...newData },
-      errors: {} // Réinitialiser les erreurs lors d'une mise à jour
+      errors: {}
     }));
   },
   
-  // Mise à jour de la validité du site web
   setWebsiteValid: (isValid) => {
     set({ websiteValid: isValid });
   },
   
-  // Récupération des informations d'entreprise à partir de l'URL du site web
   fetchCompanyInfo: async (website) => {
     if (!website) return;
 
@@ -195,7 +183,6 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     }
   },
   
-  // Sauvegarde des données sur le serveur
   saveData: async (isComplete = false) => {
     try {
       const { dataUser, dataCompany, spaceId } = get();
@@ -203,9 +190,8 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       const userResponse = await updateOnboarding(dataUser, isComplete);
 
       if (userResponse && userResponse.spaces && userResponse.spaces.length > 0) {
-        const currentSpaceId = spaceId || userResponse.spaces[0]; // Utiliser le spaceId stocké ou le premier espace de l'utilisateur
+        const currentSpaceId = spaceId || userResponse.spaces[0];
         
-        // Mettre à jour le spaceId dans le store si nécessaire
         if (!spaceId) {
           set({ spaceId: currentSpaceId });
         }
@@ -224,7 +210,6 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     }
   },
   
-  // Gestion des étapes
   setCurrentStep: (step) => set({ currentStep: step }),
   
   goToNextStep: () => {

@@ -2,7 +2,7 @@ import { Check, Paperclip, Send } from "lucide-react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import SelectDuration from "./ui/select/select-duration";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CreationStep } from "../types/enums";
 import { useTranslations } from "next-intl";
 import { useCreationStore } from "../store/creationStore";
@@ -15,23 +15,41 @@ interface DurationOption {
   value: number;
 }
 
-export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, handleConfirmVoice, isDisabled = false }: { 
+export function AiChatTab({ 
+  creationStep, 
+  sendMessage, 
+  handleConfirmAvatar, 
+  handleConfirmVoice, 
+  isDisabled = false,
+  inputMessage,
+  setInputMessage
+}: { 
   creationStep: CreationStep, 
   sendMessage: (message: string, duration: number) => void, 
   handleConfirmAvatar: () => void, 
   handleConfirmVoice: () => void,
-  isDisabled?: boolean 
+  isDisabled?: boolean,
+  inputMessage: string,
+  setInputMessage: (message: string) => void
 }) {
     const { files, selectedVoice, selectedLook, setFiles } = useCreationStore()
-    const [inputMessage, setInputMessage] = useState('')
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
     const [isDragging, setIsDragging] = useState(false);
     const t = useTranslations('ai');
 
-    const adjustTextareaHeight = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      event.target.style.height = 'auto';
-      event.target.style.height = `${event.target.scrollHeight}px`;
+    const adjustTextareaHeight = (event: React.FormEvent<HTMLTextAreaElement>) => {
+      const target = event.target as HTMLTextAreaElement;
+      target.style.height = 'auto';
+      target.style.height = `${target.scrollHeight}px`;
     }
+
+    useEffect(() => {
+      const textarea = document.getElementById('ai-chat-textarea') as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    }, [inputMessage]);
 
     const handleSendMessage = (message: string, duration: number) => {
         setInputMessage('')
@@ -128,6 +146,7 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                 )}
                 
                 <Textarea
+                  id='ai-chat-textarea'
                   placeholder={t('placeholder.start')}
                   value={inputMessage}
                   onChange={(e) => {

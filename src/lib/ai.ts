@@ -370,6 +370,7 @@ After your analysis, generate three ideas for videos that would be suitable for 
 - Serve different purposes (e.g., educational content, problem resolution, product explanation)
 - Be described briefly in one or two sentences
 - For educational content and problem resolution, they don't necessarily showcase what the company is selling, they serve to educate the audience and help them solve their problems, and make them curious to find out more, so they can discover more about the company.
+- No need to add the theme of the idea beforehand, for example 'A tutorial video on', 'A problem solution video titled' are not necessary.
 - No need to specify video duration
 
 Finally, present your summary and video ideas in JSON format. Use the following structure:
