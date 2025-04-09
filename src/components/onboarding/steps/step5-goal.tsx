@@ -33,7 +33,7 @@ export default function Step5Goal({ errors = {} }: Step5Props) {
             onClick={() => handleSelect(goal)}
             className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all duration-200 transform hover:scale-[1.02] ${
               dataUser.goal === goal
-                ? "border-black bg-black text-white"
+                ? "border-primary bg-primary text-white"
                 : errors.goal
                   ? "border-red-500 hover:border-red-600"
                   : "border-gray-200 hover:border-gray-300"

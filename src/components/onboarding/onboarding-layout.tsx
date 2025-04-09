@@ -28,12 +28,11 @@ export default function OnboardingLayout({
   const isCompleted = currentStep > totalSteps;
 
   return (
-    <div className="flex min-h-screen overflow-hidden relative">
+    <div className="flex min-h-screen overflow-hidden relative flex-col md:flex-row">
       {/* Logo persistant qui change de couleur */}
       <AnimatePresence mode="popLayout">
-        {isCompleted ? (
           <motion.div 
-            className="absolute top-8 left-8 z-50"
+            className="absolute top-8 left-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -41,8 +40,18 @@ export default function OnboardingLayout({
           >
             <Image src="/logo-noir.png" alt="Hoox" width={120} height={40} />
           </motion.div>
-        ) : null}
       </AnimatePresence>
+
+      {/* Contenu principal pour les petits écrans */}
+      {!isCompleted && (
+        <div className="absolute top-8 right-8 z-50 text-right md:hidden">
+          <h2 className="text-sm font-medium uppercase tracking-wider">{t('get-started')}</h2>
+          <h1 className="text-4xl font-bold">{t('welcome')}</h1>
+          <p className="text-sm text-gray-400 mt-2">
+            {t('gateway-description')}
+          </p>
+        </div>
+      )}
 
       {/* Bouton de fermeture qui apparaît lorsque l'onboarding est terminé */}
       <AnimatePresence>
@@ -69,7 +78,7 @@ export default function OnboardingLayout({
 
       {/* Sidebar avec animation uniquement lors de la disparition */}
       <motion.div 
-        className="w-80 bg-black text-white p-8 flex flex-col"
+        className="w-80 bg-black text-white p-8 flex-col hidden md:flex z-10"
         initial={false} // Pas d'animation initiale
         animate={{
           width: isCompleted ? "0px" : "320px", // 80px = 20rem = w-80
@@ -107,7 +116,7 @@ export default function OnboardingLayout({
 
       {/* Main content */}
       <motion.div 
-        className="flex-1 bg-white rounded-tl-3xl rounded-bl-3xl p-12 flex flex-col"
+        className="flex-1 bg-white rounded-tl-3xl rounded-bl-3xl md:p-12 p-6 flex flex-col"
         initial={false} // Pas d'animation initiale
         animate={{
           borderTopLeftRadius: isCompleted ? "0px" : "1.5rem",
@@ -121,14 +130,14 @@ export default function OnboardingLayout({
       >
         <div className="mx-auto w-full flex-1 flex flex-col">
           {showProgress && (
-            <div className="max-w-xl mx-auto w-full">
-              <div className="text-sm text-gray-500 mb-2">{category}</div>
+            <div className="max-w-xl mx-auto w-full mt-28 md:mt-0">
+              <div className="text-sm text-gray-500 mb-2 hidden md:block pt-4">{category}</div>
               <ProgressSteps currentStep={currentStep} totalSteps={totalSteps} />
             </div>
           )}
 
           <div className="flex-1 flex flex-col items-center justify-center">
-            <div className={`w-full ${isCompleted ? "max-w-none" : "max-w-md"}`}>{children}</div>
+            <div className={`w-full ${isCompleted ? "max-w-none" : "md:max-w-md max-w-none"}`}>{children}</div>
           </div>
         </div>
       </motion.div>

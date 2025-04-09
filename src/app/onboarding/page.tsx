@@ -19,6 +19,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
 import { useToast } from "@/src/hooks/use-toast"
 import { useOnboardingStore } from "@/src/store/onboardingStore"
 import { useTranslations } from "next-intl"
+import { Button } from "@/src/components/ui/button"
 
 export default function OnboardingPage() {
   const router = useRouter()
@@ -42,22 +43,18 @@ export default function OnboardingPage() {
   
   // État local pour la gestion des tentatives de validation
   const [attemptedNext, setAttemptedNext] = useState(false)
+  const [storeInitialized, setStoreInitialized] = useState(false);
 
   const totalSteps = 8
   const isCompleted = currentStep > totalSteps
   
   useEffect(() => {
-    if (session?.user) {
-      if (session.user.hasFinishedOnboarding) {
-        router.push('/dashboard')
-      }
+    if (session?.user && session.user.hasFinishedOnboarding) {
+      router.push('/dashboard')
     }
-  }, [session, router])
-
-  useEffect(() => {
-    if (session?.user) {
-      // Initialisation du store avec les données du serveur
+    if (session?.user && !storeInitialized) {
       initStore().then(() => {
+        setStoreInitialized(true);
       }).catch(error => {
         console.error("Erreur lors de l'initialisation:", error)
         toast({
@@ -67,7 +64,7 @@ export default function OnboardingPage() {
         })
       })
     }
-  }, [session])
+  }, [session, storeInitialized])
 
   const nextStep = () => {
     setAttemptedNext(true)
@@ -166,18 +163,22 @@ export default function OnboardingPage() {
             </AnimatePresence>
 
             {!isCompleted && (
-              <div className="flex justify-between mt-4">
-                <button
+              <div className="flex flex-col md:flex-row justify-between mt-4">
+                <Button
                   onClick={prevStep}
-                  className={`px-4 py-2 rounded-md border border-gray-200 text-sm font-medium flex items-center transition-opacity duration-300 gap-2 ${currentStep === 1 ? "opacity-0" : ""}`}
+                  className={`w-full md:w-auto ${currentStep === 1 ? "opacity-0" : ""}`}
+                  variant="outline"
+                  size="lg"
                 >
                   <ArrowLeftIcon className="w-4 h-4" />
                   {t('back')}
-                </button>
+                </Button>
 
-                <button
+                <Button
                   onClick={nextStep}
-                  className="px-4 py-2 bg-black text-white rounded-md text-sm font-medium flex items-center gap-2"
+                  className="w-full md:w-auto mt-2 md:mt-0"
+                  variant="default"
+                  size="lg"
                 >
                   {currentStep === totalSteps ? (
                     <>
@@ -190,7 +191,7 @@ export default function OnboardingPage() {
                       <ArrowRightIcon className="w-4 h-4" />
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             )}
           </>

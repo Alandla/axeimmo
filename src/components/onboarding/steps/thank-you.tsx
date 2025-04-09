@@ -105,7 +105,7 @@ export default function ThankYou() {
         >
           <div className="text-center mb-10">
             <motion.h2
-              className="text-3xl font-bold max-w-lg mx-auto"
+              className="text-3xl font-bold max-w-lg mx-auto md:pt-0 pt-20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}

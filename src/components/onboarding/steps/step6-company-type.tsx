@@ -48,7 +48,7 @@ export default function Step6CompanyType({ errors = {} }: Step6Props) {
               onClick={() => handleSelectCompanyType(type)}
               className={`relative overflow-hidden rounded-lg border p-4 text-center transition-all ${
                 dataCompany.companyType === type
-                  ? "border-black bg-black text-white"
+                  ? "border-primary bg-primary text-white"
                   : errors.companyType
                     ? "border-red-500 hover:border-red-600"
                     : "border-gray-200 hover:border-gray-300"
