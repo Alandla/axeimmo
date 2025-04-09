@@ -252,10 +252,6 @@ export function combineTranscriptions(sentences: any[]): any {
   return combinedTranscription;
 }
 
-const client = new Groq({
-  apiKey: process.env.GROQ_API_KEY
-});
-
 /**
  * Récupère la transcription d'un fichier audio à partir d'une URL
  * @param audioUrl URL du fichier audio à transcrire
