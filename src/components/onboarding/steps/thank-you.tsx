@@ -118,7 +118,7 @@ export default function ThankYou() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 2, duration: 0.5 }}
             >
-              <Link href="/dashboard">
+              <Link href="/dashboard/create">
                 <Button variant="ghost" size="lg">
                   {t('pricing.continue-free-trial') || "Continue with free trial"}
                   <ArrowRight className="w-4 h-4" />

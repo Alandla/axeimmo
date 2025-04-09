@@ -249,7 +249,6 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     switch (currentStep) {
       case 1:
         if (!dataUser.name.trim()) newErrors.name = true;
-        if (!dataUser.firstName.trim()) newErrors.firstName = true;
         break;
       case 2:
         if (!dataUser.role) newErrors.role = true;
@@ -284,7 +283,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     const company = companyData ? { ...dataCompany, ...companyData } : dataCompany;
     
     // Step 1: Personal information
-    if (!user.name || !user.firstName) return 1;
+    if (!user.name) return 1;
     
     // Step 2: Role
     if (!user.role) return 2;

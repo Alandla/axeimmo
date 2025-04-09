@@ -11,7 +11,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async profile(profile) {
         return {
           id: profile.sub,
-          name: profile.name,
+          name: profile.name.split(" ")[0],
+          firstName: profile.name.split(" ")[1],
           email: profile.email,
           image: profile.image,
           createdAt: new Date(),

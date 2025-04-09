@@ -1140,7 +1140,8 @@
         "name-label": "Nom",
         "name-error": "Le nom est requis",
         "firstName-label": "Prénom",
-        "firstName-error": "Le prénom est requis"
+        "firstName-error": "Le prénom est requis",
+        "optional": "(Optionnel)"
       },
       "step2": {
         "title": "Quel est ton rôle ?",

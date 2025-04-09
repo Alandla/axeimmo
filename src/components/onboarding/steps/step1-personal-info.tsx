@@ -35,6 +35,7 @@ export default function Step1PersonalInfo({ errors = {} }: Step1Props) {
         <div className="space-y-2">
           <Label htmlFor="firstName" className="flex justify-between">
             <span>{t('firstName-label')}</span>
+            <span className="text-xs text-gray-500">{t('optional')}</span>
           </Label>
           <Input
             id="firstName"

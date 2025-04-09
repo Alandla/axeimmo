@@ -38,7 +38,7 @@ export default function Page() {
 
   const handleSignInGoogle = async () => {
     await signIn('google', {
-      redirectTo: '/dashboard',
+      redirectTo: '/onboarding',
     })
   }
 

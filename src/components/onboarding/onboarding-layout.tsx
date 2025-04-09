@@ -54,7 +54,7 @@ export default function OnboardingLayout({
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ delay: 2, duration: 0.3 }}
           >
-            <Link href="/dashboard">
+            <Link href="/dashboard/create">
               <Button 
                 variant="ghost" 
                 size="icon" 
