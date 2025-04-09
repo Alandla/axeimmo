@@ -257,20 +257,15 @@ export function combineTranscriptions(sentences: any[]): any {
  * @returns La transcription du fichier audio
  */
 export const getTranscription = async (audioUrl: string, text?: string) => {
-    try {
-        // Télécharger le fichier audio depuis l'URL
-        const audioResponse = await axios.get(audioUrl, { responseType: 'arraybuffer' });
-        
+    try {        
         // Créer un FormData pour envoyer le fichier
         const formData = new FormData();
-        formData.append('file', Buffer.from(audioResponse.data), {
-            filename: 'audio.mp3',
-            contentType: 'audio/mpeg'
-        });
+
+        formData.append('url', audioUrl);
         formData.append('model', 'whisper-large-v3');
         
         if (text) {
-            formData.append('prompt', text);
+          formData.append('prompt', text);
         }
         
         formData.append('response_format', 'verbose_json');
