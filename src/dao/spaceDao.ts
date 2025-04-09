@@ -4,7 +4,7 @@ import SpaceModel from "../models/Space";
 import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
 import { addSpaceToUser } from "./userDao";
 import { IMedia } from "../types/video";
-import { IMediaSpace, IPlan } from "../types/space";
+import { IMediaSpace, IPlan, ISpace } from "../types/space";
 
 export const createPrivateSpaceForUser = async (userId: string, userName?: string | null) => {
   return executeWithRetry(async () => {
@@ -182,10 +182,11 @@ export const getUserSpaces = async (userId: string) => {
 
       const spaces = await SpaceModel.find(
         { _id: { $in: user.spaces } },
-        'name plan credits members'
+        'name plan credits members videoIdeas details'
       );
 
       return spaces.map((space) => {
+        console.log("space", space);
         const userRole = space.members.find((member: any) => member.userId.toString() === userId)?.roles;
         return {
           id: space._id,
@@ -194,6 +195,9 @@ export const getUserSpaces = async (userId: string) => {
           credits: space.credits,
           creditsPerMonth: space.plan.creditsMonth,
           userRole: userRole,
+          companyMission: space.details?.companyMission,
+          companyTarget: space.details?.companyTarget,
+          videoIdeas: space.videoIdeas,
         };
       });
     });
@@ -284,3 +288,73 @@ export async function updateMedia(spaceId: string, mediaId: string, updates: any
     throw error;
   }
 }
+
+export const updateSpaceDetails = async (spaceId: string, details: Record<string, any>, videoIdeas?: string[]) => {
+  try {
+    return await executeWithRetry(async () => {
+      const updateData: any = { details };
+      
+      if (videoIdeas !== undefined) {
+        updateData.videoIdeas = videoIdeas;
+      }
+      
+      const space = await SpaceModel.findByIdAndUpdate(
+        spaceId, 
+        { $set: updateData }, 
+        { new: true }
+      );
+      
+      if (!space) throw new Error("Space not found");
+      return space.details;
+    });
+  } catch (error) {
+    console.error("Error while updating space details: ", error);
+    throw error;
+  }
+};
+
+export const updateSpace = async (spaceId: string, updateData: Partial<ISpace>) => {
+  try {
+    return await executeWithRetry(async () => {
+      const flattenedUpdateData: Record<string, any> = {};
+      
+      // Normal properties
+      Object.entries(updateData).forEach(([key, value]) => {
+        if (key !== 'details') {
+          flattenedUpdateData[key] = value;
+        }
+      });
+      
+      // Nested properties
+      if (updateData.details) {
+        Object.entries(updateData.details).forEach(([detailKey, detailValue]) => {
+          flattenedUpdateData[`details.${detailKey}`] = detailValue;
+        });
+      }
+      
+      // Update with flattened data
+      const updatedSpace = await SpaceModel.findByIdAndUpdate(
+        spaceId,
+        { $set: flattenedUpdateData },
+        { new: true, runValidators: true }
+      );
+      
+      if (!updatedSpace) throw new Error("Space not found");
+      
+      // Map to SimpleSpace format for client
+      return {
+        id: updatedSpace._id,
+        name: updatedSpace.name,
+        planName: updatedSpace.plan.name,
+        credits: updatedSpace.credits,
+        creditsPerMonth: updatedSpace.plan.creditsMonth,
+        companyMission: updatedSpace.details?.companyMission,
+        companyTarget: updatedSpace.details?.companyTarget,
+        videoIdeas: updatedSpace.videoIdeas,
+      };
+    });
+  } catch (error) {
+    console.error("Error while updating space: ", error);
+    throw error;
+  }
+};

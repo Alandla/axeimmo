@@ -98,6 +98,23 @@
         "error-description": "You don't have an active subscription."
       }
     },
+    "settings": {
+      "space": {
+        "title": "Space Settings",
+        "name-label": "Name",
+        "name-placeholder": "Enter space name",
+        "name-description": "The name of your space visible to all members",
+        "mission-label": "Mission",
+        "mission-placeholder": "What is your company's mission?",
+        "mission-description": "Your company's mission that will guide your videos",
+        "target-label": "Target",
+        "target-placeholder": "What is your company's target audience?",
+        "target-description": "Your company's target audience to tailor your videos",
+        "save-button": "Save",
+        "update-success-title": "Changes saved",
+        "update-success-description": "Space settings have been successfully updated"
+      }
+    },
     "pricing": {
       "upgrade": "Upgrade",
       "downgrade": "Downgrade",
@@ -407,6 +424,7 @@
       "no-avatar": "I don't need an avatar, next step",
       "no-avatar-generation": "I don't need an avatar, start generation",
       "start-generation": "Start generation",
+      "need-ideas": "Need ideas ?",
       "select-to-start": {
         "title": "Before starting, you must ",
         "need-prompt": "have a prompt or a voice/avatar file",
@@ -1111,6 +1129,133 @@
         "cancel": "Cancel",
         "delete": "Delete",
         "deleting": "Deleting..."
+      }
+    },
+    "onboarding": {
+      "categories": {
+        "personal-information": "Personal Information",
+        "company-information": "Company Information"
+      },
+      "common": {
+        "back": "Back",
+        "continue": "Continue",
+        "complete": "Complete"
+      },
+      "layout": {
+        "get-started": "GET STARTED",
+        "welcome": "Welcome",
+        "gateway-description": "Your gateway to accelerated video content creation.",
+        "sidebar-features": {
+          "simple-edit": "Simple edit",
+          "simple-edit-description": "Never been easier to edit a video with our intuitive editor",
+          "video-automation": "Video automation",
+          "video-automation-description": "Generate engaging videos in minutes without any editing skills",
+          "game-changer": "Game changer",
+          "game-changer-description": "All our users see an improvement in their workflow and results"
+        }
+      },
+      "step1": {
+        "title": "Let's personalise your experience",
+        "name-label": "Name",
+        "name-error": "Name is required",
+        "firstName-label": "First Name",
+        "firstName-error": "First name is required",
+        "optional": "(Optional)"
+      },
+      "step2": {
+        "title": "What's your role?",
+        "role-error": "Please select your role",
+        "roles": {
+          "owner": "Owner",
+          "marketing": "Marketing",
+          "sales": "Sales",
+          "social-media": "Social Media",
+          "communication": "Communication"
+        }
+      },
+      "step3": {
+        "title": "How did you hear about us?",
+        "channel-error": "Please select how do you find us",
+        "channels": {
+          "linkedin": "Linkedin",
+          "youtube": "Youtube",
+          "x": "X",
+          "instagram": "Instagram",
+          "tiktok": "TikTok",
+          "google": "Google",
+          "friends": "Friends",
+          "other": "Other"
+        }
+      },
+      "step4": {
+        "title": "Tell us about your company",
+        "companyName-label": "Company Name",
+        "companyName-error": "Company name is required",
+        "website-label": "Website (optional)",
+        "website-placeholder": "https://yourcompany.com",
+        "website-error": "Please enter a valid URL"
+      },
+      "step5": {
+        "title": "Your goal with Hoox",
+        "goal-error": "Please select your goal",
+        "goals": {
+          "organic-growth": "Organic growth",
+          "ads-creation": "Ads creation",
+          "brand-awareness": "Brand Awareness",
+          "lead-generation": "Lead Generation",
+          "faceless-content": "Faceless Content"
+        }
+      },
+      "step6": {
+        "title": "You are...",
+        "companyType-error": "Please select your company type",
+        "companyTypes": {
+          "agency": "Agency",
+          "ecommerce": "E-commerce",
+          "saas": "SaaS",
+          "content-creator": "Content Creator",
+          "non-profit": "Non-profit",
+          "other": "Other"
+        },
+        "companySize-title": "Company size",
+        "companySizes": {
+          "solo": "Solo",
+          "2-10": "2-10",
+          "11-50": "11-50",
+          "51-100": "51-100",
+          "+100": "+100"
+        }
+      },
+      "step7": {
+        "title": "You sell...",
+        "salesType-error": "Please select what you sell",
+        "salesTypes": {
+          "products": "Products",
+          "services": "Services",
+          "software": "Software",
+          "nothing": "Nothing"
+        }
+      },
+      "step8": {
+        "title": "Tell us more about your company",
+        "fetching-website": "We are fetching your company website...",
+        "mission-label": "What is your company's mission?",
+        "mission-optional": "(Optional)",
+        "mission-placeholder": "Describe your company's mission...",
+        "target-label": "Who is your target audience?",
+        "target-optional": "(Optional)",
+        "target-placeholder": "Describe your goals...",
+        "needs-label": "What makes you want to use Hoox?",
+        "needs-optional": "(Optional)",
+        "needs-placeholder": "Describe how Hoox can help you to achieve your goals..."
+      },
+      "pricing": {
+        "title": "Welcome, let's have a look at our plans that best suit your needs",
+        "continue-free-trial": "Continue with free trial"
+      },
+      "thank-you": {
+        "title": "Thank you !",
+        "description": "Your onboarding is complete. We're excited to have you on board and can't wait to help you achieve your goals."
       }
     }
   }

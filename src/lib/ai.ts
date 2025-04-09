@@ -1,10 +1,15 @@
 import { createGroq } from "@ai-sdk/groq";
-import { generateText } from "ai";
+import { generateObject, generateText } from "ai";
 import { SimpleMedia, SimpleSequence } from "./analyse";
 import { LightTranscription } from "./transcription";
 import { logger } from "@trigger.dev/sdk/v3";
+import Groq from "groq-sdk";
 
 const groq = createGroq({
+    apiKey: process.env.GROQ_API_KEY
+});
+
+const client = new Groq({
     apiKey: process.env.GROQ_API_KEY
 });
 
@@ -307,4 +312,106 @@ export const matchMediaToSequences = async (sequences: LightTranscription[], med
         console.error(error)
         return null
     }
+}
+
+export const summarizeCompany = async (searchResults: any) => {
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+        try {
+            const completion = await client.chat.completions.create({
+                model: "meta-llama/llama-4-scout-17b-16e-instruct",
+                messages: [
+                    {
+                        role: "user", 
+                        content: `You are an expert business analyst tasked with creating a detailed company summary based on web search results. This summary will be used to create optimized video scripts for social networks. Your goal is to analyze the provided company data and extract key information to create a comprehensive summary broken down into specific sections.
+
+Here is the company data from web search results:
+
+<company_data>
+${JSON.stringify(searchResults)}
+</company_data>
+
+Please carefully analyze the provided company data, focusing on content from the company's website pages such as landing, FAQ, about, and pricing pages. Extract relevant information to create a detailed summary for each of the following sections:
+
+1. Mission: Summarize what the company does and provide an overview of their main activities.
+2. Audience: Identify who this brand could target on social networks to generate interest in their product and encourage purchases through educational content, problem-solving, sales pitches, etc.
+3. Need: Explain why this company would benefit from using our automatic video creation software. Highlight how our software enables faster content creation (allowing for more content) and cost-effective production, which can help the company grow on social networks, run ads, etc.
+
+For each section, wrap your analysis inside <detailed_analysis> tags. In your analysis:
+
+For Mission:
+- List key phrases from the company data that describe their activities and offerings
+- Note any specific products or services mentioned
+- Summarize the company's main focus and goals
+
+For Audience:
+- Create a persona for the target audience, including:
+  * Demographics (age, location, profession, etc.)
+  * Psychographics (interests, values, lifestyle, pain points)
+- Explain how this persona aligns with the company's offerings
+
+For Need:
+- List specific challenges the company might face in content creation or marketing
+- For each challenge, explain how video creation software addresses it
+- Highlight the potential impact on the company's growth and social media presence
+
+Then, refine your draft based on the following guidelines:
+
+- Write as if you were the company founder explaining the concept.
+- No “This company”, “they” but “Our” or “my company”.
+- Use simple, clear language without unnecessary complexity.
+- Be thorough but concise, avoiding long-winded explanations.
+- Do not mention the company name in the summary.
+
+After your analysis, generate three ideas for videos that would be suitable for the company's social media presence. These ideas should:
+- Be engaging and capture the attention of the target audience
+- Serve different purposes (e.g., educational content, problem resolution, product explanation)
+- Be described briefly in one or two sentences
+- For educational content and problem resolution, they don't necessarily showcase what the company is selling, they serve to educate the audience and help them solve their problems, and make them curious to find out more, so they can discover more about the company.
+- No need to add the theme, don't add text like 'A tutorial video on', 'A problem solution video titled'.
+- No need to specify video duration
+
+Finally, present your summary and video ideas in JSON format. Use the following structure:
+
+{
+  "mission": "Concise description of what the company does and their main activities",
+  "audience": "Clear analysis of the target audience for social media content",
+  "need": "Straightforward explanation of why the company would benefit from our video creation software",
+  "ideas": [
+    "Brief description of educational content video idea",
+    "Brief description of problem resolution video idea",
+    "Brief description of product explanation video idea"
+  ]
+}
+
+Ensure that each section provides an accurate and easy-to-understand representation of the company based on the available data.`
+                    }
+                ],
+                temperature: 1,
+                stream: false,
+                response_format: { type: "json_object" }
+            });
+
+            if (!completion.choices[0].message.content) {
+                throw new Error("No response from Groq");
+            }
+
+            const jsonResponse = JSON.parse(completion.choices[0].message.content || "");
+
+            return jsonResponse;
+        } catch (error: any) {
+            attempts++;
+            console.error(`Attempt ${attempts} failed:`, error);
+
+            if (attempts === maxAttempts) {
+                console.error("Maximum attempts reached. Returning null.");
+                return null;
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    }
+    return null;
 }

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useTranslations } from "next-intl"
-import { Check, Pencil, Clock, AlertCircle, Rocket } from 'lucide-react'
+import { Check, Pencil, Clock, AlertCircle, Rocket, Plus } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { useSession } from 'next-auth/react'
 import { generateScript, improveScript, readStream } from '../lib/stream'
@@ -53,6 +53,7 @@ export function AiChat() {
   const t = useTranslations('ai');
   const tAi = useTranslations('ai-chat');
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [inputMessage, setInputMessage] = useState('');
 
   // Vérifier le nombre de vidéos pour le plan gratuit
   useEffect(() => {
@@ -381,7 +382,7 @@ export function AiChat() {
 }, [activeSpace])
 
   return (
-    <div className="flex flex-col h-full relative">
+    <div className="flex flex-col h-full relative max-w-">
       {hasFreePlanReachedLimit && (
         <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full m-4">
@@ -483,7 +484,33 @@ export function AiChat() {
           handleConfirmAvatar={handleConfirmAvatar} 
           handleConfirmVoice={handleConfirmVoice}
           isDisabled={hasFreePlanReachedLimit}
+          inputMessage={inputMessage}
+          setInputMessage={setInputMessage}
         />
+        {activeSpace?.videoIdeas && activeSpace?.videoIdeas?.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="w-full max-w-md md:max-w-xl mt-4 bg-white rounded-lg"
+          >
+            <h3 className="text-sm font-medium text-gray-500 mb-2 p-4 pb-0">{t('need-ideas')}</h3>
+            <div className="flex flex-col gap-2 p-4 pt-2">
+              {activeSpace.videoIdeas.map((idea: string, index: number) => (
+                <button
+                  key={index}
+                  onClick={() => setInputMessage(idea)}
+                  className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors w-full overflow-hidden"
+                >
+                  <Plus className="h-4 w-4 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <span className="truncate block text-left">{idea}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   )

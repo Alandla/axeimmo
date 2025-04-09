@@ -4,7 +4,6 @@ import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
 import mediaSchema from "./Media";
 import avatarSchema from "./Avatar";
 import voiceSchema from "./Voice";
-import { subtitles } from "../config/subtitles.config";
 
 // Schéma pour les membres
 const memberSchema = new mongoose.Schema({
@@ -51,6 +50,21 @@ const planSchema = new mongoose.Schema({
   },
 });
 
+// Schéma pour les détails de l'entreprise
+const companyDetailsSchema = new mongoose.Schema({
+  companyName: String,
+  website: String,
+  companyType: String,
+  companySize: String,
+  salesType: String,
+  companyMission: String,
+  companyTarget: String,
+  companyNeeds: String
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+});
+
 const mediaSpaceSchema = new mongoose.Schema(
   {
     media: mediaSchema,
@@ -84,6 +98,10 @@ const spaceSchema = new mongoose.Schema(
       type: Number,
       default: 10,
     },
+    details: {
+      type: companyDetailsSchema,
+      default: () => ({}),
+    },
     subtitleStyle: [
       {
         name: String,
@@ -94,6 +112,10 @@ const spaceSchema = new mongoose.Schema(
     ],
     avatars: [avatarSchema],
     voices: [voiceSchema],
+    videoIdeas: {
+      type: [String],
+      default: []
+    },
     lastUsed: {
       voices: [],
       avatars: [],

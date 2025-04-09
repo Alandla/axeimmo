@@ -29,3 +29,18 @@ export function getMostFrequentString(strings: string[]) {
 
   return mostFrequentString;
 }
+
+/**
+ * Convert an ObjectId to a string
+ */
+export function objectIdToString(id: any): string {
+  if (!id) return '';
+
+  if (typeof id === 'string') return id;
+
+  if (typeof id === 'object' && id !== null && id.toString) {
+    return id.toString();
+  }
+
+  return String(id);
+}

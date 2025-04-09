@@ -37,6 +37,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   useEffect(() => {
     const fetchSpaces = async () => {
       const userSpaces = await getSpaces()
+      console.log("userSpaces", userSpaces);
       if (userSpaces) {
         setSpaces(userSpaces)
         if (!activeSpace && userSpaces.length > 0) {

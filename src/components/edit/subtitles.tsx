@@ -1,7 +1,7 @@
 import { subtitles } from "@/src/config/subtitles.config"
 import Subtitle from "./subtitle"
 import { ISpaceSubtitleStyle } from "@/src/types/space"
-import { basicApiCall, basicApiGetCall } from "@/src/lib/api"
+import { basicApiCall } from "@/src/lib/api"
 import { useSubtitleStyleStore } from "@/src/store/subtitlesStyleSore"
 import { useToast } from "@/src/hooks/use-toast"
 import { useTranslations } from "next-intl"

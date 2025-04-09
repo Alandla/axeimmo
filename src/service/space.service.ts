@@ -12,6 +12,9 @@ export async function getSpaceById(id: string): Promise<SimpleSpace | null> {
             planName: response.plan.name,
             creditsPerMonth: response.plan.creditsMonth,
             credits: response.credits,
+            videoIdeas: response.videoIdeas,
+            companyMission: response.details?.companyMission,
+            companyTarget: response.details?.companyTarget,
         }
         return space
     } catch (error) {
@@ -63,5 +66,18 @@ export async function addLastUsed(id:string, voiceId?: string, avatarId?: string
     } catch (error) {
         console.error("Error fetching spaces:", error);
         return undefined;
+    }
+}
+
+export async function updateSpaceDetails(id: string, details: Record<string, any>): Promise<any> {
+    try {
+        const response = await basicApiCall<any>('/space/details', {
+            spaceId: id,
+            details
+        });
+        return response;
+    } catch (error) {
+        console.error("Error updating space details:", error);
+        throw error;
     }
 } 

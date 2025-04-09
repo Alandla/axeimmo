@@ -68,8 +68,6 @@ export function GeneralSettings({ user }: { user: User }) {
 
   return (
     <div className="space-y-6 sm:px-12">
-      <h2 className="text-2xl font-bold">{t('title')}</h2>
-
       <div className="flex items-start justify-between sm:h-24">
         <div className="space-y-1">
           <div className="flex items-center gap-2">

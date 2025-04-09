@@ -1,6 +1,7 @@
 export interface IUser {
   id: string;
   name: string;
+  firstName: string;
   email: string;
   image: string;
   customerId: string;
@@ -9,4 +10,8 @@ export interface IUser {
   };
   spaces: string[];
   checkAffiliate?: boolean;
+  goal: string;
+  discoveryChannel: string;
+  role: string;
+  hasFinishedOnboarding: boolean;
 }

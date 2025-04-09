@@ -1,20 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Button } from "@/src/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/src/components/ui/dialog"
-import { Download } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
-import { SimpleSpace } from '@/src/types/space'
-import { getSpaceById } from '@/src/service/space.service'
 import PricingPage from '../pricing-page'
 import { ScrollArea } from '../ui/scroll-area'
 
