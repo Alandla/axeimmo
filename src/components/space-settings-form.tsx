@@ -54,6 +54,7 @@ export function SpaceSettingsForm() {
       toast({
         title: t('update-success-title'),
         description: t('update-success-description'),
+        variant: "confirm",
       })
     } catch (error) {
        toast({
