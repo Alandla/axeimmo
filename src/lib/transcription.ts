@@ -2,6 +2,8 @@ import { logger } from "@trigger.dev/sdk/v3";
 import { ISequence, IWord } from "../types/video";
 import axios from "axios";
 import FormData from "form-data";
+import Groq from "groq-sdk";
+import { wait } from "@trigger.dev/sdk/v3";
 
 interface Utterance {
   text: string;
@@ -250,6 +252,10 @@ export function combineTranscriptions(sentences: any[]): any {
   return combinedTranscription;
 }
 
+const client = new Groq({
+  apiKey: process.env.GROQ_API_KEY
+});
+
 /**
  * Récupère la transcription d'un fichier audio à partir d'une URL
  * @param audioUrl URL du fichier audio à transcrire
@@ -257,39 +263,47 @@ export function combineTranscriptions(sentences: any[]): any {
  * @returns La transcription du fichier audio
  */
 export const getTranscription = async (audioUrl: string, text?: string) => {
-    try {        
-        // Créer un FormData pour envoyer le fichier
-        const formData = new FormData();
+    let attempts = 0;
+    const maxAttempts = 6;
+    while (attempts < maxAttempts) {
+        try {
+            // Créer un FormData pour envoyer le fichier
+            const formData = new FormData();
 
-        formData.append('url', audioUrl);
-        formData.append('model', 'whisper-large-v3');
-        
-        if (text) {
-          formData.append('prompt', text);
-        }
-        
-        formData.append('response_format', 'verbose_json');
-        formData.append('timestamp_granularities[]', 'word');
-        
-        // Utiliser axios pour faire une requête directe à l'API Groq avec FormData
-        const response = await axios.post(
-            'https://api.groq.com/openai/v1/audio/transcriptions',
-            formData,
-            {
-                headers: {
-                    'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-                    ...formData.getHeaders()
-                }
+            formData.append('url', audioUrl);
+            formData.append('model', 'whisper-large-v3');
+            
+            if (text) {
+              formData.append('prompt', text);
             }
-        );
+            
+            formData.append('response_format', 'verbose_json');
+            formData.append('timestamp_granularities[]', 'word');
+            
+            // Utiliser axios pour faire une requête directe à l'API Groq avec FormData
+            const response = await axios.post(
+                'https://api.groq.com/openai/v1/audio/transcriptions',
+                formData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+                        ...formData.getHeaders()
+                    }
+                }
+            );
 
-        return {
-            text: response.data.text,
-            raw: response.data
-        };
-    } catch (error: any) {
-        console.error("Erreur de transcription Groq:", error.response?.data || error.message);
-        return null;
+            return {
+                text: response.data.text,
+                raw: response.data
+            };
+        } catch (error: any) {
+            attempts++;
+            logger.error(`Erreur de transcription Groq (tentative ${attempts}):`, { error: error.response });
+            if (attempts >= maxAttempts) {
+                console.error("Erreur de transcription Groq:", error.response?.data || error.message);
+                return null;
+            }
+        }
     }
 }
 
