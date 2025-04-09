@@ -1113,12 +1113,128 @@
       }
     },
     "onboarding": {
+      "categories": {
+        "personal-information": "Informations personnelles",
+        "company-information": "Informations sur l'entreprise"
+      },
+      "common": {
+        "back": "Retour",
+        "continue": "Continuer",
+        "complete": "Terminer"
+      },
+      "layout": {
+        "get-started": "COMMENCER",
+        "welcome": "Bienvenue",
+        "gateway-description": "Ta passerelle vers la création de contenu vidéo accélérée et simplifiée.",
+        "sidebar-features": {
+          "simple-edit": "Édition simple",
+          "simple-edit-description": "Jamais il n'a été aussi facile d'éditer une vidéo avec notre éditeur intuitif",
+          "video-automation": "Automatisation vidéo",
+          "video-automation-description": "Génère des vidéos engageantes en quelques minutes sans compétences en montage",
+          "game-changer": "Révolutionnaire",
+          "game-changer-description": "Tous nos utilisateurs constatent une amélioration de leur flux de travail et de leurs résultats"
+        }
+      },
+      "step1": {
+        "title": "Personnalisons ton expérience",
+        "name-label": "Nom",
+        "name-error": "Le nom est requis",
+        "firstName-label": "Prénom",
+        "firstName-error": "Le prénom est requis"
+      },
+      "step2": {
+        "title": "Quel est ton rôle ?",
+        "role-error": "Sélectionne ton rôle",
+        "roles": {
+          "owner": "Propriétaire",
+          "marketing": "Marketing",
+          "sales": "Ventes",
+          "social-media": "Réseaux sociaux",
+          "communication": "Communication"
+        }
+      },
+      "step3": {
+        "title": "Comment as-tu entendu parler de nous ?",
+        "channel-error": "Sélectionne comment tu nous as découvert",
+        "channels": {
+          "linkedin": "Linkedin",
+          "youtube": "Youtube",
+          "x": "X",
+          "instagram": "Instagram",
+          "tiktok": "TikTok",
+          "google": "Google",
+          "friends": "Amis",
+          "other": "Autre"
+        }
+      },
+      "step4": {
+        "title": "Parle-nous de ton entreprise",
+        "companyName-label": "Nom de l'entreprise",
+        "companyName-error": "Le nom de l'entreprise est requis",
+        "website-label": "Site web (optionnel)",
+        "website-placeholder": "https://tonentreprise.com",
+        "website-error": "Entre une URL valide"
+      },
+      "step5": {
+        "title": "Ton objectif avec Hoox",
+        "goal-error": "Sélectionne ton objectif",
+        "goals": {
+          "organic-growth": "Croissance organique",
+          "ads-creation": "Création de publicités",
+          "brand-awareness": "Notoriété de la marque",
+          "lead-generation": "Génération de leads",
+          "faceless-content": "Contenu sans visage"
+        }
+      },
+      "step6": {
+        "title": "Vous êtes...",
+        "companyType-error": "Sélectionne le type de ton entreprise",
+        "companyTypes": {
+          "agency": "Agence",
+          "ecommerce": "E-commerce",
+          "saas": "SaaS",
+          "content-creator": "Créateur de contenu",
+          "non-profit": "But non lucratif",
+          "other": "Autre"
+        },
+        "companySize-title": "Taille de l'entreprise",
+        "companySizes": {
+          "solo": "Solo",
+          "2-10": "2-10",
+          "11-50": "11-50",
+          "51-100": "51-100",
+          "+100": "+100"
+        }
+      },
+      "step7": {
+        "title": "Vous vendez...",
+        "salesType-error": "Sélectionne ce que ton entreprise vend",
+        "salesTypes": {
+          "products": "Produits",
+          "services": "Services",
+          "software": "Logiciels",
+          "nothing": "Rien"
+        }
+      },
+      "step8": {
+        "title": "Dis-nous en plus sur ton entreprise",
+        "fetching-website": "Nous récupérons les informations de ton site web...",
+        "mission-label": "Quelle est la mission de ton entreprise ?",
+        "mission-optional": "(Optionnel)",
+        "mission-placeholder": "Décris la mission de ton entreprise...",
+        "target-label": "Qui est ton public cible ?",
+        "target-optional": "(Optionnel)",
+        "target-placeholder": "Décris tes objectifs...",
+        "needs-label": "Qu'est-ce qui te donne envie d'utiliser Hoox ?",
+        "needs-optional": "(Optionnel)",
+        "needs-placeholder": "Décris comment Hoox peut t'aider à atteindre tes objectifs..."
+      },
       "thank-you": {
         "title": "Merci !",
-        "description": "Votre intégration est terminée. Nous sommes ravis de vous compter parmi nous et avons hâte de vous aider à atteindre vos objectifs."
+        "description": "Ton intégration est terminée. Nous sommes ravis de te compter parmi nous et avons hâte de t'aider à atteindre tes objectifs."
       },
       "pricing": {
-        "title": "Choisissez votre plan",
+        "title": "Bienvenue, jette un coup d'œil à nos plans qui correspondent à tes besoins",
         "continue-free-trial": "Continuer avec l'essai gratuit"
       }
     },

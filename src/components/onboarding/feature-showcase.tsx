@@ -3,21 +3,22 @@
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
+import { useTranslations } from "next-intl"
 
 const features = [
   {
-    title: "Simple edit",
-    description: "Never been easier to edit a video with our intuitive editor",
+    titleKey: "simple-edit",
+    descriptionKey: "simple-edit-description",
     image: "/onboarding/onboarding-edit.png",
   },
   {
-    title: "Video automation",
-    description: "Generate engaging videos in minutes without any editing skills",
+    titleKey: "video-automation",
+    descriptionKey: "video-automation-description",
     image: "/onboarding/onboarding-create.png",
   },
   {
-    title: "Game changer",
-    description: "All our users see an improvement in their workflow and results",
+    titleKey: "game-changer",
+    descriptionKey: "game-changer-description",
   },
 ]
 
@@ -27,6 +28,7 @@ export default function FeatureShowcase() {
   const animationRef = useRef<NodeJS.Timeout | null>(null)
   const animationDuration = 5000 // 5 seconds per feature
   const animationInterval = 50 // Update progress every 50ms
+  const t = useTranslations('onboarding.layout.sidebar-features');
 
   useEffect(() => {
     // Reset progress when feature changes
@@ -100,14 +102,14 @@ export default function FeatureShowcase() {
           transition={{ duration: 0.3 }}
           className="overflow-hidden"
         >
-          <h3 className="text-xl font-bold pr-4">{features[currentFeature].title}</h3>
-          <p className="text-sm text-gray-400 pr-4">{features[currentFeature].description}</p>
+          <h3 className="text-xl font-bold pr-4">{t(features[currentFeature].titleKey)}</h3>
+          <p className="text-sm text-gray-400 pr-4">{t(features[currentFeature].descriptionKey)}</p>
 
           <div className="mt-6 rounded-lg overflow-hidden -mr-4">
             {features[currentFeature].image && (
               <Image
                 src={features[currentFeature].image}
-                alt={features[currentFeature].title}
+                alt={t(features[currentFeature].titleKey)}
                 width={320}
                 height={213}
                 className="w-[calc(100%+2rem)] h-auto"

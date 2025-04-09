@@ -2,16 +2,18 @@
 
 import { motion } from "framer-motion"
 import { useOnboardingStore } from "@/src/store/onboardingStore"
-import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 interface Step2Props {
   errors?: Record<string, boolean>
 }
 
 const roles = ["Owner", "Marketing", "Sales", "Social Media", "Communication"]
+const roleKeys = ["owner", "marketing", "sales", "social-media", "communication"]
 
 export default function Step2Role({ errors = {} }: Step2Props) {
   const { dataUser, updateUserData, goToNextStep } = useOnboardingStore();
+  const t = useTranslations('onboarding.step2');
 
   const handleSelect = (role: string) => {
     updateUserData({ role })
@@ -20,12 +22,12 @@ export default function Step2Role({ errors = {} }: Step2Props) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">What's your role?</h2>
+      <h2 className="text-2xl font-bold">{t('title')}</h2>
 
-      {errors.role && <p className="text-xs text-red-500">Please select your role</p>}
+      {errors.role && <p className="text-xs text-red-500">{t('role-error')}</p>}
 
       <div className="grid grid-cols-2 gap-4">
-        {roles.map((role) => (
+        {roles.map((role, index) => (
           <button
             key={role}
             onClick={() => handleSelect(role)}
@@ -37,7 +39,7 @@ export default function Step2Role({ errors = {} }: Step2Props) {
                   : "border-gray-200 hover:border-gray-300"
             }`}
           >
-            <span className="relative z-10">{role}</span>
+            <span className="relative z-10">{t(`roles.${roleKeys[index]}`)}</span>
           </button>
         ))}
       </div>

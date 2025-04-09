@@ -4,6 +4,11 @@ import { ICompanyDetails } from '@/src/types/space'
 import { updateSpaceDetails } from '@/src/service/space.service'
 import { updateOnboarding } from '../service/user.service'
 
+export const STEP_CATEGORIES = {
+  PERSONAL: "personal-information",
+  COMPANY: "company-information"
+};
+
 export interface UserOnboardingData {
   name: string
   firstName: string
@@ -141,8 +146,6 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   
   fetchCompanyInfo: async (website) => {
     if (!website) return;
-
-    console.log("Fetching company info for website:", website);
     
     set({ isLoadingCompanyInfo: true, lastFetchedWebsite: website, fetchingCompanyData: true });
     
@@ -150,8 +153,6 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       const response : any = await basicApiCall("/search/company", { website });
       
       if (response) {
-        console.log("Company info", response);
-
         const companyData = {
           companyMission: response.mission || get().dataCompany.companyMission,
           companyTarget: response.audience || get().dataCompany.companyTarget,
@@ -170,9 +171,8 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
         if (spaceId) {
           try {
             await updateSpaceDetails(spaceId, companyData);
-            console.log("Détails du space mis à jour avec les données d'entreprise");
           } catch (error) {
-            console.error("Erreur lors de la mise à jour des détails du space:", error);
+            console.error("Error updating space details:", error);
           }
         }
       }
@@ -215,8 +215,8 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   goToNextStep: () => {
     const { currentStep, saveData, dataCompany, fetchCompanyInfo, lastFetchedWebsite } = get();
     
-    // Si nous sommes à l'étape 4 (informations sur l'entreprise) et qu'il y a un site web valide,
-    // récupérer les informations de l'entreprise en arrière-plan uniquement si le site a changé
+    // If we're at step 4 (company information) and there's a valid website,
+    // fetch company info in the background only if the site has changed
     if (currentStep === 4 && 
         dataCompany.website && 
         dataCompany.website !== lastFetchedWebsite && 
@@ -241,7 +241,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     }));
   },
   
-  // Validation de l'étape courante
+  // Validate current step
   validateCurrentStep: () => {
     const { currentStep, dataUser, dataCompany, websiteValid } = get();
     const newErrors: Record<string, boolean> = {};
@@ -270,52 +270,52 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       case 7:
         if (!dataCompany.salesType) newErrors.salesType = true;
         break;
-      // Étape 8: tous les champs sont optionnels
+      // Step 8: all fields are optional
     }
     
     set({ errors: newErrors });
     return Object.keys(newErrors).length === 0;
   },
   
-  // Calcul de l'étape en fonction des données remplies
+  // Calculate step based on filled data
   calculateCurrentStep: (userData?: Partial<UserOnboardingData>, companyData?: Partial<CompanyOnboardingData>) => {
     const { dataUser, dataCompany } = get();
     const user = userData ? { ...dataUser, ...userData } : dataUser;
     const company = companyData ? { ...dataCompany, ...companyData } : dataCompany;
     
-    // Étape 1: Informations personnelles
+    // Step 1: Personal information
     if (!user.name || !user.firstName) return 1;
     
-    // Étape 2: Rôle
+    // Step 2: Role
     if (!user.role) return 2;
     
-    // Étape 3: Découverte
+    // Step 3: Discovery
     if (!user.discoveryChannel) return 3;
     
-    // Étape 4: Informations sur l'entreprise
+    // Step 4: Company information
     if (!company.companyName) return 4;
     
-    // Étape 5: Objectif
+    // Step 5: Goal
     if (!user.goal) return 5;
     
-    // Étape 6: Type d'entreprise
+    // Step 6: Company type
     if (!company.companyType) return 6;
     
-    // Étape 7: Type de ventes
+    // Step 7: Sales type
     if (!company.salesType) return 7;
     
-    // Étape 8: Détails de l'entreprise (optionnels)
+    // Step 8: Company details (optional)
     return 8;
   },
   
-  // Obtenir la catégorie de l'étape actuelle
+  // Get current step category
   getStepCategory: () => {
     const { currentStep } = get();
-    if (currentStep <= 3) return "Personal Information";
-    if (currentStep <= 8) return "Company Information";
+    if (currentStep <= 3) return STEP_CATEGORIES.PERSONAL;
+    if (currentStep <= 8) return STEP_CATEGORIES.COMPANY;
     return "";
   },
   
-  // Réinitialiser les erreurs
+  // Reset errors
   resetErrors: () => set({ errors: {} })
 })); 

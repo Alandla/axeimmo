@@ -18,11 +18,13 @@ import ThankYou from "@/src/components/onboarding/steps/thank-you"
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
 import { useToast } from "@/src/hooks/use-toast"
 import { useOnboardingStore } from "@/src/store/onboardingStore"
+import { useTranslations } from "next-intl"
 
 export default function OnboardingPage() {
   const { data: session } = useSession()
-  const router = useRouter()
   const { toast } = useToast()
+  const t = useTranslations('onboarding.common')
+  const tCategories = useTranslations('onboarding.categories')
   
   // Utilisation du store zustand pour l'onboarding
   const {
@@ -132,7 +134,7 @@ export default function OnboardingPage() {
     <OnboardingLayout
       currentStep={currentStep}
       totalSteps={totalSteps}
-      category={getStepCategory()}
+      category={tCategories(getStepCategory())}
       showProgress={!isCompleted}
     >
       <div className="flex flex-col">
@@ -162,7 +164,7 @@ export default function OnboardingPage() {
                   className={`px-4 py-2 rounded-md border border-gray-200 text-sm font-medium flex items-center transition-opacity duration-300 gap-2 ${currentStep === 1 ? "opacity-0" : ""}`}
                 >
                   <ArrowLeftIcon className="w-4 h-4" />
-                  Back
+                  {t('back')}
                 </button>
 
                 <button
@@ -171,12 +173,12 @@ export default function OnboardingPage() {
                 >
                   {currentStep === totalSteps ? (
                     <>
-                      Complete
+                      {t('complete')}
                       <CheckCircle className="w-4 h-4" />
                     </>
                   ) : (
                     <>
-                      Continue
+                      {t('continue')}
                       <ArrowRightIcon className="w-4 h-4" />
                     </>
                   )}

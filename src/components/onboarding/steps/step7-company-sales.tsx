@@ -2,15 +2,17 @@
 
 import { motion } from "framer-motion"
 import { useOnboardingStore } from "@/src/store/onboardingStore"
+import { useTranslations } from "next-intl"
 
 interface Step7Props {
   errors?: Record<string, boolean>
 }
 
-const salesTypes = ["Products", "Services", "Software", "Nothing"]
+const salesTypes = ["products", "services", "software", "nothing"]
 
 export default function Step7CompanySales({ errors = {} }: Step7Props) {
   const { dataCompany, updateCompanyData, goToNextStep } = useOnboardingStore();
+  const t = useTranslations('onboarding.step7');
 
   const handleSelect = (salesType: string) => {
     updateCompanyData({ salesType })
@@ -19,9 +21,9 @@ export default function Step7CompanySales({ errors = {} }: Step7Props) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">You sell...</h2>
+      <h2 className="text-2xl font-bold">{t('title')}</h2>
 
-      {errors.salesType && <p className="text-xs text-red-500">Please select what you sell</p>}
+      {errors.salesType && <p className="text-xs text-red-500">{t('salesType-error')}</p>}
 
       <div className="grid grid-cols-2 gap-4">
         {salesTypes.map((type) => (
@@ -36,7 +38,7 @@ export default function Step7CompanySales({ errors = {} }: Step7Props) {
                   : "border-gray-200 hover:border-gray-300"
             }`}
           >
-            <span className="relative z-10">{type}</span>
+            <span className="relative z-10">{t(`salesTypes.${type}`)}</span>
           </button>
         ))}
       </div>

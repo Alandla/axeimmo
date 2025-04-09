@@ -2,15 +2,18 @@
 
 import { motion } from "framer-motion"
 import { useOnboardingStore } from "@/src/store/onboardingStore"
+import { useTranslations } from "next-intl"
 
 interface Step3Props {
   errors?: Record<string, boolean>
 }
 
 const channels = ["Linkedin", "Youtube", "X", "Instagram", "TikTok", "Google", "Friends", "Other"]
+const channelKeys = ["linkedin", "youtube", "x", "instagram", "tiktok", "google", "friends", "other"]
 
 export default function Step3Discovery({ errors = {} }: Step3Props) {
   const { dataUser, updateUserData, goToNextStep } = useOnboardingStore();
+  const t = useTranslations('onboarding.step3');
 
   const handleSelect = (channel: string) => {
     updateUserData({ discoveryChannel: channel })
@@ -19,12 +22,12 @@ export default function Step3Discovery({ errors = {} }: Step3Props) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">How did you hear about us?</h2>
+      <h2 className="text-2xl font-bold">{t('title')}</h2>
 
-      {errors.discoveryChannel && <p className="text-xs text-red-500">Please select how do you find us</p>}
+      {errors.discoveryChannel && <p className="text-xs text-red-500">{t('channel-error')}</p>}
 
       <div className="grid grid-cols-3 gap-4">
-        {channels.map((channel) => (
+        {channels.map((channel, index) => (
           <button
             key={channel}
             onClick={() => handleSelect(channel)}
@@ -36,7 +39,7 @@ export default function Step3Discovery({ errors = {} }: Step3Props) {
                   : "border-gray-200 hover:border-gray-300"
             }`}
           >
-            <span className="relative z-10">{channel}</span>
+            <span className="relative z-10">{t(`channels.${channelKeys[index]}`)}</span>
           </button>
         ))}
       </div>

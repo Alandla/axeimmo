@@ -24,6 +24,7 @@ export default function OnboardingLayout({
   showProgress = true,
 }: OnboardingLayoutProps) {
   const tFooter = useTranslations('footer');
+  const t = useTranslations('onboarding.layout');
   const isCompleted = currentStep > totalSteps;
 
   return (
@@ -83,10 +84,10 @@ export default function OnboardingLayout({
         <div className="mb-12">
           <Image src="/logo-blanc.png" alt="Hoox" width={120} height={40} className="mb-12" />
           <div className="space-y-1">
-            <h2 className="text-sm font-medium uppercase tracking-wider">GET STARTED</h2>
-            <h1 className="text-4xl font-bold">Welcome</h1>
+            <h2 className="text-sm font-medium uppercase tracking-wider">{t('get-started')}</h2>
+            <h1 className="text-4xl font-bold">{t('welcome')}</h1>
             <p className="text-sm text-gray-400 mt-2">
-              Your gateway for your gateway to accelerated video content creation.
+              {t('gateway-description')}
             </p>
           </div>
         </div>

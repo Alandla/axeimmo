@@ -4,6 +4,7 @@ import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { useOnboardingStore } from "@/src/store/onboardingStore"
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 
 interface Step4Props {
   errors?: Record<string, boolean>
@@ -35,6 +36,7 @@ const isValidUrl = (url: string): boolean => {
 export default function Step4CompanyInfo({ errors = {} }: Step4Props) {
   const { dataCompany, updateCompanyData, setWebsiteValid } = useOnboardingStore();
   const [urlError, setUrlError] = useState<string>("");
+  const t = useTranslations('onboarding.step4');
 
   const handleWebsiteChange = (value: string) => {
     updateCompanyData({ website: value });
@@ -43,7 +45,7 @@ export default function Step4CompanyInfo({ errors = {} }: Step4Props) {
     setWebsiteValid(isValid);
     
     if (value && !isValid) {
-      setUrlError("Please enter a valid URL");
+      setUrlError(t('website-error'));
     } else {
       setUrlError("");
     }
@@ -55,43 +57,43 @@ export default function Step4CompanyInfo({ errors = {} }: Step4Props) {
       setWebsiteValid(isValid);
       
       if (!isValid) {
-        setUrlError("Please enter a valid URL");
+        setUrlError(t('website-error'));
       }
     }
   }, [dataCompany.website, setWebsiteValid]);
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Tell us about your company</h2>
+      <h2 className="text-2xl font-bold">{t('title')}</h2>
 
       <div className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="companyName" className="flex justify-between">
-            <span>Company Name</span>
+            <span>{t('companyName-label')}</span>
           </Label>
           <Input
             id="companyName"
             value={dataCompany.companyName}
             onChange={(e) => updateCompanyData({ companyName: e.target.value })}
-            placeholder="Your company name"
+            placeholder={t('companyName-label')}
             className={errors.companyName ? "border-red-500" : ""}
           />
-          {errors.companyName && <p className="text-xs text-red-500 mt-1">Company name is required</p>}
+          {errors.companyName && <p className="text-xs text-red-500 mt-1">{t('companyName-error')}</p>}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="website" className="flex justify-between">
-            <span>Website (optional)</span>
+            <span>{t('website-label')}</span>
           </Label>
           <Input
             id="website"
             value={dataCompany.website}
             onChange={(e) => handleWebsiteChange(e.target.value)}
-            placeholder="https://yourcompany.com"
+            placeholder={t('website-placeholder')}
             className={urlError ? "border-red-500" : ""}
           />
           {urlError && <p className="text-xs text-red-500 mt-1">{urlError}</p>}
-          {errors.website && <p className="text-xs text-red-500 mt-1">URL invalide</p>}
+          {errors.website && <p className="text-xs text-red-500 mt-1">{t('website-error')}</p>}
         </div>
       </div>
     </div>
