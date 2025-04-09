@@ -45,6 +45,8 @@ export interface SimpleSpace {
   planName: PlanName;
   userRole?: string;
   videoIdeas?: string[];
+  companyMission?: string;
+  companyTarget?: string;
 }
 
 export interface ICompanyDetails {

@@ -1121,5 +1121,22 @@
         "title": "Choisissez votre plan",
         "continue-free-trial": "Continuer avec l'essai gratuit"
       }
+    },
+    "settings": {
+      "space": {
+        "title": "Paramètres de l'espace",
+        "name-label": "Nom",
+        "name-placeholder": "Entrez le nom de l'espace",
+        "name-description": "Le nom de votre espace visible par tous les membres",
+        "mission-label": "Mission",
+        "mission-placeholder": "Quelle est l'objectif de votre entreprise ?",
+        "mission-description": "Connaitre les details de votre entreprise va permettre de personnaliser vos vidéos",
+        "target-label": "Cible",
+        "target-placeholder": "Quelle est la cible de votre entreprise ?",
+        "target-description": "La cible de votre entreprise pour adapter vos videos",
+        "save-button": "Sauvegarder",
+        "update-success-title": "Modifications enregistrées",
+        "update-success-description": "Les paramètres de l'espace ont été mis à jour avec succès"
+      }
     }
   }

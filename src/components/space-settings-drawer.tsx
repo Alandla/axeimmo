@@ -1,19 +1,17 @@
 import { useRef, useEffect } from "react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/src/components/ui/sheet"
 import { ScrollArea } from "@/src/components/ui/scroll-area"
-import { GeneralSettings } from "./general-settings"
-import { User } from "next-auth"
+import { SpaceSettingsForm } from "./space-settings-form"
 import { useTranslations } from "next-intl"
 
-interface SettingsDrawerProps {
+interface SpaceSettingsDrawerProps {
   open: boolean
   onClose: () => void
-  user: User
 }
 
-export function SettingsDrawer({ open, onClose, user }: SettingsDrawerProps) {
-  const t = useTranslations('general-settings')
+export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps) {
   const contentRef = useRef<HTMLDivElement>(null)
+  const t = useTranslations('settings.space')
 
   useEffect(() => {
     if (open) {
@@ -31,17 +29,16 @@ export function SettingsDrawer({ open, onClose, user }: SettingsDrawerProps) {
         <SheetHeader className="p-6 pb-0 sm:px-12">
           <SheetTitle>{t('title')}</SheetTitle>
         </SheetHeader>
-        <ScrollArea className="h-full">
+        <ScrollArea className="flex-grow">
           <div 
             ref={contentRef}
             tabIndex={-1}
             className="mt-6 focus:outline-none"
           >
-            <GeneralSettings user={user} />
+            <SpaceSettingsForm />
           </div>
         </ScrollArea>
       </SheetContent>
     </Sheet>
   )
-}
-
+} 

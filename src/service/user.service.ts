@@ -6,6 +6,7 @@ import { IUser } from "../types/user";
 export async function getSpaces(): Promise<SimpleSpace[]> {
     try {
         const response = await basicApiGetCall<SimpleSpace[]>('/user/getSpaces');
+        console.log("response", response);
         return response
     } catch (error) {
         console.error("Error fetching spaces:", error);

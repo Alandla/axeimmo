@@ -98,6 +98,23 @@
         "error-description": "You don't have an active subscription."
       }
     },
+    "settings": {
+      "space": {
+        "title": "Space Settings",
+        "name-label": "Name",
+        "name-placeholder": "Enter space name",
+        "name-description": "The name of your space visible to all members",
+        "mission-label": "Mission",
+        "mission-placeholder": "What is your company's mission?",
+        "mission-description": "Your company's mission that will guide your videos",
+        "target-label": "Target",
+        "target-placeholder": "What is your company's target audience?",
+        "target-description": "Your company's target audience to tailor your videos",
+        "save-button": "Save",
+        "update-success-title": "Changes saved",
+        "update-success-description": "Space settings have been successfully updated"
+      }
+    },
     "pricing": {
       "upgrade": "Upgrade",
       "downgrade": "Downgrade",
