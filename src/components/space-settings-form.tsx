@@ -156,8 +156,11 @@ export function SpaceSettingsForm() {
           
           <div className="flex items-start justify-between h-24">
             <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              <Save className="h-4 w-4" />
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4" />
+              )}
               {t('save-button')}
             </Button>
           </div>

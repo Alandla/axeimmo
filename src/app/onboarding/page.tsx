@@ -21,6 +21,7 @@ import { useOnboardingStore } from "@/src/store/onboardingStore"
 import { useTranslations } from "next-intl"
 
 export default function OnboardingPage() {
+  const router = useRouter()
   const { data: session } = useSession()
   const { toast } = useToast()
   const t = useTranslations('onboarding.common')
@@ -44,12 +45,19 @@ export default function OnboardingPage() {
 
   const totalSteps = 8
   const isCompleted = currentStep > totalSteps
+  
+  useEffect(() => {
+    if (session?.user) {
+      if (session.user.hasFinishedOnboarding) {
+        router.push('/dashboard')
+      }
+    }
+  }, [session, router])
 
   useEffect(() => {
     if (session?.user) {
       // Initialisation du store avec les données du serveur
       initStore().then(() => {
-        // Ne pas rediriger automatiquement
       }).catch(error => {
         console.error("Erreur lors de l'initialisation:", error)
         toast({
