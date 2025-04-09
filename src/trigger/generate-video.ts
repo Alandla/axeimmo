@@ -53,7 +53,7 @@ export const generateVideoTask = task({
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
 
@@ -346,7 +346,7 @@ export const generateVideoTask = task({
 
     /*
     /
-    /   Generate keywords
+    /   Analyse user medias
     /
     */
 
@@ -707,6 +707,7 @@ const processBatchWithSieve = async (
     
     const analysisPromises = batch.map(async (media, index) => {
       const mediaUrl = media.type === 'video' ? media.video?.link : media.image?.link;
+      const sdMediaUrl = media.type === 'video' ? media.sdVideoUrl : null;
       
       if (!mediaUrl) return media;
 
@@ -716,11 +717,10 @@ const processBatchWithSieve = async (
         if (isDetailedAnalysis) {
           jobId = await analyzeVideoWithSieve(mediaUrl);
         } else {
-          jobId = await analyzeSimpleVideoWithSieve(mediaUrl);
+          jobId = await analyzeSimpleVideoWithSieve(sdMediaUrl || mediaUrl);
         }
         logger.log(`Job ID`, { jobId })
         const description = await getAnalysisResult(jobId, 0, mediaUrl, isDetailedAnalysis);
-        logger.log('Description', { description })
 
         if (description) {
           logger.log('Description', { description })

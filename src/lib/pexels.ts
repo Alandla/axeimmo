@@ -26,11 +26,16 @@ export const getImagePexels = async (keyword: string, nb: number, page: number) 
 }
 
 export const getPexelsVideosMedia = async (keyword: string, number: number, page: number) => {
-    const videos = await getVideoPexels(keyword, number, page)
+    const videos = await getVideoPexels(keyword, number, page);
+    let sdVideoUrl = null;
     if ('videos' in videos) {
         const videoBestQuality = getVideosBestQuality(videos.videos);
-        logger.log('Video best quality', { videoBestQuality })
-        return pexelVideoToMedia(videoBestQuality);
+        const videoSdQuality = getVideoSdQuality(videos.videos);
+        if (videoSdQuality) {
+            sdVideoUrl = videoSdQuality.link;
+        }
+        logger.log('Video best quality', { videoBestQuality });
+        return pexelVideoToMedia(videoBestQuality, sdVideoUrl);
     }
     return [];
 }
@@ -58,7 +63,7 @@ export function pexelImageToMedia(images: Photo[]) {
     });
 }
 
-export function pexelVideoToMedia(videos: any[]) {
+export function pexelVideoToMedia(videos: any[], sdVideoUrl: string | null) {
   return videos.map(video => {
     return {
       type: "video",
@@ -71,7 +76,8 @@ export function pexelVideoToMedia(videos: any[]) {
       video: {
         ...video.videoBestQuality,
         link: video.videoBestQuality.link
-      }
+      },
+      sdVideoUrl
     };
   });
 }
@@ -115,3 +121,10 @@ export const getBestQualityVideo = (videos: any[]) => {
     // Retourner la vidéo la plus proche de la hauteur cible
     return hdVideos[0];
   };
+
+export function getVideoSdQuality(videos: Video[]) {
+    const sdVideos = videos.flatMap(video => video.video_files.filter(file => file.quality === 'sd' && file.height !== null));
+    if (!sdVideos || sdVideos.length === 0) return null;
+    // Retourner la vidéo SD avec la plus grande résolution
+    return sdVideos.reduce((prev, current) => (prev.height! > current.height!) ? prev : current);
+}
