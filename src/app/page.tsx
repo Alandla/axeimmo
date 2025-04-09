@@ -37,18 +37,29 @@ export default function Page() {
   const [sendedEmail, setSendedEmail] = useState(false);
 
   const handleSignInGoogle = async () => {
-    await signIn('google', {
+    const response = await signIn('google', {
       redirectTo: '/dashboard',
+      redirect: false
     })
+    if (response?.error) {
+      toast({
+        title: t('error-title'),
+        description: t(`error-${response.error}`),
+        variant: 'destructive',
+      })
+    }
   }
 
   const handleSignInEmail = async () => {
     setLoading(true);
-    const result = await signIn('http-email', { email: email, redirect: false })
+    const result = await signIn('http-email', { 
+      email: email, 
+      redirect: false 
+    })
     if (result?.error) {
       toast({
         title: t('error-title'),
-        description: t('error-description'),
+        description: t(`error-${result.error}`),
         variant: 'destructive',
       })
       setLoading(false);

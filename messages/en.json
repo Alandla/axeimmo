@@ -14,7 +14,11 @@
       "emailSent": "A verification email has been sent to the address indicated.",
       "openGmail": "Open Gmail",
       "error-title": "Error",
-      "error-description": "An error occurred while signing in. Please try again."
+      "error-description": "An error occurred while signing in. Please try again.",
+      "error-disposable-email": "Disposable email detected. Please use a valid email address.",
+      "error-contact-creation": "An error occurred while creating your account. Please try again.",
+      "error-invalid-email": "Invalid email address. Please use a valid email address.",
+      "error-Configuration": "The entered email is not valid, please try again."
     },
     "breadcrumbs": {
       "Dashboard": "Dashboard",
