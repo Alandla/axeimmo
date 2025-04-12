@@ -3,6 +3,8 @@ import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
 import { ICompanyDetails } from '@/src/types/space'
 import { updateSpaceDetails } from '@/src/service/space.service'
 import { updateOnboarding } from '../service/user.service'
+import { setMixpanelUserProperties, track } from '@/src/utils/mixpanel'
+import { MixpanelEvent } from '../types/events'
 
 export const STEP_CATEGORIES = {
   PERSONAL: "personal-information",
@@ -131,6 +133,9 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       dataUser: { ...state.dataUser, ...newData },
       errors: {}
     }));
+    setMixpanelUserProperties({
+      ...newData
+    });
   },
   
   updateCompanyData: (newData) => {
@@ -138,6 +143,9 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       dataCompany: { ...state.dataCompany, ...newData },
       errors: {}
     }));
+    setMixpanelUserProperties({
+      ...newData,
+    });
   },
   
   setWebsiteValid: (isValid) => {
@@ -166,6 +174,10 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
             ...companyData
           }
         }));
+
+        setMixpanelUserProperties({
+          ...companyData
+        });
 
         const { spaceId } = get();
         if (spaceId) {
@@ -200,6 +212,10 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       }
       
       if (isComplete) {
+        setMixpanelUserProperties({
+            hasFinishedOnboarding: true
+        });
+        track(MixpanelEvent.FINISHED_ONBOARDING);
         set({ hasCompleted: true });
       }
       
@@ -282,11 +298,8 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     const user = userData ? { ...dataUser, ...userData } : dataUser;
     const company = companyData ? { ...dataCompany, ...companyData } : dataCompany;
     
-    // Step 1: Personal information
-    if (!user.name) return 1;
-    
     // Step 2: Role
-    if (!user.role) return 2;
+    if (!user.role) return 1;
     
     // Step 3: Discovery
     if (!user.discoveryChannel) return 3;

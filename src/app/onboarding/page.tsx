@@ -20,13 +20,14 @@ import { useToast } from "@/src/hooks/use-toast"
 import { useOnboardingStore } from "@/src/store/onboardingStore"
 import { useTranslations } from "next-intl"
 import { Button } from "@/src/components/ui/button"
+import { identify } from '@/src/utils/mixpanel'
+import AffiliateTracker from "@/src/lib/referral"
 
 export default function OnboardingPage() {
   const router = useRouter()
   const { data: session } = useSession()
   const { toast } = useToast()
   const t = useTranslations('onboarding.common')
-  const tCategories = useTranslations('onboarding.categories')
   
   // Utilisation du store zustand pour l'onboarding
   const {
@@ -53,6 +54,14 @@ export default function OnboardingPage() {
       router.push('/dashboard')
     }
     if (session?.user && !storeInitialized) {
+      if (session.user.id && session.user.email) {
+        identify(session.user.id, {
+          email: session.user.email,
+          name: session.user?.name,
+          hasFinishedOnboarding: false,
+        });
+      }
+      
       initStore().then(() => {
         setStoreInitialized(true);
       }).catch(error => {
@@ -136,68 +145,71 @@ export default function OnboardingPage() {
   }
 
   return (
-    <OnboardingLayout
-      currentStep={currentStep}
-      totalSteps={totalSteps}
-      category={tCategories(getStepCategory())}
-      showProgress={!isCompleted}
-    >
-      <div className="flex flex-col">
-        {isLoading ? (
-          <div className="flex items-center justify-center flex-1 min-h-[400px] ">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
-          </div>
-        ) : (
-          <>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.15 }}
-                className="flex-1 min-h-[435px] "
-              >
-                {renderStep()}
-              </motion.div>
-            </AnimatePresence>
-
-            {!isCompleted && (
-              <div className="flex flex-col md:flex-row justify-between mt-4">
-                <Button
-                  onClick={prevStep}
-                  className={`w-full md:w-auto ${currentStep === 1 ? "opacity-0" : ""}`}
-                  variant="outline"
-                  size="lg"
+    <>
+      <AffiliateTracker />
+      <OnboardingLayout
+        currentStep={currentStep}
+        totalSteps={totalSteps}
+        category={getStepCategory()}
+        showProgress={!isCompleted}
+      >
+        <div className="flex flex-col">
+          {isLoading ? (
+            <div className="flex items-center justify-center flex-1 min-h-[400px] ">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
+            </div>
+          ) : (
+            <>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentStep}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex-1 min-h-[435px] "
                 >
-                  <ArrowLeftIcon className="w-4 h-4" />
-                  {t('back')}
-                </Button>
+                  {renderStep()}
+                </motion.div>
+              </AnimatePresence>
 
-                <Button
-                  onClick={nextStep}
-                  className="w-full md:w-auto mt-2 md:mt-0"
-                  variant="default"
-                  size="lg"
-                >
-                  {currentStep === totalSteps ? (
-                    <>
-                      {t('complete')}
-                      <CheckCircle className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      {t('continue')}
-                      <ArrowRightIcon className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </OnboardingLayout>
+              {!isCompleted && (
+                <div className="flex flex-col md:flex-row justify-between mt-4">
+                  <Button
+                    onClick={prevStep}
+                    className={`w-full md:w-auto ${currentStep === 1 ? "opacity-0" : ""}`}
+                    variant="outline"
+                    size="lg"
+                  >
+                    <ArrowLeftIcon className="w-4 h-4" />
+                    {t('back')}
+                  </Button>
+
+                  <Button
+                    onClick={nextStep}
+                    className="w-full md:w-auto mt-2 md:mt-0"
+                    variant="default"
+                    size="lg"
+                  >
+                    {currentStep === totalSteps ? (
+                      <>
+                        {t('complete')}
+                        <CheckCircle className="w-4 h-4" />
+                      </>
+                    ) : (
+                      <>
+                        {t('continue')}
+                        <ArrowRightIcon className="w-4 h-4" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </OnboardingLayout>
+    </>
   )
 }
 

@@ -33,6 +33,7 @@ import { signOut } from "next-auth/react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { SettingsDrawer } from "./settings-drawer"
+import { reset } from '@/src/utils/mixpanel'
 
 export function NavUser({
   user,
@@ -55,6 +56,7 @@ export function NavUser({
   }
 
   const handleLogout = () => {
+    reset();
     signOut({
       callbackUrl: "/",
     })

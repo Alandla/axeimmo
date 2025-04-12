@@ -14,6 +14,7 @@ import { IconGoogle } from "../components/icons/google-icon"
 import { useState } from "react"
 import { ArrowRight, Loader2 } from "lucide-react"
 import { useToast } from "../hooks/use-toast"
+import { getDeviceId } from "../utils/mixpanel"
 
 export default function Page() {
   const { data: session } = useSession()
@@ -37,9 +38,11 @@ export default function Page() {
   const [sendedEmail, setSendedEmail] = useState(false);
 
   const handleSignInGoogle = async () => {
+    const deviceId = getDeviceId();
     const response = await signIn('google', {
       redirectTo: '/dashboard',
-      redirect: false
+      redirect: false,
+      deviceId
     })
     if (response?.error) {
       toast({
@@ -52,9 +55,11 @@ export default function Page() {
 
   const handleSignInEmail = async () => {
     setLoading(true);
+    const deviceId = getDeviceId();
     const result = await signIn('http-email', { 
       email: email, 
-      redirect: false 
+      redirect: false,
+      deviceId
     })
     if (result?.error) {
       toast({

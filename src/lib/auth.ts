@@ -41,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
-    async signIn({ user }) {
+    async signIn({ user, account }) {
       console.log("Sign in event: ", user);
       if (user.email) {
         const isDisposable = await isDisposableEmail(user.email);
@@ -61,6 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return "/auth/error?error=contact-creation";
           }
         }
+
         return true;
       }
       return "/auth/error?error=invalid-email";
@@ -71,6 +72,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/',
   },
   events: {
+    signIn: async (user) => {
+      console.log("Sign in event: ", user);
+    },
     createUser: async (user) => {
       console.log("Create user event: ", user);
       if (user.user.id && user.user.email) {

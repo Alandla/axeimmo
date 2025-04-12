@@ -7,6 +7,8 @@ import { basicApiCall } from '@/src/lib/api';
 import { useRouter, usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { detectAndUpdateLanguage } from './client-geolocation';
+import { MixpanelEvent } from "../types/events";
+import { track } from "../utils/mixpanel";
 
 // Étendre l'interface Window pour inclure tolt
 declare global {
@@ -22,6 +24,7 @@ export function AffiliateTracker() {
   const [checked, setChecked] = useState(false);
   const [toltReady, setToltReady] = useState(false);
   const [languageChecked, setLanguageChecked] = useState(false);
+  const [createdAccountEventSent, setCreatedAccountEventSent] = useState(false);
   const router = useRouter();
   const currentLocale = useLocale();
 
@@ -115,7 +118,11 @@ export function AffiliateTracker() {
 
     const checkAffiliate = async () => {
       try {
-        // Track the affiliation on the client side
+        if (!createdAccountEventSent) {
+          track(MixpanelEvent.CREATED_ACCOUNT);
+          setCreatedAccountEventSent(true);
+        }
+
         console.log('Tracking affiliation for:', session?.user?.email);
         
         // À ce stade, nous savons que tolt est prêt et que l'email existe
