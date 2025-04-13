@@ -1,10 +1,11 @@
 import { create } from 'zustand'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { ICompanyDetails } from '@/src/types/space'
+import { ICompanyDetails, SimpleSpace } from '@/src/types/space'
 import { updateSpaceDetails } from '@/src/service/space.service'
 import { updateOnboarding } from '../service/user.service'
 import { setMixpanelUserProperties, track } from '@/src/utils/mixpanel'
 import { MixpanelEvent } from '../types/events'
+import { useActiveSpaceStore } from './activeSpaceStore'
 
 export const STEP_CATEGORIES = {
   PERSONAL: "personal-information",
@@ -98,11 +99,11 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     set({ isLoading: true });
     
     try {
-      const { hasFinishedOnboarding, userData, spaceDetails, spaceId } = await basicApiGetCall<{
+      const { hasFinishedOnboarding, userData, spaceDetails, simpleSpace } = await basicApiGetCall<{
         hasFinishedOnboarding: boolean;
         userData: UserOnboardingData;
         spaceDetails?: ICompanyDetails;
-        spaceId?: string;
+        simpleSpace?: SimpleSpace;
       }>("/user/onboarding");
       
       if (hasFinishedOnboarding) {
@@ -119,8 +120,13 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
         dataCompany: { ...defaultCompanyData, ...spaceDetails as Partial<CompanyOnboardingData> },
         currentStep: calculatedStep,
         hasCompleted: hasFinishedOnboarding,
-        spaceId: spaceId || null
+        spaceId: simpleSpace?.id || null
       });
+
+      if (simpleSpace) {
+        console.log("simpleSpace", simpleSpace);
+        useActiveSpaceStore.getState().setActiveSpace(simpleSpace);
+      }
     } catch (error) {
       console.error("Error while loading onboarding data:", error);
     } finally {

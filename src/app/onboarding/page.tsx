@@ -65,10 +65,10 @@ export default function OnboardingPage() {
       initStore().then(() => {
         setStoreInitialized(true);
       }).catch(error => {
-        console.error("Erreur lors de l'initialisation:", error)
+        console.error("Error on onboarding initialization:", error)
         toast({
-          title: "Erreur",
-          description: "Une erreur est survenue",
+          title: "Error on onboarding initialization",
+          description: "An error occurred",
           variant: "destructive",
         })
       })
