@@ -4,6 +4,7 @@ export interface IUser {
   firstName?: string;
   email?: string;
   image?: string;
+  customerId?: string;
   emailVerified?: Date;
   options?: {
     lang: string;
