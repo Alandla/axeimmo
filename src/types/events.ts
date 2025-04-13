@@ -29,4 +29,8 @@ export enum MixpanelEvent {
     // Événements d'abonnement
     SUBSCRIPTION_CREATED = 'Subscription Created',
     GO_TO_CHECKOUT = 'Go to Checkout',
+
+    // Événements de génération de vidéo
+    FIRST_VIDEO_CREATED = 'First Video Created',
+    VIDEO_EXPORTED = 'Video Exported',
 }
