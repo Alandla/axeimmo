@@ -26,6 +26,7 @@ export default function OnboardingLayout({
   const tFooter = useTranslations('footer');
   const t = useTranslations('onboarding.layout');
   const isCompleted = currentStep > totalSteps;
+  const tCategories = useTranslations('onboarding.categories')
 
   return (
     <div className="flex min-h-screen overflow-hidden relative flex-col md:flex-row">
@@ -131,7 +132,7 @@ export default function OnboardingLayout({
         <div className="mx-auto w-full flex-1 flex flex-col">
           {showProgress && (
             <div className="max-w-xl mx-auto w-full mt-28 md:mt-0">
-              <div className="text-sm text-gray-500 mb-2 hidden md:block pt-4">{category}</div>
+              <div className="text-sm text-gray-500 mb-2 hidden md:block pt-4">{tCategories(category)}</div>
               <ProgressSteps currentStep={currentStep} totalSteps={totalSteps} />
             </div>
           )}

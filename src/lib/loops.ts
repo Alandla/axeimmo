@@ -69,9 +69,11 @@ export async function sendCreatedVideoEvent({ email, videoId }: { email: string,
   return result;
 }
 
-export async function sendVerificationRequest({ identifier: email, url }: { identifier: string, url: string }) {
+export async function sendVerificationRequest({ identifier: email, url, deviceId }: { identifier: string, url: string, deviceId?: string }) {
+  const finalURL = url + `&deviceId=${deviceId}`;
+  
   const dataVariables = {
-    link: url
+    link: finalURL
   }
 
   const result = await loops.sendTransactionalEmail({

@@ -11,6 +11,8 @@ import { calculateHeygenCost } from "../lib/cost";
 import { combineAudioVoices } from "./combine-audio";
 import { addVideoExportedContact, sendExportedVideoEmail } from "../lib/loops";
 import UserModel from "../models/User";
+import { MixpanelEvent } from "../types/events";
+import { track } from "../utils/mixpanel-server";
 
 interface RenderStatus {
   status: string;
@@ -119,6 +121,14 @@ export const exportVideoTask = task({
 
         try {
           logger.info('Sending emails to space users');
+          const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
+          const userId = createEvent?.user;
+
+          track(MixpanelEvent.VIDEO_EXPORTED, {
+            distinct_id: userId,
+            videoId: video.id,
+            hasAvatar: video.video?.avatar ? true : false,
+          })
 
           const space = await getSpaceById(video.spaceId);
           

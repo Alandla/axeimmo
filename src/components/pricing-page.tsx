@@ -12,6 +12,8 @@ import { basicApiCall, basicApiGetCall } from '../lib/api'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import Link from 'next/link'
 import DiscountBanner from './discount-banner'
+import { track } from '@/src/utils/mixpanel'
+import { MixpanelEvent } from '@/src/types/events'
 import {
   Select,
   SelectContent,
@@ -234,6 +236,14 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
   const handlePayment = async (plan: Plan) => {
     try {
       setLoadingPlan(plan.name);
+      
+      track(MixpanelEvent.GO_TO_CHECKOUT, {
+        plan: plan.name,
+        subscriptionType: isAnnual ? 'annual' : 'monthly',
+        price: isAnnual ? plan.annualPrice : plan.monthlyPrice,
+        currency: currency,
+      });
+
       if (activeSpace?.planName === PlanName.FREE) {
         const priceId = isAnnual ? plan.priceId.annual : plan.priceId.month;
 

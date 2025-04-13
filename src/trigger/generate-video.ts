@@ -30,6 +30,8 @@ import { addMediasToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
 import { IMediaSpace, ISpace } from "../types/space";
 import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { getMostFrequentString } from "../lib/utils";
+import { MixpanelEvent } from "../types/events";
+import { track } from "../utils/mixpanel-server";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -53,7 +55,7 @@ export const generateVideoTask = task({
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
 
@@ -674,6 +676,11 @@ export const generateVideoTask = task({
 
     if (user && user.videosCount === 0) {
       await sendCreatedVideoEvent({ email: user.email, videoId: newVideo.id || "" })
+      track(MixpanelEvent.FIRST_VIDEO_CREATED, {
+        distinct_id: payload.userId,
+        videoId: newVideo.id,
+        hasAvatar: payload.avatar ? true : false,
+      })
     }
 
     return {
