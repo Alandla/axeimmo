@@ -25,4 +25,8 @@ export enum MixpanelEvent {
     
     // Événements de parcours utilisateur
     CROSS_DOMAIN_CONTINUATION = 'Cross Domain Continuation',
-  }
+
+    // Événements d'abonnement
+    SUBSCRIPTION_CREATED = 'Subscription Created',
+    GO_TO_CHECKOUT = 'Go to Checkout',
+}

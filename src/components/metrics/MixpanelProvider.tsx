@@ -2,23 +2,25 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { trackPageView } from '@/src/utils/mixpanel';
+import { trackPageView, identify } from '@/src/utils/mixpanel';
+import { useSession } from 'next-auth/react';
 
 export default function MixpanelProvider() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lastTrackedPath = useRef<string | null>(null);
+  const { data: session } = useSession();
 
-  // Suivi de chaque changement de page
   useEffect(() => {
-    // Vérifie si ce chemin a déjà été suivi récemment
     if (pathname !== lastTrackedPath.current) {
-      // On envoie la vue de page à chaque changement de route
+      if (session?.user?.id && session?.user?.email) {
+        identify(session.user.id);
+      }
+
       trackPageView(pathname);
       lastTrackedPath.current = pathname;
     }
-  }, [pathname, searchParams]);
+  }, [pathname, searchParams, session]);
 
-  // Pas besoin de rendu visible
   return null;
 } 
