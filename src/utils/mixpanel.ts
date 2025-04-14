@@ -8,8 +8,6 @@ const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN || 'your-token-her
 
 // Initialiser Mixpanel avec conservation de l'ID entre sous-domaines
 const initMixpanel = () => {
-  // Afficher les cookies dans la console
-  console.log('Initialisation Mixpanel');
   mixpanel.init(MIXPANEL_TOKEN, { 
     debug: process.env.NODE_ENV !== 'production',
     track_pageview: false,
@@ -17,10 +15,6 @@ const initMixpanel = () => {
     ignore_dnt: true,
     cookie_domain: 'hoox.video',
   });
-  if (typeof window !== 'undefined') {
-    console.log('Cookies existants :', document.cookie);
-    console.log('Liste des cookies :', document.cookie.split(';').map(cookie => cookie.trim()));
-  }
 };
 
 // Appeler l'initialisation que côté client

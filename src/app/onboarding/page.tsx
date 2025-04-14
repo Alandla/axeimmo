@@ -56,7 +56,7 @@ export default function OnboardingPage() {
     if (session?.user && !storeInitialized) {
       if (session.user.id && session.user.email) {
         identify(session.user.id, {
-          email: session.user.email,
+          Email: session.user.email,
           name: session.user?.name,
           hasFinishedOnboarding: false,
         });
