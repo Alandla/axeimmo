@@ -11,9 +11,9 @@ const initMixpanel = () => {
   mixpanel.init(MIXPANEL_TOKEN, { 
     debug: process.env.NODE_ENV !== 'production',
     track_pageview: false,
-    persistence: 'localStorage',
     cross_subdomain_cookie: true,
     ignore_dnt: true,
+    cookie_domain: 'hoox.video',
   });
 };
 
@@ -29,7 +29,7 @@ export const trackPageView = (pageName?: string) => {
     page,
     site: 'app',
     url: typeof window !== 'undefined' ? window.location.href : '',
-    referrer: typeof window !== 'undefined' ? document.referrer : ''
+    referrer: typeof window !== 'undefined' ? document.referrer : '',
   });
 };
 
