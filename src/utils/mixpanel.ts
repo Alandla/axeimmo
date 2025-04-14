@@ -29,7 +29,10 @@ export const trackPageView = (pageName?: string) => {
     page,
     site: 'app',
     url: typeof window !== 'undefined' ? window.location.href : '',
-    referrer: typeof window !== 'undefined' ? document.referrer : ''
+    referrer: typeof window !== 'undefined' ? document.referrer : '',
+    cross_subdomain_cookie: true,
+    cookie_domain: 'hoox.video',
+    ignore_dnt: true,
   });
 };
 
