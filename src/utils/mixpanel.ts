@@ -15,6 +15,8 @@ const initMixpanel = () => {
     cross_subdomain_cookie: true,
     ignore_dnt: true,
     cookie_domain: 'hoox.video',
+    cross_site_cookie: true,
+    cookie_name: 'hoox_mixpanel_id',
   });
 };
 
