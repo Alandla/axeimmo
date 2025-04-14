@@ -30,6 +30,7 @@ export const trackPageView = (pageName?: string) => {
     site: 'app',
     url: typeof window !== 'undefined' ? window.location.href : '',
     referrer: typeof window !== 'undefined' ? document.referrer : '',
+    persistence: 'localStorage',
     cross_subdomain_cookie: true,
     cookie_domain: 'hoox.video',
     ignore_dnt: true,
