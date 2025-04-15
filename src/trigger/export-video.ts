@@ -8,11 +8,11 @@ import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed, getSpaceB
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
 import { calculateHeygenCost } from "../lib/cost";
-import { combineAudioVoices } from "./combine-audio";
 import { addVideoExportedContact, sendExportedVideoEmail } from "../lib/loops";
 import UserModel from "../models/User";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
+import { exportAudioTask } from "./export-audio";
 
 interface RenderStatus {
   status: string;
@@ -38,6 +38,7 @@ export const exportVideoTask = task({
     try {
       const videoId = payload.videoId;
       const exportId = payload.exportId;
+      let renderAudioCost = 0;
 
       logger.log("Exporting video...");
       const exportData : IExport = await updateExport(exportId, { runId: ctx.run.id, status: 'processing' });
@@ -59,14 +60,18 @@ export const exportVideoTask = task({
 
       if (video.video?.avatar?.id && video.video?.audio?.voices && !video.video?.avatar?.videoUrl) {
         logger.log("Combinaison des audios...");
-        const combinedAudio = await combineAudioVoices.triggerAndWait({ voices: video.video.audio.voices });
-        
-        if (!combinedAudio.ok) {
+        const audioRender = await exportAudioTask.triggerAndWait({
+          videoId
+        });
+
+        if (!audioRender.ok) {
           throw new Error('La combinaison des audios a échoué');
         }
 
+        renderAudioCost = audioRender.output?.costs || 0;
+
         logger.log("Génération de la vidéo avatar...");
-        const avatarResponse = await generateAvatarVideo(video.video.avatar, combinedAudio.output.url);
+        const avatarResponse = await generateAvatarVideo(video.video.avatar, audioRender.output?.audioUrl || '');
 
         logger.log("Avatar response", { avatarResponse });
         const avatarVideoUrl = await pollAvatarVideoStatus(avatarResponse.data.video_id);
@@ -110,13 +115,13 @@ export const exportVideoTask = task({
       if (renderStatus.status === 'completed' && renderStatus.videoUrl && renderStatus.costs) {
         await updateExport(exportId, { 
           downloadUrl: renderStatus.videoUrl, 
-          renderCost: renderStatus.costs + ctx.run.costInCents, 
+          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost, 
           status: 'completed' 
         });
         await metadata.replace({
           status: 'completed',
           downloadUrl: renderStatus.videoUrl,
-          renderCost: renderStatus.costs + ctx.run.costInCents
+          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost
         })
 
         try {

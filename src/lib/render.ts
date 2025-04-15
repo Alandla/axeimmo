@@ -31,6 +31,32 @@ export const renderVideo = async (video: any, showWatermark: boolean = true) => 
     });
 };
 
+export const renderAudio = async (video: any) => {
+    console.log("Rendering audio, props:")
+    console.log(video)
+    return await renderMediaOnLambda({
+        region: "eu-west-3",
+        functionName: speculateFunctionName({
+            diskSizeInMb: 4096,
+            memorySizeInMb: 2048,
+            timeoutInSeconds: 300
+        }),
+        serveUrl: process.env.REMOTION_AUDIO_SERVE_URL || '',
+        composition: "videoGenerate",
+        inputProps: {
+            data: video,
+        },
+        codec: "mp3",
+        privacy: "public",
+        maxRetries: 3,
+        deleteAfter: "7-days",
+        downloadBehavior: {
+            type: "download",
+            fileName: video.title + ".mp3",
+        }
+    });
+};
+
 export const getProgress = async (renderId: string, bucketName: string) => {
     const progress = await getRenderProgress({
         renderId: renderId,

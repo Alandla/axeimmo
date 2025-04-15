@@ -1,5 +1,5 @@
 import { createGroq } from "@ai-sdk/groq";
-import { generateObject, generateText } from "ai";
+import { generateText } from "ai";
 import { SimpleMedia, SimpleSequence } from "./analyse";
 import { LightTranscription } from "./transcription";
 import { logger } from "@trigger.dev/sdk/v3";
@@ -16,7 +16,7 @@ const client = new Groq({
 export const generateBrollDisplay = async (sequences: SimpleSequence[]) => {
     try {
         const result = await generateText({
-            model: groq('llama-3.2-90b-vision-preview'),
+            model: groq('meta-llama/llama-4-scout-17b-16e-instruct'),
             messages: [
                 {
                     role: "user",
