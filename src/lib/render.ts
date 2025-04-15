@@ -57,14 +57,14 @@ export const renderAudio = async (video: any) => {
     });
 };
 
-export const getProgress = async (renderId: string, bucketName: string) => {
+export const getProgress = async (renderId: string, bucketName: string, isAudio: boolean = false) => {
     const progress = await getRenderProgress({
         renderId: renderId,
         bucketName: bucketName,
         functionName: speculateFunctionName({
-            diskSizeInMb: 10240,
+            diskSizeInMb: isAudio ? 4096 : 10240,
             memorySizeInMb: 2048,
-            timeoutInSeconds: 600,
+            timeoutInSeconds: isAudio ? 300 : 600,
         }),
         region: "eu-west-3",
     });
@@ -79,7 +79,7 @@ export const getProgress = async (renderId: string, bucketName: string) => {
     if (progress.done) {
         return {
             status: "completed",
-            videoUrl: progress.outputFile,
+            url: progress.outputFile,
             size: progress.outputSizeInBytes,
             costs: progress.costs.accruedSoFar
         }
@@ -89,7 +89,6 @@ export const getProgress = async (renderId: string, bucketName: string) => {
         status: "processing",
         progress: Math.round(Math.max(0.03, progress.overallProgress) * 100)
     }
-
 }
 
 export const generateThumbnail = async (video: any) => {

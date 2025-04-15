@@ -4,7 +4,9 @@ import {
   Download, 
   Video, 
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  Music,
+  User
 } from 'lucide-react';
 import { Button } from "@/src/components/ui/button";
 import { Progress } from "@/src/components/ui/progress";
@@ -25,7 +27,7 @@ import { auth, runs } from '@trigger.dev/sdk/v3';
 import confetti from 'canvas-confetti';
 
 type ExportStatus = 'pending' | 'processing' | 'completed' | 'failed';
-type ExportStep = 'avatar' | 'render';
+type ExportStep = 'avatar' | 'render' | 'render-audio';
 
 export default function VideoExportProgress({ exportData, video }: { exportData: IExport | null, video: IVideo | null }) {
   const t = useTranslations('export')
@@ -84,6 +86,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
             auth.configure({
               accessToken: publicAccessToken,
             });
+            
 
             for await (const run of runs.subscribeToRun(runId)) {
               setStatus(run.metadata?.status as ExportStatus)
@@ -113,7 +116,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
 
           for await (const run of runs.subscribeToRun(runId)) {
             if (run.status === "COMPLETED") {
-              setDownloadUrl(run.output.videoUrl as string)
+              setDownloadUrl(run.output.url as string)
               setStatus('completed')
               triggerConfetti()
               break
@@ -125,6 +128,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
             }
             setStatus(run.metadata?.status as ExportStatus)
             setProgress(run.metadata?.progress as number)
+            setStep(run.metadata?.step as ExportStep)
           }
         } else if (exportData && video && exportData.status === 'completed' && exportData.runId) {
           triggerConfetti()
@@ -138,6 +142,30 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
     }
     fetchExport()
   }, [exportData, video])
+
+  // Fonction pour afficher l'icône en fonction de l'étape actuelle
+  const renderStepIcon = () => {
+    switch (step) {
+      case 'avatar':
+        return <User className="w-12 h-12 text-primary animate-pulse" />;
+      case 'render-audio':
+        return <Music className="w-12 h-12 text-primary animate-pulse" />;
+      default:
+        return <Video className="w-12 h-12 text-primary animate-pulse" />;
+    }
+  };
+
+  // Fonction pour afficher le titre en fonction de l'étape actuelle
+  const getStepTitle = () => {
+    switch (step) {
+      case 'avatar':
+        return t('title-avatar');
+      case 'render-audio':
+        return t('title-audio');
+      default:
+        return t('title');
+    }
+  };
 
   if (status === 'failed') {
     return (
@@ -202,9 +230,9 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
         <>
           <CardHeader>
             <div className="flex justify-center">
-              <Video className="w-12 h-12 text-primary animate-pulse" />
+              {renderStepIcon()}
             </div>
-            <CardTitle className="text-center">{step === 'avatar' ? t('title-avatar') : t('title')}</CardTitle>
+            <CardTitle className="text-center">{getStepTitle()}</CardTitle>
             <CardDescription className="text-center">
               {status === 'processing' ? t('processing') : t('waiting-to-start')}
             </CardDescription>

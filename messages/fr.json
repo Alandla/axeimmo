@@ -195,6 +195,7 @@
     "export": {
       "title": "Exportation de ta vidéo",
       "title-avatar": "Génération de ton avatar",
+      "title-audio": "Préparation de l'audio",
       "title-failed": "Exportation échouée",
       "title-completed": "Export terminée !",
       "message-failed": "Une erreur est survenue lors de l'exportation de ta vidéo. Veuillez réessayer.",

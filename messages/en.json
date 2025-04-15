@@ -204,6 +204,7 @@
     "export": {
       "title": "Exporting Your Video",
       "title-avatar": "Generating your avatar",
+      "title-audio": "Preparing audio",
       "title-failed": "Exporting failed",
       "title-completed": "Export completed !",
       "message-failed": "An error occurred while exporting your video. Please try again.",
