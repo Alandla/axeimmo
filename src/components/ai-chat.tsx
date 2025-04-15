@@ -17,13 +17,14 @@ import { useCreationStore } from '../store/creationStore'
 import { AvatarGridComponent } from './avatar-grid'
 import { Steps, StepState } from '../types/step'
 import { GenerationProgress } from './generation-progress'
-import { startGeneration } from '../service/generation.service'
+import { useGenerationProcess, handleRunUpdate } from '../service/generation.service'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { useVideosStore } from '../store/videosStore'
 import { useRouter } from 'next/navigation'
 import { ILastUsed } from '@/src/types/space'
 import { getSpaceLastUsed } from '../service/space.service'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
+import { useRealtimeRun } from '@trigger.dev/react-hooks'
 
 enum MessageType {
   TEXT = 'text',
@@ -54,6 +55,33 @@ export function AiChat() {
   const tAi = useTranslations('ai-chat');
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [inputMessage, setInputMessage] = useState('');
+  const [runId, setRunId] = useState<string | undefined>();
+  const [accessToken, setAccessToken] = useState<string | undefined>();
+  const [generationSpaceId, setGenerationSpaceId] = useState<string | undefined>();
+  
+  const { startGeneration: startGenerationProcess } = useGenerationProcess();
+  
+  // Utilisation de useRealtimeRun pour suivre les mises à jour de la tâche
+  const { run } = useRealtimeRun(runId, {
+    accessToken: accessToken,
+    enabled: !!runId && !!accessToken,
+    experimental_throttleInMs: 1000
+  });
+  
+  // Effet pour traiter les mises à jour du run
+  useEffect(() => {
+    if (run && generationSpaceId) {
+      try {
+        const videoId = handleRunUpdate(run, generationSpaceId);
+        
+        if (videoId && run.status === "COMPLETED") {
+          router.push(`/edit/${videoId}`);
+        }
+      } catch (error) {
+        console.error('Generation error:', error);
+      }
+    }
+  }, [run, generationSpaceId, router]);
 
   // Vérifier le nombre de vidéos pour le plan gratuit
   useEffect(() => {
@@ -283,9 +311,14 @@ export function AiChat() {
   }
 
   const handleStartGeneration = async () => {
-    const videoId = await startGeneration(session?.user?.id || '', activeSpace?.id || '')
-    if (videoId) {
-      router.push(`/edit/${videoId}`)
+    try {
+      const result = await startGenerationProcess(session?.user?.id || '', activeSpace?.id || '');
+      
+      setRunId(result.runId);
+      setAccessToken(result.publicAccessToken);
+      setGenerationSpaceId(result.spaceId);
+    } catch (error) {
+      console.error('Error starting generation:', error);
     }
   }
 

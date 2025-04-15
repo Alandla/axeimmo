@@ -3,7 +3,7 @@ import { CreationStep } from '../types/enums'
 import { Voice } from '../types/voice'
 import { AvatarLook } from '../types/avatar'
 import { FileToUpload } from '../types/files'
-import { Step } from '../types/step'
+import { Step, Steps } from '../types/step'
 
 type CreationStore = {
   script: string
@@ -14,6 +14,7 @@ type CreationStore = {
   selectedAvatarName: String | null
   selectedVoice: Voice | null
   steps: Step[]
+  lastStep: Steps | null
   setScript: (script: string) => void
   setFiles: (files: FileToUpload[]) => void,
   setTotalCost: (cost: number) => void
@@ -24,6 +25,7 @@ type CreationStore = {
   setSelectedLook: (avatar: AvatarLook | null) => void
   addStep: (step: Step) => void
   setSteps: (steps: Step[]) => void
+  setLastStep: (step: Steps) => void
   resetSteps: () => void
 }
 
@@ -36,6 +38,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   selectedLook: null,
   selectedAvatarName: null,
   steps: [],
+  lastStep: null,
   setScript: (script) => set({ script }),
   setFiles: (files) => set({ files }),
   setTotalCost: (cost) => set({ totalCost: cost }),
@@ -46,6 +49,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   setSelectedAvatarName: (name) => set({ selectedAvatarName: name }),
   addStep: (step) => set((state) => ({ steps: [...state.steps, step] })),
   setSteps: (steps) => set({ steps }),
-  resetSteps: () => set({ steps: [] })
+  setLastStep: (step) => set({ lastStep: step }),
+  resetSteps: () => set({ steps: [], lastStep: null })
 }))
 

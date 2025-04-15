@@ -42,6 +42,7 @@
     "@remotion/player": "4.0.267",
     "@remotion/preload": "4.0.267",
     "@remotion/transitions": "4.0.267",
+    "@trigger.dev/react-hooks": "^3.3.17",
     "@trigger.dev/sdk": "3.3.17",
     "@types/canvas-confetti": "^1.6.4",
     "@vercel/functions": "^2.0.0",

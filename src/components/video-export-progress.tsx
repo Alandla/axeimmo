@@ -23,7 +23,8 @@ import { basicApiCall } from '../lib/api';
 import { IVideo } from '../types/video';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { auth, runs } from '@trigger.dev/sdk/v3';
+import { auth } from '@trigger.dev/sdk/v3';
+import { useRealtimeRun } from '@trigger.dev/react-hooks';
 import confetti from 'canvas-confetti';
 
 type ExportStatus = 'pending' | 'processing' | 'completed' | 'failed';
@@ -37,6 +38,42 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
   const [startedExport, setStartedExport] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [runId, setRunId] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  // Utilisation du hook useRealtimeRun pour suivre les mises à jour du run
+  const { run } = useRealtimeRun(runId || undefined, {
+    accessToken: accessToken || undefined,
+    enabled: !!runId && !!accessToken,
+    experimental_throttleInMs: 1000
+  });
+
+  // Effet pour traiter les mises à jour du run en temps réel
+  useEffect(() => {
+    console.log("Run", run)
+    if (run) {
+      setStatus(run.metadata?.status as ExportStatus || status);
+      
+      if (run.metadata?.progress) {
+        setProgress(run.metadata?.progress as number);
+      }
+      
+      if (run.metadata?.step) {
+        setStep(run.metadata?.step as ExportStep);
+      }
+      
+      if (run.status === "COMPLETED") {
+        setDownloadUrl(run.metadata?.downloadUrl as string);
+        setStatus('completed');
+        triggerConfetti();
+      }
+      
+      if (run.status === "FAILED") {
+        setErrorMessage(run.metadata?.errorMessage as string || "Une erreur s'est produite");
+        setStatus('failed');
+      }
+    }
+  }, [run]);
 
   const triggerConfetti = () => {
     const end = Date.now() + 1000; // 1 seconde
@@ -72,76 +109,57 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
     const fetchExport = async () => {
       console.log("Fetching export", exportData, video)
       try {
+        // Cas 1: Nouvel export à démarrer (pending et pas de runId)
         if (exportData?.status === 'pending' && video && exportData && !exportData.runId) {
-
           const options = {
             videoId: video.id,
             exportId: exportData.id
           }
 
           if (!startedExport) {
-            setStartedExport(true)
-            const { runId, publicAccessToken } = await basicApiCall('/trigger/startExport', { options }) as { runId: string, publicAccessToken: string };
-
+            setStartedExport(true);
+            const response = await basicApiCall('/trigger/startExport', { options });
+            const { runId: newRunId, publicAccessToken } = response as { runId: string, publicAccessToken: string };
+            
+            // Configuration pour useRealtimeRun
+            setRunId(newRunId);
+            setAccessToken(publicAccessToken);
+            
+            // Configuration auth pour d'autres API trigger.dev si nécessaire
             auth.configure({
               accessToken: publicAccessToken,
             });
-            
-
-            for await (const run of runs.subscribeToRun(runId)) {
-              setStatus(run.metadata?.status as ExportStatus)
-              if (run.metadata?.progress) {
-                setProgress(run.metadata?.progress as number)
-              } else {
-                setProgress(0)
-              }
-              setStep(run.metadata?.step as ExportStep)
-              if (run.status === "COMPLETED") {
-                setDownloadUrl(run.metadata?.downloadUrl as string)
-                triggerConfetti()
-                break
-              }
-              if (run.status === "FAILED") {
-                setErrorMessage(run.metadata?.errorMessage as string)
-                break
-              }
-            }
           }
-        } else if (exportData && video && exportData.status === 'processing' && exportData.runId) {
-          const { runId, publicAccessToken } = await basicApiCall('/trigger/getAccessToken', { runId: exportData.runId }) as { runId: string, publicAccessToken: string };
-
+        } 
+        // Cas 2: Export déjà en cours (processing et runId existant)
+        else if (exportData && video && exportData.status === 'processing' && exportData.runId) {
+          const response = await basicApiCall('/trigger/getAccessToken', { runId: exportData.runId });
+          const { runId: existingRunId, publicAccessToken } = response as { runId: string, publicAccessToken: string };
+          
+          // Configuration pour useRealtimeRun
+          setRunId(existingRunId);
+          setAccessToken(publicAccessToken);
+          
+          // Configuration auth pour d'autres API trigger.dev si nécessaire
           auth.configure({
             accessToken: publicAccessToken,
           });
-
-          for await (const run of runs.subscribeToRun(runId)) {
-            if (run.status === "COMPLETED") {
-              setDownloadUrl(run.output.url as string)
-              setStatus('completed')
-              triggerConfetti()
-              break
-            }
-            if (run.status === "FAILED") {
-              setErrorMessage(run.output.error as string)
-              setStatus('failed')
-              break
-            }
-            setStatus(run.metadata?.status as ExportStatus)
-            setProgress(run.metadata?.progress as number)
-            setStep(run.metadata?.step as ExportStep)
-          }
-        } else if (exportData && video && exportData.status === 'completed' && exportData.runId) {
-          triggerConfetti()
-          setDownloadUrl(exportData.downloadUrl as string)
-          setStatus('completed')
+        } 
+        // Cas 3: Export déjà terminé (completed)
+        else if (exportData && video && exportData.status === 'completed' && exportData.runId) {
+          triggerConfetti();
+          setDownloadUrl(exportData.downloadUrl as string);
+          setStatus('completed');
         }
       } catch (error) {
-        console.error('Error fetching export:', error)
-        setStatus('failed')
+        console.error('Error fetching export:', error);
+        setStatus('failed');
+        setErrorMessage("Erreur lors de la récupération de l'export");
       }
     }
-    fetchExport()
-  }, [exportData, video])
+    
+    fetchExport();
+  }, [exportData, video]);
 
   // Fonction pour afficher l'icône en fonction de l'étape actuelle
   const renderStepIcon = () => {
