@@ -14,7 +14,6 @@ export const connectMongo = async () => {
 
   try {
     const options = {
-      useUnifiedTopology: true,
       bufferCommands: false,
       serverSelectionTimeoutMS: 15000,
       socketTimeoutMS: 30000,
