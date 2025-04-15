@@ -3,11 +3,6 @@ import { IVideo } from '../types/video'
 import { VideoWithCreator } from '@/src/app/dashboard/page'
 import { basicApiCall } from '@/src/lib/api'
 
-interface ApiResponse {
-  videos: any[];
-  totalCount: number;
-}
-
 interface VideosStoreState {
   videosBySpace: Map<string, VideoWithCreator[]>
   totalVideoCountBySpace: Map<string, number>
@@ -36,7 +31,7 @@ export const useVideosStore = create<VideosStoreState>((set, get) => ({
   
   fetchVideos: async (spaceId: string) => {
     try {
-      const { videos, totalCount } = await basicApiCall<ApiResponse>('/space/getVideos', { spaceId });
+      const { videos, totalCount } = await basicApiCall('/space/getVideos', { spaceId }) as { videos: IVideo[], totalCount: number };
 
       const processedVideos = videos.map(video => {
         const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');

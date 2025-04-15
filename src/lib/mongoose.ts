@@ -14,6 +14,10 @@ export const connectMongo = async () => {
 
   try {
     const options = {
+      urlNewParser: true,
+      useUnifiedTopology: true,
+      bufferCommands: false,
+      bufferMaxEntries: 0,
       serverSelectionTimeoutMS: 15000,
       socketTimeoutMS: 30000,
       maxPoolSize: 50,
