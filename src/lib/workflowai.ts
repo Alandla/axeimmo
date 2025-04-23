@@ -16,6 +16,7 @@ export interface Image {
 // Initialize Your AI agent
 export interface VideoScriptKeywordExtractionInput {
   script?: string
+  keyword_count ? : number
 }
 
 export interface VideoScriptKeywordExtractionOutput {
@@ -110,14 +111,8 @@ export interface MediaSequenceMatchingOutput {
 
 const videoScriptKeywordExtraction = workflowAI.agent<VideoScriptKeywordExtractionInput, VideoScriptKeywordExtractionOutput>({
   id: "video-script-keyword-extraction",
-  schemaId: 1,
+  schemaId: 2,
   version: "production",
-  // Cache options:
-  // - "auto" (default): if a previous run exists with the same version and input, and if
-  // the temperature is 0, the cached output is returned
-  // - "always": the cached output is returned when available, regardless
-  // of the temperature value
-  // - "never": the cache is never used
   useCache: process.env.NODE_ENV === 'development' ? 'never' : 'auto'
 })
 
@@ -161,8 +156,26 @@ export async function videoScriptKeywordExtractionRun(scriptContent: string): Pr
   cost: number,
   output: VideoScriptKeywordExtractionOutput
 }> {
+  // Calcul du nombre de mots-clés en fonction de la longueur du script
+  const calculateKeywordCount = (scriptLength: number): number => {
+    // Base de 10 mots-clés
+    let keywordCount = 10;
+    
+    // Si plus de 2000 caractères, on ajoute 5 mots-clés
+    if (scriptLength > 2000) {
+      keywordCount += 5;
+      
+      // Pour chaque 1000 caractères supplémentaires, on ajoute 5 mots-clés
+      const additionalThousands = Math.floor((scriptLength - 2000) / 1000);
+      keywordCount += additionalThousands * 5;
+    }
+    
+    return keywordCount;
+  };
+
   const input: VideoScriptKeywordExtractionInput = {
-    "script": scriptContent
+    "script": scriptContent,
+    "keyword_count": calculateKeywordCount(scriptContent.length)
   }
 
   try {
