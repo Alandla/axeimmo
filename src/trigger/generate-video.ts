@@ -53,7 +53,6 @@ export const generateVideoTask = task({
 
     let cost = 0
     const mediaSource = payload.mediaSource || "PEXELS";
-    const transcriptionService = "SIEVE"; // "GROQ" or "SIEVE"
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
     const isDevelopment = ctx.environment.type === "DEVELOPMENT"
@@ -262,7 +261,7 @@ export const generateVideoTask = task({
 
         const transcriptionPromises = sentences.map(async (sentence, index) => {
           try {
-            const transcriptionResult = await getTranscription(sentence.audioUrl, sentence.text, transcriptionService);
+            const transcriptionResult = await getTranscription(sentence.audioUrl, sentence.text);
             
             if (!transcriptionResult) {
               return sentence;
@@ -297,7 +296,7 @@ export const generateVideoTask = task({
 
         sentences = await Promise.all(transcriptionPromises);
         
-        logger.info(`All sentences transcribed with ${transcriptionService}`, { totalCount: sentences.length });
+        logger.info(`All sentences transcribed`, { totalCount: sentences.length });
       } catch (error) {
         logger.error('Error in transcription process', { errorMessage: error instanceof Error ? error.message : String(error) });
       }

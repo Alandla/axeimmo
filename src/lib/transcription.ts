@@ -282,85 +282,86 @@ const mergeApostropheWords = (words: Array<{ word: string; start: number; end: n
  * @param text Texte optionnel pour guider la transcription
  * @returns La transcription du fichier audio
  */
-export const getTranscription = async (audioUrl: string, text?: string, transcriptionService?: string) => {
-    if (transcriptionService === "GROQ") {
-        let attempts = 0;
-        const maxAttempts = 6;
-        while (attempts < maxAttempts) {
-            try {
-                const formData = new FormData();
-                formData.append('url', audioUrl);
-                formData.append('model', 'whisper-large-v3-turbo');
-                
-                if (text) {
-                    formData.append('prompt', text);
-                }
-                
-                formData.append('response_format', 'verbose_json');
-                formData.append('timestamp_granularities[]', 'word');
-                
-                const response = await axios.post(
-                    'https://api.groq.com/openai/v1/audio/transcriptions',
-                    formData,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-                            ...formData.getHeaders()
-                        }
-                    }
-                );
+export const getTranscription = async (audioUrl: string, text?: string) => {
+  const useGroq = false;
+  if (useGroq) {
+      let attempts = 0;
+      const maxAttempts = 6;
+      while (attempts < maxAttempts) {
+          try {
+              const formData = new FormData();
+              formData.append('url', audioUrl);
+              formData.append('model', 'whisper-large-v3-turbo');
+              
+              if (text) {
+                  formData.append('prompt', text);
+              }
+              
+              formData.append('response_format', 'verbose_json');
+              formData.append('timestamp_granularities[]', 'word');
+              
+              const response = await axios.post(
+                  'https://api.groq.com/openai/v1/audio/transcriptions',
+                  formData,
+                  {
+                      headers: {
+                          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+                          ...formData.getHeaders()
+                      }
+                  }
+              );
 
-                return {
-                    text: response.data.text,
-                    raw: response.data
-                };
-            } catch (error: any) {
-                attempts++;
-                logger.error(`Erreur de transcription Groq (tentative ${attempts}):`, { error: error.response });
-                if (attempts >= maxAttempts) {
-                    console.error("Erreur de transcription Groq:", error.response?.data || error.message);
-                    return null;
-                }
-            }
-        }
-    } else if (transcriptionService === "SIEVE") {
-        try {
-            const jobId = await createSieveTranscription(audioUrl, text);
-            const result = await pollSieveTranscriptionStatus(jobId);
+              return {
+                  text: response.data.text,
+                  raw: response.data
+              };
+          } catch (error: any) {
+              attempts++;
+              logger.error(`Erreur de transcription Groq (tentative ${attempts}):`, { error: error.response });
+              if (attempts >= maxAttempts) {
+                  console.error("Erreur de transcription Groq:", error.response?.data || error.message);
+                  return null;
+              }
+          }
+      }
+  } else {
+      try {
+          const jobId = await createSieveTranscription(audioUrl, text);
+          const result = await pollSieveTranscriptionStatus(jobId);
 
-            if (result.status === 'done') {
-                const sieveResult = result.result;
-                const words = [];
-                let fullText = "";
+          if (result.status === 'done') {
+              const sieveResult = result.result;
+              const words = [];
+              let fullText = "";
 
-                // Parcourir tous les segments pour extraire les mots
-                for (const segment of sieveResult.segments) {
-                    fullText += segment.text + " ";
-                    // Appliquer la fusion des mots avec apostrophe pour chaque segment
-                    const mergedWords = mergeApostropheWords(segment.words);
-                    words.push(...mergedWords);
-                }
+              // Parcourir tous les segments pour extraire les mots
+              for (const segment of sieveResult.segments) {
+                  fullText += segment.text + " ";
+                  // Appliquer la fusion des mots avec apostrophe pour chaque segment
+                  const mergedWords = mergeApostropheWords(segment.words);
+                  words.push(...mergedWords);
+              }
 
-                return {
-                    text: fullText.trim(),
-                    raw: {
-                        task: "transcribe",
-                        text: fullText.trim(),
-                        duration: words.length > 0 ? words[words.length - 1].end : 0,
-                        language: sieveResult.language_code,
-                        segments: null,
-                        words: words
-                    }
-                };
-            }
-            return null;
-        } catch (error: any) {
-            logger.error("Erreur de transcription Sieve:", error.message);
-            return null;
-        }
-    }
+              return {
+                  text: fullText.trim(),
+                  raw: {
+                      task: "transcribe",
+                      text: fullText.trim(),
+                      duration: words.length > 0 ? words[words.length - 1].end : 0,
+                      language: sieveResult.language_code,
+                      segments: null,
+                      words: words
+                  }
+              };
+          }
+          return null;
+      } catch (error: any) {
+          logger.error("Erreur de transcription Sieve:", error.message);
+          return null;
+      }
+  }
 
-    return null;
+  return null;
 }
 
 /**
