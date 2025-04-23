@@ -23,7 +23,7 @@ export function GenerationProgress() {
         return <Search className="h-3.5 w-3.5 text-gray-500" />;
       case Steps.ANALYZE_YOUR_MEDIA:
         return <Sparkle className="h-3.5 w-3.5 text-gray-500" />;
-      case Steps.ANALYZE_NEW_MEDIA:
+      case Steps.ANALYZE_FOUND_MEDIA:
         return <Sparkle className="h-3.5 w-3.5 text-gray-500" />;
       default:
         return <Clock className="h-3.5 w-3.5 text-gray-500" />;

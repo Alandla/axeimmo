@@ -30,6 +30,13 @@ export function simplifyMedia(media: IMedia[]): SimpleMedia[] {
   }));
 }
 
+export function simplifyMediaFromPexels(result: any[]): any[] {
+  return result.map((r, index) => ({
+    id: index,
+    description: r.media.description?.[0]?.text || ''
+  }));
+}
+
 export interface ShowBrollResult {
   cost: number;
   show: Array<{

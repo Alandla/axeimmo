@@ -2,8 +2,6 @@ import { logger } from "@trigger.dev/sdk/v3";
 import { ISequence, IWord } from "../types/video";
 import axios from "axios";
 import FormData from "form-data";
-import Groq from "groq-sdk";
-import { wait } from "@trigger.dev/sdk/v3";
 
 interface Utterance {
   text: string;
@@ -91,17 +89,12 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
         }))
       }
 
-      logger.info('Adjusted utterances', { adjusted });
-
       // Créer les séquences pour cette phrase
       const s: ISequence[] = splitIntoSequences(adjusted, sentences[i].index);
 
-      logger.info('Sequences', { s });
       finalSequences.push(...s);
 
       timeOffset = adjusted.end;
-
-      logger.info('Time offset', { timeOffset });
     }
 
   }

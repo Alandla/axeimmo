@@ -284,7 +284,7 @@ export function AiChat() {
     let messageAi = '';
     if (selectedLook) {
       messageUser1 = getRandomMessage('user-select-avatar', { "name": selectedLook?.name || '' });
-      addStep({ id: 5, name: Steps.ANALYZE_NEW_MEDIA, state: StepState.PENDING, progress: 0 })
+      addStep({ id: 5, name: Steps.ANALYZE_FOUND_MEDIA, state: StepState.PENDING, progress: 0 })
     } else {
       messageUser1 = getRandomMessage('user-no-avatar');
     }

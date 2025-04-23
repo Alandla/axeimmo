@@ -46,6 +46,7 @@
     "@trigger.dev/sdk": "3.3.17",
     "@types/canvas-confetti": "^1.6.4",
     "@vercel/functions": "^2.0.0",
+    "@workflowai/workflowai": "^1.6.7",
     "ai": "^3.4.33",
     "axios": "^1.7.7",
     "canvas-confetti": "^1.9.3",
