@@ -267,7 +267,7 @@ export const getTranscription = async (audioUrl: string, text?: string) => {
             const formData = new FormData();
 
             formData.append('url', audioUrl);
-            formData.append('model', 'whisper-large-v3');
+            formData.append('model', 'whisper-large-v3-turbo');
             
             if (text) {
               formData.append('prompt', text);
