@@ -15,15 +15,14 @@ import sentencesNoTranscriptionMock from "../test/mockup/sentencesNoTranscriptio
 import sentencesWithNewTranscriptionMock from "../test/mockup/sentencesWithNewTranscription.json";
 
 import { createLightTranscription, getTranscription, ISentence, splitSentences } from "../lib/transcription";
-import { generateKeywords } from "../lib/keywords";
 import { calculateElevenLabsCost } from "../lib/cost";
-import { mediaToMediaSpace, searchMediaForSequence, searchMediaForKeywords } from "../service/media.service";
+import { mediaToMediaSpace, searchMediaForKeywords } from "../service/media.service";
 import { IMedia, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
-import { generateBrollDisplay, generateStartData, matchMediaToSequences } from "../lib/ai";
+import { generateStartData } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
-import { analyzeSimpleVideoWithSieve, analyzeVideoWithSieve, getAnalysisResult, getJobCost, SieveCostResponse } from "../lib/sieve";
-import { applyShowBrollToSequences, ShowBrollResult, simplifyMedia, simplifyMediaFromPexels, simplifySequences } from "../lib/analyse";
+import { getJobCost, SieveCostResponse } from "../lib/sieve";
+import { simplifyMediaFromPexels, simplifySequences } from "../lib/analyse";
 import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
 import { addMediasToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
@@ -768,11 +767,7 @@ export const generateVideoTask = task({
         });
         
         try {
-          const sequencesForDisplay = sequences.map((seq, index) => ({
-            sequence_id: String(index),
-            text: seq.text,
-            b_roll_description: seq.media?.description?.[0]?.text || ""
-          }));
+          const sequencesForDisplay = simplifySequences(sequences)
           
           const { displayModes, cost: displayModeCost } = await selectBRollDisplayModes(sequencesForDisplay);
           cost += displayModeCost;

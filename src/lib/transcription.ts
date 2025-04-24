@@ -194,58 +194,6 @@ function mergeShortSequences(sequences: ISequence[]): ISequence[] {
   return result;
 }
 
-export function combineTranscriptions(sentences: any[]): any {
-  let combinedTranscription = {
-      metadata: {
-          audio_duration: 0,
-          number_of_distinct_channels: 1,
-          billing_time: 0,
-          transcription_time: 0
-      },
-      transcription: {
-          languages: ["fr"],
-          utterances: [] as any[],
-          full_transcript: ""
-      }
-  };
-
-  let timeOffset = 0;
-  let fullTranscript: any[] = [];
-
-  sentences.forEach(sentence => {
-      const trans = sentence.transcription;
-      
-      // Mettre à jour les métadonnées
-      combinedTranscription.metadata.audio_duration += trans.metadata.audio_duration;
-      combinedTranscription.metadata.billing_time += trans.metadata.billing_time;
-      combinedTranscription.metadata.transcription_time += trans.metadata.transcription_time;
-
-      // Ajuster les timings pour chaque utterance
-      trans.transcription.utterances.forEach((utterance: any) => {
-          const adjustedUtterance = {
-              ...utterance,
-              start: utterance.start + timeOffset,
-              end: utterance.end + timeOffset,
-              audioIndex: sentence.index,
-              words: utterance.words.map((word: any) => ({
-                  ...word,
-                  start: word.start + timeOffset,
-                  end: word.end + timeOffset
-              }))
-          };
-          combinedTranscription.transcription.utterances.push(adjustedUtterance);
-      });
-
-      fullTranscript.push(trans.transcription.full_transcript);
-      const lastUtterance = trans.transcription.utterances[trans.transcription.utterances.length - 1];
-      timeOffset += lastUtterance ? lastUtterance.end : 0;
-  });
-
-  combinedTranscription.transcription.full_transcript = fullTranscript.join(" ");
-
-  return combinedTranscription;
-}
-
 /**
  * Fusionne les mots avec apostrophe avec le mot précédent
  */
@@ -355,43 +303,4 @@ export const getTranscription = async (audioUrl: string, text?: string) => {
   }
 
   return null;
-}
-
-/**
- * Transcrit toutes les sentences en parallèle et ajoute les résultats aux sentences
- * @param sentences Liste des sentences à transcrire
- * @returns Les sentences avec les résultats de transcription
- */
-export const transcribeAllSentences = async (sentences: ISentence[]) => {
-    try {
-        const transcriptionPromises = sentences.map(sentence => 
-            getTranscription(sentence.audioUrl, sentence.text)
-        );
-
-        const transcriptionResults = await Promise.all(transcriptionPromises);
-
-        return sentences.map((sentence, index) => {
-            const transcriptionResult = transcriptionResults[index];
-            
-            if (!transcriptionResult) {
-                return sentence;
-            }
-
-            const words = transcriptionResult.raw.words
-            
-            return {
-                ...sentence,
-                transcription: {
-                  text: transcriptionResult.text,
-                  language: transcriptionResult.raw.language,
-                  start: words.length > 0 ? words[0].start : 0,
-                  end: words.length > 0 ? words[words.length - 1].end : 0,
-                  words: words
-                }
-            };
-        });
-    } catch (error: any) {
-        console.error("Erreur lors de la transcription des sentences:", error);
-        return sentences; // En cas d'erreur, on retourne les sentences inchangées
-    }
 }
