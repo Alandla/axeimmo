@@ -133,7 +133,7 @@ const videoBRollSelection = workflowAI.agent<VideoBRollSelectionInput, VideoBRol
 const bRollDisplayModeSelection = workflowAI.agent<BRollDisplayModeSelectionInput, BRollDisplayModeSelectionOutput>({
   id: "broll-display-mode-selection",
   schemaId: 2,
-  version: "3.1",
+  version: "production",
   useCache: process.env.NODE_ENV === 'development' ? 'never' : 'auto'
 })
 
@@ -147,7 +147,7 @@ const videoSequenceAnalysis = workflowAI.agent<VideoSequenceAnalysisInput, Video
 const mediaSequenceMatching = workflowAI.agent<MediaSequenceMatchingInput, MediaSequenceMatchingOutput>({
   id: "media-sequence-matching",
   schemaId: 1,
-  version: "2.1",
+  version: "production",
   useCache: process.env.NODE_ENV === 'development' ? 'never' : 'auto'
 })
 
