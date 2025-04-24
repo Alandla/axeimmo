@@ -268,8 +268,6 @@ export const generateStartData = async (script: string) => {
             ],
         });
 
-        logger.info("Result", { text: result?.text });
-
         const jsonResponse = JSON.parse(result.text);
 
         const data = {

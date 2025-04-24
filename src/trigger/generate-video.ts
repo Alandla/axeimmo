@@ -66,6 +66,7 @@ export const generateVideoTask = task({
     const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
+    let scriptLength = payload.script ? payload.script.length : 0;
 
     logger.log("Generating video...", { payload, ctx });
 
@@ -214,8 +215,8 @@ export const generateVideoTask = task({
           keywords = resultKeywords?.output?.keywords || []
           cost += resultKeywords?.cost || 0
 
-          logger.info('Keywords', { keywords: resultKeywords?.output?.keywords || [] })
-          logger.info('Cost', { cost: resultKeywords?.cost || 0 })
+          logger.log('[KEYWORDS] Result', { keywords: resultKeywords?.output?.keywords || [] })
+          logger.log('[KEYWORDS] Cost', { cost: resultKeywords?.cost || 0 })
           return keywords
         })
 
@@ -296,7 +297,7 @@ export const generateVideoTask = task({
       let processedCount = 0;
 
       // Process sentences by batches of 5
-      for (let i = 0; i < rawSentences.length; i += 5) {
+      for (let i = 0; i < rawSentences.length; i += 15) {
         const batch = rawSentences.slice(i, Math.min(i + 5, rawSentences.length));
         
         const batchPromises = batch.map(async (text, batchIndex) => {
@@ -460,7 +461,7 @@ export const generateVideoTask = task({
     // Si pas de script en entrée, générer les mots-clés à partir du script transcrit
     if (!payload.script && !keywordsPromise) {
       const script = lightTranscription.map(item => item.text).join(' ');
-      
+      scriptLength = script.length;
       const startData = generateStartData(script).then((data) => {
         logger.info('Start data', data?.details)
         videoStyle = data?.details.style
@@ -491,8 +492,8 @@ export const generateVideoTask = task({
           keywords = resultKeywords?.output?.keywords || []
           cost += resultKeywords?.cost || 0
 
-          logger.info('Keywords from transcription', { keywords: resultKeywords?.output?.keywords || [] })
-          logger.info('Cost', { cost: resultKeywords?.cost || 0 })
+          logger.log('[KEYWORDS] Result', { keywords: resultKeywords?.output?.keywords || [] })
+          logger.log('[KEYWORDS] Cost', { cost: resultKeywords?.cost || 0 })
           return keywords
         })
 
@@ -530,11 +531,15 @@ export const generateVideoTask = task({
     if (isDevelopment) {
       sequences = sequencesWithMediaMock as ISequence[]
     } else {
-      // Utiliser la nouvelle fonction pour récupérer une liste de médias pour tous les mots-clés
-      logger.log(`[MEDIA] Searching media for all keywords...`);
-      logger.log(`[MEDIA] Keywords`, { keywords })
-      mediaResults = await searchMediaForKeywords(keywords, mediaSource);
-      logger.log(`[MEDIA] Found ${mediaResults.length} media results for all keywords`);
+
+      let mediaCount = 6;
+      
+      // Si plus de 2000 caractères, on ajoute 5 mots-clés
+      if (scriptLength > 2000) {
+        mediaCount += 4;
+      }
+
+      mediaResults = await searchMediaForKeywords(keywords, mediaSource, mediaCount);
 
       await metadata.replace({
         name: Steps.SEARCH_MEDIA,
@@ -571,11 +576,6 @@ export const generateVideoTask = task({
             if (media.type === 'video' && media.video_pictures && media.video_pictures.length >= 4) {
               // Extraire 4 images de preview de la vidéo
               const videoPreviewUrls = media.video_pictures.slice(0, 4).map((pic: { link?: string, picture?: string }) => pic.link || pic.picture);
-              
-              logger.log(`[ANALYZE] Generating description for media ${index + 1}/${totalMedias}`, { 
-                mediaId: media.video?.id,
-                keyword: mediaResult.keyword
-              });
               
               // Générer la description avec WorkflowAI
               const { description, cost } = await generateVideoDescription(videoPreviewUrls);
@@ -672,12 +672,10 @@ export const generateVideoTask = task({
     }
 
     logger.info('Simplified media', { simplifiedMedia })
-    logger.info('Simplified sequences', { lightTranscription })
     const inputAnalyse = {
       sequence_list: lightTranscription,
       b_roll_list: simplifiedMedia
     }
-    logger.info('Input analyse', { inputAnalyse })
 
     // Utiliser l'IA pour sélectionner les meilleurs B-Rolls pour chaque séquence et matcher les médias analysés
     logger.log(`[BROLL] Selecting best B-Rolls and matching media for sequences...`)
@@ -817,7 +815,6 @@ export const generateVideoTask = task({
       });
     }
 
-    logger.info('Sequences taille', { size: sequences.length })
     logger.info('Sequences', { sequences })
 
     let avatar;
@@ -830,7 +827,6 @@ export const generateVideoTask = task({
     }
 
     let videoMusic;
-    logger.info('Video style', { videoStyle })
     if (videoStyle) {
       let style = videoStyle as Genre
       const matchingMusics = music.filter((m: any) => m.genre === style)
@@ -870,8 +866,6 @@ export const generateVideoTask = task({
         mode: randomTransition.mode
       };
     });
-
-    logger.info('Auto transitions', { autoTransitions })
 
     const space : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
 

@@ -42,24 +42,22 @@ export const searchMediaForSequence = async (sequence: any, index: number, keywo
  * Récupère une liste de médias pour tous les mots clés donnés
  * @param keywords Objet avec un tableau de mots clés { keywords: [string, string, ...] }
  * @param mediaSource Source des médias (PEXELS ou STORYBLOCKS)
+ * @param mediaCount Nombre de médias à récupérer
  * @returns Liste de médias avec leurs mots clés associés
  */
-export const searchMediaForKeywords = async (keywords: any, mediaSource: string) => {
-  logger.log('Recherche de médias pour les mots clés', { keywords, count: keywords.length });
-  
-  // Préparer les promesses pour toutes les recherches en parallèle
+export const searchMediaForKeywords = async (keywords: any, mediaSource: string, mediaCount: number) => {
+
   const searchPromises = keywords.map(async (keyword: string) => {
     if (!keyword) return [];
     
     try {
-      logger.log('Démarrage recherche pour mot clé', { keyword });
       
       // Récupérer 6 vidéos pour ce mot clé
       let mediasResult: any[] = [];
       if (mediaSource === "PEXELS") {
-        mediasResult = await getPexelsVideosMedia(keyword, 6, 1);
+        mediasResult = await getPexelsVideosMedia(keyword, mediaCount, 1);
       } else if (mediaSource === "STORYBLOCKS") {
-        mediasResult = await getStoryblocksVideosMedia(keyword, 6, 1);
+        mediasResult = await getStoryblocksVideosMedia(keyword, mediaCount, 1);
       }
       
       // Convertir les résultats au format attendu
@@ -70,11 +68,6 @@ export const searchMediaForKeywords = async (keywords: any, mediaSource: string)
         } as IMedia,
         keyword
       }));
-      
-      logger.log('Médias trouvés pour le mot clé', { 
-        keyword, 
-        count: mediasResult.length 
-      });
       
       return formattedResults;
     } catch (error) {
@@ -91,11 +84,6 @@ export const searchMediaForKeywords = async (keywords: any, mediaSource: string)
   
   // Aplatir le tableau de tableaux en un seul tableau de résultats
   const results = resultsArrays.flat();
-  
-  logger.log('Résultat final de la recherche de médias', { 
-    totalMedias: results.length, 
-    uniqueKeywords: Array.from(new Set(results.map(r => r.keyword))).length 
-  });
   
   return results;
 };

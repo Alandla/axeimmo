@@ -29,7 +29,6 @@ export const getPexelsVideosMedia = async (keyword: string, number: number, page
     const videos = await getVideoPexels(keyword, number, page);
     if ('videos' in videos) {
         const videoBestQuality = getVideosBestQuality(videos.videos);
-        logger.log('Video best quality', { videoBestQuality });
         return pexelVideoToMedia(videoBestQuality);
     }
     return [];
