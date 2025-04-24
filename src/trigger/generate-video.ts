@@ -391,7 +391,7 @@ export const generateVideoTask = task({
       try {
         const totalSentences = sentences.length;
         let transcribedCount = 0;
-
+        let transcriptionCost = 0;
         const transcriptionPromises = sentences.map(async (sentence, index) => {
           try {
             const transcriptionResult = await getTranscription(sentence.audioUrl, sentence.text);
@@ -408,6 +408,9 @@ export const generateVideoTask = task({
             });
             
             logger.info(`Transcription ${index + 1}/${totalSentences} completed`, { transcriptionResult });
+
+            transcriptionCost += transcriptionResult.cost;
+
             
             const words = transcriptionResult.raw.words;
             
@@ -428,8 +431,9 @@ export const generateVideoTask = task({
         });
 
         sentences = await Promise.all(transcriptionPromises);
+        cost += transcriptionCost;
         
-        logger.info(`All sentences transcribed`, { totalCount: sentences.length });
+        logger.info(`All sentences transcribed`, { totalCount: sentences.length, cost: transcriptionCost });
       } catch (error) {
         logger.error('Error in transcription process', { errorMessage: error instanceof Error ? error.message : String(error) });
       }

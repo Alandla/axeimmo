@@ -3,6 +3,7 @@ import { ISequence, IWord } from "../types/video";
 import axios from "axios";
 import FormData from "form-data";
 import { createSieveTranscription, pollSieveTranscriptionStatus } from "./sieve";
+import { calculateWhisperGroqCost, calculateWhisperSieveCost } from "./cost";
 
 interface Utterance {
   text: string;
@@ -257,15 +258,16 @@ function validateTranscriptionTimings(transcription: any): boolean {
  * Récupère la transcription d'un fichier audio à partir d'une URL
  */
 export const getTranscription = async (audioUrl: string, text?: string) => {
-    const MAX_GROQ_ATTEMPTS = 3;
+    const MAX_GROQ_ATTEMPTS = 4;
     let attempts = 0;
+    let cost = 0;
 
-    // Première tentative avec Groq
     while (attempts < MAX_GROQ_ATTEMPTS) {
         try {
             const formData = new FormData();
             formData.append('url', audioUrl);
-            formData.append('model', 'whisper-large-v3');
+            const isTurbo = attempts >= 2;
+            formData.append('model', isTurbo ? 'whisper-large-v3-turbo' : 'whisper-large-v3');
             
             if (text) {
                 formData.append('prompt', text);
@@ -286,10 +288,14 @@ export const getTranscription = async (audioUrl: string, text?: string) => {
             );
 
             validateTranscriptionTimings(response.data);
+            
+            // Calculer le coût en fonction du modèle utilisé
+            cost = calculateWhisperGroqCost(response.data.duration, isTurbo);
 
             return {
                 text: response.data.text,
-                raw: response.data
+                raw: response.data,
+                cost
             };
         } catch (error: any) {
             attempts++;
@@ -314,6 +320,7 @@ export const getTranscription = async (audioUrl: string, text?: string) => {
         const result = await pollSieveTranscriptionStatus(jobId);
 
         if (result.status === 'done') {
+            let duration = 0;
             const sieveResult = result.result;
             const words = [];
             let fullText = "";
@@ -324,18 +331,22 @@ export const getTranscription = async (audioUrl: string, text?: string) => {
                 // Appliquer la fusion des mots avec apostrophe pour chaque segment
                 const mergedWords = mergeApostropheWords(segment.words);
                 words.push(...mergedWords);
+                duration += segment.end - segment.start;
             }
+
+            cost = calculateWhisperSieveCost(duration);
 
             return {
                 text: fullText.trim(),
                 raw: {
                     task: "transcribe",
                     text: fullText.trim(),
-                    duration: words.length > 0 ? words[words.length - 1].end : 0,
+                    duration: duration,
                     language: sieveResult.language_code,
                     segments: null,
                     words: words
-                }
+                },
+                cost
             };
         }
     } catch (error: any) {
