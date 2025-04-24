@@ -128,19 +128,22 @@ export function AiChat() {
         addStep({ id: 1, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
         
         if (files.some(file => file.usage === 'media')) {
-          addStep({ id: 3, name: Steps.ANALYZE_YOUR_MEDIA, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 6, name: Steps.ANALYZE_YOUR_MEDIA, state: StepState.PENDING, progress: 0 })
         }
 
         if (files.some(file => file.usage === 'voice')) {
-          addStep({ id: 2, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.AVATAR)
           const messageAi = getRandomMessage('ai-get-audio-select-avatar');
           addMessageAi(messageAi, MessageType.AVATAR);
           return;
         } else if (files.some(file => file.usage === 'avatar')) {
-          addStep({ id: 2, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
           addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
-          addStep({ id: 5, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 5, name: Steps.ANALYZE_FOUND_MEDIA, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 7, name: Steps.PLACE_BROLL, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 8, name: Steps.DISPLAY_BROLL, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 9, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.GENERATION)
           const messageAi = getRandomMessage('ai-get-all-start-generation');
           addMessageAi(messageAi, MessageType.GENERATION);
@@ -266,11 +269,11 @@ export function AiChat() {
     // Ajout de l'étape QUEUE avant les autres étapes si elle n'existe pas déjà
     const hasQueueStep = useCreationStore.getState().steps.some(step => step.name === Steps.QUEUE);
     if (!hasQueueStep) {
-      addStep({ id: 0, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
+      addStep({ id: 1, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
     }
     
-    addStep({ id: 1, name: Steps.VOICE_GENERATION, state: StepState.PENDING, progress: 0 })
-    addStep({ id: 2, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 2, name: Steps.VOICE_GENERATION, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.AVATAR);
     const messageUser = getRandomMessage('user-select-voice', { "name": selectedVoice?.name || '' });
     const messageAi = getRandomMessage('ai-select-avatar');
@@ -284,7 +287,7 @@ export function AiChat() {
     let messageAi = '';
     if (selectedLook) {
       messageUser1 = getRandomMessage('user-select-avatar', { "name": selectedLook?.name || '' });
-      addStep({ id: 5, name: Steps.ANALYZE_FOUND_MEDIA, state: StepState.PENDING, progress: 0 })
+      addStep({ id: 8, name: Steps.DISPLAY_BROLL, state: StepState.PENDING, progress: 0 })
     } else {
       messageUser1 = getRandomMessage('user-no-avatar');
     }
@@ -296,12 +299,13 @@ export function AiChat() {
     // Ajout de l'étape QUEUE avant les autres étapes
     const hasQueueStep = useCreationStore.getState().steps.some(step => step.name === Steps.QUEUE);
     if (!hasQueueStep) {
-      addStep({ id: 3, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
+      addStep({ id: 1, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
     }
     
     addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
-    // Ajout de l'étape REDIRECTING à la fin
-    addStep({ id: 6, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 5, name: Steps.ANALYZE_FOUND_MEDIA, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 7, name: Steps.PLACE_BROLL, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 9, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
     
     setCreationStep(CreationStep.GENERATION)
     handleStartGeneration()

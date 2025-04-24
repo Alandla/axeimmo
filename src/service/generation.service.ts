@@ -82,10 +82,22 @@ export const handleRunUpdate = (run: any, spaceId: string) => {
       setSteps(updatedSteps);
     };
 
-    // Si on change d'étape, on complète l'étape précédente
+    // Si on change d'étape, on complète toutes les étapes précédentes
     const lastStep = useCreationStore.getState().lastStep;
+    const currentSteps = useCreationStore.getState().steps;
     if (lastStep && run.metadata?.name !== lastStep) {
       updateStepProgress(lastStep as Steps, 100);
+      // Trouver l'index de la nouvelle étape
+      const stepOrder = Object.values(Steps);
+      const newStepIndex = stepOrder.indexOf(run.metadata?.name as Steps);
+      
+      // Mettre à 100% toutes les étapes précédentes qui ne sont pas complètes
+      currentSteps.forEach(step => {
+        const stepIndex = stepOrder.indexOf(step.name);
+        if (stepIndex < newStepIndex && step.progress < 100) {
+          updateStepProgress(step.name, 100);
+        }
+      });
     }
     
     // Mettre à jour l'étape actuelle
@@ -94,16 +106,8 @@ export const handleRunUpdate = (run: any, spaceId: string) => {
     
     // Quand le processus est terminé
     if (run.status === "COMPLETED") {
-      updateStepProgress(Steps.REDIRECTING, 20)
+      updateStepProgress(Steps.REDIRECTING, 80)
       videoId = run.output?.videoId as string;
-      
-      if (videoId && spaceId) {
-        try {
-          useVideosStore.getState().fetchVideos(spaceId, true);
-        } catch (e) {
-          console.error('Erreur lors de la mise à jour du cache vidéo:', e);
-        }
-      }
       
       // Générer la miniature
       if (videoId) {

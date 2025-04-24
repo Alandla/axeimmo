@@ -217,90 +217,130 @@ const mergeApostropheWords = (words: Array<{ word: string; start: number; end: n
     return mergedWords;
 };
 
+class InvalidTimingsError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidTimingsError';
+  }
+}
+
 /**
- * Récupère la transcription d'un fichier audio à partir d'une URL
- * @param audioUrl URL du fichier audio à transcrire
- * @param text Texte optionnel pour guider la transcription
- * @returns La transcription du fichier audio
+ * Vérifie si les timings de la transcription sont valides
  */
-export const getTranscription = async (audioUrl: string, text?: string) => {
-  const useGroq = false;
-  if (useGroq) {
-      let attempts = 0;
-      const maxAttempts = 6;
-      while (attempts < maxAttempts) {
-          try {
-              const formData = new FormData();
-              formData.append('url', audioUrl);
-              formData.append('model', 'whisper-large-v3-turbo');
-              
-              if (text) {
-                  formData.append('prompt', text);
-              }
-              
-              formData.append('response_format', 'verbose_json');
-              formData.append('timestamp_granularities[]', 'word');
-              
-              const response = await axios.post(
-                  'https://api.groq.com/openai/v1/audio/transcriptions',
-                  formData,
-                  {
-                      headers: {
-                          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-                          ...formData.getHeaders()
-                      }
-                  }
-              );
+function validateTranscriptionTimings(transcription: any): boolean {
+  const duration = transcription.duration;
+  const words = transcription.words;
 
-              return {
-                  text: response.data.text,
-                  raw: response.data
-              };
-          } catch (error: any) {
-              attempts++;
-              logger.error(`Erreur de transcription Groq (tentative ${attempts}):`, { error: error.response });
-              if (attempts >= maxAttempts) {
-                  console.error("Erreur de transcription Groq:", error.response?.data || error.message);
-                  return null;
-              }
-          }
-      }
-  } else {
-      try {
-          const jobId = await createSieveTranscription(audioUrl, text);
-          const result = await pollSieveTranscriptionStatus(jobId);
+  if (!words || words.length === 0) return true;
 
-          if (result.status === 'done') {
-              const sieveResult = result.result;
-              const words = [];
-              let fullText = "";
-
-              // Parcourir tous les segments pour extraire les mots
-              for (const segment of sieveResult.segments) {
-                  fullText += segment.text + " ";
-                  // Appliquer la fusion des mots avec apostrophe pour chaque segment
-                  const mergedWords = mergeApostropheWords(segment.words);
-                  words.push(...mergedWords);
-              }
-
-              return {
-                  text: fullText.trim(),
-                  raw: {
-                      task: "transcribe",
-                      text: fullText.trim(),
-                      duration: words.length > 0 ? words[words.length - 1].end : 0,
-                      language: sieveResult.language_code,
-                      segments: null,
-                      words: words
-                  }
-              };
-          }
-          return null;
-      } catch (error: any) {
-          logger.error("Erreur de transcription Sieve:", error.message);
-          return null;
-      }
+  // Vérifie si le premier mot commence après la durée totale
+  if (words[0].start > duration) {
+    logger.log('Invalid timing: first word starts after audio duration', { transcription })
+    throw new InvalidTimingsError(`Invalid timing: first word starts after audio duration (${words[0].start}s > ${duration}s)`);
   }
 
-  return null;
+  // Vérifie si le dernier mot se termine après la durée totale avec une marge de tolérance de 0.1s
+  if (words[words.length - 1].end > duration + 0.1) {
+    throw new InvalidTimingsError(`Invalid timing: last word ends after audio duration (${words[words.length - 1].end}s > ${duration}s)`);
+  }
+
+  // Vérifie si le premier mot commence après 1 seconde
+  if (words[0].start > 1) {
+    logger.log('Invalid timing: first word starts after 1 second', { transcription })
+    throw new InvalidTimingsError(`Invalid timing: first word starts too late (${words[0].start}s > 1s)`);
+  }
+
+  return true;
+}
+
+/**
+ * Récupère la transcription d'un fichier audio à partir d'une URL
+ */
+export const getTranscription = async (audioUrl: string, text?: string) => {
+    const MAX_GROQ_ATTEMPTS = 3;
+    let attempts = 0;
+
+    // Première tentative avec Groq
+    while (attempts < MAX_GROQ_ATTEMPTS) {
+        try {
+            const formData = new FormData();
+            formData.append('url', audioUrl);
+            formData.append('model', 'whisper-large-v3');
+            
+            if (text) {
+                formData.append('prompt', text);
+            }
+            
+            formData.append('response_format', 'verbose_json');
+            formData.append('timestamp_granularities[]', 'word');
+            
+            const response = await axios.post(
+                'https://api.groq.com/openai/v1/audio/transcriptions',
+                formData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+                        ...formData.getHeaders()
+                    }
+                }
+            );
+
+            validateTranscriptionTimings(response.data);
+
+            return {
+                text: response.data.text,
+                raw: response.data
+            };
+        } catch (error: any) {
+            attempts++;
+            if (error instanceof InvalidTimingsError) {
+                logger.error(`Erreur de timing Groq (tentative ${attempts}/${MAX_GROQ_ATTEMPTS}):`, { error: error.message });
+            } else {
+                logger.error(`Erreur de transcription Groq (tentative ${attempts}/${MAX_GROQ_ATTEMPTS}):`, { error: error.response });
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Attendre 1 seconde entre les tentatives
+
+            if (attempts >= MAX_GROQ_ATTEMPTS) {
+                logger.warn("Échec des tentatives Groq, basculement vers Sieve");
+                break;
+            }
+        }
+    }
+
+    // Fallback vers Sieve si Groq a échoué
+    try {
+        const jobId = await createSieveTranscription(audioUrl, text);
+        const result = await pollSieveTranscriptionStatus(jobId);
+
+        if (result.status === 'done') {
+            const sieveResult = result.result;
+            const words = [];
+            let fullText = "";
+
+            // Parcourir tous les segments pour extraire les mots
+            for (const segment of sieveResult.segments) {
+                fullText += segment.text + " ";
+                // Appliquer la fusion des mots avec apostrophe pour chaque segment
+                const mergedWords = mergeApostropheWords(segment.words);
+                words.push(...mergedWords);
+            }
+
+            return {
+                text: fullText.trim(),
+                raw: {
+                    task: "transcribe",
+                    text: fullText.trim(),
+                    duration: words.length > 0 ? words[words.length - 1].end : 0,
+                    language: sieveResult.language_code,
+                    segments: null,
+                    words: words
+                }
+            };
+        }
+    } catch (error: any) {
+        logger.error("Erreur de transcription Sieve:", error.message);
+    }
+
+    return null;
 }

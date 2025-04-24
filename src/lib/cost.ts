@@ -15,7 +15,7 @@ export function calculateAnthropicCost(usage: TokenUsage): number {
 }
 
 export function calculateElevenLabsCost(text: string, isTurbo: boolean = false): number {
-  const COST_PER_1000_CHARS = 0.30;
+  const COST_PER_1000_CHARS = 0.12;
   const TURBO_DISCOUNT = 0.5;
 
   // Calculer le coût de base pour 1000 caractères

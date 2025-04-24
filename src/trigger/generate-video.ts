@@ -201,11 +201,6 @@ export const generateVideoTask = task({
 
       logger.log(`[KEYWORDS] Starting keyword generation in parallel...`)
 
-      await metadata.replace({
-        name: Steps.SEARCH_MEDIA,
-        progress: 0
-      })
-
       if (isDevelopment) {
         keywordsPromise = Promise.resolve(keywordsMock)
       } else {
@@ -263,8 +258,10 @@ export const generateVideoTask = task({
 
       const sentencesCut = payload.script
         .replace(/\.\.\./g, '___ELLIPSIS___') // Remplace temporary points of ellipsis
-        .match(/[^.!?]+[.!?]+/g) || [payload.script];
-      
+        .split(/(?<=[.!?])\s+(?=[A-Z])/g)
+        .map(sentence => sentence.trim())
+        .filter(sentence => sentence.length > 0);
+
       // Restore ellipsis
       const processedSentencesCut = sentencesCut.map(sentence => 
         sentence.replace(/___ELLIPSIS___/g, '...')
@@ -297,7 +294,7 @@ export const generateVideoTask = task({
 
       // Process sentences by batches of 5
       for (let i = 0; i < rawSentences.length; i += 15) {
-        const batch = rawSentences.slice(i, Math.min(i + 5, rawSentences.length));
+        const batch = rawSentences.slice(i, Math.min(i + 15, rawSentences.length));
         
         const batchPromises = batch.map(async (text, batchIndex) => {
           const globalIndex = i + batchIndex; // Global index to maintain order
@@ -368,6 +365,11 @@ export const generateVideoTask = task({
         audioUrl: avatarFile.video?.link || "",
       })
     }
+
+    await metadata.replace({
+      name: Steps.VOICE_GENERATION,
+      progress: 100
+    });
 
     logger.log(`[VOICE] Voice generation done`)
 
@@ -479,11 +481,6 @@ export const generateVideoTask = task({
       // Générer les mots-clés maintenant que nous avons le script transcrit
       logger.log(`[KEYWORDS] Starting keyword generation from transcription...`)
 
-      await metadata.replace({
-        name: Steps.SEARCH_MEDIA,
-        progress: 0
-      })
-
       if (isDevelopment) {
         keywordsPromise = Promise.resolve(keywordsMock)
       } else {
@@ -540,13 +537,13 @@ export const generateVideoTask = task({
 
       mediaResults = await searchMediaForKeywords(keywords, mediaSource, mediaCount);
 
+      logger.log(`[MEDIA] Media search completed with ${mediaResults.length} medias for ${Array.from(new Set(mediaResults.map(r => r.keyword))).length} unique keywords`);
+      
       await metadata.replace({
         name: Steps.SEARCH_MEDIA,
         progress: 100,
       });
 
-      logger.log(`[MEDIA] Media search completed with ${mediaResults.length} medias for ${Array.from(new Set(mediaResults.map(r => r.keyword))).length} unique keywords`);
-      
       /*
       /
       /   Analyze media from stock with WorkflowAI
@@ -598,6 +595,12 @@ export const generateVideoTask = task({
                   description: description.substring(0, 100) + '...'
                 });
               }
+
+              await metadata.replace({
+                name: Steps.ANALYZE_FOUND_MEDIA,
+                progress: Math.round((completedAnalyses / totalMedias) * 100)
+              });
+
             } else {
               logger.info(`[ANALYZE] Skipping media ${index + 1} (not a video or insufficient preview images)`, {
                 mediaId: media.video?.id || media.image?.id,
@@ -809,6 +812,11 @@ export const generateVideoTask = task({
         error: error instanceof Error ? error.message : String(error) 
       });
     }
+
+    await metadata.replace({
+      name: Steps.REDIRECTING,
+      progress: 20
+    });
 
     logger.info('Sequences', { sequences })
 
