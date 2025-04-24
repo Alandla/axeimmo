@@ -1,164 +1,257 @@
 [
-  {
-    "text": "Ceci est un exemple de script mockup.",
-    "index": 0,
-    "audioUrl": "https://media.hoox.video/8ce026c3-ec20-45d8-9452-5f3a324716b1.mp3",
-    "transcription": {
-      "text": "Ceci est un exemple de script mockup.",
-      "language_code": "fr",
-      "segments": [
-        {
-          "end": 1.72,
-          "text": " Ceci est un exemple de script mockup.",
-          "start": 0.12,
-          "words": [
-            {
-              "end": 0.28,
-              "word": " Ceci",
-              "start": 0.12,
-              "confidence": 0.978759765625
-            },
-            {
-              "end": 0.38,
-              "word": " est",
-              "start": 0.28,
-              "confidence": 0.9990234375
-            },
-            {
-              "end": 0.48,
-              "word": " un",
-              "start": 0.38,
-              "confidence": 0.99755859375
-            },
-            {
-              "end": 0.82,
-              "word": " exemple",
-              "start": 0.48,
-              "confidence": 0.998046875
-            },
-            {
-              "end": 1.04,
-              "word": " de",
-              "start": 0.82,
-              "confidence": 0.99658203125
-            },
-            {
-              "end": 1.34,
-              "word": " script",
-              "start": 1.04,
-              "confidence": 0.8369140625
-            },
-            {
-              "end": 1.72,
-              "word": " mockup.",
-              "start": 1.34,
-              "confidence": 0.697021484375
-            }
-          ]
-        }
-      ]
+    {
+      "text": "Video marketing mistakes cost you money and time!",
+      "index": 0,
+      "audioUrl": "https://media.hoox.video/ba4d5797-af01-431f-a76a-4fd589f091f3.mp3",
+      "transcription": {
+        "end": 2.8,
+        "text": " Video marketing mistakes cost you money and time!",
+        "start": 0.02,
+        "language": "English",
+        "words": [
+          {
+            "end": 0.26,
+            "word": "Video",
+            "start": 0.02
+          },
+          {
+            "end": 0.78,
+            "word": "marketing",
+            "start": 0.26
+          },
+          {
+            "end": 1.26,
+            "word": "mistakes",
+            "start": 0.78
+          },
+          {
+            "end": 1.64,
+            "word": "cost",
+            "start": 1.26
+          },
+          {
+            "end": 1.78,
+            "word": "you",
+            "start": 1.64
+          },
+          {
+            "end": 2.06,
+            "word": "money",
+            "start": 1.78
+          },
+          {
+            "end": 2.3,
+            "word": "and",
+            "start": 2.06
+          },
+          {
+            "end": 2.8,
+            "word": "time!",
+            "start": 2.3
+          }
+        ]
+      }
+    },
+    {
+      "text": "Many businesses struggle with ineffective videos that don't convert.",
+      "index": 1,
+      "audioUrl": "https://media.hoox.video/fbaaac37-6add-4b1d-b45c-a60f5f178d11.mp3",
+      "transcription": {
+        "end": 3.96,
+        "text": " Many businesses struggle with ineffective videos that don't convert.",
+        "start": 0.02,
+        "language": "English",
+        "words": [
+          {
+            "end": 0.22,
+            "word": "Many",
+            "start": 0.02
+          },
+          {
+            "end": 0.66,
+            "word": "businesses",
+            "start": 0.22
+          },
+          {
+            "end": 1.1,
+            "word": "struggle",
+            "start": 0.66
+          },
+          {
+            "end": 1.36,
+            "word": "with",
+            "start": 1.1
+          },
+          {
+            "end": 1.9,
+            "word": "ineffective",
+            "start": 1.36
+          },
+          {
+            "end": 2.42,
+            "word": "videos",
+            "start": 1.9
+          },
+          {
+            "end": 2.72,
+            "word": "that",
+            "start": 2.42
+          },
+          {
+            "end": 2.92,
+            "word": "don't",
+            "start": 2.72
+          },
+          {
+            "end": 3.96,
+            "word": "convert.",
+            "start": 2.92
+          }
+        ]
+      }
+    },
+    {
+      "text": "Poor voiceover quality immediately turns viewers away.",
+      "index": 2,
+      "audioUrl": "https://media.hoox.video/9de3829b-9abc-4353-891e-e8fab91a391c.mp3",
+      "transcription": {
+        "end": 3.6,
+        "text": " Poor voiceover quality immediately turns viewers away.",
+        "start": 0.04,
+        "language": "English",
+        "words": [
+          {
+            "end": 0.32,
+            "word": "Poor",
+            "start": 0.04
+          },
+          {
+            "end": 0.9,
+            "word": "voiceover",
+            "start": 0.32
+          },
+          {
+            "end": 1.38,
+            "word": "quality",
+            "start": 0.9
+          },
+          {
+            "end": 1.9,
+            "word": "immediately",
+            "start": 1.38
+          },
+          {
+            "end": 2.3,
+            "word": "turns",
+            "start": 1.9
+          },
+          {
+            "end": 2.68,
+            "word": "viewers",
+            "start": 2.3
+          },
+          {
+            "end": 3.6,
+            "word": "away.",
+            "start": 2.68
+          }
+        ]
+      }
+    },
+    {
+      "text": "Choose professional voice talent that matches your brand's personality.",
+      "index": 3,
+      "audioUrl": "https://media.hoox.video/13c6dde6-e30d-49a2-9e93-3c93ce2a3531.mp3",
+      "transcription": {
+        "end": 4.4,
+        "text": " Choose professional voice talent that matches your brand's personality.",
+        "start": 0.08,
+        "language": "English",
+        "words": [
+          {
+            "end": 0.28,
+            "word": "Choose",
+            "start": 0.08
+          },
+          {
+            "end": 0.84,
+            "word": "professional",
+            "start": 0.28
+          },
+          {
+            "end": 1.26,
+            "word": "voice",
+            "start": 0.84
+          },
+          {
+            "end": 1.62,
+            "word": "talent",
+            "start": 1.26
+          },
+          {
+            "end": 1.8,
+            "word": "that",
+            "start": 1.62
+          },
+          {
+            "end": 2.2,
+            "word": "matches",
+            "start": 1.8
+          },
+          {
+            "end": 2.42,
+            "word": "your",
+            "start": 2.2
+          },
+          {
+            "end": 2.86,
+            "word": "brand's",
+            "start": 2.42
+          },
+          {
+            "end": 4.4,
+            "word": "personality.",
+            "start": 2.86
+          }
+        ]
+      }
+    },
+    {
+      "text": "Share your biggest challenge below!",
+      "index": 4,
+      "audioUrl": "https://media.hoox.video/5eadf1ca-37d3-4085-803f-8a0911519a42.mp3",
+      "transcription": {
+        "end": 1.74,
+        "text": " Share your biggest challenge below!",
+        "start": 0.04,
+        "language": "English",
+        "words": [
+          {
+            "end": 0.22,
+            "word": "Share",
+            "start": 0.04
+          },
+          {
+            "end": 0.38,
+            "word": "your",
+            "start": 0.22
+          },
+          {
+            "end": 0.78,
+            "word": "biggest",
+            "start": 0.38
+          },
+          {
+            "end": 1.26,
+            "word": "challenge",
+            "start": 0.78
+          },
+          {
+            "end": 1.74,
+            "word": "below!",
+            "start": 1.26
+          }
+        ]
+      }
     }
-  },
-  {
-    "text": "Il contient plusieurs lignes.",
-    "index": 1,
-    "audioUrl": "https://media.hoox.video/d306d23d-70da-4eab-bce9-0be0d56c2881.mp3",
-    "transcription": {
-      "text": "Il contient plusieurs lignes.",
-      "language_code": "fr",
-      "segments": [
-        {
-          "end": 1.08,
-          "text": " Il contient plusieurs lignes.",
-          "start": 0,
-          "words": [
-            {
-              "end": 0.14,
-              "word": " Il",
-              "start": 0,
-              "confidence": 0.8876953125
-            },
-            {
-              "end": 0.4,
-              "word": " contient",
-              "start": 0.18,
-              "confidence": 0.999755859375
-            },
-            {
-              "end": 0.66,
-              "word": " plusieurs",
-              "start": 0.4,
-              "confidence": 1
-            },
-            {
-              "end": 1.08,
-              "word": " lignes.",
-              "start": 0.66,
-              "confidence": 1
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "text": "Pour tester le comportement de l'interface.",
-    "index": 2,
-    "audioUrl": "https://media.hoox.video/b3439f7f-7e1d-4435-bb9d-75e0410acf1a.mp3",
-    "transcription": {
-      "text": "Pour tester le comportement de l'interface.",
-      "language_code": "fr",
-      "segments": [
-        {
-          "end": 1.66,
-          "text": " Pour tester le comportement de l'interface.",
-          "start": 0,
-          "words": [
-            {
-              "end": 0.16,
-              "word": " Pour",
-              "start": 0,
-              "confidence": 0.053131103515625
-            },
-            {
-              "end": 0.42,
-              "word": " tester",
-              "start": 0.24,
-              "confidence": 0.9990234375
-            },
-            {
-              "end": 0.6,
-              "word": " le",
-              "start": 0.44,
-              "confidence": 0.9970703125
-            },
-            {
-              "end": 1.04,
-              "word": " comportement",
-              "start": 0.6,
-              "confidence": 0.999755859375
-            },
-            {
-              "end": 1.16,
-              "word": " de",
-              "start": 1.04,
-              "confidence": 0.99853515625
-            },
-            {
-              "end": 1.22,
-              "word": " l",
-              "start": 1.16,
-              "confidence": 1
-            },
-            {
-              "end": 1.66,
-              "word": "'interface.",
-              "start": 1.22,
-              "confidence": 0.9996744791666666
-            }
-          ]
-        }
-      ]
-    }
-  }
 ]

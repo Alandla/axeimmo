@@ -633,7 +633,9 @@
       "AVATAR_GENERATION": "Génération de l'avatar",
       "SEARCH_MEDIA": "Recherche de médias",
       "ANALYZE_YOUR_MEDIA": "Analyse de vos médias",
-      "ANALYZE_NEW_MEDIA": "Analyse de nouveaux médias",
+      "ANALYZE_FOUND_MEDIA": "Analyse des médias trouvés",
+      "PLACE_BROLL": "Placement des B-Rolls",
+      "DISPLAY_BROLL": "Placement de l'avatar",
       "REDIRECTING": "Sauvegarde et redirection vers l'éditeur",
       "error-message": "Erreur, veuillez contacter le support."
     },

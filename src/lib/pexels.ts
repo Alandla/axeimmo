@@ -27,15 +27,9 @@ export const getImagePexels = async (keyword: string, nb: number, page: number) 
 
 export const getPexelsVideosMedia = async (keyword: string, number: number, page: number) => {
     const videos = await getVideoPexels(keyword, number, page);
-    let sdVideoUrl = null;
     if ('videos' in videos) {
         const videoBestQuality = getVideosBestQuality(videos.videos);
-        const videoSdQuality = getVideoSdQuality(videos.videos);
-        if (videoSdQuality) {
-            sdVideoUrl = videoSdQuality.link;
-        }
-        logger.log('Video best quality', { videoBestQuality });
-        return pexelVideoToMedia(videoBestQuality, sdVideoUrl);
+        return pexelVideoToMedia(videoBestQuality);
     }
     return [];
 }
@@ -63,7 +57,7 @@ export function pexelImageToMedia(images: Photo[]) {
     });
 }
 
-export function pexelVideoToMedia(videos: any[], sdVideoUrl: string | null) {
+export function pexelVideoToMedia(videos: any[]) {
   return videos.map(video => {
     return {
       type: "video",
@@ -77,7 +71,7 @@ export function pexelVideoToMedia(videos: any[], sdVideoUrl: string | null) {
         ...video.videoBestQuality,
         link: video.videoBestQuality.link
       },
-      sdVideoUrl
+      video_pictures: video.video_pictures
     };
   });
 }

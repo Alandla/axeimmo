@@ -32,7 +32,7 @@ export interface IMedia {
     fps?: number;
     link: string;
   };
-  sdVideoUrl?: string;
+  video_pictures?: any[];
   image?: {
     id: string;
     link: string;

@@ -642,7 +642,9 @@
       "AVATAR_GENERATION": "Avatar generation",
       "SEARCH_MEDIA": "Media search",
       "ANALYZE_YOUR_MEDIA": "Analyzing your media",
-      "ANALYZE_NEW_MEDIA": "Analyzing new media",
+      "ANALYZE_FOUND_MEDIA": "Analyzing found media",
+      "PLACE_BROLL": "Placing B-Rolls",
+      "DISPLAY_BROLL": "Placing the avatar",
       "REDIRECTING": "Saving and redirecting to editor",
       "error-message": "Error, please contact support."
     },
