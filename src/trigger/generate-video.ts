@@ -428,7 +428,7 @@ export const generateVideoTask = task({
 
         sentences = await Promise.all(transcriptionPromises);
         
-        logger.info('All sentences transcribed with Groq', { totalCount: sentences.length });
+        logger.info(`All sentences transcribed`, { totalCount: sentences.length });
       } catch (error) {
         logger.error('Error in transcription process', { errorMessage: error instanceof Error ? error.message : String(error) });
       }

@@ -2,6 +2,7 @@ import { logger } from "@trigger.dev/sdk/v3";
 import { ISequence, IWord } from "../types/video";
 import axios from "axios";
 import FormData from "form-data";
+import { createSieveTranscription, pollSieveTranscriptionStatus } from "./sieve";
 
 interface Utterance {
   text: string;
@@ -246,54 +247,114 @@ export function combineTranscriptions(sentences: any[]): any {
 }
 
 /**
+ * Fusionne les mots avec apostrophe avec le mot précédent
+ */
+const mergeApostropheWords = (words: Array<{ word: string; start: number; end: number; confidence?: number }>) => {
+    const mergedWords = [];
+    
+    for (let i = 0; i < words.length; i++) {
+        const currentWord = words[i];
+        
+        // Si le mot commence par une apostrophe et ce n'est pas le premier mot
+        if (currentWord.word.startsWith("'") && i > 0) {
+            const previousWord = mergedWords[mergedWords.length - 1];
+            // Fusionner avec le mot précédent
+            previousWord.word = previousWord.word + currentWord.word;
+            previousWord.end = currentWord.end;
+        } else {
+            mergedWords.push({ ...currentWord });
+        }
+    }
+    
+    return mergedWords;
+};
+
+/**
  * Récupère la transcription d'un fichier audio à partir d'une URL
  * @param audioUrl URL du fichier audio à transcrire
  * @param text Texte optionnel pour guider la transcription
  * @returns La transcription du fichier audio
  */
 export const getTranscription = async (audioUrl: string, text?: string) => {
-    let attempts = 0;
-    const maxAttempts = 6;
-    while (attempts < maxAttempts) {
-        try {
-            // Créer un FormData pour envoyer le fichier
-            const formData = new FormData();
+  const useGroq = false;
+  if (useGroq) {
+      let attempts = 0;
+      const maxAttempts = 6;
+      while (attempts < maxAttempts) {
+          try {
+              const formData = new FormData();
+              formData.append('url', audioUrl);
+              formData.append('model', 'whisper-large-v3-turbo');
+              
+              if (text) {
+                  formData.append('prompt', text);
+              }
+              
+              formData.append('response_format', 'verbose_json');
+              formData.append('timestamp_granularities[]', 'word');
+              
+              const response = await axios.post(
+                  'https://api.groq.com/openai/v1/audio/transcriptions',
+                  formData,
+                  {
+                      headers: {
+                          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+                          ...formData.getHeaders()
+                      }
+                  }
+              );
 
-            formData.append('url', audioUrl);
-            formData.append('model', 'whisper-large-v3');
-            
-            if (text) {
-              formData.append('prompt', text);
-            }
-            
-            formData.append('response_format', 'verbose_json');
-            formData.append('timestamp_granularities[]', 'word');
-            
-            // Utiliser axios pour faire une requête directe à l'API Groq avec FormData
-            const response = await axios.post(
-                'https://api.groq.com/openai/v1/audio/transcriptions',
-                formData,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-                        ...formData.getHeaders()
-                    }
-                }
-            );
+              return {
+                  text: response.data.text,
+                  raw: response.data
+              };
+          } catch (error: any) {
+              attempts++;
+              logger.error(`Erreur de transcription Groq (tentative ${attempts}):`, { error: error.response });
+              if (attempts >= maxAttempts) {
+                  console.error("Erreur de transcription Groq:", error.response?.data || error.message);
+                  return null;
+              }
+          }
+      }
+  } else {
+      try {
+          const jobId = await createSieveTranscription(audioUrl, text);
+          const result = await pollSieveTranscriptionStatus(jobId);
 
-            return {
-                text: response.data.text,
-                raw: response.data
-            };
-        } catch (error: any) {
-            attempts++;
-            logger.error(`Erreur de transcription Groq (tentative ${attempts}):`, { error: error.response });
-            if (attempts >= maxAttempts) {
-                console.error("Erreur de transcription Groq:", error.response?.data || error.message);
-                return null;
-            }
-        }
-    }
+          if (result.status === 'done') {
+              const sieveResult = result.result;
+              const words = [];
+              let fullText = "";
+
+              // Parcourir tous les segments pour extraire les mots
+              for (const segment of sieveResult.segments) {
+                  fullText += segment.text + " ";
+                  // Appliquer la fusion des mots avec apostrophe pour chaque segment
+                  const mergedWords = mergeApostropheWords(segment.words);
+                  words.push(...mergedWords);
+              }
+
+              return {
+                  text: fullText.trim(),
+                  raw: {
+                      task: "transcribe",
+                      text: fullText.trim(),
+                      duration: words.length > 0 ? words[words.length - 1].end : 0,
+                      language: sieveResult.language_code,
+                      segments: null,
+                      words: words
+                  }
+              };
+          }
+          return null;
+      } catch (error: any) {
+          logger.error("Erreur de transcription Sieve:", error.message);
+          return null;
+      }
+  }
+
+  return null;
 }
 
 /**
