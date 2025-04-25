@@ -752,7 +752,7 @@ export default function VideoEditor() {
     const defaultTransition = {
       ...defaultTransitions[0],
       indexSequenceBefore: afterIndex,
-      volume: 0.5,
+      volume: 0.15,
       sound: defaultSounds[0].url
     };
 

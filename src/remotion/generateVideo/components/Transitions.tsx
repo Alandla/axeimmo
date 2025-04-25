@@ -15,8 +15,13 @@ export const Transitions = ({sequences, transitions}: {sequences: any[], transit
           .reduce((acc, seq) => acc + (seq.durationInFrames || 0), 0);
         
         // Calculer le moment où la transition doit commencer
+        console.log(transition.soundPeakAt)
         const startAt = totalFramesBefore - (transition.fullAt ?? 0);
         const soundStartAt = totalFramesBefore - (transition.soundPeakAt === 0 ? (transition.fullAt ?? 0) : (transition.soundPeakAt ?? 0));
+
+        console.log("Total frame before:", totalFramesBefore)
+        console.log("Start at", startAt)
+        console.log("Sound start at", soundStartAt)
 
         return (
           <>

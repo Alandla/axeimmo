@@ -66,10 +66,11 @@ export default function TransitionMusics({
   const currentSounds = filteredSounds.slice(indexOfFirstSound, indexOfLastSound);
   const totalPages = Math.ceil(filteredSounds.length / soundsPerPage);
 
-  const handleSoundSelect = (soundUrl: string) => {
+  const handleSoundSelect = (soundUrl: string, soundPeakAt: number) => {
     const newTransition = {
       ...transition,
       sound: soundUrl,
+      soundPeakAt: soundPeakAt
     };
     updateTransition(transitionIndex, newTransition);
   };
@@ -201,7 +202,7 @@ export default function TransitionMusics({
                 "flex items-center justify-between p-3 rounded-lg border cursor-pointer",
                 isSelected && "border-primary"
               )}
-              onClick={() => handleSoundSelect(sound.url)}
+              onClick={() => handleSoundSelect(sound.url, sound.soundPeakAt)}
             >
               <div className="truncate flex-1 mr-4 text-sm">
                 {sound.name}
