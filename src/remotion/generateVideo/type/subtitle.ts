@@ -19,11 +19,6 @@ export type Sequence = {
 	end: number;
 	durationInFrames?: number;
 	audioUrl?: string;
-	keywords?: Array<{
-	search: 'stock' | 'web';
-	keyword: string;
-	precision: 'hard' | 'normal' | 'easy';
-	}>;
 };
 
 export type SubtitleMode = 'word' | 'line' | 'twoLines';

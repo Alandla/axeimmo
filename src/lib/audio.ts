@@ -73,7 +73,6 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
     start: index === 0 ? previousEnd : seq.start + previousEnd,
     end: seq.end + previousEnd,
     media: relatedSequences[index]?.media,
-    keywords: relatedSequences[index]?.keywords,
     audioIndex: audioIndex,
     words: seq.words.map((word, wordIndex) => ({
       ...word,
