@@ -9,21 +9,6 @@ const sequenceSchema = new mongoose.Schema({
   end: Number,
   durationInFrames: Number,
   audioIndex: Number,
-  keywords: [{
-    search: {
-      type: String,
-      validate(value: string) {
-        return ["stock", "web"].includes(value);
-      },
-    },
-    keyword: String,
-    precision: {
-      type: String,
-      validate(value: string) {
-        return ["HARD", "NORMAL", "EASY"].includes(value);
-      },
-    },
-  }],
   media: mediaSchema,
 });
 

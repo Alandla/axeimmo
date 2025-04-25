@@ -54,11 +54,6 @@ export interface ISequence {
   end: number;
   durationInFrames?: number;
   audioIndex: number;
-  keywords?: Array<{
-    search: 'stock' | 'web';
-    keyword: string;
-    precision: 'hard' | 'normal' | 'easy';
-  }>;
   media?: IMedia;
   originalText?: string;
   needsAudioRegeneration?: boolean;
@@ -92,6 +87,7 @@ export interface IVideo {
   video?: {
     thumbnail: string;
     subtitle: any;
+    keywords?: string[];
     audio?: {
       voices: {
         url: string;

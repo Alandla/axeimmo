@@ -9,7 +9,7 @@ import MediaItem from "../ui/media-item";
 import { useToast } from "@/src/hooks/use-toast";
 import { useTranslations } from "next-intl";
 
-export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSequenceMedia }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void }) {
+export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSequenceMedia, keywords }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, keywords: string[] }) {
   const t = useTranslations('edit.sequence-edit-search')
   
   const [searchType, setSearchType] = useState<'stock' | 'web'>('stock')
@@ -70,6 +70,13 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
     }
   }
 
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (e.deltaY !== 0) {
+      e.currentTarget.scrollLeft += e.deltaY;
+    }
+  };
+
   return (
     <>
         <form onSubmit={(e) => { e.preventDefault(); fetchResults(searchQuery, 1) }} className="space-y-2 md:space-y-0 md:flex md:gap-2">
@@ -96,19 +103,26 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
             {t('search-button')}
             </Button>
         </form>
-        <div className="mt-2 flex flex-wrap gap-2">
-            {sequence.keywords?.slice(0, 3).map((keyword, index) => (
-            <Button
-                key={index}
-                variant="outline"
-                size="sm"
-                className="flex items-center"
-                onClick={() => fetchResults(keyword.keyword, 1)}
-            >
-                {keyword.keyword}
-                <Search size={12} />
-            </Button>
-            ))}
+        <div className="mt-2 w-full overflow-hidden">
+          <div 
+            className="w-full overflow-x-auto scrollbar-hide"
+            onWheel={handleWheel}
+          >
+            <div className="flex gap-2 flex-nowrap">
+              {keywords?.map((keyword, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center shrink-0 whitespace-nowrap"
+                  onClick={() => fetchResults(keyword, 1)}
+                >
+                  {keyword}
+                  <Search size={12} className="ml-1" />
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="mt-4 columns-3 gap-2">
             {searchResults.map((media, index) => (

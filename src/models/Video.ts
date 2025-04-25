@@ -38,6 +38,7 @@ const videoSchema = new mongoose.Schema({
     }],
     video: {
       thumbnail: String,
+      keywords: [String],
       transitions: [{
         indexSequenceBefore: Number,
         durationInFrames: Number,

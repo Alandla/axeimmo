@@ -76,23 +76,6 @@
     "start": 0.10004,
     "end": 4.02173,
     "durationInFrames": 237,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Bullied child",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Childhood struggles",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Success",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -196,23 +179,6 @@
     "start": 4.02173,
     "end": 7.34315,
     "durationInFrames": 199,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "African savannah",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "South African landscape",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Africa",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -288,23 +254,6 @@
     "start": 7.34315,
     "end": 10.50451,
     "durationInFrames": 188,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Child with computer",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Young programmer",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Technology",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -394,23 +343,6 @@
     "start": 10.50451,
     "end": 13.42576,
     "durationInFrames": 176,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "12-year-old coding",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Child creating video game",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Gaming",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -507,23 +439,6 @@
     "start": 13.42576,
     "end": 17.46749,
     "durationInFrames": 241,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "University campus",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Canadian university",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Education",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -585,23 +500,6 @@
     "start": 17.46749,
     "end": 20.48879,
     "durationInFrames": 181,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Startup office",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Entrepreneur working",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Business",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -677,23 +575,6 @@
     "start": 20.48879,
     "end": 23.24997,
     "durationInFrames": 166,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Visionary thinking",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Innovative ideas",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Inspiration",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -783,23 +664,6 @@
     "start": 23.24997,
     "end": 26.83151,
     "durationInFrames": 216,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Investor meeting",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Business investment",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Finance",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -854,23 +718,6 @@
     "start": 26.83151,
     "end": 28.4681,
     "durationInFrames": 99,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Risk taking",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Entrepreneurial risk",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Challenge",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -960,23 +807,6 @@
     "start": 28.4681,
     "end": 32.07096,
     "durationInFrames": 216,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Perseverance",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Overcoming obstacles",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Determination",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -1038,23 +868,6 @@
     "start": 32.07096,
     "end": 34.913219999999995,
     "durationInFrames": 169,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Electric car manufacturing",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Tesla factory",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Sustainability",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -1116,23 +929,6 @@
     "start": 34.913219999999995,
     "end": 38.47605,
     "durationInFrames": 213,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "SpaceX launch",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Rocket launch",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Space exploration",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -1208,23 +1004,6 @@
     "start": 38.47605,
     "end": 42.15897,
     "durationInFrames": 220,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Innovation hub",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Transformative technology",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Progress",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [
@@ -1314,23 +1093,6 @@
     "start": 42.15897,
     "end": 45.38153,
     "durationInFrames": 194,
-    "keywords": [
-      {
-        "search": "web",
-        "keyword": "Twitter logo",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Neuralink technology",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Innovation",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "image",
       "name": "How to change back to the old Twitter app icon on iOS | TechCrunch",
@@ -1397,23 +1159,6 @@
     "start": 45.38153,
     "end": 48.796735,
     "durationInFrames": 205,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Comment section",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Online discussion",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Feedback",
-        "precision": "EASY"
-      }
-    ],
     "media": {
       "type": "video",
       "description": [

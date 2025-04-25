@@ -724,7 +724,7 @@ export const generateVideoTask = task({
       logger.log(`[BROLL] B-Roll and media matching completed`, { 
         totalBRollSelections: brollResult.selections.length,
         totalMediaMatches: matchResult?.matches?.length || 0,
-        totalCost: cost
+        totalCost: brollResult.cost + (matchResult?.cost || 0)
       });
 
       // Appliquer les médias sélectionnés aux séquences
@@ -909,6 +909,7 @@ export const generateVideoTask = task({
             genre: videoMusic.genre
           } : undefined
         },
+        keywords: keywords,
         transitions: autoTransitions,
         thumbnail: "",
         metadata: videoMetadata,
