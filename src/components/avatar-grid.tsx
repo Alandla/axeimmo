@@ -27,6 +27,7 @@ import {
 import { cn, getMostFrequentString } from '@/src/lib/utils'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { getSpaceAvatars } from '../service/space.service'
+import { HorizontalScrollList } from './ui/horizontal-scroll-list'
 
 export function AvatarGridComponent() {
   const t = useTranslations('avatars')
@@ -121,15 +122,6 @@ export function AvatarGridComponent() {
       : [...selectedTags, tag]
     setSelectedTags(newTags)
     handleFilters(filteredAvatars)
-  }
-
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    // Empêche le scroll vertical de la page
-    e.preventDefault();
-    
-    if (e.deltaY !== 0) {
-      e.currentTarget.scrollLeft += e.deltaY;
-    }
   }
 
   // Mettre à jour les gestionnaires d'événements des filtres
@@ -295,11 +287,8 @@ export function AvatarGridComponent() {
           </motion.div>
         )}
       </AnimatePresence>
-      <div 
-        className="overflow-x-auto scrollbar-hide mt-2"
-        onWheel={handleWheel}
-      >
-        <div className="flex gap-2">
+      
+      <HorizontalScrollList>
         {activeAvatar ? (
           activeAvatar.tags.map(tag => (
             <Badge
@@ -329,8 +318,7 @@ export function AvatarGridComponent() {
             </Badge>
           ))
         )}
-        </div>
-      </div>
+      </HorizontalScrollList>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
         {activeAvatar ? (

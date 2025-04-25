@@ -8,6 +8,7 @@ import { basicApiCall } from "@/src/lib/api";
 import MediaItem from "../ui/media-item";
 import { useToast } from "@/src/hooks/use-toast";
 import { useTranslations } from "next-intl";
+import { HorizontalScrollList } from "../ui/horizontal-scroll-list";
 
 export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSequenceMedia, keywords }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, keywords: string[] }) {
   const t = useTranslations('edit.sequence-edit-search')
@@ -70,13 +71,6 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
     }
   }
 
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (e.deltaY !== 0) {
-      e.currentTarget.scrollLeft += e.deltaY;
-    }
-  };
-
   return (
     <>
         <form onSubmit={(e) => { e.preventDefault(); fetchResults(searchQuery, 1) }} className="space-y-2 md:space-y-0 md:flex md:gap-2">
@@ -103,27 +97,22 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
             {t('search-button')}
             </Button>
         </form>
-        <div className="mt-2 w-full overflow-hidden">
-          <div 
-            className="w-full overflow-x-auto scrollbar-hide"
-            onWheel={handleWheel}
-          >
-            <div className="flex gap-2 flex-nowrap">
-              {keywords?.map((keyword, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center shrink-0 whitespace-nowrap"
-                  onClick={() => fetchResults(keyword, 1)}
-                >
-                  {keyword}
-                  <Search size={12} className="ml-1" />
-                </Button>
-              ))}
-            </div>
-          </div>
-        </div>
+        
+        <HorizontalScrollList className="mt-2">
+          {keywords?.map((keyword, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              size="sm"
+              className="flex items-center shrink-0 whitespace-nowrap"
+              onClick={() => fetchResults(keyword, 1)}
+            >
+              {keyword}
+              <Search size={12} className="ml-1" />
+            </Button>
+          ))}
+        </HorizontalScrollList>
+        
         <div className="mt-4 columns-3 gap-2">
             {searchResults.map((media, index) => (
                 <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} media={media} source='web' setSequenceMedia={setSequenceMedia} />

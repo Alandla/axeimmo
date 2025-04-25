@@ -16,6 +16,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/src/components/ui/pagination"
+import { HorizontalScrollList } from "../ui/horizontal-scroll-list";
 
 interface TransitionPreviewProps {
   transitionItem: ITransition;
@@ -107,13 +108,6 @@ export default function TransitionListSettings({
   const [currentPage, setCurrentPage] = useState(1);
   const transitionsPerPage = 12;
 
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (e.deltaY !== 0) {
-      e.currentTarget.scrollLeft += e.deltaY;
-    }
-  };
-
   // Obtenir toutes les catégories uniques
   const allCategories = Array.from(new Set(transitions.map(t => t.category).filter((category): category is string => typeof category === 'string')));
 
@@ -181,26 +175,21 @@ export default function TransitionListSettings({
   return (
     <div className="w-full">
       <div className="w-full overflow-hidden">
-        <div 
-          className="w-full overflow-x-auto scrollbar-hide mb-4"
-          onWheel={handleWheel}
-        >
-          <div className="flex gap-2 flex-nowrap">
-            {allCategories.map(category => (
-              <Badge
-                key={category}
-                variant={selectedCategories.includes(category) ? "default" : "outline"}
-                className="cursor-pointer shrink-0 whitespace-nowrap"
-                onClick={() => toggleCategory(category)}
-              >
-                {selectedCategories.includes(category) && (
-                  <Check className="w-3 h-3 mr-1" />
-                )}
-                {t(`category.${category}`)}
-              </Badge>
-            ))}
-          </div>
-        </div>
+        <HorizontalScrollList className="mb-4">
+          {allCategories.map(category => (
+            <Badge
+              key={category}
+              variant={selectedCategories.includes(category) ? "default" : "outline"}
+              className="cursor-pointer shrink-0 whitespace-nowrap"
+              onClick={() => toggleCategory(category)}
+            >
+              {selectedCategories.includes(category) && (
+                <Check className="w-3 h-3 mr-1" />
+              )}
+              {t(`category.${category}`)}
+            </Badge>
+          ))}
+        </HorizontalScrollList>
 
         <div className="w-full">
           <div className="grid grid-cols-3 gap-2 mb-4">
