@@ -15,7 +15,6 @@ import { Download, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { SimpleSpace } from '@/src/types/space'
 import { getSpaceById } from '@/src/service/space.service'
-import ModalPricing from './modal-pricing'
 import { useRouter } from 'next/navigation'
 
 interface ModalConfirmExportProps {
@@ -77,26 +76,26 @@ export default function ModalConfirmExport({
             <DialogTitle>{t('title')}</DialogTitle>
             <DialogDescription>
               {t('description')}
-              <div className="text-sm text-gray-500 mt-2">
-                <p><b>{t('cost')}:</b> {cost} credits</p>
-                <p><b>{t('balance')}:</b> {space?.credits} credits</p>
-              </div>
-              {showWatermark && (
-                <Alert 
-                  variant="destructive" 
-                  className="cursor-pointer mt-2"
-                  onClick={() => {
-                    setIsOpen(false)
-                    setShowModalPricing(true)
-                  }}
-                >
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    {t('watermark-warning')}
-                  </AlertDescription>
-                </Alert>
-              )}
             </DialogDescription>
+            <div className="text-sm text-gray-500 mt-2">
+              <p><b>{t('cost')}:</b> {cost} credits</p>
+              <p><b>{t('balance')}:</b> {space?.credits} credits</p>
+            </div>
+            {showWatermark && (
+              <Alert 
+                variant="destructive" 
+                className="cursor-pointer mt-2"
+                onClick={() => {
+                  setIsOpen(false)
+                  setShowModalPricing(true)
+                }}
+              >
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  {t('watermark-warning')}
+                </AlertDescription>
+              </Alert>
+            )}
           </DialogHeader>
           <DialogFooter className="flex justify-end">
             <Button
@@ -118,12 +117,6 @@ export default function ModalConfirmExport({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <ModalPricing
-        title={t('modal-pricing-title')}
-        description={t('modal-pricing-description')}
-        isOpen={showModalPricing}
-        setIsOpen={setShowModalPricing}
-      />
     </>
   )
 }

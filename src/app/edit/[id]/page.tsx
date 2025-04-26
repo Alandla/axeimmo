@@ -38,6 +38,7 @@ import { PlanName } from '@/src/types/enums'
 import TransitionSettings from '@/src/components/edit/transition-settings'
 import { transitions as defaultTransitions, sounds as defaultSounds } from '@/src/config/transitions.config'
 import { usePremiumToast } from '@/src/utils/premium-toast'
+import MobileDisclaimerModal from '@/src/components/modal/mobile-disclaimer'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -69,6 +70,7 @@ export default function VideoEditor() {
   const [modalPricingDescription, setModalPricingDescription] = useState('')
   const [isDirty, setIsDirty] = useState(false)
   const [hasExistingReview, setHasExistingReview] = useState(false)
+  const [showMobileDisclaimer, setShowMobileDisclaimer] = useState(false)
   
   const updateVideo = (newVideoData: any) => {
     setVideo(newVideoData)
@@ -306,16 +308,26 @@ export default function VideoEditor() {
 
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 1024) // 1024px est la breakpoint lg de Tailwind
-    }
+      const mobile = window.innerWidth < 1024; // 1024px est la breakpoint lg de Tailwind
+      setIsMobile(mobile);
+      // Check localStorage and mobile status to show disclaimer
+      if (mobile && !localStorage.getItem('mobileDisclaimerShown')) {
+        setShowMobileDisclaimer(true);
+      }
+    };
 
-    checkIsMobile()
+    checkIsMobile(); // Check on initial mount
 
-    window.addEventListener('resize', checkIsMobile)
+    window.addEventListener('resize', checkIsMobile);
     return () => {
-      window.removeEventListener('resize', checkIsMobile)
-    }
-  }, [])
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []); // Empty dependency array ensures this runs only once on mount for the initial check
+
+  const handleCloseMobileDisclaimer = () => {
+    setShowMobileDisclaimer(false);
+    localStorage.setItem('mobileDisclaimerShown', 'true');
+  };
 
   const handleRegenerateAudio = async (sequenceIndex: number) => {
     if (!video?.video) return;
@@ -800,6 +812,10 @@ export default function VideoEditor() {
       description={modalPricingDescription}
       isOpen={showModalPricing}
       setIsOpen={setShowModalPricing}
+    />
+    <MobileDisclaimerModal
+        isOpen={showMobileDisclaimer}
+        onClose={handleCloseMobileDisclaimer}
     />
     <ModalConfirmExport
       cost={calculateCredits(video?.video?.metadata.audio_duration || 30)}

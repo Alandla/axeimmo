@@ -230,6 +230,11 @@
       "audio-tabs-title": "Audio",
       "modal-pricing-not-enough-credits": "Pas assez de crédits",
       "modal-pricing-description-not-enough-credits": "Tu n'as pas assez de crédits pour exporter ta vidéo, passe à un plan supérieur pour exporter ta vidéo.",
+      "mobile-disclaimer": {
+        "title": "Version ordinateur recommandée",
+        "description": "Pour de meilleures performances et une expérience optimale, nous recommandons d'utiliser un ordinateur.",
+        "close-button": "Compris"
+      },
       "review": {
         "title": "Comment avez-vous trouvé la vidéo ?",
         "details-title": "Qu'est ce qui ne vous a plu ?",
