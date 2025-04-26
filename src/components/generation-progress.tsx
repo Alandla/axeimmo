@@ -2,7 +2,7 @@
 
 import { useCreationStore } from '../store/creationStore'
 import { Steps, StepState } from '../types/step'
-import { Check, Clock, Loader2, Upload, Mic, FileText, User, Search, X, Sparkle } from 'lucide-react'
+import { Check, Clock, Loader2, Upload, Mic, FileText, User, Search, X, Sparkle, UserRoundSearch, FileSearch2, ReplaceAll } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export function GenerationProgress() {
@@ -17,14 +17,16 @@ export function GenerationProgress() {
         return <Mic className="h-3.5 w-3.5 text-gray-500" />;
       case Steps.TRANSCRIPTION:
         return <FileText className="h-3.5 w-3.5 text-gray-500" />;
-      case Steps.AVATAR_GENERATION:
-        return <User className="h-3.5 w-3.5 text-gray-500" />;
       case Steps.SEARCH_MEDIA:
         return <Search className="h-3.5 w-3.5 text-gray-500" />;
       case Steps.ANALYZE_YOUR_MEDIA:
+        return <FileSearch2 className="h-3.5 w-3.5 text-gray-500" />;
+      case Steps.ANALYZE_FOUND_MEDIA:
         return <Sparkle className="h-3.5 w-3.5 text-gray-500" />;
-      case Steps.ANALYZE_NEW_MEDIA:
-        return <Sparkle className="h-3.5 w-3.5 text-gray-500" />;
+      case Steps.PLACE_BROLL:
+        return <ReplaceAll className="h-3.5 w-3.5 text-gray-500" />;
+      case Steps.DISPLAY_BROLL:
+        return <UserRoundSearch className="h-3.5 w-3.5 text-gray-500" />;
       default:
         return <Clock className="h-3.5 w-3.5 text-gray-500" />;
     }

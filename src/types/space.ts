@@ -44,6 +44,20 @@ export interface SimpleSpace {
   credits: number;
   planName: PlanName;
   userRole?: string;
+  videoIdeas?: string[];
+  companyMission?: string;
+  companyTarget?: string;
+}
+
+export interface ICompanyDetails {
+  companyName?: string;
+  website?: string;
+  companyType?: string;
+  companySize?: string;
+  salesType?: string;
+  companyMission?: string;
+  companyTarget?: string;
+  companyNeeds?: string;
 }
 
 export interface ISpace {
@@ -53,8 +67,10 @@ export interface ISpace {
   medias: IMediaSpace[];
   plan: IPlan;
   credits: number;
+  details?: ICompanyDetails;
   subtitleStyle: ISpaceSubtitleStyle[];
   avatars: Avatar[];
   voices: Voice[];
+  videoIdeas: string[];
   lastUsed: ILastUsed
 }

@@ -136,6 +136,8 @@ export const SubtitlesDaniel = ({ subtitleSequences, style }: { subtitleSequence
 			{subtitles.map((subtitle, index) => {
 				if (subtitle.durationInFrames === 0) {
 					subtitle.durationInFrames = 1;
+				} else if (subtitle.durationInFrames < 0) {
+					subtitle.durationInFrames = 1;
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>

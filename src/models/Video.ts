@@ -8,6 +8,10 @@ const videoSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId, // Référence à un espace
       ref: 'Space',
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
     state: {
       type: {
         type: String,
@@ -34,6 +38,7 @@ const videoSchema = new mongoose.Schema({
     }],
     video: {
       thumbnail: String,
+      keywords: [String],
       transitions: [{
         indexSequenceBefore: Number,
         durationInFrames: Number,
@@ -77,9 +82,7 @@ const videoSchema = new mongoose.Schema({
       },
       metadata: {
         audio_duration: Number,
-        number_of_distinct_channels: Number,
-        billing_time: Number,
-        transcription_time: Number,
+        language: String,
       },
       sequences: [sequenceSchema],
       avatar: {

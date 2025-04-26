@@ -8,6 +8,8 @@ import { createPrivateSpaceForUser, getSpaceById, removeCreditsToSpace, setCredi
 import { plans } from "@/src/config/plan.config";
 import { IPlan, ISpace } from "@/src/types/space";
 import { SubscriptionType } from "@/src/types/enums";
+import { track } from "@/src/utils/mixpanel-server";
+import { MixpanelEvent } from "@/src/types/events";
 import { trackOrderFacebook } from "@/src/lib/facebook";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
@@ -109,6 +111,17 @@ export async function POST(req: Request) {
         await updateSpacePlan(spaceId as string, planSpace);
         
         trackOrderFacebook(user?.email, session?.invoice as string, session?.subscription as string, user?.id?.toString(), priceAmount, fbc, fbp);
+
+        // Track subscription in Mixpanel
+        if (user.id) {
+          track(MixpanelEvent.SUBSCRIPTION_CREATED, {
+            distinct_id: user.id,
+            plan: plan.name,
+            subscriptionType: billingInterval === "month" ? "monthly" : "annual",
+            price: priceData.unit_amount,
+            currency: priceData.currency,
+          });
+        }
 
         // Extra: send email with user link, product page, etc...
         // try {

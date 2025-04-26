@@ -5,7 +5,6 @@ import { ISentence, splitSentences, timeToFrames } from './transcription';
 interface RegenerateAudioResult {
   audioUrl: string;
   cost: number;
-  transcriptionId: string;
 }
 
 export async function regenerateAudioForSequence(
@@ -74,7 +73,6 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
     start: index === 0 ? previousEnd : seq.start + previousEnd,
     end: seq.end + previousEnd,
     media: relatedSequences[index]?.media,
-    keywords: relatedSequences[index]?.keywords,
     audioIndex: audioIndex,
     words: seq.words.map((word, wordIndex) => ({
       ...word,
@@ -133,7 +131,9 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
       throw new Error('Video object is undefined');
   }
 
-  updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, transcription.metadata.audio_duration, duration);
+  const audioDuration = transcription.end;
+
+  updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, audioDuration, duration);
   
   updatedVideo = {
       ...updatedVideo,
@@ -143,9 +143,7 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
           subtitle: updatedVideo?.video?.subtitle || {},
           metadata: updatedVideo?.video?.metadata || {
               audio_duration: 0,
-              number_of_distinct_channels: 0,
-              billing_time: 0,
-              transcription_time: 0
+              language: 'en'
           },
           sequences: newSequences
       }
@@ -301,31 +299,19 @@ export function updateSequenceTimings(
   });
 }
 
-export const waitForTranscription = async (
-  transcriptionId: string, 
-  maxAttempts = 100, 
-  delaySeconds = 2
+export const getTranscription = async (
+  audioUrl: string, 
 ) => {
-  let attempts = 0;
 
-  while (attempts < maxAttempts) {
     try {
-      const transcriptionStatus : any = await basicApiCall('/audio/getTranscription', {
-        transcriptionId
-      }); 
+      const transcription : any = await basicApiCall('/audio/getTranscription', {
+        audioUrl
+      });
 
-      if (transcriptionStatus.status === 'done') {
-        return transcriptionStatus.result;
-      }
-
-      await new Promise(resolve => setTimeout(resolve, delaySeconds * 1000));
-      attempts++;
+      return transcription;
     } catch (error: any) {
       console.error('Erreur lors de la récupération du statut de transcription:', error);
-      await new Promise(resolve => setTimeout(resolve, delaySeconds * 1000));
-      attempts++;
     }
-  }
 
   throw new Error('Nombre maximum de tentatives atteint sans obtenir un statut "done" pour la transcription.');
 };

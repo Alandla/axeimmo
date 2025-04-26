@@ -12,7 +12,13 @@
       "orContinueWith": "Or continue with",
       "checkEmail": "Check your emails",
       "emailSent": "A verification email has been sent to the address indicated.",
-      "openGmail": "Open Gmail"
+      "openGmail": "Open Gmail",
+      "error-title": "Error",
+      "error-description": "An error occurred while signing in. Please try again.",
+      "error-disposable-email": "Disposable email detected. Please use a valid email address.",
+      "error-contact-creation": "An error occurred while creating your account. Please try again.",
+      "error-invalid-email": "Invalid email address. Please use a valid email address.",
+      "error-Configuration": "The entered email is not valid, please try again."
     },
     "breadcrumbs": {
       "Dashboard": "Dashboard",
@@ -37,7 +43,11 @@
       "toast": {
         "title-updated": "Title updated",
         "description-updated": "Your video title has been updated",
-        "error-message": "An error occurred while updating the title"
+        "error-message": "An error occurred while updating the title",
+        "title-video-deleted": "Video deleted",
+        "description-video-deleted": "Your video has been deleted",
+        "error-video-deleted": "An error occurred while deleting the video",
+        "error-title": "Error"
       },
       "video": {
         "outdated": "This video is no longer available",
@@ -92,6 +102,23 @@
         "error-description": "You don't have an active subscription."
       }
     },
+    "settings": {
+      "space": {
+        "title": "Space Settings",
+        "name-label": "Name",
+        "name-placeholder": "Enter space name",
+        "name-description": "The name of your space visible to all members",
+        "mission-label": "Mission",
+        "mission-placeholder": "What is your company's mission?",
+        "mission-description": "Your company's mission that will guide your videos",
+        "target-label": "Target",
+        "target-placeholder": "What is your company's target audience?",
+        "target-description": "Your company's target audience to tailor your videos",
+        "save-button": "Save",
+        "update-success-title": "Changes saved",
+        "update-success-description": "Space settings have been successfully updated"
+      }
+    },
     "pricing": {
       "upgrade": "Upgrade",
       "downgrade": "Downgrade",
@@ -107,12 +134,25 @@
       "everything-in": "Everything included in",
       "plus": "plus",
       "credits": "credits",
-      "250-credits": "250 credits = 25 minutes of video",
-      "1000-credits": "1000 credits = 1h40 of video",
-      "3000-credits": "3000 credits = 5 hours of video",
+      "150-credits": "15 minutes of video",
+      "400-credits": "40 minutes of video",
+      "800-credits": "1h20 of video",
       "custom": "Custom",
       "need-custom-plan": "Need a custom plan ? Contact us for a tailored solution.",
       "contact-sales": "Contact us",
+      "pricing": "Pricing",
+      "choose-plan": "Choose the plan that fits your needs",
+      "start-creating": "Start creating professional videos today with our flexible pricing options",
+      "see-detailed-comparison": "See detailed plan comparison",
+      "user": "user",
+      "max-duration": "Maximum duration of",
+      "minute": "minute",
+      "soon": "Soon",
+      "premium-toast": {
+        "title": "Premium plan required",
+        "description": "This feature requires a paid plan. You need the {plan} plan to access it.",
+        "button": "Upgrade"
+      },
       "discount": {
         "title": "Launch Offer",
         "description": "Limited time offer - Get 20% off on all plans",
@@ -127,27 +167,44 @@
         "duration-1-max": "Maximum duration of 1 minute",
         "duration-3-max": "Maximum duration of 3 minutes",
         "duration-5-max": "Maximum duration of 5 minutes",
-        "watermark-removal": "Watermark removal",
+        "watermark-removal": "Watermark Removal",
         "subtitles": "Automatic subtitles",
-        "voice": "High quality voice",
-        "avatar": "Realistic avatar",
+        "voice-1": "20 High quality voice",
+        "voice-2": "+100 High quality voice",
+        "voice-3": "+120 High quality voice",
+        "avatar-1": "88 Realistic avatar",
+        "avatar-2": "+150 Realistic avatar",
         "create-article": "Create a video from an article",
         "add-media": "Automatically add your media",
-        "brand-kit": "Brand kit",
-        "voice-cloning": "Voice cloning",
+        "brand-kit": "Brand Kit",
+        "voice-cloning": "Voice Cloning",
         "avatar-clone": "Avatar cloning",
-        "save-template": "Save templates"
+        "save-template": "Save templates",
+        "number-users": "Number of Users",
+        "max-video-duration": "Maximum Video Duration",
+        "music-library": "Music Library",
+        "voices-library": "Voices Library",
+        "avatars-library": "Avatars Library",
+        "digital-clone": "Digital Clone",
+        "save-templates": "Save templates",
+        "smart-media-placement": "Smart Media Auto Placement",
+        "ai-video-b-rolls": "AI Video B-Rolls",
+        "brand-space": "Brand Space",
+        "social-media-agent": "Social Media Strategist Agent",
+        "video-producer-agent": "Video Content Producer Agent",
+        "community-manager-agent": "Community Manager Agent"
       }
     },
     "plan": {
       "FREE": "Free",
       "PRO": "Pro",
-      "CREATOR": "Creator",
+      "START": "Start",
       "ENTREPRISE": "Entreprise"
     },
     "export": {
       "title": "Exporting Your Video",
       "title-avatar": "Generating your avatar",
+      "title-audio": "Preparing audio",
       "title-failed": "Exporting failed",
       "title-completed": "Export completed !",
       "message-failed": "An error occurred while exporting your video. Please try again.",
@@ -182,6 +239,11 @@
       "audio-tabs-title": "Audio",
       "modal-pricing-not-enough-credits": "Not enough credits",
       "modal-pricing-description-not-enough-credits": "You don't have enough credits to export your video, upgrade to a higher plan to export your video.",
+      "mobile-disclaimer": {
+        "title": "Desktop version recommended",
+        "description": "For better performance and optimal experience, we recommend using a computer.",
+        "close-button": "Got it"
+      },
       "review": {
         "title": "How did you find the video ?",
         "details-title": "What didn't you like ?",
@@ -206,7 +268,9 @@
         "description-space-not-found": "The space was not found.",
         "title-regenerated": "Regenerating audio",
         "description-regenerated": "The audio has been regenerated successfully.",
-        "description-regeneration-error": "An error occurred while regenerating the audio."
+        "description-regeneration-error": "An error occurred while regenerating the audio.",
+        "description-premium-voice-error": "This voice is only available in paid plans. Upgrade your subscription to access it.",
+        "description-premium-avatar-error": "This avatar is only available in paid plans. Upgrade your subscription to access it."
       },
       "sequence": {
         "edit-word": "Edit word",
@@ -239,6 +303,7 @@
           "X-Ray": "X-Ray",
           "Signal": "Signal",
           "Old Film": "Old Film",
+          "camera-shutter": "Camera shutter",
           "Swoosh": "Swoosh",
           "Glitch": "Glitch",
           "Impact": "Impact",
@@ -256,6 +321,7 @@
       "subtitle-settings": {
         "title": "Subtitle style",
         "save-button": "Save",
+        "save-button-tooltip": "Feature available with Pro and Enterprise plans",
         "title-subtitle-style-saved": "Subtitle style saved",
         "description-subtitle-style-saved": "The subtitle style has been saved.",
         "italic": "Italic",
@@ -369,6 +435,7 @@
       "no-avatar": "I don't need an avatar, next step",
       "no-avatar-generation": "I don't need an avatar, start generation",
       "start-generation": "Start generation",
+      "need-ideas": "Need ideas ?",
       "select-to-start": {
         "title": "Before starting, you must ",
         "need-prompt": "have a prompt or a voice/avatar file",
@@ -378,7 +445,11 @@
       "placeholder": {
         "start": "A video about ...",
         "edit-script": "Could you modify the script to ..."
-      }
+      },
+      "loading": "Loading...",
+      "limit-reached-title": "Video Limit Reached",
+      "limit-reached-description": "With the free plan, you are limited to 3 videos. Upgrade your plan to create additional videos.",
+      "upgrade-plan": "Upgrade Plan"
     },
     "select": {
       "duration": {
@@ -396,6 +467,10 @@
       "search": "Search a voice..",
       "listen": "Listen",
       "pause": "Pause",
+      "toast": {
+        "title-error": "Paid plan required",
+        "description-premium-error": "This voice is only available in paid plans. You need the {plan} plan to access it."
+      },
       "tags": {
         "narrator": "Narrator",
         "documentary": "Documentary",
@@ -422,13 +497,16 @@
         "storytelling": "Storytelling",
         "journalism": "Journalism",
         "entertainment": "Entertainment",
-        "tv": "TV"
+        "tv": "TV",
+        "sales": "Sales",
+        "podcast": "Podcast"
       },
       "gender": {
         "male": "Male",
         "female": "Female"
       },
       "accent": {
+        "all": "All accents",
         "french": "French",
         "quebecois": "Quebecois",
         "spanish": "Spanish",
@@ -440,12 +518,26 @@
         "irish": "Irish",
         "german": "German",
         "swedish": "Swedish",
-        "canadian": "Canadian"
+        "canadian": "Canadian",
+        "brazilian": "Brazilian",
+        "portuguese": "Portuguese",
+        "croatian": "Croatian",
+        "nigerian": "Nigerian",
+        "egyptian": "Egyptian",
+        "indian": "Indian",
+        "italian": "Italian",
+        "latin american": "Latin American",
+        "arabic": "Arabic",
+        "peninsular": "Peninsular"
       }
     },
     "avatars": {
       "search": "Search an avatar..",
       "preview": "Preview",
+      "toast": {
+        "title-error": "Paid plan required",
+        "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it."
+      },
       "tags": {
         "professional": "Professional",
         "cossy": "Cossy",
@@ -549,13 +641,17 @@
       }
     },
     "generation": {
-      "MEDIA_UPLOAD": "Upload files",
+      "QUEUE": "Waiting to start",
+      "MEDIA_UPLOAD": "Media upload",
       "VOICE_GENERATION": "Voice generation",
       "TRANSCRIPTION": "Transcription",
       "AVATAR_GENERATION": "Avatar generation",
-      "SEARCH_MEDIA": "Search media",
-      "ANALYZE_YOUR_MEDIA": "Analyze your media",
-      "ANALYZE_NEW_MEDIA": "Analyze added media",
+      "SEARCH_MEDIA": "Media search",
+      "ANALYZE_YOUR_MEDIA": "Analyzing your media",
+      "ANALYZE_FOUND_MEDIA": "Analyzing found media",
+      "PLACE_BROLL": "Placing B-Rolls",
+      "DISPLAY_BROLL": "Placing the avatar",
+      "REDIRECTING": "Saving and redirecting to editor",
       "error-message": "Error, please contact support."
     },
     "space": {
@@ -803,7 +899,11 @@
         "22": "it's time for creation.",
         "23": "we can move to the generation.",
         "24": "let's launch the final production.",
-        "25": "let's start the creation process."
+        "25": "let's start the creation process.",
+        "26": "let's start the video generation.",
+        "27": "I confirm the start of the production.",
+        "28": "let's start the video generation.",
+        "29": "it's time to start the generation."
       },
       "user-next-step": {
         "0": "we can move to the next step.",
@@ -1042,6 +1142,133 @@
         "cancel": "Cancel",
         "delete": "Delete",
         "deleting": "Deleting..."
+      }
+    },
+    "onboarding": {
+      "categories": {
+        "personal-information": "Personal Information",
+        "company-information": "Company Information"
+      },
+      "common": {
+        "back": "Back",
+        "continue": "Continue",
+        "complete": "Complete"
+      },
+      "layout": {
+        "get-started": "GET STARTED",
+        "welcome": "Welcome",
+        "gateway-description": "Your gateway to accelerated video content creation.",
+        "sidebar-features": {
+          "simple-edit": "Simple edit",
+          "simple-edit-description": "Never been easier to edit a video with our intuitive editor",
+          "video-automation": "Video automation",
+          "video-automation-description": "Generate engaging videos in minutes without any editing skills",
+          "game-changer": "Game changer",
+          "game-changer-description": "All our users see an improvement in their workflow and results"
+        }
+      },
+      "step1": {
+        "title": "Let's personalise your experience",
+        "name-label": "Name",
+        "name-error": "Name is required",
+        "firstName-label": "First Name",
+        "firstName-error": "First name is required",
+        "optional": "(Optional)"
+      },
+      "step2": {
+        "title": "What's your role?",
+        "role-error": "Please select your role",
+        "roles": {
+          "owner": "Owner",
+          "marketing": "Marketing",
+          "sales": "Sales",
+          "social-media": "Social Media",
+          "communication": "Communication"
+        }
+      },
+      "step3": {
+        "title": "How did you hear about us?",
+        "channel-error": "Please select how do you find us",
+        "channels": {
+          "linkedin": "Linkedin",
+          "youtube": "Youtube",
+          "x": "X",
+          "instagram": "Instagram",
+          "tiktok": "TikTok",
+          "google": "Google",
+          "friends": "Friends",
+          "other": "Other"
+        }
+      },
+      "step4": {
+        "title": "Tell us about your company",
+        "companyName-label": "Company Name",
+        "companyName-error": "Company name is required",
+        "website-label": "Website (optional)",
+        "website-placeholder": "https://yourcompany.com",
+        "website-error": "Please enter a valid URL"
+      },
+      "step5": {
+        "title": "Your goal with Hoox",
+        "goal-error": "Please select your goal",
+        "goals": {
+          "organic-growth": "Organic growth",
+          "ads-creation": "Ads creation",
+          "brand-awareness": "Brand Awareness",
+          "lead-generation": "Lead Generation",
+          "faceless-content": "Faceless Content"
+        }
+      },
+      "step6": {
+        "title": "You are...",
+        "companyType-error": "Please select your company type",
+        "companyTypes": {
+          "agency": "Agency",
+          "ecommerce": "E-commerce",
+          "saas": "SaaS",
+          "content-creator": "Content Creator",
+          "non-profit": "Non-profit",
+          "other": "Other"
+        },
+        "companySize-title": "Company size",
+        "companySizes": {
+          "solo": "Solo",
+          "2-10": "2-10",
+          "11-50": "11-50",
+          "51-100": "51-100",
+          "+100": "+100"
+        }
+      },
+      "step7": {
+        "title": "You sell...",
+        "salesType-error": "Please select what you sell",
+        "salesTypes": {
+          "products": "Products",
+          "services": "Services",
+          "software": "Software",
+          "nothing": "Nothing"
+        }
+      },
+      "step8": {
+        "title": "Tell us more about your company",
+        "fetching-website": "We are fetching your company website...",
+        "mission-label": "What is your company's mission?",
+        "mission-optional": "(Optional)",
+        "mission-placeholder": "Describe your company's mission...",
+        "target-label": "Who is your target audience?",
+        "target-optional": "(Optional)",
+        "target-placeholder": "Describe your goals...",
+        "needs-label": "What makes you want to use Hoox?",
+        "needs-optional": "(Optional)",
+        "needs-placeholder": "Describe how Hoox can help you to achieve your goals..."
+      },
+      "pricing": {
+        "title": "Welcome, let's have a look at our plans that best suit your needs",
+        "continue-free-trial": "Continue with free trial"
+      },
+      "thank-you": {
+        "title": "Thank you !",
+        "description": "Your onboarding is complete. We're excited to have you on board and can't wait to help you achieve your goals."
       }
     }
   }

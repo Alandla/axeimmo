@@ -10,6 +10,7 @@ import { IMediaSpace } from '@/src/types/space'
 import VideoCardSkeleton from '@/src/components/video-card-skeleton'
 import { ImageOff } from 'lucide-react'
 import { IMedia } from '@/src/types/video'
+import { useAssetsStore } from '@/src/store/assetsStore'
 
 interface User {
   id: string
@@ -24,6 +25,7 @@ export interface MediaSpaceWithCreator extends IMediaSpace {
 export default function AssetsPage() {
   const t = useTranslations('assets')
   const { activeSpace } = useActiveSpaceStore()
+  const { assetsBySpace, setAssets: setStoreAssets, fetchAssets } = useAssetsStore()
   
   const [assets, setAssets] = useState<MediaSpaceWithCreator[]>([])
   const [selectedAsset, setSelectedAsset] = useState<MediaSpaceWithCreator | null>(null)
@@ -43,33 +45,44 @@ export default function AssetsPage() {
   }
 
   const handleDeleteAsset = (deletedMedia: IMedia) => {
-    setAssets(prevAssets => prevAssets.filter(asset => asset.media.id !== deletedMedia.id));
+    const updatedAssets = assets.filter(asset => asset.media.id !== deletedMedia.id);
+    setAssets(updatedAssets);
+    
+    if (activeSpace?.id) {
+      setStoreAssets(activeSpace.id, updatedAssets);
+    }
   };
 
   useEffect(() => {
-    const fetchAssets = async () => {
-      if (activeSpace?.id) {
-        const rawAssets: IMediaSpace[] = await basicApiCall('/space/getMedias', {
-          spaceId: activeSpace.id
-        })
-        console.log(rawAssets)
-        if (rawAssets) {
-          const processedAssets = rawAssets.map(asset => ({
-            ...asset,
-            creator: {
-              id: asset.uploadedBy,
-              name: '',
-              image: ''
-            }
-          }))
-          setAssets(processedAssets.reverse())
-          setIsLoading(false)
-        }
-      }
+    if (!activeSpace?.id) return;
+
+    const cachedAssets = assetsBySpace.get(activeSpace.id);
+    
+    if (cachedAssets) {
+      setAssets(cachedAssets);
+      setIsLoading(false);
     }
 
-    fetchAssets()
-  }, [activeSpace?.id])
+    const loadAssets = async () => {
+      try {
+        if (!cachedAssets) {
+          setIsLoading(true);
+        }
+
+        const assetsFromApi = await fetchAssets(activeSpace.id, true);
+
+        setAssets(assetsFromApi);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Erreur lors du chargement des assets:', error);
+        if (!cachedAssets) {
+          setIsLoading(false);
+        }
+      }
+    };
+    
+    loadAssets();
+  }, [activeSpace]);
 
   return (
     <>

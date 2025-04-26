@@ -12,7 +12,7 @@ import { IconEyeSlash } from "../icons/eye-slash";
 import { IconEyeLowVision } from "../icons/eye-low-vision";
 import { IconEye } from "../icons/eye";
 
-export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId, hadAvatar }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string, hadAvatar: boolean }) {
+export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId, hadAvatar, keywords }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string, hadAvatar: boolean, keywords: string[] }) {
 
   const t = useTranslations('edit.sequence-edit')
 
@@ -58,7 +58,7 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
             <TabsTrigger value="assets">{t('assets')}</TabsTrigger>
           </TabsList>
           <TabsContent value="search">
-            <SequenceSettingsSearch sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} />
+            <SequenceSettingsSearch sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} keywords={keywords} />
           </TabsContent>
           <TabsContent value="assets">
             <SequenceSettingsAssets sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={spaceId} />

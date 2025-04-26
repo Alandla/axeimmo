@@ -8,6 +8,10 @@ export default async function LayoutPrivate({ children }: Readonly<{children: Re
     redirect('/');
   }
 
+  if (!session.user?.hasFinishedOnboarding) {
+    redirect('/onboarding');
+  }
+
   return (
     <>
       {children}

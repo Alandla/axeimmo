@@ -1,5 +1,6 @@
 import { LoopsClient } from 'loops';
 import { mails } from '../config/mails.config';
+import { logger } from '@trigger.dev/sdk/v3';
 
 const loops = new LoopsClient(process.env.LOOPS_API_KEY as string);
 
@@ -22,6 +23,7 @@ export const addVideoCountContact = async (userId: string) => {
   if (contact.length === 0) {
     return;
   }
+  logger.log('[VIDEO COUNT] Contact', { email: contact[0].email });
   const result = await loops.updateContact(contact[0].email, {
     videosCount: contact[0]?.videosCount ? Number(contact[0].videosCount) + 1 : 1
   });
@@ -69,9 +71,11 @@ export async function sendCreatedVideoEvent({ email, videoId }: { email: string,
   return result;
 }
 
-export async function sendVerificationRequest({ identifier: email, url }: { identifier: string, url: string }) {
+export async function sendVerificationRequest({ identifier: email, url, deviceId }: { identifier: string, url: string, deviceId?: string }) {
+  const finalURL = url + `&deviceId=${deviceId}`;
+  
   const dataVariables = {
-    link: url
+    link: finalURL
   }
 
   const result = await loops.sendTransactionalEmail({

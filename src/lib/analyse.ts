@@ -1,32 +1,15 @@
-import { IMedia } from "../types/video";
-
-export function getDataForAnalysis() {
-  return '';
-}
-
-export interface SimpleSequence {
-  id: number;
-  text: string;
-  mediaDescription: string;
-}
-
-export interface SimpleMedia {
-  id: number;
-  description: string[]
-}
-
-export function simplifySequences(sequences: any[]): SimpleSequence[] {
-  return sequences.map((sequence, index) => ({
-    id: index + 1,
-    text: sequence.text,
-    mediaDescription: sequence.media?.description || ''
+export function simplifySequences(sequences: any[]) {
+  return sequences.map((seq, index) => ({
+    sequence_id: String(index),
+    text: seq.text,
+    b_roll_description: seq.media?.description?.[0]?.text || ""
   }));
 }
 
-export function simplifyMedia(media: IMedia[]): SimpleMedia[] {
-  return media.map((media, index) => ({
+export function simplifyMediaFromPexels(result: any[]): any[] {
+  return result.map((r, index) => ({
     id: index,
-    description: media.description?.map(d => d.text) || []
+    description: r.media.description?.[0]?.text || ''
   }));
 }
 
@@ -36,17 +19,4 @@ export interface ShowBrollResult {
     id: number;
     show: 'full' | 'half' | 'hide';
   }>;
-}
-
-export function applyShowBrollToSequences(sequences: any[], showBrollResult: ShowBrollResult): any[] {
-  return sequences.map((sequence, index) => {
-    const showInfo = showBrollResult.show.find(s => s.id === index + 1);
-    return {
-      ...sequence,
-      media: {
-        ...sequence.media,
-        show: showInfo?.show || 'full' // 'full' comme valeur par défaut
-      }
-    };
-  });
 }

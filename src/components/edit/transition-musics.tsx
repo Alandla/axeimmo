@@ -21,6 +21,7 @@ import {
   PaginationPrevious,
 } from "@/src/components/ui/pagination"
 import { ITransition } from "@/src/types/video";
+import { HorizontalScrollList } from "../ui/horizontal-scroll-list";
 
 interface TransitionMusicsProps {
   transition: ITransition;
@@ -54,13 +55,6 @@ export default function TransitionMusics({
     setCurrentPage(1); // Réinitialiser la page lors du changement de catégorie
   };
 
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (e.deltaY !== 0) {
-      e.currentTarget.scrollLeft += e.deltaY;
-    }
-  };
-
   // Filtrer les sons selon les catégories sélectionnées
   const filteredSounds = sounds.filter(s => 
     selectedCategories.length === 0 || (typeof s.category === 'string' && selectedCategories.includes(s.category))
@@ -72,10 +66,11 @@ export default function TransitionMusics({
   const currentSounds = filteredSounds.slice(indexOfFirstSound, indexOfLastSound);
   const totalPages = Math.ceil(filteredSounds.length / soundsPerPage);
 
-  const handleSoundSelect = (soundUrl: string) => {
+  const handleSoundSelect = (soundUrl: string, soundPeakAt: number) => {
     const newTransition = {
       ...transition,
       sound: soundUrl,
+      soundPeakAt: soundPeakAt
     };
     updateTransition(transitionIndex, newTransition);
   };
@@ -142,11 +137,7 @@ export default function TransitionMusics({
   return (
     <>
       <div className="flex justify-between mb-4">
-        <div 
-          className="overflow-x-auto scrollbar-hide flex-1"
-          onWheel={handleWheel}
-        >
-          <div className="flex gap-2">
+          <HorizontalScrollList>
             {allCategories.map(category => (
               <Badge
                 key={category}
@@ -160,8 +151,7 @@ export default function TransitionMusics({
                 {t(`category.${category}`)}
               </Badge>
             ))}
-          </div>
-        </div>
+          </HorizontalScrollList>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="ml-2">
@@ -212,7 +202,7 @@ export default function TransitionMusics({
                 "flex items-center justify-between p-3 rounded-lg border cursor-pointer",
                 isSelected && "border-primary"
               )}
-              onClick={() => handleSoundSelect(sound.url)}
+              onClick={() => handleSoundSelect(sound.url, sound.soundPeakAt)}
             >
               <div className="truncate flex-1 mr-4 text-sm">
                 {sound.name}

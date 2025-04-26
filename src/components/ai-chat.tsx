@@ -2,12 +2,12 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useTranslations } from "next-intl"
-import { Check, Pencil, Clock } from 'lucide-react'
+import { Check, Pencil, Clock, AlertCircle, Rocket, Plus } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { useSession } from 'next-auth/react'
 import { generateScript, improveScript, readStream } from '../lib/stream'
 import { getArticleContentFromUrl } from '../lib/article'
-import { CreationStep } from '../types/enums'
+import { CreationStep, PlanName } from '../types/enums'
 import { Textarea } from './ui/textarea'
 import { AiChatTab } from './ai-chat-tab'
 import { Button } from './ui/button'
@@ -17,11 +17,14 @@ import { useCreationStore } from '../store/creationStore'
 import { AvatarGridComponent } from './avatar-grid'
 import { Steps, StepState } from '../types/step'
 import { GenerationProgress } from './generation-progress'
-import { startGeneration } from '../service/generation.service'
+import { useGenerationProcess, handleRunUpdate } from '../service/generation.service'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { useVideosStore } from '../store/videosStore'
 import { useRouter } from 'next/navigation'
 import { ILastUsed } from '@/src/types/space'
 import { getSpaceLastUsed } from '../service/space.service'
+import { Alert, AlertDescription, AlertTitle } from './ui/alert'
+import { useRealtimeRun } from '@trigger.dev/react-hooks'
 
 enum MessageType {
   TEXT = 'text',
@@ -42,40 +45,116 @@ interface Message {
 export function AiChat() {
   const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps } = useCreationStore()
   const { activeSpace, setLastUsedParameters } = useActiveSpaceStore()
+  const { totalVideoCountBySpace, fetchVideos } = useVideosStore()
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [creationStep, setCreationStep] = useState(CreationStep.START)
+  const [hasFreePlanReachedLimit, setHasFreePlanReachedLimit] = useState(false)
   const { data: session } = useSession()
   const t = useTranslations('ai');
   const tAi = useTranslations('ai-chat');
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [inputMessage, setInputMessage] = useState('');
+  const [runId, setRunId] = useState<string | undefined>();
+  const [accessToken, setAccessToken] = useState<string | undefined>();
+  const [generationSpaceId, setGenerationSpaceId] = useState<string | undefined>();
+  
+  const { startGeneration: startGenerationProcess } = useGenerationProcess();
+  
+  // Utilisation de useRealtimeRun pour suivre les mises à jour de la tâche
+  const { run } = useRealtimeRun(runId, {
+    accessToken: accessToken,
+    enabled: !!runId && !!accessToken,
+    experimental_throttleInMs: 1000
+  });
+  
+  // Effet pour traiter les mises à jour du run
+  useEffect(() => {
+    if (run && generationSpaceId) {
+      try {
+        const videoId = handleRunUpdate(run, generationSpaceId);
+        
+        if (videoId && run.status === "COMPLETED") {
+          router.push(`/edit/${videoId}`);
+        }
+      } catch (error) {
+        console.error('Generation error:', error);
+      }
+    }
+  }, [run, generationSpaceId, router]);
+
+  // Vérifier le nombre de vidéos pour le plan gratuit
+  useEffect(() => {
+    const checkVideoLimit = async () => {
+      if (!activeSpace || activeSpace.planName !== PlanName.FREE) {
+        return;
+      }
+
+      try {
+        // Récupérer les vidéos depuis le store ou l'API
+        let totalVideoCount = totalVideoCountBySpace.get(activeSpace.id);
+        
+        if (!totalVideoCount) {
+          // Si le store est vide, charger depuis l'API
+          const { totalCount } = await fetchVideos(activeSpace.id);
+          totalVideoCount = totalCount;
+        }
+        
+        // Vérifier si l'utilisateur a atteint la limite de 3 vidéos
+        if (totalVideoCount >= 3) {
+          setHasFreePlanReachedLimit(true);
+        } else {
+          setHasFreePlanReachedLimit(false);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la vérification du nombre de vidéos:", error);
+      }
+    };
+    
+    checkVideoLimit();
+  }, [activeSpace]);
 
   const handleSendMessage = (message: string, duration: number) => {
     if (creationStep === CreationStep.START) {
       resetSteps()
-      if (files.length !== 0) {
+      
+      // Vérifier si nous avons des fichiers à uploader
+      const hasFiles = files.length !== 0;
+      
+      if (hasFiles) {
+        // Si nous avons des fichiers à uploader, commencer par MEDIA_UPLOAD
         addStep({ id: 0, name: Steps.MEDIA_UPLOAD, state: StepState.PENDING, progress: 0 })
+        // Ajouter QUEUE après MEDIA_UPLOAD
+        addStep({ id: 1, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
         
         if (files.some(file => file.usage === 'media')) {
-          addStep({ id: 3, name: Steps.ANALYZE_YOUR_MEDIA, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 6, name: Steps.ANALYZE_YOUR_MEDIA, state: StepState.PENDING, progress: 0 })
         }
 
         if (files.some(file => file.usage === 'voice')) {
-          addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.AVATAR)
           const messageAi = getRandomMessage('ai-get-audio-select-avatar');
           addMessageAi(messageAi, MessageType.AVATAR);
           return;
         } else if (files.some(file => file.usage === 'avatar')) {
-          addStep({ id: 1, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
           addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 5, name: Steps.ANALYZE_FOUND_MEDIA, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 7, name: Steps.PLACE_BROLL, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 8, name: Steps.DISPLAY_BROLL, state: StepState.PENDING, progress: 0 })
+          addStep({ id: 9, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
           setCreationStep(CreationStep.GENERATION)
           const messageAi = getRandomMessage('ai-get-all-start-generation');
           addMessageAi(messageAi, MessageType.GENERATION);
           handleStartGeneration()
           return;
         }
+      } else {
+        // Si nous n'avons pas de fichiers à uploader, commencer par QUEUE
+        addStep({ id: 0, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
       }
+      
       setCreationStep(CreationStep.SCRIPT)
       handleAiChat(message, duration)
     } else if (creationStep === CreationStep.SCRIPT) {
@@ -187,8 +266,14 @@ export function AiChat() {
   }
 
   const handleConfirmVoice = () => {
-    addStep({ id: 1, name: Steps.VOICE_GENERATION, state: StepState.PENDING, progress: 0 })
-    addStep({ id: 2, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
+    // Ajout de l'étape QUEUE avant les autres étapes si elle n'existe pas déjà
+    const hasQueueStep = useCreationStore.getState().steps.some(step => step.name === Steps.QUEUE);
+    if (!hasQueueStep) {
+      addStep({ id: 1, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
+    }
+    
+    addStep({ id: 2, name: Steps.VOICE_GENERATION, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
     setCreationStep(CreationStep.AVATAR);
     const messageUser = getRandomMessage('user-select-voice', { "name": selectedVoice?.name || '' });
     const messageAi = getRandomMessage('ai-select-avatar');
@@ -202,7 +287,7 @@ export function AiChat() {
     let messageAi = '';
     if (selectedLook) {
       messageUser1 = getRandomMessage('user-select-avatar', { "name": selectedLook?.name || '' });
-      addStep({ id: 5, name: Steps.ANALYZE_NEW_MEDIA, state: StepState.PENDING, progress: 0 })
+      addStep({ id: 8, name: Steps.DISPLAY_BROLL, state: StepState.PENDING, progress: 0 })
     } else {
       messageUser1 = getRandomMessage('user-no-avatar');
     }
@@ -211,7 +296,17 @@ export function AiChat() {
     messageAi = getRandomMessage('ai-generation-progress');
     const messageUser = messageUser1 + ' ' + messageUser2;
 
+    // Ajout de l'étape QUEUE avant les autres étapes
+    const hasQueueStep = useCreationStore.getState().steps.some(step => step.name === Steps.QUEUE);
+    if (!hasQueueStep) {
+      addStep({ id: 1, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
+    }
+    
     addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 5, name: Steps.ANALYZE_FOUND_MEDIA, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 7, name: Steps.PLACE_BROLL, state: StepState.PENDING, progress: 0 })
+    addStep({ id: 9, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
+    
     setCreationStep(CreationStep.GENERATION)
     handleStartGeneration()
 
@@ -220,9 +315,14 @@ export function AiChat() {
   }
 
   const handleStartGeneration = async () => {
-    const videoId = await startGeneration(session?.user?.id || '', activeSpace?.id || '')
-    if (videoId) {
-      router.push(`/edit/${videoId}`)
+    try {
+      const result = await startGenerationProcess(session?.user?.id || '', activeSpace?.id || '');
+      
+      setRunId(result.runId);
+      setAccessToken(result.publicAccessToken);
+      setGenerationSpaceId(result.spaceId);
+    } catch (error) {
+      console.error('Error starting generation:', error);
     }
   }
 
@@ -319,8 +419,29 @@ export function AiChat() {
 }, [activeSpace])
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col justify-center items-center p-4">
+    <div className="flex flex-col h-full relative max-w-">
+      {hasFreePlanReachedLimit && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full m-4">
+            <Alert variant="destructive" className="mb-3">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>{t('limit-reached-title')}</AlertTitle>
+              <AlertDescription>
+                {t('limit-reached-description')}
+              </AlertDescription>
+            </Alert>
+            <Button 
+              variant="default" 
+              onClick={() => router.push('/dashboard/pricing')}
+              className="w-full"
+            >
+              <Rocket className="h-4 w-4" />
+              {t('upgrade-plan')}
+            </Button>
+          </div>
+        </div>
+      )}
+      <div className={`flex-1 flex flex-col justify-center items-center p-4 ${hasFreePlanReachedLimit ? 'pointer-events-none' : ''}`}>
         {messages.length === 0 ? (
           <div className="w-full max-w-md">
             <div className="text-center mb-8">
@@ -394,7 +515,39 @@ export function AiChat() {
             ))}
           </div>
         )}
-        <AiChatTab creationStep={creationStep} sendMessage={handleSendMessage} handleConfirmAvatar={handleConfirmAvatar} handleConfirmVoice={handleConfirmVoice} />
+        <AiChatTab 
+          creationStep={creationStep} 
+          sendMessage={handleSendMessage} 
+          handleConfirmAvatar={handleConfirmAvatar} 
+          handleConfirmVoice={handleConfirmVoice}
+          isDisabled={hasFreePlanReachedLimit}
+          inputMessage={inputMessage}
+          setInputMessage={setInputMessage}
+        />
+        {activeSpace?.videoIdeas && activeSpace?.videoIdeas?.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="w-full max-w-md md:max-w-xl mt-4 bg-white rounded-lg"
+          >
+            <h3 className="text-sm font-medium text-gray-500 mb-2 p-4 pb-0">{t('need-ideas')}</h3>
+            <div className="flex flex-col gap-2 p-4 pt-2">
+              {activeSpace.videoIdeas.map((idea: string, index: number) => (
+                <button
+                  key={index}
+                  onClick={() => setInputMessage(idea)}
+                  className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors w-full overflow-hidden"
+                >
+                  <Plus className="h-4 w-4 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <span className="truncate block text-left">{idea}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   )

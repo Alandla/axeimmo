@@ -1,21 +1,22 @@
 import { logger, metadata, task, wait } from "@trigger.dev/sdk/v3";
 import { updateExport } from "../dao/exportDao";
 import { getVideoById, updateVideo } from "../dao/videoDao";
-import { getProgress, renderVideo } from "../lib/render";
+import { getProgress, renderVideo, renderAudio } from "../lib/render";
 import { uploadImageFromUrlToS3 } from "../lib/r2";
 import { IVideo } from "../types/video";
 import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails } from "../lib/heygen";
 import { calculateHeygenCost } from "../lib/cost";
-import { combineAudioVoices } from "./combine-audio";
 import { addVideoExportedContact, sendExportedVideoEmail } from "../lib/loops";
 import UserModel from "../models/User";
+import { MixpanelEvent } from "../types/events";
+import { track } from "../utils/mixpanel-server";
 
 interface RenderStatus {
   status: string;
   progress?: number;
-  videoUrl?: string | null;
+  url?: string | null;
   costs?: number;
   message?: string;
 }
@@ -36,6 +37,7 @@ export const exportVideoTask = task({
     try {
       const videoId = payload.videoId;
       const exportId = payload.exportId;
+      let renderAudioCost = 0;
 
       logger.log("Exporting video...");
       const exportData : IExport = await updateExport(exportId, { runId: ctx.run.id, status: 'processing' });
@@ -55,16 +57,28 @@ export const exportVideoTask = task({
       const space = await getSpaceById(video.spaceId);
       const showWatermark = space.plan.name === "FREE";
 
+      // Intégration de l'export audio si un avatar est présent
       if (video.video?.avatar?.id && video.video?.audio?.voices && !video.video?.avatar?.videoUrl) {
         logger.log("Combinaison des audios...");
-        const combinedAudio = await combineAudioVoices.triggerAndWait({ voices: video.video.audio.voices });
         
-        if (!combinedAudio.ok) {
+        // Render audio only
+        const audioRender = await renderAudio(video);
+        logger.log("Audio render started", { renderId: audioRender.renderId, bucketName: audioRender.bucketName });
+
+        const audioRenderStatus : RenderStatus = await pollRenderStatus(
+          audioRender.renderId, 
+          audioRender.bucketName,
+          'render-audio'
+        );
+
+        if (audioRenderStatus.status === 'failed') {
           throw new Error('La combinaison des audios a échoué');
         }
 
+        renderAudioCost = audioRenderStatus.costs || 0;
+
         logger.log("Génération de la vidéo avatar...");
-        const avatarResponse = await generateAvatarVideo(video.video.avatar, combinedAudio.output.url);
+        const avatarResponse = await generateAvatarVideo(video.video.avatar, audioRenderStatus.url || '');
 
         logger.log("Avatar response", { avatarResponse });
         const avatarVideoUrl = await pollAvatarVideoStatus(avatarResponse.data.video_id);
@@ -82,7 +96,11 @@ export const exportVideoTask = task({
       const render = await renderVideo(video, showWatermark);
       await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
 
-      const renderStatus : RenderStatus = await pollRenderStatus(render.renderId, render.bucketName);
+      const renderStatus : RenderStatus = await pollRenderStatus(
+        render.renderId, 
+        render.bucketName,
+        'render'
+      );
 
       if (renderStatus.status === 'failed') {
         if (ctx.attempt.number === 1) {
@@ -105,20 +123,28 @@ export const exportVideoTask = task({
         }
       }
 
-      if (renderStatus.status === 'completed' && renderStatus.videoUrl && renderStatus.costs) {
+      if (renderStatus.status === 'completed' && renderStatus.url && renderStatus.costs) {
         await updateExport(exportId, { 
-          downloadUrl: renderStatus.videoUrl, 
-          renderCost: renderStatus.costs + ctx.run.costInCents, 
+          downloadUrl: renderStatus.url, 
+          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost, 
           status: 'completed' 
         });
         await metadata.replace({
           status: 'completed',
-          downloadUrl: renderStatus.videoUrl,
-          renderCost: renderStatus.costs + ctx.run.costInCents
+          downloadUrl: renderStatus.url,
+          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost
         })
 
         try {
           logger.info('Sending emails to space users');
+          const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
+          const userId = createEvent?.user;
+
+          track(MixpanelEvent.VIDEO_EXPORTED, {
+            distinct_id: userId,
+            videoId: video.id,
+            hasAvatar: video.video?.avatar ? true : false,
+          })
 
           const space = await getSpaceById(video.spaceId);
           
@@ -153,7 +179,7 @@ export const exportVideoTask = task({
           logger.error('Error while sending emails', { error: errorMessage });
         }
         
-        return { success: true, videoUrl: renderStatus.videoUrl };
+        return { success: true, url: renderStatus.url };
       }
 
       logger.info('Cost infra', { costInCents: ctx.run.costInCents });
@@ -164,25 +190,25 @@ export const exportVideoTask = task({
   },
 });
 
-const pollRenderStatus = async (renderId: string, bucketName: string) => {
+const pollRenderStatus = async (renderId: string, bucketName: string, step: string = 'render') => {
   let attempts = 0;
-  const maxAttempts = 1000;
+  const maxAttempts = step === 'render' ? 1000 : 500;
   const delayBetweenAttempts = 2;
 
   while (attempts < maxAttempts) {
     try {
-      const renderStatus : RenderStatus = await getProgress(renderId, bucketName)
+      const renderStatus = await getProgress(renderId, bucketName, step === 'render-audio');
 
       if (renderStatus.status === 'processing' && renderStatus.progress) {
         await metadata.replace({
           status: 'processing',
-          step: 'render',
+          step: step,
           progress: renderStatus.progress
         })
-      } else if (renderStatus.status === 'completed' && renderStatus.videoUrl && renderStatus.costs) {
+      } else if (renderStatus.status === 'completed' && renderStatus.url) {
         await metadata.replace({
           status: 'completed',
-          videoUrl: renderStatus.videoUrl,
+          url: renderStatus.url,
           costs: renderStatus.costs
         })
         return renderStatus;
@@ -193,13 +219,13 @@ const pollRenderStatus = async (renderId: string, bucketName: string) => {
       await wait.for({ seconds: delayBetweenAttempts });
       attempts++;
     } catch (error) {
-      logger.error(`Error while getting transcription status: ${error}`);
+      logger.error(`Error while getting ${step} status: ${error}`);
       await wait.for({ seconds: delayBetweenAttempts });
       attempts++;
     }
   }
 
-  throw new Error('Nombre maximum de tentatives atteint sans obtenir un statut "done" pour le rendu.');
+  throw new Error(`Nombre maximum de tentatives atteint sans obtenir un statut "done" pour le ${step}.`);
 };
 
 const uploadGoogleImagesToS3 = async (video: IVideo) => {

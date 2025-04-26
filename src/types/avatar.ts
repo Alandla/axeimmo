@@ -5,6 +5,7 @@ export type Avatar = {
     gender: 'male' | 'female'
     tags: string[]
     thumbnail: string
+    premium?: boolean
     looks: AvatarLook[]
 }
 

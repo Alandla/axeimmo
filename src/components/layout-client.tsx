@@ -7,6 +7,7 @@ import { Toaster } from "@/src/components/ui/toaster";
 import { CrispChat } from "./crisp-chat";
 import MicrosoftClarity from "./metrics/MicrosoftClarity";
 import GoogleAnalytics from "./metrics/GoogleAnalytics";
+import MixpanelProvider from "./metrics/MixpanelProvider";
 import FacebookPixel from "./metrics/Facebook";
 
 const ClientLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -22,6 +23,7 @@ const ClientLayout = async ({ children }: { children: React.ReactNode }) => {
           <NextTopLoader color={config.colors.main} showSpinner={false} />
           {children}
           <CrispChat />
+          <MixpanelProvider />
         </NextIntlClientProvider>
       </SessionProvider>
     </>

@@ -4,7 +4,7 @@ export interface IWord {
   word: string;
   start: number;
   end: number;
-  confidence: number;
+  confidence?: number;
   durationInFrames: number;
 }
 
@@ -32,6 +32,7 @@ export interface IMedia {
     fps?: number;
     link: string;
   };
+  video_pictures?: any[];
   image?: {
     id: string;
     link: string;
@@ -53,11 +54,6 @@ export interface ISequence {
   end: number;
   durationInFrames?: number;
   audioIndex: number;
-  keywords?: Array<{
-    search: 'stock' | 'web';
-    keyword: string;
-    precision: 'hard' | 'normal' | 'easy';
-  }>;
   media?: IMedia;
   originalText?: string;
   needsAudioRegeneration?: boolean;
@@ -79,6 +75,7 @@ export interface IVideo {
   id?: string;
   spaceId: string; // MongoDB ObjectId as string
   costToGenerate?: number;
+  archived?: boolean;
   state: {
     type: 'pending' | 'generating' | 'done' | 'exporting' | 'error';
     message?: string;
@@ -90,6 +87,7 @@ export interface IVideo {
   video?: {
     thumbnail: string;
     subtitle: any;
+    keywords?: string[];
     audio?: {
       voices: {
         url: string;
@@ -110,9 +108,7 @@ export interface IVideo {
     }
     metadata: {
       audio_duration: number;
-      number_of_distinct_channels: number;
-      billing_time: number;
-      transcription_time: number;
+      language: string;
     };
     sequences: ISequence[];
     transitions?: ITransition[];

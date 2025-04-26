@@ -15,7 +15,7 @@ export function calculateAnthropicCost(usage: TokenUsage): number {
 }
 
 export function calculateElevenLabsCost(text: string, isTurbo: boolean = false): number {
-  const COST_PER_1000_CHARS = 0.30;
+  const COST_PER_1000_CHARS = 0.12;
   const TURBO_DISCOUNT = 0.5;
 
   // Calculer le coût de base pour 1000 caractères
@@ -32,5 +32,27 @@ export function calculateHeygenCost(durationInSeconds: number): number {
   const segments = Math.ceil(durationInSeconds / 30);
   
   return segments * COST_PER_30_SECONDS;
+}
+
+export function calculateWhisperGroqCost(durationInSeconds: number, isTurbo: boolean = false): number {
+  // Convertir les secondes en heures
+  const durationInHours = durationInSeconds / 3600;
+  
+  // Prix par heure transcrite
+  const WHISPER_LARGE_COST_PER_HOUR = 0.111;
+  const WHISPER_LARGE_TURBO_COST_PER_HOUR = 0.04;
+  
+  // Calculer le coût en fonction du modèle
+  return durationInHours * (isTurbo ? WHISPER_LARGE_TURBO_COST_PER_HOUR : WHISPER_LARGE_COST_PER_HOUR);
+}
+
+export function calculateWhisperSieveCost(durationInSeconds: number): number {
+  // Convertir les secondes en heures
+  const durationInHours = durationInSeconds / 3600;
+  
+  // Prix par heure transcrite
+  const SIEVE_COST_PER_HOUR = 0.15;
+  
+  return durationInHours * SIEVE_COST_PER_HOUR;
 }
 

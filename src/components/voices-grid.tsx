@@ -23,6 +23,7 @@ import { cn, getMostFrequentString } from "@/src/lib/utils"
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { getSpaceVoices } from '../service/space.service'
 import { useCreationStore } from '../store/creationStore'
+import { HorizontalScrollList } from './ui/horizontal-scroll-list'
 
 export function VoicesGridComponent() {
   const t = useTranslations('voices')
@@ -123,15 +124,6 @@ export function VoicesGridComponent() {
     handleFilters(filteredVoices)
   }
 
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    // Empêche le scroll vertical de la page
-    e.preventDefault();
-    
-    if (e.deltaY !== 0) {
-      e.currentTarget.scrollLeft += e.deltaY;
-    }
-  }
-
   // Mettre à jour les gestionnaires d'événements des filtres
   const handleFilters = (filteredResults: Voice[]) => {
     if (currentPage !== 1 && currentPage * voicesPerPage > filteredResults.length) {
@@ -188,11 +180,11 @@ export function VoicesGridComponent() {
           setSelectedAccent(value)
           handleFilters(filteredVoices)
         }}>
-          <SelectTrigger className="w-[120px] sm:w-[180px]">
+          <SelectTrigger className="w-[100px] sm:w-[180px]">
             <SelectValue>
               {selectedAccent === 'all' ? (
                 <div className="flex items-center">
-                  <span>🌍</span>
+                  <span className="mr-1">🌍</span>
                   <span className="hidden sm:inline ml-1">{tCommon('all-f')}</span>
                 </div>
               ) : (
@@ -205,7 +197,7 @@ export function VoicesGridComponent() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              <span className="mr-1">🌍</span> {tCommon('all-f')}
+              <span className="mr-1">🌍</span> {t('accent.all')}
             </SelectItem>
             {Array.from(new Set(voices.map(v => v.accent))).map(accent => (
               <SelectItem key={accent} value={accent} onClick={() => removeSelectedAccent(accent)}>
@@ -261,26 +253,21 @@ export function VoicesGridComponent() {
         </Select>
       </div>
 
-      <div 
-        className="overflow-x-auto scrollbar-hide mt-2"
-        onWheel={handleWheel}
-      >
-        <div className="flex gap-2">
-          {allTags.map(tag => (
-            <Badge
-              key={tag}
-              variant={selectedTags.includes(tag) ? "default" : "outline"}
-              className="cursor-pointer whitespace-nowrap"
-              onClick={() => toggleTag(tag)}
-            >
-              {selectedTags.includes(tag) && (
-                <Check className="w-3 h-3 mr-1" />
-              )}
-              {t(`tags.${tag}`)}
-            </Badge>
-          ))}
-        </div>
-      </div>
+      <HorizontalScrollList className="mt-2">
+        {allTags.map(tag => (
+          <Badge
+            key={tag}
+            variant={selectedTags.includes(tag) ? "default" : "outline"}
+            className="cursor-pointer whitespace-nowrap"
+            onClick={() => toggleTag(tag)}
+          >
+            {selectedTags.includes(tag) && (
+              <Check className="w-3 h-3 mr-1" />
+            )}
+            {t(`tags.${tag}`)}
+          </Badge>
+        ))}
+      </HorizontalScrollList>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
         {currentVoices.map((voice) => (

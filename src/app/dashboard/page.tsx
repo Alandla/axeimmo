@@ -7,6 +7,7 @@ import { useToast } from "@/src/hooks/use-toast";
 import { basicApiCall } from "@/src/lib/api";
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
 import { useVideoToDeleteStore } from "@/src/store/videoToDelete";
+import { useVideosStore } from "@/src/store/videosStore";
 import { IVideo } from "@/src/types/video";
 import { useEffect, useState } from "react";
 import Link from "next/link"
@@ -32,49 +33,67 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] = useState(false)
   const { activeSpace } = useActiveSpaceStore()
+  const { videosBySpace, setVideos: setStoreVideos, fetchVideos } = useVideosStore()
 
+  // Charger les vidéos
   useEffect(() => {
-    const fetchVideos = async () => {
-      setIsLoading(true)
-      const rawVideos: IVideo[] = await basicApiCall('/space/getVideos', { spaceId: activeSpace?.id })
-      
-      const processedVideos = rawVideos.map(video => {
-        const createEvent = video.history?.find(h => h.step === 'CREATE')
-        const userId = createEvent?.user
+    if (!activeSpace?.id) return;
 
-        return {
-          ...video,
-          creator: {
-            id: userId || '',
-            name: '',
-            image: ''
-          }
+    const cachedVideos = videosBySpace.get(activeSpace.id);
+    
+    if (cachedVideos) {
+      setVideos(cachedVideos);
+      setIsLoading(false);
+    }
+
+    const loadVideos = async () => {
+      try {
+        if (!cachedVideos) {
+          setIsLoading(true);
         }
-      })
 
-      setVideos(processedVideos.reverse())
-      setIsLoading(false)
-    }
-    if (activeSpace) {
-      fetchVideos()
-    }
-  }, [activeSpace])
+        const videosFromApi = await fetchVideos(activeSpace.id, true);
+
+        setVideos(videosFromApi.videos);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Erreur lors du chargement des vidéos:', error);
+        if (!cachedVideos) {
+          toast({
+            title: t('toast.error-title'),
+            description: t('toast.error-loading-videos'),
+            variant: "destructive",
+          });
+          setIsLoading(false);
+        }
+      }
+    };
+    
+    loadVideos();
+  }, [activeSpace]);
 
   const handleDeleteVideo = async (video: IVideo) => {
     try {
       await basicApiCall('/video/delete', { video })
       toast({
-        title: "Video deleted",
-        description: "Your video has been deleted",
+        title: t('toast.title-video-deleted'),
+        description: t('toast.description-video-deleted'),
         variant: "confirm",
       })
-      setVideos(videos.filter(v => v.id !== video.id))
+
+      const updatedVideos = videos.filter(v => v.id !== video.id);
+      setVideos(updatedVideos);
+
+      if (activeSpace?.id) {
+        setStoreVideos(activeSpace.id, updatedVideos);
+      }
+      
       setIsModalConfirmDeleteOpen(false)
     } catch (error) {
       setIsModalConfirmDeleteOpen(false)
       toast({
-        title: "Error",
-        description: "An error occurred while deleting your video",
+        title: t('toast.error-title'),
+        description: t('toast.error-video-deleted'),
         variant: "destructive",
       })
     }
@@ -82,7 +101,6 @@ export default function Dashboard() {
 
   return (
     <>
-      <AffiliateTracker />
       <ModalConfirmDelete isOpen={isModalConfirmDeleteOpen} setIsOpen={setIsModalConfirmDeleteOpen} handleDeleteVideo={handleDeleteVideo} />
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
         {isLoading ? (

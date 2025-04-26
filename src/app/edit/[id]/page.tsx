@@ -7,7 +7,7 @@ import { Card } from "@/src/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/src/components/ui/breadcrumb"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
-import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2 } from 'lucide-react'
+import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2, Rocket } from 'lucide-react'
 import Link from 'next/link'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
@@ -30,19 +30,24 @@ import AudioSettings from '@/src/components/edit/audio-settings'
 import Musics from '@/src/components/edit/musics'
 import ModalPricing from '@/src/components/modal/modal-pricing'
 import Sequences from '@/src/components/edit/sequences'
-import { regenerateAudioForSequence, updateVideoTimings, waitForTranscription } from '@/src/lib/audio'
+import { getTranscription, regenerateAudioForSequence, updateVideoTimings } from '@/src/lib/audio'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
 import { CommandShortcut } from '@/src/components/ui/command'
 import { ISpace } from '@/src/types/space'
 import { PlanName } from '@/src/types/enums'
 import TransitionSettings from '@/src/components/edit/transition-settings'
 import { transitions as defaultTransitions, sounds as defaultSounds } from '@/src/config/transitions.config'
+import { usePremiumToast } from '@/src/utils/premium-toast'
+import MobileDisclaimerModal from '@/src/components/modal/mobile-disclaimer'
 
 export default function VideoEditor() {
   const { id } = useParams()
   const { data: session } = useSession()
   const { toast } = useToast()
   const t = useTranslations('edit')
+  const pricingT = useTranslations('pricing')
+  const planT = useTranslations('plan')
+  const { showPremiumToast } = usePremiumToast()
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
 
@@ -53,6 +58,7 @@ export default function VideoEditor() {
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
   const [showWatermark, setShowWatermark] = useState(true)
+  const [planName, setPlanName] = useState<PlanName>(PlanName.FREE)
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -64,6 +70,7 @@ export default function VideoEditor() {
   const [modalPricingDescription, setModalPricingDescription] = useState('')
   const [isDirty, setIsDirty] = useState(false)
   const [hasExistingReview, setHasExistingReview] = useState(false)
+  const [showMobileDisclaimer, setShowMobileDisclaimer] = useState(false)
   
   const updateVideo = (newVideoData: any) => {
     setVideo(newVideoData)
@@ -121,6 +128,16 @@ export default function VideoEditor() {
 
   const handleSaveSubtitleStyle = async () => {
     try {
+      // Vérifier si l'utilisateur a un plan Pro ou Entreprise
+      if (planName !== PlanName.PRO && planName !== PlanName.ENTREPRISE) {
+        showPremiumToast(
+          pricingT('premium-toast.title'),
+          pricingT('premium-toast.description', { plan: planT(PlanName.PRO) }),
+          pricingT('upgrade')
+        );
+        return;
+      }
+
       const subtitleStyle : ISpaceSubtitleStyle[] = await basicApiCall("/space/addSubtitleStyle", { spaceId: video?.spaceId || '', subtitleStyle: video?.video?.subtitle?.style })
       setSubtitleStyles(subtitleStyle)
       toast({
@@ -256,7 +273,8 @@ export default function VideoEditor() {
         const spaceResponse = await basicApiGetCall<ISpace>(`/space/${response.spaceId}`);
         setShowWatermark(spaceResponse.plan.name === PlanName.FREE);
         setSubtitleStyles(spaceResponse.subtitleStyle);
-
+        setPlanName(spaceResponse.plan.name);
+        
         // Vérifier si une review existe déjà
         const reviewResponse = await basicApiGetCall(`/reviews/${id}`);
         setHasExistingReview(!!reviewResponse);
@@ -290,16 +308,26 @@ export default function VideoEditor() {
 
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 1024) // 1024px est la breakpoint lg de Tailwind
-    }
+      const mobile = window.innerWidth < 1024; // 1024px est la breakpoint lg de Tailwind
+      setIsMobile(mobile);
+      // Check localStorage and mobile status to show disclaimer
+      if (mobile && !localStorage.getItem('mobileDisclaimerShown')) {
+        setShowMobileDisclaimer(true);
+      }
+    };
 
-    checkIsMobile()
+    checkIsMobile(); // Check on initial mount
 
-    window.addEventListener('resize', checkIsMobile)
+    window.addEventListener('resize', checkIsMobile);
     return () => {
-      window.removeEventListener('resize', checkIsMobile)
-    }
-  }, [])
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []); // Empty dependency array ensures this runs only once on mount for the initial check
+
+  const handleCloseMobileDisclaimer = () => {
+    setShowMobileDisclaimer(false);
+    localStorage.setItem('mobileDisclaimerShown', 'true');
+  };
 
   const handleRegenerateAudio = async (sequenceIndex: number) => {
     if (!video?.video) return;
@@ -308,9 +336,9 @@ export default function VideoEditor() {
     setIsLoading(true);
 
     try {
-      const { audioUrl, transcriptionId } = await regenerateAudioForSequence(video, sequenceIndex);
+      const { audioUrl } = await regenerateAudioForSequence(video, sequenceIndex);
       const audioIndex = video.video.sequences[sequenceIndex].audioIndex;
-      const transcription = await waitForTranscription(transcriptionId);
+      const transcription = await getTranscription(audioUrl);
 
       //const audioUrl = "https://media.hoox.video/843f1d10-4866-4a0b-954e-7de347d826ba.mp3"
       //const transcription = transcriptionMockup
@@ -736,7 +764,7 @@ export default function VideoEditor() {
     const defaultTransition = {
       ...defaultTransitions[0],
       indexSequenceBefore: afterIndex,
-      volume: 0.5,
+      volume: 0.15,
       sound: defaultSounds[0].url
     };
 
@@ -784,6 +812,10 @@ export default function VideoEditor() {
       description={modalPricingDescription}
       isOpen={showModalPricing}
       setIsOpen={setShowModalPricing}
+    />
+    <MobileDisclaimerModal
+        isOpen={showMobileDisclaimer}
+        onClose={handleCloseMobileDisclaimer}
     />
     <ModalConfirmExport
       cost={calculateCredits(video?.video?.metadata.audio_duration || 30)}
@@ -933,7 +965,7 @@ export default function VideoEditor() {
               ) : (
                 <ScrollArea className="h-[calc(100vh-5rem)]">
                   {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                    <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
+                    <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} />
                   )}
                   {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
                     <TransitionSettings 
@@ -1019,7 +1051,7 @@ export default function VideoEditor() {
             <TabsContent value="settings-sequence">
               <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
                 {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
+                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} />
                 )}
               </ScrollArea>
             </TabsContent>
