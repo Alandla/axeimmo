@@ -6,7 +6,6 @@ import VideoCardSkeleton from "@/src/components/video-card-skeleton";
 import { useToast } from "@/src/hooks/use-toast";
 import { basicApiCall } from "@/src/lib/api";
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
-import { useVideoToDeleteStore } from "@/src/store/videoToDelete";
 import { useVideosStore } from "@/src/store/videosStore";
 import { IVideo } from "@/src/types/video";
 import { useEffect, useState } from "react";
@@ -14,7 +13,6 @@ import Link from "next/link"
 import { useTranslations } from "next-intl";
 import { Sparkles, VideoOff } from "lucide-react"
 import { Button } from "@/src/components/ui/button";
-import AffiliateTracker from "@/src/lib/referral";
 
 interface User {
   id: string;

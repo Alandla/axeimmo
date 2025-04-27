@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select"
+import { getCookie } from '../lib/cookies'
 
 // Définition des fonctionnalités avec leurs catégories pour remplacer plan.features
 export const features = [
@@ -236,11 +237,14 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
   const handlePayment = async (plan: Plan) => {
     try {
       setLoadingPlan(plan.name);
-      
+
+      const priceValue = isAnnual ? plan.annualPrice : plan.monthlyPrice;
+      const discountedPrice = applyDiscount(priceValue);
+
       track(MixpanelEvent.GO_TO_CHECKOUT, {
         plan: plan.name,
         subscriptionType: isAnnual ? 'annual' : 'monthly',
-        price: isAnnual ? plan.annualPrice : plan.monthlyPrice,
+        price: discountedPrice,
         currency: currency,
       });
 
@@ -250,6 +254,8 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
         const price = currency === "EUR" ? priceId.euros : priceId.dollars;
         
         const toltReferral = typeof window !== 'undefined' && window.tolt_referral ? window.tolt_referral : undefined;
+        const fbc = getCookie("_fbc") || undefined;
+        const fbp = getCookie("_fbp") || undefined;
         
         const url: string = await basicApiCall('/stripe/createCheckout', {
           priceId: price,
@@ -259,6 +265,10 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
           successUrl: window.location.href,
           cancelUrl: window.location.href,
           toltReferral: toltReferral,
+          price: discountedPrice,
+          currency: currency,
+          fbc: fbc,
+          fbp: fbp,
         })
 
         window.location.href = url;

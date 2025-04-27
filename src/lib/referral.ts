@@ -9,6 +9,8 @@ import { useLocale } from 'next-intl';
 import { detectAndUpdateLanguage } from './client-geolocation';
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel";
+import { trackSignUpFacebook } from '@/src/lib/facebook';
+import { getCookie } from "./cookies";
 
 // Étendre l'interface Window pour inclure tolt
 declare global {
@@ -59,7 +61,6 @@ export function AffiliateTracker() {
       return;
     }
 
-    // Check if the user has already been checked for affiliation
     if (session.user?.checkAffiliate) {
       setLanguageChecked(true);
       return;
@@ -129,6 +130,14 @@ export function AffiliateTracker() {
         if (window.tolt && session.user?.email) {
           window.tolt.signup(session.user.email);
           console.log('Tolt signup tracked for:', session.user.email);
+        }
+        
+        const fbc = getCookie('_fbc');
+        const fbp = getCookie('_fbp');
+        
+        // Suivre l'inscription sur Facebook si les cookies sont disponibles
+        if (session.user?.email && session.user?.id && (fbc || fbp)) {
+          await trackSignUpFacebook(session.user.email, session.user.id, fbc, fbp);
         }
         
         let updateData: Partial<IUser> = {};

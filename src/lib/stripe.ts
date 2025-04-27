@@ -11,6 +11,8 @@ export const createCheckout = async ({
     clientReferenceId,
     user,
     toltReferral,
+    fbc,
+    fbp,
   }: {
     priceId: string;
     mode: string;
@@ -21,6 +23,8 @@ export const createCheckout = async ({
     clientReferenceId: string;
     user: IUser;
     toltReferral?: string;
+    fbc?: string;
+    fbp?: string;
   }) => {
     if (!process.env.STRIPE_SECRET_KEY) {
       throw new Error('STRIPE_SECRET_KEY est requis');
@@ -65,6 +69,8 @@ export const createCheckout = async ({
       metadata: {
         spaceId: spaceId,
         tolt_referral: toltReferral || null,
+        fbc: fbc || null,
+        fbp: fbp || null,
       },
       subscription_data: {
         metadata: {
