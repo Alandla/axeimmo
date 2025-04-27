@@ -23,7 +23,7 @@ const ClientLayout = async ({ children }: { children: React.ReactNode }) => {
           <NextTopLoader color={config.colors.main} showSpinner={false} />
           {children}
           <CrispChat />
-          <MixpanelProvider />
+          {process.env.NODE_ENV !== 'development' && <MixpanelProvider />}
         </NextIntlClientProvider>
       </SessionProvider>
     </>

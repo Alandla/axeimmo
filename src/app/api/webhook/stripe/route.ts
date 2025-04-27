@@ -110,7 +110,9 @@ export async function POST(req: Request) {
 
         await updateSpacePlan(spaceId as string, planSpace);
         
-        trackOrderFacebook(user?.email, session?.invoice as string, session?.subscription as string, user?.id?.toString(), priceAmount, fbc, fbp);
+        if (fbc || fbp) {
+          trackOrderFacebook(user?.email, session?.invoice as string, session?.subscription as string, user?.id?.toString(), priceAmount, priceData.currency.toUpperCase(), fbc, fbp);
+        }
 
         // Track subscription in Mixpanel
         if (user.id) {
@@ -118,7 +120,7 @@ export async function POST(req: Request) {
             distinct_id: user.id,
             plan: plan.name,
             subscriptionType: billingInterval === "month" ? "monthly" : "annual",
-            price: priceData.unit_amount,
+            price: priceAmount,
             currency: priceData.currency,
           });
         }

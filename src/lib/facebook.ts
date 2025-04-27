@@ -5,8 +5,8 @@ export const trackSignUpFacebook = async (mail: string, userId: string, fbc?: st
   const hashedEmail = SHA256(mail).toString();
   const hashedUserId = SHA256(userId).toString();
 
-  const API_VERSION = "v19.0";
-  const PIXEL_ID = process.env.FACEBOOK_PIXEL_ID;
+  const API_VERSION = "v22.0";
+  const PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
   const TOKEN = process.env.FACEBOOK_TOKEN_ACCESS;
 
   const eventTime = Math.floor(Date.now() / 1000);
@@ -24,8 +24,8 @@ export const trackSignUpFacebook = async (mail: string, userId: string, fbc?: st
                 ...(fbp ? { "fbp": fbp } : {})
             }
         }
-    ]
-};
+    ],
+  };
 
   try {
     const response = await axios.post(`https://graph.facebook.com/${API_VERSION}/${PIXEL_ID}/events?access_token=${TOKEN}`, eventData);
@@ -34,15 +34,23 @@ export const trackSignUpFacebook = async (mail: string, userId: string, fbc?: st
   }
 }
 
-export const trackAddToCartFacebook = async (mail: string, userId: string, fbc?: string, fbp?: string) => {
+export const trackAddToCartFacebook = async (mail: string, userId: string, price: number, currency: string = "EUR", fbc?: string, fbp?: string) => {
   const hashedEmail = SHA256(mail).toString();
   const hashedUserId = SHA256(userId).toString();
 
-  const API_VERSION = "v19.0";
-  const PIXEL_ID = process.env.FACEBOOK_PIXEL_ID;
+  const API_VERSION = "v22.0";
+  const PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
   const TOKEN = process.env.FACEBOOK_TOKEN_ACCESS;
 
   const eventTime = Math.floor(Date.now() / 1000);
+
+  const userData: any = {
+    "em": [hashedEmail],
+    "external_id": [hashedUserId]
+  };
+
+  if (fbc) userData.fbc = fbc;
+  if (fbp) userData.fbp = fbp;
 
   const eventData = {
     "data": [
@@ -50,15 +58,14 @@ export const trackAddToCartFacebook = async (mail: string, userId: string, fbc?:
             "event_name": "AddToCart",
             "event_time": eventTime,
             "action_source": "website",
-            "user_data": {
-                "em": [hashedEmail],
-                "external_id": [hashedUserId],
-                ...(fbc ? { "fbc": fbc } : {}),
-                ...(fbp ? { "fbp": fbp } : {})
+            "user_data": userData,
+            "custom_data": {
+                "currency": currency,
+                "value": price.toString()
             }
         }
-    ]
-};
+    ],
+  };
 
   try {
     const response = await axios.post(`https://graph.facebook.com/${API_VERSION}/${PIXEL_ID}/events?access_token=${TOKEN}`, eventData);
@@ -67,15 +74,24 @@ export const trackAddToCartFacebook = async (mail: string, userId: string, fbc?:
   }
 }
 
-export const trackOrderFacebook = async (mail: string, invoiceId: string, subscriptionId: string, userId: string, price: number, fbc?: string, fbp?: string) => {
+export const trackOrderFacebook = async (mail: string, invoiceId: string, subscriptionId: string, userId: string, price: number, currency: string = "EUR", fbc?: string, fbp?: string) => {
   const hashedEmail = SHA256(mail).toString();
   const hashedUserId = SHA256(userId).toString();
 
-  const API_VERSION = "v19.0";
-  const PIXEL_ID = process.env.FACEBOOK_PIXEL_ID;
+  const API_VERSION = "v22.0";
+  const PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
   const TOKEN = process.env.FACEBOOK_TOKEN_ACCESS;
 
   const eventTime = Math.floor(Date.now() / 1000);
+
+  const userData: any = {
+    "em": [hashedEmail],
+    "external_id": [hashedUserId]
+  };
+
+  if (subscriptionId) userData.subscription_id = subscriptionId;
+  if (fbc) userData.fbc = fbc;
+  if (fbp) userData.fbp = fbp;
 
   const eventData = {
     "data": [
@@ -84,20 +100,14 @@ export const trackOrderFacebook = async (mail: string, invoiceId: string, subscr
             "event_time": eventTime,
             "event_id": invoiceId,
             "action_source": "website",
-            "user_data": {
-                "em": [hashedEmail],
-                "external_id": [hashedUserId],
-                "subscription_id": [subscriptionId],
-                "fbc": fbc,
-                "fbp": fbp
-            },
+            "user_data": userData,
             "custom_data": {
-                "currency": "EUR",
-                "value": price
+                "currency": currency,
+                "value": price.toString()
             }
         }
-    ]
-};
+    ],
+  };
 
   try {
     const response = await axios.post(`https://graph.facebook.com/${API_VERSION}/${PIXEL_ID}/events?access_token=${TOKEN}`, eventData);

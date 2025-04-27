@@ -21,15 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select"
-
-function getCookie(name: string) {
-  let cookie: { [key: string]: string } = {};
-  document.cookie.split(';').forEach(function(el) {
-    let [k,v] = el.split('=');
-    cookie[k.trim()] = v;
-  })
-  return cookie[name];
-}
+import { getCookie } from '../lib/cookies'
 
 // Définition des fonctionnalités avec leurs catégories pour remplacer plan.features
 export const features = [
@@ -245,11 +237,14 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
   const handlePayment = async (plan: Plan) => {
     try {
       setLoadingPlan(plan.name);
-      
+
+      const priceValue = isAnnual ? plan.annualPrice : plan.monthlyPrice;
+      const discountedPrice = applyDiscount(priceValue);
+
       track(MixpanelEvent.GO_TO_CHECKOUT, {
         plan: plan.name,
         subscriptionType: isAnnual ? 'annual' : 'monthly',
-        price: isAnnual ? plan.annualPrice : plan.monthlyPrice,
+        price: discountedPrice,
         currency: currency,
       });
 
@@ -269,7 +264,9 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
           couponId: discount.active ? discount.couponId : undefined,
           successUrl: window.location.href,
           cancelUrl: window.location.href,
-          toltReferral: toltReferral, // Ajouter le tolt_referral à la requête
+          toltReferral: toltReferral,
+          price: discountedPrice,
+          currency: currency,
           fbc: fbc,
           fbp: fbp,
         })

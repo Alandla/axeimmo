@@ -10,6 +10,7 @@ import { detectAndUpdateLanguage } from './client-geolocation';
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel";
 import { trackSignUpFacebook } from '@/src/lib/facebook';
+import { getCookie } from "./cookies";
 
 // Étendre l'interface Window pour inclure tolt
 declare global {
@@ -60,7 +61,6 @@ export function AffiliateTracker() {
       return;
     }
 
-    // Check if the user has already been checked for affiliation
     if (session.user?.checkAffiliate) {
       setLanguageChecked(true);
       return;
@@ -132,20 +132,11 @@ export function AffiliateTracker() {
           console.log('Tolt signup tracked for:', session.user.email);
         }
         
-        // Récupérer les cookies Facebook (fbc et fbp) s'ils existent
-        const getCookie = (name: string): string | null => {
-          if (typeof document === 'undefined') return null;
-          const value = `; ${document.cookie}`;
-          const parts = value.split(`; ${name}=`);
-          if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-          return null;
-        };
-        
         const fbc = getCookie('_fbc');
         const fbp = getCookie('_fbp');
         
         // Suivre l'inscription sur Facebook si les cookies sont disponibles
-        if (session.user?.email && session.user?.id && fbc && fbp) {
+        if (session.user?.email && session.user?.id && (fbc || fbp)) {
           await trackSignUpFacebook(session.user.email, session.user.id, fbc, fbp);
         }
         

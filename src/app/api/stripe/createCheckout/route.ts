@@ -40,9 +40,11 @@ export async function POST(req: Request) {
       user = await getUserById(session.user.id);
     }
 
-    const { priceId, mode, couponId, successUrl, cancelUrl, spaceId, toltReferral, fbc, fbp } = params;
+    const { priceId, mode, couponId, successUrl, cancelUrl, spaceId, toltReferral, fbc, fbp, price, currency } = params;
 
-    trackAddToCartFacebook(user?.email, user?.id?.toString(), fbc, fbp);
+    if (fbc || fbp) {
+      trackAddToCartFacebook(user?.email, user?.id?.toString(), price, currency, fbc, fbp);
+    }
 
     const stripeSessionURL = await createCheckout({
       priceId,
