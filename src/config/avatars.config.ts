@@ -10,7 +10,7 @@ export const avatarsConfig: Avatar[] = [
         thumbnail: 'https://files2.heygen.ai/avatar/v3/38f41688231f4f26be60187f3404a4ab/full/2.2/raw_preview_image.webp',
         looks: [
             {
-                id: '38f41688231f4f26be60187f3404a4ab',
+                id: 'ccb441289d914d049d2e1bd43b75c3d3',
                 name: 'Aliya Room',
                 place: 'room',
                 format: 'vertical',
@@ -54,7 +54,7 @@ export const avatarsConfig: Avatar[] = [
         thumbnail: 'https://files2.heygen.ai/avatar/v3/ff9f8fe30650411f8d88c20e2eb3724e/full/2.2/preview_target.webp',
         looks: [
             {
-                id: '2a1dce60098645be910b8771eef04156',
+                id: 'b989ffe879b4456aae04f57782ee6d11',
                 name: 'Amira Room',
                 place: 'room',
                 format: 'vertical',
@@ -228,16 +228,16 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['UGC'],
-        thumbnail: 'https://files2.heygen.ai/avatar/v3/f15b64460f6e4c809e14840f0c68e73c/full/2.2/preview_target.webp',
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/dd256943281d4b409ca0a9f992596e77/full/2.2/preview_target.webp',
         looks: [
             {
-                id: '22bced2dd5ae4c4e8435cf761c69f5d9',
+                id: 'e411cc565ea44f508a25dc64877f2b0a',
                 name: 'Emma Room',
                 place: 'room',
                 format: 'vertical',
                 tags: ['UGC'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/f15b64460f6e4c809e14840f0c68e73c/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/f15b64460f6e4c809e14840f0c68e73c/full/2.2/preview_video_target.mp4',
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/dd256943281d4b409ca0a9f992596e77/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/dd256943281d4b409ca0a9f992596e77/full/2.2/preview_video_target.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -1400,16 +1400,16 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['UGC'],
-        thumbnail: 'https://files2.heygen.ai/avatar/v3/7d70a710d2134e01b54dcab17d51e524/full/2.2/preview_target.webp',
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/5c8971c329e74b87b7bf87b68f4e36e7/full/2.2/preview_target.webp',
         looks: [
             {
-                id: '1b114e042d534db4a5c76113f1dcacb6',
+                id: 'cc6226d1ad824b90978f7803f2be536f',
                 name: 'Zain Room',
                 place: 'room',
                 format: 'vertical',
                 tags: ['UGC'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/7d70a710d2134e01b54dcab17d51e524/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/7d70a710d2134e01b54dcab17d51e524/full/2.2/preview_video_target.mp4',
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/5c8971c329e74b87b7bf87b68f4e36e7/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/5c8971c329e74b87b7bf87b68f4e36e7/full/2.2/preview_video_target.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
