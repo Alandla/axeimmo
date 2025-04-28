@@ -184,16 +184,16 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: 'unknown',
         tags: ['UGC'],
-        thumbnail: 'https://files2.heygen.ai/avatar/v3/e89d5ad8aefa4b66a2dc0539f46b8596/full/2.2/preview_target.webp',
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/3b1ad77b161048d1a390847881cb9f01/full/2.2/preview_target.webp',
         looks: [
             {
-                id: '55bf2d6916e34f37a4e828c0ac110e33',
+                id: '430184124f89425997f1e0db48c2bfd7',
                 name: 'Camilla Room',
                 place: 'room',
                 format: 'vertical',
                 tags: ['UGC'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/e89d5ad8aefa4b66a2dc0539f46b8596/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/e89d5ad8aefa4b66a2dc0539f46b8596/full/2.2/preview_video_target.mp4',
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/3b1ad77b161048d1a390847881cb9f01/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/3b1ad77b161048d1a390847881cb9f01/full/2.2/preview_video_target.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
