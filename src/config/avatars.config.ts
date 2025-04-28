@@ -957,16 +957,16 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: 'unknown',
         tags: ['UGC'],
-        thumbnail: 'https://files2.heygen.ai/avatar/v3/08476094b127421e86145603c8920f44/full/2.2/preview_target.webp',
+        thumbnail: 'https://files2.heygen.ai/avatar/v3/5afd20f5bdd24bbdafd1e0cd201d85d1/full/2.2/preview_target.webp',
         looks: [
             {
-                id: '0a6a8aa9ac664fc8b5abb34763ab7523',
+                id: 'ee43c12e0c1648efb0dc7dcf10f6ba2a',
                 name: 'Colton Room',
                 place: 'room',
                 format: 'vertical',
                 tags: ['UGC'],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/08476094b127421e86145603c8920f44/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/08476094b127421e86145603c8920f44/full/2.2/preview_video_target.mp4',
+                thumbnail: 'https://files2.heygen.ai/avatar/v3/5afd20f5bdd24bbdafd1e0cd201d85d1/full/2.2/preview_target.webp',
+                previewUrl: 'https://files2.heygen.ai/avatar/v3/5afd20f5bdd24bbdafd1e0cd201d85d1/full/2.2/preview_video_target.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
