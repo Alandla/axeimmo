@@ -77,6 +77,7 @@ export const createCheckout = async ({
           spaceId: spaceId,
         },
       },
+      automatic_tax: { enabled: true },
       success_url: successUrl,
       cancel_url: cancelUrl,
       ...extraParams,
