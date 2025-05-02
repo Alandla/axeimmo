@@ -195,7 +195,7 @@ export default function AssetsPage() {
           disabled={isUploadingFiles || !activeSpace?.id} 
           onClick={() => document.getElementById('file-input')?.click()}
         >
-          {isUploadingFiles ? <Loader2 size={16} className="animate-spin mr-2" /> : <Upload size={16} className="mr-2" />}
+          {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
           {t('upload-button')}
         </Button>
       </div>
@@ -207,7 +207,7 @@ export default function AssetsPage() {
           disabled={isUploadingFiles || !activeSpace?.id} 
           onClick={() => document.getElementById('file-input')?.click()}
         >
-          {isUploadingFiles ? <Loader2 size={16} className="animate-spin mr-2" /> : <Upload size={16} className="mr-2" />}
+          {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
           {t('upload-button')}
         </Button>
       </div>
