@@ -1102,7 +1102,7 @@
       "title": "Media Library",
       "more-options": "More options",
       "no-assets": "No assets",
-      "no-assets-description": "You don't have any assets yet.",
+      "no-assets-description": "Start by adding your assets to see them here.",
       "dialog": {
         "title": "Media Details",
         "name": "Name",
@@ -1124,6 +1124,8 @@
         "rename": "Rename",
         "delete": "Delete"
       },
+      "upload-button": "Upload",
+      "uploading": "Uploading",
       "toast": {
         "saved": "Saved",
         "saved-description": "Changes have been saved successfully",
@@ -1132,7 +1134,13 @@
         "error": "Error",
         "error-description": "An error occurred",
         "error-deleted-description": "An error occurred while deleting the media",
-        "error-saved-description": "An error occurred while saving the changes"
+        "error-saved-description": "An error occurred while saving the changes",
+        "uploading-file": "Uploading file",
+        "uploading-file-description": "Please wait while we upload your file",
+        "file-uploaded": "File uploaded",
+        "file-uploaded-description": "Your file has been successfully uploaded",
+        "title-error": "Error",
+        "uploading-file-error": "An error occurred while uploading your file"
       }
     },
     "modals": {

@@ -1093,7 +1093,6 @@
       "title": "Médiathèque",
       "more-options": "Plus d'options",
       "no-assets": "Aucun média",
-      "no-assets-description": "Vous n'avez pas encore de média.",
       "dialog": {
         "title": "Détails du média",
         "name": "Nom",
@@ -1115,6 +1114,9 @@
         "rename": "Renommer",
         "delete": "Supprimer"
       },
+      "no-assets-description": "Commencez par ajouter vos médias pour les voir ici.",
+      "upload-button": "Importer",
+      "uploading": "Importation en cours",
       "toast": {
         "saved": "Sauvegardé",
         "saved-description": "Les modifications ont été enregistrées avec succès",
@@ -1122,7 +1124,13 @@
         "deleted-description": "Le média a été supprimé avec succès",
         "error": "Erreur",
         "error-deleted-description": "Une erreur est survenue lors de la suppression du média",
-        "error-saved-description": "Une erreur est survenue lors de la sauvegarde des modifications"
+        "error-saved-description": "Une erreur est survenue lors de la sauvegarde des modifications",
+        "uploading-file": "Importation du fichier",
+        "uploading-file-description": "Veuillez patienter pendant que nous importons votre fichier",
+        "file-uploaded": "Fichier importé",
+        "file-uploaded-description": "Votre fichier a été importé avec succès",
+        "title-error": "Erreur",
+        "uploading-file-error": "Une erreur est survenue lors de l'importation de votre fichier"
       }
     },
     "onboarding": {
