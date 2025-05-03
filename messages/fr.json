@@ -358,6 +358,12 @@
         "half-button": "Moitié",
         "full-button": "Entier"
       },
+      "video-trim": {
+        "trim": "Ajuster",
+        "starting-at": "Commence à",
+        "duration": "durée",
+        "total-duration": "Durée totale"
+      },
       "sequence-edit-assets": {
         "upload-file-button": "Ajouter un fichier",
         "toast": {

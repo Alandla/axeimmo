@@ -50,6 +50,7 @@ export const MediaBackground = ({ sequences }: { sequences: any }) => {
                                         objectFit: 'cover',
                                         transform: `scale(${zoomProgress})`,
                                     }}
+                                    pauseWhenLoading
                                 />
                             </AbsoluteFill>
                         </Sequence>
@@ -57,7 +58,7 @@ export const MediaBackground = ({ sequences }: { sequences: any }) => {
                 } else {
                     const file = media.video.link;
                     element = (
-                        <Sequence key={index} premountFor={120} from={currentFrame} durationInFrames={duration}>
+                        <Sequence key={index} premountFor={180} from={currentFrame} durationInFrames={duration}>
                             <AbsoluteFill>
                                 <OffthreadVideo
                                     src={file}
@@ -68,6 +69,7 @@ export const MediaBackground = ({ sequences }: { sequences: any }) => {
                                         objectFit: 'cover',
                                     }}
                                     muted
+                                    pauseWhenBuffering
                                 />
                             </AbsoluteFill>
                         </Sequence>

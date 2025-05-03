@@ -38,6 +38,7 @@
     "@remotion/google-fonts": "4.0.267",
     "@remotion/lambda": "4.0.267",
     "@remotion/layout-utils": "4.0.267",
+    "@remotion/media-parser": "4.0.295",
     "@remotion/motion-blur": "4.0.267",
     "@remotion/player": "4.0.267",
     "@remotion/preload": "4.0.267",

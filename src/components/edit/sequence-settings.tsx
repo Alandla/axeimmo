@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { IconEyeSlash } from "../icons/eye-slash";
 import { IconEyeLowVision } from "../icons/eye-low-vision";
 import { IconEye } from "../icons/eye";
+import VideoTrim from "./video-trim";
 
 export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId, hadAvatar, keywords }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string, hadAvatar: boolean, keywords: string[] }) {
 
@@ -22,6 +23,13 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
         <CardTitle>Media {sequenceIndex + 1}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">
+        {sequence.media?.type === 'video' && (
+          <VideoTrim 
+            sequence={sequence} 
+            sequenceIndex={sequenceIndex} 
+            setSequenceMedia={setSequenceMedia}
+          />
+        )}
 
         {hadAvatar && (
           <div className="flex w-full">

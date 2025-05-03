@@ -423,6 +423,12 @@
         },
         "listen": "Listen",
         "pause": "Pause"
+      },
+      "video-trim": {
+        "trim": "Trim",
+        "starting-at": "Starting at",
+        "duration": "duration",
+        "total-duration": "Total duration"
       }
     },
     "ai": {
