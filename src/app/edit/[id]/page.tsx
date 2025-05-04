@@ -935,6 +935,7 @@ export default function VideoEditor() {
                         onAddTransition={handleAddTransition}
                         onUpdateDuration={handleUpdateDuration}
                         playerRef={playerRef}
+                        avatar={video?.video?.avatar}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
@@ -1035,6 +1036,7 @@ export default function VideoEditor() {
                   onAddTransition={handleAddTransition}
                   onUpdateDuration={handleUpdateDuration}
                   playerRef={playerRef}
+                  avatar={video?.video?.avatar}
                 />
               </ScrollArea>
             </TabsContent>

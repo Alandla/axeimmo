@@ -90,6 +90,7 @@ export default function VideoPreview({ playerRef, video, isMobile, showWatermark
             )}
             <div className="relative w-full h-full">
                 <Player
+                    acknowledgeRemotionLicense={true}
                     ref={playerRef}
                     component={VideoGenerate}
                     durationInFrames={video?.video?.metadata.audio_duration ? Math.ceil(video?.video?.metadata.audio_duration * 60) : 1}

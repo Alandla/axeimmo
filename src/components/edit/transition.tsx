@@ -4,6 +4,7 @@ import { Badge } from "../ui/badge";
 import { MoreVertical, Pen, Trash2 } from "lucide-react";
 import { motion } from 'framer-motion';
 import { useTranslations } from "next-intl";
+import SkeletonVideo from "../ui/skeleton-video";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +18,7 @@ interface TransitionProps {
   transition: ITransition;
   index: number;
   sequenceThumbnail: string;
+  sequenceVideoUrl?: string;
   onDeleteTransition: (index: number) => void;
   selectedIndex?: number;
   setSelectedIndex?: (index: number) => void;
@@ -28,6 +30,7 @@ export default function Transition({
   transition,
   index,
   sequenceThumbnail,
+  sequenceVideoUrl,
   onDeleteTransition,
   selectedIndex,
   setSelectedIndex,
@@ -35,7 +38,6 @@ export default function Transition({
   isMobile
 }: TransitionProps) {
   const t = useTranslations('edit.transition')
-
   const isSelected = selectedIndex === index;
 
   const handleEdit = () => {
@@ -56,10 +58,22 @@ export default function Transition({
           className="absolute inset-0 w-full h-11 mix-blend-lighten bg-center z-10"
           style={{ backgroundImage: `url(${transition.thumbnail})`}}
         />
-        <div 
-          className="absolute inset-0 w-full h-11 bg-center blur-sm scale-125"
-          style={{ backgroundImage: `url(${sequenceThumbnail})`}}
-        />
+        
+        {sequenceThumbnail ? (
+          <div 
+            className="absolute inset-0 w-full h-11 bg-center blur-sm scale-125"
+            style={{ backgroundImage: `url(${sequenceThumbnail})`}}
+          />
+        ) : sequenceVideoUrl ? (
+          <div className="absolute inset-0 w-full h-11 overflow-hidden">
+            <SkeletonVideo
+              srcVideo={sequenceVideoUrl}
+              className="w-full h-11 object-cover blur-sm scale-125"
+              disableHoverPlay={true}
+            />
+          </div>
+        ) : null}
+
         <CardContent className="flex items-center justify-between p-2 relative z-10">
           <Badge variant="outline" className={"bg-white"}>
             {t('transition')} {index + 1}

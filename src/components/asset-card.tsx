@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { MoreVertical, Pen, Eye, Trash2, Video as VideoIcon, Image as ImageIcon } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
@@ -44,10 +44,40 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
   const [editedName, setEditedName] = useState(mediaSpace.media.name)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const { media } = mediaSpace
+  const [videoLoaded, setVideoLoaded] = useState(false)
+  const [videoError, setVideoError] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+  // Configuration de l'Intersection Observer pour détecter quand la vidéo est visible
+  useEffect(() => {
+    if (!containerRef.current || media.type !== 'video') return;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1, // 10% de la vidéo visible pour déclencher le chargement
+      }
+    );
+    
+    observer.observe(containerRef.current);
+    
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, [media.type]);
 
   const startEditing = useCallback(() => {
     setIsEditing(true)
@@ -133,10 +163,26 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
     }
   }
 
+  const handleVideoLoaded = () => {
+    setVideoLoaded(true)
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0
+      videoRef.current.pause()
+    }
+  }
+
+  const handleVideoError = () => {
+    setVideoError(true)
+  }
+
   return (
     <>
       <div className="relative">
-        <div className="relative bg-muted aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group" onClick={onClick}>
+        <div 
+          ref={containerRef}
+          className="relative bg-muted aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group" 
+          onClick={onClick}
+        >
           {media.image?.link ? (
             <div className="relative w-full h-full">
               <div className="absolute inset-0 bg-black/90">
@@ -157,6 +203,32 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
                 priority
                 className="relative z-10"
               />
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+                <Eye className="text-white w-8 h-8" />
+              </div>
+            </div>
+          ) : media.type === 'video' && media.video?.link ? (
+            <div className="relative w-full h-full">
+              {!videoError ? (
+                <video
+                  ref={videoRef}
+                  className="w-full h-full object-contain"
+                  preload={isVisible ? "metadata" : "none"}
+                  muted
+                  playsInline
+                  crossOrigin="anonymous"
+                  onLoadedData={handleVideoLoaded}
+                  onError={handleVideoError}
+                  disablePictureInPicture
+                  disableRemotePlayback
+                >
+                  {isVisible && <source src={media.video.link} type="video/mp4" />}
+                </video>
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                  <VideoIcon className="w-12 h-12 text-gray-400" />
+                </div>
+              )}
               <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
                 <Eye className="text-white w-8 h-8" />
               </div>

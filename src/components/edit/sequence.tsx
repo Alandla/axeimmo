@@ -1,7 +1,8 @@
 import { ISequence } from "@/src/types/video";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
-import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen } from "lucide-react";
+import SkeletonVideo from "../ui/skeleton-video";
+import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen, Video as VideoIcon, User } from "lucide-react";
 import { motion } from 'framer-motion';
 import React, { useRef, useState, useCallback } from "react";
 import { Badge } from "../ui/badge";
@@ -37,6 +38,7 @@ interface SequenceProps {
   onUpdateDuration?: (index: number, newDuration: number) => void;
   playerRef?: React.RefObject<PlayerRef>;
   canDelete: boolean;
+  avatar?: { videoUrl?: string; previewUrl?: string; thumbnail?: string };
 }
 
 export default function Sequence({ 
@@ -56,6 +58,7 @@ export default function Sequence({
   onUpdateDuration = () => {},
   playerRef,
   canDelete,
+  avatar,
 }: SequenceProps) {
 
     const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -184,18 +187,73 @@ export default function Sequence({
                     <div 
                         className="relative"
                         onClick={handleImageClick}
-                    >  
-                        {sequence.media?.image ? (
+                    > 
+                        {sequence.media?.show === 'hide' && avatar?.thumbnail ? (
+                            <SkeletonImage
+                                src={avatar.thumbnail}
+                                height={1200}
+                                width={630}
+                                alt="Avatar"
+                                className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
+                            />
+                        ) : sequence.media?.show === 'half' && avatar?.thumbnail ? (
+                            <div className="w-12 h-12 sm:w-24 sm:h-24 rounded-md overflow-hidden relative">
+                                <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden">
+                                    {sequence.media?.image ? (
+                                        <SkeletonImage
+                                            src={sequence.media.image.link}
+                                            height={600}
+                                            width={315}
+                                            alt={sequence.text}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
+                                        <SkeletonVideo
+                                            srcVideo={sequence.media.video.link}
+                                            className='w-full h-full object-cover'
+                                            disableHoverPlay={true}
+                                            startAt={sequence.media.startAt || 0}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <VideoIcon className="text-gray-400 text-sm" />
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden">
+                                    <SkeletonImage
+                                        src={avatar.thumbnail}
+                                        height={600}
+                                        width={315}
+                                        alt="Avatar"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            </div>
+                        ) : sequence.media?.image ? (
                             <SkeletonImage
                                 src={sequence.media.image.link}
                                 height={1200}
                                 width={630}
                                 alt={sequence.text}
-                                className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover opacity-100 hover:opacity-50'
+                                className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
+                            />
+                        ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
+                            <SkeletonVideo
+                                srcVideo={sequence.media.video.link}
+                                className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
+                                disableHoverPlay={true}
+                                startAt={sequence.media.startAt || 0}
                             />
                         ) : (
                             <div className="w-12 h-12 sm:w-24 sm:h-24 rounded-md bg-gray-200 flex items-center justify-center">
-                                <FileImage className="text-gray-400 text-3xl" />
+                                {sequence.media?.show === 'hide' && avatar ? (
+                                    <User className="text-gray-400 text-3xl" />
+                                ) : sequence.media?.type === 'video' ? (
+                                    <VideoIcon className="text-gray-400 text-3xl" />
+                                ) : (
+                                    <FileImage className="text-gray-400 text-3xl" />
+                                )}
                             </div>
                         )}
                         <div className="absolute rounded-md inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">

@@ -69,6 +69,23 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
         }
       }
 
+    const cleanupMediaByType = (mediaToSet: IMedia): IMedia => {
+        const cleanedMedia = { ...mediaToSet };
+        
+        if (mediaToSet.type === 'video') {
+            cleanedMedia.image = undefined;
+        } else if (mediaToSet.type === 'image') {
+            cleanedMedia.video = undefined;
+        }
+
+        return cleanedMedia;
+    };
+
+    const handleSelectMedia = () => {
+        const cleanedMedia = cleanupMediaByType(media);
+        setSequenceMedia(sequenceIndex, cleanedMedia);
+    };
+
     // Définition des animations pour le nom et le bouton
     const itemAnimation = {
         hidden: { y: 20, opacity: 0 },
@@ -93,16 +110,14 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
             variants={container}
             initial={isLargeScreen ? "hidden" : "visible"}
             whileHover={isLargeScreen ? "visible" : ""}
-            onClick={() => setSequenceMedia(sequenceIndex, media)}
+            onClick={handleSelectMedia}
         >
-            <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-1/4 bg-gradient-to-t from-black to-transparent rounded-lg z-1"></div>
+            <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-1/4 bg-gradient-to-t from-black to-transparent rounded-lg z-10"></div>
 
             {media.type === 'video' ? (
                 <SkeletonVideo
-                    srcImg={media.image?.link || ''}
                     srcVideo={media.video?.link || ''}
-                    alt={media.name}
-                    className={`w-full h-fit rounded-md object-cover ${media.video?.link === sequence.media?.video?.link ? 'border-2 border-primary rounded-lg' : ''}`}
+                    className={`w-full h-fit rounded-md object-cover ${media.video?.link === sequence.media?.video?.link && sequence.media?.type === 'video' ? 'border-2 border-primary rounded-lg' : ''}`}
                 />
             ) : (
                 <SkeletonImage
@@ -110,12 +125,12 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
                     alt={media.name}
                     width={media.image?.width || 100}
                     height={media.image?.height || 100}
-                    className={`w-full h-fit rounded-md object-cover ${media.image?.link === sequence.media?.image?.link ? 'border-2 border-primary rounded-md' : ''}`}
+                    className={`w-full h-fit rounded-md object-cover ${media.image?.link === sequence.media?.image?.link && sequence.media?.type === 'image' ? 'border-2 border-primary rounded-md' : ''}`}
                     unoptimized={source === 'web'}
                 />
             )}
             <motion.div
-                className="absolute bottom-0 left-0 bg-opacity-50 p-2 text-sm text-white"
+                className="absolute bottom-0 left-0 bg-opacity-50 p-2 text-sm text-white z-20"
                 variants={itemAnimation}
             >
                 {media.name}

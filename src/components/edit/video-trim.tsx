@@ -112,6 +112,7 @@ export default function VideoTrim({ sequence, sequenceIndex, setSequenceMedia }:
       try {
         // D'abord récupérer les métadonnées
         const metadata = await parseMedia({
+          acknowledgeRemotionLicense: true,
           src: videoUrl,
           fields: {
             durationInSeconds: true,
@@ -217,7 +218,7 @@ export default function VideoTrim({ sequence, sequenceIndex, setSequenceMedia }:
                 <div 
                   key={i} 
                   className="w-1 bg-muted-foreground/30 rounded-full"
-                  style={{ height: `${20 + Math.random() * 60}%` }}
+                  style={{ height: `${i % 2 === 0 ? 30 : 60}%` }}
                 />
               ))}
             </div>

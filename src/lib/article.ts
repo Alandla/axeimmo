@@ -1,4 +1,4 @@
-import { getImageDimensions } from "../service/upload.service";
+import { getMediaDimensions } from "../service/upload.service";
 import { basicApiCall } from "./api";
 
 export const getArticleContentFromUrl = async (url: string) => {
@@ -65,9 +65,9 @@ const imagesPromises = await Promise.all(Array.from(tempDiv.querySelectorAll('im
     url = url.replace(/\\"/g, ''); // Enlever les guillemets échappés
     url = url.replace(/\\$/, ''); // Enlever le caractère '\' à la fin de l'URL
 
-    const dimensions = await getImageDimensions(url);
+    const dimensions = await getMediaDimensions(url);
 
-    if (dimensions.height > 150) {
+    if (dimensions?.height && dimensions?.width && dimensions?.height > 150) {
         return {
             type: "image",
             name: alt,

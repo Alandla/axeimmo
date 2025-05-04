@@ -1,9 +1,6 @@
 import { IMedia, ISequence } from "@/src/types/video";
 import { CardContent, CardHeader, CardTitle } from "../ui/card";
-import SkeletonImage from "../ui/skeleton-image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { ImageIcon } from "lucide-react";
-import SkeletonVideo from "../ui/skeleton-video";
 import SequenceSettingsSearch from "./sequence-settings-search";
 import SequenceSettingsAssets from "./sequence-settings-assets";
 import { useTranslations } from "next-intl";
