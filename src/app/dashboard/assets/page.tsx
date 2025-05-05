@@ -127,8 +127,6 @@ export default function AssetsPage() {
         mediasToAnalyze = addedMedias.filter(mediaSpace => {
           return !mediaSpace.media.description || mediaSpace.media.description[0].text === "";
         });
-
-        console.log("mediasToAnalyze", mediasToAnalyze)
       }
       
       setUploadingMedias([]);
@@ -142,16 +140,10 @@ export default function AssetsPage() {
 
       if (mediasToAnalyze.length > 0) {
         for (const mediaSpace of mediasToAnalyze) {
-          try {
-            await basicApiCall('/media/analyze', {
-              media: mediaSpace,
-              spaceId: activeSpace.id
-            });
-            
-            console.log(`Analyse lancée pour le média: ${mediaSpace.media.id}`);
-          } catch (error) {
-            console.error(`Erreur lors du lancement de l'analyse pour le média ${mediaSpace.media.id}:`, error);
-          }
+          await basicApiCall('/media/analyze', {
+            media: mediaSpace,
+            spaceId: activeSpace.id
+          });
         }
       }
     } catch (error) {

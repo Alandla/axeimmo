@@ -70,11 +70,17 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
         }
       })
 
+      let mediasToAnalyze: IMediaSpace[] = []
       if (medias.length > 0) {
         const addedMedias: IMediaSpace[] = await basicApiCall('/space/addMedias', {
             spaceId: spaceId,
             medias
         })
+
+        mediasToAnalyze = addedMedias.filter(mediaSpace => {
+          return !mediaSpace.media.description || mediaSpace.media.description[0].text === "";
+        });
+
         setAssets(addedMedias)
       }
       setIsUploadingFiles(false)
@@ -83,6 +89,15 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
         description: t('toast.file-uploaded-description'),
         variant: 'confirm'
       })
+
+      if (mediasToAnalyze.length > 0) {
+        for (const mediaSpace of mediasToAnalyze) {
+          await basicApiCall('/media/analyze', {
+            media: mediaSpace,
+            spaceId: spaceId
+          });
+        }
+      }
     } catch (error) {
       setIsUploadingFiles(false)
       console.error(error)
