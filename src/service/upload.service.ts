@@ -24,7 +24,7 @@ export const uploadFiles = async (
             
             if (fileToUpload.type === "video") {
 
-                const dimensions = await getMediaDimensions(url?.mediaUrl)
+                const dimensions = await getVideoDimensions(url?.mediaUrl)
 
                 video = {
                     id: url?.mediaId,
@@ -36,7 +36,7 @@ export const uploadFiles = async (
                 
             } else if (fileToUpload.type === "image") {
 
-                const dimensions = await getMediaDimensions(url?.mediaUrl)
+                const dimensions = await getImageDimensions(url?.mediaUrl)
 
                 image = {
                     id: url?.mediaId,
@@ -98,7 +98,16 @@ export const getMediaUrlFromFileByPresignedUrl = async (file: File) => {
     return { mediaUrl, mediaId }
 }
 
-export const getMediaDimensions = async (url: string): Promise<{width: number, height: number} | null> => {
+export const getImageDimensions = async (url: string): Promise<{width: number, height: number}> => {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve({ width: img.width, height: img.height });
+        img.onerror = () => resolve({ width: 800, height: 600 }); // Valeurs par défaut en cas d'erreur
+        img.src = url;
+    });
+};
+
+export const getVideoDimensions = async (url: string): Promise<{width: number, height: number} | null> => {
     try {
         const result = await parseMedia({
             src: url,
