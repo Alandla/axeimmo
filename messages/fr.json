@@ -1113,7 +1113,8 @@
         "unknown-user": "utilisateur inconnu",
         "tooltip-description": "Les descriptions sont utilisées par l'IA pour placer automatiquement les médias dans la vidéo",
         "automatic-placement": "Placement automatique",
-        "automatic-placement-description": "Permettre à l'IA de réutiliser automatiquement ce média"
+        "automatic-placement-description": "Permettre à l'IA de réutiliser automatiquement ce média",
+        "generate-description": "Générer une description"
       },
       "dropdown-menu": {
         "details": "Voir les détails",
@@ -1136,7 +1137,12 @@
         "file-uploaded": "Fichier importé",
         "file-uploaded-description": "Votre fichier a été importé avec succès",
         "title-error": "Erreur",
-        "uploading-file-error": "Une erreur est survenue lors de l'importation de votre fichier"
+        "uploading-file-error": "Une erreur est survenue lors de l'importation de votre fichier",
+        "generating": "Génération en cours",
+        "generating-description": "L'IA génère une description pour ce média",
+        "description-generated": "Description générée",
+        "description-generated-description": "La description a été générée avec succès",
+        "generation-error-description": "Une erreur est survenue lors de la génération de la description"
       }
     },
     "onboarding": {

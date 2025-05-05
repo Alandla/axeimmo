@@ -73,7 +73,8 @@ export default function AssetsPage() {
     
     toast({
       title: t('toast.uploading-file'),
-      description: t('toast.uploading-file-description')
+      description: t('toast.uploading-file-description'),
+      variant: 'loading'
     })
 
     try {
@@ -107,6 +108,7 @@ export default function AssetsPage() {
         }
       })
 
+      let mediasToAnalyze: IMediaSpace[] = []
       if (medias.length > 0) {
         const addedMedias: IMediaSpace[] = await basicApiCall('/space/addMedias', {
           spaceId: activeSpace.id,
@@ -121,16 +123,37 @@ export default function AssetsPage() {
           }
         }));
         setAssets(addedMediasWithCreator.reverse());
+
+        mediasToAnalyze = addedMedias.filter(mediaSpace => {
+          return !mediaSpace.media.description || mediaSpace.media.description[0].text === "";
+        });
+
+        console.log("mediasToAnalyze", mediasToAnalyze)
       }
       
       setUploadingMedias([]);
       setIsUploadingFiles(false)
-      
+
       toast({
         title: t('toast.file-uploaded'),
         description: t('toast.file-uploaded-description'),
         variant: 'confirm'
       })
+
+      if (mediasToAnalyze.length > 0) {
+        for (const mediaSpace of mediasToAnalyze) {
+          try {
+            await basicApiCall('/media/analyze', {
+              media: mediaSpace,
+              spaceId: activeSpace.id
+            });
+            
+            console.log(`Analyse lancée pour le média: ${mediaSpace.media.id}`);
+          } catch (error) {
+            console.error(`Erreur lors du lancement de l'analyse pour le média ${mediaSpace.media.id}:`, error);
+          }
+        }
+      }
     } catch (error) {
       setUploadingMedias([]);
       setIsUploadingFiles(false)

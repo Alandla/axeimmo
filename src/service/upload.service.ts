@@ -1,6 +1,5 @@
 import { basicApiCall } from "@/src/lib/api";
-import { FileToUpload, UploadedFile } from "../types/files";
-import { IMedia } from "../types/video";
+import { FileToUpload } from "../types/files";
 import { parseMedia } from '@remotion/media-parser';
 
 export const uploadFiles = async (

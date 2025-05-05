@@ -1,0 +1,86 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Règles globales pour le développement de l'application
+
+## Style de code et commentaires
+
+- Mettre très peu de commentaires dans le code, uniquement lorsque le code est vraiment complexe ou difficile à comprendre
+- Tous les commentaires doivent être rédigés en anglais
+- Les commentaires doivent être concis et expliquer le "pourquoi" plutôt que le "comment"
+- Éviter les commentaires redondants qui ne font que répéter ce que le code montre déjà
+
+Exemple de bon commentaire :
+```typescript
+// Handle edge case when user has multiple active subscriptions
+if (subscriptions.length > 1) {
+  return subscriptions.sort((a, b) => b.credits - a.credits)[0];
+}
+```
+
+## Internationalisation (i18n)
+
+- Aucun texte visible pour l'utilisateur ne doit être écrit en dur dans le code
+- Tous les textes doivent passer par next-intl avec des clés structurées
+- Les traductions doivent être ajoutées à la fois dans `messages/en.json` et `messages/fr.json`
+- Structurer les clés de traduction de manière hiérarchique (par fonctionnalité/page)
+
+### Utilisation de next-intl
+
+```typescript
+// Importation du hook useTranslations
+import { useTranslations } from 'next-intl'
+
+function MyComponent() {
+  // Récupération des traductions pour la section "assets"
+  const t = useTranslations('assets')
+  
+  return (
+    <div>
+      <h1>{t('title')}</h1>
+      <p>{t('no-assets-description')}</p>
+      <button>
+        {t('upload-button')}
+      </button>
+    </div>
+  )
+}
+```
+
+### Structure des fichiers de traduction
+
+- Organiser les traductions par fonctionnalité ou page
+- Utiliser des noms de clés cohérents entre les différentes sections
+- Les clés doivent être explicites quant à leur contenu
+
+```json
+{
+  "assets": {
+    "title": "Media Library",
+    "no-assets": "No assets",
+    "no-assets-description": "Start by adding your assets to see them here.",
+    "upload-button": "Upload"
+  }
+}
+```
+
+### Valeurs dynamiques dans les traductions
+
+Pour les textes avec des valeurs dynamiques, utiliser la syntaxe de substitution :
+
+```typescript
+// Dans le fichier de traduction
+{
+  "assets": {
+    "added-by": "Added by {name} on {date}"
+  }
+}
+
+// Dans le composant
+const formattedText = t('added-by', { 
+  name: userName, 
+  date: formattedDate 
+});
+```

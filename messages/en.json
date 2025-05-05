@@ -1123,7 +1123,8 @@
         "unknown-user": "unknown user",
         "tooltip-description": "Descriptions are used by the AI to automatically place media in the video",
         "automatic-placement": "Automatic placement",
-        "automatic-placement-description": "Allow the AI to reuse this media automatically"
+        "automatic-placement-description": "Allow the AI to reuse this media automatically",
+        "generate-description": "Generate description"
       },
       "dropdown-menu": {
         "details": "View details",
@@ -1146,7 +1147,12 @@
         "file-uploaded": "File uploaded",
         "file-uploaded-description": "Your file has been successfully uploaded",
         "title-error": "Error",
-        "uploading-file-error": "An error occurred while uploading your file"
+        "uploading-file-error": "An error occurred while uploading your file",
+        "generating": "Generating",
+        "generating-description": "AI is generating a description for this media",
+        "description-generated": "Description generated",
+        "description-generated-description": "The description has been successfully generated",
+        "generation-error-description": "An error occurred while generating the description"
       }
     },
     "modals": {
