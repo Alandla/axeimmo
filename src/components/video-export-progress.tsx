@@ -229,15 +229,15 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
               />
             </div>
           </CardContent>
-          <CardFooter className="flex justify-center gap-4">
-            <Link href="/dashboard">
-              <Button variant="outline" size="lg">
+          <CardFooter className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+            <Link href="/dashboard" className="w-full sm:w-auto">
+              <Button variant="outline" size="lg" className="w-full">
                 <ArrowLeft className="w-5 h-5" />
                 {t('back-to-dashboard')}
               </Button>
             </Link>
-            <a href={downloadUrl} download>
-              <Button size="lg">
+            <a href={downloadUrl} download className="w-full sm:w-auto">
+              <Button size="lg" className="w-full">
                 <Download className="w-5 h-5" />
                 {t('download-video')}
               </Button>
