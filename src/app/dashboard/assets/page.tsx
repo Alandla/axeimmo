@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { basicApiCall } from '@/src/lib/api'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
@@ -16,6 +16,8 @@ import { FileToUpload } from '@/src/types/files'
 import { uploadFiles } from '@/src/service/upload.service'
 import { useSession } from 'next-auth/react'
 import { useToast } from '@/src/hooks/use-toast'
+import AssetUpgradeBanner from '@/src/components/asset-upgrade-banner'
+import { PlanName } from '@/src/types/enums'
 
 interface User {
   id: string
@@ -39,6 +41,7 @@ export default function AssetsPage() {
   const { activeSpace } = useActiveSpaceStore()
   const { assetsBySpace, setAssets: setStoreAssets, fetchAssets } = useAssetsStore()
   const { toast } = useToast()
+  const containerRef = useRef<HTMLDivElement>(null)
   
   const [assets, setAssets] = useState<MediaSpaceWithCreator[]>([])
   const [selectedAsset, setSelectedAsset] = useState<MediaSpaceWithCreator | null>(null)
@@ -46,6 +49,27 @@ export default function AssetsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isUploadingFiles, setIsUploadingFiles] = useState(false)
   const [uploadingMedias, setUploadingMedias] = useState<UploadingMedia[]>([])
+  const [containerHeight, setContainerHeight] = useState(0)
+
+  // Vérifier si l'utilisateur a un plan Pro ou Entreprise
+  const hasPlan = activeSpace?.planName === PlanName.PRO || activeSpace?.planName === PlanName.ENTREPRISE
+
+  // Mettre à jour la hauteur du conteneur
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const updateHeight = () => {
+        // Soustraire la hauteur du header (64px = 16 * 4, h-16 dans le layout)
+        setContainerHeight(window.innerHeight - 64);
+      };
+      
+      updateHeight();
+      window.addEventListener('resize', updateHeight);
+      
+      return () => {
+        window.removeEventListener('resize', updateHeight);
+      };
+    }
+  }, []);
 
   const setMedia = (media: MediaSpaceWithCreator) => {
     setAssets(prevAssets => {
@@ -190,84 +214,107 @@ export default function AssetsPage() {
   }, [activeSpace]);
 
   return (
-    <>
-      <input
-        id="file-input"
-        type="file"
-        multiple
-        className="hidden"
-        accept="image/*,video/*"
-        onChange={(e) => {
-          if (e.target.files && e.target.files.length > 0) {
-            handleFileUpload(Array.from(e.target.files));
-          }
-        }}
-      />
-      
-      {/* Bouton fixé pour desktop, normal pour mobile */}
-      <div className="hidden md:block fixed top-4 right-4 z-10">
-        <Button 
-          disabled={isUploadingFiles || !activeSpace?.id} 
-          onClick={() => document.getElementById('file-input')?.click()}
+    <div 
+      ref={containerRef} 
+      className="relative"
+      style={{ height: !hasPlan ? `${containerHeight}px` : 'auto' }}
+    >
+      {/* Bannière d'upgrade pour les utilisateurs sans plan Pro ou Entreprise */}
+      {!hasPlan && (
+        <div 
+          className="absolute inset-x-0 bottom-0 top-16 z-10 flex items-center justify-center p-4"
+          style={{ top: '16px' }}
         >
-          {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-          {t('upload-button')}
-        </Button>
-      </div>
-      
-      {/* Version mobile: affichage normal en pleine largeur */}
-      <div className="md:hidden px-4">
-        <Button 
-          className="w-full"
-          disabled={isUploadingFiles || !activeSpace?.id} 
-          onClick={() => document.getElementById('file-input')?.click()}
-        >
-          {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-          {t('upload-button')}
-        </Button>
-      </div>
-      
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
-        {/* Afficher les médias en cours d'upload */}
-        {uploadingMedias.map((uploadingMedia) => (
-          <div key={uploadingMedia.id} className="relative overflow-hidden rounded-lg">
-            <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            </div>
-            <div className="p-2">
-              <p className="text-lg font-semibold truncate cursor-text">{uploadingMedia.file.name}</p>
-              <p className="text-sm text-gray-500 truncate">{t('uploading')}...</p>
-            </div>
+          <div className="w-full max-w-5xl">
+            <AssetUpgradeBanner />
           </div>
-        ))}
+        </div>
+      )}
+      
+      <div 
+        className={!hasPlan ? "filter blur-sm pointer-events-none overflow-hidden" : ""}
+        style={{ maxHeight: !hasPlan ? `${containerHeight}px` : 'none' }}
+      >
+        <input
+          id="file-input"
+          type="file"
+          multiple
+          className="hidden"
+          accept="image/*,video/*"
+          onChange={(e) => {
+            if (e.target.files && e.target.files.length > 0) {
+              handleFileUpload(Array.from(e.target.files));
+            }
+          }}
+        />
         
-        {isLoading ? (
-          Array.from({ length: 8 }).map((_, index) => (
-            <VideoCardSkeleton key={index} />
-          ))
-        ) : assets.length === 0 && uploadingMedias.length === 0 ? (
-          <div className="col-span-full flex flex-col items-center justify-center py-20">
-            <ImageOff className="w-12 h-12 text-gray-400 mb-4" />
-            <h2 className="text-2xl font-semibold mb-2">{t('no-assets')}</h2>
-            <p className="text-gray-500 mb-6 text-center">
-              {t('no-assets-description')}
-            </p>
+        {/* Bouton fixé pour desktop, normal pour mobile */}
+        <div className="hidden md:block fixed top-4 right-4 z-1">
+          <Button 
+            disabled={isUploadingFiles || !activeSpace?.id} 
+            onClick={() => document.getElementById('file-input')?.click()}
+          >
+            {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+            {t('upload-button')}
+          </Button>
+        </div>
+        
+        {/* Version mobile: affichage normal en pleine largeur */}
+        <div className="md:hidden px-4">
+          <Button 
+            className="w-full"
+            disabled={isUploadingFiles || !activeSpace?.id} 
+            onClick={() => document.getElementById('file-input')?.click()}
+          >
+            {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+            {t('upload-button')}
+          </Button>
+        </div>
+        
+        <div className="p-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {/* Afficher les médias en cours d'upload */}
+            {uploadingMedias.map((uploadingMedia) => (
+              <div key={uploadingMedia.id} className="relative overflow-hidden rounded-lg">
+                <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center">
+                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                </div>
+                <div className="p-2">
+                  <p className="text-lg font-semibold truncate cursor-text">{uploadingMedia.file.name}</p>
+                  <p className="text-sm text-gray-500 truncate">{t('uploading')}...</p>
+                </div>
+              </div>
+            ))}
+            
+            {isLoading ? (
+              Array.from({ length: 8 }).map((_, index) => (
+                <VideoCardSkeleton key={index} />
+              ))
+            ) : assets.length === 0 && uploadingMedias.length === 0 ? (
+              <div className="col-span-full flex flex-col items-center justify-center py-20">
+                <ImageOff className="w-12 h-12 text-gray-400 mb-4" />
+                <h2 className="text-2xl font-semibold mb-2">{t('no-assets')}</h2>
+                <p className="text-gray-500 mb-6 text-center">
+                  {t('no-assets-description')}
+                </p>
+              </div>
+            ) : (
+              assets.map((asset) => (
+                <AssetCard
+                  key={asset.media.id}
+                  spaceId={activeSpace?.id || ''}
+                  mediaSpace={asset}
+                  setMedia={setMedia}
+                  onDelete={handleDeleteAsset}
+                  onClick={() => {
+                    setSelectedAsset(asset)
+                    setIsDialogOpen(true)
+                  }}
+                />
+              ))
+            )}
           </div>
-        ) : (
-          assets.map((asset) => (
-            <AssetCard
-              key={asset.media.id}
-              spaceId={activeSpace?.id || ''}
-              mediaSpace={asset}
-              setMedia={setMedia}
-              onDelete={handleDeleteAsset}
-              onClick={() => {
-                setSelectedAsset(asset)
-                setIsDialogOpen(true)
-              }}
-            />
-          ))
-        )}
+        </div>
       </div>
 
       <AssetDialog
@@ -278,6 +325,6 @@ export default function AssetsPage() {
           setIsDialogOpen(false)
         }}
       />
-    </>
+    </div>
   )
 } 

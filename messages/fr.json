@@ -178,7 +178,7 @@
         "avatars-library": "Bibliothèque d'avatars",
         "digital-clone": "Clone numérique",
         "save-templates": "Sauvegarde de modèles",
-        "smart-media-placement": "Placement automatique de médias",
+        "smart-media-placement": "Placement automatique des médias",
         "ai-video-b-rolls": "B-Rolls vidéo IA",
         "brand-space": "Espace de marque",
         "social-media-agent": "Agent stratège de médias sociaux",
@@ -1099,6 +1099,13 @@
       "title": "Médiathèque",
       "more-options": "Plus d'options",
       "no-assets": "Aucun média",
+      "upgrade-banner": {
+        "title": "Débloquez le placement automatique intelligent des médias",
+        "description": "Notre IA analyse vos vidéos et vos médias pour les placer automatiquement dans vos futurs vidéos, aux bons moments.",
+        "upgrade-to": "Passez au plan",
+        "pro-description": "Accédez à la fonctionnalité de placement automatique des médias et à toutes les autres fonctionnalités Pro.",
+        "upgrade-now": "Passez au Pro maintenant"
+      },
       "dialog": {
         "title": "Détails du média",
         "name": "Nom",

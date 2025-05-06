@@ -1,0 +1,273 @@
+'use client'
+
+import { useState, useRef, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
+import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
+import { Button } from '@/src/components/ui/button'
+import { PlanName } from '@/src/types/enums'
+import { plans } from '@/src/config/plan.config'
+import { basicApiCall } from '@/src/lib/api'
+import { Loader2, ArrowRight, Check, Lock } from 'lucide-react'
+import { track } from '@/src/utils/mixpanel'
+import { MixpanelEvent } from '@/src/types/events'
+import { getCookie } from '@/src/lib/cookies'
+import { motion } from 'framer-motion'
+
+function VideoPlayer() {
+  return (
+    <div className="aspect-video bg-black rounded-md overflow-hidden shadow-lg w-full max-w-3xl">
+      <video 
+        className="w-full h-full object-cover"
+        src="/videos/asset-demo.mp4"
+        poster="/images/asset-poster.jpg"
+        controls
+        preload="none"
+      />
+    </div>
+  )
+}
+
+function PlanToggle({ isAnnual, onChange }: { isAnnual: boolean, onChange: (value: boolean) => void }) {
+  const tPricing = useTranslations('pricing')
+  const [sliderWidth, setSliderWidth] = useState(0)
+  const [sliderLeft, setSliderLeft] = useState(0)
+  
+  const monthlyRef = useRef<HTMLButtonElement>(null)
+  const annuallyRef = useRef<HTMLButtonElement>(null)
+  
+  useEffect(() => {
+    if (isAnnual && annuallyRef.current) {
+      setSliderWidth(annuallyRef.current.offsetWidth)
+      setSliderLeft(annuallyRef.current.offsetLeft)
+    } else if (!isAnnual && monthlyRef.current) {
+      setSliderWidth(monthlyRef.current.offsetWidth)
+      setSliderLeft(monthlyRef.current.offsetLeft)
+    }
+  }, [isAnnual])
+  
+  return (
+    <div className="inline-flex items-center rounded-lg border p-0.5 relative self-start">
+      <div 
+        className="absolute top-0.5 bottom-0.5 rounded-lg bg-primary transition-all duration-300 ease-in-out"
+        style={{ 
+          width: `${sliderWidth - 4}px`, 
+          left: `${sliderLeft + 2}px` 
+        }}
+      />
+      <button
+        ref={monthlyRef}
+        onClick={() => onChange(false)}
+        className={`px-3 py-1.5 rounded-lg text-sm relative z-10 transition-colors duration-300 ${
+          !isAnnual ? 'text-primary-foreground' : ''
+        }`}
+      >
+        {tPricing('monthly')}
+      </button>
+      <button
+        ref={annuallyRef}
+        onClick={() => onChange(true)}
+        className={`px-3 py-1.5 rounded-lg text-sm relative z-10 transition-colors duration-300 flex items-center ${
+          isAnnual ? 'text-primary-foreground' : ''
+        }`}
+      >
+        <span>{tPricing('annually')}</span>
+        <span className="ml-1 text-xs px-1 py-0.5 transition-colors duration-300 rounded-full bg-[#FB5688]/10 text-[#FB5688]">
+          {tPricing('20-off')}
+        </span>
+      </button>
+    </div>
+  )
+}
+
+function PricingCard({ 
+  isAnnual, 
+  setIsAnnual, 
+  onUpgradeClick,
+  isLoading,
+  currentPrice,
+  currency,
+  setCurrency
+}: { 
+  isAnnual: boolean, 
+  setIsAnnual: (value: boolean) => void,
+  onUpgradeClick: () => void,
+  isLoading: boolean,
+  currentPrice: number,
+  currency: string,
+  setCurrency: (currency: string) => void
+}) {
+  const t = useTranslations('assets')
+  const tPricing = useTranslations('pricing')
+  const tPlan = useTranslations('plan')
+  
+  const features = [
+    "feature.smart-media-placement",
+    "feature.save-templates",
+    "feature.brand-kit",
+    "feature.ai-video-b-rolls",
+    "feature.social-media-agent"
+  ]
+  
+  const getCurrencySymbol = () => {
+    return currency === "EUR" ? "€" : "$"
+  }
+  
+  return (
+    <motion.div 
+      className="bg-white rounded-xl px-8 py-4 shadow-md border border-gray-100"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 0.5 }}
+    >
+      <div className="flex items-center justify-between">
+        <PlanToggle isAnnual={isAnnual} onChange={setIsAnnual} />
+        
+        <div className="flex items-center gap-1 border rounded-md">
+          <button 
+            className={`px-2 py-1 rounded-l-md ${currency === "USD" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+            onClick={() => setCurrency("USD")}
+          >
+            $
+          </button>
+          <button 
+            className={`px-2 py-1 rounded-r-md ${currency === "EUR" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+            onClick={() => setCurrency("EUR")}
+          >
+            €
+          </button>
+        </div>
+      </div>
+      
+      <h3 className="text-2xl font-bold mt-4">{t('upgrade-banner.upgrade-to')} {tPlan(PlanName.PRO)}</h3>
+      <p className="text-gray-500">{t('upgrade-banner.pro-description')}</p>
+      
+      <div className="mt-4 flex items-baseline">
+        <span className="text-4xl font-bold text-primary">{getCurrencySymbol()}{currentPrice}</span>
+        <span className="text-gray-500 ml-2">/{tPricing('month')}{isAnnual && `, ${tPricing('billed-annually')}`}</span>
+      </div>
+      
+      <div className="mt-4 space-y-1">
+        {features.map((feature, index) => (
+          <div key={index} className="flex items-start">
+            <Check size={18} className="text-green-500 mt-0.5 mr-2 flex-shrink-0" />
+            <span className="text-gray-700 text-sm">{tPricing(feature)}</span>
+          </div>
+        ))}
+      </div>
+      
+      <Button 
+        className="w-full mt-4 h-12 font-medium"
+        size="lg"
+        onClick={onUpgradeClick}
+        disabled={isLoading}
+      >
+        {t('upgrade-banner.upgrade-now')}
+        {isLoading ? (
+          <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+        ) : (
+          <ArrowRight className="ml-2 h-4 w-4" />
+        )}
+      </Button>
+    </motion.div>
+  )
+}
+
+export default function AssetUpgradeBanner() {
+  const t = useTranslations('assets')
+  const [isAnnual, setIsAnnual] = useState(false)
+  const [loadingPlan, setLoadingPlan] = useState(false)
+  const [currency, setCurrency] = useState("EUR")
+  const { activeSpace } = useActiveSpaceStore()
+  
+  // Trouver le plan PRO
+  const proPlan = plans.find(plan => plan.name === PlanName.PRO)
+  
+  const basePrice = isAnnual && proPlan ? proPlan.annualPrice : proPlan ? proPlan.monthlyPrice : 0
+
+  const handleUpgrade = async () => {
+    if (!proPlan || !activeSpace) return
+    
+    try {
+      setLoadingPlan(true)
+      
+      track(MixpanelEvent.GO_TO_CHECKOUT, {
+        plan: proPlan.name,
+        subscriptionType: isAnnual ? 'annual' : 'monthly',
+        price: isAnnual ? proPlan.annualPrice : proPlan.monthlyPrice,
+        currency: currency,
+        context: 'assets_page'
+      })
+
+      const priceId = isAnnual ? proPlan.priceId.annual : proPlan.priceId.month
+      const price = currency === "EUR" ? priceId.euros : priceId.dollars
+      
+      const toltReferral = typeof window !== 'undefined' && (window as any).tolt_referral ? (window as any).tolt_referral : undefined
+      const fbc = getCookie("_fbc") || undefined
+      const fbp = getCookie("_fbp") || undefined
+      
+      const url: string = await basicApiCall('/stripe/createCheckout', {
+        priceId: price,
+        spaceId: activeSpace.id,
+        mode: 'subscription',
+        successUrl: window.location.href,
+        cancelUrl: window.location.href,
+        toltReferral: toltReferral,
+        price: isAnnual ? proPlan.annualPrice : proPlan.monthlyPrice,
+        currency: currency,
+        fbc: fbc,
+        fbp: fbp,
+      })
+
+      window.location.href = url
+    } catch (error) {
+      console.error('Erreur lors du checkout:', error)
+      setLoadingPlan(false)
+    }
+  }
+
+  return (
+    <motion.div 
+      className="bg-gray-50 rounded-xl p-10 shadow-sm border"
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <div className="max-w-6xl mx-auto">
+        <motion.div 
+          className="text-center mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Lock className="font-bold h-6 w-6" />
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+              {t('upgrade-banner.title')}
+            </h2>
+          </div>
+          <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
+            {t('upgrade-banner.description')}
+          </p>
+        </motion.div>
+
+        <div className="flex flex-col lg:flex-row justify-center items-center gap-4">
+          <div className="w-full lg:w-3/5 flex justify-center">
+            <VideoPlayer />
+          </div>
+          
+          <div className="w-full lg:w-2/5">
+            <PricingCard 
+              isAnnual={isAnnual} 
+              setIsAnnual={setIsAnnual} 
+              onUpgradeClick={handleUpgrade}
+              isLoading={loadingPlan}
+              currentPrice={basePrice}
+              currency={currency}
+              setCurrency={setCurrency}
+            />
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+} 
