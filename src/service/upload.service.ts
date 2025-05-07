@@ -41,12 +41,14 @@ export const uploadFiles = async (
                 image = {
                     id: url?.mediaId,
                     ...(dimensions && { width: dimensions.width, height: dimensions.height }),
-                    link: url?.mediaUrl
+                    link: url?.mediaUrl,
+                    size: fileToUpload.file.size
                 }
             } else if (fileToUpload.type === "audio") {
                 audio = {
                     id: url?.mediaId,
-                    link: url?.mediaUrl
+                    link: url?.mediaUrl,
+                    size: fileToUpload.file.size
                 }
             }
 

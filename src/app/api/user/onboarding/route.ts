@@ -47,6 +47,8 @@ export async function GET() {
         companyMission: space.details?.companyMission,
         companyTarget: space.details?.companyTarget,
         videoIdeas: space.videoIdeas,
+        usedStorageBytes: space.usedStorageBytes,
+        storageLimit: space.plan.storageLimit
       }
     }
     const response = {

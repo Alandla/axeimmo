@@ -36,7 +36,10 @@
       "Assets": "Médias"
     },
     "dashboard": {
-      "title": "Tableau de bord"
+      "title": "Tableau de bord",
+      "storage-usage": "Utilisation du stockage",
+      "storage-limit-exceeded": "Limite de stockage atteinte",
+      "storage-limit-warning": "Vous approchez de votre limite de stockage"
     },
     "videos": {
       "title": "Vidéos",

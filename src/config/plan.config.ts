@@ -8,6 +8,14 @@ export const discount = {
   couponId: process.env.NODE_ENV === "development" ? "1prfCTD9": "LFuOJEsa"
 }
 
+// Définition des limites de stockage par plan en octets
+export const storageLimit = {
+  [PlanName.FREE]: 1 * 1024 * 1024 * 1024, // 1 GO
+  [PlanName.START]: 5 * 1024 * 1024 * 1024, // 5 GO 
+  [PlanName.PRO]: 50 * 1024 * 1024 * 1024, // 50 GO
+  [PlanName.ENTREPRISE]: 150 * 1024 * 1024 * 1024, // 150 GO
+}
+
 export const plans: Plan[] = [
   {
     name: PlanName.START,
@@ -27,6 +35,7 @@ export const plans: Plan[] = [
     },
     users: 1,
     maxVideoDuration: 1,
+    storageLimit: storageLimit[PlanName.START],
   },
   {
     name: PlanName.PRO,
@@ -46,7 +55,8 @@ export const plans: Plan[] = [
     },
     users: 2,
     maxVideoDuration: 3,
-    popular: true
+    popular: true,
+    storageLimit: storageLimit[PlanName.PRO],
   },
   {
     name: PlanName.ENTREPRISE,
@@ -66,5 +76,6 @@ export const plans: Plan[] = [
     },
     users: 5,
     maxVideoDuration: 5,
+    storageLimit: storageLimit[PlanName.ENTREPRISE],
   }
 ]

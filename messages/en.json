@@ -27,7 +27,10 @@
       "Assets": "Assets"
     },
     "dashboard": {
-      "title": "Dashboard"
+      "title": "Dashboard",
+      "storage-usage": "Storage usage",
+      "storage-limit-exceeded": "Storage limit reached",
+      "storage-limit-warning": "You are approaching your storage limit"
     },
     "videos": {
       "title": "Videos",

@@ -5,7 +5,7 @@ import { findCheckoutSession } from "@/src/lib/stripe";
 import { createUser, getUserByEmail, getUserById } from "@/src/dao/userDao";
 import { addUserIdToContact } from "@/src/lib/loops";
 import { createPrivateSpaceForUser, getSpaceById, removeCreditsToSpace, setCreditsToSpace, updateSpacePlan } from "@/src/dao/spaceDao";
-import { plans } from "@/src/config/plan.config";
+import { plans, storageLimit } from "@/src/config/plan.config";
 import { IPlan, ISpace } from "@/src/types/space";
 import { SubscriptionType } from "@/src/types/enums";
 import { track } from "@/src/utils/mixpanel-server";
@@ -105,6 +105,7 @@ export async function POST(req: Request) {
           priceId: priceId as string,
           subscriptionType: billingInterval === "month" ? SubscriptionType.MONTHLY : SubscriptionType.ANNUAL,
           creditsMonth: plan.credits,
+          storageLimit: storageLimit[plan.name],
           nextPhase: nextPhase
         }
 
@@ -174,6 +175,7 @@ export async function POST(req: Request) {
           priceId: priceId as string,
           subscriptionType: billingInterval === "month" ? SubscriptionType.MONTHLY : SubscriptionType.ANNUAL,
           creditsMonth: plan.credits,
+          storageLimit: storageLimit[plan.name],
           nextPhase: nextPhase
         }
 
@@ -204,6 +206,7 @@ export async function POST(req: Request) {
           priceId: "",
           subscriptionType: SubscriptionType.FREE,
           creditsMonth: 0,
+          storageLimit: storageLimit[SubscriptionType.FREE], // Limite de stockage du plan gratuit
         });
 
         break;
@@ -248,9 +251,13 @@ export async function POST(req: Request) {
       default:
       // Unhandled event type
     }
-  } catch (e: any) {
-    console.error("stripe error: " + e.message + " | EVENT TYPE: " + event.type);
-  }
 
-  return NextResponse.json({});
+    return NextResponse.json({ received: true });
+  } catch (err: any) {
+    console.error(`Error processing Stripe webhook: ${err.message}`);
+    return NextResponse.json(
+      { error: `Error processing Stripe webhook: ${err.message}` },
+      { status: 400 }
+    );
+  }
 }

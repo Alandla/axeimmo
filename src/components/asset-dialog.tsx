@@ -98,6 +98,7 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
     
     setEditedName(mediaSpace.media.name);
     setEditedDescriptions(mediaSpace.media.description || []);
+    setAutoPlacement(mediaSpace.autoPlacement ?? true);
 
     const isRecentlyAdded = mediaSpace.uploadedAt && 
       (new Date().getTime() - new Date(mediaSpace.uploadedAt).getTime()) < 2 * 60 * 1000; // 2 minutes
@@ -135,6 +136,8 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
 
     setIsSaving(true)
 
+    console.log(editedName !== mediaSpace.media.name || editedDescriptions !== mediaSpace.media.description || autoPlacement !== mediaSpace.autoPlacement)
+
     if (editedName !== mediaSpace.media.name || editedDescriptions !== mediaSpace.media.description || autoPlacement !== mediaSpace.autoPlacement) {
       try {
         const updatedSpaceMedia = {
@@ -151,7 +154,7 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
           spaceId: activeSpace.id,
           mediaSpace: updatedSpaceMedia
         })
-
+        
         setMedia(updatedSpaceMedia as MediaSpaceWithCreator)
 
         toast({

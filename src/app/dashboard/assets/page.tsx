@@ -8,7 +8,7 @@ import AssetCard from '@/src/components/asset-card'
 import AssetDialog from '@/src/components/asset-dialog'
 import { IMediaSpace } from '@/src/types/space'
 import VideoCardSkeleton from '@/src/components/video-card-skeleton'
-import { ImageOff, Loader2, Upload } from 'lucide-react'
+import { ImageOff, AlertTriangle, Loader2, Upload } from 'lucide-react'
 import { IMedia } from '@/src/types/video'
 import { useAssetsStore } from '@/src/store/assetsStore'
 import { Button } from '@/src/components/ui/button'
@@ -18,6 +18,10 @@ import { useSession } from 'next-auth/react'
 import { useToast } from '@/src/hooks/use-toast'
 import AssetUpgradeBanner from '@/src/components/asset-upgrade-banner'
 import { PlanName } from '@/src/types/enums'
+import { storageLimit } from '@/src/config/plan.config'
+import { formatBytes } from '@/src/utils/format'
+import { Alert, AlertDescription, AlertTitle } from '@/src/components/ui/alert'
+import { UsageStorage } from '@/src/components/ui/usage-storage'
 
 interface User {
   id: string
@@ -37,8 +41,9 @@ export interface UploadingMedia {
 
 export default function AssetsPage() {
   const t = useTranslations('assets')
+  const tDashboard = useTranslations('dashboard')
   const { data: session } = useSession()
-  const { activeSpace } = useActiveSpaceStore()
+  const { activeSpace, setActiveSpace } = useActiveSpaceStore()
   const { assetsBySpace, setAssets: setStoreAssets, fetchAssets } = useAssetsStore()
   const { toast } = useToast()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -53,6 +58,17 @@ export default function AssetsPage() {
 
   // Vérifier si l'utilisateur a un plan Pro ou Entreprise
   const hasPlan = activeSpace?.planName === PlanName.PRO || activeSpace?.planName === PlanName.ENTREPRISE
+  
+  // Calcul de l'utilisation du stockage
+  const usedStorage = activeSpace?.usedStorageBytes || 0
+  const storageMax = activeSpace?.storageLimit || storageLimit[activeSpace?.planName || PlanName.FREE]
+  const storagePercentage = Math.min(Math.round((usedStorage / storageMax) * 100), 100);
+  const isStorageFull = storagePercentage >= 100
+  const isStorageWarning = storagePercentage > 70
+  const isStorageCritical = storagePercentage > 90
+
+  // Désactiver le bouton d'upload si l'utilisateur n'a pas de plan ou si le stockage est plein
+  const isUploadDisabled = !activeSpace?.id || isUploadingFiles || !hasPlan || isStorageFull
 
   // Mettre à jour la hauteur du conteneur
   useEffect(() => {
@@ -134,10 +150,10 @@ export default function AssetsPage() {
 
       let mediasToAnalyze: IMediaSpace[] = []
       if (medias.length > 0) {
-        const addedMedias: IMediaSpace[] = await basicApiCall('/space/addMedias', {
+        const { addedMedias, usedStorageBytes } = await basicApiCall('/space/addMedias', {
           spaceId: activeSpace.id,
           medias
-        })
+        }) as { addedMedias: IMediaSpace[], usedStorageBytes: number }
         const addedMediasWithCreator: MediaSpaceWithCreator[] = addedMedias.map(media => ({
           ...media,
           creator: {
@@ -147,6 +163,13 @@ export default function AssetsPage() {
           }
         }));
         setAssets(addedMediasWithCreator.reverse());
+
+        if (activeSpace) {
+          setActiveSpace({
+            ...activeSpace,
+            usedStorageBytes: usedStorageBytes
+          });
+        }
 
         mediasToAnalyze = addedMedias.filter(mediaSpace => {
           return !mediaSpace.media.description || mediaSpace.media.description[0].text === "";
@@ -219,6 +242,24 @@ export default function AssetsPage() {
       className="relative"
       style={{ height: !hasPlan ? `${containerHeight}px` : 'auto' }}
     >
+      {/* Alerte de stockage */}
+      {activeSpace && isStorageWarning && (
+        <div className="px-4 py-2 mb-4">
+          <Alert variant={isStorageCritical ? "destructive" : "warning"}>
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>
+              {isStorageCritical 
+                ? tDashboard('storage-limit-exceeded') 
+                : tDashboard('storage-limit-warning')
+              }
+            </AlertTitle>
+            <AlertDescription>
+              {formatBytes(usedStorage)} / {formatBytes(storageMax)} ({storagePercentage}%)
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+      
       {/* Bannière d'upgrade pour les utilisateurs sans plan Pro ou Entreprise */}
       {!hasPlan && (
         <div 
@@ -248,10 +289,18 @@ export default function AssetsPage() {
           }}
         />
         
-        {/* Bouton fixé pour desktop, normal pour mobile */}
-        <div className="hidden md:block fixed top-4 right-4 z-1">
+        {/* Version mobile: barre de progression au-dessus + bouton pleine largeur */}
+        <div className="md:hidden px-4 mb-4">
+          <div className="mb-2">
+            <UsageStorage 
+              usedStorageBytes={activeSpace?.usedStorageBytes || 0} 
+              planName={activeSpace?.planName || PlanName.FREE} 
+              customStorageLimit={activeSpace?.storageLimit}
+            />
+          </div>
           <Button 
-            disabled={isUploadingFiles || !activeSpace?.id} 
+            className="w-full"
+            disabled={isUploadDisabled}
             onClick={() => document.getElementById('file-input')?.click()}
           >
             {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
@@ -259,11 +308,17 @@ export default function AssetsPage() {
           </Button>
         </div>
         
-        {/* Version mobile: affichage normal en pleine largeur */}
-        <div className="md:hidden px-4">
+        {/* Version desktop: barre de progression et bouton côte à côte */}
+        <div className="hidden md:flex items-center justify-end space-x-4 fixed top-4 right-4 z-1">
+          <div className="w-64">
+            <UsageStorage 
+              usedStorageBytes={activeSpace?.usedStorageBytes || 0} 
+              planName={activeSpace?.planName || PlanName.FREE} 
+              customStorageLimit={activeSpace?.storageLimit}
+            />
+          </div>
           <Button 
-            className="w-full"
-            disabled={isUploadingFiles || !activeSpace?.id} 
+            disabled={isUploadDisabled}
             onClick={() => document.getElementById('file-input')?.click()}
           >
             {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}

@@ -86,7 +86,8 @@ function PricingCard({
   isLoading,
   currentPrice,
   currency,
-  setCurrency
+  setCurrency,
+  monthlyPrice
 }: { 
   isAnnual: boolean, 
   setIsAnnual: (value: boolean) => void,
@@ -94,7 +95,8 @@ function PricingCard({
   isLoading: boolean,
   currentPrice: number,
   currency: string,
-  setCurrency: (currency: string) => void
+  setCurrency: (currency: string) => void,
+  monthlyPrice: number
 }) {
   const t = useTranslations('assets')
   const tPricing = useTranslations('pricing')
@@ -111,6 +113,8 @@ function PricingCard({
   const getCurrencySymbol = () => {
     return currency === "EUR" ? "€" : "$"
   }
+  
+  const savePercentage = isAnnual ? Math.round(((monthlyPrice - currentPrice) / monthlyPrice) * 100) : 0
   
   return (
     <motion.div 
@@ -143,8 +147,15 @@ function PricingCard({
       
       <div className="mt-4 flex items-baseline">
         <span className="text-4xl font-bold text-primary">{getCurrencySymbol()}{currentPrice}</span>
-        <span className="text-gray-500 ml-2">/{tPricing('month')}{isAnnual && `, ${tPricing('billed-annually')}`}</span>
+        <div className="flex flex-col text-sm -space-y-1 ml-2">
+          {isAnnual && (
+            <span className="line-through">{monthlyPrice}{getCurrencySymbol()}</span>
+          )}
+          <span className="text-gray-500">/{tPricing('month')}{isAnnual && `, ${tPricing('billed-annually')}`}</span>
+        </div>
       </div>
+      
+      
       
       <div className="mt-4 space-y-1">
         {features.map((feature, index) => (
@@ -165,7 +176,7 @@ function PricingCard({
         {isLoading ? (
           <Loader2 className="ml-2 h-4 w-4 animate-spin" />
         ) : (
-          <ArrowRight className="ml-2 h-4 w-4" />
+          <ArrowRight className="h-4 w-4" />
         )}
       </Button>
     </motion.div>
@@ -178,11 +189,11 @@ export default function AssetUpgradeBanner() {
   const [loadingPlan, setLoadingPlan] = useState(false)
   const [currency, setCurrency] = useState("EUR")
   const { activeSpace } = useActiveSpaceStore()
-  
-  // Trouver le plan PRO
+
   const proPlan = plans.find(plan => plan.name === PlanName.PRO)
   
   const basePrice = isAnnual && proPlan ? proPlan.annualPrice : proPlan ? proPlan.monthlyPrice : 0
+  const monthlyPrice = proPlan ? proPlan.monthlyPrice : 0
 
   const handleUpgrade = async () => {
     if (!proPlan || !activeSpace) return
@@ -227,7 +238,7 @@ export default function AssetUpgradeBanner() {
 
   return (
     <motion.div 
-      className="bg-gray-50 rounded-xl p-10 shadow-sm border"
+      className="bg-gray-50 rounded-xl p-8 px-4 sm:px-8 shadow-sm border"
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -264,6 +275,7 @@ export default function AssetUpgradeBanner() {
               currentPrice={basePrice}
               currency={currency}
               setCurrency={setCurrency}
+              monthlyPrice={monthlyPrice}
             />
           </div>
         </div>

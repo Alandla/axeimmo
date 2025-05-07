@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl'
 import { useToast } from '@/src/hooks/use-toast'
 import { basicApiCall } from '@/src/lib/api'
 import { useUsersStore } from '@/src/store/creatorUserVideo'
+import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import { Button } from './ui/button'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import { AvatarImage } from '@radix-ui/react-avatar'
@@ -39,6 +40,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
   const { data: session } = useSession()
   const { toast } = useToast()
   const { fetchUser } = useUsersStore()
+  const { activeSpace, setActiveSpace } = useActiveSpaceStore()
   
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(mediaSpace.media.name)
@@ -135,6 +137,22 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
       })
 
       onDelete?.(mediaToDelete)
+
+      if (activeSpace && activeSpace.id === spaceId) {
+        let storageToRemove = 0;
+        if (mediaToDelete.type === 'image' && mediaToDelete.image && mediaToDelete.image.size) {
+          storageToRemove += mediaToDelete.image.size;
+        } else if (mediaToDelete.type === 'video' && mediaToDelete.video && mediaToDelete.video.size) {
+          storageToRemove += mediaToDelete.video.size;
+        }
+        
+        if (storageToRemove > 0) {
+          setActiveSpace({
+            ...activeSpace,
+            usedStorageBytes: Math.max(0, (activeSpace.usedStorageBytes || 0) - storageToRemove)
+          });
+        }
+      }
       
       toast({
         title: t('toast.deleted'),

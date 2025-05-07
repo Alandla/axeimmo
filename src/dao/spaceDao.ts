@@ -19,6 +19,7 @@ export const createPrivateSpaceForUser = async (userId: string, userName?: strin
         creditsMonth: 10,
       },
       credits: 10,
+      usedStorageBytes: 0,
     });
 
     await space.save();
@@ -33,6 +34,20 @@ export const addMediasToSpace = async (spaceId: string, medias: IMediaSpace[]) =
     return await executeWithRetry(async () => {
       const space = await getSpaceById(spaceId);
       if (!space.medias) space.medias = [];
+      
+      let additionalStorageBytes = 0;
+      for (const mediaSpace of medias) {
+        const media = mediaSpace.media;
+        if (media.type === 'video' && media.video && media.video.size) {
+          additionalStorageBytes += media.video.size;
+        } else if (media.type === 'image' && media.image && media.image.size) {
+          additionalStorageBytes += media.image.size;
+        }
+      }
+      
+      if (!space.usedStorageBytes) space.usedStorageBytes = 0;
+      space.usedStorageBytes += additionalStorageBytes;
+      
       space.medias.push(...medias);
       await space.save();
       return space.medias;
@@ -153,6 +168,18 @@ export const deleteMediaFromSpace = async (spaceId: string, media: IMedia) => {
   try {
     return await executeWithRetry(async () => {
       const space = await getSpaceById(spaceId);
+      
+      let storageToRemove = 0;
+      if (media.type === 'video' && media.video && media.video.size) {
+        storageToRemove += media.video.size;
+      } else if (media.type === 'image' && media.image && media.image.size) {
+        storageToRemove += media.image.size;
+      }
+      
+      if (space.usedStorageBytes && storageToRemove > 0) {
+        space.usedStorageBytes = Math.max(0, space.usedStorageBytes - storageToRemove);
+      }
+      
       space.medias = space.medias.filter((m: any) => m.media._id.toString() !== media.id);
       await space.save();
       return space.medias;
@@ -182,11 +209,10 @@ export const getUserSpaces = async (userId: string) => {
 
       const spaces = await SpaceModel.find(
         { _id: { $in: user.spaces } },
-        'name plan credits members videoIdeas details'
+        'name plan credits members videoIdeas details usedStorageBytes'
       );
 
       return spaces.map((space) => {
-        console.log("space", space);
         const userRole = space.members.find((member: any) => member.userId.toString() === userId)?.roles;
         return {
           id: space._id,
@@ -198,6 +224,8 @@ export const getUserSpaces = async (userId: string) => {
           companyMission: space.details?.companyMission,
           companyTarget: space.details?.companyTarget,
           videoIdeas: space.videoIdeas,
+          usedStorageBytes: space.usedStorageBytes,
+          storageLimit: space.plan.storageLimit
         };
       });
     });
@@ -351,6 +379,8 @@ export const updateSpace = async (spaceId: string, updateData: Partial<ISpace>) 
         companyMission: updatedSpace.details?.companyMission,
         companyTarget: updatedSpace.details?.companyTarget,
         videoIdeas: updatedSpace.videoIdeas,
+        usedStorageBytes: updatedSpace.usedStorageBytes,
+        storageLimit: updatedSpace.plan.storageLimit
       };
     });
   } catch (error) {

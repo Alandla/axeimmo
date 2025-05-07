@@ -39,6 +39,10 @@ const planSchema = new mongoose.Schema({
     required: true,
     default: 10,
   },
+  storageLimit: {
+    type: Number,
+    default: 1 * 1024 * 1024 * 1024, // 1 GO par défaut pour le plan gratuit
+  },
   nextPhase: {
     type: Date,
     required: true,
@@ -120,7 +124,11 @@ const spaceSchema = new mongoose.Schema(
       voices: [],
       avatars: [],
       subtitles: []
-    }
+    },
+    usedStorageBytes: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

@@ -11,6 +11,10 @@ import { useSession } from "next-auth/react";
 import { useMediaToDeleteStore } from "@/src/store/mediaToDelete";
 import { useToast } from "@/src/hooks/use-toast";
 import { useTranslations } from "next-intl";
+import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
+import { PlanName } from "@/src/types/enums";
+import { storageLimit } from "@/src/config/plan.config";
+import { UsageStorage } from "../ui/usage-storage";
 
 export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSequenceMedia, spaceId }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string }) {
   const { data: session } = useSession()
@@ -20,6 +24,19 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
   const [assets, setAssets] = useState<IMediaSpace[]>([])
   const { setSpaceId } = useMediaToDeleteStore()
   const { toast } = useToast()
+  const { activeSpace, setActiveSpace } = useActiveSpaceStore()
+
+  // Vérifier si l'utilisateur a un plan Pro ou Entreprise
+  const hasPlan = activeSpace?.planName === PlanName.PRO || activeSpace?.planName === PlanName.ENTREPRISE
+  
+  // Calcul de l'utilisation du stockage
+  const usedStorage = activeSpace?.usedStorageBytes || 0
+  const storageMax = activeSpace?.storageLimit || (activeSpace?.planName ? storageLimit[activeSpace.planName] : storageLimit[PlanName.FREE])
+  const storagePercentage = Math.min(Math.round((usedStorage / storageMax) * 100), 100);
+  const isStorageFull = storagePercentage >= 100
+
+  // Désactiver le bouton d'upload si l'utilisateur n'a pas de plan ou si le stockage est plein
+  const isUploadDisabled = isUploadingFiles || !activeSpace?.id || isStorageFull
 
   useEffect(() => {
     const fetchAssets = async () => {
@@ -37,6 +54,23 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
     })
     const updatedAssets = assets.filter(asset => asset.media.id !== media.id);
     setAssets(updatedAssets);
+
+    if (activeSpace && activeSpace.id === spaceId) {
+      let storageToRemove = 0;
+      if (media.type === 'image' && media.image && media.image.size) {
+        storageToRemove += media.image.size;
+      } else if (media.type === 'video' && media.video && media.video.size) {
+        storageToRemove += media.video.size;
+      }
+
+      if (storageToRemove > 0) {
+        setActiveSpace({
+          ...activeSpace,
+          usedStorageBytes: Math.max(0, (activeSpace.usedStorageBytes || 0) - storageToRemove)
+        });
+      }
+    }
+    
     toast({
       title: t('toast.file-deleted'),
       description: t('toast.file-deleted-description'),
@@ -72,16 +106,23 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
 
       let mediasToAnalyze: IMediaSpace[] = []
       if (medias.length > 0) {
-        const addedMedias: IMediaSpace[] = await basicApiCall('/space/addMedias', {
+        const { addedMedias, usedStorageBytes } = await basicApiCall('/space/addMedias', {
             spaceId: spaceId,
             medias
-        })
+        }) as { addedMedias: IMediaSpace[], usedStorageBytes: number }
 
         mediasToAnalyze = addedMedias.filter(mediaSpace => {
           return !mediaSpace.media.description || mediaSpace.media.description[0].text === "";
         });
 
         setAssets(addedMedias)
+
+        if (activeSpace && activeSpace.id === spaceId) {
+          setActiveSpace({
+            ...activeSpace,
+            usedStorageBytes: usedStorageBytes
+          });
+        }
       }
       setIsUploadingFiles(false)
       toast({
@@ -123,7 +164,14 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
           }
           }}
       />
-      <Button className="w-full" disabled={isUploadingFiles} onClick={() => document.getElementById('file-input')?.click()}>
+      <div className="mb-2">
+        <UsageStorage 
+          usedStorageBytes={activeSpace?.usedStorageBytes || 0} 
+          planName={activeSpace?.planName || PlanName.FREE} 
+          customStorageLimit={activeSpace?.storageLimit}
+        />
+      </div>
+      <Button className="w-full" disabled={isUploadDisabled} onClick={() => document.getElementById('file-input')?.click()}>
         {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
         {t('upload-file-button')}
       </Button>

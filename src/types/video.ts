@@ -38,6 +38,7 @@ export interface IMedia {
     link: string;
     width?: number;
     height?: number;
+    size?: number;
   };
   audio?: {
     id: string;
