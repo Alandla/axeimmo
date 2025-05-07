@@ -39,6 +39,7 @@ import TransitionSettings from '@/src/components/edit/transition-settings'
 import { transitions as defaultTransitions, sounds as defaultSounds } from '@/src/config/transitions.config'
 import { usePremiumToast } from '@/src/utils/premium-toast'
 import MobileDisclaimerModal from '@/src/components/modal/mobile-disclaimer'
+import { useAssetsStore } from '@/src/store/assetsStore'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -50,6 +51,7 @@ export default function VideoEditor() {
   const { showPremiumToast } = usePremiumToast()
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
+  const assetsStore = useAssetsStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
@@ -274,6 +276,10 @@ export default function VideoEditor() {
         setShowWatermark(spaceResponse.plan.name === PlanName.FREE);
         setSubtitleStyles(spaceResponse.subtitleStyle);
         setPlanName(spaceResponse.plan.name);
+
+        if (response.spaceId && (spaceResponse as any).medias && Array.isArray((spaceResponse as any).medias)) {
+          assetsStore.setAssets(response.spaceId, (spaceResponse as any).medias);
+        }
         
         // Vérifier si une review existe déjà
         const reviewResponse = await basicApiGetCall(`/reviews/${id}`);
