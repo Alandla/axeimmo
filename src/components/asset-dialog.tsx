@@ -215,7 +215,7 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
   const updateDescription = (index: number, field: keyof Description, value: string | number) => {
     if (!mediaSpace) return
 
-    const newDescriptions = [...(mediaSpace.media.description || [])]
+    const newDescriptions = [...editedDescriptions]
     newDescriptions[index] = {
       ...newDescriptions[index],
       [field]: value
