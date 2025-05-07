@@ -237,44 +237,33 @@ export default function AssetsPage() {
   }, [activeSpace]);
 
   return (
-    <div 
-      ref={containerRef} 
-      className="relative"
-      style={{ height: !hasPlan ? `${containerHeight}px` : 'auto' }}
-    >
-      {/* Alerte de stockage */}
-      {activeSpace && isStorageWarning && (
-        <div className="px-4 py-2 mb-4">
-          <Alert variant={isStorageCritical ? "destructive" : "warning"}>
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>
-              {isStorageCritical 
-                ? tDashboard('storage-limit-exceeded') 
-                : tDashboard('storage-limit-warning')
-              }
-            </AlertTitle>
-            <AlertDescription>
-              {formatBytes(usedStorage)} / {formatBytes(storageMax)} ({storagePercentage}%)
-            </AlertDescription>
-          </Alert>
-        </div>
-      )}
-      
-      {/* Bannière d'upgrade pour les utilisateurs sans plan Pro ou Entreprise */}
-      {!hasPlan && (
-        <div 
-          className="absolute inset-x-0 bottom-0 top-16 z-10 flex items-center justify-center p-4"
-          style={{ top: '16px' }}
-        >
-          <div className="w-full max-w-5xl">
-            <AssetUpgradeBanner />
-          </div>
-        </div>
-      )}
-      
+    <div className="relative">
+      {/* Version desktop: barre de progression et bouton côte à côte */}
       <div 
-        className={!hasPlan ? "filter blur-sm pointer-events-none overflow-hidden" : ""}
-        style={{ maxHeight: !hasPlan ? `${containerHeight}px` : 'none' }}
+        className={`hidden md:flex items-center justify-end space-x-4 fixed top-4 right-4 z-50 ${activeSpace && !hasPlan ? 'filter blur-sm pointer-events-none' : ''}`} 
+        style={{ position: 'fixed', top: '1rem', right: '1rem' }}
+      >
+        <div className="w-64">
+          <UsageStorage 
+            usedStorageBytes={activeSpace?.usedStorageBytes || 0} 
+            planName={activeSpace?.planName || PlanName.FREE} 
+            customStorageLimit={activeSpace?.storageLimit}
+          />
+        </div>
+        <Button 
+          disabled={isUploadDisabled}
+          onClick={() => document.getElementById('file-input')?.click()}
+          className="relative z-50"
+        >
+          {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+          {t('upload-button')}
+        </Button>
+      </div>
+    
+      <div 
+        ref={containerRef} 
+        className="relative"
+        style={{ height: !hasPlan ? `${containerHeight}px` : 'auto' }}
       >
         <input
           id="file-input"
@@ -289,85 +278,102 @@ export default function AssetsPage() {
           }}
         />
         
-        {/* Version mobile: barre de progression au-dessus + bouton pleine largeur */}
-        <div className="md:hidden px-4 mb-4">
-          <div className="mb-2">
-            <UsageStorage 
-              usedStorageBytes={activeSpace?.usedStorageBytes || 0} 
-              planName={activeSpace?.planName || PlanName.FREE} 
-              customStorageLimit={activeSpace?.storageLimit}
-            />
+        {/* Alerte de stockage */}
+        {activeSpace && isStorageWarning && (
+          <div className="px-4 py-2 mb-4">
+            <Alert variant={isStorageCritical ? "destructive" : "warning"}>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>
+                {isStorageCritical 
+                  ? tDashboard('storage-limit-exceeded') 
+                  : tDashboard('storage-limit-warning')
+                }
+              </AlertTitle>
+              <AlertDescription>
+                {formatBytes(usedStorage)} / {formatBytes(storageMax)} ({storagePercentage}%)
+              </AlertDescription>
+            </Alert>
           </div>
-          <Button 
-            className="w-full"
-            disabled={isUploadDisabled}
-            onClick={() => document.getElementById('file-input')?.click()}
-          >
-            {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-            {t('upload-button')}
-          </Button>
-        </div>
+        )}
         
-        {/* Version desktop: barre de progression et bouton côte à côte */}
-        <div className="hidden md:flex items-center justify-end space-x-4 fixed top-4 right-4 z-1">
-          <div className="w-64">
-            <UsageStorage 
-              usedStorageBytes={activeSpace?.usedStorageBytes || 0} 
-              planName={activeSpace?.planName || PlanName.FREE} 
-              customStorageLimit={activeSpace?.storageLimit}
-            />
+        {/* Bannière d'upgrade pour les utilisateurs sans plan Pro ou Entreprise */}
+        {activeSpace && !hasPlan && (
+          <div 
+            className="absolute inset-x-0 bottom-0 top-16 z-10 flex items-center justify-center p-4 overflow-visible"
+            style={{ top: '16px' }}
+          >
+            <div className="w-full max-w-5xl">
+              <AssetUpgradeBanner />
+            </div>
           </div>
-          <Button 
-            disabled={isUploadDisabled}
-            onClick={() => document.getElementById('file-input')?.click()}
-          >
-            {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-            {t('upload-button')}
-          </Button>
-        </div>
+        )}
         
-        <div className="p-4">
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {/* Afficher les médias en cours d'upload */}
-            {uploadingMedias.map((uploadingMedia) => (
-              <div key={uploadingMedia.id} className="relative overflow-hidden rounded-lg">
-                <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <div 
+          className={activeSpace && !hasPlan ? "filter blur-sm pointer-events-none overflow-hidden" : ""}
+          style={{ maxHeight: activeSpace && !hasPlan ? `${containerHeight}px` : 'none' }}
+        >
+          {/* Version mobile: barre de progression au-dessus + bouton pleine largeur */}
+          <div className="md:hidden px-4 mb-4">
+            <div className="mb-2">
+              <UsageStorage 
+                usedStorageBytes={activeSpace?.usedStorageBytes || 0} 
+                planName={activeSpace?.planName || PlanName.FREE} 
+                customStorageLimit={activeSpace?.storageLimit}
+              />
+            </div>
+            <Button 
+              className="w-full"
+              disabled={isUploadDisabled}
+              onClick={() => document.getElementById('file-input')?.click()}
+            >
+              {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+              {t('upload-button')}
+            </Button>
+          </div>
+          
+          <div className="p-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {/* Afficher les médias en cours d'upload */}
+              {uploadingMedias.map((uploadingMedia) => (
+                <div key={uploadingMedia.id} className="relative overflow-hidden rounded-lg">
+                  <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                  </div>
+                  <div className="p-2">
+                    <p className="text-lg font-semibold truncate cursor-text">{uploadingMedia.file.name}</p>
+                    <p className="text-sm text-gray-500 truncate">{t('uploading')}...</p>
+                  </div>
                 </div>
-                <div className="p-2">
-                  <p className="text-lg font-semibold truncate cursor-text">{uploadingMedia.file.name}</p>
-                  <p className="text-sm text-gray-500 truncate">{t('uploading')}...</p>
+              ))}
+              
+              {isLoading ? (
+                Array.from({ length: 8 }).map((_, index) => (
+                  <VideoCardSkeleton key={index} />
+                ))
+              ) : assets.length === 0 && uploadingMedias.length === 0 ? (
+                <div className="col-span-full flex flex-col items-center justify-center py-20">
+                  <ImageOff className="w-12 h-12 text-gray-400 mb-4" />
+                  <h2 className="text-2xl font-semibold mb-2">{t('no-assets')}</h2>
+                  <p className="text-gray-500 mb-6 text-center">
+                    {t('no-assets-description')}
+                  </p>
                 </div>
-              </div>
-            ))}
-            
-            {isLoading ? (
-              Array.from({ length: 8 }).map((_, index) => (
-                <VideoCardSkeleton key={index} />
-              ))
-            ) : assets.length === 0 && uploadingMedias.length === 0 ? (
-              <div className="col-span-full flex flex-col items-center justify-center py-20">
-                <ImageOff className="w-12 h-12 text-gray-400 mb-4" />
-                <h2 className="text-2xl font-semibold mb-2">{t('no-assets')}</h2>
-                <p className="text-gray-500 mb-6 text-center">
-                  {t('no-assets-description')}
-                </p>
-              </div>
-            ) : (
-              assets.map((asset) => (
-                <AssetCard
-                  key={asset.media.id}
-                  spaceId={activeSpace?.id || ''}
-                  mediaSpace={asset}
-                  setMedia={setMedia}
-                  onDelete={handleDeleteAsset}
-                  onClick={() => {
-                    setSelectedAsset(asset)
-                    setIsDialogOpen(true)
-                  }}
-                />
-              ))
-            )}
+              ) : (
+                assets.map((asset) => (
+                  <AssetCard
+                    key={asset.media.id}
+                    spaceId={activeSpace?.id || ''}
+                    mediaSpace={asset}
+                    setMedia={setMedia}
+                    onDelete={handleDeleteAsset}
+                    onClick={() => {
+                      setSelectedAsset(asset)
+                      setIsDialogOpen(true)
+                    }}
+                  />
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import { Button } from '@/src/components/ui/button'
@@ -12,6 +12,7 @@ import { track } from '@/src/utils/mixpanel'
 import { MixpanelEvent } from '@/src/types/events'
 import { getCookie } from '@/src/lib/cookies'
 import { motion } from 'framer-motion'
+import PlanPeriodToggle from './plan-period-toggle'
 
 function VideoPlayer() {
   return (
@@ -23,58 +24,6 @@ function VideoPlayer() {
         controls
         preload="none"
       />
-    </div>
-  )
-}
-
-function PlanToggle({ isAnnual, onChange }: { isAnnual: boolean, onChange: (value: boolean) => void }) {
-  const tPricing = useTranslations('pricing')
-  const [sliderWidth, setSliderWidth] = useState(0)
-  const [sliderLeft, setSliderLeft] = useState(0)
-  
-  const monthlyRef = useRef<HTMLButtonElement>(null)
-  const annuallyRef = useRef<HTMLButtonElement>(null)
-  
-  useEffect(() => {
-    if (isAnnual && annuallyRef.current) {
-      setSliderWidth(annuallyRef.current.offsetWidth)
-      setSliderLeft(annuallyRef.current.offsetLeft)
-    } else if (!isAnnual && monthlyRef.current) {
-      setSliderWidth(monthlyRef.current.offsetWidth)
-      setSliderLeft(monthlyRef.current.offsetLeft)
-    }
-  }, [isAnnual])
-  
-  return (
-    <div className="inline-flex items-center rounded-lg border p-0.5 relative self-start">
-      <div 
-        className="absolute top-0.5 bottom-0.5 rounded-lg bg-primary transition-all duration-300 ease-in-out"
-        style={{ 
-          width: `${sliderWidth - 4}px`, 
-          left: `${sliderLeft + 2}px` 
-        }}
-      />
-      <button
-        ref={monthlyRef}
-        onClick={() => onChange(false)}
-        className={`px-3 py-1.5 rounded-lg text-sm relative z-10 transition-colors duration-300 ${
-          !isAnnual ? 'text-primary-foreground' : ''
-        }`}
-      >
-        {tPricing('monthly')}
-      </button>
-      <button
-        ref={annuallyRef}
-        onClick={() => onChange(true)}
-        className={`px-3 py-1.5 rounded-lg text-sm relative z-10 transition-colors duration-300 flex items-center ${
-          isAnnual ? 'text-primary-foreground' : ''
-        }`}
-      >
-        <span>{tPricing('annually')}</span>
-        <span className="ml-1 text-xs px-1 py-0.5 transition-colors duration-300 rounded-full bg-[#FB5688]/10 text-[#FB5688]">
-          {tPricing('20-off')}
-        </span>
-      </button>
     </div>
   )
 }
@@ -117,24 +66,19 @@ function PricingCard({
   const savePercentage = isAnnual ? Math.round(((monthlyPrice - currentPrice) / monthlyPrice) * 100) : 0
   
   return (
-    <motion.div 
-      className="bg-white rounded-xl px-8 py-4 shadow-md border border-gray-100"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4, duration: 0.5 }}
-    >
+    <div className="bg-white rounded-xl p-4 shadow-md border border-gray-100">
       <div className="flex items-center justify-between">
-        <PlanToggle isAnnual={isAnnual} onChange={setIsAnnual} />
+        <PlanPeriodToggle isAnnual={isAnnual} onToggle={setIsAnnual} compact={true} />
         
-        <div className="flex items-center gap-1 border rounded-md">
+        <div className="flex items-center gap-1 border rounded-md h-[42px]">
           <button 
-            className={`px-2 py-1 rounded-l-md ${currency === "USD" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+            className={`px-2 h-full rounded-l-md ${currency === "USD" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
             onClick={() => setCurrency("USD")}
           >
             $
           </button>
           <button 
-            className={`px-2 py-1 rounded-r-md ${currency === "EUR" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+            className={`px-2 h-full rounded-r-md ${currency === "EUR" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
             onClick={() => setCurrency("EUR")}
           >
             €
@@ -145,17 +89,13 @@ function PricingCard({
       <h3 className="text-2xl font-bold mt-4">{t('upgrade-banner.upgrade-to')} {tPlan(PlanName.PRO)}</h3>
       <p className="text-gray-500">{t('upgrade-banner.pro-description')}</p>
       
-      <div className="mt-4 flex items-baseline">
-        <span className="text-4xl font-bold text-primary">{getCurrencySymbol()}{currentPrice}</span>
-        <div className="flex flex-col text-sm -space-y-1 ml-2">
-          {isAnnual && (
-            <span className="line-through">{monthlyPrice}{getCurrencySymbol()}</span>
-          )}
+      <div className="mt-4 flex gap-2">
+        <span className="text-4xl font-bold text-primary">{currentPrice}{getCurrencySymbol()}</span>
+        <div className="flex flex-col text-sm -space-y-1">
+          <span className={`line-through ${savePercentage > 0 ? '' : 'opacity-0'}`}>{monthlyPrice}{getCurrencySymbol()}</span>
           <span className="text-gray-500">/{tPricing('month')}{isAnnual && `, ${tPricing('billed-annually')}`}</span>
         </div>
       </div>
-      
-      
       
       <div className="mt-4 space-y-1">
         {features.map((feature, index) => (
@@ -179,7 +119,7 @@ function PricingCard({
           <ArrowRight className="h-4 w-4" />
         )}
       </Button>
-    </motion.div>
+    </div>
   )
 }
 
@@ -244,12 +184,7 @@ export default function AssetUpgradeBanner() {
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <div className="max-w-6xl mx-auto">
-        <motion.div 
-          className="text-center mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
+        <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Lock className="font-bold h-6 w-6" />
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
@@ -259,7 +194,7 @@ export default function AssetUpgradeBanner() {
           <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
             {t('upgrade-banner.description')}
           </p>
-        </motion.div>
+        </div>
 
         <div className="flex flex-col lg:flex-row justify-center items-center gap-4">
           <div className="w-full lg:w-3/5 flex justify-center">

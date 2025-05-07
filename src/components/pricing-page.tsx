@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { Star, Heart, Diamond, Check, Gem, Info, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Star, Heart, Diamond, Check, Gem, Info, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight, Database } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card'
 import { Button } from '@/src/components/ui/button'
 import { useTranslations } from 'next-intl'
@@ -14,6 +14,7 @@ import Link from 'next/link'
 import DiscountBanner from './discount-banner'
 import { track } from '@/src/utils/mixpanel'
 import { MixpanelEvent } from '@/src/types/events'
+import PlanPeriodToggle from './plan-period-toggle'
 import {
   Select,
   SelectContent,
@@ -22,6 +23,7 @@ import {
   SelectValue,
 } from "@/src/components/ui/select"
 import { getCookie } from '../lib/cookies'
+import { formatBytes } from '../utils/format'
 
 // Définition des fonctionnalités avec leurs catégories pour remplacer plan.features
 export const features = [
@@ -197,12 +199,7 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
   const [isAnnual, setIsAnnual] = useState(false)
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
   const { activeSpace } = useActiveSpaceStore()
-  const [sliderWidth, setSliderWidth] = useState(0)
-  const [sliderLeft, setSliderLeft] = useState(0)
   const [currency, setCurrency] = useState("USD")
-  
-  const monthlyRef = useRef<HTMLButtonElement>(null)
-  const annuallyRef = useRef<HTMLButtonElement>(null)
   
   useEffect(() => {
     async function detectUserCurrency() {
@@ -218,17 +215,6 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
     
     detectUserCurrency();
   }, []);
-  
-  useEffect(() => {
-    // Mettre à jour la position et la largeur du fond en fonction de l'option sélectionnée
-    if (isAnnual && annuallyRef.current) {
-      setSliderWidth(annuallyRef.current.offsetWidth)
-      setSliderLeft(annuallyRef.current.offsetLeft)
-    } else if (!isAnnual && monthlyRef.current) {
-      setSliderWidth(monthlyRef.current.offsetWidth)
-      setSliderLeft(monthlyRef.current.offsetLeft)
-    }
-  }, [isAnnual])
 
   const getCurrencySymbol = () => {
     return currency === "EUR" ? "€" : "$";
@@ -340,35 +326,12 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
         <div className="hidden md:block w-[100px]">
           {/* Empty div to balance the layout on desktop */}
         </div>
-        <div className="inline-flex items-center rounded-full border p-1 relative">
-          <div 
-            className="absolute top-1 bottom-1 rounded-full bg-primary transition-all duration-300 ease-in-out"
-            style={{ 
-              width: `${sliderWidth - 8}px`, 
-              left: `${sliderLeft + 4}px` 
-            }}
+        <div className="w-full max-w-md mx-auto">
+          <PlanPeriodToggle 
+            isAnnual={isAnnual} 
+            onToggle={setIsAnnual} 
+            fullWidth={true}
           />
-          <button
-            ref={monthlyRef}
-            onClick={() => setIsAnnual(false)}
-            className={`px-4 py-2 rounded-full text-sm relative z-10 transition-colors duration-300 ${
-              !isAnnual ? 'text-primary-foreground' : ''
-            }`}
-          >
-            {tPricing('monthly')}
-          </button>
-          <button
-            ref={annuallyRef}
-            onClick={() => setIsAnnual(true)}
-            className={`px-4 py-2 rounded-full text-sm relative z-10 transition-colors duration-300 flex items-center ${
-              isAnnual ? 'text-primary-foreground' : ''
-            }`}
-          >
-            <span>{tPricing('annually')}</span>
-            <span className={`ml-1 text-xs px-2 py-0.5 transition-colors duration-300 rounded-full bg-[#FB5688]/10 text-[#FB5688]`}>
-              {tPricing('20-off')}
-            </span>
-          </button>
         </div>
         <div className="w-[100px]">
           <Select
@@ -469,9 +432,9 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
                       </span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <Users className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                      <Database className="h-4 w-4 flex-shrink-0 mt-0.5" />
                       <span className="text-sm font-medium">
-                        {plan.users} {tPricing('user')}{plan.users > 1 ? 's' : ''}
+                        {formatBytes(plan.storageLimit || 0)} {tPricing('storage')}
                       </span>
                     </div>
                     <div className="flex items-start gap-2">

@@ -140,6 +140,7 @@
       "150-credits": "15 minutes of video",
       "400-credits": "40 minutes of video",
       "800-credits": "1h20 of video",
+      "storage": "Assets storage",
       "custom": "Custom",
       "need-custom-plan": "Need a custom plan ? Contact us for a tailored solution.",
       "contact-sales": "Contact us",
