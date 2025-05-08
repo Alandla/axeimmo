@@ -524,7 +524,7 @@ export function AiChat() {
           inputMessage={inputMessage}
           setInputMessage={setInputMessage}
         />
-        {activeSpace?.videoIdeas && activeSpace?.videoIdeas?.length > 0 && (
+        {creationStep === CreationStep.START && activeSpace?.videoIdeas && activeSpace?.videoIdeas?.length > 0 && (
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
