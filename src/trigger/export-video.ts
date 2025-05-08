@@ -29,7 +29,7 @@ interface ExportVideoPayload {
 
 export const exportVideoTask = task({
   id: "export-video",
-  maxDuration: 300,
+  maxDuration: 600,
   retry: {
     maxAttempts: 2,
   },
@@ -193,7 +193,7 @@ export const exportVideoTask = task({
 const pollRenderStatus = async (renderId: string, bucketName: string, step: string = 'render') => {
   let attempts = 0;
   const maxAttempts = step === 'render' ? 1000 : 500;
-  const delayBetweenAttempts = 2;
+  const delayBetweenAttempts = 6;
 
   while (attempts < maxAttempts) {
     try {
@@ -253,7 +253,7 @@ const uploadGoogleImagesToS3 = async (video: IVideo) => {
 async function pollAvatarVideoStatus(videoId: string): Promise<string> {
   let attempts = 0;
   const maxAttempts = 1000;
-  const delayBetweenAttempts = 2;
+  const delayBetweenAttempts = 6;
 
   while (attempts < maxAttempts) {
     try {
