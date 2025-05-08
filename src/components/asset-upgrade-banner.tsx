@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useState, useRef } from 'react'
+import { useTranslations, useLocale } from 'next-intl'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import { Button } from '@/src/components/ui/button'
 import { PlanName } from '@/src/types/enums'
@@ -15,15 +15,52 @@ import { motion } from 'framer-motion'
 import PlanPeriodToggle from './plan-period-toggle'
 
 function VideoPlayer() {
+  const locale = useLocale()
+  const videoSrc = locale === 'fr' 
+    ? 'https://assets.hoox.video/demo-auto-media-placement-fr.mp4'
+    : 'https://assets.hoox.video/demo-auto-media-placement-en.mp4'
+  
+  const [isPlaying, setIsPlaying] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  
+  const togglePlay = () => {
+    if (!videoRef.current) return
+    
+    if (isPlaying) {
+      videoRef.current.pause()
+    } else {
+      videoRef.current.play()
+    }
+    
+    setIsPlaying(!isPlaying)
+  }
+  
+  const handleVideoStateChange = () => {
+    if (!videoRef.current) return
+    setIsPlaying(!videoRef.current.paused)
+  }
+    
   return (
-    <div className="aspect-video bg-black rounded-md overflow-hidden shadow-lg w-full max-w-3xl">
+    <div className="aspect-video rounded-md overflow-hidden shadow-lg w-full max-w-3xl relative">
       <video 
-        className="w-full h-full object-cover"
-        src="/videos/asset-demo.mp4"
-        poster="/images/asset-poster.jpg"
-        controls
-        preload="none"
+        ref={videoRef}
+        className="w-full h-full object-cover cursor-pointer"
+        src={videoSrc}
+        onClick={togglePlay}
+        onPlay={handleVideoStateChange}
+        onPause={handleVideoStateChange}
       />
+      
+      {!isPlaying && (
+        <div 
+          className="absolute inset-0 flex items-center justify-center bg-black/20 cursor-pointer"
+          onClick={togglePlay}
+        >
+          <div className="w-20 h-20 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors">
+            <div className="w-0 h-0 border-t-[14px] border-t-transparent border-l-[24px] border-l-black border-b-[14px] border-b-transparent ml-2" />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

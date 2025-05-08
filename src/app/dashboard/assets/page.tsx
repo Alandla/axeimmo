@@ -302,7 +302,7 @@ export default function AssetsPage() {
             className="absolute inset-x-0 bottom-0 top-16 z-10 flex items-center justify-center p-4 overflow-visible"
             style={{ top: '16px' }}
           >
-            <div className="w-full max-w-5xl">
+            <div className="w-full max-w-6xl">
               <AssetUpgradeBanner />
             </div>
           </div>
