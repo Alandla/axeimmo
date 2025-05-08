@@ -168,6 +168,8 @@ export const deleteMediaFromSpace = async (spaceId: string, media: IMedia) => {
   try {
     return await executeWithRetry(async () => {
       const space = await getSpaceById(spaceId);
+      console.log("medias lenght", space.medias.length)
+      console.log("media", media)
       
       let storageToRemove = 0;
       if (media.type === 'video' && media.video && media.video.size) {
@@ -181,6 +183,7 @@ export const deleteMediaFromSpace = async (spaceId: string, media: IMedia) => {
       }
       
       space.medias = space.medias.filter((m: any) => m.media._id.toString() !== media.id);
+      console.log("medias lenght", space.medias.length)
       await space.save();
       return space.medias;
     });

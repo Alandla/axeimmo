@@ -13,6 +13,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  console.log("POST /api/media/analyze by user: ", session.user.id);
+
   const { media, spaceId } = await req.json();
 
   if (!media || !spaceId) {
@@ -65,6 +67,7 @@ async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId: string
       if (result.descriptions && result.descriptions.length > 0) {
         const updatedSpaceMedia = {
             ...media,
+            _id: media.id,
             description: result.descriptions
         }
 
@@ -81,6 +84,7 @@ async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId: string
 
         const updatedSpaceMedia = {
             ...media,
+            _id: media.id,
             description: description
         }
         

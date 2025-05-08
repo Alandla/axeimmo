@@ -238,28 +238,6 @@ export default function AssetsPage() {
 
   return (
     <div className="relative">
-      {/* Version desktop: barre de progression et bouton côte à côte */}
-      <div 
-        className={`hidden md:flex items-center justify-end space-x-4 fixed top-4 right-4 z-50 ${activeSpace && !hasPlan ? 'filter blur-sm pointer-events-none' : ''}`} 
-        style={{ position: 'fixed', top: '1rem', right: '1rem' }}
-      >
-        <div className="w-64">
-          <UsageStorage 
-            usedStorageBytes={activeSpace?.usedStorageBytes || 0} 
-            planName={activeSpace?.planName || PlanName.FREE} 
-            customStorageLimit={activeSpace?.storageLimit}
-          />
-        </div>
-        <Button 
-          disabled={isUploadDisabled}
-          onClick={() => document.getElementById('file-input')?.click()}
-          className="relative z-50"
-        >
-          {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-          {t('upload-button')}
-        </Button>
-      </div>
-    
       <div 
         ref={containerRef} 
         className="relative"
