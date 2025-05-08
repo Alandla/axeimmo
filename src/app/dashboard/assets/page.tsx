@@ -172,7 +172,7 @@ export default function AssetsPage() {
         }
 
         mediasToAnalyze = addedMedias.filter(mediaSpace => {
-          return !mediaSpace.media.description || mediaSpace.media.description[0].text === "";
+          return !mediaSpace.media.description || !mediaSpace.media.description.length || mediaSpace.media.description[0].text === "";
         });
       }
       
