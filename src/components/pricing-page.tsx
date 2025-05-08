@@ -126,7 +126,7 @@ export const features = [
         start: false,
         pro: true,
         enterprise: true,
-        soon: true,
+        soon: false,
         tooltip: "Our AI automatically selects and places your uploaded or generated media assets in your video based on context and content.",
         icon: <Layout className="h-4 w-4 mt-0.5 flex-shrink-0" />,
       },
