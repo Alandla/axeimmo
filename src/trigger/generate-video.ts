@@ -1,4 +1,4 @@
-import { logger, metadata, task, wait } from "@trigger.dev/sdk/v3";
+import { logger, metadata, task, wait } from "@trigger.dev/sdk";
 import { Steps } from "../types/step";
 import { Voice } from "../types/voice";
 import { AvatarLook } from "../types/avatar";
@@ -59,7 +59,7 @@ export const generateVideoTask = task({
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;

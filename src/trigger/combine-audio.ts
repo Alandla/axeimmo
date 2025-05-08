@@ -1,4 +1,4 @@
-import { logger, task } from "@trigger.dev/sdk/v3";
+import { logger, task } from "@trigger.dev/sdk";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs/promises";
 import fetch from "node-fetch";

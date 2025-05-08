@@ -1,4 +1,4 @@
-import { logger, metadata, task, wait } from "@trigger.dev/sdk/v3";
+import { logger, metadata, task, wait } from "@trigger.dev/sdk";
 import { getVideoById } from "../dao/videoDao";
 import { getProgress, renderAudio } from "../lib/render";
 import { IVideo } from "../types/video";
