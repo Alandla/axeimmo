@@ -36,7 +36,10 @@
       "Assets": "Médias"
     },
     "dashboard": {
-      "title": "Tableau de bord"
+      "title": "Tableau de bord",
+      "storage-usage": "Utilisation du stockage",
+      "storage-limit-exceeded": "Limite de stockage atteinte",
+      "storage-limit-warning": "Vous approchez de votre limite de stockage"
     },
     "videos": {
       "title": "Vidéos",
@@ -129,6 +132,7 @@
       "150-credits": "15 minutes de vidéo",
       "400-credits": "40 minutes de vidéo",
       "800-credits": "1h20 de vidéo",
+      "storage": "stockage assets",
       "custom": "Personnalisé",
       "need-custom-plan": "Besoin d'un plan personnalisé ? Contactez-nous pour une solution sur mesure.",
       "contact-sales": "Contactez-nous",
@@ -178,7 +182,7 @@
         "avatars-library": "Bibliothèque d'avatars",
         "digital-clone": "Clone numérique",
         "save-templates": "Sauvegarde de modèles",
-        "smart-media-placement": "Placement automatique de médias",
+        "smart-media-placement": "Placement automatique des médias",
         "ai-video-b-rolls": "B-Rolls vidéo IA",
         "brand-space": "Espace de marque",
         "social-media-agent": "Agent stratège de médias sociaux",
@@ -357,6 +361,12 @@
         "hide-button": "Masquer",
         "half-button": "Moitié",
         "full-button": "Entier"
+      },
+      "video-trim": {
+        "trim": "Ajuster",
+        "starting-at": "Commence à",
+        "duration": "durée",
+        "total-duration": "Durée totale"
       },
       "sequence-edit-assets": {
         "upload-file-button": "Ajouter un fichier",
@@ -1093,7 +1103,13 @@
       "title": "Médiathèque",
       "more-options": "Plus d'options",
       "no-assets": "Aucun média",
-      "no-assets-description": "Vous n'avez pas encore de média.",
+      "upgrade-banner": {
+        "title": "Débloquez le Smart Media Auto Placement",
+        "description": "Notre IA analyse vos médias pour les placer automatiquement dans vos futurs vidéos, aux bons moments. Arrêtez de perdre du temps et donnez une seconde vie à vos médias.",
+        "upgrade-to": "Passez au plan",
+        "pro-description": "Accédez à la fonctionnalité de placement automatique des médias et à toutes les autres fonctionnalités Pro.",
+        "upgrade-now": "Passez au Pro maintenant"
+      },
       "dialog": {
         "title": "Détails du média",
         "name": "Nom",
@@ -1108,13 +1124,17 @@
         "unknown-user": "utilisateur inconnu",
         "tooltip-description": "Les descriptions sont utilisées par l'IA pour placer automatiquement les médias dans la vidéo",
         "automatic-placement": "Placement automatique",
-        "automatic-placement-description": "Permettre à l'IA de réutiliser automatiquement ce média"
+        "automatic-placement-description": "Permettre à l'IA de réutiliser automatiquement ce média",
+        "generate-description": "Générer une description"
       },
       "dropdown-menu": {
         "details": "Voir les détails",
         "rename": "Renommer",
         "delete": "Supprimer"
       },
+      "no-assets-description": "Commencez par ajouter vos médias pour les voir ici.",
+      "upload-button": "Importer",
+      "uploading": "Importation en cours",
       "toast": {
         "saved": "Sauvegardé",
         "saved-description": "Les modifications ont été enregistrées avec succès",
@@ -1122,7 +1142,18 @@
         "deleted-description": "Le média a été supprimé avec succès",
         "error": "Erreur",
         "error-deleted-description": "Une erreur est survenue lors de la suppression du média",
-        "error-saved-description": "Une erreur est survenue lors de la sauvegarde des modifications"
+        "error-saved-description": "Une erreur est survenue lors de la sauvegarde des modifications",
+        "uploading-file": "Importation du fichier",
+        "uploading-file-description": "Veuillez patienter pendant que nous importons votre fichier",
+        "file-uploaded": "Fichier importé",
+        "file-uploaded-description": "Votre fichier a été importé avec succès",
+        "title-error": "Erreur",
+        "uploading-file-error": "Une erreur est survenue lors de l'importation de votre fichier",
+        "generating": "Génération en cours",
+        "generating-description": "L'IA génère une description pour ce média",
+        "description-generated": "Description générée",
+        "description-generated-description": "La description a été générée avec succès",
+        "generation-error-description": "Une erreur est survenue lors de la génération de la description"
       }
     },
     "onboarding": {

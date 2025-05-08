@@ -1,0 +1,106 @@
+---
+description: This rule explains how to correctly write an API request and an API route for the project.
+globs: 
+alwaysApply: false
+---
+# Règles pour les appels API dans l'application
+
+## Côté Serveur (Routes API)
+
+### Structure d'une route API
+
+```typescript
+import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@/src/lib/auth';
+// Importer les DAO nécessaires
+
+export async function POST(req: NextRequest) {
+  // 1. Vérifier l'authentification
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // 2. Logger l'appel API
+  console.log("POST /api/route/path by user: ", session.user.id);
+
+  // 3. Récupérer et décomposer les paramètres
+  const params = await req.json();
+  const { param1, param2 } = params;
+
+  try {
+    // 4. Vérifications d'autorisation si nécessaire
+    // Exemple:
+    // const userIsInSpace: boolean = await isUserInSpace(session.user.id, spaceId);
+    // if (!userIsInSpace) {
+    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // }
+
+    // 5. Appels aux DAO pour interagir avec la base de données
+    // const result = await someDao.doSomething(param1, param2);
+
+    // 6. Retourner les données encapsulées dans 'data'
+    return NextResponse.json({ data: result })
+  } catch (error) {
+    console.error('Error message:', error)
+    return NextResponse.json({ error: 'Error message' }, { status: 500 })
+  }
+}
+```
+
+### Points importants
+- Toujours vérifier l'authentification en premier
+- Logger l'appel API avec informations pertinentes
+- Encapsuler les données de retour dans un objet `{ data: result }`
+- Gérer correctement les erreurs en les loggant et en retournant un message approprié
+
+## Côté Client
+
+### Appels API
+
+Toujours utiliser les méthodes de `api.ts` :
+
+```typescript
+// Pour les appels POST
+const result = await basicApiCall('/endpoint/path', {
+  param1: value1,
+  param2: value2
+});
+
+// Pour les appels GET
+const result = await basicApiGetCall('/endpoint/path');
+```
+
+### Points importants
+- Ne jamais utiliser `fetch` ou `axios` directement, sauf si explicitement requis
+- Pas besoin d'extraire `.data` du résultat car l'intercepteur s'en charge déjà
+- La réponse de `basicApiCall` contient directement les données retournées
+- Gérer les erreurs avec try/catch
+
+### Exemple complet d'utilisation
+
+```typescript
+try {
+  const mediaData = await basicApiCall('/media/getData', {
+    mediaId: id,
+    options: { includeMetadata: true }
+  });
+  
+  // mediaData contient directement le contenu de 'data' de la réponse API
+  setMedia(mediaData);
+} catch (error) {
+  console.error('Erreur lors de la récupération des données:', error);
+  toast({
+    title: t('toast.title-error'),
+    description: t('toast.fetching-error'),
+    variant: 'destructive'
+  });
+}
+```
+
+## Interactions avec la base de données
+
+- Toujours passer par les DAO (Data Access Objects) pour interagir avec la base de données
+- Structurer les nouveaux DAO de manière similaire à ceux existants
+- Utiliser `executeWithRetry` pour les opérations de base de données importantes 

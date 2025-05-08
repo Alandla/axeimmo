@@ -8,6 +8,7 @@ export interface Plan {
   credits: number
   users: number
   maxVideoDuration: number
+  storageLimit?: number
   popular?: boolean
   priceId: {
     month: { 

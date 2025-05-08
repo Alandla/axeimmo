@@ -28,8 +28,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    console.log("mediaSpace", mediaSpace)
-
     const updatedMedia = await updateMedia(spaceId, mediaSpace.id, mediaSpace.media);
 
     console.log(updatedMedia)

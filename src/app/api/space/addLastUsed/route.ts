@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/src/lib/auth';
-import { addMediasToSpace, updateSpaceLastUsed } from '@/src/dao/spaceDao';
+import { updateSpaceLastUsed } from '@/src/dao/spaceDao';
 import { isUserInSpace } from '@/src/dao/userDao';
-import { IMediaSpace } from '@/src/types/space';
 
 export async function POST(req: NextRequest) {
   const session = await auth();

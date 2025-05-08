@@ -57,6 +57,7 @@ const mediaSchema = new mongoose.Schema({
       link: String,
       width: Number,
       height: Number,
+      size: Number,
     },
     audio: {
       id: String,

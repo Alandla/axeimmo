@@ -25,20 +25,17 @@ import { getJobCost, SieveCostResponse } from "../lib/sieve";
 import { simplifyMediaFromPexels, simplifySequences } from "../lib/analyse";
 import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
-import { addMediasToSpace, updateSpaceLastUsed } from "../dao/spaceDao";
+import { addMediasToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
 import { IMediaSpace, ISpace } from "../types/space";
 import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { getMostFrequentString } from "../lib/utils";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
-import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, analyzeVideoSequence, matchMediaWithSequences } from "../lib/workflowai";
+import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, analyzeVideoSequence, matchMediaWithSequences, mediaRecommendationFilterRun } from "../lib/workflowai";
 import { analyzeImage } from "../lib/ai";
+import { PlanName } from "../types/enums";
 
-import ffmpeg from "fluent-ffmpeg";
-import fs from "fs/promises";
-import os from "os";
-import path from "path";
-import { ExtractedFrame } from "../lib/ffmpeg";
+import { extractFramesFromVideo } from "../lib/ffmpeg";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -65,6 +62,7 @@ export const generateVideoTask = task({
     const isDevelopment = ctx.environment.type === "DEVELOPMENT"
 
     let videoStyle: string | undefined;
+    let spacePlan: string = PlanName.FREE;
     let scriptLength = payload.script ? payload.script.length : 0;
 
     logger.log("Generating video...", { payload, ctx });
@@ -177,6 +175,88 @@ export const generateVideoTask = task({
     // Initialiser un objet pour stocker la promesse de génération des mots-clés
     let keywordsPromise: Promise<any> | null = null
     let keywords: any;
+    
+    /*
+    /
+    /   Get Space and filter media if PRO/ENTREPRISE
+    /
+    */
+    let userMediasFilteredPromise: Promise<IMediaSpace[]> | null = null;
+    let userMediasFiltered: IMediaSpace[] = [];
+    
+    // Récupérer les informations du space pour connaître le plan
+    logger.log(`[MEDIA] Getting space information for media filtering...`);
+    const getSpaceAndFilterMedias = async (videoScript: string) => {
+      try {
+        // Récupérer les informations sur le space
+        const space = await getSpaceById(payload.spaceId);
+        
+        if (!space) {
+          logger.error(`[MEDIA] Space not found: ${payload.spaceId}`);
+          return [];
+        }
+
+        spacePlan = space.plan?.name;
+        if (space.plan && (space.plan.name === PlanName.PRO || space.plan.name === PlanName.ENTREPRISE)) {
+
+          if (videoScript && space.medias && space.medias.length > 0) {
+            const availableMedias = space.medias
+              .filter((mediaSpace: IMediaSpace) => 
+                mediaSpace.autoPlacement !== false && 
+                mediaSpace.media.description && 
+                mediaSpace.media.description.length > 0 &&
+                mediaSpace.media.description.some((desc: {text: string}) => desc.text)
+              )
+              .map((mediaSpace: IMediaSpace, index: number) => ({
+                id: mediaSpace.media.id || String(index),
+                descriptions: mediaSpace.media.description?.map((desc: {text: string}) => desc.text) || []
+              }));
+            
+            if (availableMedias.length > 0) {
+              logger.log(`[MEDIA] Filtering ${availableMedias.length} medias with WorkflowAI`);
+              
+              const { recommendedMedia, cost: filterCost } = await mediaRecommendationFilterRun(
+                videoScript, 
+                availableMedias
+              );
+              
+              cost += filterCost;
+              logger.log(`[MEDIA] Filtering cost: $${filterCost}`);
+
+              if (recommendedMedia.length > 0) {
+                const filteredMedias = space.medias.filter((mediaSpace: IMediaSpace) => 
+                  recommendedMedia.includes(mediaSpace.media.id || "")
+                );
+                
+                logger.log(`[MEDIA] Found ${filteredMedias.length} matching medias from ${recommendedMedia.length} recommended IDs`);
+                return filteredMedias;
+              } else {
+                logger.log(`[MEDIA] No media IDs recommended by WorkflowAI`);
+              }
+            } else {
+              logger.log(`[MEDIA] No media with descriptions found for filtering`);
+            }
+          } else {
+            logger.log(`[MEDIA] No script or medias available for filtering`);
+          }
+        } else {
+          logger.log(`[MEDIA] Plan ${space.plan?.name} doesn't support media filtering`);
+        }
+        
+        return [];
+      } catch (error) {
+        logger.error(`[MEDIA] Error filtering medias:`, {
+          error: error instanceof Error ? error.message : String(error)
+        });
+        return [];
+      }
+    };
+    
+    // Lancer la promesse de filtrage des médias en parallèle si on a déjà un script
+    if (payload.script) {
+      userMediasFilteredPromise = getSpaceAndFilterMedias(payload.script);
+      logger.log(`[MEDIA] Media filtering process started in background with provided script`);
+    }
 
     if (payload.script) {
       const startData = generateStartData(payload.script).then((data) => {
@@ -499,6 +579,11 @@ export const generateVideoTask = task({
 
         logger.log(`[KEYWORDS] Keyword generation from transcription started`)
       }
+      
+      // Lancer le filtrage des médias si nous n'avions pas de script au départ
+      if (!userMediasFilteredPromise) {
+        userMediasFilteredPromise = getSpaceAndFilterMedias(script);
+      }
     }
     
     /*
@@ -667,6 +752,17 @@ export const generateVideoTask = task({
       });
     }
 
+    /*
+    /
+    /   Attendre que le filtrage des médias soit terminé
+    /
+    */
+    if (userMediasFilteredPromise && (spacePlan === PlanName.PRO || spacePlan === PlanName.ENTREPRISE)) {
+      logger.log(`[MEDIA] Waiting for media filtering to complete...`);
+      userMediasFiltered = await userMediasFilteredPromise;
+      logger.log(`[MEDIA] Media filtering completed with ${userMediasFiltered.length} filtered medias`, { userMediasFiltered });
+    }
+
     let simplifiedMedia = [];
     try {
       simplifiedMedia = simplifyMediaFromPexels(mediaResults)
@@ -701,18 +797,33 @@ export const generateVideoTask = task({
       // Préparer les médias analysés pour le matching
       const analyzedMediasForMatching = analyzedMedias.map((media, idx) => ({
         id: String(idx),
-        descriptions: media.media.description?.map(d => d.text) || []
+        descriptions: media.media.description?.map(d => d.text) || [],
+        needed: true // Ces médias sont nécessaires
       }));
+
+      // Préparer les médias filtrés et les combiner avec ceux analysés
+      let combinedMedias = [...analyzedMediasForMatching];
+      
+      // Ajouter les médias filtrés avec needed = false
+      if (userMediasFiltered.length > 0) {
+        const filteredMediasForMatching = userMediasFiltered.map((media, idx) => ({
+          id: String(analyzedMedias.length + idx), // On continue la numérotation
+          descriptions: media.media.description?.map(d => d.text) || [],
+          needed: false // Ces médias sont optionnels
+        }));
+        
+        combinedMedias = [...combinedMedias, ...filteredMediasForMatching];
+      }
 
       // Lancer selectBRollsForSequences et optionnellement matchMediaWithSequences
       let brollResult: { selections: { sequence_id?: string, media_id?: string }[], cost: number };
       let matchResult: { matches: { sequence_id?: string, media_id?: string, description_index?: number }[], cost: number } | undefined;
       
-      if (analyzedMedias.length > 0) {
-        // Si on a des médias analysés, lancer les deux appels en parallèle
+      if (combinedMedias.length > 0) {
+        // Si on a des médias analysés ou filtrés, lancer les deux appels en parallèle
         [brollResult, matchResult] = await Promise.all([
           selectBRollsForSequences(simplifiedMedia, sequencesForMatching, keywords),
-          matchMediaWithSequences(analyzedMediasForMatching, sequencesForMatching)
+          matchMediaWithSequences(combinedMedias, sequencesForMatching)
         ]);
         cost += brollResult.cost + matchResult.cost;
       } else {
@@ -735,15 +846,37 @@ export const generateVideoTask = task({
         
         let updatedSequence = { ...sequence };
 
-        // Appliquer le média analysé s'il existe
+        // Appliquer le média correspondant s'il existe
         if (mediaMatch) {
-          const matchedMedia = analyzedMedias[Number(mediaMatch.media_id)];
-          if (matchedMedia && matchedMedia.media.description && mediaMatch.description_index !== undefined) {
-            updatedSequence.media = {
-              ...matchedMedia.media,
-              startAt: matchedMedia.media.description[mediaMatch.description_index].start,
-              description: [matchedMedia.media.description[mediaMatch.description_index]]
-            };
+          const mediaId = Number(mediaMatch.media_id);
+          // Déterminer si le média provient des analyzedMedias ou des userMediasFiltered
+          const isFromAnalyzedMedias = mediaId < analyzedMedias.length;
+          
+          if (isFromAnalyzedMedias) {
+            // Média provenant de analyzedMedias (needed = true)
+            const matchedMedia = analyzedMedias[mediaId];
+            if (matchedMedia && matchedMedia.media.description && mediaMatch.description_index !== undefined) {
+              updatedSequence.media = {
+                ...matchedMedia.media,
+                startAt: matchedMedia.media.description[mediaMatch.description_index].start,
+                description: matchedMedia.media.description,
+              };
+            }
+          } else {
+            // Média provenant de userMediasFiltered (needed = false)
+            const filteredMediaIndex = mediaId - analyzedMedias.length;
+            if (filteredMediaIndex >= 0 && filteredMediaIndex < userMediasFiltered.length) {
+              const matchedMedia = userMediasFiltered[filteredMediaIndex];
+              if (matchedMedia && matchedMedia.media.description && mediaMatch.description_index !== undefined) {
+                const startAt = matchedMedia.media.description[mediaMatch.description_index].start;
+                const plainMedia = JSON.parse(JSON.stringify(matchedMedia.media));
+                updatedSequence.media = {
+                  ...plainMedia,
+                  startAt: startAt,
+                  description: matchedMedia.media.description,
+                };
+              }
+            }
           }
         } else if (brollSelection) {
           // Trouver le média correspondant dans mediaResults
@@ -1026,82 +1159,4 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
     durationInFrames: 0,
     voiceId
   }];
-}
-
-/**
- * Extrait des frames d'une vidéo à intervalle régulier (1 frame par seconde)
- * Les frames sont retournées en base64 pour être utilisées directement avec un LLM
- * @param videoUrl URL de la vidéo à analyser
- * @returns Un tableau d'objets contenant les frames en base64 et leurs timestamps
- */
-export async function extractFramesFromVideo(videoUrl: string): Promise<ExtractedFrame[]> {
-  // Créer un identifiant unique basé sur l'URL de la vidéo et un timestamp
-  const videoHash = Buffer.from(videoUrl).toString('base64').replace(/[/+=]/g, '_').substring(0, 15);
-  const uniqueId = `${videoHash}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
-  const tempDirectory = os.tmpdir();
-  const outputDirectory = path.join(tempDirectory, `frames_${uniqueId}`);
-  
-  // Créer le dossier temporaire
-  await fs.mkdir(outputDirectory, { recursive: true });
-  
-  try {
-    
-    // Extraire les frames
-    await new Promise((resolve, reject) => {
-      ffmpeg(videoUrl)
-        .fps(1) // 1 frame par seconde
-        .size('320x?') // Redimensionner à 720px de large, hauteur proportionnelle
-        .outputOptions([
-          '-frame_pts', '1', // Ajouter le timestamp dans le nom du fichier
-          '-q:v', '2' // Qualité d'image (2 est un bon compromis entre qualité et taille)
-        ])
-        .output(path.join(outputDirectory, 'frame-%d.jpg'))
-        .on('end', resolve)
-        .on('error', reject)
-        .run();
-    });
-    
-    // Lister tous les fichiers générés
-    const files = await fs.readdir(outputDirectory);
-    const frameFiles = files
-      .filter(file => file.startsWith('frame-') && file.endsWith('.jpg'))
-      // Ignorer la première frame qui est dupliquée
-      .sort((a, b) => {
-        const numA = parseInt(a.replace('frame-', '').replace('.jpg', ''));
-        const numB = parseInt(b.replace('frame-', '').replace('.jpg', ''));
-        return numA - numB;
-      })
-      .slice(1);
-    
-    // Convertir chaque frame en base64
-    const framePromises = frameFiles.map(async (file) => {
-      const filePath = path.join(outputDirectory, file);
-      const frameBuffer = await fs.readFile(filePath);
-      
-      // Extraire le timestamp du nom du fichier (frame-X.jpg)
-      const timestamp = parseInt(file.replace('frame-', '').replace('.jpg', ''));
-      
-      // Convertir en base64
-      const base64 = frameBuffer.toString('base64');
-      
-      // Supprimer le fichier temporaire
-      await fs.unlink(filePath);
-      
-      return {
-        base64,
-        timestamp,
-        mimeType: 'image/jpeg'
-      };
-    });
-    
-    const frames = await Promise.all(framePromises);
-    
-    // Trier les frames par timestamp
-    frames.sort((a, b) => a.timestamp - b.timestamp);
-    
-    return frames;
-  } finally {
-    // Nettoyer le dossier temporaire
-    await fs.rm(outputDirectory, { recursive: true, force: true });
-  }
 } 

@@ -27,8 +27,8 @@ export interface IMedia {
     quality?: string;
     file_type: string;
     size: number;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
     fps?: number;
     link: string;
   };
@@ -36,8 +36,9 @@ export interface IMedia {
   image?: {
     id: string;
     link: string;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
+    size?: number;
   };
   audio?: {
     id: string;

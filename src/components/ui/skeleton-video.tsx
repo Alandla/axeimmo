@@ -1,58 +1,79 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
-const SkeletonVideo = ({ srcImg, srcVideo, alt, className }: { srcImg: string, srcVideo: string, alt: string, className: string }) => {
+const SkeletonVideo = ({ 
+  srcVideo,
+  className, 
+  disableHoverPlay = false,
+  startAt = 0
+}: { 
+  srcVideo: string, 
+  className: string,
+  disableHoverPlay?: boolean,
+  startAt?: number
+}) => {
   const [isHovering, setIsHovering] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false); // Add video loaded state
+  const [isLoaded, setIsLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const handleMouseEnter = () => {
-    setIsHovering(true);
-    setVideoLoaded(false); // Reset video loaded state
+  // Charger la vidéo dès le début et la positionner au timestamp spécifié
+  useEffect(() => {
+    if (videoRef.current && srcVideo) {
+      videoRef.current.load();
+      setIsLoaded(false);
+    }
+  }, [srcVideo, startAt]);
+
+  const handleVideoLoaded = () => {
+    setIsLoaded(true);
     if (videoRef.current) {
-      videoRef.current.load(); // Load the video
+      videoRef.current.currentTime = startAt; // Positionner au timestamp spécifié
+      videoRef.current.pause();
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (disableHoverPlay) return;
+    
+    setIsHovering(true);
+    if (videoRef.current && isLoaded) {
+      videoRef.current.play();
     }
   };
 
   const handleMouseLeave = () => {
+    if (disableHoverPlay) return;
+    
     setIsHovering(false);
-    setVideoLoaded(false); // Reset video loaded state
     if (videoRef.current) {
       videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  };
-
-  const onVideoLoadedData = () => {
-    setVideoLoaded(true); // Set video loaded state to true when video data is loaded
-    if (videoRef.current) {
-      videoRef.current.play(); // Play the video after it's loaded
+      videoRef.current.currentTime = startAt; // Revenir au timestamp spécifié
     }
   };
 
   return (
     <div
-      className={`relative overflow-hidden ${className} ${!loaded ? 'bg-gray-200 animate-pulse' : ''}`}
+      className={`relative overflow-hidden ${className} bg-gray-200 ${!isLoaded ? 'animate-pulse' : ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {isHovering && srcVideo && (
+      {/* Conteneur de la vidéo */}
+      <div className="relative w-full h-full">
+        {/* Vidéo unique qui sert à la fois de vignette et de lecteur */}
         <video
           ref={videoRef}
-          loop 
-          muted 
-          className={`w-auto h-full absolute inset-0 object-contain ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoadedData={onVideoLoadedData}>
-            <source src={srcVideo} type="video/mp4" />
-            Your browser does not support the video tag.
+          muted
+          playsInline
+          loop={isHovering && !disableHoverPlay}
+          preload="metadata"
+          className={`w-full h-full object-cover ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-200`}
+          onLoadedData={handleVideoLoaded}
+          crossOrigin="anonymous"
+          disablePictureInPicture
+          disableRemotePlayback
+        >
+          <source src={srcVideo} type="video/mp4" />
         </video>
-      )}
-        <img
-          src={srcImg}
-          alt={alt}
-          className={`w-auto h-full object-contain transition-opacity duration-300 ${!videoLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={() => setLoaded(true)}
-        />
+      </div>
     </div>
   );
 };

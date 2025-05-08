@@ -27,7 +27,10 @@
       "Assets": "Assets"
     },
     "dashboard": {
-      "title": "Dashboard"
+      "title": "Dashboard",
+      "storage-usage": "Storage usage",
+      "storage-limit-exceeded": "Storage limit reached",
+      "storage-limit-warning": "You are approaching your storage limit"
     },
     "videos": {
       "title": "Videos",
@@ -137,6 +140,7 @@
       "150-credits": "15 minutes of video",
       "400-credits": "40 minutes of video",
       "800-credits": "1h20 of video",
+      "storage": "Assets storage",
       "custom": "Custom",
       "need-custom-plan": "Need a custom plan ? Contact us for a tailored solution.",
       "contact-sales": "Contact us",
@@ -169,23 +173,23 @@
         "duration-5-max": "Maximum duration of 5 minutes",
         "watermark-removal": "Watermark Removal",
         "subtitles": "Automatic subtitles",
-        "voice-1": "20 High quality voice",
-        "voice-2": "+100 High quality voice",
-        "voice-3": "+120 High quality voice",
-        "avatar-1": "88 Realistic avatar",
-        "avatar-2": "+150 Realistic avatar",
-        "create-article": "Create a video from an article",
+        "voice-1": "20 High-quality voices",
+        "voice-2": "+100 High-quality voices",
+        "voice-3": "+120 High-quality voices",
+        "avatar-1": "88 Realistic avatars",
+        "avatar-2": "+150 Realistic avatars",
+        "create-article": "Create video from article",
         "add-media": "Automatically add your media",
-        "brand-kit": "Brand Kit",
-        "voice-cloning": "Voice Cloning",
+        "brand-kit": "Brand kit",
+        "voice-cloning": "Voice cloning",
         "avatar-clone": "Avatar cloning",
         "save-template": "Save templates",
-        "number-users": "Number of Users",
-        "max-video-duration": "Maximum Video Duration",
-        "music-library": "Music Library",
-        "voices-library": "Voices Library",
-        "avatars-library": "Avatars Library",
-        "digital-clone": "Digital Clone",
+        "number-users": "Number of users",
+        "max-video-duration": "Maximum video duration",
+        "music-library": "Music library",
+        "voices-library": "Voices library",
+        "avatars-library": "Avatars library",
+        "digital-clone": "Digital clone",
         "save-templates": "Save templates",
         "smart-media-placement": "Smart Media Auto Placement",
         "ai-video-b-rolls": "AI Video B-Rolls",
@@ -423,6 +427,12 @@
         },
         "listen": "Listen",
         "pause": "Pause"
+      },
+      "video-trim": {
+        "trim": "Trim",
+        "starting-at": "Starting at",
+        "duration": "duration",
+        "total-duration": "Total duration"
       }
     },
     "ai": {
@@ -1102,7 +1112,14 @@
       "title": "Media Library",
       "more-options": "More options",
       "no-assets": "No assets",
-      "no-assets-description": "You don't have any assets yet.",
+      "upgrade-banner": {
+        "title": "Unlock Smart Media Auto Placement",
+        "description": "Our AI analyzes your content to automatically place them in your future videos. Stop waisting time and give a second life to your content.",
+        "upgrade-to": "Upgrade to",
+        "pro-description": "Access the automatic media placement feature and all other Pro features.",
+        "upgrade-now": "Upgrade to Pro now"
+      },
+      "no-assets-description": "Start by adding your assets to see them here.",
       "dialog": {
         "title": "Media Details",
         "name": "Name",
@@ -1117,13 +1134,16 @@
         "unknown-user": "unknown user",
         "tooltip-description": "Descriptions are used by the AI to automatically place media in the video",
         "automatic-placement": "Automatic placement",
-        "automatic-placement-description": "Allow the AI to reuse this media automatically"
+        "automatic-placement-description": "Allow the AI to reuse this media automatically",
+        "generate-description": "Generate description"
       },
       "dropdown-menu": {
         "details": "View details",
         "rename": "Rename",
         "delete": "Delete"
       },
+      "upload-button": "Upload",
+      "uploading": "Uploading",
       "toast": {
         "saved": "Saved",
         "saved-description": "Changes have been saved successfully",
@@ -1132,7 +1152,18 @@
         "error": "Error",
         "error-description": "An error occurred",
         "error-deleted-description": "An error occurred while deleting the media",
-        "error-saved-description": "An error occurred while saving the changes"
+        "error-saved-description": "An error occurred while saving the changes",
+        "uploading-file": "Uploading file",
+        "uploading-file-description": "Please wait while we upload your file",
+        "file-uploaded": "File uploaded",
+        "file-uploaded-description": "Your file has been successfully uploaded",
+        "title-error": "Error",
+        "uploading-file-error": "An error occurred while uploading your file",
+        "generating": "Generating",
+        "generating-description": "AI is generating a description for this media",
+        "description-generated": "Description generated",
+        "description-generated-description": "The description has been successfully generated",
+        "generation-error-description": "An error occurred while generating the description"
       }
     },
     "modals": {

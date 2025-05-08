@@ -67,7 +67,7 @@ const imagesPromises = await Promise.all(Array.from(tempDiv.querySelectorAll('im
 
     const dimensions = await getImageDimensions(url);
 
-    if (dimensions.height > 150) {
+    if (dimensions?.height && dimensions?.width && dimensions?.height > 150) {
         return {
             type: "image",
             name: alt,

@@ -31,6 +31,7 @@ interface SequencesProps {
     onAddTransition?: (afterIndex: number) => void;
     onUpdateDuration: (index: number, newDuration: number) => void;
     playerRef?: React.RefObject<PlayerRef>;
+    avatar?: { videoUrl?: string; previewUrl?: string; thumbnail?: string };
 }
 
 export default function Sequences({ 
@@ -53,6 +54,7 @@ export default function Sequences({
     onAddTransition,
     onUpdateDuration,
     playerRef,
+    avatar,
 }: SequencesProps) {
     const t = useTranslations('edit.sequence');
 
@@ -96,6 +98,7 @@ export default function Sequences({
                             onUpdateDuration={onUpdateDuration}
                             canDelete={isSequenceDeletable(sequences, index)}
                             playerRef={playerRef}
+                            avatar={avatar}
                         />
                         {transitions.map((transition, transitionIndex) => 
                             transition.indexSequenceBefore === index && (
@@ -104,6 +107,7 @@ export default function Sequences({
                                     transition={transition}
                                     index={transitionIndex}
                                     sequenceThumbnail={sequence.media?.image?.link || ""}
+                                    sequenceVideoUrl={sequence.media?.type === 'video' && sequence.media.video?.link ? sequence.media.video.link : undefined}
                                     selectedIndex={selectedTransitionIndex}
                                     setSelectedIndex={handleTransitionClick}
                                     setActiveTabMobile={setActiveTabMobile}

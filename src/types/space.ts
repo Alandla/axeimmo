@@ -26,6 +26,7 @@ export interface IPlan {
   priceId: string;
   subscriptionType: SubscriptionType;
   creditsMonth: number;
+  storageLimit?: number;
   nextPhase?: Date;
 }
 
@@ -47,6 +48,8 @@ export interface SimpleSpace {
   videoIdeas?: string[];
   companyMission?: string;
   companyTarget?: string;
+  usedStorageBytes?: number;
+  storageLimit?: number;
 }
 
 export interface ICompanyDetails {
@@ -72,5 +75,6 @@ export interface ISpace {
   avatars: Avatar[];
   voices: Voice[];
   videoIdeas: string[];
-  lastUsed: ILastUsed
+  lastUsed: ILastUsed;
+  usedStorageBytes: number;
 }

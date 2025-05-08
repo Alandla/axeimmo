@@ -1,6 +1,6 @@
 import { basicApiCall } from "@/src/lib/api";
-import { FileToUpload, UploadedFile } from "../types/files";
-import { IMedia } from "../types/video";
+import { FileToUpload } from "../types/files";
+import { parseMedia } from '@remotion/media-parser';
 
 export const uploadFiles = async (
     files: FileToUpload[], 
@@ -24,44 +24,31 @@ export const uploadFiles = async (
             
             if (fileToUpload.type === "video") {
 
-                const thumbnail : any = await basicApiCall("/trigger/generateMediaThumbnail", {
-                    url: url?.mediaUrl
-                })
-
-                const { thumbnailUrl, imageId } = thumbnail.output
-
-                const dimensionsVideo = await getVideoDimensions(url?.mediaUrl)
-                const dimensionsImage = await getImageDimensions(thumbnailUrl)
+                const dimensions = await getVideoDimensions(url?.mediaUrl)
 
                 video = {
                     id: url?.mediaId,
                     file_type: fileToUpload.file.type,
                     size: fileToUpload.file.size,
-                    width: dimensionsVideo.width,
-                    height: dimensionsVideo.height,
                     link: url?.mediaUrl,
+                    ...(dimensions && { width: dimensions.width, height: dimensions.height })
                 }
-
-                image = {
-                    id: imageId,
-                    width: dimensionsImage.width,
-                    height: dimensionsImage.height,
-                    link: thumbnailUrl
-                }
+                
             } else if (fileToUpload.type === "image") {
 
-                const dimensionsImage = await getImageDimensions(url?.mediaUrl)
+                const dimensions = await getImageDimensions(url?.mediaUrl)
 
                 image = {
                     id: url?.mediaId,
-                    width: dimensionsImage.width,
-                    height: dimensionsImage.height,
-                    link: url?.mediaUrl
+                    ...(dimensions && { width: dimensions.width, height: dimensions.height }),
+                    link: url?.mediaUrl,
+                    size: fileToUpload.file.size
                 }
             } else if (fileToUpload.type === "audio") {
                 audio = {
                     id: url?.mediaId,
-                    link: url?.mediaUrl
+                    link: url?.mediaUrl,
+                    size: fileToUpload.file.size
                 }
             }
 
@@ -122,24 +109,18 @@ export const getImageDimensions = async (url: string): Promise<{width: number, h
     });
 };
 
-const getVideoDimensions = (url: string): Promise<{width: number, height: number}> => {
-    return new Promise((resolve) => {
-        const video = document.createElement('video');
-        video.preload = 'metadata';
+export const getVideoDimensions = async (url: string): Promise<{width: number, height: number} | null> => {
+    try {
+        const result = await parseMedia({
+            src: url,
+            fields: {
+                dimensions: true,
+            },
+        });
         
-        video.onloadedmetadata = () => {
-            resolve({
-                width: video.videoWidth,
-                height: video.videoHeight
-            });
-            video.remove(); // Nettoie l'élément vidéo
-        };
-        
-        video.onerror = () => {
-            resolve({ width: 0, height: 0 }); // Valeurs par défaut en cas d'erreur
-            video.remove();
-        };
-
-        video.src = url;
-    });
+        return result.dimensions || null;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des dimensions:', error);
+        return null;
+    }
 };

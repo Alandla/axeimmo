@@ -65,6 +65,18 @@ export interface BRollDisplayModeSelectionOutput {
   }[]
 }
 
+export interface MediaRecommendationFilterInput {
+  video_script?: string
+  available_media?: {
+    id?: string
+    descriptions?: string[]
+  }[]
+}
+
+export interface MediaRecommendationFilterOutput {
+  recommended_media?: string[]
+}
+
 export interface WorkflowAIResponse<T> {
   output: T
   data: {
@@ -146,9 +158,16 @@ const videoSequenceAnalysis = workflowAI.agent<VideoSequenceAnalysisInput, Video
 
 const mediaSequenceMatching = workflowAI.agent<MediaSequenceMatchingInput, MediaSequenceMatchingOutput>({
   id: "media-sequence-matching",
-  schemaId: 1,
-  version: "production",
+  schemaId: 2,
+  version: process.env.NODE_ENV === 'development' ? '4.2' : 'production',
   useCache: process.env.NODE_ENV === 'development' ? 'never' : 'auto'
+})
+
+const mediaRecommendationFilter = workflowAI.agent<MediaRecommendationFilterInput, MediaRecommendationFilterOutput>({
+  id: "media-recommendation-filter",
+  schemaId: 1,
+  version: "1.1",
+  useCache: "auto"
 })
 
 // Run Your AI agent
@@ -323,7 +342,7 @@ export async function analyzeVideoSequence(
  * @returns Les associations média-séquence et le coût de l'opération
  */
 export async function matchMediaWithSequences(
-  mediaList: { id?: string, descriptions?: string[] }[],
+  mediaList: { id?: string, descriptions?: string[], needed?: boolean }[],
   sequences: { id?: string, transcript?: string }[]
 ): Promise<{
   cost: number,
@@ -343,6 +362,37 @@ export async function matchMediaWithSequences(
     }
   } catch (error) {
     console.error('Failed to match media with sequences:', error);
+    throw error;
+  }
+}
+
+/**
+ * Filtre et recommande les médias pertinents en fonction d'un script vidéo
+ * @param videoScript Le script de la vidéo
+ * @param availableMedia Liste des médias disponibles avec leurs descriptions
+ * @returns Les médias recommandés et le coût de l'opération
+ */
+export async function mediaRecommendationFilterRun(
+  videoScript: string,
+  availableMedia: { id?: string, descriptions?: string[] }[]
+): Promise<{
+  cost: number,
+  recommendedMedia: string[]
+}> {
+  const input: MediaRecommendationFilterInput = {
+    video_script: videoScript,
+    available_media: availableMedia
+  }
+
+  try {
+    const response = await mediaRecommendationFilter(input) as WorkflowAIResponse<MediaRecommendationFilterOutput>;
+    
+    return {
+      cost: response.data.cost_usd,
+      recommendedMedia: response.output.recommended_media || []
+    }
+  } catch (error) {
+    console.error('Failed to filter and recommend media:', error);
     throw error;
   }
 }
