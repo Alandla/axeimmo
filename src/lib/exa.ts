@@ -20,25 +20,48 @@ export interface ExaCleanedResult {
   url: string;
   text: string;
   subpages?: ExaCleanedSubpage[];
+  image?: string;
+  favicon?: string;
 }
 
 export interface ExaCleanedResponse {
   results: ExaCleanedResult[];
+  costDollars?: {
+    total: number;
+    contents?: {
+      text?: number;
+    }
+  }
 }
 
 /**
  * Nettoie les résultats de la recherche Exa en enlevant les champs non nécessaires
+ * @param exaResponse - La réponse brute d'Exa
+ * @param includeImage - Si true, inclut l'image dans les résultats (false par défaut)
  */
-export function cleanExaResults(exaResponse: any): ExaCleanedResponse {
+export function cleanExaResults(exaResponse: any, includeImage: boolean = false, includeFavicon: boolean = false): ExaCleanedResponse {
   if (!exaResponse || !exaResponse.results) {
     return { results: [] };
   }
 
   // Filtrer les champs de chaque résultat
   const cleanResults = exaResponse.results.map((result: any) => {
-    const { title, url, text } = result;
+    const { title, url, text, image, favicon } = result;
     
-    let cleanedResult: ExaCleanedResult = { title, url, text };
+    let cleanedResult: ExaCleanedResult = { 
+      title, 
+      url, 
+      text,
+    };
+    
+    // Inclure l'image uniquement si demandé
+    if (includeImage && image) {
+      cleanedResult.image = image;
+    }
+
+    if (includeFavicon && favicon) {
+      cleanedResult.favicon = favicon;
+    }
     
     // Traiter les sous-pages si elles existent
     if (result.subpages && Array.isArray(result.subpages)) {
@@ -51,7 +74,11 @@ export function cleanExaResults(exaResponse: any): ExaCleanedResponse {
     return cleanedResult;
   });
 
-  return { results: cleanResults };
+  // Ajouter les informations de coût
+  return { 
+    results: cleanResults,
+    costDollars: exaResponse.costDollars
+  };
 }
 
 /**
@@ -76,6 +103,53 @@ export async function getCompanyInfo(website: string): Promise<ExaCleanedRespons
     return cleanExaResults(result);
   } catch (error) {
     console.error('Error fetching company info from Exa:', error);
+    throw error;
+  }
+}
+
+/**
+ * Récupère le contenu d'une URL spécifique via Exa AI
+ * @param url - L'URL complète de la page à récupérer
+ * @returns Le contenu de la page avec le titre, texte, image, etc.
+ */
+export async function getUrlContent(url: string): Promise<ExaCleanedResponse> {
+  try {
+    const result = await exa.getContents(
+      [url],
+      {
+        livecrawl: "always",
+        text: true
+      }
+    );
+
+    return cleanExaResults(result, true, true);
+  } catch (error) {
+    console.error('Error fetching URL content from Exa:', error);
+    throw error;
+  }
+}
+
+/**
+ * Effectue une recherche à partir d'une requête textuelle
+ * @param query - La requête de recherche
+ * @param maxResults - Nombre maximum de résultats (défaut: 5)
+ * @returns Les résultats de la recherche
+ */
+export async function searchQuery(query: string, maxResults: number = 5): Promise<ExaCleanedResponse> {
+  try {
+    const result = await exa.search(
+      query,
+      {
+        numResults: maxResults,
+        type: "keyword"
+      }
+    );
+
+    console.log(result);
+
+    return cleanExaResults(result, false, true);
+  } catch (error) {
+    console.error('Error performing search with Exa:', error);
     throw error;
   }
 } 

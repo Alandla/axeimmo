@@ -1097,6 +1097,20 @@
         "27": "Voici l'évolution actuelle de la vidéo.",
         "28": "Voici la progression actuelle de la génération.",
         "29": "Voici le rapport de progrès sur la vidéo."
+      },
+      "tool": {
+        "urlScraping": {
+          "loading": "Récupération des contenu des URL...",
+          "result": "URL{count, plural, one {} other {s}} analysée{count, plural, one {} other {s}}"
+        },
+        "webSearch": {
+          "loading": "Recherche pour le mot clé {keyword}...",
+          "result": "page{count, plural, one {} other {s}} trouvée{count, plural, one {} other {s}}"
+        },
+        "getWebContent": {
+          "loading": "Récupération du contenu de la page...",
+          "result": "URL{count, plural, one {} other {s}} analysée{count, plural, one {} other {s}}"
+        }
       }
     },
     "assets": {

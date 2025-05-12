@@ -1,4 +1,4 @@
-import { Check, Paperclip, Send } from "lucide-react";
+import { Check, Paperclip, Send, Globe } from "lucide-react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import SelectDuration from "./ui/select/select-duration";
@@ -32,7 +32,7 @@ export function AiChatTab({
   inputMessage: string,
   setInputMessage: (message: string) => void
 }) {
-    const { files, selectedVoice, selectedLook, setFiles } = useCreationStore()
+    const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode } = useCreationStore()
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
     const [isDragging, setIsDragging] = useState(false);
     const t = useTranslations('ai');
@@ -195,28 +195,39 @@ export function AiChatTab({
                       }}
                     />
                   </div>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <Button 
-                          size="icon" 
-                          onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 936)} 
-                          disabled={
-                            isDisabled ||
-                            !files.some(file => file.usage === "voice" || file.usage === "avatar") && 
-                            (!inputMessage.trim() || !videoDuration)
-                          }
-                        >
-                          <Send className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TooltipTrigger>
-                    {(!files.some(file => file.usage === "voice" || file.usage === "avatar") && (!inputMessage.trim() || !videoDuration)) && 
-                      <TooltipContent>
-                        {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
-                      </TooltipContent>
-                    }
-                  </Tooltip>
+                  <div className="flex items-center space-x-2">
+                    <Button 
+                      variant={isWebMode ? "default" : "outline"} 
+                      onClick={() => !isDisabled && setWebMode(!isWebMode)}
+                      disabled={isDisabled}
+                      className={isWebMode ? "bg-[#FB5688]/10 border border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688]/20 px-2" : "px-2"}
+                    >
+                      <Globe className="h-4 w-4"/>
+                      Web
+                    </Button>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <div>
+                          <Button 
+                            size="icon" 
+                            onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 936)} 
+                            disabled={
+                              isDisabled ||
+                              !files.some(file => file.usage === "voice" || file.usage === "avatar") && 
+                              (!inputMessage.trim() || !videoDuration)
+                            }
+                          >
+                            <Send className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TooltipTrigger>
+                      {(!files.some(file => file.usage === "voice" || file.usage === "avatar") && (!inputMessage.trim() || !videoDuration)) && 
+                        <TooltipContent>
+                          {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
+                        </TooltipContent>
+                      }
+                    </Tooltip>
+                  </div>
                 </div>
               </div>
             </div>

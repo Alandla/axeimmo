@@ -1106,6 +1106,20 @@
         "27": "Here is the current evolution of the video.",
         "28": "Here is the current progression of the generation.",
         "29": "Here is the progress report on the video."
+      },
+      "tool": {
+        "urlScraping": {
+          "loading": "Scraping URLs...",
+          "result": "Page content retrieved"
+        },
+        "webSearch": {
+          "loading": "Searching the web...",
+          "result": "Web search results"
+        },
+        "getWebContent": {
+          "loading": "Getting page content...",
+          "result": "Page content retrieved"
+        }
       }
     },
     "assets": {

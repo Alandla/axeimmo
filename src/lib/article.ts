@@ -1,6 +1,17 @@
 import { getImageDimensions } from "../service/upload.service";
 import { basicApiCall } from "./api";
 
+/**
+ * Extrait toutes les URL d'un texte
+ * @param text - Le texte à analyser
+ * @returns Un tableau d'URLs trouvées
+ */
+export const extractUrls = (text: string): string[] => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const matches = text.match(urlRegex);
+  return matches ? Array.from(new Set(matches)) : []; // Utilisation de Set pour éliminer les doublons
+};
+
 export const getArticleContentFromUrl = async (url: string) => {
 
     try {
