@@ -240,11 +240,6 @@ function validateTranscriptionTimings(transcription: any): boolean {
     throw new InvalidTimingsError(`Invalid timing: first word starts after audio duration (${words[0].start}s > ${duration}s)`);
   }
 
-  // Vérifie si le dernier mot se termine après la durée totale avec une marge de tolérance de 0.1s
-  if (words[words.length - 1].end > duration + 0.1) {
-    throw new InvalidTimingsError(`Invalid timing: last word ends after audio duration (${words[words.length - 1].end}s > ${duration}s)`);
-  }
-
   // Vérifie si le premier mot commence après 1 seconde
   if (words[0].start > 1) {
     logger.log('Invalid timing: first word starts after 1 second', { transcription })
