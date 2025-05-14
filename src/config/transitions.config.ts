@@ -10,14 +10,6 @@ export const transitions : ITransition[] = [
         mode: 'lighten'
     },
     {
-        durationInFrames: 30,
-        video: "https://assets.hoox.video/Transition%20verte.mp4",
-        thumbnail: "https://assets.hoox.video/transition-vert-thumbnail.png",
-        fullAt: 17,
-        category: "Burnt Film",
-        mode: 'lighten'
-    },
-    {
         durationInFrames: 60,
         video: "https://assets.hoox.video/Film_Burns_01.mp4",
         thumbnail: "https://assets.hoox.video/Film_Burns_01-thumbnail.png",
