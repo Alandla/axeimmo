@@ -43,8 +43,8 @@
     "@remotion/player": "4.0.267",
     "@remotion/preload": "4.0.267",
     "@remotion/transitions": "4.0.267",
-    "@trigger.dev/react-hooks": "4.0.0-v4-beta.13",
-    "@trigger.dev/sdk": "4.0.0-v4-beta.13",
+    "@trigger.dev/react-hooks": "4.0.0-v4-beta.14",
+    "@trigger.dev/sdk": "4.0.0-v4-beta.14",
     "@types/canvas-confetti": "^1.6.4",
     "@types/crypto-js": "^4.2.2",
     "@vercel/functions": "^2.0.0",
@@ -90,7 +90,7 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
-    "@trigger.dev/build": "4.0.0-v4-beta.13",
+    "@trigger.dev/build": "4.0.0-v4-beta.14",
     "@types/fluent-ffmpeg": "^2.1.27",
     "@types/mixpanel-browser": "^2.54.0",
     "@types/node": "^20",

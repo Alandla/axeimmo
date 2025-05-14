@@ -389,7 +389,6 @@ export function AiChat() {
         }));
       },
       (toolResult) => {
-        console.log("resultat du tool call", toolResult)
         setMessages(prevMessages => prevMessages.map(msg => {
           if (msg.id === messageAiId) {
             return {

@@ -9,7 +9,7 @@ import { useVideosStore } from '../store/videosStore'
 // Create hooks for components to use
 export const useGenerationProcess = () => {
   const startGeneration = async (userId: string, spaceId: string) => {
-    const { files, script, selectedVoice, selectedLook, setSteps, setLastStep } = useCreationStore.getState()
+    const { files, script, selectedVoice, selectedLook, setSteps, setLastStep, isWebMode } = useCreationStore.getState()
     
     const updateStepProgress = (stepName: string, progress: number) => {
       const currentSteps = useCreationStore.getState().steps
@@ -36,7 +36,8 @@ export const useGenerationProcess = () => {
       voice: selectedVoice,
       avatar: selectedLook,
       userId: userId,
-      spaceId: spaceId
+      spaceId: spaceId,
+      webSearch: isWebMode
     }
 
     // Start generation task

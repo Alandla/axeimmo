@@ -63,3 +63,45 @@ export const mediaToMediaSpace = (medias: IMedia[], userId: string) => {
     }
   })
 }
+
+/**
+ * Récupère une liste d'images Google pour toutes les requêtes données
+ * @param queries Liste des requêtes de recherche d'images
+ * @param mediaCount Nombre d'images à récupérer par requête (défaut: 5)
+ * @returns Liste d'images avec leurs requêtes associées
+ */
+export const searchGoogleImagesForQueries = async (queries: { query?: string }[], mediaCount: number = 5) => {
+  const searchPromises = queries.map(async (queryObj) => {
+    if (!queryObj.query) return [];
+    
+    try {
+      // Récupérer les images pour cette requête
+      const imagesResult = await getGoogleImagesMedia(queryObj.query, mediaCount, 1);
+      
+      // Convertir les résultats au format attendu
+      const formattedResults = imagesResult.map(mediaItem => ({
+        media: {
+          ...mediaItem,
+          usage: 'media',
+        } as IMedia,
+        query: queryObj.query
+      }));
+      
+      return formattedResults;
+    } catch (error) {
+      logger.error('Erreur lors de la recherche d\'images Google', { 
+        query: queryObj.query, 
+        error: error instanceof Error ? error.message : String(error) 
+      });
+      return [];
+    }
+  });
+  
+  // Attendre que toutes les recherches se terminent en parallèle
+  const resultsArrays = await Promise.all(searchPromises);
+  
+  // Aplatir le tableau de tableaux en un seul tableau de résultats
+  const results = resultsArrays.flat();
+  
+  return results;
+};
