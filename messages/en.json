@@ -213,7 +213,7 @@
       "title-completed": "Export completed !",
       "message-failed": "An error occurred while exporting your video. Please try again.",
       "retry-export": "Retry Export",
-      "processing": "Few seconds to wait while we process your masterpiece...",
+      "processing": "We are exporting your video, you can close this page and you will receive an email with the download link.",
       "waiting-to-start": "Waiting to start the export...",
       "download-video": "Download Video",
       "back-to-dashboard": "Back to Dashboard"

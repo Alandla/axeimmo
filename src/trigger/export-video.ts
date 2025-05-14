@@ -58,7 +58,7 @@ export const exportVideoTask = task({
       const showWatermark = space.plan.name === "FREE";
 
       // Intégration de l'export audio si un avatar est présent
-      if (video.video?.avatar?.id && video.video?.audio?.voices && !video.video?.avatar?.videoUrl) {
+      if (video.video?.avatar?.id && video.video?.audio?.voices && ctx.attempt.number === 1) {
         logger.log("Combinaison des audios...");
         
         // Render audio only
@@ -119,7 +119,7 @@ export const exportVideoTask = task({
             status: 'failed',
             errorMessage: renderStatus.message || 'Render failed'
           })
-          return { success: false, error: renderStatus.message };
+          throw new Error(renderStatus.message || 'Render failed');
         }
       }
 
