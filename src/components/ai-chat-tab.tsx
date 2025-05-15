@@ -3,12 +3,15 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import SelectDuration from "./ui/select/select-duration";
 import { useState, useEffect } from "react";
-import { CreationStep } from "../types/enums";
+import { CreationStep, PlanName } from "../types/enums";
 import { useTranslations } from "next-intl";
 import { useCreationStore } from "../store/creationStore";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "./ui/tooltip";
 import { FilePreview } from "./file-preview";
 import { FileToUpload } from "../types/files";
+import { Badge } from "./ui/badge";
+import { useActiveSpaceStore } from "../store/activeSpaceStore";
+import { usePremiumToast } from "@/src/utils/premium-toast";
 
 interface DurationOption {
   name: string;
@@ -33,9 +36,13 @@ export function AiChatTab({
   setInputMessage: (message: string) => void
 }) {
     const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode } = useCreationStore()
+    const { activeSpace } = useActiveSpaceStore()
+    const { showPremiumToast } = usePremiumToast()
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
     const [isDragging, setIsDragging] = useState(false);
     const t = useTranslations('ai');
+    const pricingT = useTranslations('pricing');
+    const planT = useTranslations('plan');
 
     const adjustTextareaHeight = (event: React.FormEvent<HTMLTextAreaElement>) => {
       const target = event.target as HTMLTextAreaElement;
@@ -111,6 +118,20 @@ export function AiChatTab({
             }
             return true;
         });
+    };
+
+    const handleWebModeClick = () => {
+      if (!isDisabled) {
+        if (activeSpace?.planName === PlanName.FREE) {
+          showPremiumToast(
+            pricingT('premium-toast.title'),
+            pricingT('premium-toast.description', { plan: planT(PlanName.START) }),
+            pricingT('upgrade')
+          );
+        } else {
+          setWebMode(!isWebMode);
+        }
+      }
     };
 
     return (
@@ -196,15 +217,31 @@ export function AiChatTab({
                     />
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Button 
-                      variant={isWebMode ? "default" : "outline"} 
-                      onClick={() => !isDisabled && setWebMode(!isWebMode)}
-                      disabled={isDisabled}
-                      className={isWebMode ? "bg-[#FB5688]/10 border border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688]/20 px-2" : "px-2"}
-                    >
-                      <Globe className="h-4 w-4"/>
-                      Web
-                    </Button>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span>
+                            <Button 
+                              variant={isWebMode ? "default" : "outline"} 
+                              onClick={handleWebModeClick}
+                              disabled={isDisabled}
+                              className={isWebMode ? "bg-[#FB5688]/10 border border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688]/20 px-2" : "px-2"}
+                            >
+                              <Globe className="h-4 w-4"/>
+                              Web
+                            </Button>
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary" className="bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white border-none">
+                              Start
+                            </Badge>
+                            <p>{t('web-mode-tooltip')}</p>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                     <Tooltip delayDuration={0}>
                       <TooltipTrigger asChild>
                         <div>

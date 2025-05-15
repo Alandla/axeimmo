@@ -450,7 +450,8 @@
       "loading": "Chargement...",
       "limit-reached-title": "Limite de vidéos atteinte",
       "limit-reached-description": "Avec le plan gratuit, tu es limité à 3 vidéos. Mettez à niveau ton abonnement pour créer des vidéos supplémentaires.",
-      "upgrade-plan": "Passer à un plan supérieur"
+      "upgrade-plan": "Passer à un plan supérieur",
+      "web-mode-tooltip": "Fonctionnalité Pro : Permet de générer des vidéos à partir de recherches sur le web"
     },
     "select": {
       "duration": {
