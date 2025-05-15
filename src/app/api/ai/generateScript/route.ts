@@ -4,6 +4,7 @@ import { auth } from '@/src/lib/auth';
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { searchQuery, getUrlContent } from '@/src/lib/exa';
+import { ToolSet } from "ai";
 
 const anthropic = createAnthropic({
     apiKey: process.env.ANTHROPIC_API_KEY
@@ -21,7 +22,7 @@ export async function POST(req: NextRequest) {
     console.log("POST /api/ai/generateScript by user: ", session.user.id);
 
     const params = await req.json();
-    const { prompt, duration, urlScrapingResult } = params;
+    const { prompt, duration, urlScrapingResult, web: isWebMode } = params;
 
     const numCharactersMin = duration;
     const numCharactersMax = numCharactersMin * 1.1;
@@ -70,69 +71,76 @@ export async function POST(req: NextRequest) {
         let webSearchCount = 0;
         let getWebContentCount = 0;
         
-        const result = await streamText({
-            model: anthropic('claude-3-7-sonnet-20250219'),
-            tools: {
-                webSearch: {
-                    description: "Search the web for information on a topic. Returns a list of results with title, url, and favicon.",
-                    parameters: z.object({
-                        query: z.string().describe("The search query")
-                    }),
-                    execute: async ({ query }) => {
-                        try {
-                            if (webSearchCount >= 3) {
-                                return { 
-                                    results: [],
-                                    error: "Web search limit reached (3 per request)",
-                                    success: false
-                                };
-                            }
-                            webSearchCount++;
-                            const results = await searchQuery(query, 5); // 5 résultats max
-                            console.log(results)
-                            return { ...results, success: true };
-                        } catch (error) {
-                            console.error("Error in webSearch tool:", error);
-                            // En cas d'erreur, retourner un résultat vide mais valide pour ne pas bloquer le LLM
+        // Préparer les outils conditionnellement
+        const tools: ToolSet = isWebMode ? {
+            webSearch: {
+                description: "Search the web for information on a topic. Returns a list of results with title, url, and favicon.",
+                parameters: z.object({
+                    query: z.string().describe("The search query")
+                }),
+                execute: async ({ query }: { query: string }) => {
+                    try {
+                        if (webSearchCount >= 3) {
                             return { 
-                                results: [], 
-                                error: "Failed to perform web search",
+                                results: [],
+                                error: "Web search limit reached (3 per request)",
                                 success: false
                             };
                         }
-                    }
-                },
-                getWebContent: {
-                    description: "Get the content of a web page by its URL. Returns title, url, text, image, favicon.",
-                    parameters: z.object({
-                        url: z.string().url().describe("The URL of the page to fetch")
-                    }),
-                    execute: async ({ url }) => {
-                        try {
-                            if (getWebContentCount >= 2) {
-                                return { 
-                                    results: [],
-                                    error: "Get web content limit reached (2 per request)",
-                                    success: false
-                                };
-                            }
-                            getWebContentCount++;
-                            const result = await getUrlContent(url);
-                            return { ...result, success: true };
-                        } catch (error) {
-                            console.error("Error in getWebContent tool:", error);
-                            // En cas d'erreur, retourner un résultat vide mais valide pour ne pas bloquer le LLM
-                            return { 
-                                results: [], 
-                                error: `Failed to fetch content from ${url}`,
-                                success: false
-                            };
-                        }
+                        webSearchCount++;
+                        const results = await searchQuery(query, 5); // 5 résultats max
+                        return { ...results, success: true };
+                    } catch (error) {
+                        console.error("Error in webSearch tool:", error);
+                        // En cas d'erreur, retourner un résultat vide mais valide pour ne pas bloquer le LLM
+                        return { 
+                            results: [], 
+                            error: "Failed to perform web search",
+                            success: false
+                        };
                     }
                 }
             },
-            maxSteps: 5,
-            system: systemPrompt + "\n\nIf a tool returns an error, acknowledge it but continue with your task using the information you already have.",
+            getWebContent: {
+                description: "Get the content of a web page by its URL. Returns title, url, text, image, favicon.",
+                parameters: z.object({
+                    url: z.string().url().describe("The URL of the page to fetch")
+                }),
+                execute: async ({ url }: { url: string }) => {
+                    try {
+                        if (getWebContentCount >= 2) {
+                            return { 
+                                results: [],
+                                error: "Get web content limit reached (2 per request)",
+                                success: false
+                            };
+                        }
+                        getWebContentCount++;
+                        const result = await getUrlContent(url);
+                        return { ...result, success: true };
+                    } catch (error) {
+                        console.error("Error in getWebContent tool:", error);
+                        // En cas d'erreur, retourner un résultat vide mais valide pour ne pas bloquer le LLM
+                        return { 
+                            results: [], 
+                            error: `Failed to fetch content from ${url}`,
+                            success: false
+                        };
+                    }
+                }
+            }
+        } : {};
+        
+        // Message système additionnel pour le mode web
+        const webModeInstruction = isWebMode 
+            ? "\n\nIf a tool returns an error, acknowledge it but continue with your task using the information you already have."
+            : "";
+        
+        const result = await streamText({
+            model: anthropic('claude-3-7-sonnet-20250219'),
+            tools: isWebMode ? tools : undefined,
+            maxSteps: isWebMode ? 5 : 1,
+            system: systemPrompt + webModeInstruction,
             prompt: userPrompt,
             onFinish: ({ usage }) => {
                 data.append({ usage });
