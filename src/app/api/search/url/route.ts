@@ -19,7 +19,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "URLs array is required" }, { status: 400 })
     }
 
-    // Valider que toutes les entrées sont des URLs valides
     const validUrls = urls.filter(url => {
       try {
         new URL(url)

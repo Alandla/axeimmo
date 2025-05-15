@@ -38,6 +38,7 @@ export interface ExaCleanedResponse {
  * Nettoie les résultats de la recherche Exa en enlevant les champs non nécessaires
  * @param exaResponse - La réponse brute d'Exa
  * @param includeImage - Si true, inclut l'image dans les résultats (false par défaut)
+ * @param includeFavicon - Si true, inclut le favicon dans les résultats (false par défaut)
  */
 export function cleanExaResults(exaResponse: any, includeImage: boolean = false, includeFavicon: boolean = false): ExaCleanedResponse {
   if (!exaResponse || !exaResponse.results) {

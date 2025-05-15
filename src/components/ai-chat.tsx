@@ -2,11 +2,11 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useTranslations } from "next-intl"
-import { Check, Pencil, Clock, AlertCircle, Rocket, Plus, Globe, Loader2 } from 'lucide-react'
+import { Check, Pencil, Clock, AlertCircle, Rocket, Plus } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { useSession } from 'next-auth/react'
 import { generateScript, improveScript, readStream } from '../lib/stream'
-import { getArticleContentFromUrl, extractUrls } from '../lib/article'
+import { extractUrls } from '../lib/article'
 import { basicApiCall } from '../lib/api'
 import { ExaCleanedResponse, ExaCleanedResult } from '../lib/exa'
 import { CreationStep, PlanName } from '../types/enums'
@@ -27,10 +27,7 @@ import { ILastUsed } from '@/src/types/space'
 import { getSpaceLastUsed } from '../service/space.service'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { useRealtimeRun } from '@trigger.dev/react-hooks'
-import { TextShimmer } from './ui/text-shimmer'
-
-// Ajouter un type pour l'état de la recherche web
-type WebSearchStatus = 'idle' | 'loading' | 'success' | 'error';
+import { ToolDisplay, ToolCall } from './tool-display'
 
 enum MessageType {
   TEXT = 'text',
@@ -43,17 +40,11 @@ interface Message {
   id: string;
   sender: 'user' | 'ai';
   type: MessageType;
-  content: Array<{ position: number; text: string }>;
+  content: string;
   script: string;
   prompt: string;
-  toolCalls?: Array<{
-    toolCallId: string;
-    toolName: string;
-    args: any;
-    result?: any;
-    status: 'pending' | 'completed' | 'error';
-    position: number;
-  }>;
+  toolCalls?: ToolCall[];
+  showTools: boolean;
 }
 
 export function AiChat() {
@@ -195,9 +186,7 @@ export function AiChat() {
           if (msg.id === messageAiId) {
             return {
               ...msg,
-              content: [
-                { position: 0, text: "Voici un script mockup pour le mode développement" }
-              ],
+              content: "Voici un script mockup pour le mode développement",
               script: "Ceci est un exemple de script mockup.\nIl contient plusieurs lignes.\nPour tester le comportement de l'interface.",
               prompt: message
             };
@@ -213,20 +202,18 @@ export function AiChat() {
     let prompt = message;
     let urlScrapingResult : ExaCleanedResult[] | null = null;
 
-    let currentPosition = 0;
-
     if (urls.length > 0 && activeSpace && (activeSpace.planName === PlanName.START || activeSpace.planName === PlanName.PRO || activeSpace.planName === PlanName.ENTREPRISE)) {
-      // Ajouter le tool call pour la recherche web
+      // Ajouter le tool call pour la recherche web et afficher le bloc d'outils
       setMessages(prevMessages => prevMessages.map(msg => {
         if (msg.id === messageAiId) {
           return {
             ...msg,
+            showTools: true,
             toolCalls: [...(msg.toolCalls || []), {
               toolCallId: `url-scraping-${Date.now()}`,
               toolName: 'urlScraping',
               args: { urls },
-              status: 'pending',
-              position: currentPosition
+              status: 'pending'
             }]
           };
         }
@@ -248,7 +235,6 @@ export function AiChat() {
         // Mettre à jour le status du tool call
         setMessages(prevMessages => prevMessages.map(msg => {
           if (msg.id === messageAiId) {
-            currentPosition++;
             return {
               ...msg,
               toolCalls: msg.toolCalls?.map(tc => 
@@ -260,8 +246,7 @@ export function AiChat() {
                         urlsAnalyzed: urls.length,
                         content: urlContents
                       },
-                      status: 'completed',
-                      position: currentPosition
+                      status: 'completed'
                     }
                   : tc
               )
@@ -271,10 +256,8 @@ export function AiChat() {
         }));
       } catch (error) {
         console.error("Error processing URLs:", error);
-        // Mettre à jour le status du tool call en cas d'erreur
         setMessages(prevMessages => prevMessages.map(msg => {
           if (msg.id === messageAiId) {
-            currentPosition++;
             return {
               ...msg,
               toolCalls: msg.toolCalls?.map(tc => 
@@ -285,8 +268,7 @@ export function AiChat() {
                         success: false,
                         error: "Erreur lors de l'analyse des URLs"
                       },
-                      status: 'error',
-                      position: currentPosition
+                      status: 'error'
                     }
                   : tc
               )
@@ -309,13 +291,12 @@ export function AiChat() {
     }
 
     setMessages(prevMessages => prevMessages.map(msg => 
-      msg.id === messageAiId ? { ...msg, content: [], toolCalls: [] } : msg
+      msg.id === messageAiId ? { ...msg, showTools: false } : msg
     ));
 
     if (!stream) {
       return;
     }
-
 
     readStream(
       stream, 
@@ -339,33 +320,9 @@ export function AiChat() {
                   adjustTextareaHeight(textarea as HTMLTextAreaElement);
                 }
               }, 0);
-              // Mise à jour du bloc à la position courante
-              const existingIdx = (msg.content || []).findIndex(c => c.position === currentPosition);
-              let newContent;
-              if (existingIdx !== -1) {
-                newContent = [...msg.content];
-                newContent[existingIdx] = { position: currentPosition, text: content };
-              } else {
-                newContent = [
-                  ...(msg.content || []),
-                  { position: currentPosition, text: content }
-                ];
-              }
-              return { ...msg, content: newContent, script, prompt: chunk };
+              return { ...msg, content, script, prompt: chunk, showTools: false };
             }
-            // Mise à jour du bloc à la position courante
-            const existingIdx = (msg.content || []).findIndex(c => c.position === currentPosition);
-            let newContent;
-            if (existingIdx !== -1) {
-              newContent = [...msg.content];
-              newContent[existingIdx] = { position: currentPosition, text: chunk };
-            } else {
-              newContent = [
-                ...(msg.content || []),
-                { position: currentPosition, text: chunk }
-              ];
-            }
-            return { ...msg, content: newContent, prompt: chunk };
+            return { ...msg, content: chunk, prompt: chunk, showTools: false };
           }
           return msg;
         }));
@@ -376,12 +333,12 @@ export function AiChat() {
           if (msg.id === messageAiId) {
             return {
               ...msg,
+              showTools: true,
               toolCalls: [...(msg.toolCalls || []), { 
                 ...toolCall, 
                 result: undefined,
                 status: 'pending',
-                toolName: toolCall.toolName,
-                position: currentPosition
+                toolName: toolCall.toolName
               }]
             };
           }
@@ -391,6 +348,11 @@ export function AiChat() {
       (toolResult) => {
         setMessages(prevMessages => prevMessages.map(msg => {
           if (msg.id === messageAiId) {
+            const isError = toolResult.result && (
+              toolResult.result.error || 
+              (typeof toolResult.result === 'object' && 'error' in toolResult.result)
+            );
+            
             return {
               ...msg,
               toolCalls: msg.toolCalls?.map(tc => 
@@ -398,7 +360,7 @@ export function AiChat() {
                   ? { 
                       ...tc, 
                       result: toolResult.result,
-                      status: 'completed'
+                      status: isError ? 'error' : 'completed'
                     }
                   : tc
               )
@@ -406,7 +368,6 @@ export function AiChat() {
           }
           return msg;
         }));
-        currentPosition++;
       }
     ).then(({ cost }) => {
       if (cost) {
@@ -492,7 +453,7 @@ export function AiChat() {
     const messageId = Date.now().toString();
     setMessages(prevMessages => [
       ...prevMessages,
-      { id: messageId, sender: 'user', type: MessageType.TEXT, content: [{ position: 0, text: userMessage }], script: '', prompt: '', toolCalls: [] },
+      { id: messageId, sender: 'user', type: MessageType.TEXT, content: userMessage, script: '', prompt: '', toolCalls: [], showTools: false },
     ]);
     return messageId;
   }
@@ -502,7 +463,7 @@ export function AiChat() {
     const messageId = `${newMessageId}-ai`;
     setMessages(prevMessages => [
       ...prevMessages,
-      { id: messageId, sender: 'ai', type: type, content: [{ position: 0, text: aiMessage }], script: '', prompt: '', toolCalls: [] }
+      { id: messageId, sender: 'ai', type: type, content: aiMessage, script: '', prompt: '', toolCalls: [], showTools: false }
     ]);
     return messageId;
   }
@@ -568,7 +529,6 @@ export function AiChat() {
     const fetchLastUsed = async () => {
         if (activeSpace?.id) {
             const lastUsed : ILastUsed | null = await getSpaceLastUsed(activeSpace.id)
-            console.log(lastUsed)
             if (lastUsed) {
               setLastUsedParameters(lastUsed)
             }
@@ -628,99 +588,18 @@ export function AiChat() {
                     <img src="/img/logo-square.png" alt="AI Avatar" className="rounded-full" />
                   </Avatar>
                 )}
-                <div className={`rounded-lg p-3 max-w-[85vw] sm:max-w-xl ${message.script && 'w-full'} shadow ${message.sender === 'user' ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
-                  {/* Fusionne content et toolCalls par position pour l'affichage ordonné */}
-                  {(() => {
-                    const allBlocks: Array<{ type: 'text'; position: number; text: string } | { type: 'tool'; position: number; toolCall: any }> = [];
-                    if (message.content) {
-                      for (const c of message.content) {
-                        allBlocks.push({ type: 'text', position: c.position, text: c.text });
-                      }
-                    }
-                    if (message.toolCalls) {
-                      for (const t of message.toolCalls) {
-                        allBlocks.push({ type: 'tool', position: t.position, toolCall: t });
-                      }
-                    }
-                    allBlocks.sort((a, b) => a.position - b.position);
-                    return (
-                      <div className="space-y-2">
-                        {allBlocks.map((block, idx) => {
-                          if (block.type === 'text') {
-                            return (
-                              <>
-                                {block.text}
-                              </>
-                            );
-                          } else {
-                            const toolCall = block.toolCall;
-                            const isCompleted = toolCall.status === 'completed';
-                            const isError = toolCall.status === 'error';
-                            return (
-                              <div
-                                key={`tool-${message.id}-${toolCall.toolCallId}`}
-                                className={`p-2 rounded text-sm ${
-                                  isCompleted
-                                    ? 'bg-[#FB5688]/10 text-[#FB5688]'
-                                    : isError
-                                    ? 'bg-red-50 text-red-700'
-                                    : 'bg-black/5 text-black'
-                                }`}
-                              >
-                                <div className="text-xs">
-                                  {isCompleted ? (
-                                    <>
-                                      {(toolCall.toolName === 'urlScraping' || toolCall.toolName === 'getWebContent' || toolCall.toolName === 'webSearch') ? (
-                                        <div className="flex items-center gap-2">
-                                          {(() => {
-                                            const resultsList = toolCall.result?.results || toolCall.result?.content?.results || [];
-                                            const hasFavicon = resultsList.length > 0 && resultsList.some((item: any) => item.favicon);
-                                            return (
-                                              <>
-                                                {hasFavicon ? (
-                                                  <div className="flex items-center gap-1">
-                                                    <img
-                                                      src={resultsList[0].favicon}
-                                                      alt="favicon"
-                                                      className="w-4 h-4 rounded shadow border border-white"
-                                                    />
-                                                    {resultsList.length > 1 && (
-                                                      <span className="ml-1 text-xs font-semibold bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded">+{resultsList.length - 1}</span>
-                                                    )}
-                                                  </div>
-                                                ) : (
-                                                  <Globe className="h-3 w-3" />
-                                                )}
-                                                <span>{tAi(`tool.${toolCall.toolName}.result`, { count: resultsList.length })}</span>
-                                              </>
-                                            );
-                                          })()}
-                                        </div>
-                                      ) : (
-                                        <div>Résultat: {JSON.stringify(toolCall.result)}</div>
-                                      )}
-                                    </>
-                                  ) : isError ? (
-                                    <div className="flex items-center gap-2">
-                                      <AlertCircle className="h-3 w-3" />
-                                      <span>Erreur d'exécution</span>
-                                    </div>
-                                  ) : (
-                                    <div className="flex items-center gap-2">
-                                      <Loader2 className="h-3 w-3 animate-spin" />
-                                      <TextShimmer className="text-xs" duration={1.5}>
-                                        {tAi(`tool.${toolCall.toolName}.loading`, { keyword: toolCall.args?.query })}
-                                      </TextShimmer>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          }
-                        })}
-                      </div>
-                    );
-                  })()}
+                <div className={`rounded-lg p-3 max-w-[85vw] sm:max-w-xl whitespace-pre-wrap ${message.script && 'w-full'} shadow ${message.sender === 'user' ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
+                  {/* Utilisation du composant ToolDisplay */}
+                  {message.sender === 'ai' && (
+                    <ToolDisplay 
+                      toolCalls={message.toolCalls || []} 
+                      showTools={message.showTools} 
+                    />
+                  )}
+                  
+                  {/* Contenu principal du message */}
+                  {message.content}
+                  
                   {message.type === MessageType.TEXT && message.script && (
                     <>
                       <div className="relative mt-2">

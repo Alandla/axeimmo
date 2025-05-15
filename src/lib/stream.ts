@@ -105,7 +105,7 @@ export const readStream = async (
                     if (onToolResult) {
                       onToolResult(toolResult);
                     }
-                    result = ''
+                    result += '\n'
                   } catch (parseError) {
                     console.error('Error parsing tool result:', parseError);
                   }

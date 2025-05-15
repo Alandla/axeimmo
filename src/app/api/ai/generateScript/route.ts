@@ -79,12 +79,27 @@ export async function POST(req: NextRequest) {
                         query: z.string().describe("The search query")
                     }),
                     execute: async ({ query }) => {
-                        if (webSearchCount >= 3) {
-                            return { error: "Web search limit reached (3 per request)" };
+                        try {
+                            if (webSearchCount >= 3) {
+                                return { 
+                                    results: [],
+                                    error: "Web search limit reached (3 per request)",
+                                    success: false
+                                };
+                            }
+                            webSearchCount++;
+                            const results = await searchQuery(query, 5); // 5 résultats max
+                            console.log(results)
+                            return { ...results, success: true };
+                        } catch (error) {
+                            console.error("Error in webSearch tool:", error);
+                            // En cas d'erreur, retourner un résultat vide mais valide pour ne pas bloquer le LLM
+                            return { 
+                                results: [], 
+                                error: "Failed to perform web search",
+                                success: false
+                            };
                         }
-                        webSearchCount++;
-                        const results = await searchQuery(query, 5); // 5 résultats max
-                        return results;
                     }
                 },
                 getWebContent: {
@@ -93,17 +108,31 @@ export async function POST(req: NextRequest) {
                         url: z.string().url().describe("The URL of the page to fetch")
                     }),
                     execute: async ({ url }) => {
-                        if (getWebContentCount >= 2) {
-                            return { error: "Get web content limit reached (2 per request)" };
+                        try {
+                            if (getWebContentCount >= 2) {
+                                return { 
+                                    results: [],
+                                    error: "Get web content limit reached (2 per request)",
+                                    success: false
+                                };
+                            }
+                            getWebContentCount++;
+                            const result = await getUrlContent(url);
+                            return { ...result, success: true };
+                        } catch (error) {
+                            console.error("Error in getWebContent tool:", error);
+                            // En cas d'erreur, retourner un résultat vide mais valide pour ne pas bloquer le LLM
+                            return { 
+                                results: [], 
+                                error: `Failed to fetch content from ${url}`,
+                                success: false
+                            };
                         }
-                        getWebContentCount++;
-                        const result = await getUrlContent(url);
-                        return result;
                     }
                 }
             },
             maxSteps: 5,
-            system: systemPrompt,
+            system: systemPrompt + "\n\nIf a tool returns an error, acknowledge it but continue with your task using the information you already have.",
             prompt: userPrompt,
             onFinish: ({ usage }) => {
                 data.append({ usage });

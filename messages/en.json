@@ -1108,13 +1108,15 @@
         "29": "Here is the progress report on the video."
       },
       "tool": {
+        "success": "Operation successful",
+        "error": "Operation failed",
         "urlScraping": {
           "loading": "Scraping URLs...",
           "result": "Page content retrieved"
         },
         "webSearch": {
-          "loading": "Searching the web...",
-          "result": "Web search results"
+          "loading": "Searching for \"{keyword}\"...",
+          "result": "{count} Page{count, plural, one {} other {s}} found{count, plural, one {} other {s}}"
         },
         "getWebContent": {
           "loading": "Getting page content...",
