@@ -66,12 +66,10 @@ export async function POST(req: NextRequest) {
 
     try {
         const data = new StreamData();
-        
-        // Limites d'appels par requête
-        let webSearchCount = 0;
-        let getWebContentCount = 0;
-        
-        // Préparer les outils conditionnellement
+
+        let currentStep = 0;
+        const maxSteps = isWebMode ? 6 : 1;
+
         const tools: ToolSet = isWebMode ? {
             webSearch: {
                 description: "Search the web for information on a topic. Returns a list of results with title, url, and favicon.",
@@ -80,19 +78,18 @@ export async function POST(req: NextRequest) {
                 }),
                 execute: async ({ query }: { query: string }) => {
                     try {
-                        if (webSearchCount >= 3) {
+                        // Prevent tool usage in the final step
+                        if (currentStep >= maxSteps - 1) {
                             return { 
                                 results: [],
-                                error: "Web search limit reached (3 per request)",
+                                error: "Cannot use tools in the final step. Please generate the script now.",
                                 success: false
                             };
                         }
-                        webSearchCount++;
-                        const results = await searchQuery(query, 5); // 5 résultats max
+                        const results = await searchQuery(query, 10);
                         return { ...results, success: true };
                     } catch (error) {
                         console.error("Error in webSearch tool:", error);
-                        // En cas d'erreur, retourner un résultat vide mais valide pour ne pas bloquer le LLM
                         return { 
                             results: [], 
                             error: "Failed to perform web search",
@@ -108,21 +105,20 @@ export async function POST(req: NextRequest) {
                 }),
                 execute: async ({ url }: { url: string }) => {
                     try {
-                        if (getWebContentCount >= 2) {
+                        if (currentStep >= maxSteps - 1) {
                             return { 
                                 results: [],
-                                error: "Get web content limit reached (2 per request)",
+                                error: "Cannot use tools in the final step. Please generate the script now.",
                                 success: false
                             };
                         }
-                        getWebContentCount++;
                         const result = await getUrlContent(url);
                         return { ...result, success: true };
                     } catch (error) {
                         console.error("Error in getWebContent tool:", error);
-                        // En cas d'erreur, retourner un résultat vide mais valide pour ne pas bloquer le LLM
-                        return { 
-                            results: [], 
+                        // When the tool fails, return an empty result but valid to avoid blocking the LLM
+                        return {
+                            results: [],
                             error: `Failed to fetch content from ${url}`,
                             success: false
                         };
@@ -130,18 +126,21 @@ export async function POST(req: NextRequest) {
                 }
             }
         } : {};
-        
-        // Message système additionnel pour le mode web
+
         const webModeInstruction = isWebMode 
-            ? "\n\nIf a tool returns an error, acknowledge it but continue with your task using the information you already have."
+            ? "\n\nYou can use tools to gather information, but YOUR FINAL STEP MUST ALWAYS BE THE SCRIPT GENERATION, NOT A TOOL CALL. In the last step, you must generate the script based on the information you've gathered.\n\nIf a tool returns an error, acknowledge it but continue with your task using the information you already have."
             : "";
         
         const result = await streamText({
             model: anthropic('claude-3-7-sonnet-20250219'),
             tools: isWebMode ? tools : undefined,
-            maxSteps: isWebMode ? 5 : 1,
+            maxSteps: maxSteps,
             system: systemPrompt + webModeInstruction,
             prompt: userPrompt,
+            onStepFinish: ({ finishReason }) => {
+                currentStep++;
+                console.log(`Step ${currentStep}/${maxSteps} completed with finish reason: ${finishReason}`);
+            },
             onFinish: ({ usage }) => {
                 data.append({ usage });
                 data.close();

@@ -371,6 +371,7 @@ export function AiChat() {
       }
     ).then(({ cost }) => {
       if (cost) {
+        console.log("cost", cost)
         addToTotalCost(cost);
       }
     });
@@ -575,7 +576,7 @@ export function AiChat() {
         ) : (
           <div 
             ref={messagesContainerRef}
-            className="w-full max-w-5xl h-[calc(100vh-200px)] overflow-y-auto mb-4 bg-white rounded-lg p-4 overflow-hidden"
+            className="w-full max-w-5xl h-[calc(100vh-180px)] overflow-y-auto mb-4 bg-white rounded-lg p-4 overflow-hidden"
           >
             {messages.map((message) => (
               <motion.div

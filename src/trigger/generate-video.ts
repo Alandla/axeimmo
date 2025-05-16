@@ -58,9 +58,10 @@ export const generateVideoTask = task({
 
     let cost = 0
     const mediaSource = payload.mediaSource || "PEXELS";
+    const ENABLE_GOOGLE_IMAGES_SEARCH = false;
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "PRODUCTION"
+    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;
@@ -265,7 +266,7 @@ export const generateVideoTask = task({
     };
 
     // Lancer la recherche d'images Google en parallèle si on a un script et webSearch est activé
-    if (payload.script && payload.webSearch) {
+    if (payload.script && payload.webSearch && ENABLE_GOOGLE_IMAGES_SEARCH) {
       logger.log(`[GOOGLE_IMAGES] Starting Google Images search in parallel with provided script`);
       googleImagesSearchPromise = searchAndAnalyzeGoogleImages(payload.script);
     }
@@ -684,7 +685,7 @@ export const generateVideoTask = task({
       }
 
       // Lancer la recherche d'images Google si nous n'avions pas de script au départ
-      if (payload.webSearch && !googleImagesSearchPromise) {
+      if (payload.webSearch && !googleImagesSearchPromise && ENABLE_GOOGLE_IMAGES_SEARCH) {
         logger.log(`[GOOGLE_IMAGES] Starting Google Images search with transcribed script`);
         googleImagesSearchPromise = searchAndAnalyzeGoogleImages(script);
       }
