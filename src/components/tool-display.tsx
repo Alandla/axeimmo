@@ -19,29 +19,30 @@ interface ToolDisplayProps {
   showTools: boolean
 }
 
-export function ToolDisplay({ toolCalls, showTools }: ToolDisplayProps) {
-  const tAi = useTranslations('ai-chat')
-  
-  const animations = {
-    toolBlock: {
-      initial: { opacity: 0, height: 0, marginBottom: 0 },
-      animate: { opacity: 1, height: "auto", marginBottom: 8 },
-      exit: { opacity: 0, height: 0, marginBottom: 0 },
-      transition: { 
-        duration: 0.3,
-        ease: "easeInOut"
-      }
-    },
-    toolText: {
-      initial: { y: 20, opacity: 0 },
-      animate: { y: 0, opacity: 1 },
-      exit: { y: -20, opacity: 0 },
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut"
-      }
+// Animations définies au niveau du fichier pour éviter la recréation à chaque rendu
+const animations = {
+  toolBlock: {
+    initial: { opacity: 0, height: 0, marginBottom: 0 },
+    animate: { opacity: 1, height: "auto", marginBottom: 8 },
+    exit: { opacity: 0, height: 0, marginBottom: 0 },
+    transition: { 
+      duration: 0.3,
+      ease: "easeInOut"
+    }
+  },
+  toolText: {
+    initial: { y: 20, opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+    exit: { y: -20, opacity: 0 },
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut"
     }
   }
+}
+
+export function ToolDisplay({ toolCalls, showTools }: ToolDisplayProps) {
+  const tAi = useTranslations('ai-chat')
   
   // Fonction pour obtenir le dernier outil actif
   const getLastActiveTool = (toolCalls: ToolCall[]) => {
