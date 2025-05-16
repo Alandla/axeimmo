@@ -459,7 +459,8 @@
       "loading": "Loading...",
       "limit-reached-title": "Video Limit Reached",
       "limit-reached-description": "With the free plan, you are limited to 3 videos. Upgrade your plan to create additional videos.",
-      "upgrade-plan": "Upgrade Plan"
+      "upgrade-plan": "Upgrade Plan",
+      "web-mode-tooltip": "Feature available from the start plan"
     },
     "select": {
       "duration": {
@@ -1106,6 +1107,22 @@
         "27": "Here is the current evolution of the video.",
         "28": "Here is the current progression of the generation.",
         "29": "Here is the progress report on the video."
+      },
+      "tool": {
+        "success": "Operation successful",
+        "error": "Operation failed",
+        "urlScraping": {
+          "loading": "Scraping URLs...",
+          "result": "Page content retrieved"
+        },
+        "webSearch": {
+          "loading": "Searching for \"{keyword}\"...",
+          "result": "{count} Page{count, plural, one {} other {s}} found{count, plural, one {} other {s}}"
+        },
+        "getWebContent": {
+          "loading": "Getting page content...",
+          "result": "Page content retrieved"
+        }
       }
     },
     "assets": {

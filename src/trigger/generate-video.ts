@@ -16,13 +16,13 @@ import sentencesWithNewTranscriptionMock from "../test/mockup/sentencesWithNewTr
 
 import { createLightTranscription, getTranscription, ISentence, splitSentences } from "../lib/transcription";
 import { calculateElevenLabsCost } from "../lib/cost";
-import { mediaToMediaSpace, searchMediaForKeywords } from "../service/media.service";
+import { mediaToMediaSpace, searchMediaForKeywords, searchGoogleImagesForQueries } from "../service/media.service";
 import { IMedia, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
 import { generateStartData } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
 import { getJobCost, SieveCostResponse } from "../lib/sieve";
-import { simplifyMediaFromPexels, simplifySequences } from "../lib/analyse";
+import { simplifyMediaFromPexels, simplifySequences, simplifyGoogleMedias } from "../lib/analyse";
 import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
 import { addMediasToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
@@ -31,7 +31,7 @@ import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { getMostFrequentString } from "../lib/utils";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
-import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, analyzeVideoSequence, matchMediaWithSequences, mediaRecommendationFilterRun } from "../lib/workflowai";
+import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, analyzeVideoSequence, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun } from "../lib/workflowai";
 import { analyzeImage } from "../lib/ai";
 import { PlanName } from "../types/enums";
 
@@ -45,6 +45,7 @@ interface GenerateVideoPayload {
   voice: Voice
   avatar: AvatarLook
   mediaSource: string
+  webSearch: boolean
 }
 
 export const generateVideoTask = task({
@@ -57,6 +58,7 @@ export const generateVideoTask = task({
 
     let cost = 0
     const mediaSource = payload.mediaSource || "PEXELS";
+    const ENABLE_GOOGLE_IMAGES_SEARCH = false;
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
     const isDevelopment = ctx.environment.type === "DEVELOPMENT"
@@ -171,11 +173,104 @@ export const generateVideoTask = task({
 
       userMediaAnalysisPromise = userMediaAnalysis();
     }
-
-    // Initialiser un objet pour stocker la promesse de génération des mots-clés
-    let keywordsPromise: Promise<any> | null = null
-    let keywords: any;
     
+    // Méthode complète pour la recherche et l'analyse d'images Google
+    let googleImagesSearchPromise: Promise<IMedia[]> | null = null;
+    let googleImagesResults: IMedia[] = [];
+
+    const searchAndAnalyzeGoogleImages = async (script: string) => {
+      try {
+        logger.log(`[GOOGLE_IMAGES] Starting Google Images workflow`);
+        
+        // Étape 1: Générer les requêtes d'images avec WorkflowAI
+        logger.log(`[GOOGLE_IMAGES] Generating image search queries from script...`);
+        
+        if (isDevelopment) {
+          logger.log(`[GOOGLE_IMAGES] Development mode, skipping query generation`);
+          return [];
+        }
+        
+        const { queries, cost: queriesCost } = await videoScriptImageSearchRun(script);
+        cost += queriesCost;
+        
+        if (!queries || queries.length === 0) {
+          logger.log(`[GOOGLE_IMAGES] No queries generated, aborting Google Images search`);
+          return [];
+        }
+        
+        logger.log(`[GOOGLE_IMAGES] Generated ${queries.length} search queries with cost $${queriesCost}`);
+        
+        // Étape 2: Rechercher les images avec les requêtes générées
+        logger.log(`[GOOGLE_IMAGES] Searching Google Images for ${queries.length} queries...`);
+        const searchResults = await searchGoogleImagesForQueries(queries, 5);
+        
+        if (searchResults.length === 0) {
+          logger.log(`[GOOGLE_IMAGES] No images found from Google, aborting`);
+          return [];
+        }
+        
+        logger.log(`[GOOGLE_IMAGES] Found ${searchResults.length} images from Google`);
+        
+        // Étape 3: Analyser les images trouvées
+        logger.log(`[GOOGLE_IMAGES] Analyzing Google Images...`);
+        
+        const analyzedMedias: IMedia[] = [];
+        
+        // Analyser toutes les images en parallèle
+        const analysisPromises = searchResults.map(async (result) => {
+          try {
+            const media = result.media;
+            
+            if (media.type === 'image' && media.image?.link) {
+              // Analyser l'image avec Groq
+              logger.log(`[GOOGLE_IMAGES] Analyzing image with Groq: ${media.image.link}`);
+              const analysis = await analyzeImage(media.image.link);
+              
+              if (analysis) {
+                const mediaWithDescription = {
+                  ...media,
+                  description: [{
+                    start: 0,
+                    text: analysis.description
+                  }] as [{ start: number, duration?: number, text: string }]
+                };
+                
+                return mediaWithDescription;
+              }
+            }
+            
+            return null;
+          } catch (error) {
+            logger.error(`[GOOGLE_IMAGES] Error analyzing image:`, {
+              mediaId: result.media.id,
+              error: error instanceof Error ? error.message : String(error)
+            });
+            return null;
+          }
+        });
+        
+        // Attendre que toutes les analyses soient terminées et filtrer les résultats null
+        const results = await Promise.all(analysisPromises);
+        const validResults = results.filter(result => result !== null) as IMedia[];
+        
+        // Ajouter les résultats valides
+        analyzedMedias.push(...validResults);
+        
+        return analyzedMedias;
+      } catch (error) {
+        logger.error(`[GOOGLE_IMAGES] Error in Google Images workflow:`, {
+          error: error instanceof Error ? error.message : String(error)
+        });
+        return [];
+      }
+    };
+
+    // Lancer la recherche d'images Google en parallèle si on a un script et webSearch est activé
+    if (payload.script && payload.webSearch && ENABLE_GOOGLE_IMAGES_SEARCH) {
+      logger.log(`[GOOGLE_IMAGES] Starting Google Images search in parallel with provided script`);
+      googleImagesSearchPromise = searchAndAnalyzeGoogleImages(payload.script);
+    }
+
     /*
     /
     /   Get Space and filter media if PRO/ENTREPRISE
@@ -257,6 +352,10 @@ export const generateVideoTask = task({
       userMediasFilteredPromise = getSpaceAndFilterMedias(payload.script);
       logger.log(`[MEDIA] Media filtering process started in background with provided script`);
     }
+
+    // Initialiser un objet pour stocker la promesse de génération des mots-clés
+    let keywordsPromise: Promise<any> | null = null
+    let keywords: any;
 
     if (payload.script) {
       const startData = generateStartData(payload.script).then((data) => {
@@ -584,6 +683,12 @@ export const generateVideoTask = task({
       if (!userMediasFilteredPromise) {
         userMediasFilteredPromise = getSpaceAndFilterMedias(script);
       }
+
+      // Lancer la recherche d'images Google si nous n'avions pas de script au départ
+      if (payload.webSearch && !googleImagesSearchPromise && ENABLE_GOOGLE_IMAGES_SEARCH) {
+        logger.log(`[GOOGLE_IMAGES] Starting Google Images search with transcribed script`);
+        googleImagesSearchPromise = searchAndAnalyzeGoogleImages(script);
+      }
     }
     
     /*
@@ -763,11 +868,48 @@ export const generateVideoTask = task({
       logger.log(`[MEDIA] Media filtering completed with ${userMediasFiltered.length} filtered medias`, { userMediasFiltered });
     }
 
+    /*
+    /
+    /   Attendre que les images Google soient recherchées
+    /
+    */
+
+    if (googleImagesSearchPromise) {
+      await metadata.replace({
+        name: Steps.SEARCH_GOOGLE_IMAGES,
+        progress: 0,
+      });
+
+      logger.log(`[GOOGLE_IMAGES] Waiting for Google Images search to complete...`)
+      googleImagesResults = await googleImagesSearchPromise
+      logger.log(`[GOOGLE_IMAGES] Google Images search completed with ${googleImagesResults.length} images`, { googleImagesResults })
+
+      await metadata.replace({
+        name: Steps.SEARCH_GOOGLE_IMAGES,
+        progress: 100,
+      });
+    }
+
+    /*
+    /
+    /   Preparer les resultats de recherche pour l'IA 
+    /
+    */
     let simplifiedMedia = [];
     try {
-      simplifiedMedia = simplifyMediaFromPexels(mediaResults)
+      simplifiedMedia = simplifyMediaFromPexels(mediaResults);
+
+      if (googleImagesResults && googleImagesResults.length > 0) {
+        logger.log(`[MEDIA] Adding ${googleImagesResults.length} Google Images to simplified media`);
+          
+        const simplifiedGoogleImages = simplifyGoogleMedias(googleImagesResults, simplifiedMedia.length);
+        
+        simplifiedMedia = [...simplifiedMedia, ...simplifiedGoogleImages];
+      }
+
+      logger.log(`[MEDIA] Total simplified media: ${simplifiedMedia.length}`, { simplifiedMedia });
     } catch (error) {
-      logger.log(`[MEDIA] Media results`, { mediaResults })
+      logger.log(`[MEDIA] Media results`, { mediaResults, googleImagesResults })
       logger.error(`[BROLL] Error simplifying media:`, { 
         error: error instanceof Error ? error.message : String(error) 
       });
@@ -879,11 +1021,30 @@ export const generateVideoTask = task({
             }
           }
         } else if (brollSelection) {
-          // Trouver le média correspondant dans mediaResults
-          const selectedMedia = mediaResults[Number(brollSelection.media_id)];
+          // Déterminer si le média sélectionné provient des médias de stock ou des images Google
+          const brollMediaId = Number(brollSelection.media_id);
+          const totalStockMedias = mediaResults.length;
           
-          if (selectedMedia) {
-            updatedSequence.media = selectedMedia.media;
+          if (brollMediaId < totalStockMedias) {
+            // Média provenant des résultats de stock (Pexels/Storyblocks)
+            const selectedMedia = mediaResults[brollMediaId];
+            
+            if (selectedMedia) {
+              updatedSequence.media = selectedMedia.media;
+              logger.log(`[BROLL] Applying stock media ${brollMediaId} to sequence ${sequenceIndex}`);
+            }
+          } else {
+            // Média provenant des images Google
+            const googleMediaIndex = brollMediaId - totalStockMedias;
+            
+            if (googleImagesResults && googleMediaIndex < googleImagesResults.length) {
+              const selectedGoogleMedia = googleImagesResults[googleMediaIndex];
+              
+              if (selectedGoogleMedia) {
+                updatedSequence.media = selectedGoogleMedia;
+                logger.log(`[BROLL] Applying Google image ${googleMediaIndex} to sequence ${sequenceIndex}`);
+              }
+            }
           }
         }
         

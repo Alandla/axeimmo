@@ -15,6 +15,7 @@ type CreationStore = {
   selectedVoice: Voice | null
   steps: Step[]
   lastStep: Steps | null
+  isWebMode: boolean
   setScript: (script: string) => void
   setFiles: (files: FileToUpload[]) => void,
   setTotalCost: (cost: number) => void
@@ -27,6 +28,7 @@ type CreationStore = {
   setSteps: (steps: Step[]) => void
   setLastStep: (step: Steps) => void
   resetSteps: () => void
+  setWebMode: (isEnabled: boolean) => void
 }
 
 export const useCreationStore = create<CreationStore>((set) => ({
@@ -39,6 +41,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   selectedAvatarName: null,
   steps: [],
   lastStep: null,
+  isWebMode: false,
   setScript: (script) => set({ script }),
   setFiles: (files) => set({ files }),
   setTotalCost: (cost) => set({ totalCost: cost }),
@@ -50,6 +53,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   addStep: (step) => set((state) => ({ steps: [...state.steps, step] })),
   setSteps: (steps) => set({ steps }),
   setLastStep: (step) => set({ lastStep: step }),
-  resetSteps: () => set({ steps: [], lastStep: null })
+  resetSteps: () => set({ steps: [], lastStep: null }),
+  setWebMode: (isEnabled) => set({ isWebMode: isEnabled }),
 }))
 

@@ -121,6 +121,17 @@ export interface MediaSequenceMatchingOutput {
   }[]
 }
 
+export interface VideoScriptImageSearchInput {
+  video_script?: string
+  max_queries?: number
+}
+
+export interface VideoScriptImageSearchOutput {
+  image_search_queries?: {
+    query?: string
+  }[]
+}
+
 const videoScriptKeywordExtraction = workflowAI.agent<VideoScriptKeywordExtractionInput, VideoScriptKeywordExtractionOutput>({
   id: "video-script-keyword-extraction",
   schemaId: 2,
@@ -167,6 +178,13 @@ const mediaRecommendationFilter = workflowAI.agent<MediaRecommendationFilterInpu
   id: "media-recommendation-filter",
   schemaId: 1,
   version: "1.1",
+  useCache: "auto"
+})
+
+const videoScriptImageSearch = workflowAI.agent<VideoScriptImageSearchInput, VideoScriptImageSearchOutput>({
+  id: "video-script-image-search",
+  schemaId: 2,
+  version: process.env.NODE_ENV === 'development' ? '4.3' : 'production',
   useCache: "auto"
 })
 
@@ -393,6 +411,31 @@ export async function mediaRecommendationFilterRun(
     }
   } catch (error) {
     console.error('Failed to filter and recommend media:', error);
+    throw error;
+  }
+}
+
+export async function videoScriptImageSearchRun(
+  scriptContent: string,
+  maxQueries?: number
+): Promise<{
+  cost: number,
+  queries: { query?: string }[]
+}> {
+  const input: VideoScriptImageSearchInput = {
+    video_script: scriptContent,
+    max_queries: maxQueries
+  }
+
+  try {
+    const response = await videoScriptImageSearch(input) as WorkflowAIResponse<VideoScriptImageSearchOutput>;
+    
+    return {
+      cost: response.data.cost_usd,
+      queries: response.output.image_search_queries || []
+    }
+  } catch (error) {
+    console.error('Failed to run video script image search:', error);
     throw error;
   }
 }

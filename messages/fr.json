@@ -450,7 +450,8 @@
       "loading": "Chargement...",
       "limit-reached-title": "Limite de vidéos atteinte",
       "limit-reached-description": "Avec le plan gratuit, tu es limité à 3 vidéos. Mettez à niveau ton abonnement pour créer des vidéos supplémentaires.",
-      "upgrade-plan": "Passer à un plan supérieur"
+      "upgrade-plan": "Passer à un plan supérieur",
+      "web-mode-tooltip": "Fonctionnalité Pro : Permet de générer des vidéos à partir de recherches sur le web"
     },
     "select": {
       "duration": {
@@ -1097,6 +1098,22 @@
         "27": "Voici l'évolution actuelle de la vidéo.",
         "28": "Voici la progression actuelle de la génération.",
         "29": "Voici le rapport de progrès sur la vidéo."
+      },
+      "tool": {
+        "success": "Opération réussie",
+        "error": "Erreur d'exécution",
+        "urlScraping": {
+          "loading": "Récupération des contenu des URL...",
+          "result": "URL{count, plural, one {} other {s}} analysée{count, plural, one {} other {s}}"
+        },
+        "webSearch": {
+          "loading": "Recherche pour \"{keyword}\"...",
+          "result": "{count} Page{count, plural, one {} other {s}} trouvée{count, plural, one {} other {s}}"
+        },
+        "getWebContent": {
+          "loading": "Récupération du contenu de la page...",
+          "result": "URL{count, plural, one {} other {s}} analysée{count, plural, one {} other {s}}"
+        }
       }
     },
     "assets": {

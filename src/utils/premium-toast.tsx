@@ -25,7 +25,10 @@ export function usePremiumToast() {
       description,
       action: (
         <Link href="/dashboard/pricing" target="_blank">
-          <Button variant="outline" className="border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688] hover:text-white mt-2 w-full">
+          <Button 
+            variant="outline" 
+            className="border-[#FB5688] text-[#FB5688] hover:text-[#d74a74] mt-2 w-full hover:border-[#d74a74]"
+          >
             <Rocket className="h-4 w-4" />
             {upgradeText}
           </Button>
