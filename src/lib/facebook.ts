@@ -65,7 +65,6 @@ export const trackAddToCartFacebook = async (mail: string, userId: string, price
             }
         }
     ],
-    "test_event_code": "TEST88235"
   };
 
   try {
@@ -108,7 +107,6 @@ export const trackOrderFacebook = async (mail: string, invoiceId: string, subscr
             }
         }
     ],
-    "test_event_code": "TEST88235"
   };
 
   try {
