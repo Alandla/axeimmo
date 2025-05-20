@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Star, Heart, Diamond, Check, Gem, Info, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight, Database } from 'lucide-react'
+import { Star, Heart, Diamond, Check, Gem, Info, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight, Database, Globe } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card'
 import { Button } from '@/src/components/ui/button'
 import { useTranslations } from 'next-intl'
@@ -94,6 +94,14 @@ export const features = [
   {
     category: "Advanced Features",
     items: [
+      {
+        name: "web",
+        start: true,
+        pro: true,
+        enterprise: true,
+        soon: false,
+        icon: <Globe className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
       {
         name: "voice-cloning",
         start: false,
