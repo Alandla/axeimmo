@@ -277,7 +277,9 @@
         "add-sequence": "Ajouter une séquence",
         "add": "Ajouter",
         "add-transition": "Ajouter une transition",
-        "edit": "Modifier la séquence"
+        "edit": "Modifier la séquence",
+        "merge-with-previous": "Fusionner avec la séquence précédente",
+        "merge-with-next": "Fusionner avec la séquence suivante"
       },
       "transition": {
         "transition": "Transition",

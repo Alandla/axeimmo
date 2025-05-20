@@ -399,6 +399,91 @@ export default function VideoEditor() {
     }
   };
 
+  const handleMergeWordWithPrevious = (sequenceIndex: number, wordIndex: number) => {
+    if (!video?.video || sequenceIndex <= 0 || wordIndex !== 0) return;
+    
+    const newSequences = [...video.video.sequences];
+    const currentSequence = newSequences[sequenceIndex];
+    const previousSequence = newSequences[sequenceIndex - 1];
+    
+    // The word to move
+    const wordToMove = currentSequence.words[0];
+    
+    // Add the word to the end of the previous sequence
+    previousSequence.words.push(wordToMove);
+    
+    // Update the timing of the previous sequence
+    previousSequence.end = wordToMove.end;
+    previousSequence.durationInFrames = (previousSequence.durationInFrames || 0) + wordToMove.durationInFrames;
+    
+    // Update the text of the previous sequence
+    previousSequence.text = previousSequence.words.map(word => word.word).join(' ');
+    previousSequence.originalText = previousSequence.text;
+    previousSequence.needsAudioRegeneration = false;
+    
+    // Delete the word from the current sequence
+    currentSequence.words.splice(0, 1);
+    
+    // Update the timing of the current sequence
+    currentSequence.start = wordToMove.end;
+    currentSequence.durationInFrames = (currentSequence.durationInFrames || 0) - wordToMove.durationInFrames;
+    
+    // Update the text of the current sequence
+    currentSequence.text = currentSequence.words.map(word => word.word).join(' ');
+    currentSequence.originalText = currentSequence.text;
+    currentSequence.needsAudioRegeneration = false;
+    
+    updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
+    if (currentSequence.words.length === 0) {
+      // If the sequence becomes empty, delete it
+      handleDeleteSequence(sequenceIndex);
+    }
+  };
+
+  const handleMergeWordWithNext = (sequenceIndex: number, wordIndex: number) => {
+    if (!video?.video || sequenceIndex >= video.video.sequences.length - 1) return;
+    
+    const newSequences = [...video.video.sequences];
+    const currentSequence = newSequences[sequenceIndex];
+    const nextSequence = newSequences[sequenceIndex + 1];
+    
+    // Check if the word to move is the last one of the current sequence
+    if (wordIndex !== currentSequence.words.length - 1) return;
+    
+    // The word to move
+    const wordToMove = currentSequence.words[wordIndex];
+    
+    // Add the word to the beginning of the next sequence
+    nextSequence.words.unshift(wordToMove);
+    
+    // Update the timing of the next sequence
+    nextSequence.start = wordToMove.start;
+    nextSequence.durationInFrames = (nextSequence.durationInFrames || 0) + wordToMove.durationInFrames;
+    
+    // Update the text of the next sequence
+    nextSequence.text = nextSequence.words.map(word => word.word).join(' ');
+    nextSequence.originalText = nextSequence.text;
+    nextSequence.needsAudioRegeneration = false;
+    
+    // Delete the word from the current sequence
+    currentSequence.words.pop();
+    
+    // Update the timing of the current sequence
+    currentSequence.end = wordToMove.start;
+    currentSequence.durationInFrames = (currentSequence.durationInFrames || 0) - wordToMove.durationInFrames;
+    
+    // Update the text of the current sequence
+    currentSequence.text = currentSequence.words.map(word => word.word).join(' ');
+    currentSequence.originalText = currentSequence.text;
+    currentSequence.needsAudioRegeneration = false;
+    
+    updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
+    if (currentSequence.words.length === 0) {
+      // If the sequence becomes empty, delete it
+      handleDeleteSequence(sequenceIndex);
+    }
+  };
+
   const handleWordAdd = (sequenceIndex: number, wordIndex: number) => {
     if (video && video.video) {
       const newSequences = [...video.video.sequences];
@@ -440,7 +525,7 @@ export default function VideoEditor() {
 
     // Mettre à jour les indexSequenceBefore des transitions
     newTransitions.forEach(transition => {
-      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore > sequenceIndex) {
+      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore >= sequenceIndex) {
         transition.indexSequenceBefore -= 1;
       }
     });
@@ -942,6 +1027,8 @@ export default function VideoEditor() {
                         onUpdateDuration={handleUpdateDuration}
                         playerRef={playerRef}
                         avatar={video?.video?.avatar}
+                        handleMergeWordWithPrevious={handleMergeWordWithPrevious}
+                        handleMergeWordWithNext={handleMergeWordWithNext}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
@@ -1043,6 +1130,8 @@ export default function VideoEditor() {
                   onUpdateDuration={handleUpdateDuration}
                   playerRef={playerRef}
                   avatar={video?.video?.avatar}
+                  handleMergeWordWithPrevious={handleMergeWordWithPrevious}
+                  handleMergeWordWithNext={handleMergeWordWithNext}
                 />
               </ScrollArea>
             </TabsContent>

@@ -32,6 +32,8 @@ interface SequencesProps {
     onUpdateDuration: (index: number, newDuration: number) => void;
     playerRef?: React.RefObject<PlayerRef>;
     avatar?: { videoUrl?: string; previewUrl?: string; thumbnail?: string };
+    handleMergeWordWithPrevious?: (sequenceIndex: number, wordIndex: number) => void;
+    handleMergeWordWithNext?: (sequenceIndex: number, wordIndex: number) => void;
 }
 
 export default function Sequences({ 
@@ -55,6 +57,8 @@ export default function Sequences({
     onUpdateDuration,
     playerRef,
     avatar,
+    handleMergeWordWithPrevious,
+    handleMergeWordWithNext,
 }: SequencesProps) {
     const t = useTranslations('edit.sequence');
 
@@ -79,7 +83,11 @@ export default function Sequences({
     return (
         <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
             <div className="relative">
-                {sequences && sequences.map((sequence, index) => (
+                {sequences && sequences.map((sequence, index) => {
+                    const canMergeWithPrevious = index > 0 && sequences[index - 1].audioIndex === sequence.audioIndex;
+                    const canMergeWithNext = index < sequences.length - 1 && sequences[index + 1].audioIndex === sequence.audioIndex;
+
+                    return (
                     <React.Fragment key={index}>
                         <Sequence 
                             sequence={sequence} 
@@ -99,6 +107,10 @@ export default function Sequences({
                             canDelete={isSequenceDeletable(sequences, index)}
                             playerRef={playerRef}
                             avatar={avatar}
+                            handleMergeWordWithPrevious={handleMergeWordWithPrevious}
+                            handleMergeWordWithNext={handleMergeWordWithNext}
+                            canMergeWithPrevious={canMergeWithPrevious}
+                            canMergeWithNext={canMergeWithNext}
                         />
                         {transitions.map((transition, transitionIndex) => 
                             transition.indexSequenceBefore === index && (
@@ -181,7 +193,8 @@ export default function Sequences({
                             </motion.div>
                         )}
                     </React.Fragment>
-                ))}
+                    );
+                })}
             </div>
         </ScrollArea>
     )

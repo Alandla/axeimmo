@@ -2,7 +2,7 @@ import { ISequence } from "@/src/types/video";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
 import SkeletonVideo from "../ui/skeleton-video";
-import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen, Video as VideoIcon, User } from "lucide-react";
+import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen, Video as VideoIcon, User, ArrowUp, ArrowDown } from "lucide-react";
 import { motion } from 'framer-motion';
 import React, { useRef, useState, useCallback } from "react";
 import { Badge } from "../ui/badge";
@@ -39,6 +39,10 @@ interface SequenceProps {
   playerRef?: React.RefObject<PlayerRef>;
   canDelete: boolean;
   avatar?: { videoUrl?: string; previewUrl?: string; thumbnail?: string };
+  handleMergeWordWithPrevious?: (sequenceIndex: number, wordIndex: number) => void;
+  handleMergeWordWithNext?: (sequenceIndex: number, wordIndex: number) => void;
+  canMergeWithPrevious?: boolean;
+  canMergeWithNext?: boolean;
 }
 
 export default function Sequence({ 
@@ -59,13 +63,20 @@ export default function Sequence({
   playerRef,
   canDelete,
   avatar,
+  handleMergeWordWithPrevious = () => {},
+  handleMergeWordWithNext = () => {},
+  canMergeWithPrevious = false,
+  canMergeWithNext = false,
 }: SequenceProps) {
 
     const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editingWordIndex, setEditingWordIndex] = useState<number | null>(null);
     const t = useTranslations('edit.sequence')
-    const [duration, setDuration] = useState(sequence.end - sequence.start);
+    const [inputDuration, setInputDuration] = useState<number | null>(null);
+    
+    // Calculer la durée dynamiquement à partir de la séquence
+    const duration = sequence.end - sequence.start;
 
     const focusWord = useCallback((wordIndex: number) => {
         setTimeout(() => {
@@ -80,6 +91,16 @@ export default function Sequence({
             }
         }, 0);
     }, []);
+
+    const handleMergeWordWithNextAndFocus = (wordIndex: number) => {
+        handleMergeWordWithNext(index, wordIndex);
+        const lastWordIndex = sequence.words.length - 1;
+        if (lastWordIndex >= 0) {
+            setEditingWordIndex(lastWordIndex);
+            setIsEditing(true);
+            focusWord(lastWordIndex);
+        }
+    };
 
     const handleWordAddWithFocus = (wordIndex: number) => {
         const newIndex = handleWordAdd(index, wordIndex);
@@ -149,17 +170,19 @@ export default function Sequence({
 
     const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setDuration(parseFloat(value) || 0);
+        setInputDuration(parseFloat(value) || 0);
     };
 
     const handleDurationBlur = () => {
+        if (inputDuration === null) return;
+        
         const lastWord = sequence.words[sequence.words.length - 1];
         const minDuration = lastWord.start - sequence.start;
         
-        let finalDuration = Math.max(duration, minDuration);
+        let finalDuration = Math.max(inputDuration, minDuration);
         finalDuration = parseFloat(finalDuration.toFixed(2));
         
-        setDuration(finalDuration);
+        setInputDuration(null);
         onUpdateDuration(index, finalDuration);
     };
 
@@ -290,7 +313,7 @@ export default function Sequence({
                                 >
                                     <Input
                                         type="number"
-                                        value={duration}
+                                        value={inputDuration !== null ? inputDuration : duration}
                                         step={0.1}
                                         min={sequence.words[sequence.words.length - 1].start - sequence.start}
                                         onChange={handleDurationChange}
@@ -393,6 +416,34 @@ export default function Sequence({
                                         >
                                             <Plus className="h-4 w-4" />
                                         </Button>
+                                        {wordIndex === 0 && index > 0 && canMergeWithPrevious && (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-6 w-6"
+                                                title={t('merge-with-previous')}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleMergeWordWithPrevious(index, wordIndex);
+                                                }}
+                                            >
+                                                <ArrowUp className="h-4 w-4" />
+                                            </Button>
+                                        )}
+                                        {wordIndex === sequence.words.length - 1 && canMergeWithNext && (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-6 w-6"
+                                                title={t('merge-with-next')}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleMergeWordWithNextAndFocus(wordIndex);
+                                                }}
+                                            >
+                                                <ArrowDown className="h-4 w-4" />
+                                            </Button>
+                                        )}
                                         <Button
                                             variant="ghost"
                                             size="icon"
