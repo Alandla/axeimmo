@@ -888,6 +888,18 @@ export default function VideoEditor() {
     };
   }, [isDirty]); // Dépendances pour le useEffect
 
+  const handleSubtitleStyleChange = (newStyle: any) => {
+    if (video && video.video) {
+      updateVideo({
+        ...video,
+        video: {
+          ...video.video,
+          subtitle: newStyle
+        }
+      });
+    }
+  };
+
   return (
     <>
     {isLoading && (
@@ -1077,8 +1089,17 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} hasExistingReview={hasExistingReview} />}
-          </Card>
+                {!isMobile && (
+                    <VideoPreview 
+                        playerRef={playerRef} 
+                        video={video} 
+                        isMobile={isMobile} 
+                        showWatermark={showWatermark} 
+                        hasExistingReview={hasExistingReview}
+                        onSubtitleStyleChange={handleSubtitleStyleChange}
+                    />
+                )}
+            </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
@@ -1089,7 +1110,16 @@ export default function VideoEditor() {
           ref={previewRef}
           className={`sticky top-[57px] z-20 transition-all duration-300 h-96`}
         >
-          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} hasExistingReview={hasExistingReview} />}
+          {isMobile && (
+            <VideoPreview 
+                playerRef={playerRef} 
+                video={video} 
+                isMobile={isMobile} 
+                showWatermark={showWatermark} 
+                hasExistingReview={hasExistingReview}
+                onSubtitleStyleChange={handleSubtitleStyleChange}
+            />
+          )}
         </div>
         <Card className="mt-4">
           <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>

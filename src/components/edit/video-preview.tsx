@@ -7,7 +7,7 @@ import { AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ReviewFloating } from "@/src/components/ReviewFloating";
 
-export default function VideoPreview({ playerRef, video, isMobile, showWatermark, hasExistingReview }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null, isMobile: boolean, showWatermark: boolean, hasExistingReview: boolean }) {
+export default function VideoPreview({ playerRef, video, isMobile, showWatermark, hasExistingReview, onSubtitleStyleChange }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null, isMobile: boolean, showWatermark: boolean, hasExistingReview: boolean, onSubtitleStyleChange?: (newStyle: any) => void }) {
     const t = useTranslations('edit');
     const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
     const [showReview, setShowReview] = useState(false);
@@ -99,7 +99,8 @@ export default function VideoPreview({ playerRef, video, isMobile, showWatermark
                     compositionHeight={1920}
                     inputProps={{
                         data: video,
-                        showWatermark
+                        showWatermark,
+                        onSubtitleStyleChange
                     }}
                     numberOfSharedAudioTags={12}
                     controls

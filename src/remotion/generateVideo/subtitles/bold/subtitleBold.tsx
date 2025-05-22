@@ -1,11 +1,113 @@
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, useCurrentScale } from "remotion";
 import { Line, Word } from "../../type/subtitle";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import googleFonts from "../../config/googleFonts.config";
 
-export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSequence: any, start: number, style: any }) => {
+export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void }) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
+    const scale = useCurrentScale();
+    const [isDragging, setIsDragging] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const subtitleRef = useRef<HTMLDivElement>(null);
+    const playerElementRef = useRef<HTMLElement | null>(null);
+
+    // Fonction pour trouver le player Remotion dans le DOM (une seule fois)
+    const findPlayerElement = useCallback(() => {
+        // Si on a déjà trouvé le player, on le retourne
+        if (playerElementRef.current) {
+            return playerElementRef.current;
+        }
+        
+        // Sinon on le cherche
+        let el = subtitleRef.current;
+        let parent: HTMLElement | null = el?.parentElement || null;
+        
+        // Remonter dans le DOM jusqu'à trouver l'élément avec la classe remotion-player
+        while (parent && !parent.classList.contains('__remotion-player')) {
+            parent = parent.parentElement;
+        }
+        
+        // Mémoriser le player pour les prochains appels
+        playerElementRef.current = parent;
+        return parent;
+    }, []);
+
+    // Fonction pour démarrer le glissement
+    const startDragging = useCallback((e: React.MouseEvent) => {
+        if (!onPositionChange) return;
+        
+        // Empêcher le comportement par défaut et la propagation
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Trouver et mémoriser le player dès le début du glissement
+        const playerElement = findPlayerElement();
+        let playerRect = playerElement ? playerElement.getBoundingClientRect() : null;
+        
+        // Définir l'état de glissement
+        setIsDragging(true);
+        
+        // Position initiale
+        const initialY = e.clientY;
+        const initialPosition = style.position;
+        
+        // Fonction de déplacement
+        const onMouseMove = (moveEvent: PointerEvent) => {
+            // Empêcher le comportement par défaut pour éviter de sélectionner du texte
+            moveEvent.preventDefault();
+            
+            if (playerElement && playerRect) {
+                // Mettre à jour le rectangle du player si nécessaire (en cas de redimensionnement)
+                playerRect = playerElement.getBoundingClientRect();
+                
+                // Calculer la position Y relative du curseur à l'intérieur du player
+                const relativeY = moveEvent.clientY - playerRect.top;
+                
+                // Calculer le pourcentage (0-100) de la position dans le player
+                const percentageY = (relativeY / playerRect.height) * 100;
+                
+                // Limiter entre 0 et 100
+                const newPosition = Math.max(0, Math.min(100, percentageY));
+                
+                // Mettre à jour la position via le callback
+                onPositionChange(newPosition);
+            } else {
+                // Fallback à l'ancienne méthode si on ne trouve pas le player
+                const deltaY = (moveEvent.clientY - initialY) / 4;
+                const newPosition = Math.max(0, Math.min(100, initialPosition + deltaY));
+                onPositionChange(newPosition);
+            }
+        };
+        
+        // Fonction de fin de glissement
+        const onMouseUp = (upEvent: MouseEvent) => {
+            // Empêcher la propagation pour éviter le play/pause
+            upEvent.preventDefault();
+            upEvent.stopPropagation();
+            
+            setIsDragging(false);
+            window.removeEventListener('pointermove', onMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
+        };
+        
+        // Ajouter les écouteurs d'événements globaux
+        window.addEventListener('pointermove', onMouseMove, { passive: false });
+        window.addEventListener('mouseup', onMouseUp, { passive: false });
+    }, [onPositionChange, style.position, scale, findPlayerElement]);
+
+    const handleMouseEnter = useCallback(() => {
+        setIsHovered(true);
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+        setIsHovered(false);
+    }, []);
+
+    // Trouver le player dès le montage du composant
+    useEffect(() => {
+        findPlayerElement();
+    }, [findPlayerElement]);
 
     useEffect(() => {
         const loadFontByName = async (fontSelected: string) => {
@@ -16,9 +118,9 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
         };
 
         loadFontByName(style?.fontFamily || 'Montserrat');
-		if (style?.activeWord?.isActive && style?.activeWord?.fontFamily !== style?.fontFamily) {
-			loadFontByName(style?.activeWord.fontFamily || 'Montserrat');
-		}
+        if (style?.activeWord?.isActive && style?.activeWord?.fontFamily !== style?.fontFamily) {
+            loadFontByName(style?.activeWord.fontFamily || 'Montserrat');
+        }
     }, [style?.fontFamily]);
 
     const getAnimationValues = () => {
@@ -91,7 +193,7 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
         return { scale, opacity, blurValue };
     };
 
-    const { scale, opacity, blurValue } = getAnimationValues();
+    const { scale: animationScale, opacity, blurValue } = getAnimationValues();
 
     const shadowColor = style.shadow.color ? style.shadow.color : 'black';
 
@@ -110,17 +212,25 @@ export const SubtitleBold = ({ subtitleSequence, start, style }: { subtitleSeque
         <AbsoluteFill
             style={{
                 marginTop: `${verticalPosition}px`,
-                zIndex: 10
             }}
+            ref={subtitleRef}
         >
             <div 
                 style={{
-                    transform: `scale(${scale})`,
+                    transform: `scale(${animationScale})`,
                     opacity: opacity,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    zIndex: 10,
+                    cursor: onPositionChange ? (isDragging ? 'grabbing' : (isHovered ? 'grab' : 'default')) : 'default',
+                    userSelect: 'none',
+                    touchAction: 'none',
+                    position: 'relative',
                 }}
+                onMouseDown={startDragging}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
             >
                 {subtitleSequence.lines.map((line: Line, lineIndex: number) => (
                     <div key={lineIndex}>

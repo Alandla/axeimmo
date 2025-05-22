@@ -11,10 +11,27 @@ import { SubtitlesModern } from './subtitles/modern/subtitlesModern';
 import { Voices } from './components/Audios';
 import { Transitions } from './components/Transitions';
 
-export const VideoGenerate = ({ data, showWatermark = true }: { data: any, showWatermark?: boolean }) => {
+export const VideoGenerate = ({ 
+	data, 
+	showWatermark = true,
+	onSubtitleStyleChange
+}: { 
+	data: any, 
+	showWatermark?: boolean,
+	onSubtitleStyleChange?: (newStyle: any) => void 
+}) => {
 	if (!data || !data.video.sequences.length || data.video.sequences.length === 0) {
       return <div>Loading...</div>;
     }
+
+	const handleStyleChange = (newStyle: any) => {
+		if (onSubtitleStyleChange) {
+			onSubtitleStyleChange({
+				...data.video.subtitle,
+				style: newStyle
+			});
+		}
+	};
 	
 	return (
 		<>
@@ -24,7 +41,7 @@ export const VideoGenerate = ({ data, showWatermark = true }: { data: any, showW
 			{showWatermark && <Watermark />}
 			{ data.video.avatar ? <BackgroundWithAvatar sequences={data.video.sequences} avatar={data.video.avatar} duration={data.video.metadata.audio_duration} /> : <MediaBackground sequences={data.video.sequences} /> }
 			{ data.video.transitions && <Transitions sequences={data.video.sequences} transitions={data.video.transitions} /> }
-			{ data.video.subtitle.style.template === 'bold' && <SubtitlesBold subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
+			{ data.video.subtitle.style.template === 'bold' && <SubtitlesBold subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={handleStyleChange} /> }
 			{ data.video.subtitle.style.template === 'simple' && <SubtitlesSimple subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
 			{ data.video.subtitle.style.template === 'background' && <SubtitlesBackground subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
 			{ data.video.subtitle.style.template === 'clean' && <SubtitlesClean subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
