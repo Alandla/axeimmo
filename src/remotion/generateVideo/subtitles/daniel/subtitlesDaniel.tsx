@@ -117,7 +117,7 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesDaniel = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
+export const SubtitlesDaniel = ({ subtitleSequences, style, onStyleChange }: { subtitleSequences: any, style: any, onStyleChange?: (newStyle: any) => void }) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -128,6 +128,15 @@ export const SubtitlesDaniel = ({ subtitleSequences, style }: { subtitleSequence
 		);
 		return sub;
 	}, [subtitleSequences, style]);
+
+    const handlePositionChange = (newPosition: number) => {
+        if (onStyleChange) {
+            onStyleChange({
+                ...style,
+                position: newPosition
+            });
+        }
+    };
 
     let currentFrame = Math.round(subtitleSequences[0].words[0].startInFrames) || 0;
     
@@ -141,7 +150,7 @@ export const SubtitlesDaniel = ({ subtitleSequences, style }: { subtitleSequence
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleDaniel subtitleSequence={subtitle} start={currentFrame} style={style} />
+						<SubtitleDaniel subtitleSequence={subtitle} start={currentFrame} style={style} onPositionChange={handlePositionChange} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

@@ -1,18 +1,17 @@
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, useCurrentScale } from "remotion";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import googleFonts from "../../config/googleFonts.config";
 
 export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void }) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
-    const scale = useCurrentScale();
     const [isDragging, setIsDragging] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const subtitleRef = useRef<HTMLDivElement>(null);
     const playerElementRef = useRef<HTMLElement | null>(null);
 
-    // Fonction pour trouver le player Remotion dans le DOM (une seule fois)
+    // Fonction pour trouver le player Remotion dans le DOM (mémorisée pour éviter des recherches répétées)
     const findPlayerElement = useCallback(() => {
         // Si on a déjà trouvé le player, on le retourne
         if (playerElementRef.current) {
@@ -68,7 +67,7 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
                 const percentageY = (relativeY / playerRect.height) * 100;
                 
                 // Limiter entre 0 et 100
-                const newPosition = Math.max(0, Math.min(100, percentageY));
+                const newPosition = Math.round(Math.max(0, Math.min(100, percentageY)));
                 
                 // Mettre à jour la position via le callback
                 onPositionChange(newPosition);
@@ -94,7 +93,7 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
         // Ajouter les écouteurs d'événements globaux
         window.addEventListener('pointermove', onMouseMove, { passive: false });
         window.addEventListener('mouseup', onMouseUp, { passive: false });
-    }, [onPositionChange, style.position, scale, findPlayerElement]);
+    }, []);
 
     const handleMouseEnter = useCallback(() => {
         setIsHovered(true);
@@ -103,11 +102,6 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
     const handleMouseLeave = useCallback(() => {
         setIsHovered(false);
     }, []);
-
-    // Trouver le player dès le montage du composant
-    useEffect(() => {
-        findPlayerElement();
-    }, [findPlayerElement]);
 
     useEffect(() => {
         const loadFontByName = async (fontSelected: string) => {
@@ -193,7 +187,7 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
         return { scale, opacity, blurValue };
     };
 
-    const { scale: animationScale, opacity, blurValue } = getAnimationValues();
+    const { scale, opacity, blurValue } = getAnimationValues();
 
     const shadowColor = style.shadow.color ? style.shadow.color : 'black';
 
@@ -217,7 +211,7 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
         >
             <div 
                 style={{
-                    transform: `scale(${animationScale})`,
+                    transform: `scale(${scale})`,
                     opacity: opacity,
                     display: 'flex',
                     flexDirection: 'column',

@@ -116,13 +116,22 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesSimple = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
+export const SubtitlesSimple = ({ subtitleSequences, style, onStyleChange }: { subtitleSequences: any, style: any, onStyleChange?: (newStyle: any) => void }) => {
 	const { width } = useVideoConfig();
 
 	const subtitles = useMemo(() => {
         const sub = formatSubtitles(subtitleSequences, width*0.5, 50, "Helvetica, sans-serif", style);
 		return sub;
 	}, [subtitleSequences, style]);
+
+    const handlePositionChange = (newPosition: number) => {
+        if (onStyleChange) {
+            onStyleChange({
+                ...style,
+                position: newPosition
+            });
+        }
+    };
 
     let currentFrame = Math.round(subtitleSequences[0].words[0].startInFrames) || 0;
     
@@ -134,7 +143,7 @@ export const SubtitlesSimple = ({ subtitleSequences, style }: { subtitleSequence
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleSimple subtitleSequence={subtitle} start={currentFrame} style={style}/>
+						<SubtitleSimple subtitleSequence={subtitle} start={currentFrame} style={style} onPositionChange={handlePositionChange} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

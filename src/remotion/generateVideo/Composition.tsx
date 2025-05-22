@@ -42,11 +42,11 @@ export const VideoGenerate = ({
 			{ data.video.avatar ? <BackgroundWithAvatar sequences={data.video.sequences} avatar={data.video.avatar} duration={data.video.metadata.audio_duration} /> : <MediaBackground sequences={data.video.sequences} /> }
 			{ data.video.transitions && <Transitions sequences={data.video.sequences} transitions={data.video.transitions} /> }
 			{ data.video.subtitle.style.template === 'bold' && <SubtitlesBold subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={handleStyleChange} /> }
-			{ data.video.subtitle.style.template === 'simple' && <SubtitlesSimple subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
-			{ data.video.subtitle.style.template === 'background' && <SubtitlesBackground subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
-			{ data.video.subtitle.style.template === 'clean' && <SubtitlesClean subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
-			{ data.video.subtitle.style.template === 'daniel' && <SubtitlesDaniel subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
-			{ data.video.subtitle.style.template === 'modern' && <SubtitlesModern subtitleSequences={data.video.sequences} style={data.video.subtitle.style} /> }
+			{ data.video.subtitle.style.template === 'simple' && <SubtitlesSimple subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={handleStyleChange} /> }
+			{ data.video.subtitle.style.template === 'background' && <SubtitlesBackground subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={handleStyleChange} /> }
+			{ data.video.subtitle.style.template === 'clean' && <SubtitlesClean subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={handleStyleChange} /> }
+			{ data.video.subtitle.style.template === 'daniel' && <SubtitlesDaniel subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={handleStyleChange} /> }
+			{ data.video.subtitle.style.template === 'modern' && <SubtitlesModern subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={handleStyleChange} /> }
 		</>
 	);
 };

@@ -166,7 +166,7 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesModern = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
+export const SubtitlesModern = ({ subtitleSequences, style, onStyleChange }: { subtitleSequences: any, style: any, onStyleChange?: (newStyle: any) => void }) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -177,6 +177,15 @@ export const SubtitlesModern = ({ subtitleSequences, style }: { subtitleSequence
 		);
 		return sub;
 	}, [subtitleSequences, style]);
+
+    const handlePositionChange = (newPosition: number) => {
+        if (onStyleChange) {
+            onStyleChange({
+                ...style,
+                position: newPosition
+            });
+        }
+    };
 
     let currentFrame = Math.round(subtitleSequences[0].words[0].startInFrames) || 0;
     
@@ -190,7 +199,7 @@ export const SubtitlesModern = ({ subtitleSequences, style }: { subtitleSequence
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleModern subtitleSequence={subtitle} start={currentFrame} style={style} />
+						<SubtitleModern subtitleSequence={subtitle} start={currentFrame} style={style} onPositionChange={handlePositionChange} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

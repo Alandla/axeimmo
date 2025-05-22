@@ -1,11 +1,92 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
-import { useEffect, useState } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import googleFonts from "../../config/googleFonts.config";
 
-export const SubtitleBackground = ({ subtitleSequence, start, style }: { subtitleSequence: any, start: number, style: any }) => {
+export const SubtitleBackground = ({ subtitleSequence, start, style, onPositionChange }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void }) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
+    const [isDragging, setIsDragging] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const subtitleRef = useRef<HTMLDivElement>(null);
+    const playerElementRef = useRef<HTMLElement | null>(null);
+
+    const findPlayerElement = useCallback(() => {
+        if (playerElementRef.current) {
+            return playerElementRef.current;
+        }
+
+        let el = subtitleRef.current;
+        let parent: HTMLElement | null = el?.parentElement || null;
+        
+        // Find the player element
+        while (parent && !parent.classList.contains('__remotion-player')) {
+            parent = parent.parentElement;
+        }
+
+        playerElementRef.current = parent;
+        return parent;
+    }, []);
+
+    const startDragging = useCallback((e: React.MouseEvent) => {
+        if (!onPositionChange) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Find and memorize the player element
+        const playerElement = findPlayerElement();
+        let playerRect = playerElement ? playerElement.getBoundingClientRect() : null;
+
+        setIsDragging(true);
+
+        const initialY = e.clientY;
+        const initialPosition = style.position;
+
+        const onMouseMove = (moveEvent: PointerEvent) => {
+            moveEvent.preventDefault();
+            
+            if (playerElement && playerRect) {
+                playerRect = playerElement.getBoundingClientRect();
+                
+                // Calculate the relative Y position of the cursor within the player
+                const relativeY = moveEvent.clientY - playerRect.top;
+                
+                // Calculate the percentage (0-100) of the position within the player
+                const percentageY = (relativeY / playerRect.height) * 100;
+
+                const newPosition = Math.round(Math.max(0, Math.min(100, percentageY)));
+                
+                // Mettre à jour la position via le callback
+                onPositionChange(newPosition);
+            } else {
+                // Fallback to the old method if the player is not found
+                const deltaY = (moveEvent.clientY - initialY) / 4;
+                const newPosition = Math.max(0, Math.min(100, initialPosition + deltaY));
+                onPositionChange(newPosition);
+            }
+        };
+
+        const onMouseUp = (upEvent: MouseEvent) => {
+            upEvent.preventDefault();
+            upEvent.stopPropagation();
+            
+            setIsDragging(false);
+            window.removeEventListener('pointermove', onMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
+        };
+
+        window.addEventListener('pointermove', onMouseMove, { passive: false });
+        window.addEventListener('mouseup', onMouseUp, { passive: false });
+    }, []);
+
+    const handleMouseEnter = useCallback(() => {
+        setIsHovered(true);
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+        setIsHovered(false);
+    }, []);
 
     useEffect(() => {
         const loadFontByName = async (fontSelected: string) => {
@@ -113,8 +194,8 @@ export const SubtitleBackground = ({ subtitleSequence, start, style }: { subtitl
         <AbsoluteFill
             style={{
                 marginTop: `${verticalPosition}px`,
-                zIndex: 10
             }}
+            ref={subtitleRef}
         >
             <div 
                 style={{
@@ -126,7 +207,14 @@ export const SubtitleBackground = ({ subtitleSequence, start, style }: { subtitl
                     position: 'relative',
                     width: 'fit-content',
                     margin: '0 auto',
+                    zIndex: 10,
+                    cursor: onPositionChange ? (isDragging ? 'grabbing' : (isHovered ? 'grab' : 'default')) : 'default',
+                    userSelect: 'none',
+                    touchAction: 'none',
                 }}
+                onMouseDown={startDragging}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
             >
                 {style.background.isActive && style.background.mode === 'full' && (
                     <div style={{
