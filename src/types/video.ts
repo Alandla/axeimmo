@@ -22,6 +22,10 @@ export interface IMedia {
       text: string;
     }
   ];
+  position?: {
+    x: number;
+    y: number;
+  };
   video?: {
     id: string;
     quality?: string;
@@ -85,6 +89,9 @@ export interface IVideo {
   style?: string;
   isNews?: boolean;
   runId: string;
+  settings?: {
+    avatarHeightRatio?: number;
+  };
   video?: {
     thumbnail: string;
     subtitle: any;

@@ -28,6 +28,9 @@ const videoSchema = new mongoose.Schema({
     isNews: Boolean,
     runId: String,
     costToGenerate: Number,
+    settings: {
+      avatarHeightRatio: Number,
+    },
     history: [{
       step: String,
       user: {

@@ -131,10 +131,7 @@ export const SubtitlesBackground = ({ subtitleSequences, style, onStyleChange }:
 
 	const handlePositionChange = (newPosition: number) => {
         if (onStyleChange) {
-            onStyleChange({
-                ...style,
-                position: newPosition
-            });
+            onStyleChange(newPosition);
         }
     };
 

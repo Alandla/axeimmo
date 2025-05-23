@@ -126,10 +126,7 @@ export const SubtitlesSimple = ({ subtitleSequences, style, onStyleChange }: { s
 
     const handlePositionChange = (newPosition: number) => {
         if (onStyleChange) {
-            onStyleChange({
-                ...style,
-                position: newPosition
-            });
+            onStyleChange(newPosition);
         }
     };
 
