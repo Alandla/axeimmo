@@ -73,6 +73,7 @@ export default function VideoEditor() {
   const [isDirty, setIsDirty] = useState(false)
   const [hasExistingReview, setHasExistingReview] = useState(false)
   const [showMobileDisclaimer, setShowMobileDisclaimer] = useState(false)
+  const [spaceCredits, setSpaceCredits] = useState<number | undefined>(undefined)
   
   const updateVideo = (newVideoData: any) => {
     setVideo(newVideoData)
@@ -286,6 +287,7 @@ export default function VideoEditor() {
         setShowWatermark(spaceResponse.plan.name === PlanName.FREE);
         setSubtitleStyles(spaceResponse.subtitleStyle);
         setPlanName(spaceResponse.plan.name);
+        setSpaceCredits(spaceResponse.credits);
 
         if (response.spaceId && (spaceResponse as any).medias && Array.isArray((spaceResponse as any).medias)) {
           assetsStore.setAssets(response.spaceId, (spaceResponse as any).medias);
@@ -1014,6 +1016,7 @@ export default function VideoEditor() {
       cost={calculateCredits(video?.video?.metadata.audio_duration || 30)}
       isOpen={showModalExport}
       spaceId={video?.spaceId || ''}
+      initialCredits={spaceCredits}
       setIsOpen={setShowModalExport}
       onExportVideo={onExportVideo}
       showWatermark={showWatermark}
