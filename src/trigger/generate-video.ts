@@ -61,7 +61,7 @@ export const generateVideoTask = task({
     const ENABLE_GOOGLE_IMAGES_SEARCH = false;
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;
@@ -1192,6 +1192,7 @@ export const generateVideoTask = task({
       state: {
         type: 'done',
       },
+      settings: space?.lastUsed?.config,
       video: {
         audio: {
           voices: voices,

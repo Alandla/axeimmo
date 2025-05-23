@@ -51,7 +51,7 @@ export const exportVideoTask = task({
 
       if (ctx.attempt.number === 1) {
         await removeCreditsToSpace(exportData.spaceId, exportData.creditCost);
-        updateSpaceLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name)
+        updateSpaceLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name, video.settings)
       }
 
       const space = await getSpaceById(video.spaceId);
@@ -206,11 +206,6 @@ const pollRenderStatus = async (renderId: string, bucketName: string, step: stri
           progress: renderStatus.progress
         })
       } else if (renderStatus.status === 'completed' && renderStatus.url) {
-        await metadata.replace({
-          status: 'completed',
-          url: renderStatus.url,
-          costs: renderStatus.costs
-        })
         return renderStatus;
       } else if (renderStatus.status === 'failed') {
         return renderStatus;

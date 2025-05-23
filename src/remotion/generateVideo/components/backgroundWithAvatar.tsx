@@ -297,7 +297,7 @@ export const BackgroundWithAvatar = ({
             </Sequence>
             
             {/* Resize Bar */} 
-            {isHovering && showResizeBar && (
+            {getRemotionEnvironment().isPlayer && isHovering && showResizeBar && (
                 <div
                     style={{
                         position: 'absolute',
@@ -327,7 +327,7 @@ export const BackgroundWithAvatar = ({
             )}
 
             {/* Separator Line */} 
-            {isHovering && showResizeBar && (
+            {getRemotionEnvironment().isPlayer && isHovering && showResizeBar && (
                 <div
                     style={{
                         position: 'absolute',
