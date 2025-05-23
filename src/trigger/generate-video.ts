@@ -1192,6 +1192,7 @@ export const generateVideoTask = task({
       state: {
         type: 'done',
       },
+      settings: space?.lastUsed?.config,
       video: {
         audio: {
           voices: voices,

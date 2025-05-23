@@ -7,7 +7,27 @@ import { AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ReviewFloating } from "@/src/components/ReviewFloating";
 
-export default function VideoPreview({ playerRef, video, isMobile, showWatermark, hasExistingReview }: { playerRef: React.RefObject<PlayerRef>, video: IVideo | null, isMobile: boolean, showWatermark: boolean, hasExistingReview: boolean }) {
+export default function VideoPreview({ 
+    playerRef, 
+    video, 
+    isMobile, 
+    showWatermark, 
+    hasExistingReview, 
+    onSubtitleStyleChange,
+    onAvatarHeightRatioChange,
+    onAvatarPositionChange,
+    onMediaPositionChange
+}: { 
+    playerRef: React.RefObject<PlayerRef>, 
+    video: IVideo | null, 
+    isMobile: boolean, 
+    showWatermark: boolean, 
+    hasExistingReview: boolean, 
+    onSubtitleStyleChange?: (newStyle: any) => void,
+    onAvatarHeightRatioChange?: (ratio: number) => void,
+    onAvatarPositionChange?: (position: { x: number, y: number }) => void,
+    onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void
+}) {
     const t = useTranslations('edit');
     const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
     const [showReview, setShowReview] = useState(false);
@@ -99,7 +119,11 @@ export default function VideoPreview({ playerRef, video, isMobile, showWatermark
                     compositionHeight={1920}
                     inputProps={{
                         data: video,
-                        showWatermark
+                        showWatermark,
+                        onSubtitleStyleChange,
+                        onAvatarHeightRatioChange,
+                        onAvatarPositionChange,
+                        onMediaPositionChange
                     }}
                     numberOfSharedAudioTags={12}
                     controls

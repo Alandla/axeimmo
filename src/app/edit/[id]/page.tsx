@@ -176,22 +176,25 @@ export default function VideoEditor() {
   }
 
   const updateSubtitleStyle = (newStyleProps: any) => {
-    if (video?.video?.subtitle) {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video?.subtitle) return prevVideo;
+
       const updatedVideo = {
-        ...video,
+        ...prevVideo,
         video: {
-          ...video.video,
+          ...prevVideo.video,
           subtitle: {
-            ...video.video.subtitle,
+            ...prevVideo.video.subtitle,
             style: {
-              ...video.video.subtitle.style,
+              ...prevVideo.video.subtitle.style,
               ...newStyleProps.style
             }
           }
         }
       };
-      updateVideo(updatedVideo);
-    }
+      setIsDirty(true);
+      return updatedVideo;
+    });
   };
 
   const updateAudioSettings = (audioSettings: any) => {
@@ -888,6 +891,98 @@ export default function VideoEditor() {
     };
   }, [isDirty]); // Dépendances pour le useEffect
 
+  const handleSubtitleStyleChange = (newStyleOrPosition: any) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video?.subtitle) return prevVideo;
+
+      let newSubtitleStyle;
+      if (typeof newStyleOrPosition === 'number') {
+        newSubtitleStyle = {
+          ...prevVideo.video.subtitle.style,
+          position: newStyleOrPosition
+        };
+      } else {
+        newSubtitleStyle = newStyleOrPosition;
+      }
+      
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          subtitle: {
+            ...prevVideo.video.subtitle,
+            style: newSubtitleStyle
+          }
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
+  const handleAvatarHeightRatioChange = (ratio: number) => {
+    setVideo(prevVideo => {
+      if (!prevVideo) return null;
+      const newVideo = {
+        ...prevVideo,
+        settings: {
+          ...prevVideo.settings,
+          avatarHeightRatio: ratio
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
+  const handleAvatarPositionChange = (position: { x: number, y: number }) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video?.avatar) return prevVideo;
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          avatar: {
+            ...prevVideo.video.avatar,
+            settings: {
+              ...(prevVideo.video.avatar.settings || {}),
+              position: position.x,
+              verticalPosition: position.y
+            }
+          }
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
+  const handleMediaPositionChange = (sequenceIndex: number, position: { x: number, y: number }) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video?.sequences || !prevVideo.video.sequences[sequenceIndex]?.media) return prevVideo;
+      
+      const newSequences = [...prevVideo.video.sequences];
+      const currentMedia = newSequences[sequenceIndex].media!;
+      newSequences[sequenceIndex] = {
+        ...newSequences[sequenceIndex],
+        media: {
+          ...currentMedia,
+          position: position
+        }
+      };
+      
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          sequences: newSequences
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
   return (
     <>
     {isLoading && (
@@ -1077,8 +1172,20 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} hasExistingReview={hasExistingReview} />}
-          </Card>
+                {!isMobile && (
+                    <VideoPreview 
+                        playerRef={playerRef} 
+                        video={video} 
+                        isMobile={isMobile} 
+                        showWatermark={showWatermark} 
+                        hasExistingReview={hasExistingReview}
+                        onSubtitleStyleChange={handleSubtitleStyleChange}
+                        onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
+                        onAvatarPositionChange={handleAvatarPositionChange}
+                        onMediaPositionChange={handleMediaPositionChange}
+                    />
+                )}
+            </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
@@ -1089,7 +1196,19 @@ export default function VideoEditor() {
           ref={previewRef}
           className={`sticky top-[57px] z-20 transition-all duration-300 h-96`}
         >
-          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} showWatermark={showWatermark} hasExistingReview={hasExistingReview} />}
+          {isMobile && (
+            <VideoPreview 
+                playerRef={playerRef} 
+                video={video} 
+                isMobile={isMobile} 
+                showWatermark={showWatermark} 
+                hasExistingReview={hasExistingReview}
+                onSubtitleStyleChange={handleSubtitleStyleChange}
+                onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
+                onAvatarPositionChange={handleAvatarPositionChange}
+                onMediaPositionChange={handleMediaPositionChange}
+            />
+          )}
         </div>
         <Card className="mt-4">
           <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>

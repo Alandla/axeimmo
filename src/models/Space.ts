@@ -123,7 +123,8 @@ const spaceSchema = new mongoose.Schema(
     lastUsed: {
       voices: [],
       avatars: [],
-      subtitles: []
+      subtitles: [],
+      config: {}
     },
     usedStorageBytes: {
       type: Number,

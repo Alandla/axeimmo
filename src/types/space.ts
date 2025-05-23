@@ -7,6 +7,7 @@ export interface ILastUsed {
   voices: string[],
   avatars: string[],
   subtitles: string[],
+  config?: any;
 }
 
 export interface IMember {

@@ -242,7 +242,8 @@ export const updateSpaceLastUsed = async (
   spaceId: string,
   voiceId?: string | null,
   avatarId?: string | null,
-  subtitleId?: string | null
+  subtitleId?: string | null,
+  config?: any | null
 ) => {
   try {
     return await executeWithRetry(async () => {
@@ -250,7 +251,7 @@ export const updateSpaceLastUsed = async (
       
       if (!space) throw new Error("Space not found");
 
-      let { voices, avatars, subtitles } = space.lastUsed;
+      let { voices, avatars, subtitles, config: lastUsedConfig } = space.lastUsed;
   
       if (voiceId) {
         voices.push(voiceId);
@@ -271,7 +272,11 @@ export const updateSpaceLastUsed = async (
         }
       }
 
-      space.lastUsed = { voices, avatars, subtitles };
+      if (config) {
+        lastUsedConfig = config;
+      }
+
+      space.lastUsed = { voices, avatars, subtitles, config: lastUsedConfig };
 
       await space.save();
       return space;

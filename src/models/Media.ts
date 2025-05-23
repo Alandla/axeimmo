@@ -42,6 +42,10 @@ const mediaSchema = new mongoose.Schema({
       }],
       default: [{ start: 0, text: '' }]
     },
+    position: {
+      x: Number,
+      y: Number,
+    },
     video: {
       id: String,
       quality: String,
