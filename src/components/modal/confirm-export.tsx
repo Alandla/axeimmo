@@ -13,13 +13,13 @@ import {
 import { Alert, AlertDescription } from "@/src/components/ui/alert"
 import { Download, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { SimpleSpace } from '@/src/types/space'
 import { getSpaceById } from '@/src/service/space.service'
 import { useRouter } from 'next/navigation'
 
 interface ModalConfirmExportProps {
   cost: number
   spaceId: string
+  initialCredits?: number
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   onExportVideo: () => Promise<string | undefined>
@@ -29,14 +29,14 @@ interface ModalConfirmExportProps {
 export default function ModalConfirmExport({
   cost,
   spaceId,
+  initialCredits,
   isOpen,
   setIsOpen,
   onExportVideo,
   showWatermark
 }: ModalConfirmExportProps) {
   const [isPending, setIsPending] = useState(false)
-  const [space, setSpace] = useState<SimpleSpace | null>(null)
-  const [showModalPricing, setShowModalPricing] = useState(false)
+  const [credits, setCredits] = useState<number | undefined>(initialCredits)
   const t = useTranslations('export-modal')
   const router = useRouter()
 
@@ -52,14 +52,25 @@ export default function ModalConfirmExport({
   }
 
   useEffect(() => {
-    const fetchSpace = async () => {
-      const space = await getSpaceById(spaceId)
-      setSpace(space)
+    if (initialCredits !== undefined) {
+      setCredits(initialCredits)
     }
-    if (spaceId && (!space || isOpen)) {
+
+    const fetchSpace = async () => {
+      try {
+        const space = await getSpaceById(spaceId)
+        if (space?.credits !== undefined) {
+          setCredits(space.credits)
+        }
+      } catch (error) {
+        console.error('Error fetching space credits:', error)
+      }
+    }
+
+    if (spaceId && isOpen) {
       fetchSpace()
     }
-  }, [isOpen])
+  }, [isOpen, spaceId, initialCredits])
 
   return (
     <>
@@ -79,16 +90,13 @@ export default function ModalConfirmExport({
             </DialogDescription>
             <div className="text-sm text-gray-500 mt-2">
               <p><b>{t('cost')}:</b> {cost} credits</p>
-              <p><b>{t('balance')}:</b> {space?.credits} credits</p>
+              <p><b>{t('balance')}:</b> {credits ?? '...'} credits</p>
             </div>
             {showWatermark && (
               <Alert 
                 variant="destructive" 
                 className="cursor-pointer mt-2"
-                onClick={() => {
-                  setIsOpen(false)
-                  setShowModalPricing(true)
-                }}
+                onClick={() => setIsOpen(false)}
               >
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>

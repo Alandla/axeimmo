@@ -244,6 +244,8 @@
       "audio-tabs-title": "Audio",
       "modal-pricing-not-enough-credits": "Not enough credits",
       "modal-pricing-description-not-enough-credits": "You don't have enough credits to export your video, upgrade to a higher plan to export your video.",
+      "modal-pricing-avatar-on-free-title": "No avatar on the free plan",
+      "modal-pricing-avatar-on-free-description": "The avatar feature is not available on the Free plan due to high demand. If you would like to test the result, please contact us or choose a paid plan.",
       "mobile-disclaimer": {
         "title": "Desktop version recommended",
         "description": "For better performance and optimal experience, we recommend using a computer.",
