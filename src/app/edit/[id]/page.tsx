@@ -213,6 +213,13 @@ export default function VideoEditor() {
   const onExportVideo = async () => {
     await basicApiCall('/video/save', { video })
     try {
+      if (planName === PlanName.FREE && video?.video?.avatar?.id) {
+        setModalPricingTitle(t('modal-pricing-avatar-on-free-title'))
+        setModalPricingDescription(t('modal-pricing-avatar-on-free-description'))
+        setShowModalPricing(true)
+        return undefined
+      }
+
       const exportResult : IExport = await basicApiCall('/export/create', { videoId: video?.id, spaceId: video?.spaceId })
       return exportResult.id
     } catch (error : any) {

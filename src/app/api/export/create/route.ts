@@ -6,6 +6,7 @@ import { getSpaceById } from '@/src/dao/spaceDao';
 import { ISpace } from '@/src/types/space';
 import { IVideo } from '@/src/types/video';
 import { getVideoById } from '@/src/dao/videoDao';
+import { PlanName } from '@/src/types/enums';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -42,6 +43,10 @@ export async function POST(req: NextRequest) {
 
     if (space.credits < cost) {
       return NextResponse.json({ error: "not-enough-credits" }, { status: 400 });
+    }
+
+    if (video.video?.avatar?.id && space.plan.name === PlanName.FREE) {
+      return NextResponse.json({ error: "avatar-not-available-on-free-plan" }, { status: 400 });
     }
 
     const exportData: IExport = {

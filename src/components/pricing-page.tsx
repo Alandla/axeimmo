@@ -331,23 +331,52 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
       )}
 
       <div className="mb-8 flex justify-between items-center">
-        <div className="hidden md:block w-[100px]">
+        <div className="hidden lg:block w-[100px]">
           {/* Empty div to balance the layout on desktop */}
         </div>
-        <div className="w-full max-w-md mx-auto">
+        
+        {/* Desktop layout */}
+        <div className="hidden md:block w-full max-w-md">
           <PlanPeriodToggle 
             isAnnual={isAnnual} 
             onToggle={setIsAnnual} 
             fullWidth={true}
           />
         </div>
-        <div className="w-[100px]">
+        
+        {/* Mobile layout */}
+        <div className="flex md:hidden items-center justify-between w-full gap-4">
+          <PlanPeriodToggle 
+            isAnnual={isAnnual} 
+            onToggle={setIsAnnual} 
+            compact={true}
+          />
+          
+          {/* Mobile currency selector with symbols only */}
+          <div className="flex items-center gap-1 border rounded-md h-[42px]">
+            <button 
+              className={`px-3 h-full rounded-l-md text-sm font-medium ${currency === "USD" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+              onClick={() => setCurrency("USD")}
+            >
+              $
+            </button>
+            <button 
+              className={`px-3 h-full rounded-r-md text-sm font-medium ${currency === "EUR" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+              onClick={() => setCurrency("EUR")}
+            >
+              €
+            </button>
+          </div>
+        </div>
+        
+        {/* Desktop currency selector */}
+        <div className="hidden md:block w-[100px]">
           <Select
             value={currency}
             onValueChange={setCurrency}
             defaultValue="USD"
           >
-            <SelectTrigger className="w-[100px]">
+            <SelectTrigger className="w-[100px] h-[42px]">
               <SelectValue placeholder="Devise" />
             </SelectTrigger>
             <SelectContent>
