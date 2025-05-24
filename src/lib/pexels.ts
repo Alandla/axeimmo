@@ -59,6 +59,24 @@ export function pexelImageToMedia(images: Photo[]) {
 
 export function pexelVideoToMedia(videos: any[]) {
   return videos.map(video => {
+    // Calculer le nombre de frames à sélectionner (même logique que analyze-video.ts)
+    const duration = video.duration || 10;
+    const numThumbnails = Math.min(Math.max(5, Math.floor(duration / 2)), 10);
+    
+    // Sélectionner les frames uniformément réparties dans video_pictures
+    let selectedFrames: string[] = [];
+    if (video.video_pictures && video.video_pictures.length > 0) {
+      const totalPictures = video.video_pictures.length;
+      const interval = totalPictures / numThumbnails;
+      
+      for (let i = 0; i < numThumbnails; i++) {
+        const index = Math.floor(i * interval);
+        if (video.video_pictures[index]) {
+          selectedFrames.push(video.video_pictures[index].picture);
+        }
+      }
+    }
+    
     return {
       type: "video",
       image: {
@@ -69,7 +87,9 @@ export function pexelVideoToMedia(videos: any[]) {
       },
       video: {
         ...video.videoBestQuality,
-        link: video.videoBestQuality.link
+        link: video.videoBestQuality.link,
+        frames: selectedFrames,
+        durationInSeconds: video.duration
       },
       video_pictures: video.video_pictures
     };

@@ -55,6 +55,11 @@ const mediaSchema = new mongoose.Schema({
       height: Number,
       fps: Number,
       link: String,
+      frames: {
+        type: [String],
+        default: []
+      },
+      durationInSeconds: Number,
     },
     image: {
       id: String,

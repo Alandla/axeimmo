@@ -100,6 +100,22 @@ export default function VideoTrim({ sequence, sequenceIndex, setSequenceMedia }:
   useEffect(() => {
     if (!sequence.media?.video?.link) return;
     
+    // Vérifier si on a déjà la durée sauvegardée
+    if (sequence.media?.video?.durationInSeconds) {
+      setVideoDurationInSeconds(sequence.media.video.durationInSeconds);
+    }
+    
+    // Si on a déjà des frames pré-générées, les utiliser
+    if (sequence.media?.video?.frames && sequence.media.video.frames.length > 0) {
+      const duration = sequence.media?.video?.durationInSeconds || videoDurationInSeconds || 10;
+      const preGeneratedThumbnails = sequence.media.video.frames.map((frameUrl, index) => ({
+        url: frameUrl,
+        time: index * (duration / sequence.media!.video!.frames!.length)
+      }));
+      setThumbnails(preGeneratedThumbnails);
+      return;
+    }
+    
     if (cachedMedia) {
       setVideoDurationInSeconds(cachedMedia.durationInSeconds);
       setThumbnails(cachedMedia.thumbnails);
@@ -110,22 +126,24 @@ export default function VideoTrim({ sequence, sequenceIndex, setSequenceMedia }:
     
     const initializeVideo = async () => {
       try {
-        // D'abord récupérer les métadonnées
-        const metadata = await parseMedia({
-          acknowledgeRemotionLicense: true,
-          src: videoUrl,
-          fields: {
-            durationInSeconds: true,
-            dimensions: true,
-          },
-        });
+        // D'abord récupérer les métadonnées si on n'a pas la durée
+        if (!sequence.media?.video?.durationInSeconds) {
+          const metadata = await parseMedia({
+            acknowledgeRemotionLicense: true,
+            src: videoUrl,
+            fields: {
+              durationInSeconds: true,
+              dimensions: true,
+            },
+          });
 
-        const durationInSeconds = (metadata.durationInSeconds as number) || 0;
-        setVideoDurationInSeconds(durationInSeconds);
-        
-        // Puis générer les miniatures avec la durée correcte
-        if (durationInSeconds > 0) {
-          await generateThumbnails(videoUrl, durationInSeconds);
+          const durationInSeconds = (metadata.durationInSeconds as number) || 0;
+          setVideoDurationInSeconds(durationInSeconds);
+          
+          // Puis générer les miniatures avec la durée correcte (fallback uniquement)
+          if (durationInSeconds > 0) {
+            await generateThumbnails(videoUrl, durationInSeconds);
+          }
         }
       } catch (error) {
         console.error('Error initializing video:', error);
@@ -140,7 +158,7 @@ export default function VideoTrim({ sequence, sequenceIndex, setSequenceMedia }:
     };
 
     initializeVideo();
-  }, [sequence.media?.video?.link]);
+  }, [sequence.media?.video?.link, sequence.media?.video?.frames, sequence.media?.video?.durationInSeconds]);
 
   const generateThumbnails = async (videoUrl: string, duration: number) => {
     if (cachedMedia?.thumbnails.length) return;

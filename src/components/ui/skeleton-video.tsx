@@ -1,33 +1,34 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
+import Image from 'next/image';
 
 const SkeletonVideo = ({ 
   srcVideo,
   className, 
   disableHoverPlay = false,
-  startAt = 0
+  startAt = 0,
+  thumbnailImage
 }: { 
   srcVideo: string, 
   className: string,
   disableHoverPlay?: boolean,
-  startAt?: number
+  startAt?: number,
+  thumbnailImage?: string
 }) => {
   const [isHovering, setIsHovering] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(!thumbnailImage);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Charger la vidéo dès le début et la positionner au timestamp spécifié
-  useEffect(() => {
-    if (videoRef.current && srcVideo) {
-      videoRef.current.load();
-      setIsLoaded(false);
-    }
-  }, [srcVideo, startAt]);
-
   const handleVideoLoaded = () => {
-    setIsLoaded(true);
+    setIsVideoLoaded(true);
     if (videoRef.current) {
-      videoRef.current.currentTime = startAt; // Positionner au timestamp spécifié
+      videoRef.current.currentTime = startAt;
       videoRef.current.pause();
+      
+      // Si l'utilisateur est en train de hover quand la vidéo se charge, la lancer immédiatement
+      if (isHovering && !disableHoverPlay) {
+        videoRef.current.play();
+      }
     }
   };
 
@@ -35,7 +36,14 @@ const SkeletonVideo = ({
     if (disableHoverPlay) return;
     
     setIsHovering(true);
-    if (videoRef.current && isLoaded) {
+    
+    // Commencer à charger la vidéo si ce n'est pas déjà fait
+    if (!shouldLoadVideo) {
+      setShouldLoadVideo(true);
+    }
+    
+    // Si la vidéo est chargée, la jouer
+    if (videoRef.current && isVideoLoaded) {
       videoRef.current.play();
     }
   };
@@ -46,34 +54,62 @@ const SkeletonVideo = ({
     setIsHovering(false);
     if (videoRef.current) {
       videoRef.current.pause();
-      videoRef.current.currentTime = startAt; // Revenir au timestamp spécifié
+      videoRef.current.currentTime = startAt;
     }
   };
 
   return (
     <div
-      className={`relative overflow-hidden ${className} bg-gray-200 ${!isLoaded ? 'animate-pulse' : ''}`}
+      className={`relative overflow-hidden ${className} bg-gray-200`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Conteneur de la vidéo */}
-      <div className="relative w-full h-full">
-        {/* Vidéo unique qui sert à la fois de vignette et de lecteur */}
-        <video
-          ref={videoRef}
-          muted
-          playsInline
-          loop={isHovering && !disableHoverPlay}
-          preload="metadata"
-          className={`w-full h-full object-cover ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-200`}
-          onLoadedData={handleVideoLoaded}
-          crossOrigin="anonymous"
-          disablePictureInPicture
-          disableRemotePlayback
+      {/* Image de vignette (priorité) */}
+      {thumbnailImage && (
+        <div 
+          className={`transition-opacity duration-200 ${
+            isHovering && isVideoLoaded ? 'opacity-0' : 'opacity-100'
+          }`}
         >
-          <source src={srcVideo} type="video/mp4" />
-        </video>
-      </div>
+          <Image
+            src={thumbnailImage}
+            alt=""
+            width={800}
+            height={450}
+            className="w-full h-auto object-cover rounded-md"
+            unoptimized={thumbnailImage.includes('pexels.com')}
+          />
+        </div>
+      )}
+
+      {/* Vidéo (chargée seulement au hover ou si pas d'image) */}
+      {shouldLoadVideo && (
+        <div className={`${thumbnailImage ? 'absolute inset-0' : 'relative'} w-full h-full`}>
+          <video
+            key={`${srcVideo}-${startAt}`} // Force remount quand srcVideo ou startAt change
+            ref={videoRef}
+            muted
+            playsInline
+            loop={isHovering && !disableHoverPlay}
+            preload="metadata"
+            className={`w-full h-full object-cover rounded-md ${
+              thumbnailImage 
+                ? (isHovering && isVideoLoaded ? 'opacity-100' : 'opacity-0') 
+                : (isVideoLoaded ? 'opacity-100' : 'opacity-0')
+            } transition-opacity duration-200`}
+            onLoadedData={handleVideoLoaded}
+            disablePictureInPicture
+            disableRemotePlayback
+          >
+            <source src={srcVideo} type="video/mp4" />
+          </video>
+        </div>
+      )}
+
+      {/* Skeleton loader si aucune image et vidéo pas encore chargée */}
+      {!thumbnailImage && !isVideoLoaded && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+      )}
     </div>
   );
 };
