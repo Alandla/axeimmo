@@ -38,11 +38,12 @@ export function AiChatTab({
     const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
     const { showPremiumToast } = usePremiumToast()
-    const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
     const [isDragging, setIsDragging] = useState(false);
     const t = useTranslations('ai');
     const pricingT = useTranslations('pricing');
     const planT = useTranslations('plan');
+    const durationT = useTranslations('select.duration');
+    const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>({ name: durationT('options.30-seconds'), value: 468 });
 
     const adjustTextareaHeight = (event: React.FormEvent<HTMLTextAreaElement>) => {
       const target = event.target as HTMLTextAreaElement;
@@ -182,7 +183,7 @@ export function AiChatTab({
                   onKeyDown={(e) => {
                     if (!isDisabled && e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
-                      handleSendMessage(inputMessage, videoDuration?.value || 936);
+                      handleSendMessage(inputMessage, videoDuration?.value || 468);
                     }
                   }}
                 />
@@ -247,7 +248,7 @@ export function AiChatTab({
                         <div>
                           <Button 
                             size="icon" 
-                            onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 936)} 
+                            onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 468)} 
                             disabled={
                               isDisabled ||
                               !files.some(file => file.usage === "voice" || file.usage === "avatar") && 
