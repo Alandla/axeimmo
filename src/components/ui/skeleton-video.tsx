@@ -98,7 +98,6 @@ const SkeletonVideo = ({
                 : (isVideoLoaded ? 'opacity-100' : 'opacity-0')
             } transition-opacity duration-200`}
             onLoadedData={handleVideoLoaded}
-            crossOrigin="anonymous"
             disablePictureInPicture
             disableRemotePlayback
           >
