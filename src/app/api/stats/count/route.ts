@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
         return await UserModel.countDocuments({});
       }),
       executeWithRetry(async () => {
-        return await VideoModel.countDocuments({ archived: { $ne: true } });
+        return await VideoModel.countDocuments({});
       })
     ]);
 
