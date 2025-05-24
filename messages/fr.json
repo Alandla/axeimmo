@@ -541,6 +541,9 @@
     "avatars": {
       "search": "Rechercher un avatar..",
       "preview": "Prévisualiser",
+      "no-avatar-name": "Pas d'avatar",
+      "no-avatar-description": "Mode voix seulement",
+      "no-looks-found": "Aucun look trouvé pour les filtres sélectionnés",
       "toast": {
         "title-error": "Plan payant requis",
         "description-premium-error": "Cet avatar n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder."

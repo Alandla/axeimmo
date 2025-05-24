@@ -550,6 +550,9 @@
     "avatars": {
       "search": "Search an avatar..",
       "preview": "Preview",
+      "no-avatar-name": "No avatar",
+      "no-avatar-description": "Voice only mode",
+      "no-looks-found": "No looks found for the selected filters",
       "toast": {
         "title-error": "Paid plan required",
         "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it."

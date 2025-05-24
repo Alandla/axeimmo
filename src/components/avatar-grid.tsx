@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/src/components/ui/button"
 import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } from './voice-card'
 import { Badge } from "@/src/components/ui/badge"
-import { Check } from "lucide-react"
+import { Check, UserRoundX, X } from "lucide-react"
 import { useTranslations } from 'next-intl'
 import { avatarsConfig } from '../config/avatars.config'
 import { Avatar, AvatarLook } from '../types/avatar'
@@ -28,12 +28,51 @@ import { cn, getMostFrequentString } from '@/src/lib/utils'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { getSpaceAvatars } from '../service/space.service'
 import { HorizontalScrollList } from './ui/horizontal-scroll-list'
+import { Card, CardContent } from "@/src/components/ui/card"
+
+// Composant pour la carte "No avatar"
+function NoAvatarCard() {
+  const t = useTranslations('avatars')
+  const { selectedLook, setSelectedLook, setSelectedAvatarName } = useCreationStore()
+  const isSelected = !selectedLook
+
+  const handleClick = () => {
+    setSelectedLook(null)
+    setSelectedAvatarName(null)
+  }
+
+  return (
+    <Card 
+      className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
+      onClick={handleClick}
+    >
+      {isSelected && (
+        <div className="absolute top-4 right-2 transition-all duration-150">
+          <Check className="h-5 w-5 text-primary" />
+        </div>
+      )}
+      <CardContent className="flex flex-col justify-between p-4 h-full">
+        <div>
+          <h3 className="text-lg font-semibold mb-2">{t('no-avatar-name')}</h3>
+          <div className="mb-4">
+            <Badge variant="secondary" className="shrink-0 whitespace-nowrap">
+              {t('no-avatar-description')}
+            </Badge>
+          </div>
+          <div className="w-full aspect-square rounded-md overflow-hidden bg-gray-100 flex items-center justify-center">
+            <UserRoundX className="h-12 w-12 text-gray-400" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
 
 export function AvatarGridComponent() {
   const t = useTranslations('avatars')
   const tCommon = useTranslations('common')
 
-  const { selectedVoice, setSelectedLook } = useCreationStore()
+  const { selectedVoice, setSelectedLook, selectedLook } = useCreationStore()
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedGender, setSelectedGender] = useState<string>(selectedVoice?.gender || 'all')
@@ -104,6 +143,17 @@ export function AvatarGridComponent() {
   const indexOfFirstAvatar = indexOfLastAvatar - avatarsPerPage
   const currentAvatars = filteredAvatars.slice(indexOfFirstAvatar, indexOfLastAvatar)
   const totalPages = Math.ceil(filteredAvatars.length / avatarsPerPage)
+
+  // Pour la première page, on affiche la carte "No avatar" + (avatarsPerPage - 1) avatars
+  // Pour les autres pages, on affiche avatarsPerPage avatars normaux
+  const showNoAvatarCard = !activeAvatar && currentPage === 1
+  const avatarsToShow = showNoAvatarCard 
+    ? currentAvatars.slice(0, avatarsPerPage - 1) 
+    : currentAvatars
+
+  // Ajuster le calcul du total des pages pour tenir compte de la carte "No avatar"
+  const adjustedTotalAvatars = filteredAvatars.length + (showNoAvatarCard ? 1 : 0)
+  const adjustedTotalPages = Math.ceil(adjustedTotalAvatars / avatarsPerPage)
 
   // Calculs pour la pagination des looks
   const filteredLooks = activeAvatar ? activeAvatar.looks.filter(look => {
@@ -337,14 +387,17 @@ export function AvatarGridComponent() {
             </div>
           )
         ) : (
-          // Afficher la liste des avatars
-          (currentAvatars as Avatar[]).map((avatar: Avatar) => (
-            <AvatarCard
-              key={avatar.id}
-              avatar={avatar}
-              onClick={() => setActiveAvatar(avatar)}
-            />
-          ))
+          // Afficher la liste des avatars avec la carte "No avatar" en première position uniquement sur la première page
+          <>
+            {showNoAvatarCard && <NoAvatarCard />}
+            {(avatarsToShow as Avatar[]).map((avatar: Avatar) => (
+              <AvatarCard
+                key={avatar.id}
+                avatar={avatar}
+                onClick={() => setActiveAvatar(avatar)}
+              />
+            ))}
+          </>
         )}
       </div>
 
@@ -432,7 +485,7 @@ export function AvatarGridComponent() {
         )
       ) : (
         // Pagination des avatars
-        totalPages > 1 && (
+        adjustedTotalPages > 1 && (
           <Pagination>
             <PaginationContent>
               <PaginationItem>
@@ -484,8 +537,8 @@ export function AvatarGridComponent() {
                     <PaginationEllipsis />
                   </PaginationItem>
                   <PaginationItem>
-                    <PaginationLink onClick={() => handlePageChange(totalPages)}>
-                      {totalPages}
+                    <PaginationLink onClick={() => handlePageChange(adjustedTotalPages)}>
+                      {adjustedTotalPages}
                     </PaginationLink>
                   </PaginationItem>
                 </>
@@ -497,7 +550,7 @@ export function AvatarGridComponent() {
                   onClick={() => handlePageChange(currentPage + 1)}
                   className={cn(
                     "cursor-pointer sm:hidden",
-                    currentPage === totalPages && "pointer-events-none opacity-50"
+                    currentPage === adjustedTotalPages && "pointer-events-none opacity-50"
                   )}
                 />
                 <PaginationNext 
@@ -505,7 +558,7 @@ export function AvatarGridComponent() {
                   onClick={() => handlePageChange(currentPage + 1)}
                   className={cn(
                     "cursor-pointer hidden sm:flex",
-                    currentPage === totalPages && "pointer-events-none opacity-50"
+                    currentPage === adjustedTotalPages && "pointer-events-none opacity-50"
                   )}
                 />
               </PaginationItem>
