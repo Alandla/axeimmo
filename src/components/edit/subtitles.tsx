@@ -1,8 +1,7 @@
 import { subtitles } from "@/src/config/subtitles.config"
 import Subtitle from "./subtitle"
-import { useEffect, useState } from "react"
 import { ISpaceSubtitleStyle } from "@/src/types/space"
-import { basicApiCall, basicApiGetCall } from "@/src/lib/api"
+import { basicApiCall } from "@/src/lib/api"
 import { useSubtitleStyleStore } from "@/src/store/subtitlesStyleSore"
 import { useToast } from "@/src/hooks/use-toast"
 import { useTranslations } from "next-intl"
@@ -20,19 +19,6 @@ export default function Subtitles({ video, setSubtitleStyle, setActiveTabMobile,
             setActiveTabMobile('settings-subtitle');
         }
     };
-
-    useEffect(() => {
-        const fetchSpaceSubtitleStyles = async () => {
-            if (video?.spaceId && !subtitleStyles) {
-                const spaceSubtitleStyles = await basicApiGetCall<ISpaceSubtitleStyle[]>(`/space/${video.spaceId}/getSubtitleStyles`)
-                setSubtitleStyles(spaceSubtitleStyles)
-            }
-        }
-
-        if (video?.spaceId) {
-            fetchSpaceSubtitleStyles()
-        }
-    }, [video])
 
     const updateSubtitleStyle = async (subtitleStyleId: string, subtitleStyle: ISpaceSubtitleStyle) => {
         const response : ISpaceSubtitleStyle[]= await basicApiCall(`/space/subtitleStyle/update`, { spaceId: video.spaceId, subtitleStyleId, subtitleStyle })

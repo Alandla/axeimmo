@@ -5,6 +5,7 @@ export type Avatar = {
     gender: 'male' | 'female'
     tags: string[]
     thumbnail: string
+    premium?: boolean
     looks: AvatarLook[]
 }
 
@@ -18,6 +19,8 @@ export type AvatarLook = {
     videoUrl?: string
     format?: 'vertical' | 'horizontal'
     settings?: {
-		position: number
+        heygenType?: 'avatar' | 'talking_photo'
+		position?: number  // Position horizontale (en pourcentage)
+		verticalPosition?: number  // Position verticale (en pourcentage)
 	}
 }

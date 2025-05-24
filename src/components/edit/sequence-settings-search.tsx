@@ -8,8 +8,9 @@ import { basicApiCall } from "@/src/lib/api";
 import MediaItem from "../ui/media-item";
 import { useToast } from "@/src/hooks/use-toast";
 import { useTranslations } from "next-intl";
+import { HorizontalScrollList } from "../ui/horizontal-scroll-list";
 
-export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSequenceMedia }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void }) {
+export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSequenceMedia, keywords }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, keywords: string[] }) {
   const t = useTranslations('edit.sequence-edit-search')
   
   const [searchType, setSearchType] = useState<'stock' | 'web'>('stock')
@@ -96,20 +97,22 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
             {t('search-button')}
             </Button>
         </form>
-        <div className="mt-2 flex flex-wrap gap-2">
-            {sequence.keywords?.slice(0, 3).map((keyword, index) => (
+        
+        <HorizontalScrollList className="mt-2">
+          {keywords?.map((keyword, index) => (
             <Button
-                key={index}
-                variant="outline"
-                size="sm"
-                className="flex items-center"
-                onClick={() => fetchResults(keyword.keyword, 1)}
+              key={index}
+              variant="outline"
+              size="sm"
+              className="flex items-center shrink-0 whitespace-nowrap"
+              onClick={() => fetchResults(keyword, 1)}
             >
-                {keyword.keyword}
-                <Search size={12} />
+              {keyword}
+              <Search size={12} className="ml-1" />
             </Button>
-            ))}
-        </div>
+          ))}
+        </HorizontalScrollList>
+        
         <div className="mt-4 columns-3 gap-2">
             {searchResults.map((media, index) => (
                 <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} media={media} source='web' setSequenceMedia={setSequenceMedia} />

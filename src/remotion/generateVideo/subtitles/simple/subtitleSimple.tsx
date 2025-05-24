@@ -1,12 +1,120 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
+import { useState, useCallback, useRef } from "react";
 
-export const SubtitleSimple = ({ subtitleSequence, start, style }: { subtitleSequence: any, start: number, style: any }) => {
+export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChange }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void }) => {
     const frame = useCurrentFrame();
+    const [isDragging, setIsDragging] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const subtitleRef = useRef<SVGSVGElement>(null);
+    const playerElementRef = useRef<HTMLElement | null>(null);
+
+    // Function to find the Remotion player element in the DOM (memoized to avoid repeated searches)
+    const findPlayerElement = useCallback(() => {
+        // If we already found the player, return it
+        if (playerElementRef.current) {
+            return playerElementRef.current;
+        }
+        
+        // Otherwise, search for it
+        let el = subtitleRef.current;
+        let parent: HTMLElement | null = el?.parentElement as HTMLElement || null;
+        
+        // Traverse the DOM upwards until we find the element with the remotion-player class
+        while (parent && !parent.classList.contains('__remotion-player')) {
+            parent = parent.parentElement;
+        }
+        
+        // Store the player for future calls
+        playerElementRef.current = parent;
+        return parent;
+    }, []);
+
+    // Function to start dragging
+    const startDragging = useCallback((e: React.MouseEvent) => {
+        if (!onPositionChange) return;
+        
+        // Prevent default behavior and propagation
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Find and store the player element at the beginning of the drag
+        const playerElement = findPlayerElement();
+        let playerRect = playerElement ? playerElement.getBoundingClientRect() : null;
+        
+        // Set dragging state
+        setIsDragging(true);
+        
+        // Initial position
+        const initialY = e.clientY;
+        const initialPosition = style.position;
+        
+        // Mouse move function
+        const onMouseMove = (moveEvent: PointerEvent) => {
+            // Prevent default to avoid selecting text
+            moveEvent.preventDefault();
+            
+            if (playerElement && playerRect) {
+                // Update the player rect if necessary (in case of resize)
+                playerRect = playerElement.getBoundingClientRect();
+                
+                // Calculate the relative Y position of the cursor within the player
+                const relativeY = moveEvent.clientY - playerRect.top;
+                
+                // Calculate the percentage (0-100) of the position within the player
+                const percentageY = (relativeY / playerRect.height) * 100;
+                
+                // Limit between 0 and 100
+                const newPosition = Math.round(Math.max(0, Math.min(100, percentageY)));
+                
+                // Update the position via the callback
+                onPositionChange(newPosition);
+            } else {
+                // Fallback to the old method if the player is not found
+                const deltaY = (moveEvent.clientY - initialY) / 4;
+                const newPosition = Math.max(0, Math.min(100, initialPosition + deltaY));
+                onPositionChange(newPosition);
+            }
+        };
+        
+        // Mouse up function
+        const onMouseUp = (upEvent: MouseEvent) => {
+            // Prevent propagation to avoid play/pause
+            upEvent.preventDefault();
+            upEvent.stopPropagation();
+            
+            setIsDragging(false);
+            window.removeEventListener('pointermove', onMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
+        };
+        
+        // Add global event listeners
+        window.addEventListener('pointermove', onMouseMove, { passive: false });
+        window.addEventListener('mouseup', onMouseUp, { passive: false });
+    }, [onPositionChange, findPlayerElement, style.position]);
+
+    const handleMouseEnter = useCallback(() => {
+        setIsHovered(true);
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+        setIsHovered(false);
+    }, []);
     
     return (
         <AbsoluteFill>
-            <svg width="100%" height="100%" style={{ zIndex: 10 }}>
+            <svg 
+                width="100%" 
+                height="100%" 
+                style={{ 
+                    zIndex: 10,
+                    cursor: onPositionChange ? (isDragging ? 'grabbing' : (isHovered ? 'grab' : 'default')) : 'default',
+                }}
+                ref={subtitleRef}
+                onMouseDown={startDragging}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            >
                 {subtitleSequence.lines.map((line: Line, lineIndex: number) => (
                     <text 
                         key={lineIndex}

@@ -1,5 +1,6 @@
 import { getUserById } from "@/src/dao/userDao";
 import { auth } from "@/src/lib/auth";
+import { trackAddToCartFacebook } from "@/src/lib/facebook";
 import { createCheckout } from "@/src/lib/stripe";
 import { NextResponse } from "next/server";
 
@@ -32,15 +33,18 @@ export async function POST(req: Request) {
   try {
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    console.log("POST /api/stripe/createCheckout by user: ", session?.user?.id);
+
+    let user;
+    if (session && session.user && session.user.id) {
+      user = await getUserById(session.user.id);
     }
 
-    console.log("POST /api/stripe/createCheckout by user: ", session.user.id);
+    const { priceId, mode, couponId, successUrl, cancelUrl, spaceId, toltReferral, fbc, fbp, price, currency } = params;
 
-    const user = await getUserById(session.user.id);
-
-    const { priceId, mode, couponId, successUrl, cancelUrl, spaceId } = params;
+    if (fbc || fbp) {
+      trackAddToCartFacebook(user?.email, user?.id?.toString(), price, currency, fbc, fbp);
+    }
 
     const stripeSessionURL = await createCheckout({
       priceId,
@@ -49,13 +53,14 @@ export async function POST(req: Request) {
       successUrl,
       couponId,
       cancelUrl,
+      toltReferral,
       // If user is logged in, it will pass the user ID to the Stripe Session so it can be retrieved in the webhook later
       clientReferenceId: user?._id?.toString(),
       // If user is logged in, this will automatically prefill Checkout data like email and/or credit card for faster checkout
       user,
+      fbc,
+      fbp,
     });
-
-    console.log("URL de session Stripe:", stripeSessionURL);
 
     if (!stripeSessionURL) {
       console.error("L'URL de session Stripe est undefined");

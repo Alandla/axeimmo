@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    firstName: {
+      type: String,
+      trim: true,
+    },
     email: {
       type: String,
       trim: true,
@@ -23,7 +27,7 @@ const userSchema = new mongoose.Schema(
     options: {
       lang: {
         type: String,
-        default: "fr",
+        default: "en",
         validate: {
           validator: (v: string) => ["en", "fr"].includes(v),
           message: "Language must be either 'en' or 'fr'",
@@ -36,6 +40,26 @@ const userSchema = new mongoose.Schema(
         ref: "Space",
       },
     ],
+    checkAffiliate: {
+      type: Boolean,
+      default: false,
+    },
+    role: {
+      type: String,
+      required: false,
+    },
+    discoveryChannel: {
+      type: String,
+      required: false,
+    },
+    goal: {
+      type: String,
+      required: false,
+    },
+    hasFinishedOnboarding: {
+      type: Boolean,
+      default: false,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
@@ -54,6 +78,4 @@ const userSchema = new mongoose.Schema(
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
-
-export default User;
+export default mongoose.models.User || mongoose.model("User", userSchema);

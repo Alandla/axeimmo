@@ -8,6 +8,10 @@ const videoSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId, // Référence à un espace
       ref: 'Space',
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
     state: {
       type: {
         type: String,
@@ -24,6 +28,9 @@ const videoSchema = new mongoose.Schema({
     isNews: Boolean,
     runId: String,
     costToGenerate: Number,
+    settings: {
+      avatarHeightRatio: Number,
+    },
     history: [{
       step: String,
       user: {
@@ -34,6 +41,23 @@ const videoSchema = new mongoose.Schema({
     }],
     video: {
       thumbnail: String,
+      keywords: [String],
+      transitions: [{
+        indexSequenceBefore: Number,
+        durationInFrames: Number,
+        video: String,
+        thumbnail: String,
+        sound: String,
+        volume: Number,
+        fullAt: Number,
+        soundPeakAt: Number,
+        category: String,
+        mode: {
+          type: String,
+          enum: ['hard-light', 'lighten'],
+          default: 'hard-light'
+        }
+      }],
       audio: {
         voices: [{
           url: String,
@@ -61,9 +85,7 @@ const videoSchema = new mongoose.Schema({
       },
       metadata: {
         audio_duration: Number,
-        number_of_distinct_channels: Number,
-        billing_time: Number,
-        transcription_time: Number,
+        language: String,
       },
       sequences: [sequenceSchema],
       avatar: {
@@ -74,11 +96,12 @@ const videoSchema = new mongoose.Schema({
         videoUrl: String,
         format: {
           type: String,
-          enum: ['vertical', 'horizontal'],
-          default: 'horizontal'
+          enum: ['vertical', 'horizontal']
         },
         settings: {
-          position: Number
+          heygenType: { type: String, enum: ['avatar', 'talking_photo'] },
+          position: Number,
+          verticalPosition: Number,
         }
       }
     },

@@ -21,7 +21,7 @@ export function NavButtonVideo() {
             tooltip={t('createVideo')}
             className="justify-center"
           >
-            <Link href="/dashboard/create" className="flex items-center gap-2">
+            <Link href="/dashboard/create" prefetch={true} className="flex items-center gap-2">
               <Sparkles className="h-4 w-4" />
               <span className={cn("inline", "group-data-[collapsible=icon]:hidden")}>
                 {t('createVideo')}

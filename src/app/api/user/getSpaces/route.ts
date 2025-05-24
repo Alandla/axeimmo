@@ -16,6 +16,8 @@ export async function GET(req: NextRequest) {
     const userId = session.user.id;
     const spaces: SimpleSpace[] = await getUserSpaces(userId);
 
+    console.log("spaces", spaces);
+
     return NextResponse.json({ data: spaces });
   } catch (error) {
     console.error("fetchingUserSpaces", error);

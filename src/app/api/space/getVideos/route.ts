@@ -17,16 +17,15 @@ export async function POST(req: NextRequest) {
   const { spaceId } = params;
 
   try {
-
     const userIsInSpace: boolean = await isUserInSpace(session.user.id, spaceId);
 
     if (!userIsInSpace) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const videos = await getVideosBySpaceId(spaceId);
+    const { videos, totalCount } = await getVideosBySpaceId(spaceId);
 
-    return NextResponse.json({ data: videos })
+    return NextResponse.json({ data: { videos, totalCount } })
   } catch (error) {
     console.error('Error getting space medias:', error)
     return NextResponse.json({ error: 'Error getting space medias' }, { status: 500 })

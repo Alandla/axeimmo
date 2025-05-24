@@ -212,7 +212,7 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  {video.creator.image && <AvatarImage src={video.creator.image} alt={creator.name ?? ''} />}
+                  {creator.image && <AvatarImage src={creator.image} alt={creator.name ?? ''} />}
                   <AvatarFallback className="rounded-lg">{creator.name?.charAt(0) ?? ''}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">

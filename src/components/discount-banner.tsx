@@ -18,7 +18,7 @@ export default function DiscountBanner() {
   }, [])
 
   function calculateTimeLeft() {
-    const difference = +new Date("2025-01-30") - +new Date()
+    const difference = +new Date("2025-03-30") - +new Date()
     let timeLeft: { [key: string]: number } = {}
 
     if (difference > 0) {
@@ -36,7 +36,7 @@ export default function DiscountBanner() {
     <Card className="bg-gradient-to-r from-[#FB5688]/60 to-[#FB5688]/60 text-gray-800 p-4 xl:px-48 shadow-lg mx-auto mb-8">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex flex-col md:flex-row items-center gap-4">
-          <Badge className="text-4xl font-bold bg-white text-[#FB5688] p-3 rounded-full px-6">-30%</Badge>
+          <Badge className="text-4xl font-bold bg-white text-[#FB5688] p-3 rounded-full px-6">-20%</Badge>
           <div className="text-center md:text-left">
             <h3 className="text-xl font-bold text-[#732039]">{t('title')}</h3>
             <p className="text-sm opacity-75 text-[#732039]">{t('description')}</p>

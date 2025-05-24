@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Button } from "@/src/components/ui/button"
 import {
   Dialog,
@@ -10,45 +11,42 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/components/ui/dialog"
-import { basicApiCall } from '@/src/lib/api'
-import { useMediaToDeleteStore } from '@/src/store/mediaToDelete'
+import { IMedia } from '@/src/types/video'
 
-interface ModalConfirmDeleteProps {
+interface ModalConfirmDeleteAssetProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  onDeleteMedia: (mediaId: string) => void
+  media: IMedia | null
+  handleDeleteAsset: (media: IMedia) => Promise<void>
 }
 
-export default function ModalConfirmDelete({
+export default function ModalConfirmDeleteAsset({
   isOpen,
   setIsOpen,
-  onDeleteMedia = () => {}
-}: ModalConfirmDeleteProps) {
+  media,
+  handleDeleteAsset,
+}: ModalConfirmDeleteAssetProps) {
+  const t = useTranslations('modals.confirm-delete')
   const [isPending, setIsPending] = useState(false)
-  const { media, spaceId } = useMediaToDeleteStore()
 
   const handleConfirm = async () => {
     setIsPending(true)
-    await basicApiCall('/media/delete', {
-        media,
-        spaceId
-    })
-    onDeleteMedia(media?.id || '')
+    if (media) {
+      await handleDeleteAsset(media)
+    }
     setIsPending(false)
     setIsOpen(false)
   }
 
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent 
         className="sm:max-w-[425px]"
-        onEscapeKeyDown={() => setIsOpen(false)}
-        onInteractOutside={() => setIsOpen(false)}
       >
         <DialogHeader>
-          <DialogTitle>Confirm deletion</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete {media?.name} ? This action is irreversible.
+            {t('description', { name: media?.name })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end">
@@ -58,7 +56,7 @@ export default function ModalConfirmDelete({
             onClick={() => setIsOpen(false)}
             disabled={isPending}
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button
             type="button"
@@ -66,10 +64,10 @@ export default function ModalConfirmDelete({
             onClick={handleConfirm}
             disabled={isPending}
           >
-            {isPending ? 'Deleting...' : 'Delete'}
+            {isPending ? t('deleting') : t('delete')}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   )
-}
+} 

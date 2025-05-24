@@ -1,9 +1,6 @@
 import { IMedia, ISequence } from "@/src/types/video";
 import { CardContent, CardHeader, CardTitle } from "../ui/card";
-import SkeletonImage from "../ui/skeleton-image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { ImageIcon } from "lucide-react";
-import SkeletonVideo from "../ui/skeleton-video";
 import SequenceSettingsSearch from "./sequence-settings-search";
 import SequenceSettingsAssets from "./sequence-settings-assets";
 import { useTranslations } from "next-intl";
@@ -11,8 +8,9 @@ import { Button } from "../ui/button";
 import { IconEyeSlash } from "../icons/eye-slash";
 import { IconEyeLowVision } from "../icons/eye-low-vision";
 import { IconEye } from "../icons/eye";
+import VideoTrim from "./video-trim";
 
-export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId, hadAvatar }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string, hadAvatar: boolean }) {
+export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId, hadAvatar, keywords }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string, hadAvatar: boolean, keywords: string[] }) {
 
   const t = useTranslations('edit.sequence-edit')
 
@@ -22,6 +20,13 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
         <CardTitle>Media {sequenceIndex + 1}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">
+        {sequence.media?.type === 'video' && (
+          <VideoTrim 
+            sequence={sequence} 
+            sequenceIndex={sequenceIndex} 
+            setSequenceMedia={setSequenceMedia}
+          />
+        )}
 
         {hadAvatar && (
           <div className="flex w-full">
@@ -58,7 +63,7 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
             <TabsTrigger value="assets">{t('assets')}</TabsTrigger>
           </TabsList>
           <TabsContent value="search">
-            <SequenceSettingsSearch sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} />
+            <SequenceSettingsSearch sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} keywords={keywords} />
           </TabsContent>
           <TabsContent value="assets">
             <SequenceSettingsAssets sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={spaceId} />

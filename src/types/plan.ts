@@ -6,7 +6,9 @@ export interface Plan {
   monthlyPrice: number
   annualPrice: number
   credits: number
-  features: string[]
+  users: number
+  maxVideoDuration: number
+  storageLimit?: number
   popular?: boolean
   priceId: {
     month: { 

@@ -4,7 +4,7 @@ import * as React from "react"
 import { Cross2Icon } from "@radix-ui/react-icons"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
-import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Loader2, CheckCircle2, AlertCircle, Gem } from 'lucide-react'
 
 import { cn } from "@/src/lib/utils"
 
@@ -34,8 +34,9 @@ const toastVariants = cva(
         destructive:
           "destructive group border-destructive bg-destructive text-destructive-foreground",
         confirm:
-          "border bg-green-500 text-white",
-        loading: ""
+          "border border-green-600 bg-green-500 text-white",
+        loading: "border bg-background text-foreground",
+        premium: "border-2 border-[#FB5688]/60 bg-background text-foreground"
       },
     },
     defaultVariants: {

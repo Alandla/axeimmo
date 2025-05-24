@@ -14,14 +14,19 @@ import { IconGoogle } from "../components/icons/google-icon"
 import { useState } from "react"
 import { ArrowRight, Loader2 } from "lucide-react"
 import { useToast } from "../hooks/use-toast"
+import { getDeviceId } from "../utils/mixpanel"
 
 export default function Page() {
   const { data: session } = useSession()
   const router = useRouter()
 
   useEffect(() => {
-    if (session) {
-      router.push('/dashboard')
+    if (session?.user) {
+      if (!session.user.hasFinishedOnboarding) {
+        router.push('/onboarding')
+      } else {
+        router.push('/dashboard')
+      }
     }
   }, [session, router])
 
@@ -33,18 +38,33 @@ export default function Page() {
   const [sendedEmail, setSendedEmail] = useState(false);
 
   const handleSignInGoogle = async () => {
-    await signIn('google', {
+    const deviceId = getDeviceId();
+    const response = await signIn('google', {
       redirectTo: '/dashboard',
+      redirect: false,
+      deviceId
     })
+    if (response?.error) {
+      toast({
+        title: t('error-title'),
+        description: t(`error-${response.error}`),
+        variant: 'destructive',
+      })
+    }
   }
 
   const handleSignInEmail = async () => {
     setLoading(true);
-    const result = await signIn('http-email', { email: email, redirect: false })
+    const deviceId = getDeviceId();
+    const result = await signIn('http-email', { 
+      email: email, 
+      redirect: false,
+      deviceId
+    })
     if (result?.error) {
       toast({
-        title: 'Error',
-        description: 'Tu n\'as pas accès à la bêta',
+        title: t('error-title'),
+        description: t(`error-${result.error}`),
         variant: 'destructive',
       })
       setLoading(false);
@@ -113,7 +133,7 @@ export default function Page() {
         
         {/* Footer */}
         <div className="flex justify-between text-sm text-gray-500 w-full">
-          <p>{tFooter('rights')}</p>
+          <p>{tFooter('rights').replace('2024', new Date().getFullYear().toString())}</p>
           <div>
             <Link href="/privacy-policy" className="hover:underline">{tFooter('privacy')}</Link>
             <span className="mx-2">|</span>

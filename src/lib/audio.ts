@@ -1,11 +1,10 @@
 import { ISequence, IVideo, IWord } from '../types/video';
 import { basicApiCall } from './api';
-import { adjustSequenceTimings, timeToFrames } from './transcription';
+import { ISentence, splitSentences, timeToFrames } from './transcription';
 
 interface RegenerateAudioResult {
   audioUrl: string;
   cost: number;
-  transcriptionId: string;
 }
 
 export async function regenerateAudioForSequence(
@@ -14,7 +13,7 @@ export async function regenerateAudioForSequence(
 ): Promise<RegenerateAudioResult> {
   const audioIndex = video?.video?.sequences[sequenceIndex].audioIndex;
   const relatedSequences = video?.video?.sequences.filter(seq => seq.audioIndex === audioIndex);
-  console.log("relatedSequences", relatedSequences)
+  const audio = video?.video?.audio?.voices.find(voice => voice.index === audioIndex);
   
   if (!relatedSequences || audioIndex === undefined) {
     throw new Error('No related sequences found');
@@ -27,92 +26,130 @@ export async function regenerateAudioForSequence(
 
   const res = await basicApiCall('/audio/generate', {
     text: completeText,
-    voiceId: video?.video?.audio?.voices[audioIndex].voiceId,
+    voiceId: audio?.voiceId,
+    spaceId: video?.spaceId
   });
 
   return res as RegenerateAudioResult;
 }
 
 export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: string, transcription: any) {
-    const relatedSequences = video?.video?.sequences.filter(seq => seq.audioIndex === audioIndex);
+  const relatedSequences = video?.video?.sequences.filter(seq => seq.audioIndex === audioIndex);
 
-    if (!relatedSequences) {
-        throw new Error('No related sequences found');
-    }
+  if (!relatedSequences) {
+      throw new Error('No related sequences found');
+  }
 
-    let updatedVideo = {...video};
+  let updatedVideo = {...video};
+  const completeText = relatedSequences
+    .sort((a, b) => a.start - b.start)
+    .map(seq => seq.text)
+    .join(' ');
 
-    let updatedSequences = updateSequenceTimings(relatedSequences, transcription.transcription.utterances[0].words);
-    const offset = relatedSequences[0].start;
-    updatedSequences = adjustSequenceTimings(updatedSequences);
+  let sentence : ISentence = {
+    text: completeText,
+    index: 0,
+    audioUrl: audioUrl,
+    transcription: transcription
+  }
 
-    let newSequences = [...updatedVideo?.video?.sequences || []];
-    
-    // Trouver l'index de la dernière séquence concernée
-    const lastUpdatedSequenceIndex = newSequences.findIndex(seq => 
-        seq.audioIndex === audioIndex && 
-        seq.text === updatedSequences[updatedSequences.length - 1].text
-    );
+  let splitSentencesResult = splitSentences([sentence])
+  let updatedSequences = splitSentencesResult.sequences;
 
-    // Calculer la différence de durée
-    const voice = video?.video?.audio?.voices.find(v => v.index === audioIndex);
-    const oldDuration = (voice?.end || 0) - (voice?.start || 0);
-    const newDuration = transcription.metadata.audio_duration;
-    const durationDifference = newDuration - oldDuration;
+  // Trouver l'index de la première séquence relative
+  const firstRelatedIndex = video.video?.sequences.findIndex(seq => seq.audioIndex === audioIndex);
+  if (firstRelatedIndex === undefined || firstRelatedIndex === -1) {
+    throw new Error('No related sequences found');
+  }
 
-    // Mettre à jour les séquences modifiées
-    updatedSequences.forEach(updatedSeq => {
-        const index = newSequences.findIndex(seq => 
-            seq.audioIndex === audioIndex && seq.text === updatedSeq.text
-        );
-        if (index !== -1) {
-            newSequences[index] = updatedSeq;
-        }
-    });
+  // Récupérer le end de la séquence précédente
+  const previousEnd = firstRelatedIndex > 0 && video.video?.sequences[firstRelatedIndex - 1]?.end 
+    ? video.video.sequences[firstRelatedIndex - 1].end 
+    : 0;
 
-    // Ajuster les timings des séquences suivantes
-    for (let i = lastUpdatedSequenceIndex + 1; i < newSequences.length; i++) {
-        const currentSequence = newSequences[i];
-        
-        // Ajuster les timings de la séquence
-        currentSequence.start += durationDifference;
-        currentSequence.end += durationDifference;
-        
-        // Ajuster les timings de chaque mot
-        currentSequence.words = currentSequence.words.map(word => ({
-            ...word,
-            start: word.start + durationDifference,
-            end: word.end + durationDifference
-        }));
-    }
+  // Ajuster les timings des nouvelles séquences
+  updatedSequences = updatedSequences.map((seq, index, array) => ({
+    ...seq,
+    start: index === 0 ? previousEnd : seq.start + previousEnd,
+    end: seq.end + previousEnd,
+    media: relatedSequences[index]?.media,
+    audioIndex: audioIndex,
+    words: seq.words.map((word, wordIndex) => ({
+      ...word,
+      start: wordIndex === 0 && index === 0 ? previousEnd : word.start + previousEnd,
+      end: word.end + previousEnd
+    }))
+  }));
 
-    // Mettre à jour la durée totale
-    let duration = ((video.video?.metadata?.audio_duration || 0) - oldDuration) + newDuration;
+  // Supprimer toutes les séquences relatives
+  let newSequences = [...updatedVideo?.video?.sequences || []].filter(seq => seq.audioIndex !== audioIndex);
+  
+  // Insérer les nouvelles séquences à l'index de la première séquence relative
+  newSequences.splice(firstRelatedIndex, 0, ...updatedSequences);
+  
+  // Trouver l'index de la dernière séquence concernée
+  const lastUpdatedSequenceIndex = newSequences.findIndex(seq => 
+      seq.audioIndex === audioIndex && 
+      seq.text === updatedSequences[updatedSequences.length - 1].text
+  );
 
-    if (!updatedVideo.video) {
-        throw new Error('Video object is undefined');
-    }
+  // Calculer la différence de durée
+  const oldDuration = relatedSequences[relatedSequences.length - 1].end - relatedSequences[0].start;
+  const newDuration = updatedSequences[updatedSequences.length - 1].end - updatedSequences[0].start;
+  const durationDifference = newDuration - oldDuration;
 
-    updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, transcription.metadata.audio_duration, duration);
-    
-    updatedVideo = {
-        ...updatedVideo,
-        video: {
-            ...updatedVideo?.video,
-            thumbnail: updatedVideo?.video?.thumbnail || '',
-            subtitle: updatedVideo?.video?.subtitle || {},
-            metadata: updatedVideo?.video?.metadata || {
-                audio_duration: 0,
-                number_of_distinct_channels: 0,
-                billing_time: 0,
-                transcription_time: 0
-            },
-            sequences: newSequences
-        }
-    };
-    
+  // Mettre à jour les séquences modifiées
+  updatedSequences.forEach(updatedSeq => {
+      const index = newSequences.findIndex(seq => 
+          seq.audioIndex === audioIndex && seq.text === updatedSeq.text
+      );
+      if (index !== -1) {
+          newSequences[index] = updatedSeq;
+      }
+  });
 
-    return updatedVideo;
+  // Ajuster les timings des séquences suivantes
+  for (let i = lastUpdatedSequenceIndex + 1; i < newSequences.length; i++) {
+      const currentSequence = newSequences[i];
+      
+      // Ajuster les timings de la séquence
+      currentSequence.start += durationDifference;
+      currentSequence.end += durationDifference;
+      
+      // Ajuster les timings de chaque mot
+      currentSequence.words = currentSequence.words.map(word => ({
+          ...word,
+          start: word.start + durationDifference,
+          end: word.end + durationDifference
+      }));
+  }
+
+  // Mettre à jour la durée totale
+  let duration = ((video.video?.metadata?.audio_duration || 0) - oldDuration) + newDuration;
+
+  if (!updatedVideo.video) {
+      throw new Error('Video object is undefined');
+  }
+
+  const audioDuration = transcription.end;
+
+  updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, audioDuration, duration);
+  
+  updatedVideo = {
+      ...updatedVideo,
+      video: {
+          ...updatedVideo?.video,
+          thumbnail: updatedVideo?.video?.thumbnail || '',
+          subtitle: updatedVideo?.video?.subtitle || {},
+          metadata: updatedVideo?.video?.metadata || {
+              audio_duration: 0,
+              language: 'en'
+          },
+          sequences: newSequences
+      }
+  };
+
+  return updatedVideo;
 }
 
 export function updateVideoWithNewAudio(
@@ -262,31 +299,19 @@ export function updateSequenceTimings(
   });
 }
 
-export const waitForTranscription = async (
-  transcriptionId: string, 
-  maxAttempts = 100, 
-  delaySeconds = 2
+export const getTranscription = async (
+  audioUrl: string, 
 ) => {
-  let attempts = 0;
 
-  while (attempts < maxAttempts) {
     try {
-      const transcriptionStatus : any = await basicApiCall('/audio/getTranscription', {
-        transcriptionId
-      }); 
+      const transcription : any = await basicApiCall('/audio/getTranscription', {
+        audioUrl
+      });
 
-      if (transcriptionStatus.status === 'done') {
-        return transcriptionStatus.result;
-      }
-
-      await new Promise(resolve => setTimeout(resolve, delaySeconds * 1000));
-      attempts++;
+      return transcription;
     } catch (error: any) {
       console.error('Erreur lors de la récupération du statut de transcription:', error);
-      await new Promise(resolve => setTimeout(resolve, delaySeconds * 1000));
-      attempts++;
     }
-  }
 
   throw new Error('Nombre maximum de tentatives atteint sans obtenir un statut "done" pour la transcription.');
 };

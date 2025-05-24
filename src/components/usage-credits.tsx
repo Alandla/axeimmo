@@ -6,12 +6,16 @@ import { useTranslations } from "next-intl"
 import { useSidebar } from "@/src/components/ui/sidebar"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 import Link from "next/link"
+import { Badge } from "./ui/badge"
+import { discount } from "../config/plan.config"
 
 export function UsageCredits() {
   const t = useTranslations('sidebar')
+  const tPricing = useTranslations('pricing')
   const { activeSpace } = useActiveSpaceStore()
   const { open } = useSidebar()
   const percentage = activeSpace ? (activeSpace?.credits / activeSpace?.creditsPerMonth) * 100 : 0
+  const discountPercentage = discount.active ? Math.round((1 - discount.reduction) * 100) : 0
 
   if (!activeSpace) {
     if (!open) {
@@ -24,10 +28,15 @@ export function UsageCredits() {
             </div>
             <Progress value={0} className="h-2" />
           </div>
-          <Link href="/dashboard/pricing" className="flex items-center gap-2">
+          <Link href="/dashboard/pricing" prefetch={true} className="flex items-center gap-2">
             <Button variant="outline" size="sm" className="text-xs w-full justify-center">
               <Rocket className="w-3 h-3" />
               {t('upgrade')}
+              {discount.active && (
+                <span className="text-xs bg-[#FB5688]/10 text-[#FB5688] px-2 py-0.5 rounded-full">
+                  {tPricing('20-off')}
+                </span>
+              )}
             </Button>
           </Link>
         </div>
@@ -47,6 +56,11 @@ export function UsageCredits() {
           <Button variant="outline" size="sm" className="text-xs w-full justify-center">
             <Rocket className="w-3 h-3" />
             {t('upgrade')}
+            {discount.active && (
+              <span className="text-xs bg-[#FB5688]/10 text-[#FB5688] px-2 py-0.5 rounded-full">
+                {tPricing('20-off')}
+              </span>
+            )}
           </Button>
         </Link>
       </div>
@@ -62,11 +76,13 @@ export function UsageCredits() {
               <div className="flex flex-col items-center">
                 <span className="text-xs font-medium">{activeSpace?.credits}</span>
               </div>
-              <Link href="/dashboard/pricing">
-                <Button variant="outline" size="icon">
-                  <Rocket className="w-3 h-3" />
-                </Button>
-              </Link>
+              <div className="flex items-center gap-1">
+                <Link href="/dashboard/pricing">
+                  <Button variant="outline" size="icon">
+                    <Rocket className="w-3 h-3" />
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </TooltipTrigger>
@@ -92,6 +108,11 @@ export function UsageCredits() {
         <Button variant="outline" size="sm" className="text-xs w-full justify-center">
           <Rocket className="w-3 h-3" />
           {t('upgrade')}
+          {discount.active && (
+            <span className="text-xs bg-[#FB5688]/10 text-[#FB5688] px-2 py-0.5 rounded-full">
+              {tPricing('20-off')}
+            </span>
+          )}
         </Button>
       </Link>
     </div>

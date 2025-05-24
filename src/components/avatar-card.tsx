@@ -1,12 +1,16 @@
 'use client'
 
-import { Check } from 'lucide-react'
+import { Check, Gem, Rocket } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
+import { Button } from "@/src/components/ui/button"
 import { useTranslations } from 'next-intl'
 import { useCreationStore } from '../store/creationStore'
 import { Avatar } from '../types/avatar'
 import Image from 'next/image'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { PlanName } from '../types/enums'
+import { usePremiumToast } from '@/src/utils/premium-toast'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -43,15 +47,30 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
 );
 
 export function AvatarCard({ avatar, onClick }: { avatar: Avatar; onClick: () => void }) {
-    const { selectedAvatar } = useCreationStore()
+    const { selectedAvatarName } = useCreationStore()
+    const { activeSpace } = useActiveSpaceStore()
+    const { showPremiumToast } = usePremiumToast()
     const t = useTranslations('avatars')
-    const isSelected = selectedAvatar?.name === avatar.name;
+    const pricingT = useTranslations('pricing')
+    const isSelected = selectedAvatarName === avatar.name;
+
+    const handleAvatarSelection = () => {
+      if (avatar.premium && activeSpace?.planName === PlanName.FREE) {
+        showPremiumToast(
+          t('toast.title-error'),
+          t('toast.description-premium-error', { plan: 'Pro' }),
+          pricingT('upgrade')
+        );
+        return
+      }
+      onClick()
+    }
 
   return (
     <Card 
       key={avatar.id} 
       className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
-      onClick={onClick}
+      onClick={handleAvatarSelection}
     >
       {isSelected && (
         <div className="absolute top-4 right-2 transition-all duration-150">
@@ -67,6 +86,11 @@ export function AvatarCard({ avatar, onClick }: { avatar: Avatar; onClick: () =>
               <IconGenderFemale className="h-5 w-5 mr-2 text-pink-500" />
             )}
             <h3 className="text-lg font-semibold">{avatar.name}</h3>
+            {avatar.premium && (
+              <Badge variant="secondary" className="ml-2 bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white text-xs border-none shadow-sm font-medium">
+                Pro
+              </Badge>
+            )}
           </div>
           <div 
             className="mb-4 overflow-x-auto scrollbar-hide"

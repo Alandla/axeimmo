@@ -5,6 +5,7 @@ import { useEffect } from "react"
 import {
   Home,
   Video,
+  Image as ImageIcon,
 } from "lucide-react"
 import Image from "next/image"
 
@@ -36,6 +37,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   useEffect(() => {
     const fetchSpaces = async () => {
       const userSpaces = await getSpaces()
+      console.log("userSpaces", userSpaces);
       if (userSpaces) {
         setSpaces(userSpaces)
         if (!activeSpace && userSpaces.length > 0) {
@@ -60,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     {
       name: `${t('links.assets')}`,
       url: "/assets",
-      icon: Image,
+      icon: ImageIcon,
     },
   ]
 
@@ -69,6 +71,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       name: `${t('links.home')}`,
       url: "/dashboard",
       icon: Home,
+    },
+    {
+      name: `${t('links.assets')}`,
+      url: "/dashboard/assets",
+      icon: ImageIcon,
     },
   ]
 

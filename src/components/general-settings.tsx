@@ -4,10 +4,10 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
-import { Camera, Settings2, User2, Languages, Save, Loader2, X } from 'lucide-react'
+import { Camera, User2, Languages, Save, Loader2, X } from 'lucide-react'
 import { User } from "next-auth"
 import { basicApiCall } from "../lib/api"
-import { useLocale, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 import { IUser } from "../types/user"
 import { getMediaUrlFromFileByPresignedUrl } from "../service/upload.service"
 
@@ -16,13 +16,12 @@ export function GeneralSettings({ user }: { user: User }) {
   const [isHovering, setIsHovering] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [name, setName] = useState(user.name || '')
-  const [language, setLanguage] = useState(user.options?.lang || 'fr')
+  const [language, setLanguage] = useState(user.options?.lang || 'en')
   const [avatarUrl, setAvatarUrl] = useState(user.image || undefined)
   const [avatarFileInUpload, setAvatarFileInUpload] = useState<File | undefined>(undefined)
   const [originalName, setOriginalName] = useState(user.name || '')
-  const [originalLanguage, setOriginalLanguage] = useState(user.options?.lang || 'fr')
+  const [originalLanguage, setOriginalLanguage] = useState(user.options?.lang || 'en')
   const [originalAvatarUrl, setOriginalAvatarUrl] = useState(user.image || undefined)
-  const locale = useLocale()
   const [isUploading, setIsUploading] = useState(false)
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,8 +68,6 @@ export function GeneralSettings({ user }: { user: User }) {
 
   return (
     <div className="space-y-6 sm:px-12">
-      <h2 className="text-2xl font-bold">{t('title')}</h2>
-
       <div className="flex items-start justify-between sm:h-24">
         <div className="space-y-1">
           <div className="flex items-center gap-2">

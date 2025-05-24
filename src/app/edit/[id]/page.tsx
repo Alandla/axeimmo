@@ -7,13 +7,13 @@ import { Card } from "@/src/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/src/components/ui/breadcrumb"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
-import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2 } from 'lucide-react'
+import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2, Rocket } from 'lucide-react'
 import Link from 'next/link'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { ISequence, IVideo, IWord } from '@/src/types/video'
+import { ISequence, IVideo, IWord, ITransition } from '@/src/types/video'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
@@ -30,23 +30,37 @@ import AudioSettings from '@/src/components/edit/audio-settings'
 import Musics from '@/src/components/edit/musics'
 import ModalPricing from '@/src/components/modal/modal-pricing'
 import Sequences from '@/src/components/edit/sequences'
-import { regenerateAudioForSequence, updateVideoTimings, waitForTranscription } from '@/src/lib/audio'
+import { getTranscription, regenerateAudioForSequence, updateVideoTimings } from '@/src/lib/audio'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
 import { CommandShortcut } from '@/src/components/ui/command'
+import { ISpace } from '@/src/types/space'
+import { PlanName } from '@/src/types/enums'
+import TransitionSettings from '@/src/components/edit/transition-settings'
+import { transitions as defaultTransitions, sounds as defaultSounds } from '@/src/config/transitions.config'
+import { usePremiumToast } from '@/src/utils/premium-toast'
+import MobileDisclaimerModal from '@/src/components/modal/mobile-disclaimer'
+import { useAssetsStore } from '@/src/store/assetsStore'
 
 export default function VideoEditor() {
   const { id } = useParams()
   const { data: session } = useSession()
   const { toast } = useToast()
   const t = useTranslations('edit')
+  const pricingT = useTranslations('pricing')
+  const planT = useTranslations('plan')
+  const { showPremiumToast } = usePremiumToast()
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
+  const assetsStore = useAssetsStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
   const [selectedSequenceIndex, setSelectedSequenceIndex] = useState<number>(0)
+  const [selectedTransitionIndex, setSelectedTransitionIndex] = useState<number>(-1)
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
+  const [showWatermark, setShowWatermark] = useState(true)
+  const [planName, setPlanName] = useState<PlanName>(PlanName.FREE)
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -57,9 +71,11 @@ export default function VideoEditor() {
   const [modalPricingTitle, setModalPricingTitle] = useState('')
   const [modalPricingDescription, setModalPricingDescription] = useState('')
   const [isDirty, setIsDirty] = useState(false)
+  const [hasExistingReview, setHasExistingReview] = useState(false)
+  const [showMobileDisclaimer, setShowMobileDisclaimer] = useState(false)
+  const [spaceCredits, setSpaceCredits] = useState<number | undefined>(undefined)
   
   const updateVideo = (newVideoData: any) => {
-    console.log("newVideoData", newVideoData)
     setVideo(newVideoData)
     setIsDirty(true)
   }
@@ -88,33 +104,12 @@ export default function VideoEditor() {
     console.log("cutIndex", cutIndex)
   }
 
-  // Function to generate thumbnail through API
-  const generateThumbnailAsync = async () => {
-    try {
-      const thumbnail : any = await basicApiCall('/video/thumbnail', { video });
-      console.log("thumbnailUrl", thumbnail)
-      if (thumbnail && video) {
-        updateVideo({
-          ...video,
-          costToGenerate: video.costToGenerate + thumbnail.estimatedPrice,
-          video: {
-            ...video.video,
-            thumbnail: thumbnail.url
-          }
-        });
-        setIsDirty(false)
-      }
-    } catch (error) {
-      console.error("Failed to generate thumbnail:", error);
-    }
-  };
-
   const handleSaveVideo = async () => {
     setIsSaving(true);
     
     try {
 
-      await basicApiCall('/video/save', { video, takeThumbnail: true });
+      await basicApiCall('/video/save', { video });
       
       setIsDirty(false);
       
@@ -136,6 +131,16 @@ export default function VideoEditor() {
 
   const handleSaveSubtitleStyle = async () => {
     try {
+      // Vérifier si l'utilisateur a un plan Pro ou Entreprise
+      if (planName !== PlanName.PRO && planName !== PlanName.ENTREPRISE) {
+        showPremiumToast(
+          pricingT('premium-toast.title'),
+          pricingT('premium-toast.description', { plan: planT(PlanName.PRO) }),
+          pricingT('upgrade')
+        );
+        return;
+      }
+
       const subtitleStyle : ISpaceSubtitleStyle[] = await basicApiCall("/space/addSubtitleStyle", { spaceId: video?.spaceId || '', subtitleStyle: video?.video?.subtitle?.style })
       setSubtitleStyles(subtitleStyle)
       toast({
@@ -172,22 +177,25 @@ export default function VideoEditor() {
   }
 
   const updateSubtitleStyle = (newStyleProps: any) => {
-    if (video?.video?.subtitle) {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video?.subtitle) return prevVideo;
+
       const updatedVideo = {
-        ...video,
+        ...prevVideo,
         video: {
-          ...video.video,
+          ...prevVideo.video,
           subtitle: {
-            ...video.video.subtitle,
+            ...prevVideo.video.subtitle,
             style: {
-              ...video.video.subtitle.style,
+              ...prevVideo.video.subtitle.style,
               ...newStyleProps.style
             }
           }
         }
       };
-      updateVideo(updatedVideo);
-    }
+      setIsDirty(true);
+      return updatedVideo;
+    });
   };
 
   const updateAudioSettings = (audioSettings: any) => {
@@ -206,6 +214,13 @@ export default function VideoEditor() {
   const onExportVideo = async () => {
     await basicApiCall('/video/save', { video })
     try {
+      if (planName === PlanName.FREE && video?.video?.avatar?.id) {
+        setModalPricingTitle(t('modal-pricing-avatar-on-free-title'))
+        setModalPricingDescription(t('modal-pricing-avatar-on-free-description'))
+        setShowModalPricing(true)
+        return undefined
+      }
+
       const exportResult : IExport = await basicApiCall('/export/create', { videoId: video?.id, spaceId: video?.spaceId })
       return exportResult.id
     } catch (error : any) {
@@ -252,12 +267,11 @@ export default function VideoEditor() {
   }, [video, isDirty])
 
   useEffect(() => {
-    const fetchVideo = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
         const response = await basicApiGetCall<IVideo>(`/video/${id}`);
-        
-        // Ajouter originalText à chaque séquence si ce n'est pas déjà fait
+
         if (response.video?.sequences) {
           response.video.sequences = response.video.sequences.map(seq => ({
             ...seq,
@@ -267,20 +281,34 @@ export default function VideoEditor() {
         }
         
         setVideo(response);
+        setIsLoading(false);
+
+        const spaceResponse = await basicApiGetCall<ISpace>(`/space/${response.spaceId}`);
+        setShowWatermark(spaceResponse.plan.name === PlanName.FREE);
+        setSubtitleStyles(spaceResponse.subtitleStyle);
+        setPlanName(spaceResponse.plan.name);
+        setSpaceCredits(spaceResponse.credits);
+
+        if (response.spaceId && (spaceResponse as any).medias && Array.isArray((spaceResponse as any).medias)) {
+          assetsStore.setAssets(response.spaceId, (spaceResponse as any).medias);
+        }
+        
+        // Vérifier si une review existe déjà
+        const reviewResponse = await basicApiGetCall(`/reviews/${id}`);
+        setHasExistingReview(!!reviewResponse);
+
       } catch (error) {
-        console.error(error)
+        console.error(error);
         toast({
           title: t('error.title'),
           description: t('error.description-loading'),
           variant: 'destructive'
-        })
-      } finally {
-        setIsLoading(false);
+        });
       }
     };
 
     if (id) {
-      fetchVideo();
+      fetchData();
     }
   }, [id]);
 
@@ -288,19 +316,36 @@ export default function VideoEditor() {
     if (video?.video?.sequences && selectedSequenceIndex >= 0 && selectedSequenceIndex < video.video.sequences.length) {
       playerRef.current?.seekTo(video.video.sequences[selectedSequenceIndex].start * 60)
     }
-  }, [selectedSequenceIndex])
+
+    if (video?.video?.transitions && selectedTransitionIndex >= 0 && selectedTransitionIndex < video.video.transitions.length) {
+      const transitionIndex = video.video.transitions[selectedTransitionIndex].indexSequenceBefore ?? 0;
+      const sequenceBefore = video.video.sequences[transitionIndex];
+      playerRef.current?.seekTo((sequenceBefore.end * 60) - (video.video.transitions[selectedTransitionIndex].fullAt ?? 0));
+    }
+  }, [selectedSequenceIndex, selectedTransitionIndex])
 
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 1024) // 1024px est la breakpoint lg de Tailwind
-    }
+      const mobile = window.innerWidth < 1024; // 1024px est la breakpoint lg de Tailwind
+      setIsMobile(mobile);
+      // Check localStorage and mobile status to show disclaimer
+      if (mobile && !localStorage.getItem('mobileDisclaimerShown')) {
+        setShowMobileDisclaimer(true);
+      }
+    };
 
-    checkIsMobile()
-    window.addEventListener('resize', checkIsMobile)
+    checkIsMobile(); // Check on initial mount
+
+    window.addEventListener('resize', checkIsMobile);
     return () => {
-      window.removeEventListener('resize', checkIsMobile)
-    }
-  }, [])
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []); // Empty dependency array ensures this runs only once on mount for the initial check
+
+  const handleCloseMobileDisclaimer = () => {
+    setShowMobileDisclaimer(false);
+    localStorage.setItem('mobileDisclaimerShown', 'true');
+  };
 
   const handleRegenerateAudio = async (sequenceIndex: number) => {
     if (!video?.video) return;
@@ -309,11 +354,11 @@ export default function VideoEditor() {
     setIsLoading(true);
 
     try {
-      const { audioUrl, transcriptionId } = await regenerateAudioForSequence(video, sequenceIndex);
+      const { audioUrl } = await regenerateAudioForSequence(video, sequenceIndex);
       const audioIndex = video.video.sequences[sequenceIndex].audioIndex;
-      const transcription = await waitForTranscription(transcriptionId);
+      const transcription = await getTranscription(audioUrl);
 
-      //const audioUrl = "https://media.hoox.video/bce99061-dbd1-4232-95a2-8a6c6861b03a.mp3"
+      //const audioUrl = "https://media.hoox.video/843f1d10-4866-4a0b-954e-7de347d826ba.mp3"
       //const transcription = transcriptionMockup
 
       let updatedVideo = updateVideoTimings(video, audioIndex, audioUrl, transcription);
@@ -366,6 +411,91 @@ export default function VideoEditor() {
     }
   };
 
+  const handleMergeWordWithPrevious = (sequenceIndex: number, wordIndex: number) => {
+    if (!video?.video || sequenceIndex <= 0 || wordIndex !== 0) return;
+    
+    const newSequences = [...video.video.sequences];
+    const currentSequence = newSequences[sequenceIndex];
+    const previousSequence = newSequences[sequenceIndex - 1];
+    
+    // The word to move
+    const wordToMove = currentSequence.words[0];
+    
+    // Add the word to the end of the previous sequence
+    previousSequence.words.push(wordToMove);
+    
+    // Update the timing of the previous sequence
+    previousSequence.end = wordToMove.end;
+    previousSequence.durationInFrames = (previousSequence.durationInFrames || 0) + wordToMove.durationInFrames;
+    
+    // Update the text of the previous sequence
+    previousSequence.text = previousSequence.words.map(word => word.word).join(' ');
+    previousSequence.originalText = previousSequence.text;
+    previousSequence.needsAudioRegeneration = false;
+    
+    // Delete the word from the current sequence
+    currentSequence.words.splice(0, 1);
+    
+    // Update the timing of the current sequence
+    currentSequence.start = wordToMove.end;
+    currentSequence.durationInFrames = (currentSequence.durationInFrames || 0) - wordToMove.durationInFrames;
+    
+    // Update the text of the current sequence
+    currentSequence.text = currentSequence.words.map(word => word.word).join(' ');
+    currentSequence.originalText = currentSequence.text;
+    currentSequence.needsAudioRegeneration = false;
+    
+    updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
+    if (currentSequence.words.length === 0) {
+      // If the sequence becomes empty, delete it
+      handleDeleteSequence(sequenceIndex);
+    }
+  };
+
+  const handleMergeWordWithNext = (sequenceIndex: number, wordIndex: number) => {
+    if (!video?.video || sequenceIndex >= video.video.sequences.length - 1) return;
+    
+    const newSequences = [...video.video.sequences];
+    const currentSequence = newSequences[sequenceIndex];
+    const nextSequence = newSequences[sequenceIndex + 1];
+    
+    // Check if the word to move is the last one of the current sequence
+    if (wordIndex !== currentSequence.words.length - 1) return;
+    
+    // The word to move
+    const wordToMove = currentSequence.words[wordIndex];
+    
+    // Add the word to the beginning of the next sequence
+    nextSequence.words.unshift(wordToMove);
+    
+    // Update the timing of the next sequence
+    nextSequence.start = wordToMove.start;
+    nextSequence.durationInFrames = (nextSequence.durationInFrames || 0) + wordToMove.durationInFrames;
+    
+    // Update the text of the next sequence
+    nextSequence.text = nextSequence.words.map(word => word.word).join(' ');
+    nextSequence.originalText = nextSequence.text;
+    nextSequence.needsAudioRegeneration = false;
+    
+    // Delete the word from the current sequence
+    currentSequence.words.pop();
+    
+    // Update the timing of the current sequence
+    currentSequence.end = wordToMove.start;
+    currentSequence.durationInFrames = (currentSequence.durationInFrames || 0) - wordToMove.durationInFrames;
+    
+    // Update the text of the current sequence
+    currentSequence.text = currentSequence.words.map(word => word.word).join(' ');
+    currentSequence.originalText = currentSequence.text;
+    currentSequence.needsAudioRegeneration = false;
+    
+    updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
+    if (currentSequence.words.length === 0) {
+      // If the sequence becomes empty, delete it
+      handleDeleteSequence(sequenceIndex);
+    }
+  };
+
   const handleWordAdd = (sequenceIndex: number, wordIndex: number) => {
     if (video && video.video) {
       const newSequences = [...video.video.sequences];
@@ -402,6 +532,15 @@ export default function VideoEditor() {
 
   const handleDeleteSequence = (sequenceIndex: number) => {
     if (!video?.video) return;
+
+    const newTransitions = [...(video.video.transitions || [])];
+
+    // Mettre à jour les indexSequenceBefore des transitions
+    newTransitions.forEach(transition => {
+      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore >= sequenceIndex) {
+        transition.indexSequenceBefore -= 1;
+      }
+    });
 
     const sequence = video.video.sequences[sequenceIndex];
     const audioIndex = sequence.audioIndex;
@@ -469,6 +608,7 @@ export default function VideoEditor() {
         video: {
             ...video.video,
             sequences: newSequences,
+            transitions: newTransitions,
             audio: {
                 ...video.video.audio,
                 voices: newAudio
@@ -490,6 +630,15 @@ export default function VideoEditor() {
     if (!video?.video) return;
 
     const newSequences = [...video.video.sequences];
+    const newTransitions = [...(video.video.transitions || [])];
+
+    // Mettre à jour les indexSequenceBefore des transitions
+    newTransitions.forEach(transition => {
+      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore > afterIndex) {
+        transition.indexSequenceBefore += 1;
+      }
+    });
+
     const previousSequence = newSequences[afterIndex];
     const defaultDuration = 3;
     const defaultDurationInFrames = defaultDuration * 60;
@@ -498,8 +647,10 @@ export default function VideoEditor() {
     let lastVoiceIndex = 0;
     if (video.video.audio?.voices) {
       const newVoices = [...video.video.audio.voices];
-      const previousVoice = newVoices[previousSequence.audioIndex];
+      const previousVoice = newVoices.find(voice => voice.index === previousSequence.audioIndex);
       lastVoiceIndex = Math.max(...newVoices.map(voice => voice.index)) + 1;
+
+      if (!previousVoice) return;
 
       // Créer la nouvelle voix
       const newVoice = {
@@ -566,6 +717,7 @@ export default function VideoEditor() {
         video: {
           ...video.video,
           sequences: newSequences,
+          transitions: newTransitions,
           audio: {
             ...video.video.audio,
             voices: newVoices
@@ -583,6 +735,7 @@ export default function VideoEditor() {
         video: {
           ...video.video,
           sequences: newSequences,
+          transitions: newTransitions,
           metadata: {
             ...video.video.metadata,
             audio_duration: (video.video.metadata.audio_duration || 0) + defaultDuration
@@ -591,8 +744,145 @@ export default function VideoEditor() {
       });
     }
 
-    // Sélectionner la nouvelle séquence
     setSelectedSequenceIndex(afterIndex + 1);
+    setSelectedTransitionIndex(-1);
+  };
+
+  const handleDeleteTransition = (index: number) => {
+    if (!video?.video?.transitions) return;
+
+    const newTransitions = [...video.video.transitions];
+    const transitionToDelete = newTransitions[index];
+    const sequenceIndex = transitionToDelete.indexSequenceBefore ?? 0;
+    
+    newTransitions.splice(index, 1);
+
+    updateVideo({
+      ...video,
+      video: {
+        ...video.video,
+        transitions: newTransitions
+      }
+    });
+    
+    setSelectedTransitionIndex(-1);
+    setSelectedSequenceIndex(sequenceIndex + 1);
+  };
+
+  const handleUpdateDuration = (sequenceIndex: number, newDuration: number) => {
+    if (!video?.video) return;
+
+    const newSequences = [...video.video.sequences];
+    const sequence = newSequences[sequenceIndex];
+    const newEnd = sequence.start + newDuration;
+    const timeDiff = newEnd - sequence.end;
+
+    // Mettre à jour le end de la séquence
+    sequence.end = newEnd;
+
+    // Mettre à jour le end et la durationInFrames du dernier mot
+    const lastWord = sequence.words[sequence.words.length - 1];
+    const oldWordDurationInFrames = lastWord.durationInFrames;
+    lastWord.end = newEnd;
+    lastWord.durationInFrames = Math.round((lastWord.end - lastWord.start) * 60);
+    
+    // Calculer la différence de durationInFrames
+    const durationInFramesDiff = lastWord.durationInFrames - oldWordDurationInFrames;
+    
+    // Mettre à jour la durationInFrames de la séquence
+    sequence.durationInFrames = (sequence.durationInFrames || 0) + durationInFramesDiff;
+
+    // Mettre à jour toutes les séquences suivantes
+    for (let i = sequenceIndex + 1; i < newSequences.length; i++) {
+        const currentSequence = newSequences[i];
+        
+        // Mettre à jour start et end de la séquence
+        currentSequence.start += timeDiff;
+        currentSequence.end += timeDiff;
+        
+        // Mettre à jour start et end de tous les mots
+        currentSequence.words = currentSequence.words.map(word => ({
+            ...word,
+            start: word.start + timeDiff,
+            end: word.end + timeDiff
+        }));
+    }
+
+    let updatedVoices;
+    // Mettre à jour la voix correspondante
+    if (video.video.audio?.voices) {
+        updatedVoices = [...video.video.audio.voices];
+        const voiceIndex = updatedVoices.findIndex(voice => voice.index === sequence.audioIndex);
+        
+        if (voiceIndex !== -1) {
+            const voice = updatedVoices[voiceIndex];
+            voice.end += timeDiff;
+            voice.durationInFrames = voice.durationInFrames + durationInFramesDiff;
+
+            // Mettre à jour les timings des voix suivantes
+            for (let i = voiceIndex + 1; i < updatedVoices.length; i++) {
+                updatedVoices[i].start += timeDiff;
+                updatedVoices[i].end += timeDiff;
+            }
+        }
+    }
+
+    updateVideo({
+      ...video,
+      video: {
+          ...video.video,
+          sequences: newSequences,
+          ...(updatedVoices && {
+              audio: {
+                  ...video.video.audio,
+                  voices: updatedVoices
+              }
+          }),
+          metadata: {
+              ...video.video.metadata,
+              audio_duration: newSequences[newSequences.length - 1].end
+          }
+      }
+    });
+  };
+
+  const handleUpdateTransition = (transitionIndex: number, newTransition: ITransition) => {
+    if (video && video.video && video.video.transitions) {
+      const newTransitions = [...video.video.transitions];
+      newTransitions[transitionIndex] = newTransition;
+      updateVideo({
+        ...video,
+        video: {
+          ...video.video,
+          transitions: newTransitions
+        }
+      });
+    }
+  };
+
+  const handleAddTransition = (afterIndex: number) => {
+    if (!video?.video) return;
+
+    const newTransitions = [...(video.video.transitions || [])];
+    const defaultTransition = {
+      ...defaultTransitions[0],
+      indexSequenceBefore: afterIndex,
+      volume: 0.15,
+      sound: defaultSounds[0].url
+    };
+
+    newTransitions.push(defaultTransition);
+
+    setSelectedTransitionIndex(newTransitions.length - 1);
+    setSelectedSequenceIndex(-1);
+
+    updateVideo({
+      ...video,
+      video: {
+        ...video.video,
+        transitions: newTransitions
+      }
+    });
   };
 
   useEffect(() => {
@@ -610,6 +900,98 @@ export default function VideoEditor() {
     };
   }, [isDirty]); // Dépendances pour le useEffect
 
+  const handleSubtitleStyleChange = (newStyleOrPosition: any) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video?.subtitle) return prevVideo;
+
+      let newSubtitleStyle;
+      if (typeof newStyleOrPosition === 'number') {
+        newSubtitleStyle = {
+          ...prevVideo.video.subtitle.style,
+          position: newStyleOrPosition
+        };
+      } else {
+        newSubtitleStyle = newStyleOrPosition;
+      }
+      
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          subtitle: {
+            ...prevVideo.video.subtitle,
+            style: newSubtitleStyle
+          }
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
+  const handleAvatarHeightRatioChange = (ratio: number) => {
+    setVideo(prevVideo => {
+      if (!prevVideo) return null;
+      const newVideo = {
+        ...prevVideo,
+        settings: {
+          ...prevVideo.settings,
+          avatarHeightRatio: ratio
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
+  const handleAvatarPositionChange = (position: { x: number, y: number }) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video?.avatar) return prevVideo;
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          avatar: {
+            ...prevVideo.video.avatar,
+            settings: {
+              ...(prevVideo.video.avatar.settings || {}),
+              position: position.x,
+              verticalPosition: position.y
+            }
+          }
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
+  const handleMediaPositionChange = (sequenceIndex: number, position: { x: number, y: number }) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video?.sequences || !prevVideo.video.sequences[sequenceIndex]?.media) return prevVideo;
+      
+      const newSequences = [...prevVideo.video.sequences];
+      const currentMedia = newSequences[sequenceIndex].media!;
+      newSequences[sequenceIndex] = {
+        ...newSequences[sequenceIndex],
+        media: {
+          ...currentMedia,
+          position: position
+        }
+      };
+      
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          sequences: newSequences
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
   return (
     <>
     {isLoading && (
@@ -626,12 +1008,18 @@ export default function VideoEditor() {
       isOpen={showModalPricing}
       setIsOpen={setShowModalPricing}
     />
+    <MobileDisclaimerModal
+        isOpen={showMobileDisclaimer}
+        onClose={handleCloseMobileDisclaimer}
+    />
     <ModalConfirmExport
       cost={calculateCredits(video?.video?.metadata.audio_duration || 30)}
       isOpen={showModalExport}
       spaceId={video?.spaceId || ''}
+      initialCredits={spaceCredits}
       setIsOpen={setShowModalExport}
       onExportVideo={onExportVideo}
+      showWatermark={showWatermark}
     />
     <div className="min-h-screen bg-muted overflow-hidden">
       {/* Header */}
@@ -727,23 +1115,36 @@ export default function VideoEditor() {
                     <TabsContent value="sequences">
                       <Sequences 
                         sequences={video?.video?.sequences || []} 
+                        transitions={video?.video?.transitions}
                         selectedSequenceIndex={selectedSequenceIndex} 
+                        selectedTransitionIndex={selectedTransitionIndex}
                         setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                        setSelectedTransitionIndex={setSelectedTransitionIndex}
                         handleWordInputChange={handleWordInputChange} 
                         handleWordAdd={handleWordAdd}
                         handleWordDelete={handleWordDelete}
                         handleCutSequence={handleCutSequence}
                         onRegenerateAudio={handleRegenerateAudio}
                         onDeleteSequence={handleDeleteSequence}
+                        onDeleteTransition={handleDeleteTransition}
                         onAddSequence={handleAddSequence}
+                        onAddTransition={handleAddTransition}
+                        onUpdateDuration={handleUpdateDuration}
                         playerRef={playerRef}
+                        avatar={video?.video?.avatar}
+                        handleMergeWordWithPrevious={handleMergeWordWithPrevious}
+                        handleMergeWordWithNext={handleMergeWordWithNext}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
-                      <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} />
+                      <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
+                        <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} />
+                      </ScrollArea>
                     </TabsContent>
                     <TabsContent value="audio">
-                      <Musics video={video} updateAudioSettings={updateAudioSettings} />
+                      <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
+                        <Musics video={video} updateAudioSettings={updateAudioSettings} />
+                      </ScrollArea>
                     </TabsContent>
                 </Tabs>
               </div>
@@ -763,7 +1164,16 @@ export default function VideoEditor() {
               ) : (
                 <ScrollArea className="h-[calc(100vh-5rem)]">
                   {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                    <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
+                    <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} />
+                  )}
+                  {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                    <TransitionSettings 
+                      video={video} 
+                      transition={video.video.transitions[selectedTransitionIndex]} 
+                      transitionIndex={selectedTransitionIndex} 
+                      spaceId={video.spaceId}
+                      updateTransition={handleUpdateTransition}
+                    />
                   )}
                 </ScrollArea>
               )}
@@ -772,8 +1182,20 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-              {!isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
-          </Card>
+                {!isMobile && (
+                    <VideoPreview 
+                        playerRef={playerRef} 
+                        video={video} 
+                        isMobile={isMobile} 
+                        showWatermark={showWatermark} 
+                        hasExistingReview={hasExistingReview}
+                        onSubtitleStyleChange={handleSubtitleStyleChange}
+                        onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
+                        onAvatarPositionChange={handleAvatarPositionChange}
+                        onMediaPositionChange={handleMediaPositionChange}
+                    />
+                )}
+            </Card>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
@@ -784,7 +1206,19 @@ export default function VideoEditor() {
           ref={previewRef}
           className={`sticky top-[57px] z-20 transition-all duration-300 h-96`}
         >
-          {isMobile && <VideoPreview playerRef={playerRef} video={video} isMobile={isMobile} />}
+          {isMobile && (
+            <VideoPreview 
+                playerRef={playerRef} 
+                video={video} 
+                isMobile={isMobile} 
+                showWatermark={showWatermark} 
+                hasExistingReview={hasExistingReview}
+                onSubtitleStyleChange={handleSubtitleStyleChange}
+                onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
+                onAvatarPositionChange={handleAvatarPositionChange}
+                onMediaPositionChange={handleMediaPositionChange}
+            />
+          )}
         </div>
         <Card className="mt-4">
           <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>
@@ -803,19 +1237,32 @@ export default function VideoEditor() {
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="sequences">
-              <Sequences 
-                sequences={video?.video?.sequences || []} 
-                selectedSequenceIndex={selectedSequenceIndex} 
-                setSelectedSequenceIndex={setSelectedSequenceIndex} 
-                handleWordInputChange={handleWordInputChange} 
-                handleWordAdd={handleWordAdd}
-                handleWordDelete={handleWordDelete}
-                handleCutSequence={handleCutSequence}
-                onRegenerateAudio={handleRegenerateAudio}
-                onDeleteSequence={handleDeleteSequence}
-                onAddSequence={handleAddSequence}
-                playerRef={playerRef}
-              />
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                <Sequences 
+                  sequences={video?.video?.sequences || []} 
+                  transitions={video?.video?.transitions}
+                  selectedSequenceIndex={selectedSequenceIndex} 
+                  selectedTransitionIndex={selectedTransitionIndex}
+                  setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                  setSelectedTransitionIndex={setSelectedTransitionIndex}
+                  setActiveTabMobile={setActiveTabMobile}
+                  isMobile={isMobile}
+                  handleWordInputChange={handleWordInputChange} 
+                  handleWordAdd={handleWordAdd}
+                  handleWordDelete={handleWordDelete}
+                  handleCutSequence={handleCutSequence}
+                  onRegenerateAudio={handleRegenerateAudio}
+                  onDeleteSequence={handleDeleteSequence}
+                  onDeleteTransition={handleDeleteTransition}
+                  onAddSequence={handleAddSequence}
+                  onAddTransition={handleAddTransition}
+                  onUpdateDuration={handleUpdateDuration}
+                  playerRef={playerRef}
+                  avatar={video?.video?.avatar}
+                  handleMergeWordWithPrevious={handleMergeWordWithPrevious}
+                  handleMergeWordWithNext={handleMergeWordWithNext}
+                />
+              </ScrollArea>
             </TabsContent>
             <TabsContent value="subtitle">
               <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
@@ -830,7 +1277,20 @@ export default function VideoEditor() {
             <TabsContent value="settings-sequence">
               <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
                 {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} />
+                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} />
+                )}
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-transition">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                  <TransitionSettings 
+                    video={video} 
+                    transition={video.video.transitions[selectedTransitionIndex]} 
+                    transitionIndex={selectedTransitionIndex} 
+                    spaceId={video.spaceId}
+                    updateTransition={handleUpdateTransition}
+                  />
                 )}
               </ScrollArea>
             </TabsContent>

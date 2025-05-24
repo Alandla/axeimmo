@@ -3,7 +3,8 @@ import connectMongo from "./mongo"
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import google from "next-auth/providers/google"
 import { createPrivateSpaceForUser } from "../dao/spaceDao";
-import { addUserIdToContact, checkHasBetaAccess, createContact, sendVerificationRequest } from "./loops";
+import { addUserIdToContact, createContact, sendVerificationRequest } from "./loops";
+import isDisposableEmail from "./mail";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -11,7 +12,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async profile(profile) {
         return {
           id: profile.sub,
-          name: profile.name,
+          name: profile.name.split(" ")[0],
+          firstName: profile.name.split(" ")[1],
           email: profile.email,
           image: profile.image,
           createdAt: new Date(),
@@ -39,21 +41,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
-    async signIn({ user }) {
+    async signIn({ user, account }) {
       console.log("Sign in event: ", user);
       if (user.email) {
-        let hasBetaAccess = await checkHasBetaAccess(user.email);
-        if (hasBetaAccess && user.options === undefined) {
+        const isDisposable = await isDisposableEmail(user.email);
+        if (isDisposable) {
+          return "/auth/error?error=disposable-email";
+        }
+
+        if (user.options === undefined) {
           const contactProperties = {
             firstName: user.name,
-            videosCount: 0
+            videosCount: 0,
+            videosExported: 0
           };
-          await createContact(user.email, contactProperties);
-          return true;
+          try {
+            await createContact(user.email, contactProperties);
+          } catch (error) {
+            return "/auth/error?error=contact-creation";
+          }
         }
-        return hasBetaAccess;
+
+        return true;
       }
-      return false;
+      return "/auth/error?error=invalid-email";
     }
   },
   adapter: MongoDBAdapter(connectMongo) as any,
@@ -61,6 +72,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/',
   },
   events: {
+    signIn: async (user) => {
+      console.log("Sign in event: ", user);
+    },
     createUser: async (user) => {
       console.log("Create user event: ", user);
       if (user.user.id && user.user.email) {

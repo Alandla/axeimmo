@@ -26,10 +26,9 @@ export const getImagePexels = async (keyword: string, nb: number, page: number) 
 }
 
 export const getPexelsVideosMedia = async (keyword: string, number: number, page: number) => {
-    const videos = await getVideoPexels(keyword, number, page)
+    const videos = await getVideoPexels(keyword, number, page);
     if ('videos' in videos) {
         const videoBestQuality = getVideosBestQuality(videos.videos);
-        logger.log('Video best quality', { videoBestQuality })
         return pexelVideoToMedia(videoBestQuality);
     }
     return [];
@@ -71,7 +70,8 @@ export function pexelVideoToMedia(videos: any[]) {
       video: {
         ...video.videoBestQuality,
         link: video.videoBestQuality.link
-      }
+      },
+      video_pictures: video.video_pictures
     };
   });
 }
@@ -95,10 +95,10 @@ export const getBestQualityVideo = (videos: any[]) => {
   
     if (!hdVideos || hdVideos.length === 0) return null;
   
-    // Objectif de hauteur pour une vidéo 1080p
-    const targetHeight = 1920;
-  
-    // Trier les vidéos HD par proximité avec la hauteur cible (1920 pour 1080p)
+    // Déterminer si la vidéo est verticale ou horizontale et définir la hauteur cible
+    const firstVideo = hdVideos[0];
+    const targetHeight = firstVideo.height > firstVideo.width ? 1920 : 1080;
+
     hdVideos.sort((a, b) => {
       const diffA = Math.abs(a.height - targetHeight);
       const diffB = Math.abs(b.height - targetHeight);
@@ -115,3 +115,10 @@ export const getBestQualityVideo = (videos: any[]) => {
     // Retourner la vidéo la plus proche de la hauteur cible
     return hdVideos[0];
   };
+
+export function getVideoSdQuality(videos: Video[]) {
+    const sdVideos = videos.flatMap(video => video.video_files.filter(file => file.quality === 'sd' && file.height !== null));
+    if (!sdVideos || sdVideos.length === 0) return null;
+    // Retourner la vidéo SD avec la plus grande résolution
+    return sdVideos.reduce((prev, current) => (prev.height! > current.height!) ? prev : current);
+}

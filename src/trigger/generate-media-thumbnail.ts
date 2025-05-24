@@ -1,4 +1,4 @@
-import { task } from "@trigger.dev/sdk/v3";
+import { task } from "@trigger.dev/sdk";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs/promises";
 import os from "os";

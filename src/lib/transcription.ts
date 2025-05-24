@@ -1,5 +1,9 @@
 import { logger } from "@trigger.dev/sdk/v3";
 import { ISequence, IWord } from "../types/video";
+import axios from "axios";
+import FormData from "form-data";
+import { createSieveTranscription, pollSieveTranscriptionStatus } from "./sieve";
+import { calculateWhisperGroqCost, calculateWhisperSieveCost } from "./cost";
 
 interface Utterance {
   text: string;
@@ -12,9 +16,7 @@ interface Utterance {
 
 interface TranscriptionMetadata {
   audio_duration: number;
-  number_of_distinct_channels: number;
-  billing_time: number;
-  transcription_time: number;
+  language: string;
 }
 
 interface SplitSentencesResult {
@@ -43,10 +45,8 @@ export function createLightTranscription(sequences: ISequence[]): LightTranscrip
   }));
 }
 
-export function splitIntoSequences(utterances: Utterance[], sentenceIndex: number): ISequence[] {
-  const allWords = utterances.reduce((acc, utterance) => {
-    return [...acc, ...utterance.words];
-  }, [] as IWord[]);
+export function splitIntoSequences(utterances: Utterance, sentenceIndex: number): ISequence[] {
+  const allWords = utterances.words;
 
   const sequences: ISequence[] = [];
   let currentSequence: IWord[] = [];
@@ -75,60 +75,47 @@ export function splitIntoSequences(utterances: Utterance[], sentenceIndex: numbe
 export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
   const finalSequences: ISequence[] = [];
   let timeOffset = 0;
-  
-  // Initialiser les métadonnées combinées
-  const combinedMetadata: TranscriptionMetadata = {
-    audio_duration: 0,
-    number_of_distinct_channels: 1,
-    billing_time: 0,
-    transcription_time: 0
-  };
 
   for (let i = 0; i < sentences.length; i++) {
-    // Ajouter les métadonnées de la transcription courante
-    const currentMetadata = sentences[i].transcription.metadata;
-    combinedMetadata.billing_time += currentMetadata.billing_time;
-    combinedMetadata.transcription_time += currentMetadata.transcription_time;
+    if (sentences[i].transcription.words.length > 0) {
 
-    // Ajuster les timings des utterances avec l'offset actuel
-    const adjustedUtterances = sentences[i].transcription.transcription.utterances.map((utterance: Utterance) => ({
-      ...utterance,
-      start: utterance.start + timeOffset,
-      end: utterance.end + timeOffset,
-      words: utterance.words.map(word => ({
-        ...word,
-        start: word.start + timeOffset,
-        end: word.end + timeOffset
-      }))
-    }));
+      // Ajuster les timings des utterances avec l'offset actuel
+      const adjusted = {
+        ...sentences[i].transcription,
+        start: sentences[i].transcription.start + timeOffset,
+        end: sentences[i].transcription.end + timeOffset,
+        words: sentences[i].transcription.words.map((word: any) => ({
+          ...word,
+          start: word.start + timeOffset,
+          end: word.end + timeOffset
+        }))
+      }
 
-    logger.info('Adjusted utterances', { adjustedUtterances });
+      // Créer les séquences pour cette phrase
+      const s: ISequence[] = splitIntoSequences(adjusted, sentences[i].index);
 
-    // Créer les séquences pour cette phrase
-    const s: ISequence[] = splitIntoSequences(adjustedUtterances, sentences[i].index);
+      finalSequences.push(...s);
 
-    logger.info('Sequences', { s });
-
-    finalSequences.push(...s);
-
-    // Mettre à jour l'offset pour la prochaine phrase
-    const lastUtterance = adjustedUtterances[adjustedUtterances.length - 1];
-    timeOffset = lastUtterance ? lastUtterance.end : 0;
-
-    logger.info('Time offset', { timeOffset });
+      timeOffset = adjusted.end;
+    }
 
   }
 
   const sequences = adjustSequenceTimings(finalSequences);
 
+  const metadata: TranscriptionMetadata = {
+    audio_duration: 0,
+    language: sentences[0].transcription.language_code
+  };
+
   if (sequences.length > 0) {
     const lastSequence = sequences[sequences.length - 1];
-    combinedMetadata.audio_duration = lastSequence.end;
+    metadata.audio_duration = lastSequence.end;
   }
 
   return {
     sequences: sequences,
-    videoMetadata: combinedMetadata
+    videoMetadata: metadata
   };
 }
 
@@ -166,9 +153,6 @@ export function adjustSequenceTimings(sequences: ISequence[]): ISequence[] {
       const nextSequenceStart = allSequences[index + 1].start;
       lastWord.end = nextSequenceStart;
       sequence.end = nextSequenceStart;
-    } else {
-      lastWord.end += 0.5;
-      sequence.end += 0.5;
     }
     
     lastWord.durationInFrames = timeToFrames(lastWord.end - lastWord.start);
@@ -211,54 +195,158 @@ function mergeShortSequences(sequences: ISequence[]): ISequence[] {
   return result;
 }
 
-export function combineTranscriptions(sentences: any[]): any {
-  let combinedTranscription = {
-      metadata: {
-          audio_duration: 0,
-          number_of_distinct_channels: 1,
-          billing_time: 0,
-          transcription_time: 0
-      },
-      transcription: {
-          languages: ["fr"],
-          utterances: [] as any[],
-          full_transcript: ""
-      }
-  };
+/**
+ * Fusionne les mots avec apostrophe avec le mot précédent
+ */
+const mergeApostropheWords = (words: Array<{ word: string; start: number; end: number; confidence?: number }>) => {
+    const mergedWords = [];
+    
+    for (let i = 0; i < words.length; i++) {
+        const currentWord = words[i];
+        
+        // Si le mot commence par une apostrophe et ce n'est pas le premier mot
+        if (currentWord.word.startsWith("'") && i > 0) {
+            const previousWord = mergedWords[mergedWords.length - 1];
+            // Fusionner avec le mot précédent
+            previousWord.word = previousWord.word + currentWord.word;
+            previousWord.end = currentWord.end;
+        } else {
+            mergedWords.push({ ...currentWord });
+        }
+    }
+    
+    return mergedWords;
+};
 
-  let timeOffset = 0;
-  let fullTranscript: any[] = [];
+class InvalidTimingsError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidTimingsError';
+  }
+}
 
-  sentences.forEach(sentence => {
-      const trans = sentence.transcription;
-      
-      // Mettre à jour les métadonnées
-      combinedTranscription.metadata.audio_duration += trans.metadata.audio_duration;
-      combinedTranscription.metadata.billing_time += trans.metadata.billing_time;
-      combinedTranscription.metadata.transcription_time += trans.metadata.transcription_time;
+/**
+ * Vérifie si les timings de la transcription sont valides
+ */
+function validateTranscriptionTimings(transcription: any): boolean {
+  const duration = transcription.duration;
+  const words = transcription.words;
 
-      // Ajuster les timings pour chaque utterance
-      trans.transcription.utterances.forEach((utterance: any) => {
-          const adjustedUtterance = {
-              ...utterance,
-              start: utterance.start + timeOffset,
-              end: utterance.end + timeOffset,
-              audioIndex: sentence.index,
-              words: utterance.words.map((word: any) => ({
-                  ...word,
-                  start: word.start + timeOffset,
-                  end: word.end + timeOffset
-              }))
-          };
-          combinedTranscription.transcription.utterances.push(adjustedUtterance);
-      });
+  if (!words || words.length === 0) return true;
 
-      fullTranscript.push(trans.transcription.full_transcript);
-      const lastUtterance = trans.transcription.utterances[trans.transcription.utterances.length - 1];
-      timeOffset += lastUtterance ? lastUtterance.end : 0;
-  });
+  // Vérifie si le premier mot commence après la durée totale
+  if (words[0].start > duration) {
+    logger.log('Invalid timing: first word starts after audio duration', { transcription })
+    throw new InvalidTimingsError(`Invalid timing: first word starts after audio duration (${words[0].start}s > ${duration}s)`);
+  }
 
-  combinedTranscription.transcription.full_transcript = fullTranscript.join(" ");
+  // Vérifie si le premier mot commence après 1 seconde
+  if (words[0].start > 1) {
+    logger.log('Invalid timing: first word starts after 1 second', { transcription })
+    throw new InvalidTimingsError(`Invalid timing: first word starts too late (${words[0].start}s > 1s)`);
+  }
 
-  return combinedTranscription;
+  return true;
+}
+
+/**
+ * Récupère la transcription d'un fichier audio à partir d'une URL
+ */
+export const getTranscription = async (audioUrl: string, text?: string) => {
+    const MAX_GROQ_ATTEMPTS = 4;
+    let attempts = 0;
+    let cost = 0;
+
+    while (attempts < MAX_GROQ_ATTEMPTS) {
+        try {
+            const formData = new FormData();
+            formData.append('url', audioUrl);
+            const isTurbo = attempts >= 2;
+            formData.append('model', isTurbo ? 'whisper-large-v3-turbo' : 'whisper-large-v3');
+            
+            if (text) {
+                formData.append('prompt', text);
+            }
+            
+            formData.append('response_format', 'verbose_json');
+            formData.append('timestamp_granularities[]', 'word');
+            
+            const response = await axios.post(
+                'https://api.groq.com/openai/v1/audio/transcriptions',
+                formData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+                        ...formData.getHeaders()
+                    }
+                }
+            );
+
+            validateTranscriptionTimings(response.data);
+            
+            // Calculer le coût en fonction du modèle utilisé
+            cost = calculateWhisperGroqCost(response.data.duration, isTurbo);
+
+            return {
+                text: response.data.text,
+                raw: response.data,
+                cost
+            };
+        } catch (error: any) {
+            attempts++;
+            if (error instanceof InvalidTimingsError) {
+                logger.error(`Erreur de timing Groq (tentative ${attempts}/${MAX_GROQ_ATTEMPTS}):`, { error: error.message });
+            } else {
+                logger.error(`Erreur de transcription Groq (tentative ${attempts}/${MAX_GROQ_ATTEMPTS}):`, { error: error.response });
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Attendre 1 seconde entre les tentatives
+
+            if (attempts >= MAX_GROQ_ATTEMPTS) {
+                logger.warn("Échec des tentatives Groq, basculement vers Sieve");
+                break;
+            }
+        }
+    }
+
+    // Fallback vers Sieve si Groq a échoué
+    try {
+        const jobId = await createSieveTranscription(audioUrl, text);
+        const result = await pollSieveTranscriptionStatus(jobId);
+
+        if (result.status === 'done') {
+            let duration = 0;
+            const sieveResult = result.result;
+            const words = [];
+            let fullText = "";
+
+            // Parcourir tous les segments pour extraire les mots
+            for (const segment of sieveResult.segments) {
+                fullText += segment.text + " ";
+                // Appliquer la fusion des mots avec apostrophe pour chaque segment
+                const mergedWords = mergeApostropheWords(segment.words);
+                words.push(...mergedWords);
+                duration += segment.end - segment.start;
+            }
+
+            cost = calculateWhisperSieveCost(duration);
+
+            return {
+                text: fullText.trim(),
+                raw: {
+                    task: "transcribe",
+                    text: fullText.trim(),
+                    duration: duration,
+                    language: sieveResult.language_code,
+                    segments: null,
+                    words: words
+                },
+                cost
+            };
+        }
+    } catch (error: any) {
+        logger.error("Erreur de transcription Sieve:", error.message);
+    }
+
+    return null;
 }

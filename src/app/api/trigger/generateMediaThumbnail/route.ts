@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/src/lib/auth';
 import { tasks } from '@trigger.dev/sdk/v3';
 
+export const maxDuration = 300;
+
 export async function POST(req: NextRequest) {
   const session = await auth();
 

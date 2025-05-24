@@ -4,7 +4,7 @@ export interface IWord {
   word: string;
   start: number;
   end: number;
-  confidence: number;
+  confidence?: number;
   durationInFrames: number;
 }
 
@@ -22,21 +22,27 @@ export interface IMedia {
       text: string;
     }
   ];
+  position?: {
+    x: number;
+    y: number;
+  };
   video?: {
     id: string;
     quality?: string;
     file_type: string;
     size: number;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
     fps?: number;
     link: string;
   };
+  video_pictures?: any[];
   image?: {
     id: string;
     link: string;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
+    size?: number;
   };
   audio?: {
     id: string;
@@ -53,20 +59,28 @@ export interface ISequence {
   end: number;
   durationInFrames?: number;
   audioIndex: number;
-  keywords?: Array<{
-    search: 'stock' | 'web';
-    keyword: string;
-    precision: 'hard' | 'normal' | 'easy';
-  }>;
   media?: IMedia;
   originalText?: string;
   needsAudioRegeneration?: boolean;
+}
+export interface ITransition {
+  indexSequenceBefore?: number;
+  video: string;
+  thumbnail: string;
+  sound?: string;
+  volume?: number;
+  soundPeakAt?: number;
+  fullAt?: number;
+  durationInFrames?: number;
+  category?: string;
+  mode?: string;
 }
 
 export interface IVideo {
   id?: string;
   spaceId: string; // MongoDB ObjectId as string
   costToGenerate?: number;
+  archived?: boolean;
   state: {
     type: 'pending' | 'generating' | 'done' | 'exporting' | 'error';
     message?: string;
@@ -75,9 +89,13 @@ export interface IVideo {
   style?: string;
   isNews?: boolean;
   runId: string;
+  settings?: {
+    avatarHeightRatio?: number;
+  };
   video?: {
     thumbnail: string;
     subtitle: any;
+    keywords?: string[];
     audio?: {
       voices: {
         url: string;
@@ -98,11 +116,10 @@ export interface IVideo {
     }
     metadata: {
       audio_duration: number;
-      number_of_distinct_channels: number;
-      billing_time: number;
-      transcription_time: number;
+      language: string;
     };
     sequences: ISequence[];
+    transitions?: ITransition[];
     avatar?: AvatarLook
   };
   history?: {

@@ -1,3 +1,5 @@
+import { ISpaceSubtitleStyle } from "../types/space"
+
 export const templates = [
     {
       name: "simple",
@@ -38,16 +40,16 @@ export const templates = [
       ],
     },
     {
-        name: "modern",
-        optionsAvailable: [
-          "secondLine",
-          "animation",
-          "shadow",
-        ],
-      },
+      name: "modern",
+      optionsAvailable: [
+        "secondLine",
+        "animation",
+        "shadow",
+      ],
+    },
 ]
 
-export const subtitles = [
+export const subtitles : ISpaceSubtitleStyle[] = [
     {
         id: '1',
         name: 'Simple',

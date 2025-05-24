@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
 import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
 import mediaSchema from "./Media";
+import avatarSchema from "./Avatar";
+import voiceSchema from "./Voice";
 
 // Schéma pour les membres
 const memberSchema = new mongoose.Schema({
@@ -37,6 +39,10 @@ const planSchema = new mongoose.Schema({
     required: true,
     default: 10,
   },
+  storageLimit: {
+    type: Number,
+    default: 1 * 1024 * 1024 * 1024, // 1 GO par défaut pour le plan gratuit
+  },
   nextPhase: {
     type: Date,
     required: true,
@@ -48,6 +54,21 @@ const planSchema = new mongoose.Schema({
   },
 });
 
+// Schéma pour les détails de l'entreprise
+const companyDetailsSchema = new mongoose.Schema({
+  companyName: String,
+  website: String,
+  companyType: String,
+  companySize: String,
+  salesType: String,
+  companyMission: String,
+  companyTarget: String,
+  companyNeeds: String
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+});
+
 const mediaSpaceSchema = new mongoose.Schema(
   {
     media: mediaSchema,
@@ -55,7 +76,15 @@ const mediaSpaceSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    uploadedAt: Date
+    uploadedAt: Date,
+    autoPlacement: {
+      type: Boolean,
+      default: true
+    }
+  },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
   }
 )
 
@@ -71,7 +100,11 @@ const spaceSchema = new mongoose.Schema(
     plan: planSchema,
     credits: {
       type: Number,
-      default: 30,
+      default: 10,
+    },
+    details: {
+      type: companyDetailsSchema,
+      default: () => ({}),
     },
     subtitleStyle: [
       {
@@ -80,7 +113,23 @@ const spaceSchema = new mongoose.Schema(
           type: Object
         }
       }
-    ]
+    ],
+    avatars: [avatarSchema],
+    voices: [voiceSchema],
+    videoIdeas: {
+      type: [String],
+      default: []
+    },
+    lastUsed: {
+      voices: [],
+      avatars: [],
+      subtitles: [],
+      config: {}
+    },
+    usedStorageBytes: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -89,5 +138,6 @@ const spaceSchema = new mongoose.Schema(
 );
 
 spaceSchema.plugin(toJSON);
+mediaSpaceSchema.plugin(toJSON);
 
 export default mongoose.models.Space || mongoose.model("Space", spaceSchema);

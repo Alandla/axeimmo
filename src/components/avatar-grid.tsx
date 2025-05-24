@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from "@/src/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Button } from "@/src/components/ui/button"
@@ -8,7 +8,7 @@ import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } fro
 import { Badge } from "@/src/components/ui/badge"
 import { Check } from "lucide-react"
 import { useTranslations } from 'next-intl'
-import { avatars } from '../config/avatars.config'
+import { avatarsConfig } from '../config/avatars.config'
 import { Avatar, AvatarLook } from '../types/avatar'
 import { AvatarCard } from './avatar-card'
 import { AvatarLookCard } from './avatar-look-card'
@@ -24,13 +24,16 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/src/components/ui/pagination"
-import { cn } from '@/src/lib/utils'
+import { cn, getMostFrequentString } from '@/src/lib/utils'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { getSpaceAvatars } from '../service/space.service'
+import { HorizontalScrollList } from './ui/horizontal-scroll-list'
 
 export function AvatarGridComponent() {
   const t = useTranslations('avatars')
   const tCommon = useTranslations('common')
 
-  const { selectedVoice } = useCreationStore()
+  const { selectedVoice, setSelectedLook } = useCreationStore()
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedGender, setSelectedGender] = useState<string>(selectedVoice?.gender || 'all')
@@ -38,6 +41,9 @@ export function AvatarGridComponent() {
   const avatarsPerPage = 6
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null)
+  const [avatars, setAvatars] = useState<Avatar[]>(avatarsConfig)
+
+  const { activeSpace, lastUsedParameters } = useActiveSpaceStore()
 
   // Ajouter l'état pour la pagination des looks
   const [currentLookPage, setCurrentLookPage] = useState(1)
@@ -46,7 +52,46 @@ export function AvatarGridComponent() {
   // Obtenir tous les tags uniques
   const allTags = Array.from(new Set(avatars.flatMap(avatar => avatar.tags)))
 
-  // Filtrer les voix
+  useEffect(() => {
+    const fetchSpaceAvatars = async (lastUsed? : String | undefined) => {
+        if (activeSpace?.id) {
+            const spaceAvatars : Avatar[] = await getSpaceAvatars(activeSpace.id)
+            if (spaceAvatars && spaceAvatars.length > 0) {
+              setAvatars([...spaceAvatars, ...avatars]);
+              if (lastUsed) {
+                const avatar = spaceAvatars.find((avatar) => avatar.id === lastUsed);
+                if (avatar) {
+                  const look = avatar.looks.find(l => l.id === lastUsed);
+                  if (look) {
+                    setSelectedLook(look);
+                  }
+                }
+              }
+            }
+        }
+    }
+
+    let lastUsed : String | undefined
+    if (lastUsedParameters) {
+      const mostFrequent = getMostFrequentString(lastUsedParameters.avatars)
+      if (mostFrequent && mostFrequent === "999") {
+        lastUsed = mostFrequent
+        const avatar = avatarsConfig.find((avatar) => avatar.looks.some(look => look.id === lastUsed));
+        if (avatar) {
+          const look = avatar.looks.find(l => l.id === lastUsed);
+          if (look) {
+            setSelectedLook(look);
+          }
+        }
+      }
+    }
+
+    if (activeSpace) {
+        fetchSpaceAvatars(lastUsed)
+    }
+}, [activeSpace])
+
+  // Filtrer les avatars
   const filteredAvatars = avatars.filter(avatar => {
     const matchesSearch = avatar.name.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesGender = selectedGender === 'all' ? true : avatar.gender === selectedGender
@@ -54,7 +99,7 @@ export function AvatarGridComponent() {
     return matchesSearch && matchesGender && matchesTags
   })
 
-  // Calculer les voix pour la page courante
+  // Calculer les avatars pour la page courante
   const indexOfLastAvatar = currentPage * avatarsPerPage
   const indexOfFirstAvatar = indexOfLastAvatar - avatarsPerPage
   const currentAvatars = filteredAvatars.slice(indexOfFirstAvatar, indexOfLastAvatar)
@@ -77,15 +122,6 @@ export function AvatarGridComponent() {
       : [...selectedTags, tag]
     setSelectedTags(newTags)
     handleFilters(filteredAvatars)
-  }
-
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    // Empêche le scroll vertical de la page
-    e.preventDefault();
-    
-    if (e.deltaY !== 0) {
-      e.currentTarget.scrollLeft += e.deltaY;
-    }
   }
 
   // Mettre à jour les gestionnaires d'événements des filtres
@@ -133,7 +169,7 @@ export function AvatarGridComponent() {
 
   const getPageNumbers = () => {
     const pageNumbers = []
-    const totalPagesToShow = 5
+    const totalPagesToShow = 3
     const halfWay = Math.floor(totalPagesToShow / 2)
     
     let startPage = Math.max(currentPage - halfWay, 1)
@@ -251,11 +287,8 @@ export function AvatarGridComponent() {
           </motion.div>
         )}
       </AnimatePresence>
-      <div 
-        className="overflow-x-auto scrollbar-hide mt-2"
-        onWheel={handleWheel}
-      >
-        <div className="flex gap-2">
+      
+      <HorizontalScrollList>
         {activeAvatar ? (
           activeAvatar.tags.map(tag => (
             <Badge
@@ -285,8 +318,7 @@ export function AvatarGridComponent() {
             </Badge>
           ))
         )}
-        </div>
-      </div>
+      </HorizontalScrollList>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
         {activeAvatar ? (
@@ -296,6 +328,7 @@ export function AvatarGridComponent() {
               <AvatarLookCard
                 key={look.id}
                 look={look}
+                avatarName={activeAvatar.name}
               />
             ))
           ) : (

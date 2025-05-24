@@ -1,6 +1,6 @@
 import { Composition } from 'remotion';
 import { VideoGenerate } from './Composition';
-import result from '../../test/mockup/videoResultStoryblocks.json';
+import result from '../../test/mockup/videoResult.json';
 
 const calculateMetadata = ({props}: {props: any}) => {
 	console.log(props)
@@ -22,7 +22,8 @@ export const RemotionRoot = () => {
 				width={1080}
 				height={1920}
 				defaultProps={{
-					data: result
+					data: result,
+					showWatermark: true
 				}}
 				calculateMetadata={calculateMetadata}
 			/>

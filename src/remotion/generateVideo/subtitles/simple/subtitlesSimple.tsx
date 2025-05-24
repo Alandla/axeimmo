@@ -24,7 +24,7 @@ export const formatSubtitles = (
 		return [...acc, ...sequence.words];
 	}, [] as Word[]);
 
-	let startInFrame = 0;
+	let startInFrame = Math.round(sequences[0].start*60) || 0;
 	let mode = style?.mode || 'twoLines';
 
 	if (mode === 'word') {
@@ -116,7 +116,7 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesSimple = ({ subtitleSequences, style }: { subtitleSequences: any, style: any }) => {
+export const SubtitlesSimple = ({ subtitleSequences, style, onStyleChange }: { subtitleSequences: any, style: any, onStyleChange?: (newStyle: any) => void }) => {
 	const { width } = useVideoConfig();
 
 	const subtitles = useMemo(() => {
@@ -124,7 +124,13 @@ export const SubtitlesSimple = ({ subtitleSequences, style }: { subtitleSequence
 		return sub;
 	}, [subtitleSequences, style]);
 
-    let currentFrame = 0;
+    const handlePositionChange = (newPosition: number) => {
+        if (onStyleChange) {
+            onStyleChange(newPosition);
+        }
+    };
+
+    let currentFrame = Math.round(subtitleSequences[0].words[0].startInFrames) || 0;
     
 	return (
 		<>
@@ -134,7 +140,7 @@ export const SubtitlesSimple = ({ subtitleSequences, style }: { subtitleSequence
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleSimple subtitleSequence={subtitle} start={currentFrame} style={style}/>
+						<SubtitleSimple subtitleSequence={subtitle} start={currentFrame} style={style} onPositionChange={handlePositionChange} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

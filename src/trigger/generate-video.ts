@@ -1,32 +1,41 @@
-import { logger, metadata, task, wait } from "@trigger.dev/sdk/v3";
+import { logger, metadata, task, wait } from "@trigger.dev/sdk";
 import { Steps } from "../types/step";
 import { Voice } from "../types/voice";
 import { AvatarLook } from "../types/avatar";
 import { createAudioTTS } from "../lib/elevenlabs";
 import { uploadToS3Audio } from "../lib/r2";
-import { createTranscription, getTranscription } from "../lib/gladia";
+import { transitions, sounds } from "../config/transitions.config";
+import { ITransition, ISequence } from "../types/video";
 
 import transcriptionMock from "../test/mockup/transcriptionComplete.json";
 import keywordsMock from "../test/mockup/keywordsResponse.json";
 import sequencesWithMediaMock from "../test/mockup/sequencesWithMedia.json";
 import sentencesMock from "../test/mockup/sentences.json";
+import sentencesNoTranscriptionMock from "../test/mockup/sentencesNoTranscription.json";
+import sentencesWithNewTranscriptionMock from "../test/mockup/sentencesWithNewTranscription.json";
 
-import { createLightTranscription, ISentence, splitSentences } from "../lib/transcription";
-import { generateKeywords } from "../lib/keywords";
+import { createLightTranscription, getTranscription, ISentence, splitSentences } from "../lib/transcription";
 import { calculateElevenLabsCost } from "../lib/cost";
-import { mediaToMediaSpace, searchMediaForSequence } from "../service/media.service";
-import { IMedia, ISequence, IVideo } from "../types/video";
+import { mediaToMediaSpace, searchMediaForKeywords, searchGoogleImagesForQueries } from "../service/media.service";
+import { IMedia, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
-import { generateBrollDisplay, generateStartData, matchMediaToSequences } from "../lib/ai";
+import { generateStartData } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
-import { analyzeSimpleVideoWithSieve, analyzeVideoWithSieve, getAnalysisResult, getJobCost, SieveCostResponse } from "../lib/sieve";
-import { applyShowBrollToSequences, ShowBrollResult, simplifyMedia, simplifySequences } from "../lib/analyse";
+import { getJobCost, SieveCostResponse } from "../lib/sieve";
+import { simplifyMediaFromPexels, simplifySequences, simplifyGoogleMedias } from "../lib/analyse";
 import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
-import { addMediasToSpace } from "../dao/spaceDao";
-import { IMediaSpace } from "../types/space";
-import { addVideoCountContact } from "../lib/loops";
-import { generateThumbnail } from "../lib/render";
+import { addMediasToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
+import { IMediaSpace, ISpace } from "../types/space";
+import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
+import { getMostFrequentString } from "../lib/utils";
+import { MixpanelEvent } from "../types/events";
+import { track } from "../utils/mixpanel-server";
+import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, analyzeVideoSequence, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun } from "../lib/workflowai";
+import { analyzeImage } from "../lib/ai";
+import { PlanName } from "../types/enums";
+
+import { extractFramesFromVideo } from "../lib/ffmpeg";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -36,6 +45,7 @@ interface GenerateVideoPayload {
   voice: Voice
   avatar: AvatarLook
   mediaSource: string
+  webSearch: boolean
 }
 
 export const generateVideoTask = task({
@@ -43,13 +53,19 @@ export const generateVideoTask = task({
   machine: {
     preset: "medium-1x"
   },
-  maxDuration: 300, // Stop executing after 300 secs (5 mins) of compute
+  maxDuration: 600, // Stop executing after 300 secs (5 mins) of compute
   run: async (payload: GenerateVideoPayload, { ctx }) => {
 
     let cost = 0
     const mediaSource = payload.mediaSource || "PEXELS";
+    const ENABLE_GOOGLE_IMAGES_SEARCH = false;
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
+
+    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+
     let videoStyle: string | undefined;
+    let spacePlan: string = PlanName.FREE;
+    let scriptLength = payload.script ? payload.script.length : 0;
 
     logger.log("Generating video...", { payload, ctx });
 
@@ -68,9 +84,281 @@ export const generateVideoTask = task({
 
     let newVideo = await createVideo(video)
 
+    /*
+    /
+    /   Analyze user medias in parallel
+    /
+    */
+    let userMediaAnalysisPromise: Promise<IMediaSpace[]> | null = null;
+    let analyzedMedias: IMediaSpace[] = [];
+    
+    if (payload.files.some(file => file.usage === 'media')) {
+      logger.log(`[ANALYZE] Starting user media analysis in parallel...`);
+      
+      // Commencer l'analyse des médias utilisateur en parallèle
+      const userMediaAnalysis = async () => {
+        const mediasToAnalyze = payload.files.filter(file => file.usage === 'media');
+        const analyzedMedias: IMediaSpace[] = [];
+        
+        // Analyser tous les médias en parallèle
+        const mediaAnalysisPromises = mediasToAnalyze.map(async (media) => {
+          try {
+            let descriptions: [{ start: number, duration?: number, text: string }] | undefined;
+            
+            if (media.type === 'video' && media.video?.link) {
+              // Extraire les frames de la vidéo
+              logger.log(`[ANALYZE] Extracting frames from video: ${media.video.link}`);
+              const frames = await extractFramesFromVideo(media.video.link);
+              
+              // Analyser les frames avec WorkflowAI
+              logger.log(`[ANALYZE] Analyzing video frames with WorkflowAI`);
+              const { sequences: videoSequences, cost: sequenceCost } = await analyzeVideoSequence(frames);
+              cost += sequenceCost;
+              
+              // Convertir les séquences en descriptions
+              descriptions = videoSequences
+                .filter(seq => seq.description) // On garde uniquement les séquences avec une description
+                .map(seq => ({
+                  start: seq.start_timestamp || 0,
+                  duration: seq.duration,
+                  text: seq.description || ""
+                })) as [{ start: number, duration?: number, text: string }];
+              
+            } else if (media.type === 'image' && media.image?.link) {
+              // Analyser l'image avec Groq
+              logger.log(`[ANALYZE] Analyzing image with Groq: ${media.image.link}`);
+              const analysis = await analyzeImage(media.image.link);
+              
+              if (analysis) {
+                descriptions = [{
+                  start: 0,
+                  text: analysis.description
+                }];
+              }
+            }
+            
+            if (descriptions) {
+              return mediaToMediaSpace([{
+                ...media,
+                description: descriptions
+              }], payload.userId)[0];
+            }
+            
+            return null;
+          } catch (error) {
+            logger.error(`[ANALYZE] Error analyzing media:`, {
+              mediaId: media.id,
+              error: error instanceof Error ? error.message : String(error)
+            });
+            return null;
+          }
+        });
+        
+        // Attendre que toutes les analyses soient terminées et filtrer les résultats null
+        const results = await Promise.all(mediaAnalysisPromises);
+        const validResults = results.filter(result => result !== null) as IMediaSpace[];
+        
+        // Ajouter les résultats valides à analyzedMedias
+        analyzedMedias.push(...validResults);
+
+        if (analyzedMedias.length > 0) {
+          logger.log(`[ANALYZE] Adding analyzed medias to space`);
+          await addMediasToSpace(payload.spaceId, analyzedMedias);
+        }
+        
+        return analyzedMedias;
+      };
+      
+      logger.log(`[ANALYZE] User media analysis started in background`);
+
+      userMediaAnalysisPromise = userMediaAnalysis();
+    }
+    
+    // Méthode complète pour la recherche et l'analyse d'images Google
+    let googleImagesSearchPromise: Promise<IMedia[]> | null = null;
+    let googleImagesResults: IMedia[] = [];
+
+    const searchAndAnalyzeGoogleImages = async (script: string) => {
+      try {
+        logger.log(`[GOOGLE_IMAGES] Starting Google Images workflow`);
+        
+        // Étape 1: Générer les requêtes d'images avec WorkflowAI
+        logger.log(`[GOOGLE_IMAGES] Generating image search queries from script...`);
+        
+        if (isDevelopment) {
+          logger.log(`[GOOGLE_IMAGES] Development mode, skipping query generation`);
+          return [];
+        }
+        
+        const { queries, cost: queriesCost } = await videoScriptImageSearchRun(script);
+        cost += queriesCost;
+        
+        if (!queries || queries.length === 0) {
+          logger.log(`[GOOGLE_IMAGES] No queries generated, aborting Google Images search`);
+          return [];
+        }
+        
+        logger.log(`[GOOGLE_IMAGES] Generated ${queries.length} search queries with cost $${queriesCost}`);
+        
+        // Étape 2: Rechercher les images avec les requêtes générées
+        logger.log(`[GOOGLE_IMAGES] Searching Google Images for ${queries.length} queries...`);
+        const searchResults = await searchGoogleImagesForQueries(queries, 5);
+        
+        if (searchResults.length === 0) {
+          logger.log(`[GOOGLE_IMAGES] No images found from Google, aborting`);
+          return [];
+        }
+        
+        logger.log(`[GOOGLE_IMAGES] Found ${searchResults.length} images from Google`);
+        
+        // Étape 3: Analyser les images trouvées
+        logger.log(`[GOOGLE_IMAGES] Analyzing Google Images...`);
+        
+        const analyzedMedias: IMedia[] = [];
+        
+        // Analyser toutes les images en parallèle
+        const analysisPromises = searchResults.map(async (result) => {
+          try {
+            const media = result.media;
+            
+            if (media.type === 'image' && media.image?.link) {
+              // Analyser l'image avec Groq
+              logger.log(`[GOOGLE_IMAGES] Analyzing image with Groq: ${media.image.link}`);
+              const analysis = await analyzeImage(media.image.link);
+              
+              if (analysis) {
+                const mediaWithDescription = {
+                  ...media,
+                  description: [{
+                    start: 0,
+                    text: analysis.description
+                  }] as [{ start: number, duration?: number, text: string }]
+                };
+                
+                return mediaWithDescription;
+              }
+            }
+            
+            return null;
+          } catch (error) {
+            logger.error(`[GOOGLE_IMAGES] Error analyzing image:`, {
+              mediaId: result.media.id,
+              error: error instanceof Error ? error.message : String(error)
+            });
+            return null;
+          }
+        });
+        
+        // Attendre que toutes les analyses soient terminées et filtrer les résultats null
+        const results = await Promise.all(analysisPromises);
+        const validResults = results.filter(result => result !== null) as IMedia[];
+        
+        // Ajouter les résultats valides
+        analyzedMedias.push(...validResults);
+        
+        return analyzedMedias;
+      } catch (error) {
+        logger.error(`[GOOGLE_IMAGES] Error in Google Images workflow:`, {
+          error: error instanceof Error ? error.message : String(error)
+        });
+        return [];
+      }
+    };
+
+    // Lancer la recherche d'images Google en parallèle si on a un script et webSearch est activé
+    if (payload.script && payload.webSearch && ENABLE_GOOGLE_IMAGES_SEARCH) {
+      logger.log(`[GOOGLE_IMAGES] Starting Google Images search in parallel with provided script`);
+      googleImagesSearchPromise = searchAndAnalyzeGoogleImages(payload.script);
+    }
+
+    /*
+    /
+    /   Get Space and filter media if PRO/ENTREPRISE
+    /
+    */
+    let userMediasFilteredPromise: Promise<IMediaSpace[]> | null = null;
+    let userMediasFiltered: IMediaSpace[] = [];
+    
+    // Récupérer les informations du space pour connaître le plan
+    logger.log(`[MEDIA] Getting space information for media filtering...`);
+    const getSpaceAndFilterMedias = async (videoScript: string) => {
+      try {
+        // Récupérer les informations sur le space
+        const space = await getSpaceById(payload.spaceId);
+        
+        if (!space) {
+          logger.error(`[MEDIA] Space not found: ${payload.spaceId}`);
+          return [];
+        }
+
+        spacePlan = space.plan?.name;
+        if (space.plan && (space.plan.name === PlanName.PRO || space.plan.name === PlanName.ENTREPRISE)) {
+
+          if (videoScript && space.medias && space.medias.length > 0) {
+            const availableMedias = space.medias
+              .filter((mediaSpace: IMediaSpace) => 
+                mediaSpace.autoPlacement !== false && 
+                mediaSpace.media.description && 
+                mediaSpace.media.description.length > 0 &&
+                mediaSpace.media.description.some((desc: {text: string}) => desc.text)
+              )
+              .map((mediaSpace: IMediaSpace, index: number) => ({
+                id: mediaSpace.media.id || String(index),
+                descriptions: mediaSpace.media.description?.map((desc: {text: string}) => desc.text) || []
+              }));
+            
+            if (availableMedias.length > 0) {
+              logger.log(`[MEDIA] Filtering ${availableMedias.length} medias with WorkflowAI`);
+              
+              const { recommendedMedia, cost: filterCost } = await mediaRecommendationFilterRun(
+                videoScript, 
+                availableMedias
+              );
+              
+              cost += filterCost;
+              logger.log(`[MEDIA] Filtering cost: $${filterCost}`);
+
+              if (recommendedMedia.length > 0) {
+                const filteredMedias = space.medias.filter((mediaSpace: IMediaSpace) => 
+                  recommendedMedia.includes(mediaSpace.media.id || "")
+                );
+                
+                logger.log(`[MEDIA] Found ${filteredMedias.length} matching medias from ${recommendedMedia.length} recommended IDs`);
+                return filteredMedias;
+              } else {
+                logger.log(`[MEDIA] No media IDs recommended by WorkflowAI`);
+              }
+            } else {
+              logger.log(`[MEDIA] No media with descriptions found for filtering`);
+            }
+          } else {
+            logger.log(`[MEDIA] No script or medias available for filtering`);
+          }
+        } else {
+          logger.log(`[MEDIA] Plan ${space.plan?.name} doesn't support media filtering`);
+        }
+        
+        return [];
+      } catch (error) {
+        logger.error(`[MEDIA] Error filtering medias:`, {
+          error: error instanceof Error ? error.message : String(error)
+        });
+        return [];
+      }
+    };
+    
+    // Lancer la promesse de filtrage des médias en parallèle si on a déjà un script
+    if (payload.script) {
+      userMediasFilteredPromise = getSpaceAndFilterMedias(payload.script);
+      logger.log(`[MEDIA] Media filtering process started in background with provided script`);
+    }
+
+    // Initialiser un objet pour stocker la promesse de génération des mots-clés
+    let keywordsPromise: Promise<any> | null = null
+    let keywords: any;
+
     if (payload.script) {
       const startData = generateStartData(payload.script).then((data) => {
-        logger.info('Start data', data?.details)
         videoStyle = data?.details.style
         newVideo = {
           title: data?.details.title,
@@ -83,6 +371,30 @@ export const generateVideoTask = task({
 
         return data?.details
       })
+
+      /*
+      /
+      /   Generate keywords
+      /
+      */
+
+      logger.log(`[KEYWORDS] Starting keyword generation in parallel...`)
+
+      if (isDevelopment) {
+        keywordsPromise = Promise.resolve(keywordsMock)
+      } else {
+        // Lancer la génération des mots-clés en parallèle
+        keywordsPromise = videoScriptKeywordExtractionRun(payload.script).then(resultKeywords => {
+          keywords = resultKeywords?.output?.keywords || []
+          cost += resultKeywords?.cost || 0
+
+          logger.log('[KEYWORDS] Result', { keywords: resultKeywords?.output?.keywords || [] })
+          logger.log('[KEYWORDS] Cost', { cost: resultKeywords?.cost || 0 })
+          return keywords
+        })
+
+        logger.log(`[KEYWORDS] Keyword generation started in background`)
+      }
     }
 
     /*
@@ -95,13 +407,13 @@ export const generateVideoTask = task({
     logger.log(`[VOICE] Start voice generation...`)
     let sentences: ISentence[] = [];
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    if (isDevelopment) {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
       })
 
-      sentences = sentencesMock
+      sentences = sentencesWithNewTranscriptionMock
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
@@ -123,15 +435,48 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      const rawSentences = payload.script.match(/[^.!?]+[.!?]+/g) || [payload.script];
+      const sentencesCut = payload.script
+        .replace(/\.\.\./g, '___ELLIPSIS___') // Remplace temporary points of ellipsis
+        .split(/(?<=[.!?])\s+(?=[A-Z])/g)
+        .map(sentence => sentence.trim())
+        .filter(sentence => sentence.length > 0);
+
+      // Restore ellipsis
+      const processedSentencesCut = sentencesCut.map(sentence => 
+        sentence.replace(/___ELLIPSIS___/g, '...')
+      );
+      
+      const rawSentences = [];
+      
+      for (let i = 0; i < processedSentencesCut.length; i++) {
+        const currentSentence = processedSentencesCut[i].trim();
+        
+        // Check if it's the last sentence
+        if (i === processedSentencesCut.length - 1) {
+          rawSentences.push(currentSentence);
+          continue;
+        }
+        
+        // Count the words of the next sentence
+        const nextSentence = processedSentencesCut[i + 1].trim();
+        const nextSentenceWordCount = nextSentence.split(/\s+/).length;
+        
+        if (nextSentenceWordCount < 4) {
+          // Combine with the next sentence
+          rawSentences.push(currentSentence + ' ' + nextSentence);
+          i++; // Skip the next sentence
+        } else {
+          rawSentences.push(currentSentence);
+        }
+      }
       let processedCount = 0;
 
-      // Traiter les phrases par lots de 5
-      for (let i = 0; i < rawSentences.length; i += 5) {
-        const batch = rawSentences.slice(i, Math.min(i + 5, rawSentences.length));
+      // Process sentences by batches of 5
+      for (let i = 0; i < rawSentences.length; i += 15) {
+        const batch = rawSentences.slice(i, Math.min(i + 15, rawSentences.length));
         
         const batchPromises = batch.map(async (text, batchIndex) => {
-          const globalIndex = i + batchIndex; // Index global pour maintenir l'ordre
+          const globalIndex = i + batchIndex; // Global index to maintain order
           try {
             const audioBuffer = await createAudioTTS(
               payload.voice.id,
@@ -140,7 +485,7 @@ export const generateVideoTask = task({
               true
             );
             
-            // Upload directement après la génération
+            // Upload directly after generation
             const audioUrl = await uploadToS3Audio(audioBuffer, 'medias-users');
 
 
@@ -200,6 +545,13 @@ export const generateVideoTask = task({
       })
     }
 
+    await metadata.replace({
+      name: Steps.VOICE_GENERATION,
+      progress: 100
+    });
+
+    logger.log(`[VOICE] Voice generation done`)
+
     logger.info('Sentences', { sentences })
 
     /*
@@ -214,41 +566,64 @@ export const generateVideoTask = task({
       progress: 0
     })
 
-    if (ctx.environment.type !== "DEVELOPMENT") {
-      let processedTranscriptions = 0;
-      
-      // On utilise un seul wait.for() pour contrôler le rythme global
-      for (let i = 0; i < sentences.length; i += 10) {
-        const batch = sentences.slice(i, Math.min(i + 10, sentences.length));
-        
-        const transcriptionPromises = batch.map(async (sentence) => {
-          if (!sentence.audioUrl) throw new Error("Audio URL missing");
-          
-          const transcriptionResponse = await createTranscription(sentence.audioUrl, sentence.text);
-          const result = await pollTranscriptionStatus(transcriptionResponse.id);
+    if (!isDevelopment) {
+      try {
+        const totalSentences = sentences.length;
+        let transcribedCount = 0;
+        let transcriptionCost = 0;
+        const transcriptionPromises = sentences.map(async (sentence, index) => {
+          try {
+            const transcriptionResult = await getTranscription(sentence.audioUrl, sentence.text);
+            
+            if (!transcriptionResult) {
+              return sentence;
+            }
+            
+            transcribedCount++;
 
-          processedTranscriptions++
-          await metadata.replace({
-            name: Steps.TRANSCRIPTION,
-            progress: Math.round((processedTranscriptions / sentences.length) * 100)
-          });
+            await metadata.replace({
+              name: Steps.TRANSCRIPTION,
+              progress: Math.round((transcribedCount / totalSentences) * 100)
+            });
+            
+            logger.info(`Transcription ${index + 1}/${totalSentences} completed`, { transcriptionResult });
 
-          return {
-            index: sentence.index,
-            result
-          };
-        });
+            transcriptionCost += transcriptionResult.cost;
 
-        const transcriptionResults = await Promise.all(transcriptionPromises);
-        
-        transcriptionResults.forEach(({ index, result }) => {
-          const sentence = sentences.find(s => s.index === index);
-          if (sentence) {
-            sentence.transcription = result.result;
+            
+            const words = transcriptionResult.raw.words;
+            
+            return {
+              ...sentence,
+              transcription: {
+                text: transcriptionResult.text,
+                language: transcriptionResult.raw.language,
+                start: words.length > 0 ? words[0].start : 0,
+                end: words.length > 0 ? words[words.length - 1].end : 0,
+                words: words
+              }
+            };
+          } catch (error) {
+            logger.error(`Error transcribing sentence ${index}:`, { errorMessage: error instanceof Error ? error.message : String(error) });
+            return sentence;
           }
         });
+
+        sentences = await Promise.all(transcriptionPromises);
+        cost += transcriptionCost;
+        
+        logger.info(`All sentences transcribed`, { totalCount: sentences.length, cost: transcriptionCost });
+      } catch (error) {
+        logger.error('Error in transcription process', { errorMessage: error instanceof Error ? error.message : String(error) });
       }
     }
+
+    await metadata.replace({
+      name: Steps.TRANSCRIPTION,
+      progress: 100
+    })
+
+    logger.log(`[TRANSCRIPTION] Transcription done`)
 
     /*
     /
@@ -257,16 +632,20 @@ export const generateVideoTask = task({
     /
     */
 
+    logger.info('Sentences with transcription', { sentences })
+
     let { sequences, videoMetadata } = splitSentences(sentences);
     const lightTranscription = createLightTranscription(sequences);
-    const voices = extractVoiceSegments(sequences, sentences, payload.voice.id);
+    const voices = extractVoiceSegments(sequences, sentences, payload.voice ? payload.voice.id : undefined);
 
     logger.info('Sequences', { sequences })
     logger.info('Light transcription', { lightTranscription })
     logger.info('Voices', { voices })
     
-    if (!payload.script) {
+    // Si pas de script en entrée, générer les mots-clés à partir du script transcrit
+    if (!payload.script && !keywordsPromise) {
       const script = lightTranscription.map(item => item.text).join(' ');
+      scriptLength = script.length;
       const startData = generateStartData(script).then((data) => {
         logger.info('Start data', data?.details)
         videoStyle = data?.details.style
@@ -281,113 +660,53 @@ export const generateVideoTask = task({
 
         return data?.details
       })
-    }
 
-    await metadata.replace({
-      name: Steps.TRANSCRIPTION,
-      progress: 100
-    })
+      // Générer les mots-clés maintenant que nous avons le script transcrit
+      logger.log(`[KEYWORDS] Starting keyword generation from transcription...`)
 
-    logger.log(`[TRANSCRIPTION] Transcription done`)
+      if (isDevelopment) {
+        keywordsPromise = Promise.resolve(keywordsMock)
+      } else {
+        keywordsPromise = videoScriptKeywordExtractionRun(script).then(resultKeywords => {
+          keywords = resultKeywords?.output?.keywords || []
+          cost += resultKeywords?.cost || 0
 
-    /*
-    /
-    /   Generate keywords
-    /
-    */
+          logger.log('[KEYWORDS] Result', { keywords: resultKeywords?.output?.keywords || [] })
+          logger.log('[KEYWORDS] Cost', { cost: resultKeywords?.cost || 0 })
+          return keywords
+        })
 
-    logger.log(`[ANALYZE] Start analyze...`)
-
-    if (payload.files.some(file => file.usage === 'media')) {
-      await metadata.replace({
-        name: Steps.ANALYZE_YOUR_MEDIA,
-        progress: 0
-      })
+        logger.log(`[KEYWORDS] Keyword generation from transcription started`)
+      }
       
-      const mediasToAnalyze = payload.files.filter(file => file.usage === 'media');
+      // Lancer le filtrage des médias si nous n'avions pas de script au départ
+      if (!userMediasFilteredPromise) {
+        userMediasFilteredPromise = getSpaceAndFilterMedias(script);
+      }
 
-      const { medias: analyzedMedias, totalCost } = await processBatchWithSieve(mediasToAnalyze, {
-        isDetailedAnalysis: true,
-        onProgress: async (progress) => {
-          await metadata.replace({
-            name: Steps.ANALYZE_YOUR_MEDIA,
-            progress
-          });
-        }
-      });
-
-      logger.info('Analyzed medias', { analyzedMedias })
-
-      const mediasSpace : IMediaSpace[] = mediaToMediaSpace(analyzedMedias, payload.userId)
-
-      await addMediasToSpace(payload.spaceId, mediasSpace)
-
-      logger.info('Analyzed medias', { analyzedMedias })
-      logger.info('Total cost', { totalCost })
-
-      const simplifiedMedia = simplifyMedia(analyzedMedias)
-      const assignments = await matchMediaToSequences(lightTranscription, simplifiedMedia)
-
-      logger.info('Sequences', { lightTranscription })
-      logger.info('Simplified media', { simplifiedMedia })
-      logger.info('Assignments', { assignments })
-
-      // Mettre à jour les séquences avec les médias assignés en utilisant l'index
-      sequences = sequences.map((sequence, index) => {
-        const assignment = assignments?.assignments.find((a: any) => a.sequenceId === index);
-        if (assignment) {
-          const media = analyzedMedias[assignment.mediaId];
-          if (media) {
-            return {
-              ...sequence,
-              media: {
-                ...media,
-                startAt: media.description && media.description.length > 1 ? media.description[assignment.description_index].start : 0,
-                description: media.description ? [media.description[assignment.description_index]] : undefined
-              }
-            };
-          }
-        }
-        return sequence;
-      });
-
-      logger.info('Sequences with media', { sequences })
-
-      await metadata.replace({
-        name: Steps.ANALYZE_YOUR_MEDIA,
-        progress: 100
-      })
+      // Lancer la recherche d'images Google si nous n'avions pas de script au départ
+      if (payload.webSearch && !googleImagesSearchPromise && ENABLE_GOOGLE_IMAGES_SEARCH) {
+        logger.log(`[GOOGLE_IMAGES] Starting Google Images search with transcribed script`);
+        googleImagesSearchPromise = searchAndAnalyzeGoogleImages(script);
+      }
     }
     
-
     /*
     /
-    /   Generate keywords
+    /   Attendre que les mots-clés soient générés
     /
     */
-
-    logger.log(`[KEYWORDS] Search keywords...`)
 
     await metadata.replace({
       name: Steps.SEARCH_MEDIA,
-      progress: 0
-    })
+      progress: 0,
+    });
 
-    let keywords: any;
-
-    if (ctx.environment.type === "DEVELOPMENT") {
-      keywords = keywordsMock
-    } else {
-      const resultKeywords = await generateKeywords(lightTranscription)
-      keywords = resultKeywords?.keywords
-
-      cost += resultKeywords?.cost || 0
-
-      logger.info('Keywords', resultKeywords?.keywords)
-      logger.info('Cost', { cost: resultKeywords?.cost })
+    if (keywordsPromise) {
+      logger.log(`[KEYWORDS] Waiting for keywords to complete...`)
+      keywords = await keywordsPromise
+      logger.log(`[KEYWORDS] Keywords generation completed`)
     }
-
-    logger.log(`[KEYWORDS] Keywords done`)
 
     /*
     /
@@ -397,90 +716,406 @@ export const generateVideoTask = task({
 
     logger.log(`[MEDIA] Search media...`);
 
-    if (ctx.environment.type === "DEVELOPMENT") {
+    let mediaResults = []
+
+    if (isDevelopment) {
       sequences = sequencesWithMediaMock as ISequence[]
     } else {
-      const batchSize = 5;
-      const updatedSequences = [];
 
-      for (let i = 0; i < sequences.length; i += batchSize) {
-          const batch = sequences.slice(i, i + batchSize);
-          const batchPromises = batch.map((sequence, idx) => {
-              return searchMediaForSequence(sequence, i + idx, keywords, mediaSource);
-          });
-
-          const completedBatch = await Promise.all(batchPromises);
-          updatedSequences.push(...completedBatch);
-
-          // Update progress
-          const progress = Math.round((updatedSequences.length / sequences.length) * 100);
-          await metadata.replace({
-              name: Steps.SEARCH_MEDIA,
-              progress
-          });
+      let mediaCount = 6;
+      
+      // Si plus de 2000 caractères, on ajoute 5 mots-clés
+      if (scriptLength > 2000) {
+        mediaCount += 4;
       }
 
-      sequences = updatedSequences;
+      mediaResults = await searchMediaForKeywords(keywords, mediaSource, mediaCount);
 
+      logger.log(`[MEDIA] Media search completed with ${mediaResults.length} medias for ${Array.from(new Set(mediaResults.map(r => r.keyword))).length} unique keywords`);
+      
       await metadata.replace({
         name: Steps.SEARCH_MEDIA,
         progress: 100,
       });
 
-      logger.log(`[MEDIA] Media search completed`)
+      /*
+      /
+      /   Analyze media from stock with WorkflowAI
+      /
+      */
+      
+      if (mediaResults.length > 0) {
+        logger.log(`[ANALYZE] Starting media analysis with WorkflowAI...`);
+        
+        await metadata.replace({
+          name: Steps.ANALYZE_FOUND_MEDIA,
+          progress: 0
+        });
+        
+        // Pour suivre le coût total de l'analyse
+        let costForAnalysis = 0;
+        let completedAnalyses = 0;
+        const totalMedias = mediaResults.length;
+        
+        // Préparer les promesses d'analyse pour tous les médias en parallèle
+        const analysisPromises = mediaResults.map(async (mediaResult, index) => {
+          try {
+            const media = mediaResult.media;
+            
+            // Si c'est une vidéo et qu'elle a des images de prévisualisation
+            if (media.type === 'video' && media.video_pictures && media.video_pictures.length >= 4) {
+              // Extraire 4 images de preview de la vidéo
+              const videoPreviewUrls = media.video_pictures.slice(0, 4).map((pic: { link?: string, picture?: string }) => pic.link || pic.picture);
+              
+              // Générer la description avec WorkflowAI
+              const { description, cost } = await generateVideoDescription(videoPreviewUrls);
+              
+              // Mettre à jour le coût total
+              costForAnalysis += cost;
+              
+              // Mettre à jour le média avec la description
+              if (description) {
+                // Ajouter la description au média
+                mediaResult.media = {
+                  ...media,
+                  description: [{
+                    start: 0,
+                    text: description
+                  }]
+                };
+                
+                logger.log(`[ANALYZE] Description generated for media ${index + 1}`, { 
+                  mediaId: media.video?.id,
+                  description: description.substring(0, 100) + '...'
+                });
+              }
 
+              await metadata.replace({
+                name: Steps.ANALYZE_FOUND_MEDIA,
+                progress: Math.round((completedAnalyses / totalMedias) * 100)
+              });
+
+            } else {
+              logger.info(`[ANALYZE] Skipping media ${index + 1} (not a video or insufficient preview images)`, {
+                mediaId: media.video?.id || media.image?.id,
+                type: media.type
+              });
+            }
+            
+            // Mettre à jour le compteur et la progression
+            completedAnalyses++;
+            
+            return mediaResult;
+          } catch (error) {
+            logger.error(`[ANALYZE] Error analyzing media ${index + 1}`, {
+              mediaId: mediaResult.media.video?.id || mediaResult.media.image?.id,
+              error: error instanceof Error ? error.message : String(error)
+            });
+            
+            // Mettre à jour le compteur et la progression même en cas d'erreur
+            completedAnalyses++;
+            
+            return mediaResult;
+          }
+        });
+        
+        // Attendre que toutes les analyses soient terminées
+        await Promise.all(analysisPromises);
+        
+        // Ajouter le coût de l'analyse au coût total
+        cost += costForAnalysis;
+        
+        logger.log(`[ANALYZE] Media analysis completed for ${completedAnalyses}/${totalMedias} medias`);
+        logger.info(`[ANALYZE] Cost for media analysis: $${costForAnalysis}`);
+        
+        await metadata.replace({
+          name: Steps.ANALYZE_FOUND_MEDIA,
+          progress: 100
+        });
+      }
     }
 
     /*
     /
-    /   Analyze
+    /   Attendre que les médias utilisateur soient analysés
     /
     */
 
-    if (ctx.environment.type !== "DEVELOPMENT" && (payload.avatar || avatarFile)) {
-      logger.log(`[ANALYSIS] Starting media analysis...`);
-      
-      const mediasToAnalyze = sequences.map(seq => seq.media)
-        .filter((media): media is IMedia => 
-          !!media && !media.description // On ne garde que les médias sans description
-        );
-      console.log('Medias to analyze', { mediasToAnalyze })
-      const { medias: analyzedMedias, totalCost } = await processBatchWithSieve(mediasToAnalyze, {
-        isDetailedAnalysis: false,
-        onProgress: async (progress) => {
-          await metadata.replace({
-            name: Steps.ANALYZE_NEW_MEDIA,
-            progress
-          });
-        }
+    if (userMediaAnalysisPromise) {
+      await metadata.replace({
+        name: Steps.ANALYZE_YOUR_MEDIA,
+        progress: 0,
       });
 
-      sequences = sequences.map(seq => {
-        if (seq.media) {
-          const analyzedMedia = analyzedMedias.find(m => 
-            (m.video?.id === seq.media?.video?.id) || 
-            (m.image?.id === seq.media?.image?.id)
-          );
-          return {
-            ...seq,
-            media: analyzedMedia || seq.media
-          };
-        }
-        return seq;
-      });
+      logger.log(`[ANALYZE] Waiting for user media analysis to complete...`)
+      analyzedMedias = await userMediaAnalysisPromise;
+      logger.log(`[ANALYZE] User media analysis completed`, { count: analyzedMedias.length });
 
-      cost += totalCost;
-      logger.info(`Analyse vidéo terminée. Coût total: $${totalCost}`);
-      const dataForAnalysis = simplifySequences(sequences);
-      logger.info('Data for analysis', { dataForAnalysis })
-      const showBrollResult : ShowBrollResult | null = await generateBrollDisplay(dataForAnalysis)
-      logger.info('Show broll result', { showBrollResult })
-      if (showBrollResult) {
-        sequences = applyShowBrollToSequences(sequences, showBrollResult)
-      }
+      await metadata.replace({
+        name: Steps.ANALYZE_YOUR_MEDIA,
+        progress: 100,
+      });
     }
 
-    logger.info('Sequences taille', { size: sequences.length })
+    /*
+    /
+    /   Attendre que le filtrage des médias soit terminé
+    /
+    */
+    if (userMediasFilteredPromise && (spacePlan === PlanName.PRO || spacePlan === PlanName.ENTREPRISE)) {
+      logger.log(`[MEDIA] Waiting for media filtering to complete...`);
+      userMediasFiltered = await userMediasFilteredPromise;
+      logger.log(`[MEDIA] Media filtering completed with ${userMediasFiltered.length} filtered medias`, { userMediasFiltered });
+    }
+
+    /*
+    /
+    /   Attendre que les images Google soient recherchées
+    /
+    */
+
+    if (googleImagesSearchPromise) {
+      await metadata.replace({
+        name: Steps.SEARCH_GOOGLE_IMAGES,
+        progress: 0,
+      });
+
+      logger.log(`[GOOGLE_IMAGES] Waiting for Google Images search to complete...`)
+      googleImagesResults = await googleImagesSearchPromise
+      logger.log(`[GOOGLE_IMAGES] Google Images search completed with ${googleImagesResults.length} images`, { googleImagesResults })
+
+      await metadata.replace({
+        name: Steps.SEARCH_GOOGLE_IMAGES,
+        progress: 100,
+      });
+    }
+
+    /*
+    /
+    /   Preparer les resultats de recherche pour l'IA 
+    /
+    */
+    let simplifiedMedia = [];
+    try {
+      simplifiedMedia = simplifyMediaFromPexels(mediaResults);
+
+      if (googleImagesResults && googleImagesResults.length > 0) {
+        logger.log(`[MEDIA] Adding ${googleImagesResults.length} Google Images to simplified media`);
+          
+        const simplifiedGoogleImages = simplifyGoogleMedias(googleImagesResults, simplifiedMedia.length);
+        
+        simplifiedMedia = [...simplifiedMedia, ...simplifiedGoogleImages];
+      }
+
+      logger.log(`[MEDIA] Total simplified media: ${simplifiedMedia.length}`, { simplifiedMedia });
+    } catch (error) {
+      logger.log(`[MEDIA] Media results`, { mediaResults, googleImagesResults })
+      logger.error(`[BROLL] Error simplifying media:`, { 
+        error: error instanceof Error ? error.message : String(error) 
+      });
+    }
+
+    logger.info('Simplified media', { simplifiedMedia })
+    const inputAnalyse = {
+      sequence_list: lightTranscription,
+      b_roll_list: simplifiedMedia
+    }
+
+    // Utiliser l'IA pour sélectionner les meilleurs B-Rolls pour chaque séquence et matcher les médias analysés
+    logger.log(`[BROLL] Selecting best B-Rolls and matching media for sequences...`)
+
+    await metadata.replace({
+      name: Steps.PLACE_BROLL,
+      progress: 0
+    });
+
+    try {
+      // Préparer les données pour les deux appels
+      const sequencesForMatching = lightTranscription.map((seq, idx) => ({
+        id: String(seq.id),
+        transcript: seq.text
+      }));
+
+      // Préparer les médias analysés pour le matching
+      const analyzedMediasForMatching = analyzedMedias.map((media, idx) => ({
+        id: String(idx),
+        descriptions: media.media.description?.map(d => d.text) || [],
+        needed: true // Ces médias sont nécessaires
+      }));
+
+      // Préparer les médias filtrés et les combiner avec ceux analysés
+      let combinedMedias = [...analyzedMediasForMatching];
+      
+      // Ajouter les médias filtrés avec needed = false
+      if (userMediasFiltered.length > 0) {
+        const filteredMediasForMatching = userMediasFiltered.map((media, idx) => ({
+          id: String(analyzedMedias.length + idx), // On continue la numérotation
+          descriptions: media.media.description?.map(d => d.text) || [],
+          needed: false // Ces médias sont optionnels
+        }));
+        
+        combinedMedias = [...combinedMedias, ...filteredMediasForMatching];
+      }
+
+      // Lancer selectBRollsForSequences et optionnellement matchMediaWithSequences
+      let brollResult: { selections: { sequence_id?: string, media_id?: string }[], cost: number };
+      let matchResult: { matches: { sequence_id?: string, media_id?: string, description_index?: number }[], cost: number } | undefined;
+      
+      if (combinedMedias.length > 0) {
+        // Si on a des médias analysés ou filtrés, lancer les deux appels en parallèle
+        [brollResult, matchResult] = await Promise.all([
+          selectBRollsForSequences(simplifiedMedia, sequencesForMatching, keywords),
+          matchMediaWithSequences(combinedMedias, sequencesForMatching)
+        ]);
+        cost += brollResult.cost + matchResult.cost;
+      } else {
+        // Sinon, lancer uniquement selectBRollsForSequences
+        brollResult = await selectBRollsForSequences(simplifiedMedia, sequencesForMatching, keywords);
+        cost += brollResult.cost;
+      }
+
+      logger.log(`[BROLL] B-Roll and media matching completed`, { 
+        totalBRollSelections: brollResult.selections.length,
+        totalMediaMatches: matchResult?.matches?.length || 0,
+        totalCost: brollResult.cost + (matchResult?.cost || 0)
+      });
+
+      // Appliquer les médias sélectionnés aux séquences
+      sequences = sequences.map((sequence, sequenceIndex) => {
+        // Trouver la sélection correspondante à cette séquence
+        const brollSelection = brollResult.selections.find(s => Number(s.sequence_id) === sequenceIndex);
+        const mediaMatch = matchResult?.matches?.find(m => Number(m.sequence_id) === sequenceIndex);
+        
+        let updatedSequence = { ...sequence };
+
+        // Appliquer le média correspondant s'il existe
+        if (mediaMatch) {
+          const mediaId = Number(mediaMatch.media_id);
+          // Déterminer si le média provient des analyzedMedias ou des userMediasFiltered
+          const isFromAnalyzedMedias = mediaId < analyzedMedias.length;
+          
+          if (isFromAnalyzedMedias) {
+            // Média provenant de analyzedMedias (needed = true)
+            const matchedMedia = analyzedMedias[mediaId];
+            if (matchedMedia && matchedMedia.media.description && mediaMatch.description_index !== undefined) {
+              updatedSequence.media = {
+                ...matchedMedia.media,
+                startAt: matchedMedia.media.description[mediaMatch.description_index].start,
+                description: matchedMedia.media.description,
+              };
+            }
+          } else {
+            // Média provenant de userMediasFiltered (needed = false)
+            const filteredMediaIndex = mediaId - analyzedMedias.length;
+            if (filteredMediaIndex >= 0 && filteredMediaIndex < userMediasFiltered.length) {
+              const matchedMedia = userMediasFiltered[filteredMediaIndex];
+              if (matchedMedia && matchedMedia.media.description && mediaMatch.description_index !== undefined) {
+                const startAt = matchedMedia.media.description[mediaMatch.description_index].start;
+                const plainMedia = JSON.parse(JSON.stringify(matchedMedia.media));
+                updatedSequence.media = {
+                  ...plainMedia,
+                  startAt: startAt,
+                  description: matchedMedia.media.description,
+                };
+              }
+            }
+          }
+        } else if (brollSelection) {
+          // Déterminer si le média sélectionné provient des médias de stock ou des images Google
+          const brollMediaId = Number(brollSelection.media_id);
+          const totalStockMedias = mediaResults.length;
+          
+          if (brollMediaId < totalStockMedias) {
+            // Média provenant des résultats de stock (Pexels/Storyblocks)
+            const selectedMedia = mediaResults[brollMediaId];
+            
+            if (selectedMedia) {
+              updatedSequence.media = selectedMedia.media;
+              logger.log(`[BROLL] Applying stock media ${brollMediaId} to sequence ${sequenceIndex}`);
+            }
+          } else {
+            // Média provenant des images Google
+            const googleMediaIndex = brollMediaId - totalStockMedias;
+            
+            if (googleImagesResults && googleMediaIndex < googleImagesResults.length) {
+              const selectedGoogleMedia = googleImagesResults[googleMediaIndex];
+              
+              if (selectedGoogleMedia) {
+                updatedSequence.media = selectedGoogleMedia;
+                logger.log(`[BROLL] Applying Google image ${googleMediaIndex} to sequence ${sequenceIndex}`);
+              }
+            }
+          }
+        }
+        
+        return updatedSequence;
+      });
+
+      await metadata.replace({
+        name: Steps.PLACE_BROLL,
+        progress: 100
+      });
+
+      logger.log(`[BROLL] Media applied to sequences`);
+
+      // Si on a un avatar, on détermine comment afficher les B-rolls
+      if (payload.avatar || avatarFile) {
+        logger.log(`[BROLL] Determining B-roll display modes with avatar...`);
+
+        await metadata.replace({
+          name: Steps.DISPLAY_BROLL,
+          progress: 0
+        });
+        
+        try {
+          const sequencesForDisplay = simplifySequences(sequences)
+          
+          const { displayModes, cost: displayModeCost } = await selectBRollDisplayModes(sequencesForDisplay);
+          cost += displayModeCost;
+          
+          logger.info(`[BROLL] Display modes selected`, { displayModes });
+          
+          sequences = sequences.map((sequence, index) => {
+            const displayMode = displayModes.find((mode: { sequence_id?: string, display_mode?: "full" | "half" | "hide" }) => 
+              Number(mode.sequence_id) === index
+            );
+            
+            if (displayMode && sequence.media) {
+              return {
+                ...sequence,
+                media: {
+                  ...sequence.media,
+                  show: displayMode.display_mode
+                }
+              };
+            }
+            
+            return sequence;
+          });
+
+          await metadata.replace({
+            name: Steps.DISPLAY_BROLL,
+            progress: 100
+          });
+          
+          logger.log(`[BROLL] Display modes applied to sequences`);
+        } catch (error) {
+          logger.error(`[BROLL] Error selecting display modes:`, {
+            error: error instanceof Error ? error.message : String(error)
+          });
+        }
+      }
+    } catch (error) {
+      logger.error(`[BROLL] Error selecting B-Rolls:`, { 
+        error: error instanceof Error ? error.message : String(error) 
+      });
+    }
+
+    await metadata.replace({
+      name: Steps.REDIRECTING,
+      progress: 20
+    });
+
     logger.info('Sequences', { sequences })
 
     let avatar;
@@ -493,11 +1128,62 @@ export const generateVideoTask = task({
     }
 
     let videoMusic;
-    logger.info('Video style', { videoStyle })
     if (videoStyle) {
       let style = videoStyle as Genre
       const matchingMusics = music.filter((m: any) => m.genre === style)
       videoMusic = matchingMusics[Math.floor(Math.random() * matchingMusics.length)]
+    }
+
+    // Ajouter les transitions automatiques
+    const burntFilmTransitions = transitions.filter((t: ITransition) => t.category === "Burnt Film");
+    const transitionSoundIndexes = [14, 15, 18, 19, 27, 31, 47];
+    const transitionSounds = sounds.filter((_: any, index: number) => transitionSoundIndexes.includes(index));
+
+    const lastSequencesOfAudio = new Map<number, number>();
+    sequences.forEach((seq: ISequence, index: number) => {
+      if (seq.audioIndex !== undefined) {
+        lastSequencesOfAudio.set(seq.audioIndex, index);
+      }
+    });
+
+    // Delete last element because we don't want to add a transition at the end of the video
+    const maxAudioIndex = Math.max(...Array.from(lastSequencesOfAudio.keys()));
+    lastSequencesOfAudio.delete(maxAudioIndex);
+
+    // Créer les transitions
+    const autoTransitions = Array.from(lastSequencesOfAudio.entries()).map(([_, sequenceIndex]) => {
+      const randomTransition = burntFilmTransitions[Math.floor(Math.random() * burntFilmTransitions.length)];
+      const randomSound = transitionSounds[Math.floor(Math.random() * transitionSounds.length)];
+
+      return {
+        indexSequenceBefore: sequenceIndex,
+        durationInFrames: randomTransition.durationInFrames || 0,
+        video: randomTransition.video,
+        thumbnail: randomTransition.thumbnail,
+        sound: randomSound.url,
+        volume: 0.15,
+        fullAt: randomTransition.fullAt || 0,
+        category: randomTransition.category,
+        mode: randomTransition.mode
+      };
+    });
+
+    const space : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
+
+    let subtitle = subtitles[1]
+    if (space && space.lastUsed?.subtitles) {
+      const mostFrequent = getMostFrequentString(space.lastUsed.subtitles)
+      if (mostFrequent) {
+        const subtitleFind = subtitles.find((subtitle) => subtitle.name === mostFrequent);
+        if (subtitleFind) {
+          subtitle = subtitleFind;
+        } else {
+          const subtitleFindFromSpace = space.subtitleStyle.find((subtitle) => subtitle.name === mostFrequent);
+          if (subtitleFindFromSpace) {
+            subtitle = subtitleFindFromSpace;
+          }
+        }
+      }
     }
 
     newVideo = {
@@ -506,6 +1192,7 @@ export const generateVideoTask = task({
       state: {
         type: 'done',
       },
+      settings: space?.lastUsed?.config,
       video: {
         audio: {
           voices: voices,
@@ -517,150 +1204,68 @@ export const generateVideoTask = task({
             genre: videoMusic.genre
           } : undefined
         },
+        keywords: keywords,
+        transitions: autoTransitions,
         thumbnail: "",
         metadata: videoMetadata,
         sequences,
         avatar,
         subtitle: {
-          name: subtitles[1].name,
-          style: subtitles[1].style,
+          name: subtitle.name,
+          style: subtitle.style,
         }
       }
     }
 
-    const thumbnail = await generateThumbnail(newVideo);
-
-    logger.info('Thumbnail URL', { thumbnail })
-
-    newVideo = {
-      ...newVideo,
-      costToGenerate: cost + thumbnail.estimatedPrice.accruedSoFar,
-      video: {
-        ...newVideo.video,
-        audio: {
-          voices: voices,
-          volume: 1,
-          music: videoMusic ? {
-            url: videoMusic.url,
-            volume: 0.07,
-            name: videoMusic.name,
-            genre: videoMusic.genre
-          } : undefined
-        },
-        thumbnail: thumbnail.url,
-        metadata: videoMetadata,
-        sequences,
-        avatar,
-        subtitle: {
-          name: subtitles[1].name,
-          style: subtitles[1].style,
-        }
+    // Add time to the end of the video to ensure a smooth transition
+    if (newVideo.video && newVideo.video.sequences.length > 0) {
+      // Add 0.5 second to the last sequence
+      const lastSequenceIndex = newVideo.video.sequences.length - 1;
+      const lastSequence = newVideo.video.sequences[lastSequenceIndex];
+      lastSequence.end += 0.5;
+      
+      // Add 0.5 second to the last word of the last sequence
+      if (lastSequence.words && lastSequence.words.length > 0) {
+        const lastWordIndex = lastSequence.words.length - 1;
+        lastSequence.words[lastWordIndex].end += 0.5;
+        lastSequence.words[lastWordIndex].durationInFrames = (lastSequence.words[lastWordIndex].durationInFrames || 0) + 30;
+      }
+      
+      // Add 30 frames to the duration in frames of the last sequence
+      lastSequence.durationInFrames = (lastSequence.durationInFrames || 0) + 30;
+      
+      // Add 0.5 second to the total video duration
+      if (newVideo.video.metadata) {
+        newVideo.video.metadata.audio_duration = (newVideo.video.metadata.audio_duration || 0) + 0.5;
+      }
+      
+      // Add 0.5 second to the last audio
+      if (newVideo.video.audio && newVideo.video.audio.voices && newVideo.video.audio.voices.length > 0) {
+        const lastVoiceIndex = newVideo.video.audio.voices.length - 1;
+        const lastVoice = newVideo.video.audio.voices[lastVoiceIndex];
+        lastVoice.end = (lastVoice.end || 0) + 0.5;
+        lastVoice.durationInFrames = (lastVoice.durationInFrames || 0) + 30;
       }
     }
 
     newVideo = await updateVideo(newVideo)
 
-    await addVideoCountContact(payload.userId)
+    const user = await addVideoCountContact(payload.userId)
+
+    if (user && user.videosCount === 0) {
+      await sendCreatedVideoEvent({ email: user.email, videoId: newVideo.id || "" })
+      track(MixpanelEvent.FIRST_VIDEO_CREATED, {
+        distinct_id: payload.userId,
+        videoId: newVideo.id,
+        hasAvatar: payload.avatar ? true : false,
+      })
+    }
 
     return {
       videoId: newVideo.id,
     }
   },
 });
-
-const pollTranscriptionStatus = async (transcriptionId: string) => {
-  let attempts = 0;
-  const maxAttempts = 100;
-  const delayBetweenAttempts = 2;
-
-  while (attempts < maxAttempts) {
-    try {
-      const transcriptionStatus = await getTranscription(transcriptionId);
-
-      if (transcriptionStatus.status === 'done') {
-        return transcriptionStatus;
-      }
-
-      logger.info(`Waiting for transcription [${attempts + 1}/${maxAttempts}]`, {
-        id: transcriptionId,
-        status: transcriptionStatus.status
-      });
-      await new Promise(resolve => setTimeout(resolve, delayBetweenAttempts * 1000));
-      attempts++;
-    } catch (error) {
-      logger.error(`Error while getting transcription status: ${error}`);
-      await new Promise(resolve => setTimeout(resolve, delayBetweenAttempts * 1000));
-      attempts++;
-    }
-  }
-
-  throw new Error('Nombre maximum de tentatives atteint sans obtenir un statut "done" pour la transcription.');
-};
-
-interface ProcessBatchOptions {
-  isDetailedAnalysis?: boolean;
-  batchSize?: number;
-  onProgress?: (progress: number) => Promise<void>;
-}
-
-const processBatchWithSieve = async (
-  medias: IMedia[],
-  options: ProcessBatchOptions = {}
-) => {
-  const {
-    isDetailedAnalysis = false,
-    batchSize = 3,
-    onProgress
-  } = options;
-
-  const updatedMedias = [...medias];
-  let totalCost = 0;
-  let finishedMedias = 0;
-  
-  for (let i = 0; i < medias.length; i += batchSize) {
-    const batch = medias.slice(i, Math.min(i + batchSize, medias.length));
-    
-    const analysisPromises = batch.map(async (media, index) => {
-      const mediaUrl = media.type === 'video' ? media.video?.link : media.image?.link;
-      
-      if (!mediaUrl) return media;
-
-      try {
-        logger.log('Analyze media', { mediaUrl })
-        let jobId : string
-        if (isDetailedAnalysis) {
-          jobId = await analyzeVideoWithSieve(mediaUrl);
-        } else {
-          jobId = await analyzeSimpleVideoWithSieve(mediaUrl);
-        }
-        logger.log(`Job ID`, { jobId })
-        const description = await getAnalysisResult(jobId, 0, mediaUrl, isDetailedAnalysis);
-        logger.log('Description', { description })
-
-        if (description) {
-          logger.log('Description', { description })
-          updatedMedias[i + index].description = description;
-          finishedMedias++;
-          
-          if (onProgress) {
-            await onProgress(Math.round(finishedMedias / medias.length * 100));
-          }
-        }
-      } catch (error: any) {
-        logger.error(`Failed to analyze media ${i + index}:`, error.response?.data || error.message);
-      }
-      
-      return media;
-    });
-
-    await Promise.all(analysisPromises);
-  }
-
-  return {
-    medias: updatedMedias,
-    totalCost
-  };
-}
 
 function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], voiceId?: string): {
   index: number;
@@ -716,4 +1321,4 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
     durationInFrames: 0,
     voiceId
   }];
-}
+} 

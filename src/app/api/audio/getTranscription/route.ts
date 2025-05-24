@@ -1,5 +1,5 @@
 import { auth } from '@/src/lib/auth';
-import { getTranscription } from '@/src/lib/gladia';
+import { getTranscription } from '@/src/lib/transcription';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -12,21 +12,38 @@ export async function POST(req: NextRequest) {
   console.log("POST /api/audio/getTranscription by user: ", session.user.id);
 
   const params = await req.json();
-  const { transcriptionId } = params;
+  const { audioUrl } = params;
 
-  if (!transcriptionId) {
+  if (!audioUrl) {
     return Response.json(
-      { error: 'transcriptionId is required' },
+      { error: 'audioUrl is required' },
       { status: 400 }
     );
   }
 
   try {
-    const transcriptionStatus = await getTranscription(transcriptionId);
+    const transcriptionResult = await getTranscription(audioUrl);
 
-    return Response.json({ data: transcriptionStatus });
+    if (!transcriptionResult) {
+      return Response.json(
+        { error: 'Failed to get transcription' },
+        { status: 500 }
+      );
+    }
+
+    const words = transcriptionResult.raw.words;
+
+    const transcription = {
+      text: transcriptionResult.text,
+      language: transcriptionResult.raw.language,
+      start: words.length > 0 ? words[0].start : 0,
+      end: words.length > 0 ? words[words.length - 1].end : 0,
+      words: words
+    }
+
+    return Response.json({ data: transcription });
   } catch (error: any) {
-    console.error('Error in transcription status:', error);
+    console.error('Error in transcription:', error);
     return Response.json(
       { 
         error: error.message || 'Failed to get transcription status',

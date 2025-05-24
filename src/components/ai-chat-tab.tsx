@@ -1,31 +1,62 @@
-import { Check, Paperclip, Send } from "lucide-react";
+import { Check, Paperclip, Send, Globe } from "lucide-react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import SelectDuration from "./ui/select/select-duration";
-import { useState } from "react";
-import { CreationStep } from "../types/enums";
+import { useState, useEffect } from "react";
+import { CreationStep, PlanName } from "../types/enums";
 import { useTranslations } from "next-intl";
 import { useCreationStore } from "../store/creationStore";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "./ui/tooltip";
 import { FilePreview } from "./file-preview";
 import { FileToUpload } from "../types/files";
+import { Badge } from "./ui/badge";
+import { useActiveSpaceStore } from "../store/activeSpaceStore";
+import { usePremiumToast } from "@/src/utils/premium-toast";
 
 interface DurationOption {
   name: string;
   value: number;
 }
 
-export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, handleConfirmVoice }: { creationStep: CreationStep, sendMessage: (message: string, duration: number) => void, handleConfirmAvatar: () => void, handleConfirmVoice: () => void }) {
-    const { files, selectedVoice, selectedAvatar, setFiles } = useCreationStore()
-    const [inputMessage, setInputMessage] = useState('')
+export function AiChatTab({ 
+  creationStep, 
+  sendMessage, 
+  handleConfirmAvatar, 
+  handleConfirmVoice, 
+  isDisabled = false,
+  inputMessage,
+  setInputMessage
+}: { 
+  creationStep: CreationStep, 
+  sendMessage: (message: string, duration: number) => void, 
+  handleConfirmAvatar: () => void, 
+  handleConfirmVoice: () => void,
+  isDisabled?: boolean,
+  inputMessage: string,
+  setInputMessage: (message: string) => void
+}) {
+    const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode } = useCreationStore()
+    const { activeSpace } = useActiveSpaceStore()
+    const { showPremiumToast } = usePremiumToast()
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>(undefined)
     const [isDragging, setIsDragging] = useState(false);
     const t = useTranslations('ai');
+    const pricingT = useTranslations('pricing');
+    const planT = useTranslations('plan');
 
-    const adjustTextareaHeight = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      event.target.style.height = 'auto';
-      event.target.style.height = `${event.target.scrollHeight}px`;
+    const adjustTextareaHeight = (event: React.FormEvent<HTMLTextAreaElement>) => {
+      const target = event.target as HTMLTextAreaElement;
+      target.style.height = 'auto';
+      target.style.height = `${target.scrollHeight}px`;
     }
+
+    useEffect(() => {
+      const textarea = document.getElementById('ai-chat-textarea') as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    }, [inputMessage]);
 
     const handleSendMessage = (message: string, duration: number) => {
         setInputMessage('')
@@ -89,16 +120,30 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
         });
     };
 
+    const handleWebModeClick = () => {
+      if (!isDisabled) {
+        if (activeSpace?.planName === PlanName.FREE) {
+          showPremiumToast(
+            pricingT('premium-toast.title'),
+            pricingT('premium-toast.description', { plan: planT(PlanName.START) }),
+            pricingT('upgrade')
+          );
+        } else {
+          setWebMode(!isWebMode);
+        }
+      }
+    };
+
     return (
         <div className="w-full max-w-xl">
           {creationStep === CreationStep.START ? (
             <div 
               className={`relative rounded-lg`}
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
+              onDrop={!isDisabled ? handleDrop : undefined}
+              onDragOver={!isDisabled ? handleDragOver : undefined}
+              onDragLeave={!isDisabled ? handleDragLeave : undefined}
             >
-              <div className={`relative rounded-lg border p-2 ${isDragging ? 'border-dashed border-2 border-gray-300' : ''}`}>
+              <div className={`relative rounded-lg border p-2 ${isDragging ? 'border-dashed border-2 border-gray-300' : ''} ${isDisabled ? 'opacity-60' : ''}`}>
                 {isDragging && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-white/50 z-10">
                     <Paperclip className="w-6 h-6 text-gray-400" />
@@ -113,8 +158,8 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                           key={index}
                           file={file.file}
                           usage={file.usage}
-                          onUsageChange={(newUsage) => handleFileUsageChange(index, newUsage)}
-                          onRemove={() => handleFileRemove(index)}
+                          onUsageChange={(newUsage) => !isDisabled && handleFileUsageChange(index, newUsage)}
+                          onRemove={() => !isDisabled && handleFileRemove(index)}
                         />
                       ))}
                     </div>
@@ -122,19 +167,20 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                 )}
                 
                 <Textarea
+                  id='ai-chat-textarea'
                   placeholder={t('placeholder.start')}
                   value={inputMessage}
                   onChange={(e) => {
-                    setInputMessage(e.target.value);
-                    adjustTextareaHeight(e);
+                    !isDisabled && setInputMessage(e.target.value);
+                    !isDisabled && adjustTextareaHeight(e);
                   }}
-                  disabled={files.some(file => file.usage === "voice" || file.usage === "avatar")}
-                  onInput={adjustTextareaHeight}
+                  disabled={isDisabled || files.some(file => file.usage === "voice" || file.usage === "avatar")}
+                  onInput={!isDisabled ? adjustTextareaHeight : undefined}
                   className={`w-full mb-2 border-none shadow-none focus:ring-0 resize-none ${isDragging ? 'opacity-50' : ''}`}
                   rows={1}
                   variant="no-focus-border"
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    if (!isDisabled && e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
                       handleSendMessage(inputMessage, videoDuration?.value || 936);
                     }
@@ -145,14 +191,15 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                     <Button 
                       variant="outline" 
                       size="icon" 
-                      onClick={() => document.getElementById('file-input')?.click()}
+                      onClick={() => !isDisabled && document.getElementById('file-input')?.click()}
+                      disabled={isDisabled}
                     >
                       <Paperclip className="h-4 w-4" />
                     </Button>
                     <SelectDuration 
                       value={videoDuration} 
                       onChange={setVideoDuration} 
-                      disabled={files.some(file => file.usage === "voice" || file.usage === "avatar")}
+                      disabled={isDisabled || files.some(file => file.usage === "voice" || file.usage === "avatar")}
                     />
                     <input
                       id="file-input"
@@ -163,33 +210,61 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                         'image/jpeg,image/png,image/gif,video/*' : 
                         'image/jpeg,image/png,image/gif,video/*,audio/*'}
                       onChange={(e) => {
-                        if (e.target.files) {
+                        if (!isDisabled && e.target.files) {
                           handleFileUpload(filterFiles(Array.from(e.target.files)));
                         }
                       }}
                     />
                   </div>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <Button 
-                          size="icon" 
-                          onClick={() => handleSendMessage(inputMessage, videoDuration?.value || 936)} 
-                          disabled={
-                            !files.some(file => file.usage === "voice" || file.usage === "avatar") && 
-                            (!inputMessage.trim() || !videoDuration)
-                          }
-                        >
-                          <Send className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TooltipTrigger>
-                    {(!files.some(file => file.usage === "voice" || file.usage === "avatar") && (!inputMessage.trim() || !videoDuration)) && 
-                      <TooltipContent>
-                        {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
-                      </TooltipContent>
-                    }
-                  </Tooltip>
+                  <div className="flex items-center space-x-2">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span>
+                            <Button 
+                              variant={isWebMode ? "default" : "outline"} 
+                              onClick={handleWebModeClick}
+                              disabled={isDisabled}
+                              className={isWebMode ? "bg-[#FB5688]/10 border border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688]/20 px-2" : "px-2"}
+                            >
+                              <Globe className="h-4 w-4"/>
+                              Web
+                            </Button>
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary" className="bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white border-none">
+                              Start
+                            </Badge>
+                            <p>{t('web-mode-tooltip')}</p>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <div>
+                          <Button 
+                            size="icon" 
+                            onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 936)} 
+                            disabled={
+                              isDisabled ||
+                              !files.some(file => file.usage === "voice" || file.usage === "avatar") && 
+                              (!inputMessage.trim() || !videoDuration)
+                            }
+                          >
+                            <Send className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TooltipTrigger>
+                      {(!files.some(file => file.usage === "voice" || file.usage === "avatar") && (!inputMessage.trim() || !videoDuration)) && 
+                        <TooltipContent>
+                          {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
+                        </TooltipContent>
+                      }
+                    </Tooltip>
+                  </div>
                 </div>
               </div>
             </div>
@@ -200,15 +275,16 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                   placeholder={t('placeholder.edit-script')}
                   value={inputMessage}
                   onChange={(e) => {
-                    setInputMessage(e.target.value);
-                    adjustTextareaHeight(e);
+                    !isDisabled && setInputMessage(e.target.value);
+                    !isDisabled && adjustTextareaHeight(e);
                   }}
-                  onInput={adjustTextareaHeight}
+                  disabled={isDisabled}
+                  onInput={!isDisabled ? adjustTextareaHeight : undefined}
                   className="w-full border-none shadow-none focus:ring-0 resize-none"
                   rows={1}
                   variant="no-focus-border"
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    if (!isDisabled && e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
                       handleSendMessage(inputMessage, 0);
                     }
@@ -216,8 +292,8 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                 />
                 <Button 
                   size="icon" 
-                  onClick={() => handleSendMessage(inputMessage, 0)} 
-                  disabled={!inputMessage.trim()}
+                  onClick={() => !isDisabled && handleSendMessage(inputMessage, 0)} 
+                  disabled={isDisabled || !inputMessage.trim()}
                 >
                   <Send className="h-4 w-4" />
                 </Button>
@@ -228,7 +304,7 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
                 <Tooltip delayDuration={0}>
                   <TooltipTrigger asChild>
                     <div>
-                      <Button className="w-full" disabled={!selectedVoice} onClick={handleConfirmVoice}>
+                      <Button className="w-full" disabled={isDisabled || !selectedVoice} onClick={!isDisabled ? handleConfirmVoice : undefined}>
                         <Check />{t('next-step')}
                       </Button>
                     </div>
@@ -242,13 +318,13 @@ export function AiChatTab({ creationStep, sendMessage, handleConfirmAvatar, hand
               </>
           ) : creationStep === CreationStep.AVATAR ? (
             <>
-              {selectedAvatar ? (
-                <Button className="w-full" onClick={handleConfirmAvatar}>
+              {selectedLook ? (
+                <Button className="w-full" onClick={!isDisabled ? handleConfirmAvatar : undefined} disabled={isDisabled}>
                   <Check />{files.some(file => file.usage === 'media') ? t('next-step') : t('start-generation')}
                 </Button>
               ) : (
-                <Button className="w-full" onClick={handleConfirmAvatar}>
-                  <Check />{files.some(file => file.usage === 'media') ? t('no-avatar') : t('no-avatar-generation')}
+                <Button className="w-full" onClick={!isDisabled ? handleConfirmAvatar : undefined} disabled={isDisabled}>
+                  <Check />{t('start-generation')}
                 </Button>
               )}
             </>

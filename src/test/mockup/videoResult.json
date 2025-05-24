@@ -1,3088 +1,3707 @@
 {
   "_id": {
-    "$oid": "6737db919cb04c2d0b7816c9"
+    "$oid": "67fd1d46e3fa3fa1d34a5039"
   },
+  "spaceId": {
+    "$oid": "6781605a50bf8f3d953e470c"
+  },
+  "archived": false,
   "state": {
     "type": "done"
   },
-  "runId": "run_5c86pru7n1g222a13tsym",
+  "runId": "run_qa1gpcnn4y82ahpv5ogdz",
   "history": [
     {
       "step": "CREATE",
+      "user": {
+        "$oid": "6781605950bf8f3d953e470b"
+      },
       "date": {
-        "$date": "2024-11-15T23:38:57.513Z"
+        "$date": "2025-04-14T14:35:50.760Z"
       },
       "_id": {
-        "$oid": "6737db919cb04c2d0b7816ca"
+        "$oid": "67fd1d46e3fa3fa1d34a503a"
       }
     }
   ],
   "video": {
-    "audioUrl": "https://media.hoox.video/2070cf26-1edb-41aa-9653-bb54940abaf1.mp3",
-    "thumbnail": "",
-    "metadata": {
-      "audio_duration": 67.970612,
-      "number_of_distinct_channels": 1,
-      "billing_time": 67.970612,
-      "transcription_time": 16.081
+    "audio": {
+      "music": {
+        "url": "https://music.hoox.video/motivational-opening-speech-262288.mp3",
+        "volume": 0.07,
+        "name": "Motivational Opening Speech",
+        "genre": "Inspirational"
+      },
+      "voices": [
+        {
+          "url": "https://media.hoox.video/c74a4e33-50fe-44a9-92e7-d038c47bfd6d.mp3",
+          "index": 0,
+          "start": 0,
+          "end": 2.44,
+          "durationInFrames": 146,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a5192"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/05a695f9-6173-495b-82f1-4187d15f3992.mp3",
+          "index": 1,
+          "start": 2.44,
+          "end": 9.3,
+          "durationInFrames": 412,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a5193"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/60e53a1f-03c6-4d2a-b912-52a2bbf55cdd.mp3",
+          "index": 2,
+          "start": 9.3,
+          "end": 16.66,
+          "durationInFrames": 441,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a5194"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/226c6c1b-0c06-415b-a605-fccf193fedf1.mp3",
+          "index": 3,
+          "start": 16.66,
+          "end": 22.66,
+          "durationInFrames": 359,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a5195"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/1000f2f8-a538-456e-b3f1-bb0aefbd40c2.mp3",
+          "index": 4,
+          "start": 22.66,
+          "end": 24.36,
+          "durationInFrames": 101,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a5196"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/60b5e4b4-d3cc-40b9-99ed-9ce323e6e834.mp3",
+          "index": 5,
+          "start": 24.36,
+          "end": 29.48,
+          "durationInFrames": 307,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a5197"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/8acdb4f2-afb6-4f51-9431-638ab7f170a9.mp3",
+          "index": 6,
+          "start": 29.48,
+          "end": 35.68,
+          "durationInFrames": 372,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a5198"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/702e1d14-761d-4a02-b049-e947b00289f1.mp3",
+          "index": 7,
+          "start": 35.68,
+          "end": 39.66,
+          "durationInFrames": 239,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a5199"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/d7805a91-b1ad-4c9b-9d81-9f30fd6268f2.mp3",
+          "index": 8,
+          "start": 39.66,
+          "end": 46.099999999999994,
+          "durationInFrames": 385,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a519a"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/9a0a7005-801d-4dda-ac88-5fcf9550c921.mp3",
+          "index": 9,
+          "start": 46.099999999999994,
+          "end": 54.519999999999996,
+          "durationInFrames": 505,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a519b"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/95448446-d9a7-43a0-81b5-504926be53d2.mp3",
+          "index": 10,
+          "start": 54.519999999999996,
+          "end": 61.72,
+          "durationInFrames": 431,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a519c"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/11cdba31-faf5-4181-8c41-b23b4a9e3266.mp3",
+          "index": 11,
+          "start": 61.72,
+          "end": 63.779999999999994,
+          "durationInFrames": 123,
+          "voiceId": "DbbNuBL7lf62XwY7arQb",
+          "startOffset": 0,
+          "_id": {
+            "$oid": "67fd1d7ae3fa3fa1d34a519d"
+          }
+        }
+      ],
+      "volume": 1
     },
+    "subtitle": {
+      "name": "Bold",
+      "style": {
+        "template": "bold",
+        "fontFamily": "Montserrat",
+        "fontWeight": "800",
+        "fontSize": 60,
+        "color": "#ffffff",
+        "isItalic": false,
+        "isPunctuation": true,
+        "isUppercase": true,
+        "mode": "twoLines",
+        "position": 50,
+        "animation": {
+          "appear": "bounce"
+        },
+        "activeWord": {
+          "isActive": true,
+          "fontFamily": "Montserrat",
+          "fontWeight": "800",
+          "fontSize": 62,
+          "color": "#bbbbbb",
+          "isItalic": false,
+          "isPunctuation": true,
+          "isUppercase": true
+        },
+        "shadow": {
+          "isActive": true,
+          "size": 3,
+          "color": "#000000"
+        }
+      }
+    },
+    "metadata": {
+      "audio_duration": 63.779999999999994
+    },
+    "avatar": {
+      "settings": {
+        "heygenType": "talking_photo"
+      },
+      "id": "dfb8fe7c81da4ae1ab4e7c736396c3fa",
+      "name": "Siblu",
+      "format": "vertical",
+      "thumbnail": "https://files2.heygen.ai/avatar/v3/dfb8fe7c81da4ae1ab4e7c736396c3fa/full/2.2/preview_target.webp",
+      "previewUrl": "https://files2.heygen.ai/avatar/v3/dfb8fe7c81da4ae1ab4e7c736396c3fa/full/2.2/preview_video_target.mp4"
+    },
+    "transitions": [
+      {
+        "indexSequenceBefore": 0,
+        "durationInFrames": 34,
+        "video": "https://assets.hoox.video/Film_Burns_25.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_25-thumbnail.png",
+        "sound": "https://assets.hoox.video/Right.wav",
+        "volume": 0.15,
+        "fullAt": 21,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5187"
+        }
+      },
+      {
+        "indexSequenceBefore": 2,
+        "durationInFrames": 60,
+        "video": "https://assets.hoox.video/Film_Burns_16.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_16-thumbnail.png",
+        "sound": "https://assets.hoox.video/Hard%20Swipe.wav",
+        "volume": 0.15,
+        "fullAt": 10,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5188"
+        }
+      },
+      {
+        "indexSequenceBefore": 5,
+        "durationInFrames": 75,
+        "video": "https://assets.hoox.video/Film_Burns_36.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_36-thumbnail.png",
+        "sound": "https://assets.hoox.video/Right.wav",
+        "volume": 0.15,
+        "fullAt": 36,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5189"
+        }
+      },
+      {
+        "indexSequenceBefore": 7,
+        "durationInFrames": 29,
+        "video": "https://assets.hoox.video/Film_Burns_26.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_26-thumbnail.png",
+        "sound": "https://assets.hoox.video/Right.wav",
+        "volume": 0.15,
+        "fullAt": 10,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a518a"
+        }
+      },
+      {
+        "indexSequenceBefore": 8,
+        "durationInFrames": 98,
+        "video": "https://assets.hoox.video/Film%20Burn%20Red%20Burn.mp4",
+        "thumbnail": "https://assets.hoox.video/film-burn-red-thumbnail.png",
+        "sound": "https://assets.hoox.video/Right.wav",
+        "volume": 0.15,
+        "fullAt": 14,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a518b"
+        }
+      },
+      {
+        "indexSequenceBefore": 10,
+        "durationInFrames": 46,
+        "video": "https://assets.hoox.video/Film_Burns_12.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_12-thumbnail.png",
+        "sound": "https://assets.hoox.video/Fast%20Swipe.wav",
+        "volume": 0.15,
+        "fullAt": 15,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a518c"
+        }
+      },
+      {
+        "indexSequenceBefore": 12,
+        "durationInFrames": 27,
+        "video": "https://assets.hoox.video/Film_Burns_31.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_31-thumbnail.png",
+        "sound": "https://assets.hoox.video/Soft%20Wipe.wav",
+        "volume": 0.15,
+        "fullAt": 14,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a518d"
+        }
+      },
+      {
+        "indexSequenceBefore": 13,
+        "durationInFrames": 87,
+        "video": "https://assets.hoox.video/Film_Burns_15.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_15-thumbnail.png",
+        "sound": "https://assets.hoox.video/Right.wav",
+        "volume": 0.15,
+        "fullAt": 8,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a518e"
+        }
+      },
+      {
+        "indexSequenceBefore": 15,
+        "durationInFrames": 20,
+        "video": "https://assets.hoox.video/37%20Burnt%20Film.mp4",
+        "thumbnail": "https://assets.hoox.video/37%20Burnt%20Film-thumbnail.png",
+        "sound": "https://assets.hoox.video/Hard%20Swipe.wav",
+        "volume": 0.15,
+        "fullAt": 10,
+        "category": "Burnt Film",
+        "mode": "hard-light",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a518f"
+        }
+      },
+      {
+        "indexSequenceBefore": 18,
+        "durationInFrames": 53,
+        "video": "https://assets.hoox.video/Film_Burns_35.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_35-thumbnail.png",
+        "sound": "https://assets.hoox.video/Fast%20Swipe.wav",
+        "volume": 0.15,
+        "fullAt": 25,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5190"
+        }
+      },
+      {
+        "indexSequenceBefore": 21,
+        "durationInFrames": 51,
+        "video": "https://assets.hoox.video/Film_Burns_30.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_30-thumbnail.png",
+        "sound": "https://assets.hoox.video/Soft%20Wipe.wav",
+        "volume": 0.15,
+        "fullAt": 30,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5191"
+        }
+      }
+    ],
+    "thumbnail": "",
     "sequences": [
       {
         "words": [
           {
-            "word": "Un",
-            "start": 0.10004,
-            "end": 0.24011,
-            "confidence": 1,
-            "durationInFrames": 8,
+            "word": "Imaginez-vous",
+            "start": 0,
+            "end": 0.62,
+            "durationInFrames": 37,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d1"
+              "$oid": "67fd1d7ae3fa3fa1d34a5044"
             }
           },
           {
-            "word": "enfant",
-            "start": 0.24011,
-            "end": 0.58026,
-            "confidence": 1,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d2"
-            }
-          },
-          {
-            "word": "harcelé",
-            "start": 0.58026,
-            "end": 1.16052,
-            "confidence": 0.83,
-            "durationInFrames": 35,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d3"
-            }
-          },
-          {
-            "word": "devient",
-            "start": 1.16052,
-            "end": 1.52068,
-            "confidence": 0.99,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d4"
-            }
-          },
-          {
-            "word": "l'homme",
-            "start": 1.52068,
-            "end": 1.76078,
-            "confidence": 0.92,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d5"
-            }
-          },
-          {
-            "word": "le",
-            "start": 1.76078,
-            "end": 1.90085,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d6"
-            }
-          },
-          {
-            "word": "plus",
-            "start": 1.90085,
-            "end": 2.08093,
-            "confidence": 0.86,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d7"
-            }
-          },
-          {
-            "word": "riche",
-            "start": 2.08093,
-            "end": 2.42108,
-            "confidence": 0.96,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d8"
-            }
-          },
-          {
-            "word": "du",
-            "start": 2.42108,
-            "end": 2.60116,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816d9"
-            }
-          },
-          {
-            "word": "monde.",
-            "start": 2.60116,
-            "end": 3.42152,
-            "confidence": 1,
-            "durationInFrames": 49,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816da"
-            }
-          }
-        ],
-        "text": "Un enfant harcelé devient l'homme le plus riche du monde.",
-        "start": 0.10004,
-        "end": 3.42152,
-        "durationInFrames": 198,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Wealthy person",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816db"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Rich man",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816dc"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Success",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816dd"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 2048,
-          "video": {
-            "id": "11228508",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 13165471,
-            "width": 2048,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/10295414/10295414-hd_2048_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "10295414",
-            "link": "https://images.pexels.com/videos/10295414/administration-adopted-adult-art-10295414.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7816de"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7816d0"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Né",
-            "start": 3.42152,
-            "end": 3.74166,
-            "confidence": 0.55,
+            "word": "surfer",
+            "start": 0.62,
+            "end": 0.94,
             "durationInFrames": 19,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e0"
+              "$oid": "67fd1d7ae3fa3fa1d34a5045"
             }
           },
           {
-            "word": "en",
-            "start": 3.74166,
-            "end": 3.90173,
-            "confidence": 0.99,
-            "durationInFrames": 10,
+            "word": "sur",
+            "start": 0.94,
+            "end": 1.16,
+            "durationInFrames": 13,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e1"
+              "$oid": "67fd1d7ae3fa3fa1d34a5046"
             }
           },
           {
-            "word": "Afrique",
-            "start": 3.90173,
-            "end": 4.18186,
-            "confidence": 1,
+            "word": "les",
+            "start": 1.16,
+            "end": 1.28,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5047"
+            }
+          },
+          {
+            "word": "vagues",
+            "start": 1.28,
+            "end": 1.56,
             "durationInFrames": 17,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e2"
+              "$oid": "67fd1d7ae3fa3fa1d34a5048"
             }
           },
           {
-            "word": "du",
-            "start": 4.18186,
-            "end": 4.38195,
-            "confidence": 1,
-            "durationInFrames": 12,
+            "word": "de",
+            "start": 1.56,
+            "end": 1.74,
+            "durationInFrames": 11,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e3"
+              "$oid": "67fd1d7ae3fa3fa1d34a5049"
             }
           },
           {
-            "word": "Sud",
-            "start": 4.38195,
-            "end": 4.62205,
-            "confidence": 1,
-            "durationInFrames": 14,
+            "word": "l'Atlantique !",
+            "start": 1.74,
+            "end": 2.44,
+            "durationInFrames": 42,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e4"
-            }
-          },
-          {
-            "word": "en",
-            "start": 4.62205,
-            "end": 4.76212,
-            "confidence": 0.99,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e5"
-            }
-          },
-          {
-            "word": "1971,",
-            "start": 4.76212,
-            "end": 6.86305,
-            "confidence": 0.06,
-            "durationInFrames": 126,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e6"
+              "$oid": "67fd1d7ae3fa3fa1d34a504a"
             }
           }
         ],
-        "text": "Né en Afrique du Sud en 1971,",
-        "start": 3.42152,
-        "end": 6.86305,
-        "durationInFrames": 206,
+        "text": "Imaginez-vous surfer sur les vagues de l'Atlantique !",
+        "start": 0,
+        "end": 2.44,
+        "durationInFrames": 146,
+        "audioIndex": 0,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "African savannah",
+            "keyword": "surfer on wave",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e7"
+              "$oid": "67fd1d7ae3fa3fa1d34a504b"
             }
           },
           {
             "search": "stock",
-            "keyword": "South Africa",
+            "keyword": "atlantic waves",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e8"
+              "$oid": "67fd1d7ae3fa3fa1d34a504c"
             }
           },
           {
             "search": "stock",
-            "keyword": "Africa",
+            "keyword": "ocean",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816e9"
+              "$oid": "67fd1d7ae3fa3fa1d34a504d"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 2160,
-          "width": 4096,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A surfer is crouching down on a beach, preparing to paddle out on their surfboard. The surfer is wearing a wetsuit. The sun is setting in the background, casting a warm glow on the scene.  The sand is light brown in color.  The surfboard is white with a purple stripe.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a504f"
+              }
+            }
+          ],
           "video": {
-            "id": "4839969",
+            "id": "10526184",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 32951660,
-            "width": 4096,
-            "height": 2160,
-            "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/11025493/11025493-hd_4096_2160_30fps.mp4"
+            "size": 4490639,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7660630/7660630-hd_1920_1080_25fps.mp4"
           },
           "image": {
-            "id": "11025493",
-            "link": "https://images.pexels.com/videos/11025493/pexels-photo-11025493.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
+            "id": "7660630",
+            "link": "https://images.pexels.com/videos/7660630/pexels-photo-7660630.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
             "height": 2160
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b7816ea"
+            "$oid": "67fd1f59154e8a7a0c0c452e"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b7816df"
+          "$oid": "67fd1d7ae3fa3fa1d34a5043"
         }
       },
       {
         "words": [
           {
-            "word": "Elon",
-            "start": 6.86305,
-            "end": 7.00311,
-            "confidence": 0,
+            "word": "À",
+            "start": 2.44,
+            "end": 2.58,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ec"
+              "$oid": "67fd1d7ae3fa3fa1d34a5051"
             }
           },
           {
-            "word": "Musk",
-            "start": 7.00311,
-            "end": 7.14318,
-            "confidence": 0.1,
-            "durationInFrames": 8,
+            "word": "seulement",
+            "start": 2.58,
+            "end": 2.96,
+            "durationInFrames": 23,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ed"
+              "$oid": "67fd1d7ae3fa3fa1d34a5052"
             }
           },
           {
-            "word": "a",
-            "start": 7.14318,
-            "end": 7.30325,
-            "confidence": 1,
-            "durationInFrames": 10,
+            "word": "quelques",
+            "start": 2.96,
+            "end": 3.4,
+            "durationInFrames": 26,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ee"
+              "$oid": "67fd1d7ae3fa3fa1d34a5053"
             }
           },
           {
-            "word": "connu",
-            "start": 7.30325,
-            "end": 7.60338,
-            "confidence": 0.97,
-            "durationInFrames": 18,
+            "word": "minutes",
+            "start": 3.4,
+            "end": 3.76,
+            "durationInFrames": 22,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ef"
+              "$oid": "67fd1d7ae3fa3fa1d34a5054"
+            }
+          },
+          {
+            "word": "de",
+            "start": 3.76,
+            "end": 3.96,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5055"
+            }
+          },
+          {
+            "word": "nos",
+            "start": 3.96,
+            "end": 4.08,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5056"
+            }
+          },
+          {
+            "word": "villages",
+            "start": 4.08,
+            "end": 4.52,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5057"
+            }
+          },
+          {
+            "word": "Siblu",
+            "start": 4.52,
+            "end": 5.08,
+            "durationInFrames": 34,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5058"
+            }
+          },
+          {
+            "word": "autour",
+            "start": 5.08,
+            "end": 5.48,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5059"
+            }
+          }
+        ],
+        "text": "À seulement quelques minutes de nos villages Siblu autour",
+        "start": 2.44,
+        "end": 5.48,
+        "durationInFrames": 182,
+        "audioIndex": 1,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "village near beach",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a505a"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "coastal village",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a505b"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "village",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a505c"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A young woman with long black hair is blindfolded and standing in the middle of a group of four other dancers. They are all wearing similar clothing and appear to be performing in an outdoor setting. The woman in the center is visibly distressed and appears to be in a state of fear. The other dancers are moving in a more relaxed and fluid manner. It seems like the woman in the center is trying to figure out what's going on around her. The scene is very dramatic, with the wind blowing through the woman's hair and the cloudy sky creating a sense of unease.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a505e"
+              }
+            }
+          ],
+          "video": {
+            "id": "11900358",
+            "quality": null,
+            "file_type": "video/mp4",
+            "size": 27373962,
+            "width": 1080,
+            "height": 1920,
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/25254562/11900358_1080_1920_30fps.mp4"
+          },
+          "image": {
+            "id": "25254562",
+            "link": "https://images.pexels.com/videos/25254562/adriatic-adriatic-coast-aerial-bay-of-kotor-25254562.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 1080,
+            "height": 1920
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c453d"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5050"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "de",
+            "start": 5.48,
+            "end": 5.74,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5060"
+            }
+          },
+          {
+            "word": "La",
+            "start": 5.74,
+            "end": 5.859999999999999,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5061"
+            }
+          },
+          {
+            "word": "Rochelle,",
+            "start": 5.859999999999999,
+            "end": 6.66,
+            "durationInFrames": 48,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5062"
             }
           },
           {
             "word": "une",
-            "start": 7.60338,
-            "end": 7.78346,
-            "confidence": 0.95,
-            "durationInFrames": 11,
+            "start": 6.66,
+            "end": 6.74,
+            "durationInFrames": 5,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f0"
+              "$oid": "67fd1d7ae3fa3fa1d34a5063"
             }
           },
           {
-            "word": "enfance",
-            "start": 7.78346,
-            "end": 8.40374,
-            "confidence": 0.87,
-            "durationInFrames": 37,
+            "word": "multitude",
+            "start": 6.74,
+            "end": 7.18,
+            "durationInFrames": 26,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f1"
+              "$oid": "67fd1d7ae3fa3fa1d34a5064"
             }
           },
           {
-            "word": "difficile.",
-            "start": 8.40374,
-            "end": 9.64429,
-            "confidence": 0.95,
-            "durationInFrames": 74,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f2"
-            }
-          }
-        ],
-        "text": "Elon Musk a connu une enfance difficile.",
-        "start": 6.86305,
-        "end": 9.64429,
-        "durationInFrames": 166,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Childhood home",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f3"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Difficult childhood",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f4"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Childhood",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f5"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1920,
-          "width": 1080,
-          "video": {
-            "id": "9434379",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 7102084,
-            "width": 1080,
-            "height": 1920,
-            "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/4896507/4896507-hd_1080_1920_30fps.mp4"
-          },
-          "image": {
-            "id": "4896507",
-            "link": "https://images.pexels.com/videos/4896507/pexels-photo-4896507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 1080,
-            "height": 1920
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7816f6"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7816eb"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Victime",
-            "start": 9.64429,
-            "end": 10.18453,
-            "confidence": 1,
-            "durationInFrames": 32,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f8"
-            }
-          },
-          {
-            "word": "de",
-            "start": 10.18453,
-            "end": 10.44464,
-            "confidence": 1,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816f9"
-            }
-          },
-          {
-            "word": "harcèlement",
-            "start": 10.44464,
-            "end": 11.00489,
-            "confidence": 0.91,
-            "durationInFrames": 34,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fa"
-            }
-          },
-          {
-            "word": "scolaire,",
-            "start": 11.00489,
-            "end": 11.66519,
-            "confidence": 0.99,
+            "word": "d'aventures",
+            "start": 7.18,
+            "end": 7.84,
             "durationInFrames": 40,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fb"
+              "$oid": "67fd1d7ae3fa3fa1d34a5065"
             }
           },
           {
-            "word": "il",
-            "start": 11.66519,
-            "end": 11.82526,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fc"
-            }
-          },
-          {
-            "word": "trouve",
-            "start": 11.82526,
-            "end": 12.40552,
-            "confidence": 0.99,
-            "durationInFrames": 35,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fd"
-            }
-          },
-          {
-            "word": "refuge",
-            "start": 12.40552,
-            "end": 13.00578,
-            "confidence": 0.94,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816fe"
-            }
-          }
-        ],
-        "text": "Victime de harcèlement scolaire, il trouve refuge",
-        "start": 9.64429,
-        "end": 13.00578,
-        "durationInFrames": 203,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Bullied child",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7816ff"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "School bullying",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781700"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Bullying",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781701"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 1920,
-          "video": {
-            "id": "10814191",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 4320945,
-            "width": 1920,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/8411069/8411069-hd_1920_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "8411069",
-            "link": "https://images.pexels.com/videos/8411069/pexels-photo-8411069.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 1920,
-            "height": 1080
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b781702"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7816f7"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "dans",
-            "start": 13.00578,
-            "end": 13.16585,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781704"
-            }
-          },
-          {
-            "word": "les",
-            "start": 13.16585,
-            "end": 13.32592,
-            "confidence": 0.98,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781705"
-            }
-          },
-          {
-            "word": "livres",
-            "start": 13.32592,
-            "end": 14.00623,
-            "confidence": 0.99,
-            "durationInFrames": 41,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781706"
-            }
-          },
-          {
-            "word": "et",
-            "start": 14.00623,
-            "end": 14.26634,
-            "confidence": 1,
+            "word": "en",
+            "start": 7.84,
+            "end": 8.1,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781707"
+              "$oid": "67fd1d7ae3fa3fa1d34a5066"
             }
           },
           {
-            "word": "l'informatique.",
-            "start": 14.26634,
-            "end": 15.40685,
-            "confidence": 0.97,
-            "durationInFrames": 68,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781708"
-            }
-          }
-        ],
-        "text": "dans les livres et l'informatique.",
-        "start": 13.00578,
-        "end": 15.40685,
-        "durationInFrames": 145,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Child reading book",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781709"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Child on computer",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78170a"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Learning",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78170b"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1920,
-          "width": 1080,
-          "video": {
-            "id": "10448278",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 5689966,
-            "width": 1080,
-            "height": 1920,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/7494784/7494784-hd_1080_1920_30fps.mp4"
-          },
-          "image": {
-            "id": "7494784",
-            "link": "https://images.pexels.com/videos/7494784/apartment-art-baby-bed-7494784.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78170c"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b781703"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "A",
-            "start": 15.40685,
-            "end": 15.56692,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78170e"
-            }
-          },
-          {
-            "word": "12",
-            "start": 15.56692,
-            "end": 15.84705,
-            "confidence": 0.51,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78170f"
-            }
-          },
-          {
-            "word": "ans,",
-            "start": 15.84705,
-            "end": 16.22721,
-            "confidence": 0.94,
+            "word": "plein",
+            "start": 8.1,
+            "end": 8.48,
             "durationInFrames": 23,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781710"
+              "$oid": "67fd1d7ae3fa3fa1d34a5067"
             }
           },
           {
-            "word": "il",
-            "start": 16.22721,
-            "end": 16.4273,
-            "confidence": 1,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781711"
-            }
-          },
-          {
-            "word": "crée",
-            "start": 16.4273,
-            "end": 16.90752,
-            "confidence": 0.98,
-            "durationInFrames": 29,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781712"
-            }
-          },
-          {
-            "word": "et",
-            "start": 16.90752,
-            "end": 17.0876,
-            "confidence": 0.91,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781713"
-            }
-          },
-          {
-            "word": "vend",
-            "start": 17.0876,
-            "end": 17.48777,
-            "confidence": 0.69,
-            "durationInFrames": 24,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781714"
-            }
-          },
-          {
-            "word": "son",
-            "start": 17.48777,
-            "end": 17.70787,
-            "confidence": 1,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781715"
-            }
-          },
-          {
-            "word": "premier",
-            "start": 17.70787,
-            "end": 18.12806,
-            "confidence": 0.95,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781716"
-            }
-          },
-          {
-            "word": "jeu",
-            "start": 18.12806,
-            "end": 18.42819,
-            "confidence": 0.99,
+            "word": "air",
+            "start": 8.48,
+            "end": 8.78,
             "durationInFrames": 18,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781717"
+              "$oid": "67fd1d7ae3fa3fa1d34a5068"
             }
           },
           {
-            "word": "vidéo.",
-            "start": 18.42819,
-            "end": 19.18853,
-            "confidence": 0.93,
-            "durationInFrames": 46,
+            "word": "vous",
+            "start": 8.78,
+            "end": 9.02,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781718"
+              "$oid": "67fd1d7ae3fa3fa1d34a5069"
+            }
+          },
+          {
+            "word": "attend.",
+            "start": 9.02,
+            "end": 9.3,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a506a"
             }
           }
         ],
-        "text": "A 12 ans, il crée et vend son premier jeu vidéo.",
-        "start": 15.40685,
-        "end": 19.18853,
-        "durationInFrames": 228,
+        "text": "de La Rochelle, une multitude d'aventures en pleinair vous attend.",
+        "start": 5.48,
+        "end": 9.3,
+        "durationInFrames": 230,
+        "audioIndex": 1,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Child coding",
+            "keyword": "outdoor activities",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781719"
+              "$oid": "67fd1d7ae3fa3fa1d34a506b"
             }
           },
           {
             "search": "stock",
-            "keyword": "Video game development",
+            "keyword": "adventure landscape",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78171a"
+              "$oid": "67fd1d7ae3fa3fa1d34a506c"
             }
           },
           {
             "search": "stock",
-            "keyword": "Gaming",
+            "keyword": "nature",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78171b"
+              "$oid": "67fd1d7ae3fa3fa1d34a506d"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1080,
-          "width": 2048,
+          "show": "half",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "An aerial view of a playground with people on it. The playground has a green, grass area and a blue and green painted area with a slide, climbing frame, and a swing set. There are people walking along a pathway that borders the park.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a506f"
+              }
+            }
+          ],
           "video": {
-            "id": "11165468",
-            "quality": "hd",
+            "id": "13461269",
+            "quality": null,
             "file_type": "video/mp4",
-            "size": 9379106,
-            "width": 2048,
+            "size": 7195636,
+            "width": 1920,
             "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/9783697/9783697-hd_2048_1080_25fps.mp4"
+            "fps": 60,
+            "link": "https://videos.pexels.com/video-files/31588917/13461269_1920_1080_60fps.mp4"
           },
           "image": {
-            "id": "9783697",
-            "link": "https://images.pexels.com/videos/9783697/abstract-adult-analogue-backlit-9783697.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
+            "id": "31588917",
+            "link": "https://images.pexels.com/videos/31588917/4k-4k-drone-4k-drone-footage-4k-drone-shot-31588917.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
             "height": 2160
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b78171c"
+            "$oid": "67fd1f59154e8a7a0c0c454e"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b78170d"
+          "$oid": "67fd1d7ae3fa3fa1d34a505f"
         }
       },
       {
         "words": [
           {
-            "word": "A",
-            "start": 19.18853,
-            "end": 19.32859,
-            "confidence": 0.99,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78171e"
-            }
-          },
-          {
-            "word": "17",
-            "start": 19.32859,
-            "end": 19.68875,
-            "confidence": 0.29,
+            "word": "Partez",
+            "start": 9.3,
+            "end": 9.66,
             "durationInFrames": 22,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78171f"
+              "$oid": "67fd1d7ae3fa3fa1d34a5071"
             }
           },
           {
-            "word": "ans,",
-            "start": 19.68875,
-            "end": 19.80881,
-            "confidence": 0.96,
-            "durationInFrames": 7,
+            "word": "en",
+            "start": 9.66,
+            "end": 9.74,
+            "durationInFrames": 5,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781720"
+              "$oid": "67fd1d7ae3fa3fa1d34a5072"
             }
           },
           {
-            "word": "il",
-            "start": 19.80881,
-            "end": 19.98889,
-            "confidence": 1,
-            "durationInFrames": 11,
+            "word": "famille",
+            "start": 9.74,
+            "end": 10.120000000000001,
+            "durationInFrames": 23,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781721"
+              "$oid": "67fd1d7ae3fa3fa1d34a5073"
             }
           },
           {
-            "word": "quitte",
-            "start": 19.98889,
-            "end": 20.249,
-            "confidence": 1,
-            "durationInFrames": 16,
+            "word": "admirer",
+            "start": 10.120000000000001,
+            "end": 10.700000000000001,
+            "durationInFrames": 35,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781722"
-            }
-          },
-          {
-            "word": "son",
-            "start": 20.249,
-            "end": 20.42908,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781723"
-            }
-          },
-          {
-            "word": "pays",
-            "start": 20.42908,
-            "end": 20.70921,
-            "confidence": 1,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781724"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 20.70921,
-            "end": 20.84927,
-            "confidence": 0.91,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781725"
+              "$oid": "67fd1d7ae3fa3fa1d34a5074"
             }
           },
           {
             "word": "le",
-            "start": 20.84927,
-            "end": 20.98933,
-            "confidence": 1,
+            "start": 10.700000000000001,
+            "end": 10.84,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781726"
+              "$oid": "67fd1d7ae3fa3fa1d34a5075"
             }
           },
           {
-            "word": "Canada,",
-            "start": 20.98933,
-            "end": 21.70965,
-            "confidence": 0.94,
-            "durationInFrames": 43,
+            "word": "majestueux",
+            "start": 10.84,
+            "end": 11.440000000000001,
+            "durationInFrames": 36,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781727"
+              "$oid": "67fd1d7ae3fa3fa1d34a5076"
             }
           },
           {
-            "word": "dormant",
-            "start": 21.70965,
-            "end": 22.08982,
-            "confidence": 0.9,
-            "durationInFrames": 23,
+            "word": "Fort",
+            "start": 11.440000000000001,
+            "end": 11.74,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781728"
+              "$oid": "67fd1d7ae3fa3fa1d34a5077"
             }
           },
           {
-            "word": "chez",
-            "start": 22.08982,
-            "end": 22.22988,
-            "confidence": 0.93,
-            "durationInFrames": 8,
+            "word": "Boyard",
+            "start": 11.74,
+            "end": 12.260000000000002,
+            "durationInFrames": 31,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781729"
+              "$oid": "67fd1d7ae3fa3fa1d34a5078"
+            }
+          },
+          {
+            "word": "lors",
+            "start": 12.260000000000002,
+            "end": 12.600000000000001,
+            "durationInFrames": 20,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5079"
             }
           }
         ],
-        "text": "A 17 ans, il quitte son pays pour le Canada, dormant chez",
-        "start": 19.18853,
-        "end": 22.22988,
-        "durationInFrames": 182,
+        "text": "Partez en famille admirer le majestueux Fort Boyard lors",
+        "start": 9.3,
+        "end": 12.600000000000001,
+        "durationInFrames": 198,
+        "audioIndex": 2,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Plane taking off",
+            "keyword": "family on boat",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78172a"
+              "$oid": "67fd1d7ae3fa3fa1d34a507a"
             }
           },
           {
             "search": "stock",
-            "keyword": "Airport departure",
+            "keyword": "boat tour",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78172b"
+              "$oid": "67fd1d7ae3fa3fa1d34a507b"
             }
           },
           {
             "search": "stock",
-            "keyword": "Travel",
+            "keyword": "sailing",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78172c"
+              "$oid": "67fd1d7ae3fa3fa1d34a507c"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A man and a boy are on a sailboat, both making heart shapes with their hands and looking out to the horizon. The sailboat is white and has a white sail. The water is blue and the sky is clear. The man is wearing a red jacket, a striped shirt, and white sneakers. The boy is wearing a black shirt, white shorts, and white sneakers. The sailboat is moving.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a507e"
+              }
+            }
+          ],
           "video": {
-            "id": "9442112",
+            "id": "11002408",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 24413741,
-            "width": 1080,
-            "height": 1920,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/4686173/4686173-hd_1080_1920_30fps.mp4"
-          },
-          "image": {
-            "id": "4686173",
-            "link": "https://images.pexels.com/videos/4686173/pexels-photo-4686173.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78172d"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78171d"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "des",
-            "start": 22.22988,
-            "end": 22.34994,
-            "confidence": 0.99,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78172f"
-            }
-          },
-          {
-            "word": "cousins",
-            "start": 22.34994,
-            "end": 22.91019,
-            "confidence": 0.93,
-            "durationInFrames": 34,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781730"
-            }
-          },
-          {
-            "word": "et",
-            "start": 22.91019,
-            "end": 23.09027,
-            "confidence": 0.95,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781731"
-            }
-          },
-          {
-            "word": "enchaînant",
-            "start": 23.09027,
-            "end": 23.55047,
-            "confidence": 0.93,
-            "durationInFrames": 28,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781732"
-            }
-          },
-          {
-            "word": "les",
-            "start": 23.55047,
-            "end": 23.71054,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781733"
-            }
-          },
-          {
-            "word": "petits",
-            "start": 23.71054,
-            "end": 24.03068,
-            "confidence": 1,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781734"
-            }
-          },
-          {
-            "word": "boulots.",
-            "start": 24.03068,
-            "end": 24.71099,
-            "confidence": 0.63,
-            "durationInFrames": 41,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781735"
-            }
-          }
-        ],
-        "text": "des cousins et enchaînant les petits boulots.",
-        "start": 22.22988,
-        "end": 24.71099,
-        "durationInFrames": 150,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Relative's home",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781736"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Living with relatives",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781737"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Family",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781738"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 2048,
-          "width": 1080,
-          "video": {
-            "id": "10454620",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 6227377,
+            "size": 7113865,
             "width": 1080,
             "height": 2048,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7491797/7491797-hd_1080_2048_25fps.mp4"
+            "fps": 24,
+            "link": "https://videos.pexels.com/video-files/8925163/8925163-hd_1080_2048_24fps.mp4"
           },
           "image": {
-            "id": "7491797",
-            "link": "https://images.pexels.com/videos/7491797/pexels-photo-7491797.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "id": "8925163",
+            "link": "https://images.pexels.com/videos/8925163/adult-learning-blue-sky-blue-water-boat-8925163.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
             "width": 2160,
             "height": 4096
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b781739"
+            "$oid": "67fd1f59154e8a7a0c0c455d"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b78172e"
+          "$oid": "67fd1d7ae3fa3fa1d34a5070"
         }
       },
       {
         "words": [
           {
-            "word": "Après",
-            "start": 24.71099,
-            "end": 24.95109,
-            "confidence": 1,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173b"
-            }
-          },
-          {
-            "word": "ses",
-            "start": 24.95109,
-            "end": 25.15118,
-            "confidence": 0.86,
+            "word": "d'une",
+            "start": 12.600000000000001,
+            "end": 12.8,
             "durationInFrames": 12,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173c"
+              "$oid": "67fd1d7ae3fa3fa1d34a5080"
             }
           },
           {
-            "word": "études,",
-            "start": 25.15118,
-            "end": 25.73144,
-            "confidence": 1,
-            "durationInFrames": 35,
+            "word": "croisière",
+            "start": 12.8,
+            "end": 13.280000000000001,
+            "durationInFrames": 29,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173d"
+              "$oid": "67fd1d7ae3fa3fa1d34a5081"
             }
           },
           {
-            "word": "il",
-            "start": 25.73144,
-            "end": 25.89151,
-            "confidence": 0.99,
-            "durationInFrames": 10,
+            "word": "rafraîchissante",
+            "start": 13.280000000000001,
+            "end": 14.02,
+            "durationInFrames": 44,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173e"
+              "$oid": "67fd1d7ae3fa3fa1d34a5082"
             }
           },
           {
-            "word": "lance",
-            "start": 25.89151,
-            "end": 26.41174,
-            "confidence": 0.94,
-            "durationInFrames": 31,
+            "word": "depuis",
+            "start": 14.02,
+            "end": 14.32,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78173f"
+              "$oid": "67fd1d7ae3fa3fa1d34a5083"
             }
           },
           {
-            "word": "Zip2.",
-            "start": 26.41174,
-            "end": 27.07204,
-            "confidence": 0.21,
-            "durationInFrames": 40,
+            "word": "nos",
+            "start": 14.32,
+            "end": 14.52,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781740"
+              "$oid": "67fd1d7ae3fa3fa1d34a5084"
+            }
+          },
+          {
+            "word": "campings",
+            "start": 14.52,
+            "end": 14.9,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5085"
+            }
+          },
+          {
+            "word": "Bonne",
+            "start": 14.9,
+            "end": 15.240000000000002,
+            "durationInFrames": 20,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5086"
+            }
+          },
+          {
+            "word": "Anse",
+            "start": 15.240000000000002,
+            "end": 15.38,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5087"
+            }
+          },
+          {
+            "word": "Plage",
+            "start": 15.38,
+            "end": 15.8,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5088"
             }
           }
         ],
-        "text": "Après ses études, il lance Zip2.",
-        "start": 24.71099,
-        "end": 27.07204,
-        "durationInFrames": 142,
+        "text": "d'une croisière rafraîchissante depuis nos campings Bonne Anse Plage",
+        "start": 12.600000000000001,
+        "end": 15.8,
+        "durationInFrames": 191,
+        "audioIndex": 2,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Startup office",
+            "keyword": "fort boyard cruise",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781741"
+              "$oid": "67fd1d7ae3fa3fa1d34a5089"
             }
           },
           {
             "search": "stock",
-            "keyword": "New business",
+            "keyword": "island cruise",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781742"
+              "$oid": "67fd1d7ae3fa3fa1d34a508a"
             }
           },
           {
             "search": "stock",
-            "keyword": "Entrepreneurship",
+            "keyword": "cruise",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781743"
+              "$oid": "67fd1d7ae3fa3fa1d34a508b"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1080,
-          "width": 1920,
+          "show": "half",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A boat is docked at a pier in front of a castle on an island in the middle of a river. The camera is positioned directly above the boat and looking down towards the pier. The river is calm and the water is a dark blue. The sky is overcast and the air is still.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a508d"
+              }
+            }
+          ],
           "video": {
-            "id": "9955311",
+            "id": "10628384",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 3451422,
+            "size": 32719145,
             "width": 1920,
             "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/6194002/6194002-hd_1920_1080_25fps.mp4"
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/7921906/7921906-hd_1920_1080_30fps.mp4"
           },
           "image": {
-            "id": "6194002",
-            "link": "https://images.pexels.com/videos/6194002/african-african-american-brainstorming-business-6194002.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
+            "id": "7921906",
+            "link": "https://images.pexels.com/videos/7921906/pexels-photo-7921906.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b781744"
+            "$oid": "67fd1f59154e8a7a0c0c456c"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b78173a"
+          "$oid": "67fd1d7ae3fa3fa1d34a507f"
         }
       },
       {
         "words": [
           {
-            "word": "Sa",
-            "start": 27.07204,
-            "end": 27.212120000000002,
-            "confidence": 1,
+            "word": "ou",
+            "start": 15.8,
+            "end": 16.060000000000002,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a508f"
+            }
+          },
+          {
+            "word": "Les",
+            "start": 16.060000000000002,
+            "end": 16.200000000000003,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781746"
+              "$oid": "67fd1d7ae3fa3fa1d34a5090"
             }
           },
           {
-            "word": "première",
-            "start": 27.212120000000002,
-            "end": 27.65237,
-            "confidence": 0.99,
-            "durationInFrames": 26,
+            "word": "Charmettes.",
+            "start": 16.200000000000003,
+            "end": 16.66,
+            "durationInFrames": 28,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781747"
+              "$oid": "67fd1d7ae3fa3fa1d34a5091"
             }
-          },
+          }
+        ],
+        "text": "ou Les Charmettes.",
+        "start": 15.8,
+        "end": 16.66,
+        "durationInFrames": 52,
+        "audioIndex": 2,
+        "keywords": [
           {
-            "word": "entreprise",
-            "start": 27.65237,
-            "end": 28.27272,
-            "confidence": 1,
-            "durationInFrames": 37,
+            "search": "stock",
+            "keyword": "beach resort",
+            "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781748"
+              "$oid": "67fd1d7ae3fa3fa1d34a5092"
             }
           },
           {
-            "word": "qu'il",
-            "start": 28.27272,
-            "end": 28.49284,
-            "confidence": 0.94,
+            "search": "stock",
+            "keyword": "coastal resort",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5093"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "resort",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5094"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "The video shows a beach with a lot of people on it. There is a large building in the background. The water is clear and blue, and the sky is a beautiful blue with some white clouds. It looks like a perfect summer day.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a5096"
+              }
+            }
+          ],
+          "video": {
+            "id": "13465339",
+            "quality": null,
+            "file_type": "video/mp4",
+            "size": 19118870,
+            "width": 1080,
+            "height": 1920,
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/31600110/13465339_1080_1920_30fps.mp4"
+          },
+          "image": {
+            "id": "31600110",
+            "link": "https://images.pexels.com/videos/31600110/pexels-photo-31600110.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c4575"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a508e"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Sentez",
+            "start": 16.66,
+            "end": 17.02,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5098"
+            }
+          },
+          {
+            "word": "l'air",
+            "start": 17.02,
+            "end": 17.26,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5099"
+            }
+          },
+          {
+            "word": "marin",
+            "start": 17.26,
+            "end": 17.66,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a509a"
+            }
+          },
+          {
+            "word": "caresser",
+            "start": 17.66,
+            "end": 18.080000000000002,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a509b"
+            }
+          },
+          {
+            "word": "votre",
+            "start": 18.080000000000002,
+            "end": 18.28,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a509c"
+            }
+          },
+          {
+            "word": "visage",
+            "start": 18.28,
+            "end": 18.8,
+            "durationInFrames": 31,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a509d"
+            }
+          },
+          {
+            "word": "pendant",
+            "start": 18.8,
+            "end": 19.02,
             "durationInFrames": 13,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781749"
+              "$oid": "67fd1d7ae3fa3fa1d34a509e"
             }
           },
           {
-            "word": "revend",
-            "start": 28.49284,
-            "end": 28.793010000000002,
-            "confidence": 0.86,
-            "durationInFrames": 18,
+            "word": "que",
+            "start": 19.02,
+            "end": 19.240000000000002,
+            "durationInFrames": 13,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174a"
+              "$oid": "67fd1d7ae3fa3fa1d34a509f"
             }
           },
           {
-            "word": "pour",
-            "start": 28.793010000000002,
-            "end": 28.973110000000002,
-            "confidence": 0.99,
-            "durationInFrames": 11,
+            "word": "vos",
+            "start": 19.240000000000002,
+            "end": 19.36,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174b"
+              "$oid": "67fd1d7ae3fa3fa1d34a50a0"
             }
           },
           {
-            "word": "307",
-            "start": 28.973110000000002,
-            "end": 29.69351,
-            "confidence": 0,
-            "durationInFrames": 43,
+            "word": "enfants",
+            "start": 19.36,
+            "end": 19.76,
+            "durationInFrames": 24,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174c"
+              "$oid": "67fd1d7ae3fa3fa1d34a50a1"
+            }
+          }
+        ],
+        "text": "Sentez l'air marin caresser votre visage pendant que vos enfants",
+        "start": 16.66,
+        "end": 19.76,
+        "durationInFrames": 185,
+        "audioIndex": 3,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "family on beach",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50a2"
             }
           },
           {
-            "word": "millions",
-            "start": 29.69351,
-            "end": 30.01369,
-            "confidence": 0.88,
-            "durationInFrames": 19,
+            "search": "stock",
+            "keyword": "seaside family",
+            "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174d"
+              "$oid": "67fd1d7ae3fa3fa1d34a50a3"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "family",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50a4"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A young child is walking on a beach. There are waves crashing against the shore in the background.  The child is wearing a bathing suit.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a50a6"
+              }
+            }
+          ],
+          "video": {
+            "id": "13464720",
+            "quality": null,
+            "file_type": "video/mp4",
+            "size": 32795615,
+            "width": 1080,
+            "height": 1920,
+            "fps": 60,
+            "link": "https://videos.pexels.com/video-files/31599116/13464720_1080_1920_60fps.mp4"
+          },
+          "image": {
+            "id": "31599116",
+            "link": "https://images.pexels.com/videos/31599116/pexels-photo-31599116.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c4585"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5097"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "s'émerveillent",
+            "start": 19.76,
+            "end": 20.86,
+            "durationInFrames": 66,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50a8"
+            }
+          },
+          {
+            "word": "devant",
+            "start": 20.86,
+            "end": 21.400000000000002,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50a9"
+            }
+          },
+          {
+            "word": "ce",
+            "start": 21.400000000000002,
+            "end": 21.6,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50aa"
+            }
+          },
+          {
+            "word": "monument",
+            "start": 21.6,
+            "end": 21.98,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50ab"
+            }
+          },
+          {
+            "word": "emblématique.",
+            "start": 21.98,
+            "end": 22.66,
+            "durationInFrames": 41,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50ac"
+            }
+          }
+        ],
+        "text": "s'émerveillent devant ce monument emblématique.",
+        "start": 19.76,
+        "end": 22.66,
+        "durationInFrames": 174,
+        "audioIndex": 3,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "monument visit",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50ad"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "landmark tour",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50ae"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "tourism",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50af"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "hide",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A young man in a plaid shirt and jeans is skateboarding down the street. He is performing a trick where he is balancing on the board with one foot, while the other foot is in the air. The background is a stone building with a statue in a niche. There is a pigeon on the ground.  The man is skating in a straight line.  He is wearing black shoes and the board has a graphic on it.  The man is moving forward and his left arm is extended out to the side, while his right arm is bent at the elbow.  The video is shot in a vertical format. The man is skating in front of a yellow building. The building has horizontal lines and a white trim. There is a statue of a knight in armor in the niche of the building. The statue is made of stone and it has a lot of detail.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a50b1"
+              }
+            }
+          ],
+          "video": {
+            "id": "9286018",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 14741741,
+            "width": 2048,
+            "height": 1080,
+            "fps": 24,
+            "link": "https://videos.pexels.com/video-files/2953642/2953642-hd_2048_1080_24fps.mp4"
+          },
+          "image": {
+            "id": "2953642",
+            "link": "https://images.pexels.com/videos/2953642/free-video-2953642.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c4590"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a50a7"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Amateur",
+            "start": 22.66,
+            "end": 23.04,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50b3"
             }
           },
           {
             "word": "de",
-            "start": 30.01369,
-            "end": 30.19379,
-            "confidence": 0.95,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174e"
-            }
-          }
-        ],
-        "text": "Sa première entreprise qu'il revend pour 307 millions de",
-        "start": 27.07204,
-        "end": 30.19379,
-        "durationInFrames": 186,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Money transfer",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78174f"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Business deal",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781750"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Success",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781751"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 1920,
-          "video": {
-            "id": "9640388",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 6783937,
-            "width": 1920,
-            "height": 1080,
-            "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/5220473/5220473-hd_1920_1080_30fps.mp4"
-          },
-          "image": {
-            "id": "5220473",
-            "link": "https://images.pexels.com/videos/5220473/pexels-photo-5220473.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b781752"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b781745"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "dollars.",
-            "start": 30.19379,
-            "end": 31.11431,
-            "confidence": 0.75,
-            "durationInFrames": 55,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781754"
-            }
-          },
-          {
-            "word": "Il",
-            "start": 31.11431,
-            "end": 31.25439,
-            "confidence": 1,
+            "start": 23.04,
+            "end": 23.18,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781755"
+              "$oid": "67fd1d7ae3fa3fa1d34a50b4"
             }
           },
           {
-            "word": "crée",
-            "start": 31.25439,
-            "end": 31.51453,
-            "confidence": 0.97,
-            "durationInFrames": 16,
+            "word": "sensations",
+            "start": 23.18,
+            "end": 23.52,
+            "durationInFrames": 20,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781756"
+              "$oid": "67fd1d7ae3fa3fa1d34a50b5"
             }
           },
           {
-            "word": "ensuite",
-            "start": 31.51453,
-            "end": 32.27496,
-            "confidence": 1,
-            "durationInFrames": 46,
+            "word": "fortes ?",
+            "start": 23.52,
+            "end": 24.36,
+            "durationInFrames": 50,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b781757"
-            }
-          },
-          {
-            "word": "X.com",
-            "start": 32.27496,
-            "end": 32.99536,
-            "confidence": 0.54,
-            "durationInFrames": 43,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781758"
-            }
-          },
-          {
-            "word": "qui",
-            "start": 32.99536,
-            "end": 33.15545,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781759"
-            }
-          },
-          {
-            "word": "devient",
-            "start": 33.15545,
-            "end": 33.775800000000004,
-            "confidence": 0.98,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78175a"
+              "$oid": "67fd1d7ae3fa3fa1d34a50b6"
             }
           }
         ],
-        "text": "dollars. Il crée ensuite X.com qui devient",
-        "start": 30.19379,
-        "end": 33.775800000000004,
-        "durationInFrames": 215,
+        "text": "Amateur de sensations fortes ?",
+        "start": 22.66,
+        "end": 24.36,
+        "durationInFrames": 101,
+        "audioIndex": 4,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Online payment",
+            "keyword": "extreme sports",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78175b"
+              "$oid": "67fd1d7ae3fa3fa1d34a50b7"
             }
           },
           {
             "search": "stock",
-            "keyword": "Financial transaction",
+            "keyword": "action sports",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78175c"
+              "$oid": "67fd1d7ae3fa3fa1d34a50b8"
             }
           },
           {
             "search": "stock",
-            "keyword": "Finance",
+            "keyword": "adventure",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b78175d"
+              "$oid": "67fd1d7ae3fa3fa1d34a50b9"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A paraglider is flying in the sky. The sky is blue and there are a few white clouds. The paraglider is yellow and blue. The person is flying over the ocean. There is a boat in the distance.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a50bb"
+              }
+            }
+          ],
           "video": {
-            "id": "10475293",
-            "quality": "hd",
+            "id": "13464222",
+            "quality": null,
             "file_type": "video/mp4",
-            "size": 5949327,
+            "size": 4718024,
             "width": 1080,
             "height": 1920,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7567357/7567357-hd_1080_1920_25fps.mp4"
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/31597948/13464222_1080_1920_30fps.mp4"
           },
           "image": {
-            "id": "7567357",
-            "link": "https://images.pexels.com/videos/7567357/adult-african-african-american-black-7567357.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "id": "31597948",
+            "link": "https://images.pexels.com/videos/31597948/fethiye-babadag-31597948.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
             "width": 1080,
             "height": 1920
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b78175e"
+            "$oid": "67fd1f59154e8a7a0c0c459a"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b781753"
+          "$oid": "67fd1d7ae3fa3fa1d34a50b2"
         }
       },
       {
         "words": [
           {
-            "word": "Paypal,",
-            "start": 33.775800000000004,
-            "end": 34.39615,
-            "confidence": 0.77,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781760"
-            }
-          },
-          {
-            "word": "revendu",
-            "start": 34.39615,
-            "end": 34.83639,
-            "confidence": 0.99,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781761"
-            }
-          },
-          {
-            "word": "à",
-            "start": 34.83639,
-            "end": 35.016490000000005,
-            "confidence": 0.99,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781762"
-            }
-          },
-          {
-            "word": "eBay",
-            "start": 35.016490000000005,
-            "end": 35.33667,
-            "confidence": 0.49,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781763"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 35.33667,
-            "end": 35.51677,
-            "confidence": 0.98,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781764"
-            }
-          },
-          {
-            "word": "1,5",
-            "start": 35.51677,
-            "end": 35.65685,
-            "confidence": 0.17,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781765"
-            }
-          },
-          {
-            "word": "milliard.",
-            "start": 35.65685,
-            "end": 37.43785,
-            "confidence": 0.92,
-            "durationInFrames": 107,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781766"
-            }
-          }
-        ],
-        "text": "Paypal, revendu à eBay pour 1,5 milliard.",
-        "start": 33.775800000000004,
-        "end": 37.43785,
-        "durationInFrames": 219,
-        "keywords": [
-          {
-            "search": "web",
-            "keyword": "eBay logo",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781767"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Company acquisition",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781768"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Business growth",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781769"
-            }
-          }
-        ],
-        "media": {
-          "type": "image",
-          "name": "Introducing the eBay Marketplace Integration | Akeneo",
-          "height": 1707,
-          "width": 2560,
-          "image": {
-            "id": "img-1731713948921-82fdyl6z8",
-            "link": "https://www.akeneo.com/wp-content/uploads/2024/10/AdobeStock_283674568_Editorial_Use_Only-scaled.jpeg",
-            "width": 2560,
-            "height": 1707
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78176a"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78175f"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Mais",
-            "start": 37.43785,
-            "end": 37.59794,
-            "confidence": 0.85,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78176c"
-            }
-          },
-          {
-            "word": "Musk",
-            "start": 37.59794,
-            "end": 37.8781,
-            "confidence": 0.52,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78176d"
-            }
-          },
-          {
-            "word": "ne",
-            "start": 37.8781,
-            "end": 38.03818,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78176e"
-            }
-          },
-          {
-            "word": "s'arrête",
-            "start": 38.03818,
-            "end": 38.37838,
-            "confidence": 0.93,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78176f"
-            }
-          },
-          {
-            "word": "pas",
-            "start": 38.37838,
-            "end": 38.51845,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781770"
-            }
-          },
-          {
-            "word": "là,",
-            "start": 38.51845,
-            "end": 38.878659999999996,
-            "confidence": 1,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781771"
-            }
-          },
-          {
-            "word": "il",
-            "start": 38.878659999999996,
-            "end": 39.018730000000005,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781772"
-            }
-          },
-          {
-            "word": "investit",
-            "start": 39.018730000000005,
-            "end": 39.499,
-            "confidence": 0.93,
-            "durationInFrames": 29,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781773"
-            }
-          },
-          {
-            "word": "sa",
-            "start": 39.499,
-            "end": 39.65909,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781774"
-            }
-          },
-          {
-            "word": "fortune",
-            "start": 39.65909,
-            "end": 40.09934,
-            "confidence": 1,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781775"
-            }
-          },
-          {
-            "word": "dans",
-            "start": 40.09934,
-            "end": 40.23942,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781776"
-            }
-          },
-          {
-            "word": "des",
-            "start": 40.23942,
-            "end": 40.3795,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781777"
-            }
-          },
-          {
-            "word": "projets",
-            "start": 40.3795,
-            "end": 40.83975,
-            "confidence": 0.92,
-            "durationInFrames": 28,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781778"
-            }
-          }
-        ],
-        "text": "Mais Musk ne s'arrête pas là, il investit sa fortune dans des projets",
-        "start": 37.43785,
-        "end": 40.83975,
-        "durationInFrames": 204,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Investment portfolio",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781779"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Business investment",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78177a"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Investment",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78177b"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 2048,
-          "video": {
-            "id": "9852074",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 20038496,
-            "width": 2048,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/5909908/5909908-hd_2048_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "5909908",
-            "link": "https://images.pexels.com/videos/5909908/pexels-photo-5909908.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78177c"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78176b"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "ambitieux.",
-            "start": 40.83975,
-            "end": 41.72025,
-            "confidence": 0.95,
-            "durationInFrames": 53,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78177e"
-            }
-          },
-          {
-            "word": "Tesla",
-            "start": 41.72025,
-            "end": 42.10046,
-            "confidence": 0.85,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78177f"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 42.10046,
-            "end": 42.36061,
-            "confidence": 0.99,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781780"
-            }
-          },
-          {
-            "word": "révolutionner",
-            "start": 42.36061,
-            "end": 42.96094,
-            "confidence": 0.99,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781781"
-            }
-          },
-          {
-            "word": "l'automobile,",
-            "start": 42.96094,
-            "end": 43.66133,
-            "confidence": 0.93,
-            "durationInFrames": 42,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781782"
-            }
-          },
-          {
-            "word": "SpaceX",
-            "start": 43.66133,
-            "end": 44.40175,
-            "confidence": 0.77,
-            "durationInFrames": 44,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781783"
-            }
-          }
-        ],
-        "text": "ambitieux. Tesla pour révolutionner l'automobile, SpaceX",
-        "start": 40.83975,
-        "end": 44.40175,
-        "durationInFrames": 214,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Electric car",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781784"
-            }
-          },
-          {
-            "search": "web",
-            "keyword": "Tesla logo",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781785"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Innovation",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781786"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 1920,
-          "video": {
-            "id": "9267619",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 42928058,
-            "width": 1920,
-            "height": 1080,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/2053100/2053100-hd_1920_1080_30fps.mp4"
-          },
-          "image": {
-            "id": "2053100",
-            "link": "https://images.pexels.com/videos/2053100/free-video-2053100.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b781787"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78177d"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "pour",
-            "start": 44.40175,
-            "end": 44.60186,
-            "confidence": 0.92,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781789"
-            }
-          },
-          {
-            "word": "conquérir",
-            "start": 44.60186,
-            "end": 45.122150000000005,
-            "confidence": 0.9,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178a"
-            }
-          },
-          {
-            "word": "l'espace.",
-            "start": 45.122150000000005,
-            "end": 46.08269,
-            "confidence": 0.95,
-            "durationInFrames": 58,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178b"
-            }
-          }
-        ],
-        "text": "pour conquérir l'espace.",
-        "start": 44.40175,
-        "end": 46.08269,
-        "durationInFrames": 101,
-        "keywords": [
-          {
-            "search": "web",
-            "keyword": "SpaceX logo",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178c"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Space exploration",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178d"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Space",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78178e"
-            }
-          }
-        ],
-        "media": {
-          "type": "image",
-          "name": "Symbol SpaceX Logo Iron-on Sticker (heat transfer) – Customisation ...",
-          "height": 943,
-          "width": 2048,
-          "image": {
-            "id": "img-1731713950757-jbby700t2",
-            "link": "https://customisation.club/cdn/shop/products/IMG_20210513_092943_dcca2bb0-8fd1-430f-aa96-39d3f41846fb_1024x1024@2x.jpg?v=1682789860",
-            "width": 2048,
-            "height": 943
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78178f"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b781788"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Malgré",
-            "start": 46.08269,
-            "end": 46.42288,
-            "confidence": 0.93,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781791"
-            }
-          },
-          {
-            "word": "les",
-            "start": 46.42288,
-            "end": 46.60298,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781792"
-            }
-          },
-          {
-            "word": "échecs",
-            "start": 46.60298,
-            "end": 46.96318,
-            "confidence": 0.84,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781793"
-            }
-          },
-          {
-            "word": "et",
-            "start": 46.96318,
-            "end": 47.02322,
-            "confidence": 0.83,
-            "durationInFrames": 4,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781794"
-            }
-          },
-          {
-            "word": "les",
-            "start": 47.02322,
-            "end": 47.143280000000004,
-            "confidence": 0.81,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781795"
-            }
-          },
-          {
-            "word": "critiques,",
-            "start": 47.143280000000004,
-            "end": 47.803650000000005,
-            "confidence": 0.91,
-            "durationInFrames": 40,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781796"
-            }
-          },
-          {
-            "word": "sa",
-            "start": 47.803650000000005,
-            "end": 47.98375,
-            "confidence": 1,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781797"
-            }
-          },
-          {
-            "word": "persévérance",
-            "start": 47.98375,
-            "end": 48.80421,
-            "confidence": 0.99,
-            "durationInFrames": 49,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781798"
-            }
-          },
-          {
-            "word": "paie.",
-            "start": 48.80421,
-            "end": 49.34452,
-            "confidence": 0.67,
-            "durationInFrames": 32,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b781799"
-            }
-          }
-        ],
-        "text": "Malgré les échecs et les critiques, sa persévérance paie.",
-        "start": 46.08269,
-        "end": 49.34452,
-        "durationInFrames": 196,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Perseverance",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78179a"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Overcoming obstacles",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78179b"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Success",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78179c"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1080,
-          "width": 2048,
-          "video": {
-            "id": "9596061",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 65530055,
-            "width": 2048,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/5013967/5013967-hd_2048_1080_25fps.mp4"
-          },
-          "image": {
-            "id": "5013967",
-            "link": "https://images.pexels.com/videos/5013967/pexels-photo-5013967.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b78179d"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b781790"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Tesla",
-            "start": 49.34452,
-            "end": 49.70472,
-            "confidence": 0.91,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b78179f"
-            }
-          },
-          {
-            "word": "devient",
-            "start": 49.70472,
-            "end": 50.08493,
-            "confidence": 0.99,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a0"
-            }
-          },
-          {
-            "word": "leader",
-            "start": 50.08493,
-            "end": 50.60522,
-            "confidence": 0.74,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a1"
-            }
-          },
-          {
-            "word": "des",
-            "start": 50.60522,
-            "end": 50.7453,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a2"
-            }
-          },
-          {
-            "word": "voitures",
-            "start": 50.7453,
-            "end": 51.16554,
-            "confidence": 0.95,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a3"
-            }
-          },
-          {
-            "word": "électriques.",
-            "start": 51.16554,
-            "end": 51.96598,
-            "confidence": 0.95,
-            "durationInFrames": 48,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a4"
-            }
-          }
-        ],
-        "text": "Tesla devient leader des voitures électriques.",
-        "start": 49.34452,
-        "end": 51.96598,
-        "durationInFrames": 157,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "Electric car market",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a5"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Tesla car",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a6"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Leadership",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817a7"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1920,
-          "width": 1080,
-          "video": {
-            "id": "12038850",
-            "quality": null,
-            "file_type": "video/mp4",
-            "size": 58931446,
-            "width": 1080,
-            "height": 1920,
-            "fps": 50,
-            "link": "https://videos.pexels.com/video-files/26967507/12038850_1080_1920_50fps.mp4"
-          },
-          "image": {
-            "id": "26967507",
-            "link": "https://images.pexels.com/videos/26967507/asia-driving-sunny-day-26967507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817a8"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b78179e"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "SpaceX",
-            "start": 51.96598,
-            "end": 52.60634,
-            "confidence": 0.77,
+            "word": "Iniciez-vous",
+            "start": 24.36,
+            "end": 25,
             "durationInFrames": 38,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817aa"
-            }
-          },
-          {
-            "word": "réussit",
-            "start": 52.60634,
-            "end": 53.126630000000006,
-            "confidence": 0.94,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ab"
-            }
-          },
-          {
-            "word": "là",
-            "start": 53.126630000000006,
-            "end": 53.26671,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ac"
-            }
-          },
-          {
-            "word": "où",
-            "start": 53.26671,
-            "end": 53.4268,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ad"
-            }
-          },
-          {
-            "word": "les",
-            "start": 53.4268,
-            "end": 53.58689,
-            "confidence": 0.99,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ae"
-            }
-          },
-          {
-            "word": "géants",
-            "start": 53.58689,
-            "end": 53.907070000000004,
-            "confidence": 0.92,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817af"
-            }
-          },
-          {
-            "word": "de",
-            "start": 53.907070000000004,
-            "end": 54.02714,
-            "confidence": 1,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b0"
-            }
-          },
-          {
-            "word": "l'aérospatiale",
-            "start": 54.02714,
-            "end": 54.90763,
-            "confidence": 0.85,
-            "durationInFrames": 53,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b1"
-            }
-          },
-          {
-            "word": "échouent.",
-            "start": 54.90763,
-            "end": 55.64816,
-            "confidence": 0.7,
-            "durationInFrames": 44,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b2"
-            }
-          }
-        ],
-        "text": "SpaceX réussit là où les géants de l'aérospatiale échouent.",
-        "start": 51.96598,
-        "end": 55.64816,
-        "durationInFrames": 220,
-        "keywords": [
-          {
-            "search": "stock",
-            "keyword": "SpaceX rocket",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b3"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Space achievement",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b4"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Innovation",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b5"
-            }
-          }
-        ],
-        "media": {
-          "type": "video",
-          "height": 1920,
-          "width": 1080,
-          "video": {
-            "id": "6195758",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 1815527,
-            "width": 1080,
-            "height": 1920,
-            "fps": 24,
-            "link": "https://videos.pexels.com/video-files/14618955/14618955-hd_1080_1920_24fps.mp4"
-          },
-          "image": {
-            "id": "14618955",
-            "link": "https://images.pexels.com/videos/14618955/cosmos-earth-jupiter-milky-way-14618955.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817b6"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817a9"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "En",
-            "start": 55.64816,
-            "end": 55.80847,
-            "confidence": 0.88,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b8"
-            }
-          },
-          {
-            "word": "2022,",
-            "start": 55.80847,
-            "end": 56.73028,
-            "confidence": 0,
-            "durationInFrames": 55,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817b9"
-            }
-          },
-          {
-            "word": "il",
-            "start": 56.73028,
-            "end": 56.890589999999996,
-            "confidence": 1,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ba"
-            }
-          },
-          {
-            "word": "rachète",
-            "start": 56.890589999999996,
-            "end": 57.29138,
-            "confidence": 0.94,
-            "durationInFrames": 24,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817bb"
-            }
-          },
-          {
-            "word": "Twitter",
-            "start": 57.29138,
-            "end": 57.85248,
-            "confidence": 0.67,
-            "durationInFrames": 34,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817bc"
-            }
-          },
-          {
-            "word": "pour",
-            "start": 57.85248,
-            "end": 58.07291,
-            "confidence": 0.99,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817bd"
-            }
-          },
-          {
-            "word": "44",
-            "start": 58.07291,
-            "end": 58.67409,
-            "confidence": 0,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817be"
-            }
-          },
-          {
-            "word": "milliards",
-            "start": 58.67409,
-            "end": 59.11495,
-            "confidence": 0.84,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817bf"
-            }
-          }
-        ],
-        "text": "En 2022, il rachète Twitter pour 44 milliards",
-        "start": 55.64816,
-        "end": 59.11495,
-        "durationInFrames": 208,
-        "keywords": [
-          {
-            "search": "web",
-            "keyword": "Twitter logo",
-            "precision": "HARD",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c0"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Company acquisition",
-            "precision": "NORMAL",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c1"
-            }
-          },
-          {
-            "search": "stock",
-            "keyword": "Business growth",
-            "precision": "EASY",
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c2"
-            }
-          }
-        ],
-        "media": {
-          "type": "image",
-          "name": "Flip Elon the Bird: How to Turn the X App Icon Back Into Twitter's ...",
-          "height": 2160,
-          "width": 3840,
-          "image": {
-            "id": "img-1731713951247-dsthdr9sv",
-            "link": "https://i.pcmag.com/imagery/articles/06HGiNuO9nzcBSyomWSg6e2-30..v1690990974.jpg",
-            "width": 3840,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817c3"
-          }
-        },
-        "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817b7"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "de",
-            "start": 59.11495,
-            "end": 59.25523,
-            "confidence": 0.98,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c5"
-            }
-          },
-          {
-            "word": "dollars.",
-            "start": 59.25523,
-            "end": 60.03676,
-            "confidence": 0.85,
-            "durationInFrames": 47,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c6"
-            }
-          },
-          {
-            "word": "De",
-            "start": 60.03676,
-            "end": 60.177029999999995,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c7"
-            }
-          },
-          {
-            "word": "l'enfant",
-            "start": 60.177029999999995,
-            "end": 60.53774,
-            "confidence": 0.92,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c8"
-            }
-          },
-          {
-            "word": "solitaire",
-            "start": 60.53774,
-            "end": 61.05876,
-            "confidence": 0.97,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817c9"
+              "$oid": "67fd1d7ae3fa3fa1d34a50bd"
             }
           },
           {
             "word": "au",
-            "start": 61.05876,
-            "end": 61.19904,
-            "confidence": 0.99,
+            "start": 25,
+            "end": 25.14,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ca"
+              "$oid": "67fd1d7ae3fa3fa1d34a50be"
             }
           },
           {
-            "word": "visionnaire",
-            "start": 61.19904,
-            "end": 61.72006,
-            "confidence": 0.95,
+            "word": "kitesurf",
+            "start": 25.14,
+            "end": 25.66,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817cb"
+              "$oid": "67fd1d7ae3fa3fa1d34a50bf"
             }
           },
           {
-            "word": "controversé,",
-            "start": 61.72006,
-            "end": 62.601789999999994,
-            "confidence": 1,
-            "durationInFrames": 53,
+            "word": "sur",
+            "start": 25.66,
+            "end": 25.82,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817cc"
+              "$oid": "67fd1d7ae3fa3fa1d34a50c0"
+            }
+          },
+          {
+            "word": "les",
+            "start": 25.82,
+            "end": 25.98,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50c1"
+            }
+          },
+          {
+            "word": "plages",
+            "start": 25.98,
+            "end": 26.24,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50c2"
+            }
+          },
+          {
+            "word": "de",
+            "start": 26.24,
+            "end": 26.38,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50c3"
+            }
+          },
+          {
+            "word": "l'île",
+            "start": 26.38,
+            "end": 26.56,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50c4"
+            }
+          },
+          {
+            "word": "de",
+            "start": 26.56,
+            "end": 26.72,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50c5"
+            }
+          },
+          {
+            "word": "Ré,",
+            "start": 26.72,
+            "end": 26.939999999999998,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50c6"
+            }
+          },
+          {
+            "word": "où",
+            "start": 26.939999999999998,
+            "end": 27.22,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50c7"
+            }
+          },
+          {
+            "word": "les",
+            "start": 27.22,
+            "end": 27.3,
+            "durationInFrames": 5,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50c8"
+            }
+          },
+          {
+            "word": "conditions",
+            "start": 27.3,
+            "end": 27.72,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50c9"
             }
           }
         ],
-        "text": "de dollars. De l'enfant solitaire au visionnaire controversé,",
-        "start": 59.11495,
-        "end": 62.601789999999994,
-        "durationInFrames": 208,
+        "text": "Iniciez-vous au kitesurf sur les plages de l'île de Ré, où les conditions",
+        "start": 24.36,
+        "end": 27.72,
+        "durationInFrames": 202,
+        "audioIndex": 5,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Visionary leader",
+            "keyword": "kitesurfing lesson",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817cd"
+              "$oid": "67fd1d7ae3fa3fa1d34a50ca"
             }
           },
           {
             "search": "stock",
-            "keyword": "Controversial figure",
+            "keyword": "kitesurfing",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817ce"
+              "$oid": "67fd1d7ae3fa3fa1d34a50cb"
             }
           },
           {
             "search": "stock",
-            "keyword": "Leadership",
+            "keyword": "water sports",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817cf"
+              "$oid": "67fd1d7ae3fa3fa1d34a50cc"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "show": "hide",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A person is writing in a notebook with a pen. The person is sitting at a table and there is a window in the background. The person is only visible from the wrist down and the hand is holding the pen.  There is a decorative pillow in the background.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a50ce"
+              }
+            }
+          ],
           "video": {
-            "id": "10354483",
-            "quality": "hd",
+            "id": "13248678",
+            "quality": null,
             "file_type": "video/mp4",
-            "size": 4850361,
+            "size": 64168569,
             "width": 1080,
             "height": 1920,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7224726/7224726-hd_1080_1920_25fps.mp4"
+            "fps": 30,
+            "link": "https://videos.pexels.com/video-files/30992442/13248678_1080_1920_30fps.mp4"
           },
           "image": {
-            "id": "7224726",
-            "link": "https://images.pexels.com/videos/7224726/pexels-photo-7224726.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
+            "id": "30992442",
+            "link": "https://images.pexels.com/videos/30992442/barcelona-beach-activity-sea-windsurfing-30992442.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 1080,
+            "height": 1920
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817d0"
+            "$oid": "67fd1f59154e8a7a0c0c45ad"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817c4"
+          "$oid": "67fd1d7ae3fa3fa1d34a50bc"
         }
       },
       {
         "words": [
           {
-            "word": "Musk",
-            "start": 62.601789999999994,
-            "end": 63.00257,
-            "confidence": 0.78,
-            "durationInFrames": 24,
+            "word": "sont",
+            "start": 27.72,
+            "end": 27.96,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d2"
+              "$oid": "67fd1d7ae3fa3fa1d34a50d0"
             }
           },
           {
-            "word": "prouve",
-            "start": 63.00257,
-            "end": 63.38332,
-            "confidence": 0.99,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d3"
-            }
-          },
-          {
-            "word": "qu'avec",
-            "start": 63.38332,
-            "end": 63.663869999999996,
-            "confidence": 0.99,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d4"
-            }
-          },
-          {
-            "word": "de",
-            "start": 63.663869999999996,
-            "end": 63.80414,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d5"
-            }
-          },
-          {
-            "word": "l'ambition",
-            "start": 63.80414,
-            "end": 64.30512999999999,
-            "confidence": 0.93,
-            "durationInFrames": 30,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d6"
-            }
-          },
-          {
-            "word": "et",
-            "start": 64.30512999999999,
-            "end": 64.40532,
-            "confidence": 1,
-            "durationInFrames": 6,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d7"
-            }
-          },
-          {
-            "word": "du",
-            "start": 64.40532,
-            "end": 64.5456,
-            "confidence": 1,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d8"
-            }
-          },
-          {
-            "word": "travail,",
-            "start": 64.5456,
-            "end": 65.06662,
-            "confidence": 0.98,
+            "word": "idéales",
+            "start": 27.96,
+            "end": 28.48,
             "durationInFrames": 31,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817d9"
+              "$oid": "67fd1d7ae3fa3fa1d34a50d1"
             }
           },
           {
-            "word": "tout",
-            "start": 65.06662,
-            "end": 65.24697,
-            "confidence": 0.99,
-            "durationInFrames": 11,
+            "word": "même",
+            "start": 28.48,
+            "end": 28.68,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817da"
+              "$oid": "67fd1d7ae3fa3fa1d34a50d2"
             }
           },
           {
-            "word": "est",
-            "start": 65.24697,
-            "end": 65.38725,
-            "confidence": 0.95,
+            "word": "pour",
+            "start": 28.68,
+            "end": 28.88,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50d3"
+            }
+          },
+          {
+            "word": "les",
+            "start": 28.88,
+            "end": 29.02,
             "durationInFrames": 8,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817db"
+              "$oid": "67fd1d7ae3fa3fa1d34a50d4"
             }
           },
           {
-            "word": "possible.",
-            "start": 65.38725,
-            "end": 66.14874,
-            "confidence": 0.96,
-            "durationInFrames": 46,
+            "word": "débutants.",
+            "start": 29.02,
+            "end": 29.48,
+            "durationInFrames": 28,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817dc"
+              "$oid": "67fd1d7ae3fa3fa1d34a50d5"
             }
           }
         ],
-        "text": "Musk prouve qu'avec de l'ambition et du travail, tout est possible.",
-        "start": 62.601789999999994,
-        "end": 66.14874,
-        "durationInFrames": 212,
+        "text": "sont idéales même pour les débutants.",
+        "start": 27.72,
+        "end": 29.48,
+        "durationInFrames": 105,
+        "audioIndex": 5,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Ambition",
+            "keyword": "island kitesurfing",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817dd"
+              "$oid": "67fd1d7ae3fa3fa1d34a50d6"
             }
           },
           {
             "search": "stock",
-            "keyword": "Hard work",
+            "keyword": "beach kitesurfing",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817de"
+              "$oid": "67fd1d7ae3fa3fa1d34a50d7"
             }
           },
           {
             "search": "stock",
-            "keyword": "Success",
+            "keyword": "kitesurf",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817df"
+              "$oid": "67fd1d7ae3fa3fa1d34a50d8"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 1920,
-          "width": 1080,
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A man in a harness and shorts stands on the beach holding a kite bar. He is looking up at his kite, which is flying in the air. His kiteboard is lying on the sand next to him. There are other people on the beach and buildings in the background.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a50da"
+              }
+            }
+          ],
           "video": {
-            "id": "10635372",
+            "id": "9675099",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 5183853,
-            "width": 1080,
-            "height": 1920,
-            "fps": 29.969999313354492,
-            "link": "https://videos.pexels.com/video-files/7969484/7969484-hd_1080_1920_30fps.mp4"
+            "size": 7651861,
+            "width": 1920,
+            "height": 1080,
+            "fps": 30,
+            "link": "https://videos.pexels.com/video-files/5355574/5355574-hd_1920_1080_30fps.mp4"
           },
           "image": {
-            "id": "7969484",
-            "link": "https://images.pexels.com/videos/7969484/pexels-photo-7969484.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "id": "5355574",
+            "link": "https://images.pexels.com/videos/5355574/beach-nature-ocean-scenic-view-5355574.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c45b9"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a50cf"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Pour",
+            "start": 29.48,
+            "end": 29.64,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50dc"
+            }
+          },
+          {
+            "word": "une",
+            "start": 29.64,
+            "end": 29.78,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50dd"
+            }
+          },
+          {
+            "word": "journée",
+            "start": 29.78,
+            "end": 30.080000000000002,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50de"
+            }
+          },
+          {
+            "word": "plus",
+            "start": 30.080000000000002,
+            "end": 30.3,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50df"
+            }
+          },
+          {
+            "word": "tranquille,",
+            "start": 30.3,
+            "end": 31.240000000000002,
+            "durationInFrames": 56,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50e0"
+            }
+          },
+          {
+            "word": "explorez",
+            "start": 31.240000000000002,
+            "end": 31.5,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50e1"
+            }
+          },
+          {
+            "word": "les",
+            "start": 31.5,
+            "end": 31.64,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50e2"
+            }
+          },
+          {
+            "word": "pistes",
+            "start": 31.64,
+            "end": 31.92,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50e3"
+            }
+          },
+          {
+            "word": "cyclables",
+            "start": 31.92,
+            "end": 32.54,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50e4"
+            }
+          }
+        ],
+        "text": "Pour une journée plus tranquille, explorez les pistes cyclables",
+        "start": 29.48,
+        "end": 32.54,
+        "durationInFrames": 183,
+        "audioIndex": 6,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "cycling path",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50e5"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "bike trail",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50e6"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "cycling",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50e7"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "half",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "The video shows a traffic light for bicycles. The light starts off red, then turns green.  The light also has a red light on the top. The traffic light is covered in stickers.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a50e9"
+              }
+            }
+          ],
+          "video": {
+            "id": "9706633",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 6404013,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/5465259/5465259-hd_1920_1080_25fps.mp4"
+          },
+          "image": {
+            "id": "5465259",
+            "link": "https://images.pexels.com/videos/5465259/architecture-banister-bicycle-bicycler-5465259.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c45c8"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a50db"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "qui",
+            "start": 32.54,
+            "end": 32.74,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50eb"
+            }
+          },
+          {
+            "word": "serpentent",
+            "start": 32.74,
+            "end": 33.26,
+            "durationInFrames": 31,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50ec"
+            }
+          },
+          {
+            "word": "entre",
+            "start": 33.26,
+            "end": 33.52,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50ed"
+            }
+          },
+          {
+            "word": "marais",
+            "start": 33.52,
+            "end": 34,
+            "durationInFrames": 29,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50ee"
+            }
+          },
+          {
+            "word": "salants",
+            "start": 34,
+            "end": 34.4,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50ef"
+            }
+          },
+          {
+            "word": "et",
+            "start": 34.4,
+            "end": 34.66,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50f0"
+            }
+          },
+          {
+            "word": "villages",
+            "start": 34.66,
+            "end": 35.06,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50f1"
+            }
+          },
+          {
+            "word": "pittoresques.",
+            "start": 35.06,
+            "end": 35.68,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50f2"
+            }
+          }
+        ],
+        "text": "qui serpentent entre marais salants et villages pittoresques.",
+        "start": 32.54,
+        "end": 35.68,
+        "durationInFrames": 189,
+        "audioIndex": 6,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "scenic bike ride",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50f3"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "countryside cycling",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50f4"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "ride",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50f5"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "The video shows a first-person view from a motorcycle. The rider is driving on a winding road. The video is shot on a sunny day with a blue sky and green trees in the background.  The motorcycle is going up a hill. There is a stop sign on the right side of the road, and there is a car in front of the motorcycle.  The motorcycle has a phone attached to the handlebars.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a50f7"
+              }
+            }
+          ],
+          "video": {
+            "id": "10046889",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 6065586,
+            "width": 1920,
+            "height": 1080,
+            "fps": 23.97599983215332,
+            "link": "https://videos.pexels.com/video-files/6420515/6420515-hd_1920_1080_24fps.mp4"
+          },
+          "image": {
+            "id": "6420515",
+            "link": "https://images.pexels.com/videos/6420515/bc-bike-bike-rider-canada-6420515.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c45d6"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a50ea"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Nos",
+            "start": 35.68,
+            "end": 35.839999999999996,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50f9"
+            }
+          },
+          {
+            "word": "mobile-homes",
+            "start": 35.839999999999996,
+            "end": 36.5,
+            "durationInFrames": 40,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50fa"
+            }
+          },
+          {
+            "word": "tout",
+            "start": 36.5,
+            "end": 36.8,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50fb"
+            }
+          },
+          {
+            "word": "confort",
+            "start": 36.8,
+            "end": 37.2,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50fc"
+            }
+          },
+          {
+            "word": "vous",
+            "start": 37.2,
+            "end": 37.4,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50fd"
+            }
+          },
+          {
+            "word": "attendent",
+            "start": 37.4,
+            "end": 37.82,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50fe"
+            }
+          },
+          {
+            "word": "après",
+            "start": 37.82,
+            "end": 38.019999999999996,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a50ff"
+            }
+          },
+          {
+            "word": "ces",
+            "start": 38.019999999999996,
+            "end": 38.24,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5100"
+            }
+          },
+          {
+            "word": "journées",
+            "start": 38.24,
+            "end": 38.6,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5101"
+            }
+          },
+          {
+            "word": "riches",
+            "start": 38.6,
+            "end": 39.019999999999996,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5102"
+            }
+          },
+          {
+            "word": "en",
+            "start": 39.019999999999996,
+            "end": 39.24,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5103"
+            }
+          },
+          {
+            "word": "émotions.",
+            "start": 39.24,
+            "end": 39.66,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5104"
+            }
+          }
+        ],
+        "text": "Nos mobile-homes tout confort vous attendent après ces journées richesen émotions.",
+        "start": 35.68,
+        "end": 39.66,
+        "durationInFrames": 239,
+        "audioIndex": 7,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "mobile home interior",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5105"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "vacation home",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5106"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "home",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5107"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "half",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A woman is sitting on a couch, wearing a white sweater and holding a phone. She is scrolling through pictures on her phone.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a5109"
+              }
+            }
+          ],
+          "video": {
+            "id": "9890064",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 8598630,
+            "width": 1080,
+            "height": 1920,
+            "fps": 30,
+            "link": "https://videos.pexels.com/video-files/6003986/6003986-hd_1080_1920_30fps.mp4"
+          },
+          "image": {
+            "id": "6003986",
+            "link": "https://images.pexels.com/videos/6003986/4k-4k-video-account-app-6003986.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
             "width": 2160,
             "height": 3840
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817e0"
+            "$oid": "67fd1f59154e8a7a0c0c45e8"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817d1"
+          "$oid": "67fd1d7ae3fa3fa1d34a50f8"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Le",
+            "start": 39.66,
+            "end": 39.779999999999994,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a510b"
+            }
+          },
+          {
+            "word": "soir",
+            "start": 39.779999999999994,
+            "end": 40,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a510c"
+            }
+          },
+          {
+            "word": "venu,",
+            "start": 40,
+            "end": 40.599999999999994,
+            "durationInFrames": 36,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a510d"
+            }
+          },
+          {
+            "word": "profitez",
+            "start": 40.599999999999994,
+            "end": 41.059999999999995,
+            "durationInFrames": 28,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a510e"
+            }
+          },
+          {
+            "word": "d'une",
+            "start": 41.059999999999995,
+            "end": 41.31999999999999,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a510f"
+            }
+          },
+          {
+            "word": "balade",
+            "start": 41.31999999999999,
+            "end": 41.62,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5110"
+            }
+          },
+          {
+            "word": "digestive",
+            "start": 41.62,
+            "end": 42.16,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5111"
+            }
+          },
+          {
+            "word": "sur",
+            "start": 42.16,
+            "end": 42.48,
+            "durationInFrames": 19,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5112"
+            }
+          },
+          {
+            "word": "le",
+            "start": 42.48,
+            "end": 42.62,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5113"
+            }
+          },
+          {
+            "word": "Vieux",
+            "start": 42.62,
+            "end": 42.839999999999996,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5114"
+            }
+          }
+        ],
+        "text": "Le soir venu, profitez d'une balade digestive sur le Vieux",
+        "start": 39.66,
+        "end": 42.839999999999996,
+        "durationInFrames": 190,
+        "audioIndex": 8,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "evening harbor walk",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5115"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "port at night",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5116"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "harbor",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5117"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "The video shows a waterfront scene with a row of colorful buildings lining the edge of a canal. There are people walking along the boardwalk in front of the buildings, and some are sitting at tables outside cafes and restaurants. The sky is cloudy and it looks like it might rain soon.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a5119"
+              }
+            }
+          ],
+          "video": {
+            "id": "9579493",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 4711775,
+            "width": 1920,
+            "height": 1080,
+            "fps": 23.97599983215332,
+            "link": "https://videos.pexels.com/video-files/4928485/4928485-hd_1920_1080_24fps.mp4"
+          },
+          "image": {
+            "id": "4928485",
+            "link": "https://images.pexels.com/videos/4928485/pexels-photo-4928485.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c45f8"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a510a"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Port",
+            "start": 42.839999999999996,
+            "end": 43.08,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a511b"
+            }
+          },
+          {
+            "word": "de",
+            "start": 43.08,
+            "end": 43.199999999999996,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a511c"
+            }
+          },
+          {
+            "word": "La",
+            "start": 43.199999999999996,
+            "end": 43.339999999999996,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a511d"
+            }
+          },
+          {
+            "word": "Rochelle,",
+            "start": 43.339999999999996,
+            "end": 44.14,
+            "durationInFrames": 48,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a511e"
+            }
+          },
+          {
+            "word": "illuminé",
+            "start": 44.14,
+            "end": 44.48,
+            "durationInFrames": 20,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a511f"
+            }
+          },
+          {
+            "word": "par",
+            "start": 44.48,
+            "end": 44.66,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5120"
+            }
+          },
+          {
+            "word": "les",
+            "start": 44.66,
+            "end": 44.779999999999994,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5121"
+            }
+          },
+          {
+            "word": "restaurants",
+            "start": 44.779999999999994,
+            "end": 45.199999999999996,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5122"
+            }
+          },
+          {
+            "word": "qui",
+            "start": 45.199999999999996,
+            "end": 45.48,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5123"
+            }
+          },
+          {
+            "word": "bordent",
+            "start": 45.48,
+            "end": 45.76,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5124"
+            }
+          },
+          {
+            "word": "les",
+            "start": 45.76,
+            "end": 45.94,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5125"
+            }
+          },
+          {
+            "word": "quais.",
+            "start": 45.94,
+            "end": 46.099999999999994,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5126"
+            }
+          }
+        ],
+        "text": "Port de La Rochelle, illuminé par les restaurants qui bordent lesquais.",
+        "start": 42.839999999999996,
+        "end": 46.099999999999994,
+        "durationInFrames": 195,
+        "audioIndex": 8,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "old port restaurants",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5127"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "waterfront dining",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5128"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "dining",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5129"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "hide",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "The video shows an aerial view of a city with a large wall surrounding it. The wall is made of stone and has many towers. The city is full of red-tiled buildings. There is a harbor with many boats docked. People are walking around the city. It seems to be in Europe.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a512b"
+              }
+            }
+          ],
+          "video": {
+            "id": "9289982",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 2965747,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/3108019/3108019-hd_1920_1080_25fps.mp4"
+          },
+          "image": {
+            "id": "3108019",
+            "link": "https://images.pexels.com/videos/3108019/free-video-3108019.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c460a"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a511a"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Nos",
+            "start": 46.099999999999994,
+            "end": 46.279999999999994,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a512d"
+            }
+          },
+          {
+            "word": "équipes",
+            "start": 46.279999999999994,
+            "end": 46.63999999999999,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a512e"
+            }
+          },
+          {
+            "word": "vous",
+            "start": 46.63999999999999,
+            "end": 46.779999999999994,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a512f"
+            }
+          },
+          {
+            "word": "conseilleront",
+            "start": 46.779999999999994,
+            "end": 47.339999999999996,
+            "durationInFrames": 34,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5130"
+            }
+          },
+          {
+            "word": "les",
+            "start": 47.339999999999996,
+            "end": 47.49999999999999,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5131"
+            }
+          },
+          {
+            "word": "meilleurs",
+            "start": 47.49999999999999,
+            "end": 47.919999999999995,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5132"
+            }
+          },
+          {
+            "word": "spots",
+            "start": 47.919999999999995,
+            "end": 48.199999999999996,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5133"
+            }
+          },
+          {
+            "word": "selon",
+            "start": 48.199999999999996,
+            "end": 48.53999999999999,
+            "durationInFrames": 20,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5134"
+            }
+          },
+          {
+            "word": "vos",
+            "start": 48.53999999999999,
+            "end": 48.71999999999999,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5135"
+            }
+          },
+          {
+            "word": "envies.",
+            "start": 48.71999999999999,
+            "end": 49.62,
+            "durationInFrames": 54,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5136"
+            }
+          }
+        ],
+        "text": "Nos équipes vous conseilleront les meilleurs spots selon vos envies.",
+        "start": 46.099999999999994,
+        "end": 49.62,
+        "durationInFrames": 212,
+        "audioIndex": 9,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "travel consultation",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5137"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "tourist information",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5138"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "information",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5139"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "half",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A man in a white suit and khaki pants is pointing at a subway map with a woman standing behind him. The woman is wearing a dress with black and white stripes. They are both looking at the map and discussing their travel plans. They are standing in a subway station.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a513b"
+              }
+            }
+          ],
+          "video": {
+            "id": "10893672",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 5888856,
+            "width": 1080,
+            "height": 1920,
+            "fps": 23.97599983215332,
+            "link": "https://videos.pexels.com/video-files/8551823/8551823-hd_1080_1920_24fps.mp4"
+          },
+          "image": {
+            "id": "8551823",
+            "link": "https://images.pexels.com/videos/8551823/pexels-photo-8551823.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c461a"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a512c"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Randonnées",
+            "start": 49.62,
+            "end": 49.99999999999999,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a513d"
+            }
+          },
+          {
+            "word": "dans",
+            "start": 49.99999999999999,
+            "end": 50.13999999999999,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a513e"
+            }
+          },
+          {
+            "word": "le",
+            "start": 50.13999999999999,
+            "end": 50.25999999999999,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a513f"
+            }
+          },
+          {
+            "word": "Marais",
+            "start": 50.25999999999999,
+            "end": 50.559999999999995,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5140"
+            }
+          },
+          {
+            "word": "Poitevin,",
+            "start": 50.559999999999995,
+            "end": 51.25999999999999,
+            "durationInFrames": 42,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5141"
+            }
+          },
+          {
+            "word": "paddle",
+            "start": 51.25999999999999,
+            "end": 51.49999999999999,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5142"
+            }
+          },
+          {
+            "word": "sur",
+            "start": 51.49999999999999,
+            "end": 51.75999999999999,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5143"
+            }
+          },
+          {
+            "word": "la",
+            "start": 51.75999999999999,
+            "end": 51.919999999999995,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5144"
+            }
+          },
+          {
+            "word": "côte",
+            "start": 51.919999999999995,
+            "end": 52.16,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5145"
+            }
+          },
+          {
+            "word": "ou",
+            "start": 52.16,
+            "end": 52.35999999999999,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5146"
+            }
+          },
+          {
+            "word": "découverte",
+            "start": 52.35999999999999,
+            "end": 52.879999999999995,
+            "durationInFrames": 31,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5147"
+            }
+          }
+        ],
+        "text": "Randonnées dans le Marais Poitevin, paddle sur la côte ou découverte",
+        "start": 49.62,
+        "end": 52.879999999999995,
+        "durationInFrames": 195,
+        "audioIndex": 9,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "hiking trail",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5148"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "nature walk",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5149"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "hike",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a514a"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A person walks under a waterfall in a cave. The cave walls are rocky and mossy. The waterfall is cascading down from a high height. The person is wearing a jacket and shorts.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a514c"
+              }
+            }
+          ],
+          "video": {
+            "id": "13449177",
+            "quality": null,
+            "file_type": "video/mp4",
+            "size": 25357291,
+            "width": 1920,
+            "height": 1080,
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/31557675/13449177_1920_1080_30fps.mp4"
+          },
+          "image": {
+            "id": "31557675",
+            "link": "https://images.pexels.com/videos/31557675/adventure-aerial-alpine-backpacking-31557675.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c462b"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a513c"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "des",
+            "start": 52.879999999999995,
+            "end": 53.059999999999995,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a514e"
+            }
+          },
+          {
+            "word": "huîtres",
+            "start": 53.059999999999995,
+            "end": 53.379999999999995,
+            "durationInFrames": 19,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a514f"
+            }
+          },
+          {
+            "word": "de",
+            "start": 53.379999999999995,
+            "end": 53.58,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5150"
+            }
+          },
+          {
+            "word": "Marennes-Oléron.",
+            "start": 53.58,
+            "end": 54.519999999999996,
+            "durationInFrames": 56,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5151"
+            }
+          }
+        ],
+        "text": "des huîtres de Marennes-Oléron.",
+        "start": 52.879999999999995,
+        "end": 54.519999999999996,
+        "durationInFrames": 98,
+        "audioIndex": 9,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "oyster farm tour",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5152"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "oyster farming",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5153"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "farming",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5154"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "half",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "The video shows a greenhouse with many plants. There are hanging plants in terracotta pots and rows of potted plants on the ground. There is a metal support beam visible in the image. The greenhouse is made of clear plastic.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a5156"
+              }
+            }
+          ],
+          "video": {
+            "id": "10765865",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 19934073,
+            "width": 1920,
+            "height": 1080,
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/8267642/8267642-hd_1920_1080_30fps.mp4"
+          },
+          "image": {
+            "id": "8267642",
+            "link": "https://images.pexels.com/videos/8267642/pexels-photo-8267642.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c4635"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a514d"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Chaque",
+            "start": 54.519999999999996,
+            "end": 54.839999999999996,
+            "durationInFrames": 19,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5158"
+            }
+          },
+          {
+            "word": "jour",
+            "start": 54.839999999999996,
+            "end": 55.08,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5159"
+            }
+          },
+          {
+            "word": "devient",
+            "start": 55.08,
+            "end": 55.459999999999994,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a515a"
+            }
+          },
+          {
+            "word": "une",
+            "start": 55.459999999999994,
+            "end": 55.699999999999996,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a515b"
+            }
+          },
+          {
+            "word": "nouvelle",
+            "start": 55.699999999999996,
+            "end": 56.12,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a515c"
+            }
+          },
+          {
+            "word": "aventure",
+            "start": 56.12,
+            "end": 56.699999999999996,
+            "durationInFrames": 35,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a515d"
+            }
+          },
+          {
+            "word": "sans",
+            "start": 56.699999999999996,
+            "end": 56.94,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a515e"
+            }
+          },
+          {
+            "word": "jamais",
+            "start": 56.94,
+            "end": 57.339999999999996,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a515f"
+            }
+          },
+          {
+            "word": "vous",
+            "start": 57.339999999999996,
+            "end": 57.519999999999996,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5160"
+            }
+          }
+        ],
+        "text": "Chaque jour devient une nouvelle aventure sans jamais vous",
+        "start": 54.519999999999996,
+        "end": 57.519999999999996,
+        "durationInFrames": 179,
+        "audioIndex": 10,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "daily adventure",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5161"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "exciting experience",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5162"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "adventure",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5163"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "The video shows a street scene in a European city. There are many bicycles parked on the side of the street. In the background, there are buildings, trees, and pedestrians. A purple van with the words \"HANOS\" written on the side drives by. There is a sign that says \"UNZIPPED\" hanging from a lamppost. The video is shot from a low angle, focusing on the bicycles in the foreground. The video is bright and sunny.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a5165"
+              }
+            }
+          ],
+          "video": {
+            "id": "7238871",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 18972541,
+            "width": 1920,
+            "height": 1080,
+            "fps": 59.940101623535156,
+            "link": "https://videos.pexels.com/video-files/17387407/17387407-hd_1920_1080_60fps.mp4"
+          },
+          "image": {
+            "id": "17387407",
+            "link": "https://images.pexels.com/videos/17387407/beautiful-beautiful-sunset-body-of-water-cruise-17387407.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c4644"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5157"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "éloigner",
+            "start": 57.519999999999996,
+            "end": 57.919999999999995,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5167"
+            }
+          },
+          {
+            "word": "du",
+            "start": 57.919999999999995,
+            "end": 58.08,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5168"
+            }
+          },
+          {
+            "word": "confort",
+            "start": 58.08,
+            "end": 58.49999999999999,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5169"
+            }
+          },
+          {
+            "word": "de",
+            "start": 58.49999999999999,
+            "end": 58.739999999999995,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a516a"
+            }
+          },
+          {
+            "word": "votre",
+            "start": 58.739999999999995,
+            "end": 58.919999999999995,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a516b"
+            }
+          },
+          {
+            "word": "village",
+            "start": 58.919999999999995,
+            "end": 59.339999999999996,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a516c"
+            }
+          },
+          {
+            "word": "vacances",
+            "start": 59.339999999999996,
+            "end": 59.94,
+            "durationInFrames": 36,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a516d"
+            }
+          },
+          {
+            "word": "4",
+            "start": 59.94,
+            "end": 60.58,
+            "durationInFrames": 38,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a516e"
+            }
+          }
+        ],
+        "text": "éloigner du confort de votre village vacances 4",
+        "start": 57.519999999999996,
+        "end": 60.58,
+        "durationInFrames": 183,
+        "audioIndex": 10,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "luxury vacation home",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a516f"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "high end resort",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5170"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "resort",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5171"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "half",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A woman in a white shirt and underwear is standing in front of a window. She opens the curtains and looks outside.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a5173"
+              }
+            }
+          ],
+          "video": {
+            "id": "9268497",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 34664328,
+            "width": 2048,
+            "height": 1080,
+            "fps": 29.969999313354492,
+            "link": "https://videos.pexels.com/video-files/2253719/2253719-hd_2048_1080_30fps.mp4"
+          },
+          "image": {
+            "id": "2253719",
+            "link": "https://images.pexels.com/videos/2253719/free-video-2253719.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c4652"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5166"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "ou",
+            "start": 60.58,
+            "end": 60.9,
+            "durationInFrames": 19,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5175"
+            }
+          },
+          {
+            "word": "5",
+            "start": 60.9,
+            "end": 61.26,
+            "durationInFrames": 22,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5176"
+            }
+          },
+          {
+            "word": "étoiles.",
+            "start": 61.26,
+            "end": 61.72,
+            "durationInFrames": 28,
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5177"
+            }
+          }
+        ],
+        "text": "ou 5 étoiles.",
+        "start": 60.58,
+        "end": 61.72,
+        "durationInFrames": 69,
+        "audioIndex": 10,
+        "keywords": [
+          {
+            "search": "stock",
+            "keyword": "five star resort",
+            "precision": "HARD",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5178"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "luxury resort",
+            "precision": "NORMAL",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a5179"
+            }
+          },
+          {
+            "search": "stock",
+            "keyword": "luxury",
+            "precision": "EASY",
+            "_id": {
+              "$oid": "67fd1d7ae3fa3fa1d34a517a"
+            }
+          }
+        ],
+        "media": {
+          "type": "video",
+          "show": "full",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "The video is an aerial view of a resort on the beach. There is a large pool, a beach, and a large building. The sun is setting.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a517c"
+              }
+            }
+          ],
+          "video": {
+            "id": "10809572",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 9143793,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/8396972/8396972-hd_1920_1080_25fps.mp4"
+          },
+          "image": {
+            "id": "8396972",
+            "link": "https://images.pexels.com/videos/8396972/aerial-air-aqua-arch-8396972.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 2688,
+            "height": 1512
+          },
+          "_id": {
+            "$oid": "67fd1f59154e8a7a0c0c465b"
+          }
+        },
+        "_id": {
+          "$oid": "67fd1d7ae3fa3fa1d34a5174"
         }
       },
       {
         "words": [
           {
             "word": "Partagez",
-            "start": 66.14874,
-            "end": 66.56956,
-            "confidence": 0.96,
+            "start": 61.72,
+            "end": 62.13999999999999,
             "durationInFrames": 25,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e2"
+              "$oid": "67fd1d7ae3fa3fa1d34a517e"
             }
           },
           {
-            "word": "votre",
-            "start": 66.56956,
-            "end": 66.78999999999999,
-            "confidence": 0.92,
-            "durationInFrames": 13,
+            "word": "vos",
+            "start": 62.13999999999999,
+            "end": 62.26,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e3"
+              "$oid": "67fd1d7ae3fa3fa1d34a517f"
             }
           },
           {
-            "word": "avis",
-            "start": 66.78999999999999,
-            "end": 66.97035,
-            "confidence": 0.76,
-            "durationInFrames": 11,
+            "word": "aventures",
+            "start": 62.26,
+            "end": 62.63999999999999,
+            "durationInFrames": 23,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e4"
+              "$oid": "67fd1d7ae3fa3fa1d34a5180"
             }
           },
           {
-            "word": "en",
-            "start": 66.97035,
-            "end": 67.11063,
-            "confidence": 0.99,
-            "durationInFrames": 8,
+            "word": "préférées !",
+            "start": 62.63999999999999,
+            "end": 63.779999999999994,
+            "durationInFrames": 68,
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e5"
-            }
-          },
-          {
-            "word": "commentaire.",
-            "start": 67.11063,
-            "end": 67.970612,
-            "confidence": 0.99,
-            "durationInFrames": 52,
-            "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e6"
+              "$oid": "67fd1d7ae3fa3fa1d34a5181"
             }
           }
         ],
-        "text": "Partagez votre avis en commentaire.",
-        "start": 66.14874,
-        "end": 67.970612,
-        "durationInFrames": 109,
+        "text": "Partagez vos aventures préférées !",
+        "start": 61.72,
+        "end": 63.779999999999994,
+        "durationInFrames": 123,
+        "audioIndex": 11,
         "keywords": [
           {
             "search": "stock",
-            "keyword": "Comment section",
+            "keyword": "sharing experiences",
             "precision": "HARD",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e7"
+              "$oid": "67fd1d7ae3fa3fa1d34a5182"
             }
           },
           {
             "search": "stock",
-            "keyword": "Online discussion",
+            "keyword": "social media sharing",
             "precision": "NORMAL",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e8"
+              "$oid": "67fd1d7ae3fa3fa1d34a5183"
             }
           },
           {
             "search": "stock",
-            "keyword": "Feedback",
+            "keyword": "sharing",
             "precision": "EASY",
             "_id": {
-              "$oid": "6737db9f9cb04c2d0b7817e9"
+              "$oid": "67fd1d7ae3fa3fa1d34a5184"
             }
           }
         ],
         "media": {
           "type": "video",
-          "height": 2048,
-          "width": 1080,
+          "show": "half",
+          "startAt": 0,
+          "description": [
+            {
+              "start": 0,
+              "text": "A woman in a red shirt is sitting in a wicker chair, talking to another woman who is sitting in front of her. The woman in red is looking directly at the other woman. The scene is outdoors. It is likely a casual conversation between two people, possibly friends or family.",
+              "_id": {
+                "$oid": "67fd1d7ae3fa3fa1d34a5186"
+              }
+            }
+          ],
           "video": {
-            "id": "9437634",
+            "id": "9778214",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 20625690,
-            "width": 1080,
-            "height": 2048,
+            "size": 4435802,
+            "width": 1920,
+            "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/5075219/5075219-hd_1080_2048_25fps.mp4"
+            "link": "https://videos.pexels.com/video-files/5712746/5712746-hd_1920_1080_25fps.mp4"
           },
           "image": {
-            "id": "5075219",
-            "link": "https://images.pexels.com/videos/5075219/pexels-photo-5075219.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 4096
+            "id": "5712746",
+            "link": "https://images.pexels.com/videos/5712746/pexels-photo-5712746.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
           },
           "_id": {
-            "$oid": "6737db9f9cb04c2d0b7817ea"
+            "$oid": "67fd1f59154e8a7a0c0c4665"
           }
         },
         "_id": {
-          "$oid": "6737db9f9cb04c2d0b7817e1"
+          "$oid": "67fd1d7ae3fa3fa1d34a517d"
         }
       }
     ]
   },
   "createdAt": {
-    "$date": "2024-11-15T23:38:57.748Z"
+    "$date": "2025-04-14T14:35:50.795Z"
   },
   "updatedAt": {
-    "$date": "2024-11-15T23:39:11.660Z"
+    "$date": "2025-04-14T14:44:41.380Z"
   },
   "__v": 0,
   "isNews": false,
-  "style": "Informative",
-  "title": "Mockup Script Example",
-  "costToGenerate": 0
+  "style": "Inspirational",
+  "title": "Vacances à La Rochelle",
+  "costToGenerate": 0.92985
 }

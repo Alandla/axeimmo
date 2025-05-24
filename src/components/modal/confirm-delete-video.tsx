@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Button } from "@/src/components/ui/button"
 import {
   Dialog,
@@ -24,6 +25,7 @@ export default function ModalConfirmDelete({
   setIsOpen,
   handleDeleteVideo,
 }: ModalConfirmDeleteProps) {
+  const t = useTranslations('modals.confirm-delete')
   const [isPending, setIsPending] = useState(false)
   const { video } = useVideoToDeleteStore()
 
@@ -42,9 +44,9 @@ export default function ModalConfirmDelete({
         className="sm:max-w-[425px]"
       >
         <DialogHeader>
-          <DialogTitle>Confirm deletion</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete {video?.title} ? This action is irreversible.
+            {t('description', { name: video?.title })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end">
@@ -54,7 +56,7 @@ export default function ModalConfirmDelete({
             onClick={() => setIsOpen(false)}
             disabled={isPending}
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button
             type="button"
@@ -62,7 +64,7 @@ export default function ModalConfirmDelete({
             onClick={handleConfirm}
             disabled={isPending}
           >
-            {isPending ? 'Deleting...' : 'Delete'}
+            {isPending ? t('deleting') : t('delete')}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,7 +1,6 @@
-import { StreamData } from 'ai';
 import { calculateAnthropicCost } from './cost';
 
-export const generateScript = async (prompt: string, selectedDuration: number) => {
+export const generateScript = async (prompt: string, selectedDuration: number, web: boolean = false, urlScrapingResult: any[] | null = null) => {
   try {
     const response = await fetch("/api/ai/generateScript", {
         method: 'POST',
@@ -11,6 +10,8 @@ export const generateScript = async (prompt: string, selectedDuration: number) =
         body: JSON.stringify({
             prompt,
             duration: selectedDuration,
+            urlScrapingResult,
+            web,
         }),
     });
 
@@ -27,7 +28,6 @@ export const generateScript = async (prompt: string, selectedDuration: number) =
 
 export const improveScript = async (prompt: string, messagesList: any[]) => {
   try {
-
     const response = await fetch("/api/ai/improveScript", {
         method: 'POST',
         headers: {
@@ -52,7 +52,9 @@ export const improveScript = async (prompt: string, messagesList: any[]) => {
   
 export const readStream = async (
   stream: ReadableStream, 
-  onChunkValue: (chunk: string) => void
+  onChunkValue: (chunk: string) => void,
+  onToolCall?: (toolCall: any) => void,
+  onToolResult?: (toolResult: any) => void
 ): Promise<{ text: string; cost: number | null }> => {
   const reader = stream.getReader();
   const decoder = new TextDecoder("utf-8");
@@ -71,9 +73,12 @@ export const readStream = async (
             const firstColonIndex = part.indexOf(':');
             const type = part.slice(0, firstColonIndex);
             const rawContent = part.slice(firstColonIndex + 1);
+
+            console.log("type", type)
+            console.log("rawContent", rawContent)
             
             switch (type) {
-              case '0':
+              case '0': // Text content
                   try {
                     const content = rawContent.slice(1, -1)
                       .replace(/\\"/g, '"')
@@ -84,14 +89,32 @@ export const readStream = async (
                     console.error('Error parsing text content:', parseError);
                   }
                   break;
-                case '2':
+              case '9': // Tool call
+                  try {
+                    const toolCall = JSON.parse(rawContent);
+                    if (onToolCall) {
+                      onToolCall(toolCall);
+                    }
+                  } catch (parseError) {
+                    console.error('Error parsing tool call:', parseError);
+                  }
+                  break;
+              case 'a': // Tool result
+                  try {
+                    const toolResult = JSON.parse(rawContent);
+                    if (onToolResult) {
+                      onToolResult(toolResult);
+                    }
+                    result += '\n'
+                  } catch (parseError) {
+                    console.error('Error parsing tool result:', parseError);
+                  }
+                  break;
+              case '2': // Data (usage)
                   try {
                     const data = JSON.parse(rawContent);
-                    console.log('data:', data)
-                    console.log('usage:', data[0].usage)
                     if (data[0]?.usage) {
                       totalCost = calculateAnthropicCost(data[0].usage);
-                      console.log('Cost:', totalCost);
                     }
                   } catch (parseError) {
                     console.error('Error parsing data:', parseError);

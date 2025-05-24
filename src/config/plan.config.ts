@@ -2,84 +2,80 @@ import { PlanName } from "../types/enums";
 import { Plan } from "../types/plan";
 
 export const discount = {
-    active: true,
-    mode: "all", // "year" or "month" or "all"
-    reduction: 0.7,
-    couponId: process.env.NODE_ENV === "development" ? "U4LfTMD1": "lwHMUSmY"
+  active: false,
+  mode: "all", // "year" or "month" or "all"
+  reduction: 0.8,
+  couponId: process.env.NODE_ENV === "development" ? "1prfCTD9": "LFuOJEsa"
+}
+
+// Définition des limites de stockage par plan en octets
+export const storageLimit = {
+  [PlanName.FREE]: 1 * 1024 * 1024 * 1024, // 1 GO
+  [PlanName.START]: 5 * 1024 * 1024 * 1024, // 5 GO 
+  [PlanName.PRO]: 50 * 1024 * 1024 * 1024, // 50 GO
+  [PlanName.ENTREPRISE]: 150 * 1024 * 1024 * 1024, // 150 GO
 }
 
 export const plans: Plan[] = [
   {
-    name: PlanName.CREATOR,
+    name: PlanName.START,
     icon: "Star",
-    monthlyPrice: 35,
-    annualPrice: 30,
-    credits: 250,
+    monthlyPrice: 20,
+    annualPrice: 16,
+    credits: 150,
     priceId: {
       month: { 
-        euros: process.env.NODE_ENV === "development" ? "price_1QX6A8D0Qr1zHqqn7h90G8bZ" : "price_1QXCL0D0Qr1zHqqnNwcefcjk",
-        dollars: process.env.NODE_ENV === "development" ? "price_1QX6A8D0Qr1zHqqn7h90G8bZ" : "price_1QXCL0D0Qr1zHqqnNwcefcjk",
+        euros: process.env.NODE_ENV === "development" ? "price_1R6XrvD0Qr1zHqqnLPT9g4BF" : "price_1R6XvsD0Qr1zHqqnz0NQiI4L",
+        dollars: process.env.NODE_ENV === "development" ? "price_1R9xBzD0Qr1zHqqnnQYsJw9Q" : "price_1R9xIZD0Qr1zHqqnmajg3MvG",
       },
       annual: {
-        euros: process.env.NODE_ENV === "development" ? "price_1QWQhfD0Qr1zHqqn8lq2PkT2" : "price_1QXCL6D0Qr1zHqqnsGJoZ6qB",
-        dollars: process.env.NODE_ENV === "development" ? "price_1QWQhfD0Qr1zHqqn8lq2PkT2" : "price_1QXCL6D0Qr1zHqqnsGJoZ6qB",
+        euros: process.env.NODE_ENV === "development" ? "price_1R9xDOD0Qr1zHqqnAN37CWFN" : "price_1R9xJBD0Qr1zHqqnMLECPxNs",
+        dollars: process.env.NODE_ENV === "development" ? "price_1R9xDbD0Qr1zHqqnml4AATHb" : "price_1R9xJKD0Qr1zHqqnoyr4zPxw",
       },
     },
-    features: [
-      'feature.1-member',
-      'feature.duration-1-max',
-      'feature.subtitles',
-      'feature.voice',
-      'feature.avatar',
-    ]
+    users: 1,
+    maxVideoDuration: 1,
+    storageLimit: storageLimit[PlanName.START],
   },
   {
     name: PlanName.PRO,
     icon: "Heart",
-    monthlyPrice: 99,
-    annualPrice: 79,
-    credits: 1000,
+    monthlyPrice: 50,
+    annualPrice: 40,
+    credits: 400,
     priceId: {
         month: {
-            euros: process.env.NODE_ENV === "development" ? "price_1QX6AjD0Qr1zHqqneSlnDCmJ" : "price_1QXCL2D0Qr1zHqqnCguPrThP",
-            dollars: process.env.NODE_ENV === "development" ? "price_1QX6AjD0Qr1zHqqneSlnDCmJ" : "price_1QXCL2D0Qr1zHqqnCguPrThP",
+            euros: process.env.NODE_ENV === "development" ? "price_1R5Au9D0Qr1zHqqnwu1SThl7" : "price_1R6Xw0D0Qr1zHqqnkcpYlQTP",
+            dollars: process.env.NODE_ENV === "development" ? "price_1R9xEUD0Qr1zHqqnoZmgaZnE" : "price_1R9xKMD0Qr1zHqqnMaVmO7qe",
         },
         annual: {
-            euros: process.env.NODE_ENV === "development" ? "price_1QWQiED0Qr1zHqqn90y9WBC2" : "price_1QXCL8D0Qr1zHqqnasb0n9be",
-            dollars: process.env.NODE_ENV === "development" ? "price_1QWQiED0Qr1zHqqn90y9WBC2" : "price_1QXCL8D0Qr1zHqqnasb0n9be",
+            euros: process.env.NODE_ENV === "development" ? "price_1R9xEvD0Qr1zHqqnHVEoSqBd" : "price_1R9xKbD0Qr1zHqqns1pjZ4jr",
+            dollars: process.env.NODE_ENV === "development" ? "price_1R9xF2D0Qr1zHqqnAw3tBdzg" : "price_1R9xKrD0Qr1zHqqnmL8zmvD2",
         },
     },
-    features: [
-        'feature.2-members',
-        'feature.duration-3-max',
-        'feature.create-article',
-        'feature.add-media',
-        'feature.brand-kit'
-    ],
-    popular: true
+    users: 2,
+    maxVideoDuration: 3,
+    popular: true,
+    storageLimit: storageLimit[PlanName.PRO],
   },
   {
     name: PlanName.ENTREPRISE,
     icon: "Gem",
-    monthlyPrice: 299,
-    annualPrice: 249,
-    credits: 3000,
+    monthlyPrice: 100,
+    annualPrice: 80,
+    credits: 800,
     priceId: {
         month: {
-            euros: process.env.NODE_ENV === "development" ? "price_1QX6B7D0Qr1zHqqndebSCju6" : "price_1QXCL4D0Qr1zHqqn5s2SSof6",
-            dollars: process.env.NODE_ENV === "development" ? "price_1QX6B7D0Qr1zHqqndebSCju6" : "price_1QXCL4D0Qr1zHqqn5s2SSof6",
+            euros: process.env.NODE_ENV === "development" ? "price_1R5AuYD0Qr1zHqqnC0aVFLmN" : "price_1R6XwsD0Qr1zHqqnxSzXWLST",
+            dollars: process.env.NODE_ENV === "development" ? "price_1R9xFjD0Qr1zHqqnQ4ZALCYG" : "price_1R9xLPD0Qr1zHqqn0rB635DR",
         },
         annual: {
-            euros: process.env.NODE_ENV === "development" ? "price_1QWQinD0Qr1zHqqnkDKErYzd" : "price_1QXCL9D0Qr1zHqqnc50W9aKG",
-            dollars: process.env.NODE_ENV === "development" ? "price_1QWQinD0Qr1zHqqnkDKErYzd" : "price_1QXCL9D0Qr1zHqqnc50W9aKG",
+            euros: process.env.NODE_ENV === "development" ? "price_1R9xG9D0Qr1zHqqnraJ93qd6" : "price_1R9xMrD0Qr1zHqqnLS5SXneL",
+            dollars: process.env.NODE_ENV === "development" ? "price_1R9xGMD0Qr1zHqqnLluVzRZU" : "price_1R9xMyD0Qr1zHqqnlADC8BdC",
         },
     },
-    features: [
-      'feature.5-members',
-      'feature.duration-5-max',
-      'feature.voice-cloning',
-      'feature.avatar-clone',
-      'feature.save-template'
-    ]
+    users: 5,
+    maxVideoDuration: 5,
+    storageLimit: storageLimit[PlanName.ENTREPRISE],
   }
 ]

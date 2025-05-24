@@ -4,7 +4,7 @@ import SpaceModel from "../models/Space";
 import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
 import { addSpaceToUser } from "./userDao";
 import { IMedia } from "../types/video";
-import { IMediaSpace, IPlan } from "../types/space";
+import { IMediaSpace, IPlan, ISpace } from "../types/space";
 
 export const createPrivateSpaceForUser = async (userId: string, userName?: string | null) => {
   return executeWithRetry(async () => {
@@ -16,9 +16,10 @@ export const createPrivateSpaceForUser = async (userId: string, userName?: strin
       plan: {
         name: PlanName.FREE,
         subscriptionType: SubscriptionType.MONTHLY,
-        creditsMonth: 30,
+        creditsMonth: 10,
       },
-      credits: 30,
+      credits: 10,
+      usedStorageBytes: 0,
     });
 
     await space.save();
@@ -33,6 +34,20 @@ export const addMediasToSpace = async (spaceId: string, medias: IMediaSpace[]) =
     return await executeWithRetry(async () => {
       const space = await getSpaceById(spaceId);
       if (!space.medias) space.medias = [];
+      
+      let additionalStorageBytes = 0;
+      for (const mediaSpace of medias) {
+        const media = mediaSpace.media;
+        if (media.type === 'video' && media.video && media.video.size) {
+          additionalStorageBytes += media.video.size;
+        } else if (media.type === 'image' && media.image && media.image.size) {
+          additionalStorageBytes += media.image.size;
+        }
+      }
+      
+      if (!space.usedStorageBytes) space.usedStorageBytes = 0;
+      space.usedStorageBytes += additionalStorageBytes;
+      
       space.medias.push(...medias);
       await space.save();
       return space.medias;
@@ -153,8 +168,24 @@ export const deleteMediaFromSpace = async (spaceId: string, media: IMedia) => {
   try {
     return await executeWithRetry(async () => {
       const space = await getSpaceById(spaceId);
+      console.log("medias lenght", space.medias.length)
+      console.log("media", media)
+      
+      let storageToRemove = 0;
+      if (media.type === 'video' && media.video && media.video.size) {
+        storageToRemove += media.video.size;
+      } else if (media.type === 'image' && media.image && media.image.size) {
+        storageToRemove += media.image.size;
+      }
+      
+      if (space.usedStorageBytes && storageToRemove > 0) {
+        space.usedStorageBytes = Math.max(0, space.usedStorageBytes - storageToRemove);
+      }
+      
       space.medias = space.medias.filter((m: any) => m.media._id.toString() !== media.id);
+      console.log("medias lenght", space.medias.length)
       await space.save();
+      return space.medias;
     });
   } catch (error) {
     console.error("Error while deleting media from space: ", error);
@@ -181,7 +212,7 @@ export const getUserSpaces = async (userId: string) => {
 
       const spaces = await SpaceModel.find(
         { _id: { $in: user.spaces } },
-        'name plan credits members'
+        'name plan credits members videoIdeas details usedStorageBytes'
       );
 
       return spaces.map((space) => {
@@ -193,11 +224,175 @@ export const getUserSpaces = async (userId: string) => {
           credits: space.credits,
           creditsPerMonth: space.plan.creditsMonth,
           userRole: userRole,
+          companyMission: space.details?.companyMission,
+          companyTarget: space.details?.companyTarget,
+          videoIdeas: space.videoIdeas,
+          usedStorageBytes: space.usedStorageBytes,
+          storageLimit: space.plan.storageLimit
         };
       });
     });
   } catch (error) {
     console.error("fetchingUserSpaces", error);
+    throw error;
+  }
+};
+
+export const updateSpaceLastUsed = async (
+  spaceId: string,
+  voiceId?: string | null,
+  avatarId?: string | null,
+  subtitleId?: string | null,
+  config?: any | null
+) => {
+  try {
+    return await executeWithRetry(async () => {
+      const space = await SpaceModel.findById(spaceId);
+      
+      if (!space) throw new Error("Space not found");
+
+      let { voices, avatars, subtitles, config: lastUsedConfig } = space.lastUsed;
+  
+      if (voiceId) {
+        voices.push(voiceId);
+        if (voices.length > 5) {
+          voices.pop();
+        }
+      }
+      if (avatarId) {
+        avatars.push(avatarId);
+        if (avatars.length > 5) {
+          avatars.pop();
+        }
+      }
+      if (subtitleId) {
+        subtitles.push(subtitleId);
+        if (subtitles.length > 5) {
+          subtitles.pop();
+        }
+      }
+
+      if (config) {
+        lastUsedConfig = config;
+      }
+
+      space.lastUsed = { voices, avatars, subtitles, config: lastUsedConfig };
+
+      await space.save();
+      return space;
+    });
+  } catch (error) {
+    console.error("Error while updating space last used: ", error);
+    throw error;
+  }
+};
+
+export async function updateMedia(spaceId: string, mediaId: string, updates: any) {
+  try {
+    return await executeWithRetry(async () => {
+
+      const testfind = await SpaceModel.findOne({ _id: spaceId, 'medias._id': mediaId });
+      console.log("testfind", testfind)
+
+      const space = await SpaceModel.findOneAndUpdate(
+        { 
+          _id: spaceId, 
+          'medias._id': mediaId 
+        },
+        { 
+          $set: { 'medias.$.media': updates }
+        },
+        { 
+          new: true,
+          runValidators: true
+        }
+      );
+
+      if (!space) {
+        throw new Error('Space or media not found');
+      }
+
+      const updatedMedia = space.medias.find((m: any) => m.id === mediaId);
+      if (!updatedMedia) {
+        throw new Error('Updated media not found');
+      }
+
+      return updatedMedia;
+    });
+  } catch (error) {
+    console.error("Error while updating media: ", error);
+    throw error;
+  }
+}
+
+export const updateSpaceDetails = async (spaceId: string, details: Record<string, any>, videoIdeas?: string[]) => {
+  try {
+    return await executeWithRetry(async () => {
+      const updateData: any = { details };
+      
+      if (videoIdeas !== undefined) {
+        updateData.videoIdeas = videoIdeas;
+      }
+      
+      const space = await SpaceModel.findByIdAndUpdate(
+        spaceId, 
+        { $set: updateData }, 
+        { new: true }
+      );
+      
+      if (!space) throw new Error("Space not found");
+      return space.details;
+    });
+  } catch (error) {
+    console.error("Error while updating space details: ", error);
+    throw error;
+  }
+};
+
+export const updateSpace = async (spaceId: string, updateData: Partial<ISpace>) => {
+  try {
+    return await executeWithRetry(async () => {
+      const flattenedUpdateData: Record<string, any> = {};
+      
+      // Normal properties
+      Object.entries(updateData).forEach(([key, value]) => {
+        if (key !== 'details') {
+          flattenedUpdateData[key] = value;
+        }
+      });
+      
+      // Nested properties
+      if (updateData.details) {
+        Object.entries(updateData.details).forEach(([detailKey, detailValue]) => {
+          flattenedUpdateData[`details.${detailKey}`] = detailValue;
+        });
+      }
+      
+      // Update with flattened data
+      const updatedSpace = await SpaceModel.findByIdAndUpdate(
+        spaceId,
+        { $set: flattenedUpdateData },
+        { new: true, runValidators: true }
+      );
+      
+      if (!updatedSpace) throw new Error("Space not found");
+      
+      // Map to SimpleSpace format for client
+      return {
+        id: updatedSpace._id,
+        name: updatedSpace.name,
+        planName: updatedSpace.plan.name,
+        credits: updatedSpace.credits,
+        creditsPerMonth: updatedSpace.plan.creditsMonth,
+        companyMission: updatedSpace.details?.companyMission,
+        companyTarget: updatedSpace.details?.companyTarget,
+        videoIdeas: updatedSpace.videoIdeas,
+        usedStorageBytes: updatedSpace.usedStorageBytes,
+        storageLimit: updatedSpace.plan.storageLimit
+      };
+    });
+  } catch (error) {
+    console.error("Error while updating space: ", error);
     throw error;
   }
 };

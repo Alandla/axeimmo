@@ -1,6 +1,14 @@
+import { Avatar } from "./avatar";
 import { MemberRole, PlanName, SubscriptionType } from "./enums";
 import { IMedia } from "./video";
+import { Voice } from "./voice";
 
+export interface ILastUsed {
+  voices: string[],
+  avatars: string[],
+  subtitles: string[],
+  config?: any;
+}
 
 export interface IMember {
   userId: string;
@@ -19,13 +27,16 @@ export interface IPlan {
   priceId: string;
   subscriptionType: SubscriptionType;
   creditsMonth: number;
+  storageLimit?: number;
   nextPhase?: Date;
 }
 
 export interface IMediaSpace {
+  id?: string;
   media: IMedia;
   uploadedBy: string;
   uploadedAt: Date;
+  autoPlacement?: boolean;
 }
 
 export interface SimpleSpace {
@@ -35,6 +46,22 @@ export interface SimpleSpace {
   credits: number;
   planName: PlanName;
   userRole?: string;
+  videoIdeas?: string[];
+  companyMission?: string;
+  companyTarget?: string;
+  usedStorageBytes?: number;
+  storageLimit?: number;
+}
+
+export interface ICompanyDetails {
+  companyName?: string;
+  website?: string;
+  companyType?: string;
+  companySize?: string;
+  salesType?: string;
+  companyMission?: string;
+  companyTarget?: string;
+  companyNeeds?: string;
 }
 
 export interface ISpace {
@@ -44,5 +71,11 @@ export interface ISpace {
   medias: IMediaSpace[];
   plan: IPlan;
   credits: number;
+  details?: ICompanyDetails;
   subtitleStyle: ISpaceSubtitleStyle[];
+  avatars: Avatar[];
+  voices: Voice[];
+  videoIdeas: string[];
+  lastUsed: ILastUsed;
+  usedStorageBytes: number;
 }

@@ -6,7 +6,7 @@ export enum MemberRole {
 
 export enum PlanName {
   FREE = "FREE",
-  CREATOR = "CREATOR",
+  START = "START",
   PRO = "PRO",
   ENTREPRISE = "ENTREPRISE",
 }
