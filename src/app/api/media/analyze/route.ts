@@ -68,7 +68,12 @@ async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId: string
         const updatedSpaceMedia = {
             ...media,
             _id: media.id,
-            description: result.descriptions
+            description: result.descriptions,
+            video: {
+              ...media.video,
+              frames: result.frames || [],
+              durationInSeconds: result.durationInSeconds
+            }
         }
 
         await updateMedia(spaceId, mediaId, updatedSpaceMedia);

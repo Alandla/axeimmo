@@ -186,7 +186,7 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
       </Button>
       <div className="mt-4 columns-3 gap-2">
           {assetsToDisplay.map((asset, index) => (
-              <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} spaceId={spaceId} media={asset.media} source='web' canRemove={true} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
+              <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} spaceId={spaceId} media={asset.media} source='aws' canRemove={true} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
           ))}
       </div>
     </>

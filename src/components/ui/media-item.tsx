@@ -118,6 +118,7 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
                 <SkeletonVideo
                     srcVideo={media.video?.link || ''}
                     className={`w-full h-fit rounded-md object-cover ${media.video?.link === sequence.media?.video?.link && sequence.media?.type === 'video' ? 'border-2 border-primary rounded-lg' : ''}`}
+                    thumbnailImage={media.image?.link || (media.video?.frames && media.video.frames.length > 0 ? media.video.frames[0] : undefined)}
                 />
             ) : (
                 <SkeletonImage

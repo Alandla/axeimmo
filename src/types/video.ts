@@ -35,6 +35,8 @@ export interface IMedia {
     height?: number;
     fps?: number;
     link: string;
+    frames?: string[];
+    durationInSeconds?: number;
   };
   video_pictures?: any[];
   image?: {

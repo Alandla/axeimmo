@@ -225,6 +225,30 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
                 <Eye className="text-white w-8 h-8" />
               </div>
             </div>
+          ) : media.video?.frames && media.video.frames.length > 0 ? (
+            <div className="relative w-full h-full">
+              <div className="absolute inset-0 bg-black/90">
+                <Image
+                  src={media.video.frames[0]}
+                  alt=""
+                  layout="fill"
+                  objectFit="cover"
+                  priority
+                  className="blur-md scale-110"
+                />
+              </div>
+              <Image
+                src={media.video.frames[0]}
+                alt={media.name || ''}
+                layout="fill"
+                objectFit="contain"
+                priority
+                className="relative z-10"
+              />
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+                <Eye className="text-white w-8 h-8" />
+              </div>
+            </div>
           ) : media.type === 'video' && media.video?.link ? (
             <div className="relative w-full h-full">
               {!videoError ? (
