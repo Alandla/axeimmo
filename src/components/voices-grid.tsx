@@ -44,14 +44,36 @@ export function VoicesGridComponent() {
   // Obtenir tous les tags uniques
   const allTags = Array.from(new Set(voices.flatMap(voice => voice.tags)))
 
+  // Fonction pour trier les voix avec les dernières utilisées en premier
+  const sortVoicesByLastUsed = (voicesToSort: Voice[]) => {
+    if (!lastUsedParameters?.voices) return voicesToSort;
+    
+    return [...voicesToSort].sort((a, b) => {
+      const aIsLastUsed = lastUsedParameters.voices.includes(a.id);
+      const bIsLastUsed = lastUsedParameters.voices.includes(b.id);
+      
+      if (aIsLastUsed && !bIsLastUsed) return -1;
+      if (!aIsLastUsed && bIsLastUsed) return 1;
+      
+      // Si les deux sont dans lastUsed, trier par ordre d'utilisation (plus récent d'abord)
+      if (aIsLastUsed && bIsLastUsed) {
+        const aIndex = lastUsedParameters.voices.indexOf(a.id);
+        const bIndex = lastUsedParameters.voices.indexOf(b.id);
+        return aIndex - bIndex;
+      }
+      
+      return 0;
+    });
+  };
+
   // Filtrer les voix
-  const filteredVoices = voices.filter(voice => {
+  const filteredVoices = sortVoicesByLastUsed(voices.filter(voice => {
     const matchesSearch = voice.name.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesAccent = selectedAccent === 'all' ? true : voice.accent === selectedAccent
     const matchesGender = selectedGender === 'all' ? true : voice.gender === selectedGender
     const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => voice.tags.includes(tag))
     return matchesSearch && matchesAccent && matchesGender && matchesTags
-  })
+  }))
 
   // Calculer les voix pour la page courante
   const indexOfLastVoice = currentPage * voicesPerPage
@@ -134,13 +156,13 @@ export function VoicesGridComponent() {
   // Mise à jour de la recherche
   const handleSearch = (query: string) => {
     setSearchQuery(query)
-    const newFilteredVoices = voices.filter(voice => {
+    const newFilteredVoices = sortVoicesByLastUsed(voices.filter(voice => {
       const matchesSearch = voice.name.toLowerCase().includes(query.toLowerCase())
       const matchesAccent = selectedAccent === 'all' ? true : voice.accent === selectedAccent
       const matchesGender = selectedGender === 'all' ? true : voice.gender === selectedGender
       const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => voice.tags.includes(tag))
       return matchesSearch && matchesAccent && matchesGender && matchesTags
-    })
+    }))
     handleFilters(newFilteredVoices)
   }
 
@@ -276,6 +298,7 @@ export function VoicesGridComponent() {
             voice={voice}
             playingVoice={playingVoice}
             onPreviewVoice={togglePlay}
+            isLastUsed={lastUsedParameters?.voices?.includes(voice.id)}
           />
         ))}
       </div>

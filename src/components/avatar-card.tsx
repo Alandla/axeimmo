@@ -1,9 +1,8 @@
 'use client'
 
-import { Check, Gem, Rocket } from 'lucide-react'
+import { Check, History } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
-import { Button } from "@/src/components/ui/button"
 import { useTranslations } from 'next-intl'
 import { useCreationStore } from '../store/creationStore'
 import { Avatar } from '../types/avatar'
@@ -46,7 +45,7 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
   </svg>
 );
 
-export function AvatarCard({ avatar, onClick }: { avatar: Avatar; onClick: () => void }) {
+export function AvatarCard({ avatar, onClick, isLastUsed }: { avatar: Avatar; onClick: () => void; isLastUsed?: boolean }) {
     const { selectedAvatarName } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
     const { showPremiumToast } = usePremiumToast()
@@ -72,9 +71,13 @@ export function AvatarCard({ avatar, onClick }: { avatar: Avatar; onClick: () =>
       className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
       onClick={handleAvatarSelection}
     >
-      {isSelected && (
-        <div className="absolute top-4 right-2 transition-all duration-150">
-          <Check className="h-5 w-5 text-primary" />
+      {(isSelected || isLastUsed) && (
+        <div className="absolute top-2 right-2 transition-all duration-150">
+          {isSelected ? (
+            <Check className="h-5 w-5 text-primary" />
+          ) : (
+            <History className="h-5 w-5 text-gray-400" />
+          )}
         </div>
       )}
       <CardContent className="flex flex-col justify-between p-4 h-full">

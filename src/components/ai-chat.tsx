@@ -88,41 +88,68 @@ export function AiChat() {
     }
   }, [run, generationSpaceId, router]);
 
-  // Vérifier le nombre de vidéos pour le plan gratuit
+  // Combiner les vérifications liées à activeSpace
   useEffect(() => {
-    const checkVideoLimit = async () => {
+    const checkVideoLimitAndFetchLastUsed = async () => {
       if (!activeSpace) {
         return;
       }
 
-      if (activeSpace.planName !== PlanName.FREE) {
-        setHasFreePlanReachedLimit(false);
-        return;
-      }
+      const promises = [];
+
+      // Vérification de la limite de vidéos pour le plan gratuit
+      const checkVideoLimit = async () => {
+        if (activeSpace.planName !== PlanName.FREE) {
+          setHasFreePlanReachedLimit(false);
+          return;
+        }
+
+        try {
+          // Récupérer les vidéos depuis le store ou l'API
+          let totalVideoCount = totalVideoCountBySpace.get(activeSpace.id);
+          
+          if (!totalVideoCount) {
+            // Si le store est vide, charger depuis l'API
+            const { totalCount } = await fetchVideos(activeSpace.id);
+            totalVideoCount = totalCount;
+          }
+          
+          // Vérifier si l'utilisateur a atteint la limite de 3 vidéos
+          if (totalVideoCount >= 3) {
+            setHasFreePlanReachedLimit(true);
+          } else {
+            setHasFreePlanReachedLimit(false);
+          }
+        } catch (error) {
+          console.error("Erreur lors de la vérification du nombre de vidéos:", error);
+        }
+      };
+
+      // Récupération des derniers paramètres utilisés
+      const fetchLastUsed = async () => {
+        try {
+          const lastUsed: ILastUsed | null = await getSpaceLastUsed(activeSpace.id);
+          if (lastUsed) {
+            setLastUsedParameters(lastUsed);
+          }
+        } catch (error) {
+          console.error("Erreur lors de la récupération des derniers paramètres:", error);
+        }
+      };
+
+      // Exécuter les deux requêtes en parallèle
+      promises.push(checkVideoLimit());
+      promises.push(fetchLastUsed());
 
       try {
-        // Récupérer les vidéos depuis le store ou l'API
-        let totalVideoCount = totalVideoCountBySpace.get(activeSpace.id);
-        
-        if (!totalVideoCount) {
-          // Si le store est vide, charger depuis l'API
-          const { totalCount } = await fetchVideos(activeSpace.id);
-          totalVideoCount = totalCount;
-        }
-        
-        // Vérifier si l'utilisateur a atteint la limite de 3 vidéos
-        if (totalVideoCount >= 3) {
-          setHasFreePlanReachedLimit(true);
-        } else {
-          setHasFreePlanReachedLimit(false);
-        }
+        await Promise.all(promises);
       } catch (error) {
-        console.error("Erreur lors de la vérification du nombre de vidéos:", error);
+        console.error("Erreur lors des vérifications de l'espace:", error);
       }
     };
     
-    checkVideoLimit();
-  }, [activeSpace]);
+    checkVideoLimitAndFetchLastUsed();
+  }, [activeSpace, totalVideoCountBySpace, fetchVideos, setLastUsedParameters]);
 
   const handleSendMessage = (message: string, duration: number) => {
     if (creationStep === CreationStep.START) {
@@ -525,21 +552,6 @@ export function AiChat() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  useEffect(() => {
-    const fetchLastUsed = async () => {
-        if (activeSpace?.id) {
-            const lastUsed : ILastUsed | null = await getSpaceLastUsed(activeSpace.id)
-            if (lastUsed) {
-              setLastUsedParameters(lastUsed)
-            }
-        }
-    }
-
-    if (activeSpace) {
-        fetchLastUsed()
-    }
-}, [activeSpace])
 
   return (
     <div className="flex flex-col h-full relative max-w-">

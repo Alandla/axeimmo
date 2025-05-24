@@ -1,6 +1,6 @@
 'use client'
 
-import { Play, Pause, Check, Rocket } from 'lucide-react'
+import { Play, Pause, Check, History } from 'lucide-react'
 import { Button } from "@/src/components/ui/button"
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
@@ -46,7 +46,7 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
   </svg>
 );
 
-export function VoiceCard({ voice, playingVoice, onPreviewVoice }: { voice: Voice, playingVoice: {voice: Voice | null, audio: HTMLAudioElement | null}, onPreviewVoice: (voice: Voice) => void }) {
+export function VoiceCard({ voice, playingVoice, onPreviewVoice, isLastUsed }: { voice: Voice, playingVoice: {voice: Voice | null, audio: HTMLAudioElement | null}, onPreviewVoice: (voice: Voice) => void, isLastUsed?: boolean }) {
     const { selectedVoice, setSelectedVoice } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
     const { showPremiumToast } = usePremiumToast()
@@ -73,9 +73,13 @@ export function VoiceCard({ voice, playingVoice, onPreviewVoice }: { voice: Voic
       className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`} 
       onClick={handleVoiceSelection}
     >
-      {isSelected && (
-        <div className="absolute top-4 right-2 transition-all duration-150">
-          <Check className="h-5 w-5 text-primary" />
+      {(isSelected || isLastUsed) && (
+        <div className="absolute top-2 right-2 transition-all duration-150">
+          {isSelected ? (
+            <Check className="h-5 w-5 text-primary" />
+          ) : (
+            <History className="h-5 w-5 text-gray-400" />
+          )}
         </div>
       )}
       <CardContent className="flex flex-col justify-between p-4 h-full">

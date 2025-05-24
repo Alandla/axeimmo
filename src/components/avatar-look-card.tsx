@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Play } from 'lucide-react'
+import { Check, Play, History } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
 import { useTranslations } from 'next-intl'
@@ -47,9 +47,10 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
 interface AvatarLookCardProps {
   look: AvatarLook
   avatarName: String
+  isLastUsed?: boolean
 }
 
-export function AvatarLookCard({ look, avatarName }: AvatarLookCardProps) {
+export function AvatarLookCard({ look, avatarName, isLastUsed }: AvatarLookCardProps) {
   const { selectedLook, setSelectedLook, setSelectedAvatarName } = useCreationStore()
   const isSelected = selectedLook?.id === look.id;
   const t = useTranslations('avatars')
@@ -62,9 +63,13 @@ export function AvatarLookCard({ look, avatarName }: AvatarLookCardProps) {
         setSelectedAvatarName(avatarName)
       }}
     >
-      {isSelected && (
-        <div className="absolute top-4 right-2 transition-all duration-150">
-          <Check className="h-5 w-5 text-primary" />
+      {(isSelected || isLastUsed) && (
+        <div className="absolute top-2 right-2 transition-all duration-150">
+          {isSelected ? (
+            <Check className="h-5 w-5 text-primary" />
+          ) : (
+            <History className="h-5 w-5 text-gray-400" />
+          )}
         </div>
       )}
       <CardContent className="flex flex-col justify-between p-4 h-full">

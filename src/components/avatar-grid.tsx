@@ -47,7 +47,7 @@ function NoAvatarCard() {
       onClick={handleClick}
     >
       {isSelected && (
-        <div className="absolute top-4 right-2 transition-all duration-150">
+        <div className="absolute top-2 right-2 transition-all duration-150">
           <Check className="h-5 w-5 text-primary" />
         </div>
       )}
@@ -91,6 +91,55 @@ export function AvatarGridComponent() {
   // Obtenir tous les tags uniques
   const allTags = Array.from(new Set(avatars.flatMap(avatar => avatar.tags)))
 
+  // Fonction pour trier les avatars avec les derniers utilisés en premier
+  const sortAvatarsByLastUsed = (avatarsToSort: Avatar[]) => {
+    if (!lastUsedParameters?.avatars) return avatarsToSort;
+    
+    return [...avatarsToSort].sort((a, b) => {
+      // Vérifier si l'avatar a un look dans les derniers utilisés
+      const aHasLastUsedLook = a.looks.some(look => look.id && lastUsedParameters.avatars.includes(look.id));
+      const bHasLastUsedLook = b.looks.some(look => look.id && lastUsedParameters.avatars.includes(look.id));
+      
+      if (aHasLastUsedLook && !bHasLastUsedLook) return -1;
+      if (!aHasLastUsedLook && bHasLastUsedLook) return 1;
+      
+      // Si les deux ont des looks utilisés, trier par le plus récent look utilisé
+      if (aHasLastUsedLook && bHasLastUsedLook) {
+        const aMinIndex = Math.min(...a.looks
+          .filter(look => look.id && lastUsedParameters.avatars.includes(look.id))
+          .map(look => look.id ? lastUsedParameters.avatars.indexOf(look.id) : Infinity));
+        const bMinIndex = Math.min(...b.looks
+          .filter(look => look.id && lastUsedParameters.avatars.includes(look.id))
+          .map(look => look.id ? lastUsedParameters.avatars.indexOf(look.id) : Infinity));
+        return aMinIndex - bMinIndex;
+      }
+      
+      return 0;
+    });
+  };
+
+  // Fonction pour trier les looks avec les derniers utilisés en premier
+  const sortLooksByLastUsed = (looksToSort: AvatarLook[]) => {
+    if (!lastUsedParameters?.avatars) return looksToSort;
+    
+    return [...looksToSort].sort((a, b) => {
+      const aIsLastUsed = a.id && lastUsedParameters.avatars.includes(a.id);
+      const bIsLastUsed = b.id && lastUsedParameters.avatars.includes(b.id);
+      
+      if (aIsLastUsed && !bIsLastUsed) return -1;
+      if (!aIsLastUsed && bIsLastUsed) return 1;
+      
+      // Si les deux sont dans lastUsed, trier par ordre d'utilisation (plus récent d'abord)
+      if (aIsLastUsed && bIsLastUsed && a.id && b.id) {
+        const aIndex = lastUsedParameters.avatars.indexOf(a.id);
+        const bIndex = lastUsedParameters.avatars.indexOf(b.id);
+        return aIndex - bIndex;
+      }
+      
+      return 0;
+    });
+  };
+
   useEffect(() => {
     const fetchSpaceAvatars = async (lastUsed? : String | undefined) => {
         if (activeSpace?.id) {
@@ -131,12 +180,12 @@ export function AvatarGridComponent() {
 }, [activeSpace])
 
   // Filtrer les avatars
-  const filteredAvatars = avatars.filter(avatar => {
+  const filteredAvatars = sortAvatarsByLastUsed(avatars.filter(avatar => {
     const matchesSearch = avatar.name.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesGender = selectedGender === 'all' ? true : avatar.gender === selectedGender
     const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => avatar.tags.includes(tag))
     return matchesSearch && matchesGender && matchesTags
-  })
+  }))
 
   // Calculer les avatars pour la page courante
   const indexOfLastAvatar = currentPage * avatarsPerPage
@@ -156,10 +205,10 @@ export function AvatarGridComponent() {
   const adjustedTotalPages = Math.ceil(adjustedTotalAvatars / avatarsPerPage)
 
   // Calculs pour la pagination des looks
-  const filteredLooks = activeAvatar ? activeAvatar.looks.filter(look => {
+  const filteredLooks = activeAvatar ? sortLooksByLastUsed(activeAvatar.looks.filter(look => {
     if (selectedTags.length === 0) return true
     return selectedTags.every(tag => look.tags?.includes(tag) || false)
-  }) : []
+  })) : []
 
   const indexOfLastLook = currentLookPage * looksPerPage
   const indexOfFirstLook = indexOfLastLook - looksPerPage
@@ -184,12 +233,12 @@ export function AvatarGridComponent() {
   // Mise à jour de la recherche
   const handleSearch = (query: string) => {
     setSearchQuery(query)
-    const newFilteredAvatars = avatars.filter(avatar => {
+    const newFilteredAvatars = sortAvatarsByLastUsed(avatars.filter(avatar => {
       const matchesSearch = avatar.name.toLowerCase().includes(query.toLowerCase())
       const matchesGender = selectedGender === 'all' ? true : avatar.gender === selectedGender
       const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => avatar.tags.includes(tag))
       return matchesSearch && matchesGender && matchesTags
-    })
+    }))
     handleFilters(newFilteredAvatars)
   }
 
@@ -379,6 +428,7 @@ export function AvatarGridComponent() {
                 key={look.id}
                 look={look}
                 avatarName={activeAvatar.name}
+                isLastUsed={look.id ? lastUsedParameters?.avatars?.includes(look.id) : false}
               />
             ))
           ) : (
@@ -395,6 +445,7 @@ export function AvatarGridComponent() {
                 key={avatar.id}
                 avatar={avatar}
                 onClick={() => setActiveAvatar(avatar)}
+                isLastUsed={avatar.looks.some(look => look.id && lastUsedParameters?.avatars?.includes(look.id))}
               />
             ))}
           </>
