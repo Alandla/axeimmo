@@ -207,7 +207,7 @@ export function AiChat() {
       MessageType.TEXT
     );
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'production') {
       setTimeout(() => {
         setMessages(prevMessages => prevMessages.map(msg => {
           if (msg.id === messageAiId) {

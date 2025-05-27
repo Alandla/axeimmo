@@ -68,7 +68,11 @@ export async function POST(req: NextRequest) {
         const data = new StreamData();
 
         let currentStep = 0;
-        const maxSteps = isWebMode ? 6 : 1;
+        const maxSteps = isWebMode ? 11 : 1;
+        let searchCount = 0;
+        let contentFetchCount = 0;
+        const maxSearches = 2;
+        const maxContentFetches = 4;
 
         const tools: ToolSet = isWebMode ? {
             webSearch: {
@@ -78,14 +82,16 @@ export async function POST(req: NextRequest) {
                 }),
                 execute: async ({ query }: { query: string }) => {
                     try {
-                        // Prevent tool usage in the final step
-                        if (currentStep >= maxSteps - 1) {
+                        // Prevent tool usage in the final step or if max searches reached
+                        if (currentStep >= maxSteps - 1 || searchCount >= maxSearches) {
                             return { 
                                 results: [],
-                                error: "Cannot use tools in the final step. Please generate the script now.",
+                                error: "You've reached the maximum number of searches or are in the final step. Please generate the script now.",
                                 success: false
                             };
                         }
+                        searchCount++;
+                        console.log(`Web search ${searchCount}/${maxSearches}`);
                         const results = await searchQuery(query, 10);
                         return { ...results, success: true };
                     } catch (error) {
@@ -105,13 +111,15 @@ export async function POST(req: NextRequest) {
                 }),
                 execute: async ({ url }: { url: string }) => {
                     try {
-                        if (currentStep >= maxSteps - 1) {
+                        if (currentStep >= maxSteps - 1 || contentFetchCount >= maxContentFetches) {
                             return { 
                                 results: [],
-                                error: "Cannot use tools in the final step. Please generate the script now.",
+                                error: "You've reached the maximum number of content fetches or are in the final step. Please generate the script now.",
                                 success: false
                             };
                         }
+                        contentFetchCount++;
+                        console.log(`Content fetch ${contentFetchCount}/${maxContentFetches}`);
                         const result = await getUrlContent(url);
                         return { ...result, success: true };
                     } catch (error) {
@@ -128,7 +136,7 @@ export async function POST(req: NextRequest) {
         } : {};
 
         const webModeInstruction = isWebMode 
-            ? "\n\nYou can use tools to gather information, but YOUR FINAL STEP MUST ALWAYS BE THE SCRIPT GENERATION, NOT A TOOL CALL. In the last step, you must generate the script based on the information you've gathered.\n\nIf a tool returns an error, acknowledge it but continue with your task using the information you already have."
+            ? "\n\nYou can use tools to gather information with these limits:\n- Maximum 2 web searches\n- Maximum 4 web content fetches\n\nYOUR FINAL STEP MUST ALWAYS BE THE SCRIPT GENERATION, NOT A TOOL CALL. You must generate the script based on the information you've gathered.\n\nIf a tool returns an error or you've reached the usage limit, continue with your task using the information you already have and generate the script."
             : "";
         
         const result = await streamText({
