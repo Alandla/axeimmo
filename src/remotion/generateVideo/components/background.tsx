@@ -1,5 +1,6 @@
 import { AbsoluteFill, Sequence, OffthreadVideo, Img, interpolate, useCurrentFrame, getRemotionEnvironment } from "remotion";
 import { useState, useCallback } from "react";
+import { MediaSource } from "./MediaSource";
 
 export const MediaBackground = ({ 
     sequences, 
@@ -105,6 +106,7 @@ export const MediaBackground = ({
                                         pointerEvents: 'none'
                                     }}
                                 />
+                                {media.source && <MediaSource source={media.source} />}
                                 {/* Overlay pour capturer les événements de drag */}
                                 {isPlayer && (
                                     <AbsoluteFill
@@ -138,6 +140,7 @@ export const MediaBackground = ({
                                     }}
                                     muted
                                 />
+                                {media.source && <MediaSource source={media.source} />}
                                 {/* Overlay pour capturer les événements de drag */}
                                 {isPlayer && (
                                     <AbsoluteFill

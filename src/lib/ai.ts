@@ -276,3 +276,55 @@ Ensure that each section provides an accurate and easy-to-understand representat
     }
     return null;
 }
+
+export const extractImageSource = async (imageUrl: string): Promise<string | null> => {
+  try {
+    const groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY!,
+    });
+
+    const prompt = `You are an expert at identifying image sources from URLs. Your task is to extract the most reliable source from the given image URL.
+
+Rules:
+1. Look for well-known news agencies or media organizations in the URL path (like reuters, ap, getty, afp, etc.)
+2. If no reliable source is found in the path, use the main domain name
+3. Ignore CDN domains (like cdn.*, img.*, static.*, assets.*, media.*)
+4. Return only the source name as a simple string, no explanation
+
+Examples:
+- https://cdn.zonebourse.com/static/resize/0/0//images/reuters/2025-05/2025-05-26T034450Z_1_LYNXNPEL4P02P_RTROPTP_4_VIETNAM-FRANCE-MACRON.JPG → reuters
+- https://www.klfy.com/wp-content/uploads/sites/9/2025/05/68349bdfc2a205.86586191.jpeg?w=2560&h=1440&crop=1 → klfy
+- https://images.unsplash.com/photo-1234567890/something.jpg → unsplash
+- https://cdn.cnn.com/cnnnext/dam/assets/getty-images-123456.jpg → getty
+
+URL to analyze: ${imageUrl}
+
+Source:`;
+
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      model: "meta-llama/llama-4-scout-17b-16e-instruct",
+      temperature: 0.1,
+      max_tokens: 50,
+    });
+
+    const result = completion.choices[0]?.message?.content?.trim();
+    
+    if (!result) {
+      return null;
+    }
+
+    // Clean up the result to ensure it's just the source name
+    const cleanedResult = result.toLowerCase().replace(/[^a-z0-9]/g, '');
+    
+    return cleanedResult || null;
+  } catch (error) {
+    console.error('Error extracting image source:', error);
+    return null;
+  }
+};

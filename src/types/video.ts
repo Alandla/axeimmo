@@ -15,6 +15,7 @@ export interface IMedia {
   show?: 'full' | 'half' | 'hide';
   startAt?: number;
   name: string;
+  source?: string;
   description?: [
     {
       start: number;

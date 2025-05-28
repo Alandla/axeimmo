@@ -19,7 +19,7 @@ import { calculateElevenLabsCost } from "../lib/cost";
 import { mediaToMediaSpace, searchMediaForKeywords, searchGoogleImagesForQueries } from "../service/media.service";
 import { IMedia, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
-import { generateStartData } from "../lib/ai";
+import { generateStartData, extractImageSource } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
 import { getJobCost, SieveCostResponse } from "../lib/sieve";
 import { simplifyMediaFromPexels, simplifySequences, simplifyGoogleMedias } from "../lib/analyse";
@@ -58,7 +58,6 @@ export const generateVideoTask = task({
 
     let cost = 0
     const mediaSource = payload.mediaSource || "PEXELS";
-    const ENABLE_GOOGLE_IMAGES_SEARCH = false;
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
     const isDevelopment = ctx.environment.type === "DEVELOPMENT"
@@ -182,14 +181,6 @@ export const generateVideoTask = task({
       try {
         logger.log(`[GOOGLE_IMAGES] Starting Google Images workflow`);
         
-        // Étape 1: Générer les requêtes d'images avec WorkflowAI
-        logger.log(`[GOOGLE_IMAGES] Generating image search queries from script...`);
-        
-        if (isDevelopment) {
-          logger.log(`[GOOGLE_IMAGES] Development mode, skipping query generation`);
-          return [];
-        }
-        
         const { queries, cost: queriesCost } = await videoScriptImageSearchRun(script);
         cost += queriesCost;
         
@@ -209,7 +200,7 @@ export const generateVideoTask = task({
           return [];
         }
         
-        logger.log(`[GOOGLE_IMAGES] Found ${searchResults.length} images from Google`);
+        logger.log(`[GOOGLE_IMAGES] Found ${searchResults.length} images from Google`, { searchResults });
         
         // Étape 3: Analyser les images trouvées
         logger.log(`[GOOGLE_IMAGES] Analyzing Google Images...`);
@@ -225,6 +216,7 @@ export const generateVideoTask = task({
               // Analyser l'image avec Groq
               logger.log(`[GOOGLE_IMAGES] Analyzing image with Groq: ${media.image.link}`);
               const analysis = await analyzeImage(media.image.link);
+              logger.log(`[GOOGLE_IMAGES] Analysis result:`, { analysis });
               
               if (analysis) {
                 const mediaWithDescription = {
@@ -266,7 +258,7 @@ export const generateVideoTask = task({
     };
 
     // Lancer la recherche d'images Google en parallèle si on a un script et webSearch est activé
-    if (payload.script && payload.webSearch && ENABLE_GOOGLE_IMAGES_SEARCH) {
+    if (payload.script && payload.webSearch) {
       logger.log(`[GOOGLE_IMAGES] Starting Google Images search in parallel with provided script`);
       googleImagesSearchPromise = searchAndAnalyzeGoogleImages(payload.script);
     }
@@ -685,7 +677,7 @@ export const generateVideoTask = task({
       }
 
       // Lancer la recherche d'images Google si nous n'avions pas de script au départ
-      if (payload.webSearch && !googleImagesSearchPromise && ENABLE_GOOGLE_IMAGES_SEARCH) {
+      if (payload.webSearch && !googleImagesSearchPromise) {
         logger.log(`[GOOGLE_IMAGES] Starting Google Images search with transcribed script`);
         googleImagesSearchPromise = searchAndAnalyzeGoogleImages(script);
       }
@@ -980,6 +972,8 @@ export const generateVideoTask = task({
         totalCost: brollResult.cost + (matchResult?.cost || 0)
       });
 
+      const sequencesNeedingSource: number[] = [];
+
       // Appliquer les médias sélectionnés aux séquences
       sequences = sequences.map((sequence, sequenceIndex) => {
         // Trouver la sélection correspondante à cette séquence
@@ -1042,6 +1036,8 @@ export const generateVideoTask = task({
               
               if (selectedGoogleMedia) {
                 updatedSequence.media = selectedGoogleMedia;
+                // Add this sequence to the list needing source extraction
+                sequencesNeedingSource.push(sequenceIndex);
                 logger.log(`[BROLL] Applying Google image ${googleMediaIndex} to sequence ${sequenceIndex}`);
               }
             }
@@ -1050,6 +1046,36 @@ export const generateVideoTask = task({
         
         return updatedSequence;
       });
+
+      if (sequencesNeedingSource.length > 0) {
+        logger.log(`[SOURCE] Extracting sources for ${sequencesNeedingSource.length} Google images in parallel...`);
+        
+        const sourceExtractionPromises = sequencesNeedingSource.map(async (sequenceIndex) => {
+          try {
+            const sequence = sequences[sequenceIndex];
+            if (sequence.media && sequence.media.type === 'image' && sequence.media.image?.link) {
+              const source = await extractImageSource(sequence.media.image.link);
+              if (source) {
+                sequences[sequenceIndex] = {
+                  ...sequence,
+                  media: {
+                    ...sequence.media,
+                    source: source
+                  }
+                };
+                logger.log(`[SOURCE] Source "${source}" extracted for sequence ${sequenceIndex}`);
+              }
+            }
+          } catch (error) {
+            logger.error(`[SOURCE] Error extracting source for sequence ${sequenceIndex}:`, {
+              error: error instanceof Error ? error.message : String(error)
+            });
+          }
+        });
+
+        await Promise.all(sourceExtractionPromises);
+        logger.log(`[SOURCE] Source extraction completed for all Google images`);
+      }
 
       await metadata.replace({
         name: Steps.PLACE_BROLL,

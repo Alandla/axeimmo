@@ -1,6 +1,7 @@
 import { useMemo, useState, useRef } from "react";
 import { AbsoluteFill, Sequence, OffthreadVideo, Img, interpolate, useCurrentFrame, Loop, getRemotionEnvironment, Video } from "remotion";
 import { AvatarLook } from "../type/avatar";
+import { MediaSource } from "./MediaSource";
 
 export const BackgroundWithAvatar = ({
     sequences, 
@@ -208,6 +209,7 @@ export const BackgroundWithAvatar = ({
                                     muted
                                 />
                             )}
+                            {media.source && <MediaSource source={media.source} />}
                         </div>
                     </AbsoluteFill>
                 </Sequence>
