@@ -110,7 +110,7 @@ export default function VideoPreview({
     return (
         <div className={`h-full flex flex-col items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
             {video?.video?.avatar && (
-                <div className="text-xs sm:text-sm mb-4 w-full rounded-lg border bg-muted text-muted-foreground px-4 py-3 flex items-center gap-2">
+                <div className="text-xs sm:text-sm mb-2 sm:mb-4 w-full rounded-lg border bg-muted text-muted-foreground px-4 py-3 flex items-center gap-2">
                     <AlertCircle className="h-4 w-4" />
                     {t('lip-sync-export-message')}
                 </div>
@@ -123,7 +123,7 @@ export default function VideoPreview({
                     />
                 </div>
             )}
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-full transition-all duration-300 ease-in-out">
                 <Player
                     acknowledgeRemotionLicense={true}
                     ref={playerRef}
@@ -151,6 +151,7 @@ export default function VideoPreview({
                         transform: 'translate(-50%, -50%)',
                         objectFit: 'contain',
                         maxHeight: '100%',
+                        transition: 'all 0.3s ease-in-out',
                     }}
                     autoPlay={false}
                     renderLoading={() => null}

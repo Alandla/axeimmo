@@ -51,7 +51,7 @@ export const exportVideoTask = task({
 
       if (ctx.attempt.number === 1) {
         await removeCreditsToSpace(exportData.spaceId, exportData.creditCost);
-        updateSpaceLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name, video.settings)
+        updateSpaceLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name, video.settings, video.video?.format)
       }
 
       const space = await getSpaceById(video.spaceId);

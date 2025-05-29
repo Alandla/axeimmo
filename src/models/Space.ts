@@ -124,6 +124,7 @@ const spaceSchema = new mongoose.Schema(
       voices: [],
       avatars: [],
       subtitles: [],
+      formats: [],
       config: {}
     },
     usedStorageBytes: {

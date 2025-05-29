@@ -1197,6 +1197,7 @@ export const generateVideoTask = task({
     const space : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
 
     let subtitle = subtitles[1]
+    let videoFormat: "vertical" | "ads" | "square" = "vertical"; // Format par défaut
     if (space && space.lastUsed?.subtitles) {
       const mostFrequent = getMostFrequentString(space.lastUsed.subtitles)
       if (mostFrequent) {
@@ -1209,6 +1210,13 @@ export const generateVideoTask = task({
             subtitle = subtitleFindFromSpace;
           }
         }
+      }
+    }
+
+    if (space && space.lastUsed?.formats && space.lastUsed.formats.length > 0) {
+      const mostFrequentFormat = getMostFrequentString(space.lastUsed.formats);
+      if (mostFrequentFormat && ['vertical', 'ads', 'square'].includes(mostFrequentFormat)) {
+        videoFormat = mostFrequentFormat as "vertical" | "ads" | "square";
       }
     }
 
@@ -1233,6 +1241,7 @@ export const generateVideoTask = task({
         keywords: keywords,
         transitions: autoTransitions,
         thumbnail: "",
+        format: videoFormat,
         metadata: videoMetadata,
         sequences,
         avatar,
