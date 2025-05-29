@@ -42,6 +42,11 @@ const videoSchema = new mongoose.Schema({
     video: {
       thumbnail: String,
       keywords: [String],
+      format: {
+        type: String,
+        enum: ['vertical', 'ads', 'square'],
+        default: 'vertical'
+      },
       transitions: [{
         indexSequenceBefore: Number,
         durationInFrames: Number,

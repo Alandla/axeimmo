@@ -3,6 +3,7 @@ import {fillTextBox} from '@remotion/layout-utils';
 import {useMemo} from 'react';
 import { Line, Sequence as SequenceType, SubtitleMode, Word } from "../../type/subtitle";
 import { SubtitleBackground } from "./subtitleBackground";
+import { VideoFormat } from "../../utils/videoDimensions";
 
 export const formatSubtitles = (
 	sequences: SequenceType[],
@@ -117,7 +118,12 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesBackground = ({ subtitleSequences, style, onStyleChange }: { subtitleSequences: any, style: any, onStyleChange?: (newStyle: any) => void  }) => {
+export const SubtitlesBackground = ({ subtitleSequences, style, videoFormat, onStyleChange }: { 
+	subtitleSequences: any, 
+	style: any, 
+	videoFormat?: VideoFormat,
+	onStyleChange?: (newStyle: any) => void 
+}) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -145,7 +151,13 @@ export const SubtitlesBackground = ({ subtitleSequences, style, onStyleChange }:
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleBackground subtitleSequence={subtitle} start={currentFrame} style={style} onPositionChange={handlePositionChange} />
+						<SubtitleBackground 
+							subtitleSequence={subtitle} 
+							start={currentFrame} 
+							style={style} 
+							videoFormat={videoFormat}
+							onPositionChange={handlePositionChange} 
+						/>
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

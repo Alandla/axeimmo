@@ -3,6 +3,7 @@ import {useMemo} from 'react';
 import { Line, Sequence as SequenceType, SubtitleMode, Word } from "../../type/subtitle";
 import { fillTextBox } from "../../utils/measureText";
 import { SubtitleDaniel } from "./subtitleDaniel";
+import { VideoFormat } from "../../utils/videoDimensions";
 
 export const formatSubtitles = (
 	sequences: SequenceType[],
@@ -117,7 +118,12 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesDaniel = ({ subtitleSequences, style, onStyleChange }: { subtitleSequences: any, style: any, onStyleChange?: (newStyle: any) => void }) => {
+export const SubtitlesDaniel = ({ subtitleSequences, style, videoFormat, onStyleChange }: { 
+	subtitleSequences: any, 
+	style: any, 
+	videoFormat?: VideoFormat,
+	onStyleChange?: (newStyle: any) => void 
+}) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -147,7 +153,13 @@ export const SubtitlesDaniel = ({ subtitleSequences, style, onStyleChange }: { s
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleDaniel subtitleSequence={subtitle} start={currentFrame} style={style} onPositionChange={handlePositionChange} />
+						<SubtitleDaniel 
+							subtitleSequence={subtitle} 
+							start={currentFrame} 
+							style={style} 
+							videoFormat={videoFormat}
+							onPositionChange={handlePositionChange} 
+						/>
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

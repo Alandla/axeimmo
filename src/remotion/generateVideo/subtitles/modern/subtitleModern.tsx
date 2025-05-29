@@ -2,8 +2,15 @@ import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } fr
 import { Line, Word } from "../../type/subtitle";
 import { useEffect, useState, useCallback, useRef } from "react";
 import googleFonts from "../../config/googleFonts.config";
+import { VideoFormat, calculateSubtitlePosition } from "../../utils/videoDimensions";
 
-export const SubtitleModern = ({ subtitleSequence, start, style, onPositionChange }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void }) => {
+export const SubtitleModern = ({ subtitleSequence, start, style, videoFormat, onPositionChange }: { 
+    subtitleSequence: any, 
+    start: number, 
+    style: any, 
+    videoFormat?: VideoFormat,
+    onPositionChange?: (position: number) => void 
+}) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
     const [isDragging, setIsDragging] = useState(false);
@@ -119,7 +126,8 @@ export const SubtitleModern = ({ subtitleSequence, start, style, onPositionChang
 
     const shadowColor = style.shadow.color ? style.shadow.color : 'black';
 
-    const verticalPosition = (style.position / 100) * 1750;
+    // Use the new function to calculate position based on video format
+    const verticalPosition = calculateSubtitlePosition(style.position || 50, videoFormat || 'vertical');
 
     const shadowSizes = [
         'none',

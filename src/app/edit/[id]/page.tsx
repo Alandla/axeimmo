@@ -13,7 +13,7 @@ import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { ISequence, IVideo, IWord, ITransition } from '@/src/types/video'
+import { ISequence, IVideo, IWord, ITransition, VideoFormat } from '@/src/types/video'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
@@ -992,6 +992,22 @@ export default function VideoEditor() {
     });
   };
 
+  const handleVideoFormatChange = (format: VideoFormat) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video) return prevVideo;
+      
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          format: format
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
   return (
     <>
     {isLoading && (
@@ -1193,6 +1209,7 @@ export default function VideoEditor() {
                         onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
                         onAvatarPositionChange={handleAvatarPositionChange}
                         onMediaPositionChange={handleMediaPositionChange}
+                        onVideoFormatChange={handleVideoFormatChange}
                     />
                 )}
             </Card>
@@ -1217,6 +1234,7 @@ export default function VideoEditor() {
                 onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
                 onAvatarPositionChange={handleAvatarPositionChange}
                 onMediaPositionChange={handleMediaPositionChange}
+                onVideoFormatChange={handleVideoFormatChange}
             />
           )}
         </div>

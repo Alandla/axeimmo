@@ -3,6 +3,7 @@ import {useMemo} from 'react';
 import { SubtitleBold } from "./subtitleBold";
 import { Line, Sequence as SequenceType, SubtitleMode, Word } from "../../type/subtitle";
 import { fillTextBox } from "../../utils/measureText";
+import { VideoFormat } from "../../utils/videoDimensions";
 
 export const formatSubtitles = (
 	sequences: SequenceType[],
@@ -117,7 +118,12 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesBold = ({ subtitleSequences, style, onStyleChange }: { subtitleSequences: any, style: any, onStyleChange?: (newStyle: any) => void }) => {
+export const SubtitlesBold = ({ subtitleSequences, style, videoFormat, onStyleChange }: { 
+	subtitleSequences: any, 
+	style: any, 
+	videoFormat?: VideoFormat,
+	onStyleChange?: (newStyle: any) => void 
+}) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -149,6 +155,7 @@ export const SubtitlesBold = ({ subtitleSequences, style, onStyleChange }: { sub
                             subtitleSequence={subtitle} 
                             start={currentFrame} 
                             style={style}
+                            videoFormat={videoFormat}
                             onPositionChange={onStyleChange ? handlePositionChange : undefined}
                         />
 					</Sequence>

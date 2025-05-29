@@ -1,9 +1,16 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import googleFonts from "../../config/googleFonts.config";
+import { VideoFormat, calculateSubtitlePosition } from "../../utils/videoDimensions";
 
-export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void }) => {
+export const SubtitleBold = ({ subtitleSequence, start, style, videoFormat, onPositionChange }: { 
+    subtitleSequence: any, 
+    start: number, 
+    style: any, 
+    videoFormat?: VideoFormat,
+    onPositionChange?: (position: number) => void 
+}) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
     const [isDragging, setIsDragging] = useState(false);
@@ -11,23 +18,19 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
     const subtitleRef = useRef<HTMLDivElement>(null);
     const playerElementRef = useRef<HTMLElement | null>(null);
 
-    // Fonction pour trouver le player Remotion dans le DOM (mémorisée pour éviter des recherches répétées)
+    // Fonction pour trouver le player Remotion dans le DOM
     const findPlayerElement = useCallback(() => {
-        // Si on a déjà trouvé le player, on le retourne
         if (playerElementRef.current) {
             return playerElementRef.current;
         }
         
-        // Sinon on le cherche
         let el = subtitleRef.current;
         let parent: HTMLElement | null = el?.parentElement || null;
         
-        // Remonter dans le DOM jusqu'à trouver l'élément avec la classe remotion-player
         while (parent && !parent.classList.contains('__remotion-player')) {
             parent = parent.parentElement;
         }
         
-        // Mémoriser le player pour les prochains appels
         playerElementRef.current = parent;
         return parent;
     }, []);
@@ -36,52 +39,38 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
     const startDragging = useCallback((e: React.MouseEvent) => {
         if (!onPositionChange) return;
         
-        // Empêcher le comportement par défaut et la propagation
         e.preventDefault();
         e.stopPropagation();
         
-        // Trouver et mémoriser le player dès le début du glissement
         const playerElement = findPlayerElement();
         let playerRect = playerElement ? playerElement.getBoundingClientRect() : null;
         
-        // Définir l'état de glissement
         setIsDragging(true);
         
-        // Position initiale
         const initialY = e.clientY;
         const initialPosition = style.position;
         
-        // Fonction de déplacement
         const onMouseMove = (moveEvent: PointerEvent) => {
-            // Empêcher le comportement par défaut pour éviter de sélectionner du texte
             moveEvent.preventDefault();
             
             if (playerElement && playerRect) {
-                // Mettre à jour le rectangle du player si nécessaire (en cas de redimensionnement)
                 playerRect = playerElement.getBoundingClientRect();
                 
-                // Calculer la position Y relative du curseur à l'intérieur du player
                 const relativeY = moveEvent.clientY - playerRect.top;
                 
-                // Calculer le pourcentage (0-100) de la position dans le player
                 const percentageY = (relativeY / playerRect.height) * 100;
                 
-                // Limiter entre 0 et 100
                 const newPosition = Math.round(Math.max(0, Math.min(100, percentageY)));
                 
-                // Mettre à jour la position via le callback
                 onPositionChange(newPosition);
             } else {
-                // Fallback à l'ancienne méthode si on ne trouve pas le player
                 const deltaY = (moveEvent.clientY - initialY) / 4;
                 const newPosition = Math.max(0, Math.min(100, initialPosition + deltaY));
                 onPositionChange(newPosition);
             }
         };
         
-        // Fonction de fin de glissement
         const onMouseUp = (upEvent: MouseEvent) => {
-            // Empêcher la propagation pour éviter le play/pause
             upEvent.preventDefault();
             upEvent.stopPropagation();
             
@@ -90,7 +79,6 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
             window.removeEventListener('mouseup', onMouseUp);
         };
         
-        // Ajouter les écouteurs d'événements globaux
         window.addEventListener('pointermove', onMouseMove, { passive: false });
         window.addEventListener('mouseup', onMouseUp, { passive: false });
     }, []);
@@ -121,6 +109,7 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
         let scale = 1;
         let opacity = 1;
         let blurValue = 0;
+
         switch (style.animation?.appear) {
             case 'zoom':
                 scale = spring({
@@ -191,7 +180,8 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
 
     const shadowColor = style.shadow.color ? style.shadow.color : 'black';
 
-    const verticalPosition = (style.position / 100) * 1750;
+    // Utiliser la fonction calculateSubtitlePosition pour obtenir la position en fonction du format
+    const verticalPosition = calculateSubtitlePosition(style.position || 50, videoFormat || 'vertical');
 
     const shadowSizes = [
         'none',
@@ -220,7 +210,6 @@ export const SubtitleBold = ({ subtitleSequence, start, style, onPositionChange 
                     cursor: onPositionChange ? (isDragging ? 'grabbing' : (isHovered ? 'grab' : 'default')) : 'default',
                     userSelect: 'none',
                     touchAction: 'none',
-                    position: 'relative',
                 }}
                 onMouseDown={startDragging}
                 onMouseEnter={handleMouseEnter}

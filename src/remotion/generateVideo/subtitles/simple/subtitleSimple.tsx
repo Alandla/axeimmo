@@ -91,7 +91,7 @@ export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChang
         // Add global event listeners
         window.addEventListener('pointermove', onMouseMove, { passive: false });
         window.addEventListener('mouseup', onMouseUp, { passive: false });
-    }, [onPositionChange, findPlayerElement, style.position]);
+    }, []);
 
     const handleMouseEnter = useCallback(() => {
         setIsHovered(true);

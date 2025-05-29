@@ -4,6 +4,7 @@ import { Line, Sequence as SequenceType, SubtitleMode, Word } from "../../type/s
 import { fillTextBox } from "../../utils/measureText";
 import { SubtitleModern } from "./subtitleModern";
 import { fitText, measureText } from "@remotion/layout-utils";
+import { VideoFormat } from "../../utils/videoDimensions";
 
 export const formatSubtitles = (
 	sequences: SequenceType[],
@@ -166,7 +167,7 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesModern = ({ subtitleSequences, style, onStyleChange }: { subtitleSequences: any, style: any, onStyleChange?: (newStyle: any) => void }) => {
+export const SubtitlesModern = ({ subtitleSequences, style, videoFormat, onStyleChange }: { subtitleSequences: any, style: any, videoFormat?: VideoFormat, onStyleChange?: (newStyle: any) => void }) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -196,7 +197,7 @@ export const SubtitlesModern = ({ subtitleSequences, style, onStyleChange }: { s
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleModern subtitleSequence={subtitle} start={currentFrame} style={style} onPositionChange={handlePositionChange} />
+						<SubtitleModern subtitleSequence={subtitle} start={currentFrame} style={style} videoFormat={videoFormat} onPositionChange={handlePositionChange} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

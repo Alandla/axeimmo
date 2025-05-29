@@ -1,9 +1,16 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import googleFonts from "../../config/googleFonts.config";
+import { VideoFormat, calculateSubtitlePosition } from "../../utils/videoDimensions";
 
-export const SubtitleBackground = ({ subtitleSequence, start, style, onPositionChange }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void }) => {
+export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat, onPositionChange }: { 
+    subtitleSequence: any, 
+    start: number, 
+    style: any, 
+    videoFormat?: VideoFormat,
+    onPositionChange?: (position: number) => void 
+}) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
     const [isDragging, setIsDragging] = useState(false);
@@ -15,58 +22,52 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, onPositionC
         if (playerElementRef.current) {
             return playerElementRef.current;
         }
-
+        
         let el = subtitleRef.current;
         let parent: HTMLElement | null = el?.parentElement || null;
         
-        // Find the player element
         while (parent && !parent.classList.contains('__remotion-player')) {
             parent = parent.parentElement;
         }
-
+        
         playerElementRef.current = parent;
         return parent;
     }, []);
 
     const startDragging = useCallback((e: React.MouseEvent) => {
         if (!onPositionChange) return;
-
+        
         e.preventDefault();
         e.stopPropagation();
         
-        // Find and memorize the player element
         const playerElement = findPlayerElement();
         let playerRect = playerElement ? playerElement.getBoundingClientRect() : null;
-
+        
         setIsDragging(true);
-
+        
         const initialY = e.clientY;
         const initialPosition = style.position;
-
+        
         const onMouseMove = (moveEvent: PointerEvent) => {
             moveEvent.preventDefault();
             
             if (playerElement && playerRect) {
                 playerRect = playerElement.getBoundingClientRect();
                 
-                // Calculate the relative Y position of the cursor within the player
                 const relativeY = moveEvent.clientY - playerRect.top;
                 
-                // Calculate the percentage (0-100) of the position within the player
                 const percentageY = (relativeY / playerRect.height) * 100;
-
+                
                 const newPosition = Math.round(Math.max(0, Math.min(100, percentageY)));
                 
-                // Mettre à jour la position via le callback
                 onPositionChange(newPosition);
             } else {
-                // Fallback to the old method if the player is not found
                 const deltaY = (moveEvent.clientY - initialY) / 4;
                 const newPosition = Math.max(0, Math.min(100, initialPosition + deltaY));
                 onPositionChange(newPosition);
             }
         };
-
+        
         const onMouseUp = (upEvent: MouseEvent) => {
             upEvent.preventDefault();
             upEvent.stopPropagation();
@@ -75,7 +76,7 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, onPositionC
             window.removeEventListener('pointermove', onMouseMove);
             window.removeEventListener('mouseup', onMouseUp);
         };
-
+        
         window.addEventListener('pointermove', onMouseMove, { passive: false });
         window.addEventListener('mouseup', onMouseUp, { passive: false });
     }, []);
@@ -97,9 +98,9 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, onPositionC
         };
 
         loadFontByName(style?.fontFamily || 'Montserrat');
-		if (style?.activeWord?.isActive && style?.activeWord?.fontFamily !== style?.fontFamily) {
-			loadFontByName(style?.activeWord.fontFamily || 'Montserrat');
-		}
+        if (style?.activeWord?.isActive && style?.activeWord?.fontFamily !== style?.fontFamily) {
+            loadFontByName(style?.activeWord.fontFamily || 'Montserrat');
+        }
     }, [style?.fontFamily]);
 
     const getAnimationValues = () => {
@@ -175,9 +176,7 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, onPositionC
 
     const { scale, opacity, blurValue } = getAnimationValues();
 
-    const shadowColor = style.shadow.color ? style.shadow.color : 'black';
-
-    const verticalPosition = (style.position / 100) * 1750;
+    const verticalPosition = calculateSubtitlePosition(style.position || 50, videoFormat || 'vertical');
 
     const getStroke3D = (isWordActive: boolean) => {
         let threeDEffect = '';
@@ -235,7 +234,7 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, onPositionC
                     if (line.words.length > 0) {
                         isLineActive = (frame+start) >= line.words[0].startInFrames && 
                             (frame+start) < (line.words[line.words.length - 1].startInFrames + 
-                        line.words[line.words.length - 1].durationInFrames);
+                            line.words[line.words.length - 1].durationInFrames);
                     }
 
                     return (

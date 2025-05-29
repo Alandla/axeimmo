@@ -242,6 +242,11 @@
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Subtitles",
       "audio-tabs-title": "Audio",
+      "video-format": {
+        "vertical": "Vertical",
+        "ads": "Ads",
+        "square": "Square"
+      },
       "modal-pricing-not-enough-credits": "Not enough credits",
       "modal-pricing-description-not-enough-credits": "You don't have enough credits to export your video, upgrade to a higher plan to export your video.",
       "modal-pricing-avatar-on-free-title": "No avatar on the free plan",

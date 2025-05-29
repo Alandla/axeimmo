@@ -1,11 +1,13 @@
 import { VideoGenerate } from "@/src/remotion/generateVideo/Composition";
-import { IVideo } from "@/src/types/video";
+import { IVideo, VideoFormat } from "@/src/types/video";
+import { getVideoDimensions } from "@/src/types/video";
 import { Player, PlayerRef } from "@remotion/player";
 import { useEffect, useState } from "react";
 import { preloadAudio, preloadImage, preloadVideo } from "@remotion/preload";
 import { AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ReviewFloating } from "@/src/components/ReviewFloating";
+import VideoFormatSelector from "@/src/components/edit/video-format-selector";
 
 export default function VideoPreview({ 
     playerRef, 
@@ -16,7 +18,8 @@ export default function VideoPreview({
     onSubtitleStyleChange,
     onAvatarHeightRatioChange,
     onAvatarPositionChange,
-    onMediaPositionChange
+    onMediaPositionChange,
+    onVideoFormatChange
 }: { 
     playerRef: React.RefObject<PlayerRef>, 
     video: IVideo | null, 
@@ -26,12 +29,16 @@ export default function VideoPreview({
     onSubtitleStyleChange?: (newStyle: any) => void,
     onAvatarHeightRatioChange?: (ratio: number) => void,
     onAvatarPositionChange?: (position: { x: number, y: number }) => void,
-    onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void
+    onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
+    onVideoFormatChange?: (format: VideoFormat) => void
 }) {
     const t = useTranslations('edit');
     const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
     const [showReview, setShowReview] = useState(false);
     const [hasInteractedWithReview, setHasInteractedWithReview] = useState(false);
+
+    // Get video dimensions based on format
+    const dimensions = getVideoDimensions(video?.video?.format || 'vertical');
 
     useEffect(() => {
         if (!video?.video?.sequences) return;
@@ -103,9 +110,17 @@ export default function VideoPreview({
     return (
         <div className={`h-full flex flex-col items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
             {video?.video?.avatar && (
-                <div className="text-xs sm:text-sm mb-2 sm:mb-0 w-full rounded-lg border bg-muted text-muted-foreground px-4 py-3 flex items-center gap-2">
+                <div className="text-xs sm:text-sm mb-4 w-full rounded-lg border bg-muted text-muted-foreground px-4 py-3 flex items-center gap-2">
                     <AlertCircle className="h-4 w-4" />
                     {t('lip-sync-export-message')}
+                </div>
+            )}
+            {video?.video && onVideoFormatChange && (
+                <div className="w-full mb-4">
+                    <VideoFormatSelector
+                        value={video.video.format || 'vertical'}
+                        onValueChange={onVideoFormatChange}
+                    />
                 </div>
             )}
             <div className="relative w-full h-full">
@@ -115,8 +130,8 @@ export default function VideoPreview({
                     component={VideoGenerate}
                     durationInFrames={video?.video?.metadata.audio_duration ? Math.ceil(video?.video?.metadata.audio_duration * 60) : 1}
                     fps={60}
-                    compositionWidth={1080}
-                    compositionHeight={1920}
+                    compositionWidth={dimensions.width}
+                    compositionHeight={dimensions.height}
                     inputProps={{
                         data: video,
                         showWatermark,

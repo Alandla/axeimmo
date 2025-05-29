@@ -3,6 +3,7 @@ import {fillTextBox} from '../../utils/measureText';
 import {useMemo} from 'react';
 import { Line, Sequence as SequenceType, SubtitleMode, Word } from "../../type/subtitle";
 import { SubtitleClean } from "./subtitleClean";
+import { VideoFormat } from "../../utils/videoDimensions";
 
 export const formatSubtitles = (
 	sequences: SequenceType[],
@@ -113,7 +114,7 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesClean = ({ subtitleSequences, style, onStyleChange }: { subtitleSequences: any, style: any, onStyleChange?: (newStyle: any) => void }) => {
+export const SubtitlesClean = ({ subtitleSequences, style, videoFormat, onStyleChange }: { subtitleSequences: any, style: any, videoFormat?: VideoFormat, onStyleChange?: (newStyle: any) => void }) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -141,7 +142,7 @@ export const SubtitlesClean = ({ subtitleSequences, style, onStyleChange }: { su
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleClean subtitleSequence={subtitle} start={currentFrame} style={style} onPositionChange={handlePositionChange} />
+						<SubtitleClean subtitleSequence={subtitle} start={currentFrame} style={style} videoFormat={videoFormat} onPositionChange={handlePositionChange} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;
