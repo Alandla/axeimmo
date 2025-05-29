@@ -149,7 +149,7 @@ export function AiChat() {
     };
     
     checkVideoLimitAndFetchLastUsed();
-  }, [activeSpace, totalVideoCountBySpace, fetchVideos, setLastUsedParameters]);
+  }, [activeSpace?.id]);
 
   const handleSendMessage = (message: string, duration: number) => {
     if (creationStep === CreationStep.START) {
