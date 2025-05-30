@@ -50,7 +50,7 @@ export async function POST(req: Request) {
 
         const priceId = session?.line_items?.data[0]?.price?.id;
         const userId = event.data.object.client_reference_id;
-        const spaceId = session?.metadata?.spaceId;
+        let spaceId = session?.metadata?.spaceId;
         const fbc = session?.metadata?.fbc;
         const fbp = session?.metadata?.fbp;
 
@@ -78,7 +78,8 @@ export async function POST(req: Request) {
             }
             user = await createUser(u);
             await addUserIdToContact(user.id, user.email);
-            await createPrivateSpaceForUser(user.id, user.name);
+            const newSpace = await createPrivateSpaceForUser(user.id, user.name);
+            spaceId = newSpace.id;
           }
         } else {
           console.error("No user found");
@@ -94,9 +95,11 @@ export async function POST(req: Request) {
           nextPhase = today;
         }
 
-        const plan = plans.find(p => p.name === productData.metadata.name);
+        // Si le nom du plan est "createur", on utilise "start" à la place
+        const planName = productData.metadata.name === "createur" ? "start" : productData.metadata.name;
+        const plan = plans.find(p => p.name === planName);
         if (!plan) {
-          throw new Error(`Plan ${productData.metadata.name} not found`);
+          throw new Error(`Plan ${planName} not found`);
         }
 
         const planSpace : IPlan = {
@@ -148,8 +151,10 @@ export async function POST(req: Request) {
         // You can update the user data to show a "Cancel soon" badge for instance
         console.log("STRIPE EVENT: customer.subscription.updated")
 
+        const subscription = await stripe.subscriptions.retrieve(event.data.object.id);
+        
         const product = event.data.object.items.data[0].price.product;
-        const spaceId = event.data.object.metadata.spaceId;
+        const spaceId = subscription.metadata.spaceId;
         const customerId = event.data.object.customer;
         const priceId = event.data.object.items.data[0].price.id;
         const billingInterval = event.data.object.items.data[0].price.recurring?.interval;
@@ -164,9 +169,10 @@ export async function POST(req: Request) {
           nextPhase.setMonth(nextPhase.getMonth() + 1);
         }
 
-        const plan = plans.find(p => p.name === productData.metadata.name);
+        const planName = productData.metadata.name === "CREATOR" ? "START" : productData.metadata.name;
+        const plan = plans.find(p => p.name === planName);
         if (!plan) {
-          throw new Error(`Plan ${productData.metadata.name} not found`);
+          throw new Error(`Plan ${planName} not found`);
         }
 
         const planSpace : IPlan = {
@@ -217,7 +223,15 @@ export async function POST(req: Request) {
         // ✅ Grant access to the product
         console.log("STRIPE EVENT: checkout.invoice.paid")
 
-        const spaceId = event.data.object.subscription_details?.metadata?.spaceId;
+        const subscriptionId = event.data.object.subscription;
+        
+        if (!subscriptionId) {
+          console.error("No subscription found in invoice");
+          break;
+        }
+
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId as string);
+        const spaceId = subscription.metadata.spaceId;
 
         if (!spaceId) {
           console.error("Space not found");
