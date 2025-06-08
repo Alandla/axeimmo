@@ -30,8 +30,6 @@ export async function POST(req: NextRequest) {
 
     const updatedMedia = await updateMedia(spaceId, mediaSpace.id, mediaSpace.media);
 
-    console.log(updatedMedia)
-
     return NextResponse.json({ data: updatedMedia });
   } catch (error) {
     console.error('Error updating media:', error);

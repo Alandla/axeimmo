@@ -24,7 +24,8 @@
       "Dashboard": "Dashboard",
       "Create": "Create",
       "Pricing": "Pricing",
-      "Assets": "Assets"
+      "Assets": "Assets",
+      "Enhance": "Enhance"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -1142,6 +1143,23 @@
       "title": "Media Library",
       "more-options": "More options",
       "no-assets": "No assets",
+      "enhance-button": "Enhance",
+      "enhance-title": "Enhance your media",
+      "enhance-description": "Generate videos or enhance your images with AI",
+      "generate-video": "Generate video",
+      "enhance-image": "Enhance image",
+      "enhancement-context": "Generation context",
+      "optional": "(Optional)",
+      "staging-ideas-title": "AI-suggested staging ideas",
+      "staging-ideas-loading": "Loading staging ideas...",
+      "staging-ideas-unavailable": "No staging ideas available",
+      "camera-movement-label": "Camera movement",
+      "camera-movement-placeholder": "Select a movement",
+      "back-to-assets": "Back to media",
+      "generating": "Generating...",
+      "generating-video": "Generating video...",
+      "generating-image": "Enhancing image...",
+      "processing": "Processing",
       "upgrade-banner": {
         "title": "Unlock Smart Media Auto Placement",
         "description": "Our AI analyzes your content to automatically place them in your future videos. Stop waisting time and give a second life to your content.",
@@ -1191,9 +1209,13 @@
         "uploading-file-error": "An error occurred while uploading your file",
         "generating": "Generating",
         "generating-description": "AI is generating a description for this media",
+        "generating-video-description": "AI is generating a video from your image",
+        "generating-image-description": "AI is enhancing your image",
         "description-generated": "Description generated",
         "description-generated-description": "The description has been successfully generated",
-        "generation-error-description": "An error occurred while generating the description"
+        "generation-error-description": "An error occurred while generating the description",
+        "enhancement-started": "Generation started",
+        "enhancement-started-description": "The generation has been successfully started"
       }
     },
     "modals": {

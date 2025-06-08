@@ -15,11 +15,16 @@ import Link from "next/link";
 
 function generateBreadcrumbs(pathname: string) {
     const paths = pathname.split('/').filter(Boolean);
-    return paths.map((path, index) => {
-      const href = '/' + paths.slice(0, index + 1).join('/');
+    
+    // If path contains "enhance", stop at "enhance" and don't show following segments
+    const enhanceIndex = paths.indexOf('enhance');
+    const filteredPaths = enhanceIndex !== -1 ? paths.slice(0, enhanceIndex + 1) : paths;
+    
+    return filteredPaths.map((path, index) => {
+      const href = '/' + filteredPaths.slice(0, index + 1).join('/');
       return { href, label: path.charAt(0).toUpperCase() + path.slice(1) };
     });
-  }
+}
 
 export function BreadcrumbDashboard( ) {
   const t = useTranslations('breadcrumbs')

@@ -6,6 +6,7 @@ import { basicApiCall } from '@/src/lib/api'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import AssetCard from '@/src/components/asset-card'
 import AssetDialog from '@/src/components/asset-dialog'
+import GeneratingCard from '@/src/components/generating-card'
 import { IMediaSpace } from '@/src/types/space'
 import VideoCardSkeleton from '@/src/components/video-card-skeleton'
 import { ImageOff, AlertTriangle, Loader2, Upload } from 'lucide-react'
@@ -22,6 +23,13 @@ import { storageLimit } from '@/src/config/plan.config'
 import { formatBytes } from '@/src/utils/format'
 import { Alert, AlertDescription, AlertTitle } from '@/src/components/ui/alert'
 import { UsageStorage } from '@/src/components/ui/usage-storage'
+import { 
+  checkFalMedias, 
+  updateAssetsWithCompletedMedias, 
+  startFalPolling,
+  startLegacyPolling,
+  cleanupPolling 
+} from '@/src/utils/asset-polling'
 
 interface User {
   id: string
@@ -47,6 +55,8 @@ export default function AssetsPage() {
   const { assetsBySpace, setAssets: setStoreAssets, fetchAssets } = useAssetsStore()
   const { toast } = useToast()
   const containerRef = useRef<HTMLDivElement>(null)
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const falPollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
   
   const [assets, setAssets] = useState<MediaSpaceWithCreator[]>([])
   const [selectedAsset, setSelectedAsset] = useState<MediaSpaceWithCreator | null>(null)
@@ -205,8 +215,58 @@ export default function AssetsPage() {
     }
   };
 
+  // Notre version locale de initPolling qui utilise les fonctions importées
+  const initLocalPolling = (assetsFromApi: MediaSpaceWithCreator[], spaceId: string) => {
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    
+    // 1. Vérifier les médias sans requestId (ancienne logique)
+    const recentGeneratingAssets = assetsFromApi.filter(asset => 
+      (asset.media.generationStatus === 'generating-video' || asset.media.generationStatus === 'generating-image') &&
+      !asset.media.requestId &&
+      new Date(asset.uploadedAt) > fiveMinutesAgo
+    );
+    
+    if (recentGeneratingAssets.length > 0) {
+      const hasVideoGeneration = recentGeneratingAssets.some(asset => asset.media.generationStatus === 'generating-video');
+      const hasImageGeneration = recentGeneratingAssets.some(asset => asset.media.generationStatus === 'generating-image');
+      
+      const pollInterval = hasImageGeneration ? 1000 : 5000; // 1s pour images, 5s pour vidéos
+      startLegacyPolling(
+        assetsFromApi, 
+        spaceId, 
+        pollInterval, 
+        fiveMinutesAgo, 
+        pollingIntervalRef, 
+        falPollingIntervalRef, 
+        assets,
+        setAssets,
+        fetchAssets
+      );
+    } else if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+    
+    // 2. Vérifier les médias avec requestId (Fal.ai)
+    const mediaWithRequestId = assetsFromApi.filter(asset => 
+      asset.media.generationStatus === 'generating-video' && 
+      asset.media.requestId
+    );
+    
+    if (mediaWithRequestId.length > 0) {
+      startFalPolling(assetsFromApi, spaceId, falPollingIntervalRef, assets, setAssets);
+    } else if (falPollingIntervalRef.current) {
+      clearInterval(falPollingIntervalRef.current);
+      falPollingIntervalRef.current = null;
+    }
+  };
+
   useEffect(() => {
-    if (!activeSpace?.id) return;
+    if (!activeSpace?.id) {
+      // Nettoyer les polling si on n'a pas d'espace actif
+      cleanupPolling(pollingIntervalRef, falPollingIntervalRef);
+      return;
+    }
 
     const cachedAssets = assetsBySpace.get(activeSpace.id);
     
@@ -222,9 +282,12 @@ export default function AssetsPage() {
         }
 
         const assetsFromApi = await fetchAssets(activeSpace.id, true);
-
         setAssets(assetsFromApi);
         setIsLoading(false);
+
+        // Initialiser les pollings en fonction des assets récupérés
+        initLocalPolling(assetsFromApi, activeSpace.id);
+
       } catch (error) {
         console.error('Erreur lors du chargement des assets:', error);
         if (!cachedAssets) {
@@ -234,7 +297,12 @@ export default function AssetsPage() {
     };
     
     loadAssets();
-  }, [activeSpace]);
+
+    // Cleanup function
+    return () => {
+      cleanupPolling(pollingIntervalRef, falPollingIntervalRef);
+    };
+  }, [activeSpace?.id]);
 
   return (
     <div className="relative">
@@ -337,19 +405,32 @@ export default function AssetsPage() {
                   </p>
                 </div>
               ) : (
-                assets.map((asset) => (
-                  <AssetCard
-                    key={asset.media.id}
-                    spaceId={activeSpace?.id || ''}
-                    mediaSpace={asset}
-                    setMedia={setMedia}
-                    onDelete={handleDeleteAsset}
-                    onClick={() => {
-                      setSelectedAsset(asset)
-                      setIsDialogOpen(true)
-                    }}
-                  />
-                ))
+                assets.map((asset) => {
+                  // Afficher GeneratingCard si l'asset est en génération
+                  if (asset.media.generationStatus === 'generating-video' || asset.media.generationStatus === 'generating-image') {
+                    return (
+                      <GeneratingCard
+                        key={asset.id}
+                        mediaSpace={asset}
+                      />
+                    )
+                  }
+                  
+                  // Sinon afficher AssetCard normal
+                  return (
+                    <AssetCard
+                      key={asset.media.id}
+                      spaceId={activeSpace?.id || ''}
+                      mediaSpace={asset}
+                      setMedia={setMedia}
+                      onDelete={handleDeleteAsset}
+                      onClick={() => {
+                        setSelectedAsset(asset)
+                        setIsDialogOpen(true)
+                      }}
+                    />
+                  )
+                })
               )}
             </div>
           </div>

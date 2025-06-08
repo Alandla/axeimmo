@@ -33,7 +33,8 @@
       "Dashboard": "Tableau de bord",
       "Create": "Créer",
       "Pricing": "Tarifs",
-      "Assets": "Médias"
+      "Assets": "Médias",
+      "Enhance": "Améliorer"
     },
     "dashboard": {
       "title": "Tableau de bord",
@@ -1133,6 +1134,23 @@
       "title": "Médiathèque",
       "more-options": "Plus d'options",
       "no-assets": "Aucun média",
+      "enhance-button": "Améliorer",
+      "enhance-title": "Améliorer votre média",
+      "enhance-description": "Générez des vidéos ou améliorez vos images grâce à l'IA",
+      "generate-video": "Générer une vidéo",
+      "enhance-image": "Améliorer l'image",
+      "enhancement-context": "Contexte de génération",
+      "optional": "(Optionnel)",
+      "staging-ideas-title": "Idées de mise en scène suggérées par l'IA",
+      "staging-ideas-loading": "Chargement des idées de mise en scène...",
+      "staging-ideas-unavailable": "Aucune idée de mise en scène disponible",
+      "camera-movement-label": "Mouvement de caméra",
+      "camera-movement-placeholder": "Sélectionner un mouvement",
+      "back-to-assets": "Retour aux médias",
+      "generating": "Génération...",
+      "generating-video": "Génération de vidéo...",
+      "generating-image": "Amélioration de l'image...",
+      "processing": "En cours",
       "upgrade-banner": {
         "title": "Débloquez le Smart Media Auto Placement",
         "description": "Notre IA analyse vos médias pour les placer automatiquement dans vos futurs vidéos, aux bons moments. Arrêtez de perdre du temps et donnez une seconde vie à vos médias.",
@@ -1181,9 +1199,13 @@
         "uploading-file-error": "Une erreur est survenue lors de l'importation de votre fichier",
         "generating": "Génération en cours",
         "generating-description": "L'IA génère une description pour ce média",
+        "generating-video-description": "L'IA génère une vidéo à partir de votre image",
+        "generating-image-description": "L'IA améliore votre image",
         "description-generated": "Description générée",
         "description-generated-description": "La description a été générée avec succès",
-        "generation-error-description": "Une erreur est survenue lors de la génération de la description"
+        "generation-error-description": "Une erreur est survenue lors de la génération de la description",
+        "enhancement-started": "Génération démarrée",
+        "enhancement-started-description": "La génération a été lancée avec succès"
       }
     },
     "onboarding": {

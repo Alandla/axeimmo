@@ -132,6 +132,36 @@ export interface VideoScriptImageSearchOutput {
   }[]
 }
 
+export interface KlingAnimationPromptGenerationInput {
+  image?: Image
+  aspect_ratio?: ("16:9" | "9:16" | "1:1")
+  video_duration?: ("5 seconds" | "10 seconds")
+  additional_context?: string
+}
+
+export interface KlingAnimationPromptGenerationOutput {
+  animation_prompt?: string
+  scene_analysis?: string
+}
+
+export interface KlingAnimationPromptEnhancementInput {
+  image?: Image
+  basic_prompt?: string
+}
+
+export interface KlingAnimationPromptEnhancementOutput {
+  enhanced_prompt?: string
+}
+
+export interface ImageStagingIdeasInput {
+  image?: Image
+}
+
+export interface ImageStagingIdeasOutput {
+  staging_ideas?: string[]
+  recommended_camera_movement?: ("Horizontal" | "Vertical" | "Zoom" | "Pan" | "Tilt" | "Roll" | "Master Shot: Move Left and Zoom In" | "Master Shot: Move Right and Zoom In" | "Master Shot: Move Forward and Zoom Up" | "Master Shot: Move Down and Zoom Out")
+}
+
 const videoScriptKeywordExtraction = workflowAI.agent<VideoScriptKeywordExtractionInput, VideoScriptKeywordExtractionOutput>({
   id: "video-script-keyword-extraction",
   schemaId: 2,
@@ -185,6 +215,27 @@ const videoScriptImageSearch = workflowAI.agent<VideoScriptImageSearchInput, Vid
   id: "video-script-image-search",
   schemaId: 2,
   version: process.env.NODE_ENV === 'development' ? '4.3' : 'production',
+  useCache: "auto"
+})
+
+const klingAnimationPromptGeneration = workflowAI.agent<KlingAnimationPromptGenerationInput, KlingAnimationPromptGenerationOutput>({
+  id: "kling-animation-prompt-generation",
+  schemaId: 2,
+  version: "3.1",
+  useCache: process.env.NODE_ENV === 'development' ? 'never' : 'auto'
+})
+
+const klingAnimationPromptEnhancement = workflowAI.agent<KlingAnimationPromptEnhancementInput, KlingAnimationPromptEnhancementOutput>({
+  id: "kling-animation-prompt-enhancement",
+  schemaId: 2,
+  version: "4.1",
+  useCache: "auto"
+})
+
+const imageStagingIdeas = workflowAI.agent<ImageStagingIdeasInput, ImageStagingIdeasOutput>({
+  id: "image-staging-ideas",
+  schemaId: 1,
+  version: "2.3",
   useCache: "auto"
 })
 
@@ -436,6 +487,71 @@ export async function videoScriptImageSearchRun(
     }
   } catch (error) {
     console.error('Failed to run video script image search:', error);
+    throw error;
+  }
+}
+
+/**
+ * Génère un prompt d'animation Kling à partir d'une image
+ * @param imageUrl URL de l'image source
+ * @param basicPrompt Prompt de base pour l'animation
+ * @returns Le prompt d'animation amélioré et le coût de l'opération
+ */
+export async function generateKlingAnimationPrompt(
+  imageUrl: string,
+  basicPrompt: string
+): Promise<{
+  cost: number,
+  enhancedPrompt: string
+}> {
+  const input: KlingAnimationPromptEnhancementInput = {
+    image: {
+      url: imageUrl
+    },
+    basic_prompt: basicPrompt
+  }
+
+  try {
+    const response = await klingAnimationPromptEnhancement(input) as WorkflowAIResponse<KlingAnimationPromptEnhancementOutput>;
+    
+    return {
+      cost: response.data.cost_usd,
+      enhancedPrompt: response.output.enhanced_prompt || ""
+    }
+  } catch (error) {
+    console.error('Failed to generate Kling animation prompt:', error);
+    throw error;
+  }
+}
+
+/**
+ * Génère des idées de mise en scène et recommande un mouvement de caméra pour une image
+ * @param imageUrl URL de l'image source
+ * @returns Les idées de mise en scène, le mouvement de caméra recommandé et le coût de l'opération
+ */
+export async function generateImageStagingIdeas(
+  imageUrl: string
+): Promise<{
+  cost: number,
+  stagingIdeas: string[],
+  recommendedCameraMovement: string
+}> {
+  const input: ImageStagingIdeasInput = {
+    image: {
+      url: imageUrl
+    }
+  }
+
+  try {
+    const response = await imageStagingIdeas(input) as WorkflowAIResponse<ImageStagingIdeasOutput>;
+    
+    return {
+      cost: response.data.cost_usd,
+      stagingIdeas: response.output.staging_ideas || [],
+      recommendedCameraMovement: response.output.recommended_camera_movement || ""
+    }
+  } catch (error) {
+    console.error('Failed to generate image staging ideas:', error);
     throw error;
   }
 }

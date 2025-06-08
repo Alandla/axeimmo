@@ -38,6 +38,7 @@ export interface IMediaSpace {
   uploadedBy: string;
   uploadedAt: Date;
   autoPlacement?: boolean;
+  baseMediaId?: string;
 }
 
 export interface SimpleSpace {

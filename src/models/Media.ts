@@ -29,6 +29,20 @@ const mediaSchema = new mongoose.Schema({
     },
     name: String,
     source: String,
+    generationStatus: {
+      type: String,
+      enum: ['pending', 'generating-video', 'generating-image', 'completed', 'failed'],
+      default: 'completed'
+    },
+    requestId: {
+      type: String,
+      required: false
+    },
+    generationMode: {
+      type: String,
+      enum: ['standard', 'pro', 'master'],
+      required: false
+    },
     description: {
       type: [{
         start: Number,

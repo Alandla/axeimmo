@@ -19,6 +19,7 @@ import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import { Switch } from './ui/switch'
 import { TextShimmer } from './ui/text-shimmer'
 import { IMediaSpace } from '@/src/types/space'
+import { useRouter } from 'next/navigation'
 
 interface AssetDialogProps {
   mediaSpace: MediaSpaceWithCreator | null
@@ -44,6 +45,7 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const router = useRouter()
 
   // Fonction pour récupérer la description du média depuis l'API
   const fetchMediaDescription = async () => {
@@ -149,6 +151,8 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
             },
             autoPlacement
         }
+
+        console.log("updatedSpaceMedia", updatedSpaceMedia)
 
         await basicApiCall('/media/update', {
           spaceId: activeSpace.id,
@@ -274,6 +278,21 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
         <ScrollArea className="flex-1">
           <div className="">
             <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
+              {mediaSpace.media.type === 'image' && (
+                <div className="absolute top-2 left-2 z-10">
+                  <Button 
+                    size="sm"
+                    variant="outline"
+                    className="h-8"
+                    onClick={() => {
+                      router.push(`/dashboard/assets/enhance/${mediaSpace.id}`)
+                    }}
+                  >
+                    <Sparkles size={16} />
+                    {t('enhance-button')}
+                  </Button>
+                </div>
+              )}
               <div className="absolute top-2 right-2 z-10">
                 <Button 
                   size="icon"
