@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from '@/src/lib/auth';
-import { addMediasToSpace, updateMedia } from "@/src/dao/spaceDao";
+import { addMediasToSpace, updateMedia, getUserSpaces, removeCreditsToSpace, incrementImageToVideoUsage } from "@/src/dao/spaceDao";
 import { waitUntil } from "@vercel/functions";
 import { IMediaSpace } from "@/src/types/space";
 import { IMedia } from "@/src/types/video";
 import { generateKlingAnimationPrompt } from "@/src/lib/workflowai";
-import { startKlingVideoGeneration, KlingGenerationMode } from "@/src/lib/fal";
+import { startKlingVideoGeneration, KlingGenerationMode, KLING_GENERATION_COSTS } from "@/src/lib/fal";
+import { PlanName } from "@/src/types/enums";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -25,8 +26,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Valider le mode de génération
-  if (type === 'video' && !Object.values(KlingGenerationMode).includes(mode)) {
+  // Valider et typer le mode de génération
+  const generationMode: KlingGenerationMode = mode;
+  if (type === 'video' && !Object.values(KlingGenerationMode).includes(generationMode)) {
     return NextResponse.json(
       { error: "Invalid generation mode" },
       { status: 400 }
@@ -34,13 +36,58 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    // Récupérer les espaces de l'utilisateur pour vérifier les crédits et limites
+    const userSpaces = await getUserSpaces(session.user.id);
+    console.log("userSpaces: ", userSpaces);
+    const currentSpace = userSpaces.find(space => space.id === spaceId);
+
+    console.log("currentSpace: ", currentSpace);
+    
+    if (!currentSpace) {
+      return NextResponse.json(
+        { error: "Space not found" },
+        { status: 404 }
+      );
+    }
+
+    // Vérifier les crédits pour la génération vidéo
+    if (type === 'video') {
+      const requiredCredits = KLING_GENERATION_COSTS[generationMode];
+      
+      if (currentSpace.credits < requiredCredits) {
+        return NextResponse.json(
+          { error: "Insufficient credits", required: requiredCredits, available: currentSpace.credits },
+          { status: 402 }
+        );
+      }
+
+      // Vérifier les limites de génération pour les plans non-entreprise
+      if (currentSpace.planName !== PlanName.ENTREPRISE) {
+        const remainingGenerations = (currentSpace.imageToVideoLimit || 0) - (currentSpace.imageToVideoUsed || 0);
+        if (remainingGenerations <= 0) {
+          return NextResponse.json(
+            { error: "Generation limit reached", limit: currentSpace.imageToVideoLimit, used: currentSpace.imageToVideoUsed },
+            { status: 403 }
+          );
+        }
+      }
+
+      // Vérifier l'accès au mode PRO/Ultra
+      if (generationMode === KlingGenerationMode.PRO && currentSpace.planName !== PlanName.ENTREPRISE) {
+        return NextResponse.json(
+          { error: "Mode PRO requires Enterprise plan" },
+          { status: 403 }
+        );
+      }
+    }
+
     // Créer immédiatement un nouvel asset en génération
     const enhancedMedia: IMedia = {
       type: type === 'video' ? 'video' as const : 'image' as const,
       usage: 'media' as const,
       name: `${type === 'video' ? 'Generated Video' : 'Enhanced'} - ${mediaSpace.media.name}`,
       generationStatus: type === 'video' ? 'generating-video' : 'generating-image',
-      generationMode: type === 'video' ? mode : undefined,
+      generationMode: type === 'video' ? generationMode : undefined,
       description: [{
         start: 0,
         text: context.substring(0, 200)
@@ -89,7 +136,7 @@ export async function POST(req: NextRequest) {
     console.log("Added media: ", addedMedia);
     
     // Démarrer la génération en arrière-plan avec le vrai ID
-    waitUntil(enhanceMediaInBackground(addedMedia, spaceId, context, type, mode));
+    waitUntil(enhanceMediaInBackground(addedMedia, spaceId, context, type, generationMode));
 
     return NextResponse.json( {
       data: {
@@ -145,6 +192,13 @@ async function enhanceMediaInBackground(
         duration: "5",
         aspect_ratio: "16:9"
       }, mode);
+
+      if (type === 'video') {
+        const requiredCredits = KLING_GENERATION_COSTS[mode as KlingGenerationMode];
+
+        await removeCreditsToSpace(spaceId, requiredCredits);
+        await incrementImageToVideoUsage(spaceId);
+      }
       
       console.log('Fal.ai request submitted with ID:', falResult.request_id);
       

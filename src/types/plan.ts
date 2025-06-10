@@ -10,6 +10,7 @@ export interface Plan {
   maxVideoDuration: number
   storageLimit?: number
   popular?: boolean
+  imageToVideoLimit: number
   priceId: {
     month: { 
       euros: string

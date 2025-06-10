@@ -132,18 +132,6 @@ export interface VideoScriptImageSearchOutput {
   }[]
 }
 
-export interface KlingAnimationPromptGenerationInput {
-  image?: Image
-  aspect_ratio?: ("16:9" | "9:16" | "1:1")
-  video_duration?: ("5 seconds" | "10 seconds")
-  additional_context?: string
-}
-
-export interface KlingAnimationPromptGenerationOutput {
-  animation_prompt?: string
-  scene_analysis?: string
-}
-
 export interface KlingAnimationPromptEnhancementInput {
   image?: Image
   basic_prompt?: string
@@ -159,7 +147,6 @@ export interface ImageStagingIdeasInput {
 
 export interface ImageStagingIdeasOutput {
   staging_ideas?: string[]
-  recommended_camera_movement?: ("Horizontal" | "Vertical" | "Zoom" | "Pan" | "Tilt" | "Roll" | "Master Shot: Move Left and Zoom In" | "Master Shot: Move Right and Zoom In" | "Master Shot: Move Forward and Zoom Up" | "Master Shot: Move Down and Zoom Out")
 }
 
 const videoScriptKeywordExtraction = workflowAI.agent<VideoScriptKeywordExtractionInput, VideoScriptKeywordExtractionOutput>({
@@ -218,24 +205,17 @@ const videoScriptImageSearch = workflowAI.agent<VideoScriptImageSearchInput, Vid
   useCache: "auto"
 })
 
-const klingAnimationPromptGeneration = workflowAI.agent<KlingAnimationPromptGenerationInput, KlingAnimationPromptGenerationOutput>({
-  id: "kling-animation-prompt-generation",
-  schemaId: 2,
-  version: "3.1",
-  useCache: process.env.NODE_ENV === 'development' ? 'never' : 'auto'
-})
-
 const klingAnimationPromptEnhancement = workflowAI.agent<KlingAnimationPromptEnhancementInput, KlingAnimationPromptEnhancementOutput>({
   id: "kling-animation-prompt-enhancement",
   schemaId: 2,
-  version: "4.1",
+  version: process.env.NODE_ENV === 'development' ? '4.1' : 'production',
   useCache: "auto"
 })
 
 const imageStagingIdeas = workflowAI.agent<ImageStagingIdeasInput, ImageStagingIdeasOutput>({
   id: "image-staging-ideas",
-  schemaId: 1,
-  version: "2.3",
+  schemaId: 2,
+  version: process.env.NODE_ENV === 'development' ? '5.1' : 'production',
   useCache: "auto"
 })
 
@@ -533,8 +513,7 @@ export async function generateImageStagingIdeas(
   imageUrl: string
 ): Promise<{
   cost: number,
-  stagingIdeas: string[],
-  recommendedCameraMovement: string
+  stagingIdeas: string[]
 }> {
   const input: ImageStagingIdeasInput = {
     image: {
@@ -548,7 +527,6 @@ export async function generateImageStagingIdeas(
     return {
       cost: response.data.cost_usd,
       stagingIdeas: response.output.staging_ideas || [],
-      recommendedCameraMovement: response.output.recommended_camera_movement || ""
     }
   } catch (error) {
     console.error('Failed to generate image staging ideas:', error);

@@ -106,6 +106,7 @@ export async function POST(req: Request) {
           subscriptionType: billingInterval === "month" ? SubscriptionType.MONTHLY : SubscriptionType.ANNUAL,
           creditsMonth: plan.credits,
           storageLimit: storageLimit[plan.name],
+          imageToVideoLimit: plan.imageToVideoLimit,
           nextPhase: nextPhase
         }
 
@@ -176,6 +177,7 @@ export async function POST(req: Request) {
           subscriptionType: billingInterval === "month" ? SubscriptionType.MONTHLY : SubscriptionType.ANNUAL,
           creditsMonth: plan.credits,
           storageLimit: storageLimit[plan.name],
+          imageToVideoLimit: plan.imageToVideoLimit,
           nextPhase: nextPhase
         }
 

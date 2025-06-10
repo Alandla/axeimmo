@@ -43,6 +43,10 @@ const planSchema = new mongoose.Schema({
     type: Number,
     default: 1 * 1024 * 1024 * 1024, // 1 GO par défaut pour le plan gratuit
   },
+  imageToVideoLimit: {
+    type: Number,
+    default: 0,
+  },
   nextPhase: {
     type: Date,
     required: true,
@@ -128,6 +132,10 @@ const spaceSchema = new mongoose.Schema(
       config: {}
     },
     usedStorageBytes: {
+      type: Number,
+      default: 0,
+    },
+    imageToVideoUsed: {
       type: Number,
       default: 0,
     },

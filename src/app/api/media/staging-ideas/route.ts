@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       data: {
         stagingIdeas: result.stagingIdeas,
-        recommendedCameraMovement: result.recommendedCameraMovement,
         cost: result.cost
       }
     })

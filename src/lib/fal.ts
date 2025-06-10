@@ -17,6 +17,13 @@ export const KLING_ENDPOINTS = {
   [KlingGenerationMode.MASTER]: "fal-ai/kling-video/v2.1/master/image-to-video"
 } as const;
 
+// Coûts en crédits pour chaque mode de génération
+export const KLING_GENERATION_COSTS = {
+  [KlingGenerationMode.STANDARD]: 4,
+  [KlingGenerationMode.PRO]: 7,
+  [KlingGenerationMode.MASTER]: 10
+} as const;
+
 export interface KlingRequest {
   prompt: string;
   image_url: string;
@@ -61,7 +68,7 @@ export async function startKlingVideoGeneration(
   mode: KlingGenerationMode = KlingGenerationMode.STANDARD
 ): Promise<{ request_id: string }> {
   // En mode test, retourner un ID fixe sans appeler l'API
-  if (process.env.NODE_ENV === 'development' && process.env.TEST_MODE === 'true') {
+  if (process.env.NODE_ENV === 'development') {
     console.log(`[TEST MODE] Simulating Kling video generation with mode: ${mode}`);
     return { request_id: 'a07e8111-d339-4b5c-8563-9887bb4bd146' };
   }
@@ -96,7 +103,7 @@ export async function checkKlingRequestStatus(
   mode: KlingGenerationMode = KlingGenerationMode.STANDARD
 ): Promise<FalQueueStatus> {
   // En mode test, simuler une réponse basée sur l'ID de requête
-  if (process.env.NODE_ENV === 'development' && process.env.TEST_MODE === 'true') {
+  if (process.env.NODE_ENV === 'development') {
     console.log(`[TEST MODE] Checking status for request ID: ${requestId}`);
     
     // Simuler différents états basés sur le temps écoulé

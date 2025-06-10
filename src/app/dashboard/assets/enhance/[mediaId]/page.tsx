@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl'
 import { Button } from '@/src/components/ui/button'
 import { Textarea } from '@/src/components/ui/textarea'
 import { Label } from '@/src/components/ui/label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/components/ui/tabs'
 import { Badge } from '@/src/components/ui/badge'
 import { Loader2, Sparkles, ArrowLeft, Lightbulb } from 'lucide-react'
 import { basicApiCall } from '@/src/lib/api'
@@ -15,8 +14,11 @@ import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import { IMediaSpace } from '@/src/types/space'
 import Image from 'next/image'
 import Link from 'next/link'
+import { GenerationModeSelector } from '@/src/components/ui/generation-mode-selector'
+import { KlingGenerationMode, KLING_GENERATION_COSTS } from '@/src/lib/fal'
+import { PlanName } from '@/src/types/enums'
+import { usePremiumToast } from '@/src/utils/premium-toast'
 import SkeletonImage from '@/src/components/ui/skeleton-image'
-import CameraMovementSelect from '@/src/components/ui/camera-movement-select'
 
 interface StagingIdeasData {
   stagingIdeas: string[]
@@ -28,29 +30,30 @@ export default function EnhancePage() {
   const params = useParams()
   const router = useRouter()
   const t = useTranslations('assets')
+  const planT = useTranslations('plan')
+  const pricingT = useTranslations('pricing')
   const { toast } = useToast()
   const { activeSpace } = useActiveSpaceStore()
+  const { decrementCredits, incrementImageToVideoUsage } = useActiveSpaceStore()
+  const { showPremiumToast } = usePremiumToast()
   
   const [mediaSpace, setMediaSpace] = useState<IMediaSpace | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loadingMedia, setLoadingMedia] = useState(true)
+  const [loadingStagingIdeas, setLoadingStagingIdeas] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [context, setContext] = useState('')
-  const [activeTab, setActiveTab] = useState('video')
   const [mediaNotFound, setMediaNotFound] = useState(false)
+  const [generationMode, setGenerationMode] = useState<KlingGenerationMode>(KlingGenerationMode.STANDARD)
   
   // États pour les idées de mise en scène
   const [stagingIdeas, setStagingIdeas] = useState<string[] | null>(null)
-  const [loadingStagingIdeas, setLoadingStagingIdeas] = useState(true)
-  const [selectedCameraMovement, setSelectedCameraMovement] = useState<string>('Static')
-  const [userChangedCameraMovement, setUserChangedCameraMovement] = useState(false)
 
   useEffect(() => {
     const fetchMediaAndStagingIdeas = async () => {
       if (!activeSpace?.id || !params.mediaId) return
 
       try {
-        setLoading(true)
-        setLoadingStagingIdeas(true)
+        setLoadingMedia(true)
         
         // Récupération du média
         const fetchedMediaSpace = await basicApiCall<IMediaSpace>('/media/get', {
@@ -59,8 +62,10 @@ export default function EnhancePage() {
         })
         setMediaSpace(fetchedMediaSpace)
 
-        // Si c'est une image et qu'on est sur l'onglet vidéo, récupérer les idées de mise en scène
-        if (fetchedMediaSpace?.media.type === 'image' && fetchedMediaSpace.media.image?.link && activeTab === 'video') {
+        setLoadingMedia(false)
+
+        // Si c'est une image, récupérer les idées de mise en scène
+        if (fetchedMediaSpace?.media.type === 'image' && fetchedMediaSpace.media.image?.link) {
           try {
             const stagingIdeasResult : any = await basicApiCall('/media/staging-ideas', {
               imageUrl: fetchedMediaSpace.media.image.link
@@ -68,11 +73,6 @@ export default function EnhancePage() {
 
             console.log(stagingIdeasResult)
             setStagingIdeas(stagingIdeasResult.stagingIdeas)
-
-            // Préfill du mouvement de caméra si l'utilisateur ne l'a pas changé
-            if (!userChangedCameraMovement && stagingIdeasResult.recommendedCameraMovement) {
-            setSelectedCameraMovement(stagingIdeasResult.recommendedCameraMovement)
-            }
           } catch (stagingError) {
             console.error('Error fetching staging ideas:', stagingError)
             toast({
@@ -83,8 +83,6 @@ export default function EnhancePage() {
           } finally {
             setLoadingStagingIdeas(false)
           }
-        } else {
-          setLoadingStagingIdeas(false)
         }
       } catch (error) {
         console.error('Error fetching media:', error)
@@ -94,45 +92,82 @@ export default function EnhancePage() {
           description: 'Impossible de charger le média',
           variant: 'destructive'
         })
-      } finally {
-        setLoading(false)
       }
     }
 
     fetchMediaAndStagingIdeas()
   }, [activeSpace?.id, params.mediaId])
 
-  const handleCameraMovementChange = (value: string) => {
-    setSelectedCameraMovement(value)
-    setUserChangedCameraMovement(true)
-  }
-
   const handleIdeaClick = (idea: string) => {
     const newContext = context ? `${context}\n${idea}` : idea
     setContext(newContext)
   }
 
+  const handleModeChange = (value: string) => {
+    const mode = value as KlingGenerationMode
+    
+    // Vérifier si l'utilisateur a accès au mode Ultra (PRO)
+    if (mode === KlingGenerationMode.PRO && activeSpace?.planName !== PlanName.ENTREPRISE) {
+      showPremiumToast(
+        t('toast.title-error'),
+        pricingT('premium-toast.description', { plan: planT(PlanName.ENTREPRISE) }),
+        pricingT('upgrade')
+      );
+      return
+    }
+    
+    setGenerationMode(mode)
+  }
+
   const handleGenerate = async () => {
     if (!mediaSpace || !activeSpace?.id) return
+
+    const selectedCost = KLING_GENERATION_COSTS[generationMode]
+    
+    // Vérifier les crédits
+    if (activeSpace.credits < selectedCost) {
+      toast({
+        title: t('insufficient-credits'),
+        description: t('insufficient-credits-description'),
+        variant: 'destructive'
+      })
+      return
+    }
+
+    // Vérifier la limite de génération pour les plans non-entreprise
+    if (activeSpace.planName !== PlanName.ENTREPRISE) {
+      const remainingGenerations = (activeSpace.imageToVideoLimit || 0) - (activeSpace.imageToVideoUsed || 0)
+      if (remainingGenerations <= 0) {
+        toast({
+          title: t('generation-limit-reached'),
+          description: t('generation-limit-reached-description'),
+          variant: 'destructive'
+        })
+        return
+      }
+    }
 
     setGenerating(true)
 
     try {
       toast({
         title: t('toast.generating'),
-        description: activeTab === 'video' 
-          ? t('toast.generating-video-description')
-          : t('toast.generating-image-description'),
+        description: t('toast.generating-video-description'),
         variant: 'loading'
       })
 
       await basicApiCall('/media/enhance', {
         mediaSpace,
         spaceId: activeSpace.id,
-        type: activeTab,
+        type: 'video',
         context,
-        cameraMovement: activeTab === 'video' ? selectedCameraMovement : undefined
+        mode: generationMode
       })
+
+      decrementCredits(selectedCost)
+      if (activeSpace.planName !== PlanName.ENTREPRISE) {
+        incrementImageToVideoUsage()
+      }
 
       toast({
         title: t('toast.enhancement-started'),
@@ -169,170 +204,135 @@ export default function EnhancePage() {
     )
   }
 
+  const selectedCost = KLING_GENERATION_COSTS[generationMode]
+  const hasInsufficientCredits = activeSpace ? activeSpace.credits < selectedCost : false
+  const remainingGenerations = activeSpace ? (activeSpace.imageToVideoLimit || 0) - (activeSpace.imageToVideoUsed || 0) : 0
+  const hasReachedLimit = activeSpace && activeSpace?.planName !== PlanName.ENTREPRISE && remainingGenerations <= 0
+
   return (
-    <div className="container mx-auto py-6 max-w-4xl">
+    <div className="container mx-auto p-4 max-w-2xl">
       {/* Header */}
-    <div className="flex flex-col items-center space-y-4 mb-8">
+      <div className="flex flex-col items-center space-y-2 mb-8">
         <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg bg-muted">
-        {loading ? (
+        {loadingMedia ? (
             <div className="w-full h-full bg-muted animate-pulse"></div>
         ) : (
             mediaSpace?.media.type === 'image' && (
-            <Image
-                src={mediaSpace.media.image?.link || ''}
-                alt={mediaSpace.media.name}
-                fill
-                className="object-contain"
-                priority
-            />
+              <Image
+                  src={mediaSpace.media.image?.link || ''}
+                  alt={mediaSpace.media.name}
+                  fill
+                  className="object-contain"
+                  priority
+              />
             )
         )}
         </div>
-        {loading ? (
-        <div className="h-4 bg-muted rounded animate-pulse w-48"></div>
+        {loadingMedia ? (
+          <div className="h-4 bg-muted rounded animate-pulse w-48"></div>
         ) : (
-        <p className="text-sm text-muted-foreground text-center">
+          <p className="text-sm text-muted-foreground text-center max-w-xs sm:max-w-sm md:max-w-md truncate">
             {mediaSpace?.media.name}
-        </p>
+          </p>
         )}
-    </div>
+      </div>
 
-      {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="video">{t('generate-video')}</TabsTrigger>
-          <TabsTrigger value="image">{t('enhance-image')}</TabsTrigger>
-        </TabsList>
+      <div className="space-y-4">
+        {/* Sélecteur de mode de génération */}
+        <GenerationModeSelector
+          value={generationMode}
+          onValueChange={handleModeChange}
+          activeSpace={activeSpace}
+        />
 
-        <TabsContent value="video" className="space-y-4 mt-6">
-          <div>
-            <Label htmlFor="video-context" className="text-sm font-medium flex justify-between">
-              <span>{t('enhancement-context')}</span>
-              <span className="text-xs text-gray-500">{t('optional')}</span>
-            </Label>
-            <Textarea
-              id="video-context"
-              placeholder="Décrivez la vidéo que vous souhaitez créer à partir de cette image..."
-              value={context}
-              onChange={(e) => setContext(e.target.value)}
-              className="mt-1.5 min-h-[120px]"
-            />
-          </div>
-
-          {/* Idées de mise en scène de l'IA */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Lightbulb className="h-4 w-4 text-amber-500" />
-              <Label className="text-sm font-medium">{t('staging-ideas-title')}</Label>
-            </div>
-            
-            {loadingStagingIdeas ? (
-              <div className="space-y-2">
-                <div className="h-4 bg-muted rounded animate-pulse"></div>
-                <div className="h-4 bg-muted rounded animate-pulse w-3/4"></div>
-                <div className="h-4 bg-muted rounded animate-pulse w-1/2"></div>
-              </div>
-            ) : stagingIdeas ? (
-              <div className="flex flex-wrap gap-2">
-                {stagingIdeas.map((idea, index) => (
-                  <Badge
-                    key={index}
-                    variant="secondary"
-                    className="cursor-pointer hover:bg-gray-200 hover:text-gray-800 transition-colors text-sm px-3 py-1"
-                    onClick={() => handleIdeaClick(idea)}
-                  >
-                    {idea}
-                  </Badge>
-                ))}
-              </div>
-            ) : (
-              <div className="text-sm text-muted-foreground italic">
-                {t('staging-ideas-unavailable')}
-              </div>
-            )}
-          </div>
-
-          {/* Sélection du mouvement de caméra */}
-          <CameraMovementSelect 
-            value={selectedCameraMovement} 
-            onChange={handleCameraMovementChange}
+        <div>
+          <Label htmlFor="video-context" className="text-sm font-medium flex justify-between">
+            <span>{t('enhancement-context')}</span>
+            <span className="text-xs text-gray-500">{t('optional')}</span>
+          </Label>
+          <Textarea
+            id="video-context"
+            placeholder={t('enhancement-context-placeholder')}
+            value={context}
+            onChange={(e) => setContext(e.target.value)}
+            className="mt-1.5 min-h-[120px]"
           />
+        </div>
 
-          <div className="flex flex-col gap-3">
-            <Button 
-              variant="outline"
-              onClick={() => router.push('/dashboard/assets')}
-              className="w-full"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              {t('back-to-assets')}
-            </Button>
-
-            <Button 
-              onClick={handleGenerate} 
-              disabled={generating}
-              className="w-full"
-            >
-              {generating ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {t('generating')}
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-4 w-4" />
-                  {t('generate-video')}
-                </>
-              )}
-            </Button>
+        {/* Idées de mise en scène de l'IA */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Lightbulb className="h-4 w-4 text-amber-500" />
+            <Label className="text-sm font-medium">{t('staging-ideas-title')}</Label>
           </div>
-        </TabsContent>
+          
+          {loadingStagingIdeas ? (
+            <div className="space-y-2">
+              <div className="h-4 bg-muted rounded animate-pulse"></div>
+              <div className="h-4 bg-muted rounded animate-pulse w-3/4"></div>
+              <div className="h-4 bg-muted rounded animate-pulse w-1/2"></div>
+            </div>
+          ) : stagingIdeas ? (
+            <div className="flex flex-wrap gap-2">
+              {stagingIdeas.map((idea, index) => (
+                <Badge
+                  key={index}
+                  variant="secondary"
+                  className="cursor-pointer hover:bg-gray-200 hover:text-gray-800 transition-colors text-sm px-3 py-1"
+                  onClick={() => handleIdeaClick(idea)}
+                >
+                  {idea}
+                </Badge>
+              ))}
+            </div>
+          ) : (
+            <div className="text-sm text-muted-foreground italic">
+              {t('staging-ideas-unavailable')}
+            </div>
+          )}
+        </div>
 
-        <TabsContent value="image" className="space-y-4 mt-6">
-          <div>
-            <Label htmlFor="image-context" className="text-sm font-medium flex justify-between">
-              <span>{t('enhancement-context')}</span>
-              <span className="text-xs text-gray-500">{t('optional')}</span>
-            </Label>
-            <Textarea
-              id="image-context"
-              placeholder="Décrivez comment vous souhaitez améliorer cette image..."
-              value={context}
-              onChange={(e) => setContext(e.target.value)}
-              className="mt-1.5 min-h-[120px]"
-            />
-          </div>
+        <div className="flex flex-col gap-3">
+          <Button 
+            variant="outline"
+            onClick={() => router.push('/dashboard/assets')}
+            className="w-full"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {t('back-to-assets')}
+          </Button>
 
-          <div className="flex flex-col gap-3">
-            <Button 
-              variant="outline"
-              onClick={() => router.push('/dashboard/assets')}
-              className="w-full"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              {t('back-to-assets')}
-            </Button>
+          <Button 
+            onClick={handleGenerate} 
+            disabled={generating || hasInsufficientCredits || hasReachedLimit || !activeSpace}
+            className="w-full"
+          >
+            {generating ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {t('generating')}
+              </>
+            ) : (
+              <>
+                <Sparkles className="h-4 w-4" />
+                {t('generate-with-cost', { cost: selectedCost })}
+              </>
+            )}
+          </Button>
 
-            <Button 
-              onClick={handleGenerate} 
-              disabled={generating}
-              className="w-full"
-            >
-              {generating ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {t('generating')}
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-4 w-4" />
-                  {t('enhance-image')}
-                </>
-              )}
-            </Button>
-          </div>
-        </TabsContent>
-      </Tabs>
+          {hasInsufficientCredits && (
+            <p className="text-sm text-destructive text-center">
+              {t('insufficient-credits-description')}
+            </p>
+          )}
+          
+          {hasReachedLimit && (
+            <p className="text-sm text-destructive text-center">
+              {t('generation-limit-reached-description')}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   )
 } 

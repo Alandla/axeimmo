@@ -16,7 +16,9 @@ export async function getSpaceById(id: string): Promise<SimpleSpace | null> {
             companyMission: response.details?.companyMission,
             companyTarget: response.details?.companyTarget,
             usedStorageBytes: response.usedStorageBytes,
-            storageLimit: response.plan.storageLimit
+            storageLimit: response.plan.storageLimit,
+            imageToVideoLimit: response.plan.imageToVideoLimit,
+            imageToVideoUsed: response.imageToVideoUsed
         }
         return space
     } catch (error) {

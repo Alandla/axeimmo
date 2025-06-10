@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
           ...JSON.parse(JSON.stringify(mediaSpace.media)),
           _id: mediaSpace.media.id,
           generationStatus: 'completed',
+          type: 'video',
           video: {
             quality: 'hd',
             file_type: 'mp4',
