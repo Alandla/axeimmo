@@ -132,6 +132,23 @@ export interface VideoScriptImageSearchOutput {
   }[]
 }
 
+export interface KlingAnimationPromptEnhancementInput {
+  image?: Image
+  basic_prompt?: string
+}
+
+export interface KlingAnimationPromptEnhancementOutput {
+  enhanced_prompt?: string
+}
+
+export interface ImageStagingIdeasInput {
+  image?: Image
+}
+
+export interface ImageStagingIdeasOutput {
+  staging_ideas?: string[]
+}
+
 const videoScriptKeywordExtraction = workflowAI.agent<VideoScriptKeywordExtractionInput, VideoScriptKeywordExtractionOutput>({
   id: "video-script-keyword-extraction",
   schemaId: 2,
@@ -185,6 +202,20 @@ const videoScriptImageSearch = workflowAI.agent<VideoScriptImageSearchInput, Vid
   id: "video-script-image-search",
   schemaId: 2,
   version: process.env.NODE_ENV === 'development' ? '4.3' : 'production',
+  useCache: "auto"
+})
+
+const klingAnimationPromptEnhancement = workflowAI.agent<KlingAnimationPromptEnhancementInput, KlingAnimationPromptEnhancementOutput>({
+  id: "kling-animation-prompt-enhancement",
+  schemaId: 2,
+  version: process.env.NODE_ENV === 'development' ? '4.1' : 'production',
+  useCache: "auto"
+})
+
+const imageStagingIdeas = workflowAI.agent<ImageStagingIdeasInput, ImageStagingIdeasOutput>({
+  id: "image-staging-ideas",
+  schemaId: 2,
+  version: process.env.NODE_ENV === 'development' ? '5.1' : 'production',
   useCache: "auto"
 })
 
@@ -436,6 +467,69 @@ export async function videoScriptImageSearchRun(
     }
   } catch (error) {
     console.error('Failed to run video script image search:', error);
+    throw error;
+  }
+}
+
+/**
+ * Génère un prompt d'animation Kling à partir d'une image
+ * @param imageUrl URL de l'image source
+ * @param basicPrompt Prompt de base pour l'animation
+ * @returns Le prompt d'animation amélioré et le coût de l'opération
+ */
+export async function generateKlingAnimationPrompt(
+  imageUrl: string,
+  basicPrompt: string
+): Promise<{
+  cost: number,
+  enhancedPrompt: string
+}> {
+  const input: KlingAnimationPromptEnhancementInput = {
+    image: {
+      url: imageUrl
+    },
+    basic_prompt: basicPrompt
+  }
+
+  try {
+    const response = await klingAnimationPromptEnhancement(input) as WorkflowAIResponse<KlingAnimationPromptEnhancementOutput>;
+    
+    return {
+      cost: response.data.cost_usd,
+      enhancedPrompt: response.output.enhanced_prompt || ""
+    }
+  } catch (error) {
+    console.error('Failed to generate Kling animation prompt:', error);
+    throw error;
+  }
+}
+
+/**
+ * Génère des idées de mise en scène et recommande un mouvement de caméra pour une image
+ * @param imageUrl URL de l'image source
+ * @returns Les idées de mise en scène, le mouvement de caméra recommandé et le coût de l'opération
+ */
+export async function generateImageStagingIdeas(
+  imageUrl: string
+): Promise<{
+  cost: number,
+  stagingIdeas: string[]
+}> {
+  const input: ImageStagingIdeasInput = {
+    image: {
+      url: imageUrl
+    }
+  }
+
+  try {
+    const response = await imageStagingIdeas(input) as WorkflowAIResponse<ImageStagingIdeasOutput>;
+    
+    return {
+      cost: response.data.cost_usd,
+      stagingIdeas: response.output.staging_ideas || [],
+    }
+  } catch (error) {
+    console.error('Failed to generate image staging ideas:', error);
     throw error;
   }
 }

@@ -29,6 +29,7 @@ export interface IPlan {
   subscriptionType: SubscriptionType;
   creditsMonth: number;
   storageLimit?: number;
+  imageToVideoLimit?: number;
   nextPhase?: Date;
 }
 
@@ -38,6 +39,7 @@ export interface IMediaSpace {
   uploadedBy: string;
   uploadedAt: Date;
   autoPlacement?: boolean;
+  baseMediaId?: string;
 }
 
 export interface SimpleSpace {
@@ -52,6 +54,8 @@ export interface SimpleSpace {
   companyTarget?: string;
   usedStorageBytes?: number;
   storageLimit?: number;
+  imageToVideoLimit?: number;
+  imageToVideoUsed?: number;
 }
 
 export interface ICompanyDetails {
@@ -79,4 +83,5 @@ export interface ISpace {
   videoIdeas: string[];
   lastUsed: ILastUsed;
   usedStorageBytes: number;
+  imageToVideoUsed: number;
 }

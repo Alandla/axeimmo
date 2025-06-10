@@ -212,13 +212,13 @@ export const getUserSpaces = async (userId: string) => {
 
       const spaces = await SpaceModel.find(
         { _id: { $in: user.spaces } },
-        'name plan credits members videoIdeas details usedStorageBytes'
+        'name plan credits members videoIdeas details usedStorageBytes imageToVideoUsed'
       );
 
       return spaces.map((space) => {
         const userRole = space.members.find((member: any) => member.userId.toString() === userId)?.roles;
         return {
-          id: space._id,
+          id: space.id,
           name: space.name,
           planName: space.plan.name,
           credits: space.credits,
@@ -228,7 +228,9 @@ export const getUserSpaces = async (userId: string) => {
           companyTarget: space.details?.companyTarget,
           videoIdeas: space.videoIdeas,
           usedStorageBytes: space.usedStorageBytes,
-          storageLimit: space.plan.storageLimit
+          storageLimit: space.plan.storageLimit,
+          imageToVideoLimit: space.plan.imageToVideoLimit,
+          imageToVideoUsed: space.imageToVideoUsed || 0
         };
       });
     });
@@ -299,7 +301,6 @@ export async function updateMedia(spaceId: string, mediaId: string, updates: any
     return await executeWithRetry(async () => {
 
       const testfind = await SpaceModel.findOne({ _id: spaceId, 'medias._id': mediaId });
-      console.log("testfind", testfind)
 
       const space = await SpaceModel.findOneAndUpdate(
         { 
@@ -395,11 +396,31 @@ export const updateSpace = async (spaceId: string, updateData: Partial<ISpace>) 
         companyTarget: updatedSpace.details?.companyTarget,
         videoIdeas: updatedSpace.videoIdeas,
         usedStorageBytes: updatedSpace.usedStorageBytes,
-        storageLimit: updatedSpace.plan.storageLimit
+        storageLimit: updatedSpace.plan.storageLimit,
+        imageToVideoLimit: updatedSpace.plan.imageToVideoLimit,
+        imageToVideoUsed: updatedSpace.imageToVideoUsed || 0
       };
     });
   } catch (error) {
     console.error("Error while updating space: ", error);
+    throw error;
+  }
+};
+
+export const incrementImageToVideoUsage = async (spaceId: string) => {
+  try {
+    return await executeWithRetry(async () => {
+      const space = await SpaceModel.findByIdAndUpdate(
+        spaceId,
+        { $inc: { imageToVideoUsed: 1 } },
+        { new: true }
+      );
+      
+      if (!space) throw new Error("Space not found");
+      return space.imageToVideoUsed || 0;
+    });
+  } catch (error) {
+    console.error("Error while incrementing image to video usage: ", error);
     throw error;
   }
 };

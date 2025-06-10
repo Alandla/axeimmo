@@ -36,6 +36,7 @@ export const plans: Plan[] = [
     users: 1,
     maxVideoDuration: 1,
     storageLimit: storageLimit[PlanName.START],
+    imageToVideoLimit: 0,
   },
   {
     name: PlanName.PRO,
@@ -57,6 +58,7 @@ export const plans: Plan[] = [
     maxVideoDuration: 3,
     popular: true,
     storageLimit: storageLimit[PlanName.PRO],
+    imageToVideoLimit: 30,
   },
   {
     name: PlanName.ENTREPRISE,
@@ -77,5 +79,6 @@ export const plans: Plan[] = [
     users: 5,
     maxVideoDuration: 5,
     storageLimit: storageLimit[PlanName.ENTREPRISE],
+    imageToVideoLimit: 999, // Illimité
   }
 ]

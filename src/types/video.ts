@@ -1,4 +1,12 @@
 import { AvatarLook } from "./avatar";
+import { KlingGenerationMode } from "@/src/lib/fal";
+
+export type GenerationStatus = 
+  | 'pending' 
+  | 'generating-video' 
+  | 'generating-image' 
+  | 'completed' 
+  | 'failed';
 
 export interface IWord {
   word: string;
@@ -16,6 +24,9 @@ export interface IMedia {
   startAt?: number;
   name: string;
   source?: string;
+  generationStatus?: GenerationStatus;
+  requestId?: string;
+  generationMode?: KlingGenerationMode;
   description?: [
     {
       start: number;
