@@ -82,7 +82,7 @@ export async function startKlingVideoGeneration(
         image_url: request.image_url,
         duration: request.duration || "5",
         aspect_ratio: request.aspect_ratio || "16:9",
-        negative_prompt: request.negative_prompt || "blur, distort, and low quality",
+        negative_prompt: request.negative_prompt || "cartoony motion, blurry motion, jitter, unbalanced movement, flickering limbs, expression lag, slow motion, repetitive loops, asynchronous facial movement, jerky transitions, camera drift or detachment, style inconsistency, unrealistic acting, off-sync reactions between characters",
         cfg_scale: request.cfg_scale || 0.5
       }
     });
