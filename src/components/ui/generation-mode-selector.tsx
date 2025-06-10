@@ -13,19 +13,18 @@ interface GenerationModeSelectorProps {
   value: KlingGenerationMode
   onValueChange: (value: string) => void
   activeSpace: SimpleSpace | null
-  showRemainingGenerations?: boolean
 }
 
 export function GenerationModeSelector({ 
   value, 
   onValueChange, 
-  activeSpace,
-  showRemainingGenerations = true 
+  activeSpace
 }: GenerationModeSelectorProps) {
   const t = useTranslations('assets')
   const planT = useTranslations('plan')
 
   const remainingGenerations = activeSpace ? (activeSpace.imageToVideoLimit || 0) - (activeSpace.imageToVideoUsed || 0) : 0
+  const isNotEnterprise = activeSpace?.planName !== PlanName.ENTREPRISE
 
   // Fonction pour obtenir le contenu du trigger basé sur la valeur sélectionnée
   const getTriggerContent = (value: KlingGenerationMode) => {
@@ -64,7 +63,14 @@ export function GenerationModeSelector({
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <Zap className="h-4 w-4" />
                 <div className="flex flex-col w-56">
-                  <span className="font-medium">{t('mode-standard')}</span>
+                  <span className="font-medium">
+                    {t('mode-standard')}
+                    {isNotEnterprise && (
+                      <span className="font-light text-xs text-muted-foreground ml-1">
+                        ({t('generations-left', { count: remainingGenerations })})
+                      </span>
+                    )}
+                  </span>
                   <span className="text-xs text-muted-foreground">{t('mode-standard-description')}</span>
                 </div>
               </div>

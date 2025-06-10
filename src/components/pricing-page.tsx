@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Star, Heart, Diamond, Check, Gem, Info, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight, Database, Globe } from 'lucide-react'
+import { Star, Heart, Diamond, Gem, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight, Database, Globe, Sparkles } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card'
 import { Button } from '@/src/components/ui/button'
 import { useTranslations } from 'next-intl'
@@ -94,6 +94,22 @@ export const features = [
   {
     category: "Advanced Features",
     items: [
+      {
+        name: "assets-generation-30",
+        start: false,
+        pro: true,
+        enterprise: false,
+        soon: false,
+        icon: <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
+      {
+        name: "assets-generation-full",
+        start: false,
+        pro: false,
+        enterprise: true,
+        soon: false,
+        icon: <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
       {
         name: "web",
         start: true,
