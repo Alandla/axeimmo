@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react'
 import { generateScript, improveScript, readStream } from '../lib/stream'
 import { extractUrls } from '../lib/article'
 import { basicApiCall } from '../lib/api'
-import { ExaCleanedResponse, ExaCleanedResult } from '../lib/exa'
+import { FirecrawlBatchResponse, FirecrawlScrapedResult } from '../lib/firecrawl'
 import { CreationStep, PlanName } from '../types/enums'
 import { Textarea } from './ui/textarea'
 import { AiChatTab } from './ai-chat-tab'
@@ -28,11 +28,14 @@ import { getSpaceLastUsed } from '../service/space.service'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { useRealtimeRun } from '@trigger.dev/react-hooks'
 import { ToolDisplay, ToolCall } from './tool-display'
+import { ExtractedImagesDisplay } from './extracted-images-display'
+import { extractedImagesToMediaBasic } from '../lib/extracted-images'
 
 enum MessageType {
   TEXT = 'text',
   VOICE = 'voice',
   AVATAR = 'avatar',
+  IMAGES = 'images',
   GENERATION = 'generation',
 }
 
@@ -47,8 +50,13 @@ interface Message {
   showTools: boolean;
 }
 
+interface ExtractedImagesResponse {
+  relevantImages: string[];
+  cost: number;
+}
+
 export function AiChat() {
-  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, isWebMode } = useCreationStore()
+  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, isWebMode, setExtractedImagesMedia, extractedImagesMedia } = useCreationStore()
   const { activeSpace, setLastUsedParameters } = useActiveSpaceStore()
   const { totalVideoCountBySpace, fetchVideos } = useVideosStore()
   const router = useRouter()
@@ -207,7 +215,7 @@ export function AiChat() {
       MessageType.TEXT
     );
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'production') {
       setTimeout(() => {
         setMessages(prevMessages => prevMessages.map(msg => {
           if (msg.id === messageAiId) {
@@ -227,7 +235,7 @@ export function AiChat() {
 
     const urls = extractUrls(message);
     let prompt = message;
-    let urlScrapingResult : ExaCleanedResult[] | null = null;
+    let urlScrapingResult : FirecrawlScrapedResult[] | null = null;
 
     if (urls.length > 0 && activeSpace && (activeSpace.planName === PlanName.START || activeSpace.planName === PlanName.PRO || activeSpace.planName === PlanName.ENTREPRISE)) {
       // Ajouter le tool call pour la recherche web et afficher le bloc d'outils
@@ -248,16 +256,53 @@ export function AiChat() {
       }));
       
       try {
-        const urlContents = await basicApiCall<ExaCleanedResponse>('/search/url', {
+        const urlContents = await basicApiCall<FirecrawlBatchResponse>('/search/url', {
           urls,
           planName: activeSpace.planName
         });
 
-        if (urlContents.costDollars?.total) {
-          addToTotalCost(urlContents.costDollars.total);
-        }
+        console.log("urlContents", urlContents)
 
         urlScrapingResult = urlContents.results;
+        
+        // Lancer l'extraction d'images en parallèle (sans attendre le résultat)
+        if (urlContents.results && urlContents.results.length > 0) {
+          // Traiter chaque URL individuellement pour éviter les erreurs en cascade
+          const imageExtractionPromises = urlContents.results.map(async (result) => {
+            try {
+              const imageResult = await basicApiCall<ExtractedImagesResponse>('/ai/extract-images', {
+                markdownContent: result.markdown
+              });
+
+              console.log("imageResult", imageResult)
+              
+              return imageResult.relevantImages || [];
+            } catch (error) {
+              console.error(`Erreur lors de l'extraction d'images pour ${result.url}:`, error);
+              return [];
+            }
+          });
+          
+          // Traiter tous les résultats en parallèle
+          Promise.all(imageExtractionPromises).then(results => {
+            // Fusionner toutes les images en une seule liste
+            const allImages = results.flat();
+            console.log("Images extraites:", allImages);
+            
+            // Transformer les URLs d'images en format IMedia
+            if (allImages.length > 0) {
+              try {
+                const imagesMedia = extractedImagesToMediaBasic(allImages);
+                console.log("Images transformées en IMedia:", imagesMedia);
+                setExtractedImagesMedia(imagesMedia);
+              } catch (error) {
+                console.error("Erreur lors de la transformation des images en IMedia:", error);
+              }
+            }
+          }).catch(error => {
+            console.error("Erreur lors de l'extraction d'images:", error);
+          });
+        }
         
         // Mettre à jour le status du tool call
         setMessages(prevMessages => prevMessages.map(msg => {
@@ -433,6 +478,25 @@ export function AiChat() {
   }
 
   const handleConfirmAvatar = () => {
+    // Vérifier s'il y a des images extraites à animer
+    if (extractedImagesMedia.length > 0) {
+      setCreationStep(CreationStep.IMAGES);
+      const messageUser = getRandomMessage('user-select-avatar', { "name": selectedLook?.name || '' });
+      const messageAi = getRandomMessage('ai-animate-images');
+      addMessageUser(messageUser)
+      addMessageAi(messageAi, MessageType.IMAGES);
+      return;
+    }
+
+    // Si pas d'images, démarrer directement la génération
+    startVideoGeneration();
+  }
+
+  const handleConfirmImages = () => {
+    startVideoGeneration();
+  }
+
+  const startVideoGeneration = () => {
     let messageUser1 = '';
     let messageUser2 = '';
     let messageAi = '';
@@ -456,7 +520,14 @@ export function AiChat() {
     addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
     addStep({ id: 5, name: Steps.ANALYZE_FOUND_MEDIA, state: StepState.PENDING, progress: 0 })
     addStep({ id: 7, name: Steps.PLACE_BROLL, state: StepState.PENDING, progress: 0 })
-    addStep({ id: 9, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
+    
+    // Ajouter l'étape d'animation si nécessaire
+    if (extractedImagesMedia.length > 0 && useCreationStore.getState().animateImages) {
+      addStep({ id: 9, name: Steps.ANIMATE_IMAGES, state: StepState.PENDING, progress: 0 })
+      addStep({ id: 10, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
+    } else {
+      addStep({ id: 10, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
+    }
     
     setCreationStep(CreationStep.GENERATION)
     handleStartGeneration()
@@ -646,6 +717,9 @@ export function AiChat() {
                   {message.type === MessageType.VOICE && (
                     <VoicesGridComponent />
                   )}
+                  {message.type === MessageType.IMAGES && (
+                    <ExtractedImagesDisplay />
+                  )}
                   {message.type === MessageType.GENERATION && (
                     <GenerationProgress />
                   )}
@@ -665,6 +739,7 @@ export function AiChat() {
           sendMessage={handleSendMessage} 
           handleConfirmAvatar={handleConfirmAvatar} 
           handleConfirmVoice={handleConfirmVoice}
+          handleConfirmImages={handleConfirmImages}
           isDisabled={hasFreePlanReachedLimit}
           inputMessage={inputMessage}
           setInputMessage={setInputMessage}

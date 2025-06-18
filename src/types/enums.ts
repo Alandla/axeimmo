@@ -20,8 +20,9 @@ export enum SubscriptionType {
 export enum CreationStep {
   START = "START",
   SCRIPT = "SCRIPT",
-  AVATAR = "AVATAR",
   VOICE = "VOICE",
+  AVATAR = "AVATAR",
+  IMAGES = "IMAGES",
   MEDIA = "MEDIA",
   GENERATION = "GENERATION",
 }

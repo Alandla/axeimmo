@@ -464,7 +464,11 @@
       "limit-reached-title": "Limite de vidéos atteinte",
       "limit-reached-description": "Avec le plan gratuit, tu es limité à 3 vidéos. Mettez à niveau ton abonnement pour créer des vidéos supplémentaires.",
       "upgrade-plan": "Passer à un plan supérieur",
-      "web-mode-tooltip": "Fonctionnalité Pro : Permet de générer des vidéos à partir de recherches sur le web"
+      "web-mode-tooltip": "Fonctionnalité Pro : Permet de générer des vidéos à partir de recherches sur le web",
+      "extracted-images-found": "J'ai trouvé {count} images dans les articles. Veux-tu que je les anime ?",
+      "skip-animation": "Passer l'animation",
+      "animate-images": "Animer les images",
+      "credits": "crédits"
     },
     "select": {
       "duration": {
@@ -668,6 +672,7 @@
       "ANALYZE_YOUR_MEDIA": "Analyse de vos médias",
       "ANALYZE_FOUND_MEDIA": "Analyse des médias trouvés",
       "PLACE_BROLL": "Placement des B-Rolls",
+      "ANIMATE_IMAGES": "Animation des images",
       "DISPLAY_BROLL": "Placement de l'avatar",
       "REDIRECTING": "Sauvegarde et redirection vers l'éditeur",
       "error-message": "Erreur, veuillez contacter le support."
@@ -1114,6 +1119,38 @@
         "27": "Voici l'évolution actuelle de la vidéo.",
         "28": "Voici la progression actuelle de la génération.",
         "29": "Voici le rapport de progrès sur la vidéo."
+      },
+      "ai-animate-images": {
+        "0": "Super ! J'ai trouvé des images intéressantes dans les URLs. Veux-tu que je les anime pour enrichir ta vidéo ?",
+        "1": "Parfait ! J'ai extrait quelques images des URLs. Veux-tu les animer pour rendre ta vidéo plus dynamique ?",
+        "2": "Excellent ! J'ai récupéré des images pertinentes des URLs. Souhaites-tu que je les transforme en vidéos animées ?",
+        "3": "Génial ! J'ai trouvé des visuels intéressants dans les URLs. Veux-tu que je les anime pour donner plus de vie à ta vidéo ?",
+        "4": "Super travail ! J'ai extrait des images des URLs. Veux-tu que je les anime pour ta vidéo ?",
+        "5": "Parfait ! J'ai récupéré des images des URLs. Souhaites-tu les animer pour enrichir ton contenu ?",
+        "6": "Excellent ! J'ai trouvé des visuels sympas dans les URLs. Veux-tu les animer ou passer à l'étape suivante ?",
+        "7": "Génial ! J'ai extrait des images pertinentes des URLs. Veux-tu que je les anime pour les rendre plus captivantes ?",
+        "8": "Super ! J'ai récupéré des images intéressantes des URLs. Veux-tu que je les transforme en animations ?",
+        "9": "Parfait ! J'ai trouvé des visuels des URLs. Souhaites-tu les animer pour dynamiser ta vidéo ?",
+        "10": "Excellent ! J'ai extrait des images des URLs. Veux-tu que je les anime pour les rendre plus vivantes ?",
+        "11": "Génial ! J'ai récupéré des visuels sympas des URLs. Veux-tu les animer pour plus d'impact ?",
+        "12": "Super ! J'ai trouvé des images pertinentes des URLs. Veux-tu que je les anime pour ta vidéo ?",
+        "13": "Parfait ! J'ai extrait des visuels intéressants des URLs. Souhaites-tu que je les anime pour les sublimer ?",
+        "14": "Excellent ! J'ai récupéré des images des URLs. Veux-tu que je les transforme en animations ?",
+        "15": "Génial ! J'ai trouvé des visuels sympas des URLs. Veux-tu choisir de les animer ?",
+        "16": "Super ! J'ai extrait des images des URLs. Veux-tu que je les rende animées ?",
+        "17": "Parfait ! J'ai récupéré des visuels pertinents des URLs. Souhaites-tu que je les anime pour les dynamiser ?",
+        "18": "Excellent ! J'ai trouvé des images intéressantes des URLs. Veux-tu les transformer en vidéos ?",
+        "19": "Génial ! J'ai extrait des visuels sympas des URLs. Veux-tu que je les anime pour les rendre captivantes ?",
+        "20": "Super ! J'ai récupéré des images des URLs. Souhaites-tu que je les anime pour ta vidéo ?",
+        "21": "Parfait ! J'ai trouvé des visuels intéressants des URLs. Veux-tu que je les anime ?",
+        "22": "Excellent ! J'ai extrait des images pertinentes des URLs. Souhaites-tu que je les anime pour les sublimer ?",
+        "23": "Génial ! J'ai récupéré des visuels sympas des URLs. Veux-tu les transformer en animations ?",
+        "24": "Super ! J'ai trouvé des images des URLs. Veux-tu que je les anime ?",
+        "25": "Parfait ! J'ai extrait des visuels intéressants des URLs. Souhaites-tu que je les anime pour les dynamiser ?",
+        "26": "Excellent ! J'ai récupéré des images des URLs. Veux-tu que je les rende animées ?",
+        "27": "Génial ! J'ai trouvé des visuels sympas des URLs. Veux-tu choisir de les animer ?",
+        "28": "Super ! J'ai extrait des images pertinentes des URLs. Souhaites-tu que je les anime pour les rendre vivantes ?",
+        "29": "Parfait ! J'ai récupéré des visuels intéressants des URLs. Veux-tu que je les anime ?"
       },
       "tool": {
         "success": "Opération réussie",

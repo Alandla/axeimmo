@@ -6,6 +6,7 @@ import { createAudioTTS } from "../lib/elevenlabs";
 import { uploadToS3Audio } from "../lib/r2";
 import { transitions, sounds } from "../config/transitions.config";
 import { ITransition, ISequence } from "../types/video";
+import { analyzeVideo, VideoAnalysisResult } from "../lib/video-analysis";
 
 import transcriptionMock from "../test/mockup/transcriptionComplete.json";
 import keywordsMock from "../test/mockup/keywordsResponse.json";
@@ -21,21 +22,19 @@ import { IMedia, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
 import { generateStartData, extractImageSource } from "../lib/ai";
 import { subtitles } from "../config/subtitles.config";
-import { getJobCost, SieveCostResponse } from "../lib/sieve";
 import { simplifyMediaFromPexels, simplifySequences, simplifyGoogleMedias } from "../lib/analyse";
 import { music } from "../config/musics.config";
 import { Genre } from "../types/music";
-import { addMediasToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
+import { addMediasToSpace, updateSpaceLastUsed, getSpaceById, removeCreditsToSpace, incrementImageToVideoUsage } from "../dao/spaceDao";
 import { IMediaSpace, ISpace } from "../types/space";
 import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { getMostFrequentString } from "../lib/utils";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
-import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, analyzeVideoSequence, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun } from "../lib/workflowai";
+import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, generateKlingAnimationPrompt } from "../lib/workflowai";
 import { analyzeImage } from "../lib/ai";
 import { PlanName } from "../types/enums";
-
-import { extractFramesFromVideo } from "../lib/ffmpeg";
+import { startKlingVideoGeneration, checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode, KLING_GENERATION_COSTS } from "../lib/fal";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -46,6 +45,8 @@ interface GenerateVideoPayload {
   avatar: AvatarLook
   mediaSource: string
   webSearch: boolean
+  animateImages: boolean
+  animationMode: KlingGenerationMode
 }
 
 export const generateVideoTask = task({
@@ -60,7 +61,7 @@ export const generateVideoTask = task({
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;
@@ -103,25 +104,26 @@ export const generateVideoTask = task({
         const mediaAnalysisPromises = mediasToAnalyze.map(async (media) => {
           try {
             let descriptions: [{ start: number, duration?: number, text: string }] | undefined;
+            let updatedMedia = { ...media };
             
             if (media.type === 'video' && media.video?.link) {
-              // Extraire les frames de la vidéo
-              logger.log(`[ANALYZE] Extracting frames from video: ${media.video.link}`);
-              const frames = await extractFramesFromVideo(media.video.link);
+              // Utiliser la nouvelle méthode analyzeVideo
+              logger.log(`[ANALYZE] Analyzing video with analyzeVideo method: ${media.video.link}`);
+              const analysisResult = await analyzeVideo(media.video.link, media.id);
+              cost += analysisResult.cost;
               
-              // Analyser les frames avec WorkflowAI
-              logger.log(`[ANALYZE] Analyzing video frames with WorkflowAI`);
-              const { sequences: videoSequences, cost: sequenceCost } = await analyzeVideoSequence(frames);
-              cost += sequenceCost;
+              // Les descriptions sont déjà au bon format
+              descriptions = analysisResult.descriptions as [{ start: number, duration?: number, text: string }];
               
-              // Convertir les séquences en descriptions
-              descriptions = videoSequences
-                .filter(seq => seq.description) // On garde uniquement les séquences avec une description
-                .map(seq => ({
-                  start: seq.start_timestamp || 0,
-                  duration: seq.duration,
-                  text: seq.description || ""
-                })) as [{ start: number, duration?: number, text: string }];
+              // Ajouter les frames et durationInSeconds au média
+              updatedMedia = {
+                ...media,
+                video: {
+                  ...media.video,
+                  frames: analysisResult.frames,
+                  durationInSeconds: analysisResult.durationInSeconds
+                }
+              };
               
             } else if (media.type === 'image' && media.image?.link) {
               // Analyser l'image avec Groq
@@ -138,7 +140,7 @@ export const generateVideoTask = task({
             
             if (descriptions) {
               return mediaToMediaSpace([{
-                ...media,
+                ...updatedMedia,
                 description: descriptions
               }], payload.userId)[0];
             }
@@ -160,9 +162,14 @@ export const generateVideoTask = task({
         // Ajouter les résultats valides à analyzedMedias
         analyzedMedias.push(...validResults);
 
-        if (analyzedMedias.length > 0) {
-          logger.log(`[ANALYZE] Adding analyzed medias to space`);
-          await addMediasToSpace(payload.spaceId, analyzedMedias);
+        // Filter out medias with "extracted" source before adding to space
+        const mediasToAddToSpace = analyzedMedias.filter(mediaSpace => 
+          mediaSpace.media.source !== 'extracted'
+        );
+
+        if (mediasToAddToSpace.length > 0) {
+          logger.log(`[ANALYZE] Adding ${mediasToAddToSpace.length} analyzed medias to space (excluding ${analyzedMedias.length - mediasToAddToSpace.length} extracted images)`);
+          await addMediasToSpace(payload.spaceId, mediasToAddToSpace);
         }
         
         return analyzedMedias;
@@ -908,10 +915,6 @@ export const generateVideoTask = task({
     }
 
     logger.info('Simplified media', { simplifiedMedia })
-    const inputAnalyse = {
-      sequence_list: lightTranscription,
-      b_roll_list: simplifiedMedia
-    }
 
     // Utiliser l'IA pour sélectionner les meilleurs B-Rolls pour chaque séquence et matcher les médias analysés
     logger.log(`[BROLL] Selecting best B-Rolls and matching media for sequences...`)
@@ -1083,6 +1086,286 @@ export const generateVideoTask = task({
       });
 
       logger.log(`[BROLL] Media applied to sequences`);
+
+      /*
+      /
+      /   Animate extracted images if requested
+      /
+      */
+      
+      if (payload.animateImages && sequences.some(seq => seq.media?.source === 'extracted')) {
+        logger.log(`[ANIMATE] Starting image animation process...`);
+
+        await metadata.replace({
+          name: Steps.ANIMATE_IMAGES,
+          progress: 0
+        });
+
+        // Find sequences with extracted images
+        const sequencesToAnimate = sequences
+          .map((seq, index) => ({ seq, index }))
+          .filter(({ seq }) => seq.media?.type === 'image' && seq.media?.source === 'extracted')
+          
+
+        if (sequencesToAnimate.length > 0) {
+          logger.log(`[ANIMATE] Found ${sequencesToAnimate.length} images to animate`);
+
+          // Create animation requests for all extracted images
+          const animationRequests = await Promise.all(
+            sequencesToAnimate.map(async ({ seq, index }) => {
+              try {
+                if (!seq.media?.image?.link) {
+                  throw new Error('Image URL not found');
+                }
+
+                // Generate animation prompt
+                const promptResult = await generateKlingAnimationPrompt(
+                  seq.media.image.link,
+                  'Add camera movement'
+                );
+
+                const imageWidth = seq.media.image.width || 1920;
+                const imageHeight = seq.media.image.height || 1080;
+                const aspectRatio = imageWidth >= imageHeight ? "16:9" : "9:16";
+
+                // Start Kling video generation
+                const falResult = await startKlingVideoGeneration({
+                  prompt: promptResult.enhancedPrompt,
+                  image_url: seq.media.image.link,
+                  duration: "5",
+                  aspect_ratio: aspectRatio
+                }, payload.animationMode);
+
+                cost += promptResult.cost;
+
+                return {
+                  sequenceIndex: index,
+                  requestId: falResult.request_id,
+                  originalMedia: seq.media
+                };
+              } catch (error) {
+                logger.error(`[ANIMATE] Error starting animation for sequence ${index}:`, {
+                  error: error instanceof Error ? error.message : String(error)
+                });
+                return null;
+              }
+            })
+          );
+
+          // Filter out failed requests
+          const validRequests = animationRequests.filter(req => req !== null);
+
+          if (validRequests.length > 0) {
+            logger.log(`[ANIMATE] Started ${validRequests.length} animation requests`);
+
+            // Wait for all animations to complete
+            let completedAnimations = 0;
+            
+            // Track all requests and their status
+            const pendingRequests = new Map(validRequests.map(req => [req.requestId, req]));
+            const completedResults = new Map();
+            const analysisPromises = new Map(); // Track ongoing analyses
+            
+            // Process animations with parallel status checking but sequential waits
+            while (pendingRequests.size > 0) {
+              // Check all pending requests status in parallel (no wait.for here)
+              const statusChecks = Array.from(pendingRequests.keys()).map(async (requestId) => {
+                try {
+                  const status = await checkKlingRequestStatus(requestId, payload.animationMode);
+                  return { requestId, status };
+                } catch (error) {
+                  logger.error(`[ANIMATE] Error checking status for request ${requestId}:`, {
+                    error: error instanceof Error ? error.message : String(error)
+                  });
+                  return { requestId, status: { status: 'FAILED' } };
+                }
+              });
+              
+              // Wait for all status checks to complete
+              const allStatuses = await Promise.all(statusChecks);
+              
+              // Process completed requests
+              for (const { requestId, status } of allStatuses) {
+                const request = pendingRequests.get(requestId);
+                if (!request) continue;
+                
+                if (status.status === 'COMPLETED') {
+                  try {
+                    const result = await getKlingRequestResult(requestId, payload.animationMode);
+                    
+                    if (result.data?.video?.url) {
+                      const animationResult = {
+                        sequenceIndex: request.sequenceIndex,
+                        videoUrl: result.data.video.url,
+                        width: result.data.video.width || request.originalMedia.image?.width || 1920,
+                        height: result.data.video.height || request.originalMedia.image?.height || 1080
+                      };
+                      
+                      completedResults.set(requestId, animationResult);
+                      
+                      // Launch video analysis immediately for this completed animation
+                      logger.log(`[ANIMATE] Animation completed for sequence ${request.sequenceIndex}, starting analysis...`);
+                      
+                      const analysisPromise = analyzeVideo(animationResult.videoUrl, `animated-${Date.now()}-${animationResult.sequenceIndex}`)
+                        .then((analysisResult: VideoAnalysisResult) => {
+                          logger.log(`[ANIMATE] Video analysis completed for sequence ${animationResult.sequenceIndex}`, {
+                            descriptionsCount: analysisResult.descriptions.length,
+                            framesCount: analysisResult.frames.length,
+                            cost: analysisResult.cost
+                          });
+                          
+                          cost += analysisResult.cost;
+                          
+                          return {
+                            ...animationResult,
+                            descriptions: analysisResult.descriptions,
+                            frames: analysisResult.frames,
+                            durationInSeconds: analysisResult.durationInSeconds
+                          };
+                        }).catch((error: Error) => {
+                          logger.error(`[ANIMATE] Error analyzing animated video for sequence ${animationResult.sequenceIndex}:`, {
+                            error: error instanceof Error ? error.message : String(error)
+                          });
+                          return animationResult;
+                        });
+                      
+                      // Store the analysis promise
+                      analysisPromises.set(requestId, analysisPromise);
+                      
+                      completedAnimations++;
+                      await metadata.replace({
+                        name: Steps.ANIMATE_IMAGES,
+                        progress: Math.round((completedAnimations / validRequests.length) * 100)
+                      });
+                    } else {
+                      logger.error(`[ANIMATE] No video URL in result for request ${requestId}`);
+                      completedResults.set(requestId, null);
+                      completedAnimations++;
+                    }
+                  } catch (error) {
+                    logger.error(`[ANIMATE] Error getting result for request ${requestId}:`, {
+                      error: error instanceof Error ? error.message : String(error)
+                    });
+                    completedResults.set(requestId, null);
+                    completedAnimations++;
+                  }
+                  
+                  // Remove from pending
+                  pendingRequests.delete(requestId);
+                } else if (status.status === 'FAILED' || status.status === 'CANCELLED') {
+                  logger.error(`[ANIMATE] Animation failed for request ${requestId} with status: ${status.status}`);
+                  completedResults.set(requestId, null);
+                  completedAnimations++;
+                  pendingRequests.delete(requestId);
+                }
+              }
+              
+              // If there are still pending requests, wait before next check
+              if (pendingRequests.size > 0) {
+                await wait.for({ seconds: 6 });
+              }
+            }
+            
+            // Wait for all analyses to complete
+            logger.log(`[ANIMATE] Waiting for all video analyses to complete...`);
+            const analysisResults = await Promise.all(Array.from(analysisPromises.values()));
+            
+            // Filter out null results
+            const successfulAnalyses = analysisResults.filter(result => result !== null);
+
+            // Apply animated videos to sequences
+            const successfulAnimations = successfulAnalyses.length;
+            
+            if (successfulAnimations > 0) {
+              logger.log(`[ANIMATE] Processing ${successfulAnimations} analyzed animated videos...`);
+              
+              // Collect animated medias to add to space with analysis data
+              const animatedMediasToAdd: IMediaSpace[] = [];
+              
+              successfulAnalyses.forEach(animation => {
+                const sequence = sequences[animation.sequenceIndex];
+                if (sequence && sequence.media) {
+                  // Create the animated video media with analysis data
+                  const animatedMedia: IMedia = {
+                    type: 'video',
+                    usage: 'media',
+                    name: `Animated Image - ${Date.now()}`,
+                    video: {
+                      id: `animated-${Date.now()}-${animation.sequenceIndex}`,
+                      quality: 'hd',
+                      file_type: 'mp4',
+                      size: 0,
+                      width: animation.width,
+                      height: animation.height,
+                      fps: 30,
+                      link: animation.videoUrl,
+                      frames: 'frames' in animation ? animation.frames : [],
+                      durationInSeconds: 'durationInSeconds' in animation ? animation.durationInSeconds : 5
+                    }
+                  };
+
+                  // Add description if available and has at least one element
+                  if ('descriptions' in animation && animation.descriptions && animation.descriptions.length > 0) {
+                    animatedMedia.description = animation.descriptions as [{ start: number, duration?: number, text: string }];
+                  }
+
+                  // Add to collection for space
+                  animatedMediasToAdd.push({
+                    media: animatedMedia,
+                    uploadedBy: payload.userId,
+                    uploadedAt: new Date(),
+                    autoPlacement: true
+                  });
+
+                  // Replace image with animated video in sequence, remove source
+                  sequences[animation.sequenceIndex] = {
+                    ...sequence,
+                    media: {
+                      ...animatedMedia,
+                      source: undefined, // Remove extracted source
+                    }
+                  };
+                }
+              });
+
+              // Add animated medias to space
+              if (animatedMediasToAdd.length > 0) {
+                try {
+                  await addMediasToSpace(payload.spaceId, animatedMediasToAdd);
+                  logger.log(`[ANIMATE] Added ${animatedMediasToAdd.length} analyzed animated videos to space`);
+                  
+                  // Deduct credits for each animated image
+                  const creditsPerAnimation = KLING_GENERATION_COSTS[payload.animationMode];
+                  const totalCreditsToDeduct = animatedMediasToAdd.length * creditsPerAnimation;
+                  
+                  await removeCreditsToSpace(payload.spaceId, totalCreditsToDeduct);
+                  logger.log(`[ANIMATE] Deducted ${totalCreditsToDeduct} credits (${animatedMediasToAdd.length} × ${creditsPerAnimation}) for image animations`);
+                  
+                  // Increment image to video usage counter
+                  for (let i = 0; i < animatedMediasToAdd.length; i++) {
+                    await incrementImageToVideoUsage(payload.spaceId);
+                  }
+                  logger.log(`[ANIMATE] Incremented image to video usage by ${animatedMediasToAdd.length}`);
+                  
+                } catch (error) {
+                  logger.error(`[ANIMATE] Error adding animated medias to space or deducting credits:`, {
+                    error: error instanceof Error ? error.message : String(error)
+                  });
+                }
+              }
+            }
+
+            logger.log(`[ANIMATE] Successfully animated ${successfulAnimations}/${validRequests.length} images`);
+          }
+        }
+
+        await metadata.replace({
+          name: Steps.ANIMATE_IMAGES,
+          progress: 100
+        });
+
+        logger.log(`[ANIMATE] Image animation process completed`);
+      }
 
       // Si on a un avatar, on détermine comment afficher les B-rolls
       if (payload.avatar || avatarFile) {

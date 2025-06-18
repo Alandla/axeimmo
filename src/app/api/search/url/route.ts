@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/src/lib/auth"
-import { getUrlContent, ExaCleanedResponse } from "@/src/lib/exa"
+import { scrapeUrls, FirecrawlBatchResponse } from "@/src/lib/firecrawl"
 
 export async function POST(req: Request) {
   const session = await auth()
@@ -32,24 +32,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No valid URLs provided" }, { status: 400 })
     }
 
-    // 5. Traitement des données - Récupérer le contenu de toutes les URLs en parallèle
-    const contentPromises = validUrls.map(url => getUrlContent(url))
-    const contentResults = await Promise.all(contentPromises)
+    // Scraper le contenu de toutes les URLs avec Firecrawl
+    const scrapedContent: FirecrawlBatchResponse = await scrapeUrls(validUrls)
 
-    // Fusionner les résultats
-    const mergedResults: ExaCleanedResponse = {
-      results: contentResults.flatMap(result => result.results),
-      costDollars: {
-        total: contentResults.reduce((total, result) => total + (result.costDollars?.total || 0), 0),
-        contents: {
-          text: contentResults.reduce((total, result) => total + (result.costDollars?.contents?.text || 0), 0)
-        }
-      }
-    }
-
-    // 6. Retourner les données encapsulées dans 'data'
+    // Retourner les données
     return NextResponse.json({
-      data: mergedResults
+      data: scrapedContent
     })
   } catch (error) {
     console.error("Error fetching URL content:", error)

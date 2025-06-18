@@ -209,7 +209,7 @@ export const BackgroundWithAvatar = ({
                                     muted
                                 />
                             )}
-                            {media.source && <MediaSource source={media.source} />}
+                            {media.source && media.source !== 'extracted' && <MediaSource source={media.source} />}
                         </div>
                     </AbsoluteFill>
                 </Sequence>
