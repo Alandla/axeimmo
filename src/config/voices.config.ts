@@ -78,8 +78,8 @@ export const voicesConfig: Voice[] = [
     tags: ['news', 'video-game'],
     plan: PlanName.PRO,
     voiceSettings: {
-        stability: 0.8,
-        similarity_boost: 0.69
+        stability: 0.78,
+        similarity_boost: 0.70
     },
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/1Mn4lcdhvCTTZOJZAqLZXhDzI913/voices/AmMsHJaCw4BtwV3KoUXF/dcfdf987-abaa-4677-bf1c-bd62db878c41.mp3'
   },

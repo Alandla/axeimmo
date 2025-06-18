@@ -1,15 +1,13 @@
-import { auth } from '@trigger.dev/sdk/v3'
 import { basicApiCall } from '../lib/api'
 import { useCreationStore } from '../store/creationStore'
 import { Steps, StepState } from '../types/step'
 import { uploadFiles } from './upload.service'
 import { IMedia } from '../types/video'
-import { useVideosStore } from '../store/videosStore'
 
 // Create hooks for components to use
 export const useGenerationProcess = () => {
   const startGeneration = async (userId: string, spaceId: string) => {
-    const { files, script, selectedVoice, selectedLook, setSteps, setLastStep, isWebMode } = useCreationStore.getState()
+    const { files, script, selectedVoice, selectedLook, setSteps, setLastStep, isWebMode, extractedImagesMedia, animateImages, animationMode } = useCreationStore.getState()
     
     const updateStepProgress = (stepName: string, progress: number) => {
       const currentSteps = useCreationStore.getState().steps
@@ -26,6 +24,12 @@ export const useGenerationProcess = () => {
       updateStepProgress("MEDIA_UPLOAD", 0)
       uploadedFiles = await uploadFiles(files, updateStepProgress)
     }
+
+    // Add extracted images media to uploaded files if they exist
+    if (extractedImagesMedia.length > 0) {
+      uploadedFiles = [...uploadedFiles, ...extractedImagesMedia]
+    }
+
     updateStepProgress(Steps.QUEUE, 20)
 
     setLastStep(Steps.QUEUE)
@@ -37,7 +41,9 @@ export const useGenerationProcess = () => {
       avatar: selectedLook,
       userId: userId,
       spaceId: spaceId,
-      webSearch: isWebMode
+      webSearch: isWebMode,
+      animateImages: animateImages,
+      animationMode: animationMode
     }
 
     // Start generation task

@@ -2,7 +2,7 @@
 
 import { useCreationStore } from '../store/creationStore'
 import { Steps, StepState } from '../types/step'
-import { Check, Clock, Loader2, Upload, Mic, FileText, User, Search, X, Sparkle, UserRoundSearch, FileSearch2, ReplaceAll } from 'lucide-react'
+import { Check, Clock, Loader2, Upload, Mic, FileText, Search, X, Sparkle, UserRoundSearch, FileSearch2, ReplaceAll, Play } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export function GenerationProgress() {
@@ -25,6 +25,8 @@ export function GenerationProgress() {
         return <Sparkle className="h-3.5 w-3.5 text-gray-500" />;
       case Steps.PLACE_BROLL:
         return <ReplaceAll className="h-3.5 w-3.5 text-gray-500" />;
+      case Steps.ANIMATE_IMAGES:
+        return <Play className="h-3.5 w-3.5 text-gray-500" />;
       case Steps.DISPLAY_BROLL:
         return <UserRoundSearch className="h-3.5 w-3.5 text-gray-500" />;
       default:

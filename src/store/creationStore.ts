@@ -4,6 +4,8 @@ import { Voice } from '../types/voice'
 import { AvatarLook } from '../types/avatar'
 import { FileToUpload } from '../types/files'
 import { Step, Steps } from '../types/step'
+import { KlingGenerationMode } from '../lib/fal'
+import { IMedia } from '../types/video'
 
 type CreationStore = {
   script: string
@@ -16,6 +18,9 @@ type CreationStore = {
   steps: Step[]
   lastStep: Steps | null
   isWebMode: boolean
+  extractedImagesMedia: IMedia[]
+  animateImages: boolean
+  animationMode: KlingGenerationMode
   setScript: (script: string) => void
   setFiles: (files: FileToUpload[]) => void,
   setTotalCost: (cost: number) => void
@@ -29,6 +34,10 @@ type CreationStore = {
   setLastStep: (step: Steps) => void
   resetSteps: () => void
   setWebMode: (isEnabled: boolean) => void
+  setExtractedImagesMedia: (media: IMedia[]) => void
+  addExtractedImagesMedia: (media: IMedia[]) => void
+  setAnimateImages: (animate: boolean) => void
+  setAnimationMode: (mode: KlingGenerationMode) => void
 }
 
 export const useCreationStore = create<CreationStore>((set) => ({
@@ -42,6 +51,9 @@ export const useCreationStore = create<CreationStore>((set) => ({
   steps: [],
   lastStep: null,
   isWebMode: false,
+  extractedImagesMedia: [],
+  animateImages: false,
+  animationMode: KlingGenerationMode.STANDARD,
   setScript: (script) => set({ script }),
   setFiles: (files) => set({ files }),
   setTotalCost: (cost) => set({ totalCost: cost }),
@@ -55,5 +67,9 @@ export const useCreationStore = create<CreationStore>((set) => ({
   setLastStep: (step) => set({ lastStep: step }),
   resetSteps: () => set({ steps: [], lastStep: null }),
   setWebMode: (isEnabled) => set({ isWebMode: isEnabled }),
+  setExtractedImagesMedia: (media) => set({ extractedImagesMedia: media }),
+  addExtractedImagesMedia: (media) => set((state) => ({ extractedImagesMedia: [...state.extractedImagesMedia, ...media] })),
+  setAnimateImages: (animate) => set({ animateImages: animate }),
+  setAnimationMode: (mode) => set({ animationMode: mode }),
 }))
 

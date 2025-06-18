@@ -1,4 +1,4 @@
-import { Check, Paperclip, Send, Globe } from "lucide-react";
+import { Check, Paperclip, Send, Globe, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import SelectDuration from "./ui/select/select-duration";
@@ -12,6 +12,7 @@ import { FileToUpload } from "../types/files";
 import { Badge } from "./ui/badge";
 import { useActiveSpaceStore } from "../store/activeSpaceStore";
 import { usePremiumToast } from "@/src/utils/premium-toast";
+import { KLING_GENERATION_COSTS } from "../lib/fal";
 
 interface DurationOption {
   name: string;
@@ -22,7 +23,8 @@ export function AiChatTab({
   creationStep, 
   sendMessage, 
   handleConfirmAvatar, 
-  handleConfirmVoice, 
+  handleConfirmVoice,
+  handleConfirmImages,
   isDisabled = false,
   inputMessage,
   setInputMessage
@@ -31,11 +33,12 @@ export function AiChatTab({
   sendMessage: (message: string, duration: number) => void, 
   handleConfirmAvatar: () => void, 
   handleConfirmVoice: () => void,
+  handleConfirmImages?: () => void,
   isDisabled?: boolean,
   inputMessage: string,
   setInputMessage: (message: string) => void
 }) {
-    const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode } = useCreationStore()
+    const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode, extractedImagesMedia, animationMode, setAnimateImages } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
     const { showPremiumToast } = usePremiumToast()
     const [isDragging, setIsDragging] = useState(false);
@@ -321,14 +324,44 @@ export function AiChatTab({
             <>
               {selectedLook ? (
                 <Button className="w-full" onClick={!isDisabled ? handleConfirmAvatar : undefined} disabled={isDisabled}>
-                  <Check />{files.some(file => file.usage === 'media') ? t('next-step') : t('start-generation')}
+                  <Check />{extractedImagesMedia.length > 0 ? t('next-step') : t('start-generation')}
                 </Button>
               ) : (
                 <Button className="w-full" onClick={!isDisabled ? handleConfirmAvatar : undefined} disabled={isDisabled}>
-                  <Check />{t('start-generation')}
+                  <Check />{extractedImagesMedia.length > 0 ? t('next-step') : t('start-generation')}
                 </Button>
               )}
             </>
+          ) : creationStep === CreationStep.IMAGES ? (
+            <div className="space-y-2">
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                onClick={() => {
+                  if (!isDisabled) {
+                    setAnimateImages(false);
+                    handleConfirmImages?.();
+                  }
+                }}
+                disabled={isDisabled}
+              >
+                <X className="h-4 w-4" />
+                {t('skip-animation')}
+              </Button>
+              <Button 
+                className="w-full" 
+                onClick={() => {
+                  if (!isDisabled) {
+                    setAnimateImages(true);
+                    handleConfirmImages?.();
+                  }
+                }}
+                disabled={isDisabled}
+              >
+                <Check className="h-4 w-4" />
+                {t('animate-images')} ({extractedImagesMedia.length * (KLING_GENERATION_COSTS[animationMode] ?? 0)} {t('credits')})
+              </Button>
+            </div>
           ) : creationStep === CreationStep.GENERATION ? (
             <>
               

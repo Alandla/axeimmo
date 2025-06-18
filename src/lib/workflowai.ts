@@ -149,6 +149,14 @@ export interface ImageStagingIdeasOutput {
   staging_ideas?: string[]
 }
 
+export interface WebPageContentExtractionInput {
+  markdown_content?: string
+}
+
+export interface WebPageContentExtractionOutput {
+  relevant_images?: string[]
+}
+
 const videoScriptKeywordExtraction = workflowAI.agent<VideoScriptKeywordExtractionInput, VideoScriptKeywordExtractionOutput>({
   id: "video-script-keyword-extraction",
   schemaId: 2,
@@ -216,6 +224,13 @@ const imageStagingIdeas = workflowAI.agent<ImageStagingIdeasInput, ImageStagingI
   id: "image-staging-ideas",
   schemaId: 2,
   version: process.env.NODE_ENV === 'development' ? '5.1' : 'production',
+  useCache: "auto"
+})
+
+const webPageContentExtraction = workflowAI.agent<WebPageContentExtractionInput, WebPageContentExtractionOutput>({
+  id: "web-page-content-extraction",
+  schemaId: 2,
+  version: "production",
   useCache: "auto"
 })
 
@@ -530,6 +545,34 @@ export async function generateImageStagingIdeas(
     }
   } catch (error) {
     console.error('Failed to generate image staging ideas:', error);
+    throw error;
+  }
+}
+
+/**
+ * Extrait les images pertinentes d'un contenu markdown de page web
+ * @param markdownContent Le contenu markdown de la page web
+ * @returns Les URLs des images pertinentes et le coût de l'opération
+ */
+export async function webPageContentExtractionRun(
+  markdownContent: string
+): Promise<{
+  cost: number,
+  relevantImages: string[]
+}> {
+  const input: WebPageContentExtractionInput = {
+    markdown_content: markdownContent
+  }
+
+  try {
+    const response = await webPageContentExtraction(input) as WorkflowAIResponse<WebPageContentExtractionOutput>;
+    
+    return {
+      cost: response.data.cost_usd,
+      relevantImages: response.output.relevant_images || []
+    }
+  } catch (error) {
+    console.error('Failed to extract web page content:', error);
     throw error;
   }
 }
