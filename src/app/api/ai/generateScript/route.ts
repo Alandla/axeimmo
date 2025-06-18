@@ -58,9 +58,9 @@ export async function POST(req: NextRequest) {
 
     let userPrompt = "Subject: " + prompt;
     if (urlScrapingResult && Array.isArray(urlScrapingResult) && urlScrapingResult.length > 0) {
-        userPrompt += "\n\nHere is some information extracted from the web that may help you:\n";
+        userPrompt += "\n\nHere is some information extracted from URL scraping, use this precise data to write the script without inventing values:\n";
         urlScrapingResult.forEach((result, idx) => {
-            userPrompt += `\n[${idx + 1}] Title: ${result.title}\nText: ${result.text}\n`;
+            userPrompt += `\n[${idx + 1}] Title: ${result.metadata.title}\nText: ${result.markdown}\n`;
         });
     }
 
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
         const webModeInstruction = isWebMode 
             ? "\n\nYou can use tools to gather information with these limits:\n- Maximum 2 web searches\n- Maximum 4 web content fetches\n\nYOUR FINAL STEP MUST ALWAYS BE THE SCRIPT GENERATION, NOT A TOOL CALL. You must generate the script based on the information you've gathered.\n\nIf a tool returns an error or you've reached the usage limit, continue with your task using the information you already have and generate the script."
             : "";
-        
+
         const result = await streamText({
             model: anthropic('claude-3-7-sonnet-20250219'),
             tools: isWebMode ? tools : undefined,
