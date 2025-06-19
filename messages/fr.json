@@ -60,8 +60,10 @@
         "title-video-deleted": "Vidéo supprimée",
         "description-video-deleted": "Votre vidéo a été supprimée",
         "error-video-deleted": "Une erreur est survenue lors de la suppression de la vidéo",
-        "error-title": "Erreur"
+        "error-title": "Erreur",
+        "error-loading-videos": "Échec du chargement des vidéos"
       },
+      "pagination-info": "Affichage de {start} à {end} sur {total} vidéos",
       "video": {
         "outdated": "Cette vidéo n'est plus disponible",
         "outdated-help": "La vidéo ne respecte plus les conditions de la dernière mise à jour. Contactez l'assistance si vous souhaitez la recréer."

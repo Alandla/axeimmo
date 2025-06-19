@@ -13,16 +13,30 @@ export const getVideoById = async (id: string): Promise<IVideo | null> => {
   }
 }
 
-export const getVideosBySpaceId = async (spaceId: string): Promise<{ videos: IVideo[], totalCount: number }> => {
+export const getVideosBySpaceId = async (
+  spaceId: string, 
+  page: number = 1, 
+  limit: number = 20
+): Promise<{ videos: IVideo[], totalCount: number, currentPage: number, totalPages: number }> => {
   try {
     return await executeWithRetry(async () => {
+      const skip = (page - 1) * limit;
+      
       const [videos, totalCount] = await Promise.all([
-        Video.find({ spaceId, archived: { $ne: true } }),
-        Video.countDocuments({ spaceId })
+        Video.find({ spaceId, archived: { $ne: true } })
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit),
+        Video.countDocuments({ spaceId, archived: { $ne: true } })
       ]);
+      
+      const totalPages = Math.ceil(totalCount / limit);
+      
       return {
         videos: videos.map(video => video.toJSON()),
-        totalCount
+        totalCount,
+        currentPage: page,
+        totalPages
       };
     });
   } catch (error: any) {
@@ -82,5 +96,16 @@ export const createVideo = async (videoData: IVideo): Promise<IVideo> => {
     });
   } catch (error: any) {
     throw new Error(`Erreur lors de la création de la vidéo: ${error.message}`);
+  }
+};
+
+export const getTotalVideoCountBySpaceId = async (spaceId: string): Promise<number> => {
+  try {
+    return await executeWithRetry(async () => {
+      // Compter toutes les vidéos (y compris archivées) pour la vérification des limites
+      return await Video.countDocuments({ spaceId });
+    });
+  } catch (error: any) {
+    throw new Error(`Erreur lors du comptage des vidéos: ${error.message}`);
   }
 };

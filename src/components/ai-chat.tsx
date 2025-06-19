@@ -58,7 +58,7 @@ interface ExtractedImagesResponse {
 export function AiChat() {
   const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, isWebMode, setExtractedImagesMedia, extractedImagesMedia } = useCreationStore()
   const { activeSpace, setLastUsedParameters } = useActiveSpaceStore()
-  const { totalVideoCountBySpace, fetchVideos } = useVideosStore()
+  const { fetchTotalVideoCount } = useVideosStore()
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [creationStep, setCreationStep] = useState(CreationStep.START)
@@ -113,14 +113,8 @@ export function AiChat() {
         }
 
         try {
-          // Récupérer les vidéos depuis le store ou l'API
-          let totalVideoCount = totalVideoCountBySpace.get(activeSpace.id);
-          
-          if (!totalVideoCount) {
-            // Si le store est vide, charger depuis l'API
-            const { totalCount } = await fetchVideos(activeSpace.id);
-            totalVideoCount = totalCount;
-          }
+          // Récupérer le nombre total de vidéos (y compris archivées)
+          const totalVideoCount = await fetchTotalVideoCount(activeSpace.id);
           
           // Vérifier si l'utilisateur a atteint la limite de 3 vidéos
           if (totalVideoCount >= 3) {

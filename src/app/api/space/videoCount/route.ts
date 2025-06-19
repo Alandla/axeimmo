@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/src/lib/auth';
 import { isUserInSpace } from '@/src/dao/userDao';
-import { getVideosBySpaceId } from '@/src/dao/videoDao';
+import { getTotalVideoCountBySpaceId } from '@/src/dao/videoDao';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -10,11 +10,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  console.log("POST /api/space/getVideos by user: ", session.user.id);
+  console.log("POST /api/space/videoCount by user: ", session.user.id);
 
   const params = await req.json();
 
-  const { spaceId, page = 1, limit = 20 } = params;
+  const { spaceId } = params;
 
   try {
     const userIsInSpace: boolean = await isUserInSpace(session.user.id, spaceId);
@@ -23,11 +23,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { videos, totalCount, currentPage, totalPages } = await getVideosBySpaceId(spaceId, page, limit);
+    const totalCount = await getTotalVideoCountBySpaceId(spaceId);
 
-    return NextResponse.json({ data: { videos, totalCount, currentPage, totalPages } })
+    return NextResponse.json({ data: { totalCount } })
   } catch (error) {
-    console.error('Error getting space medias:', error)
-    return NextResponse.json({ error: 'Error getting space medias' }, { status: 500 })
+    console.error('Error getting video count:', error)
+    return NextResponse.json({ error: 'Error getting video count' }, { status: 500 })
   }
 }

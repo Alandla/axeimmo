@@ -51,8 +51,10 @@
         "title-video-deleted": "Video deleted",
         "description-video-deleted": "Your video has been deleted",
         "error-video-deleted": "An error occurred while deleting the video",
-        "error-title": "Error"
+        "error-title": "Error",
+        "error-loading-videos": "Failed to load videos"
       },
+      "pagination-info": "Showing {start} to {end} of {total} videos",
       "video": {
         "outdated": "This video is no longer available",
         "outdated-help": "The video no longer meets the conditions of the latest update. Contact support if you want to recreate it."
