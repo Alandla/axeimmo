@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useRef, useCallback } from 'react'
-import { MoreVertical, Pen, Edit, Trash2, Settings2, Video as VideoIcon, VideoOff } from 'lucide-react'
+import { MoreVertical, Pen, Edit, Trash2, Settings2, Video as VideoIcon, VideoOff, Download, Loader2 } from 'lucide-react'
 import { formatDistanceToNow, Locale } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
 
@@ -48,6 +48,8 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
   const [editedTitle, setEditedTitle] = useState(video.title);
   const [creator, setCreator] = useState(video.creator)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [downloadUrls, setDownloadUrls] = useState<string[]>([])
+  const [isLoadingExports, setIsLoadingExports] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -90,11 +92,48 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
 
   const handleDropdownOpen = async (isOpen: boolean) => {
     setIsDropdownOpen(isOpen)
-    if (isOpen && !creator.name && creator.id) {
-      const userData = await fetchUser(creator.id)
-      setCreator(userData)
+    if (isOpen) {
+      const promises = []
+      
+      // Charger les informations du créateur si nécessaire
+      if (!creator.name && creator.id) {
+        promises.push(
+          fetchUser(creator.id).then(userData => {
+            setCreator(userData)
+          }).catch(error => {
+            console.error('Erreur lors du chargement du créateur:', error)
+          })
+        )
+      }
+      
+      // Charger les exports si pas encore fait
+      if (!isLoadingExports && downloadUrls.length === 0) {
+        promises.push(
+          setIsLoadingExports(true),
+          basicApiCall('/video/exports', { videoId: video.id }).then(response => {
+            const downloadUrls = response as string[]
+            setDownloadUrls(downloadUrls || [])
+          }).catch(error => {
+            console.error('Erreur lors du chargement des exports:', error)
+            setDownloadUrls([])
+          }).finally(() => {
+            setIsLoadingExports(false)
+          })
+        )
+      }
+      
+      // Exécuter toutes les promesses en parallèle
+      if (promises.length > 0) {
+        await Promise.allSettled(promises)
+      }
     }
   }
+
+  const handleDownload = useCallback(() => {
+    if (downloadUrls.length > 0) {
+      window.open(downloadUrls[0], '_blank')
+    }
+  }, [downloadUrls])
 
   const isOutdated = !video.video?.audio?.voices || video.video?.audio?.voices.length === 0
 
@@ -247,6 +286,20 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
               >
                 <Pen  />
                 {t('dropdown-menu.rename')}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDownload();
+                }}
+                disabled={isLoadingExports || downloadUrls.length === 0}
+              >
+                {isLoadingExports ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Download />
+                )}
+                {t('dropdown-menu.download')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

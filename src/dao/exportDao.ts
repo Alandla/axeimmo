@@ -36,3 +36,23 @@ export const getExportById = async (id: string) => {
     throw error;
   }
 }
+
+export const getExportsByVideoId = async (videoId: string): Promise<string[]> => {
+  try {
+    return await executeWithRetry(async () => {
+      const exports = await ExportModel.find({ 
+        videoId,
+        status: 'completed',
+        downloadUrl: { $exists: true, $ne: null }
+      })
+      .select('downloadUrl')
+      .sort({ createdAt: -1 })
+      .limit(10);
+      
+      return exports.map(exportDoc => exportDoc.downloadUrl).filter(Boolean);
+    });
+  } catch (error) {
+    console.error("Error while fetching exports by videoId: ", error);
+    throw error;
+  }
+}

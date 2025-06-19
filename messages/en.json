@@ -42,7 +42,8 @@
       "dropdown-menu": {
         "edit": "Edit",
         "rename": "Rename",
-        "delete": "Delete"
+        "delete": "Delete",
+        "download": "Download"
       },
       "toast": {
         "title-updated": "Title updated",

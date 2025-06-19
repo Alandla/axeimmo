@@ -51,7 +51,8 @@
       "dropdown-menu": {
         "edit": "Editer",
         "rename": "Renommer",
-        "delete": "Supprimer"
+        "delete": "Supprimer",
+        "download": "Télécharger"
       },
       "toast": {
         "title-updated": "Titre mis à jour",
