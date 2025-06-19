@@ -22,8 +22,23 @@ export const getVideosBySpaceId = async (
     return await executeWithRetry(async () => {
       const skip = (page - 1) * limit;
       
+      // Projection pour ne récupérer que les champs nécessaires
+      const projection = {
+        _id: 1,
+        state: 1,
+        history: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        title: 1,
+        settings: 1,
+        'video.metadata': 1,
+        'video.thumbnail': 1,
+        'video.sequence': { $slice: 1 }, // Ne récupérer que le premier élément du tableau
+        'video.audio.voices': 1
+      };
+      
       const [videos, totalCount] = await Promise.all([
-        Video.find({ spaceId, archived: { $ne: true } })
+        Video.find({ spaceId, archived: { $ne: true } }, projection)
           .sort({ createdAt: -1 })
           .skip(skip)
           .limit(limit),

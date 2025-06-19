@@ -5,6 +5,7 @@ import { MoreVertical, Pen, Trash2 } from "lucide-react";
 import { motion } from 'framer-motion';
 import { useTranslations } from "next-intl";
 import SkeletonVideo from "../ui/skeleton-video";
+import SkeletonVideoFrame from "../ui/skeleton-video-frame";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -66,10 +67,10 @@ export default function Transition({
           />
         ) : sequenceVideoUrl ? (
           <div className="absolute inset-0 w-full h-11 overflow-hidden">
-            <SkeletonVideo
+            <SkeletonVideoFrame
               srcVideo={sequenceVideoUrl}
               className="w-full h-11 object-cover blur-sm scale-125"
-              disableHoverPlay={true}
+              startAt={0}
             />
           </div>
         ) : null}

@@ -40,6 +40,7 @@ import { transitions as defaultTransitions, sounds as defaultSounds } from '@/sr
 import { usePremiumToast } from '@/src/utils/premium-toast'
 import MobileDisclaimerModal from '@/src/components/modal/mobile-disclaimer'
 import { useAssetsStore } from '@/src/store/assetsStore'
+import { useVideoFramesStore } from '@/src/store/videoFramesStore'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -52,6 +53,7 @@ export default function VideoEditor() {
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
   const assetsStore = useAssetsStore()
+  const { clearOldFrames } = useVideoFramesStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
@@ -265,6 +267,17 @@ export default function VideoEditor() {
       clearInterval(autoSaveInterval)
     }
   }, [video, isDirty])
+
+  // Nettoyer les vieilles frames du cache toutes les 5 minutes
+  useEffect(() => {
+    const cleanupInterval = setInterval(() => {
+      clearOldFrames()
+    }, 5 * 60 * 1000) // 5 minutes
+
+    return () => {
+      clearInterval(cleanupInterval)
+    }
+  }, [clearOldFrames])
 
   useEffect(() => {
     const fetchData = async () => {

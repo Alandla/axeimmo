@@ -2,6 +2,7 @@ import { ISequence } from "@/src/types/video";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
 import SkeletonVideo from "../ui/skeleton-video";
+import SkeletonVideoFrame from "../ui/skeleton-video-frame";
 import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen, Video as VideoIcon, User, ArrowUp, ArrowDown } from "lucide-react";
 import { motion } from 'framer-motion';
 import React, { useRef, useState, useCallback } from "react";
@@ -230,14 +231,13 @@ export default function Sequence({
                                             alt={sequence.text}
                                             className="w-full h-full object-cover"
                                         />
-                                    ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
-                                        <SkeletonVideo
-                                            srcVideo={sequence.media.video.link}
-                                            className='w-full h-full object-cover'
-                                            disableHoverPlay={true}
-                                            startAt={sequence.media.startAt || 0}
-                                        />
-                                    ) : (
+                                                        ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
+                        <SkeletonVideoFrame
+                            srcVideo={sequence.media.video.link}
+                            className='w-full h-full object-cover'
+                            startAt={sequence.media.startAt || 0}
+                        />
+                    ) : (
                                         <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                                             <VideoIcon className="text-gray-400 text-sm" />
                                         </div>
@@ -261,14 +261,13 @@ export default function Sequence({
                                 alt={sequence.text}
                                 className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
                             />
-                        ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
-                            <SkeletonVideo
-                                srcVideo={sequence.media.video.link}
-                                className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
-                                disableHoverPlay={true}
-                                startAt={sequence.media.startAt || 0}
-                            />
-                        ) : (
+                                ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
+            <SkeletonVideoFrame
+                srcVideo={sequence.media.video.link}
+                className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
+                startAt={sequence.media.startAt || 0}
+            />
+        ) : (
                             <div className="w-12 h-12 sm:w-24 sm:h-24 rounded-md bg-gray-200 flex items-center justify-center">
                                 {sequence.media?.show === 'hide' && avatar ? (
                                     <User className="text-gray-400 text-3xl" />
