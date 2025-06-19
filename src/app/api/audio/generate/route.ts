@@ -30,11 +30,11 @@ export async function POST(req: NextRequest) {
             const space : ISpace = await getSpaceById(spaceId);
             voice = space.voices.find(voice => voice.id === voiceId);
         }
-        const audioBuffer = await createAudioTTS(voiceId, text, voice?.voiceSettings);
+        const audioResult = await createAudioTTS(voiceId, text, voice?.voiceSettings);
 
-        const audioUrl = await uploadToS3Audio(audioBuffer, 'medias-users');
+        const audioUrl = await uploadToS3Audio(audioResult.data, 'medias-users');
 
-        const cost = calculateElevenLabsCost(text, false);
+        const cost = audioResult.cost;
 
         const data = {
             audioUrl,

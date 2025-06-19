@@ -477,7 +477,7 @@ export const generateVideoTask = task({
         const batchPromises = batch.map(async (text, batchIndex) => {
           const globalIndex = i + batchIndex; // Global index to maintain order
           try {
-            const audioBuffer = await createAudioTTS(
+            const audioResult = await createAudioTTS(
               payload.voice.id,
               text.trim(),
               payload.voice.voiceSettings,
@@ -485,7 +485,10 @@ export const generateVideoTask = task({
             );
             
             // Upload directly after generation
-            const audioUrl = await uploadToS3Audio(audioBuffer, 'medias-users');
+            const audioUrl = await uploadToS3Audio(audioResult.data, 'medias-users');
+            
+            // Add cost to total
+            cost += audioResult.cost;
 
 
             processedCount++
@@ -503,14 +506,17 @@ export const generateVideoTask = task({
             if (error.response?.status === 422) {
               await wait.for({ seconds: 2 });
 
-              const retryBuffer = await createAudioTTS(
+              const retryResult = await createAudioTTS(
                 payload.voice.id,
                 text.trim(),
                 payload.voice.voiceSettings,
                 true
               );
 
-              const audioUrl = await uploadToS3Audio(retryBuffer, 'medias-users');
+              const audioUrl = await uploadToS3Audio(retryResult.data, 'medias-users');
+              
+              // Add cost to total
+              cost += retryResult.cost;
 
               processedCount++
               await metadata.replace({
@@ -534,8 +540,6 @@ export const generateVideoTask = task({
 
       // Trier les phrases par index
       sentences.sort((a, b) => a.index - b.index);
-
-      cost += calculateElevenLabsCost(payload.script, true);
       
     } else if (avatarFile) {
       sentences.push({
