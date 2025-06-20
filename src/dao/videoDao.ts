@@ -33,7 +33,9 @@ export const getVideosBySpaceId = async (
         settings: 1,
         'video.metadata': 1,
         'video.thumbnail': 1,
-        'video.sequence': { $slice: 1 }, // Ne récupérer que le premier élément du tableau
+        'video.avatar': 1,
+        'video.format': 1,
+        'video.sequences': { $slice: 1 }, // Ne récupérer que le premier élément du tableau
         'video.audio.voices': 1
       };
       

@@ -5,7 +5,7 @@ export default function SkeletonImage({ src, style, alt, width, height, classNam
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className={`${!loaded ? 'bg-gray-200 animate-pulse' : ''}`}>
+    <div className={`${!loaded ? 'bg-gray-200 animate-pulse' : ''} ${className}`}>
       <Image
         src={src}
         height={height}
