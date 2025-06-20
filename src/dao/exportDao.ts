@@ -40,10 +40,14 @@ export const getExportById = async (id: string) => {
 export const getExportsByVideoId = async (videoId: string): Promise<string[]> => {
   try {
     return await executeWithRetry(async () => {
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      
       const exports = await ExportModel.find({ 
         videoId,
         status: 'completed',
-        downloadUrl: { $exists: true, $ne: null }
+        downloadUrl: { $exists: true, $ne: null },
+        createdAt: { $gte: sevenDaysAgo }
       })
       .select('downloadUrl')
       .sort({ createdAt: -1 })
