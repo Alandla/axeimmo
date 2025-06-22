@@ -100,63 +100,66 @@ export const generateVideoTask = task({
         const mediasToAnalyze = payload.files.filter(file => file.usage === 'media');
         const analyzedMedias: IMediaSpace[] = [];
         
-        // Analyser tous les médias en parallèle
-        const mediaAnalysisPromises = mediasToAnalyze.map(async (media) => {
-          try {
-            let descriptions: [{ start: number, duration?: number, text: string }] | undefined;
-            let updatedMedia = { ...media };
-            
-            if (media.type === 'video' && media.video?.link) {
-              // Utiliser la nouvelle méthode analyzeVideo
-              logger.log(`[ANALYZE] Analyzing video with analyzeVideo method: ${media.video.link}`);
-              const analysisResult = await analyzeVideo(media.video.link, media.id);
-              cost += analysisResult.cost;
+        // Analyser les médias par batches de 7 pour éviter les crashs
+        const results = await processBatches(
+          mediasToAnalyze,
+          async (media) => {
+            try {
+              let descriptions: [{ start: number, duration?: number, text: string }] | undefined;
+              let updatedMedia = { ...media };
               
-              // Les descriptions sont déjà au bon format
-              descriptions = analysisResult.descriptions as [{ start: number, duration?: number, text: string }];
-              
-              // Ajouter les frames et durationInSeconds au média
-              updatedMedia = {
-                ...media,
-                video: {
-                  ...media.video,
-                  frames: analysisResult.frames,
-                  durationInSeconds: analysisResult.durationInSeconds
+              if (media.type === 'video' && media.video?.link) {
+                // Utiliser la nouvelle méthode analyzeVideo
+                logger.log(`[ANALYZE] Analyzing video with analyzeVideo method: ${media.video.link}`);
+                const analysisResult = await analyzeVideo(media.video.link, media.id);
+                cost += analysisResult.cost;
+                
+                // Les descriptions sont déjà au bon format
+                descriptions = analysisResult.descriptions as [{ start: number, duration?: number, text: string }];
+                
+                // Ajouter les frames et durationInSeconds au média
+                updatedMedia = {
+                  ...media,
+                  video: {
+                    ...media.video,
+                    frames: analysisResult.frames,
+                    durationInSeconds: analysisResult.durationInSeconds
+                  }
+                };
+                
+              } else if (media.type === 'image' && media.image?.link) {
+                // Analyser l'image avec Groq
+                logger.log(`[ANALYZE] Analyzing image with Groq: ${media.image.link}`);
+                const analysis = await analyzeImage(media.image.link);
+                
+                if (analysis) {
+                  descriptions = [{
+                    start: 0,
+                    text: analysis.description
+                  }];
                 }
-              };
-              
-            } else if (media.type === 'image' && media.image?.link) {
-              // Analyser l'image avec Groq
-              logger.log(`[ANALYZE] Analyzing image with Groq: ${media.image.link}`);
-              const analysis = await analyzeImage(media.image.link);
-              
-              if (analysis) {
-                descriptions = [{
-                  start: 0,
-                  text: analysis.description
-                }];
               }
+              
+              if (descriptions) {
+                return mediaToMediaSpace([{
+                  ...updatedMedia,
+                  description: descriptions
+                }], payload.userId)[0];
+              }
+              
+              return null;
+            } catch (error) {
+              logger.error(`[ANALYZE] Error analyzing media:`, {
+                mediaId: media.id,
+                error: error instanceof Error ? error.message : String(error)
+              });
+              return null;
             }
-            
-            if (descriptions) {
-              return mediaToMediaSpace([{
-                ...updatedMedia,
-                description: descriptions
-              }], payload.userId)[0];
-            }
-            
-            return null;
-          } catch (error) {
-            logger.error(`[ANALYZE] Error analyzing media:`, {
-              mediaId: media.id,
-              error: error instanceof Error ? error.message : String(error)
-            });
-            return null;
-          }
-        });
+          },
+          7 // Limite de 7 analyses vidéo en parallèle
+        );
         
-        // Attendre que toutes les analyses soient terminées et filtrer les résultats null
-        const results = await Promise.all(mediaAnalysisPromises);
+        // Filtrer les résultats null
         const validResults = results.filter(result => result !== null) as IMediaSpace[];
         
         // Ajouter les résultats valides à analyzedMedias
@@ -1168,7 +1171,55 @@ export const generateVideoTask = task({
             // Track all requests and their status
             const pendingRequests = new Map(validRequests.map(req => [req.requestId, req]));
             const completedResults = new Map();
+            const analysisQueue: { requestId: string; animationResult: any }[] = [];
             const analysisPromises = new Map(); // Track ongoing analyses
+            const maxConcurrentAnalyses = 7;
+            let runningAnalyses = 0;
+
+            // Function to start analysis with concurrency limit
+            const startAnalysisIfPossible = () => {
+              if (runningAnalyses < maxConcurrentAnalyses && analysisQueue.length > 0) {
+                const { requestId, animationResult } = analysisQueue.shift()!;
+                runningAnalyses++;
+
+                logger.log(`[ANIMATE] Starting analysis for sequence ${animationResult.sequenceIndex} (${runningAnalyses}/${maxConcurrentAnalyses} running)`);
+                
+                const analysisPromise = analyzeVideo(animationResult.videoUrl, `animated-${Date.now()}-${animationResult.sequenceIndex}`)
+                  .then((analysisResult: VideoAnalysisResult) => {
+                    logger.log(`[ANIMATE] Video analysis completed for sequence ${animationResult.sequenceIndex}`, {
+                      descriptionsCount: analysisResult.descriptions.length,
+                      framesCount: analysisResult.frames.length,
+                      cost: analysisResult.cost
+                    });
+                    
+                    cost += analysisResult.cost;
+                    runningAnalyses--;
+                    
+                    // Start next analysis if available
+                    startAnalysisIfPossible();
+                    
+                    return {
+                      ...animationResult,
+                      descriptions: analysisResult.descriptions,
+                      frames: analysisResult.frames,
+                      durationInSeconds: analysisResult.durationInSeconds
+                    };
+                  }).catch((error: Error) => {
+                    logger.error(`[ANIMATE] Error analyzing animated video for sequence ${animationResult.sequenceIndex}:`, {
+                      error: error instanceof Error ? error.message : String(error)
+                    });
+                    runningAnalyses--;
+                    
+                    // Start next analysis if available
+                    startAnalysisIfPossible();
+                    
+                    return animationResult;
+                  });
+                
+                // Store the analysis promise
+                analysisPromises.set(requestId, analysisPromise);
+              }
+            };
             
             // Process animations with parallel status checking but sequential waits
             while (pendingRequests.size > 0) {
@@ -1207,34 +1258,12 @@ export const generateVideoTask = task({
                       
                       completedResults.set(requestId, animationResult);
                       
-                      // Launch video analysis immediately for this completed animation
-                      logger.log(`[ANIMATE] Animation completed for sequence ${request.sequenceIndex}, starting analysis...`);
+                      // Queue video analysis for this completed animation
+                      logger.log(`[ANIMATE] Animation completed for sequence ${request.sequenceIndex}, queueing analysis...`);
+                      analysisQueue.push({ requestId, animationResult });
                       
-                      const analysisPromise = analyzeVideo(animationResult.videoUrl, `animated-${Date.now()}-${animationResult.sequenceIndex}`)
-                        .then((analysisResult: VideoAnalysisResult) => {
-                          logger.log(`[ANIMATE] Video analysis completed for sequence ${animationResult.sequenceIndex}`, {
-                            descriptionsCount: analysisResult.descriptions.length,
-                            framesCount: analysisResult.frames.length,
-                            cost: analysisResult.cost
-                          });
-                          
-                          cost += analysisResult.cost;
-                          
-                          return {
-                            ...animationResult,
-                            descriptions: analysisResult.descriptions,
-                            frames: analysisResult.frames,
-                            durationInSeconds: analysisResult.durationInSeconds
-                          };
-                        }).catch((error: Error) => {
-                          logger.error(`[ANIMATE] Error analyzing animated video for sequence ${animationResult.sequenceIndex}:`, {
-                            error: error instanceof Error ? error.message : String(error)
-                          });
-                          return animationResult;
-                        });
-                      
-                      // Store the analysis promise
-                      analysisPromises.set(requestId, analysisPromise);
+                      // Try to start analysis if slot available
+                      startAnalysisIfPossible();
                       
                       completedAnimations++;
                       await metadata.replace({
@@ -1267,6 +1296,16 @@ export const generateVideoTask = task({
               // If there are still pending requests, wait before next check
               if (pendingRequests.size > 0) {
                 await wait.for({ seconds: 6 });
+              }
+            }
+            
+            // Start any remaining analyses in the queue
+            while (analysisQueue.length > 0) {
+              startAnalysisIfPossible();
+              
+              // Wait a bit if we've reached the concurrency limit
+              if (runningAnalyses >= maxConcurrentAnalyses) {
+                await wait.for({ seconds: 1 });
               }
             }
             
@@ -1643,4 +1682,31 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
     durationInFrames: 0,
     voiceId
   }];
-} 
+}
+
+/**
+ * Process promises in batches with limited concurrency
+ * @param items Array of items to process
+ * @param processor Function that processes each item and returns a Promise
+ * @param batchSize Maximum number of concurrent operations
+ * @returns Promise that resolves with array of results
+ */
+async function processBatches<T, R>(
+  items: T[],
+  processor: (item: T, index: number) => Promise<R>,
+  batchSize: number = 7
+): Promise<R[]> {
+  const results: R[] = [];
+  
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    const batchPromises = batch.map((item, batchIndex) => 
+      processor(item, i + batchIndex)
+    );
+    
+    const batchResults = await Promise.all(batchPromises);
+    results.push(...batchResults);
+  }
+  
+  return results;
+}
