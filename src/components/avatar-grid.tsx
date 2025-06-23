@@ -177,7 +177,7 @@ export function AvatarGridComponent() {
     if (activeSpace) {
         fetchSpaceAvatars(lastUsed)
     }
-}, [activeSpace])
+}, [activeSpace?.id])
 
   // Filtrer les avatars
   const filteredAvatars = sortAvatarsByLastUsed(avatars.filter(avatar => {

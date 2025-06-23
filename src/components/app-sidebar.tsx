@@ -22,7 +22,7 @@ import { useSession } from "next-auth/react"
 import { useTranslations } from "next-intl"
 import { NavButtonVideo } from "./nav-button-video"
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
-import { getSpaces } from "../service/user.service"
+import { fetchSpaceMembers, getSpaces } from "../service/user.service"
 import { SpaceSwitcher } from "./space-switcher"
 import { SimpleSpace } from "../types/space"
 import { UsageCredits } from "./usage-credits"
@@ -43,6 +43,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         if (!activeSpace && userSpaces.length > 0) {
           setActiveSpace(userSpaces[0])
         }
+
+        const spacesWithMembers = await fetchSpaceMembers(userSpaces);
+
+        setSpaces(spacesWithMembers)
+        setActiveSpace(spacesWithMembers[0])
       }
     }
     fetchSpaces()

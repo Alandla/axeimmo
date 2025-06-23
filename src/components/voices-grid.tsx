@@ -112,7 +112,7 @@ export function VoicesGridComponent() {
     if (activeSpace) {
         fetchSpaceVoices()
     }
-}, [activeSpace])
+}, [activeSpace?.id])
 
   const togglePlay = (voice: Voice) => {
     if (voice.previewUrl) {

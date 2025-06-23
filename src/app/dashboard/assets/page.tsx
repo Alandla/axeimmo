@@ -23,23 +23,11 @@ import { storageLimit } from '@/src/config/plan.config'
 import { formatBytes } from '@/src/utils/format'
 import { Alert, AlertDescription, AlertTitle } from '@/src/components/ui/alert'
 import { UsageStorage } from '@/src/components/ui/usage-storage'
-import { 
-  checkFalMedias, 
-  updateAssetsWithCompletedMedias, 
+import {
   startFalPolling,
   startLegacyPolling,
   cleanupPolling 
 } from '@/src/utils/asset-polling'
-
-interface User {
-  id: string
-  name?: string
-  image?: string
-}
-
-export interface MediaSpaceWithCreator extends IMediaSpace {
-  creator: User
-}
 
 export interface UploadingMedia {
   id: string
@@ -58,8 +46,8 @@ export default function AssetsPage() {
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const falPollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
   
-  const [assets, setAssets] = useState<MediaSpaceWithCreator[]>([])
-  const [selectedAsset, setSelectedAsset] = useState<MediaSpaceWithCreator | null>(null)
+  const [assets, setAssets] = useState<IMediaSpace[]>([])
+  const [selectedAsset, setSelectedAsset] = useState<IMediaSpace | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isUploadingFiles, setIsUploadingFiles] = useState(false)
@@ -97,7 +85,7 @@ export default function AssetsPage() {
     }
   }, []);
 
-  const setMedia = (media: MediaSpaceWithCreator) => {
+  const setMedia = (media: IMediaSpace) => {
     setAssets(prevAssets => {
       const assetIndex = prevAssets.findIndex(a => a.id === media.id)
       if (assetIndex === -1) return prevAssets
@@ -164,15 +152,8 @@ export default function AssetsPage() {
           spaceId: activeSpace.id,
           medias
         }) as { addedMedias: IMediaSpace[], usedStorageBytes: number }
-        const addedMediasWithCreator: MediaSpaceWithCreator[] = addedMedias.map(media => ({
-          ...media,
-          creator: {
-            id: session?.user?.id || '',
-            name: session?.user?.name || '',
-            image: session?.user?.image || ''
-          }
-        }));
-        setAssets(addedMediasWithCreator.reverse());
+        
+        setAssets(addedMedias.reverse());
 
         if (activeSpace) {
           setActiveSpace({
@@ -216,7 +197,7 @@ export default function AssetsPage() {
   };
 
   // Notre version locale de initPolling qui utilise les fonctions importées
-  const initLocalPolling = (assetsFromApi: MediaSpaceWithCreator[], spaceId: string) => {
+  const initLocalPolling = (assetsFromApi: IMediaSpace[], spaceId: string) => {
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
     
     // 1. Vérifier les médias sans requestId (ancienne logique)
@@ -232,7 +213,6 @@ export default function AssetsPage() {
       
       const pollInterval = hasImageGeneration ? 1000 : 5000; // 1s pour images, 5s pour vidéos
       startLegacyPolling(
-        assetsFromApi, 
         spaceId, 
         pollInterval, 
         fiveMinutesAgo, 

@@ -16,20 +16,10 @@ import { Button } from "@/src/components/ui/button";
 import { useScreenSize } from "@/src/hooks/use-screen-size";
 import { PaginationControls } from "@/src/components/ui/pagination-controls"
 
-interface User {
-  id: string;
-  name?: string;
-  image?: string;
-}
-
-export interface VideoWithCreator extends IVideo {
-  creator: User
-}
-
 export default function Dashboard() {
   const t = useTranslations('videos')
   const { toast } = useToast()
-  const [videos, setVideos] = useState<VideoWithCreator[]>([])
+  const [videos, setVideos] = useState<IVideo[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -42,7 +32,7 @@ export default function Dashboard() {
   // Réinitialiser la page lors du changement d'espace
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeSpace]);
+  }, [activeSpace?.id]);
 
   // Charger les vidéos
   useEffect(() => {
@@ -70,7 +60,7 @@ export default function Dashboard() {
     };
     
     loadVideos();
-  }, [activeSpace, currentPage, itemsPerPage]);
+  }, [activeSpace?.id, currentPage, itemsPerPage]);
 
   const handleDeleteVideo = async (video: IVideo) => {
     try {
@@ -106,8 +96,6 @@ export default function Dashboard() {
       })
     }
   }
-
-
 
   return (
     <>

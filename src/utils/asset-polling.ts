@@ -1,19 +1,18 @@
 import { basicApiCall } from '@/src/lib/api';
-import { MediaSpaceWithCreator } from '@/src/app/dashboard/assets/page';
+import { IMediaSpace } from '@/src/types/space';
 
 // Type pour la fonction setAssets qui peut accepter deux signatures différentes
 type SetAssetsFunction = 
-  | ((assets: MediaSpaceWithCreator[]) => void)
-  | ((updater: (prevAssets: MediaSpaceWithCreator[]) => MediaSpaceWithCreator[]) => void);
+  | ((assets: IMediaSpace[]) => void)
+  | ((updater: (prevAssets: IMediaSpace[]) => IMediaSpace[]) => void);
 
 /**
  * Vérifie l'état des médias avec requestId (Fal.ai)
  */
-export const checkFalMedias = async (
-  currentAssets: MediaSpaceWithCreator[], 
+const checkFalMedias = async (
+  currentAssets: IMediaSpace[], 
   spaceId: string,
-  setAssets?: (assets: MediaSpaceWithCreator[]) => void
-): Promise<MediaSpaceWithCreator[]> => {
+): Promise<IMediaSpace[]> => {
   const mediasToCheck = currentAssets.filter(asset => 
     asset.media.generationStatus === 'generating-video' && 
     asset.media.requestId
@@ -31,7 +30,7 @@ export const checkFalMedias = async (
       const result = await basicApiCall('/media/check-generation', {
         mediaSpace,
         spaceId
-      }) as { status: string; mediaSpace?: MediaSpaceWithCreator };
+      }) as { status: string; mediaSpace?: IMediaSpace };
 
       if (result.status === 'completed' || result.status === 'failed') {
         return result.mediaSpace; // MediaSpace mis à jour
@@ -44,20 +43,20 @@ export const checkFalMedias = async (
   });
 
   const results = await Promise.all(checkPromises);
-  return results.filter((result): result is MediaSpaceWithCreator => result !== null && result !== undefined);
+  return results.filter((result): result is IMediaSpace => result !== null && result !== undefined);
 };
 
 /**
  * Met à jour les assets avec les médias mis à jour
  */
 export const updateAssetsWithCompletedMedias = (
-  updatedMedias: MediaSpaceWithCreator[],
+  updatedMedias: IMediaSpace[],
   setAssets: SetAssetsFunction
 ) => {
   if (updatedMedias.length === 0) return;
 
   // Conversion sûre car nous savons comment nous utilisons cette fonction
-  const setAssetsFn = setAssets as (updater: (prevAssets: MediaSpaceWithCreator[]) => MediaSpaceWithCreator[]) => void;
+  const setAssetsFn = setAssets as (updater: (prevAssets: IMediaSpace[]) => IMediaSpace[]) => void;
   
   setAssetsFn(prevAssets => {
     const newAssets = [...prevAssets];
@@ -77,10 +76,10 @@ export const updateAssetsWithCompletedMedias = (
  * Démarre le polling Fal.ai pour les médias avec requestId
  */
 export const startFalPolling = (
-  initialAssets: MediaSpaceWithCreator[], 
+  initialAssets: IMediaSpace[], 
   spaceId: string,
   falPollingIntervalRef: React.MutableRefObject<NodeJS.Timeout | null>,
-  assets: MediaSpaceWithCreator[],
+  assets: IMediaSpace[],
   setAssets: SetAssetsFunction
 ) => {
   if (falPollingIntervalRef.current) return;
@@ -101,7 +100,7 @@ export const startFalPolling = (
       const stillGenerating = currentAssets.some(asset => 
         asset.media.generationStatus === 'generating-video' && 
         asset.media.requestId &&
-        !updatedMedias.some((updated) => updated.id === asset.id)
+        !updatedMedias.some((updated: IMediaSpace) => updated.id === asset.id)
       );
 
       if (!stillGenerating && falPollingIntervalRef.current) {
@@ -119,15 +118,14 @@ export const startFalPolling = (
  * Démarre le polling des médias sans requestId (ancienne logique)
  */
 export const startLegacyPolling = (
-  initialAssets: MediaSpaceWithCreator[], 
   spaceId: string, 
   pollInterval: number,
   fiveMinutesAgo: Date,
   pollingIntervalRef: React.MutableRefObject<NodeJS.Timeout | null>,
   falPollingIntervalRef: React.MutableRefObject<NodeJS.Timeout | null>,
-  assets: MediaSpaceWithCreator[],
+  assets: IMediaSpace[],
   setAssets: SetAssetsFunction,
-  fetchAssets: (spaceId: string, withCreator?: boolean) => Promise<MediaSpaceWithCreator[]>
+  fetchAssets: (spaceId: string, withCreator?: boolean) => Promise<IMediaSpace[]>
 ) => {
   if (pollingIntervalRef.current) return;
 
@@ -139,7 +137,7 @@ export const startLegacyPolling = (
       const updatedAssets = await fetchAssets(spaceId, true);
       
       // Type cast sûr car nous connaissons l'utilisation
-      const setAssetsFn = setAssets as (assets: MediaSpaceWithCreator[]) => void;
+      const setAssetsFn = setAssets as (assets: IMediaSpace[]) => void;
       setAssetsFn(updatedAssets);
       
       // Vérifier s'il reste des médias en génération sans requestId
@@ -172,62 +170,6 @@ export const startLegacyPolling = (
       console.error('Error during legacy polling:', error);
     }
   }, pollInterval);
-};
-
-/**
- * Initialise les pollings en fonction des assets
- */
-export const initPolling = (
-  assets: MediaSpaceWithCreator[], 
-  spaceId: string,
-  pollingIntervalRef: React.MutableRefObject<NodeJS.Timeout | null>,
-  falPollingIntervalRef: React.MutableRefObject<NodeJS.Timeout | null>,
-  currentAssets: MediaSpaceWithCreator[],
-  setAssets: SetAssetsFunction,
-  fetchAssets: (spaceId: string, withCreator?: boolean) => Promise<MediaSpaceWithCreator[]>
-) => {
-  const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-  
-  // 1. Vérifier les médias sans requestId (ancienne logique)
-  const recentGeneratingAssets = assets.filter(asset => 
-    (asset.media.generationStatus === 'generating-video' || asset.media.generationStatus === 'generating-image') &&
-    !asset.media.requestId &&
-    new Date(asset.uploadedAt) > fiveMinutesAgo
-  );
-  
-  if (recentGeneratingAssets.length > 0) {
-    const hasVideoGeneration = recentGeneratingAssets.some(asset => asset.media.generationStatus === 'generating-video');
-    const hasImageGeneration = recentGeneratingAssets.some(asset => asset.media.generationStatus === 'generating-image');
-    
-    const pollInterval = hasImageGeneration ? 1000 : 5000; // 1s pour images, 5s pour vidéos
-    startLegacyPolling(
-      assets, 
-      spaceId, 
-      pollInterval, 
-      fiveMinutesAgo, 
-      pollingIntervalRef, 
-      falPollingIntervalRef, 
-      currentAssets,
-      setAssets,
-      fetchAssets
-    );
-  } else if (pollingIntervalRef.current) {
-    clearInterval(pollingIntervalRef.current);
-    pollingIntervalRef.current = null;
-  }
-  
-  // 2. Vérifier les médias avec requestId (Fal.ai)
-  const mediaWithRequestId = assets.filter(asset => 
-    asset.media.generationStatus === 'generating-video' && 
-    asset.media.requestId
-  );
-  
-  if (mediaWithRequestId.length > 0) {
-    startFalPolling(assets, spaceId, falPollingIntervalRef, currentAssets, setAssets);
-  } else if (falPollingIntervalRef.current) {
-    clearInterval(falPollingIntervalRef.current);
-    falPollingIntervalRef.current = null;
-  }
 };
 
 /**

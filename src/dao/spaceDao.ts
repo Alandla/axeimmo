@@ -230,7 +230,10 @@ export const getUserSpaces = async (userId: string) => {
           usedStorageBytes: space.usedStorageBytes,
           storageLimit: space.plan.storageLimit,
           imageToVideoLimit: space.plan.imageToVideoLimit,
-          imageToVideoUsed: space.imageToVideoUsed || 0
+          imageToVideoUsed: space.imageToVideoUsed || 0,
+          members: space.members.map((member: any) => ({
+            id: member.userId.toString()
+          }))
         };
       });
     });

@@ -10,7 +10,6 @@ import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { useToast } from '@/src/hooks/use-toast'
 import { basicApiCall } from '@/src/lib/api'
-import { useUsersStore } from '@/src/store/creatorUserVideo'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import { Button } from './ui/button'
 import { Avatar, AvatarFallback } from './ui/avatar'
@@ -24,14 +23,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
-import { MediaSpaceWithCreator } from '../app/dashboard/assets/page'
+import { IMediaSpace } from '../types/space'
 import ModalConfirmDeleteAsset from './modal/confirm-delete-asset'
 import { IMedia } from '../types/video'
 
 interface AssetCardProps {
-  mediaSpace: MediaSpaceWithCreator
+  mediaSpace: IMediaSpace
   spaceId: string
-  setMedia: (media: MediaSpaceWithCreator) => void
+  setMedia: (media: IMediaSpace) => void
   onClick: () => void
   onDelete?: (media: IMedia) => void
 }
@@ -40,7 +39,6 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
   const t = useTranslations('assets')
   const { data: session } = useSession()
   const { toast } = useToast()
-  const { fetchUser } = useUsersStore()
   const { activeSpace, setActiveSpace } = useActiveSpaceStore()
   
   const [isEditing, setIsEditing] = useState(false)
@@ -51,6 +49,16 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+  // Récupérer les informations du créateur depuis activeSpace.members
+  const getCreator = () => {
+    if (mediaSpace.uploadedBy && activeSpace?.members) {
+      return activeSpace.members.find(member => member.id === mediaSpace.uploadedBy);
+    }
+    return { id: '', name: '', image: '' };
+  };
+
+  const creator = getCreator();
 
   const startEditing = useCallback(() => {
     setIsEditing(true)
@@ -140,19 +148,6 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
     }
     setIsDropdownOpen(false)
   }
-
-  const handleDropdownOpen = async (isOpen: boolean) => {
-    setIsDropdownOpen(isOpen)
-    if (isOpen && !mediaSpace.creator.name && mediaSpace.creator.id) {
-      const userData = await fetchUser(mediaSpace.creator.id)
-      setMedia({
-        ...mediaSpace,
-        creator: userData
-      })
-    }
-  }
-
-
 
   return (
     <>
@@ -262,7 +257,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
             </p>
           </div>
 
-          <DropdownMenu open={isDropdownOpen} onOpenChange={handleDropdownOpen}>
+          <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
                 <MoreVertical className="h-4 w-4" />
@@ -278,14 +273,14 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    {mediaSpace.creator.image && <AvatarImage src={mediaSpace.creator.image} alt={mediaSpace.creator.name ?? ''} />}
-                    <AvatarFallback className="rounded-lg">{mediaSpace.creator.name?.charAt(0) ?? ''}</AvatarFallback>
+                    {creator?.image && <AvatarImage src={creator.image} alt={creator.name ?? ''} />}
+                    <AvatarFallback className="rounded-lg">{creator?.name?.charAt(0) ?? ''}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    {!mediaSpace.creator.name ? (
+                    {!creator?.name ? (
                       <div className="h-5 w-24 bg-muted animate-pulse rounded" />
                     ) : (
-                      <span className="truncate font-semibold">{mediaSpace.creator.name}</span>
+                      <span className="truncate font-semibold">{creator?.name}</span>
                     )}
                     <span className="truncate text-xs">
                       {mediaSpace.uploadedAt ? new Date(mediaSpace.uploadedAt).toLocaleDateString() : ''}

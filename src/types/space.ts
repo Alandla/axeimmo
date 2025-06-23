@@ -56,6 +56,11 @@ export interface SimpleSpace {
   storageLimit?: number;
   imageToVideoLimit?: number;
   imageToVideoUsed?: number;
+  members?: {
+    id: string;
+    name: string;
+    image: string;
+  }[];
 }
 
 export interface ICompanyDetails {

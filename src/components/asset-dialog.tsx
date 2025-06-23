@@ -10,7 +10,6 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet'
-import { MediaSpaceWithCreator } from '../app/dashboard/assets/page'
 import { useSession } from 'next-auth/react'
 import { Textarea } from './ui/textarea'
 import { Badge } from './ui/badge'
@@ -22,8 +21,8 @@ import { IMediaSpace } from '@/src/types/space'
 import { useRouter } from 'next/navigation'
 
 interface AssetDialogProps {
-  mediaSpace: MediaSpaceWithCreator | null
-  setMedia: (media: MediaSpaceWithCreator) => void
+  mediaSpace: IMediaSpace | null
+  setMedia: (media: IMediaSpace) => void
   open: boolean
   onClose: () => void
 }
@@ -46,6 +45,16 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
   const [isSaving, setIsSaving] = useState(false)
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const router = useRouter()
+
+  // Récupérer les informations du créateur depuis activeSpace.members
+  const getCreator = () => {
+    if (mediaSpace?.uploadedBy && activeSpace?.members) {
+      return activeSpace.members.find(member => member.id === mediaSpace.uploadedBy);
+    }
+    return { id: '', name: '', image: '' };
+  };
+
+  const creator = getCreator();
 
   // Fonction pour récupérer la description du média depuis l'API
   const fetchMediaDescription = async () => {
@@ -159,7 +168,7 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
           mediaSpace: updatedSpaceMedia
         })
         
-        setMedia(updatedSpaceMedia as MediaSpaceWithCreator)
+        setMedia(updatedSpaceMedia as IMediaSpace)
 
         toast({
           title: t('toast.saved'),
@@ -330,7 +339,7 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
 
             <p className="text-sm text-muted-foreground mt-2 mb-4">
               {t('dialog.added-by', { 
-                name: mediaSpace.creator.name || t('dialog.unknown-user'),
+                name: creator?.name || t('dialog.unknown-user'),
                 date: uploadDate
               })}
             </p>

@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { IVideo } from '../types/video'
-import { VideoWithCreator } from '@/src/app/dashboard/page'
 import { basicApiCall } from '@/src/lib/api'
 
 interface PaginationInfo {
@@ -10,12 +9,12 @@ interface PaginationInfo {
 }
 
 interface VideosStoreState {
-  videosBySpace: Map<string, Map<number, VideoWithCreator[]>>
+  videosBySpace: Map<string, Map<number, IVideo[]>>
   paginationBySpace: Map<string, PaginationInfo>
   totalVideoCountBySpace: Map<string, number>
-  setVideos: (spaceId: string, page: number, videos: VideoWithCreator[], paginationInfo: PaginationInfo) => void
+  setVideos: (spaceId: string, page: number, videos: IVideo[], paginationInfo: PaginationInfo) => void
   fetchVideos: (spaceId: string, page?: number, limit?: number, forceRefresh?: boolean) => Promise<{ 
-    videos: VideoWithCreator[], 
+    videos: IVideo[], 
     totalCount: number,
     currentPage: number,
     totalPages: number
@@ -29,7 +28,7 @@ export const useVideosStore = create<VideosStoreState>((set, get) => ({
   paginationBySpace: new Map(),
   totalVideoCountBySpace: new Map(),
   
-  setVideos: (spaceId: string, page: number, videos: VideoWithCreator[], paginationInfo: PaginationInfo) => {
+  setVideos: (spaceId: string, page: number, videos: IVideo[], paginationInfo: PaginationInfo) => {
     set(state => {
       const newVideosBySpace = new Map(state.videosBySpace);
       const newPaginationBySpace = new Map(state.paginationBySpace);
@@ -76,23 +75,9 @@ export const useVideosStore = create<VideosStoreState>((set, get) => ({
         totalPages: number
       };
 
-      const processedVideos = videos.map(video => {
-        const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
-        const userId = createEvent?.user;
-        
-        return {
-          ...video,
-          creator: {
-            id: userId || '',
-            name: '',
-            image: ''
-          }
-        };
-      });
-
-      get().setVideos(spaceId, page, processedVideos, { currentPage, totalPages, totalCount });
+      get().setVideos(spaceId, page, videos, { currentPage, totalPages, totalCount });
       
-      return { videos: processedVideos, totalCount, currentPage, totalPages };
+      return { videos, totalCount, currentPage, totalPages };
     } catch (error) {
       console.error('Erreur lors de la récupération des vidéos:', error);
 

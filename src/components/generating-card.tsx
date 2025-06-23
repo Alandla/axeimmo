@@ -1,17 +1,16 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Loader2, Video, Image as ImageIcon, Clock } from 'lucide-react'
 import { Badge } from './ui/badge'
-import { MediaSpaceWithCreator } from '../app/dashboard/assets/page'
 import { useSession } from 'next-auth/react'
 import { formatDistanceToNow } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
+import { IMediaSpace } from '../types/space'
 
 interface GeneratingCardProps {
-  mediaSpace: MediaSpaceWithCreator
+  mediaSpace: IMediaSpace
 }
 
 export default function GeneratingCard({ mediaSpace }: GeneratingCardProps) {

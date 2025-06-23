@@ -20,15 +20,15 @@ import {
 import { Button } from "@/src/components/ui/button"
 import { cn } from '../lib/utils'
 import { Avatar, AvatarFallback } from './ui/avatar'
-import { VideoWithCreator } from '../app/dashboard/page'
 import { AvatarImage } from '@radix-ui/react-avatar'
 import { basicApiCall } from '../lib/api'
 import { useToast } from '../hooks/use-toast'
 import { useVideoToDeleteStore } from '../store/videoToDelete'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
-import { useUsersStore } from '../store/creatorUserVideo'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import VideoThumbnail from './video-thumbnail'
+import { IVideo } from '../types/video'
 
 function formatDuration(seconds: number): string {
   const roundedSeconds = Math.round(seconds);
@@ -37,22 +37,33 @@ function formatDuration(seconds: number): string {
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
-export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { video: VideoWithCreator, setIsModalConfirmDeleteOpen: (isOpen: boolean) => void }) {
+export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { video: IVideo, setIsModalConfirmDeleteOpen: (isOpen: boolean) => void }) {
   const t = useTranslations('videos')
   const { data: session } = useSession()
 
   const { toast } = useToast();
   const { setVideo } = useVideoToDeleteStore()
-  const { fetchUser } = useUsersStore()
+  const { activeSpace } = useActiveSpaceStore()
   
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(video.title);
-  const [creator, setCreator] = useState(video.creator)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [downloadUrls, setDownloadUrls] = useState<string[]>([])
   const [isLoadingExports, setIsLoadingExports] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Récupérer les informations du créateur depuis activeSpace.members
+  const getCreator = () => {
+    const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
+    const userId = createEvent?.user;
+    if (userId && activeSpace?.members) {
+      return activeSpace.members.find(member => member.id === userId) || { id: userId, name: '', image: '' };
+    }
+    return { id: '', name: '', image: '' };
+  };
+
+  const creator = getCreator();
 
   const handleDelete = (e: any) => {
     e.stopPropagation()
@@ -93,39 +104,18 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
 
   const handleDropdownOpen = async (isOpen: boolean) => {
     setIsDropdownOpen(isOpen)
-    if (isOpen) {
-      const promises = []
-      
-      // Charger les informations du créateur si nécessaire
-      if (!creator.name && creator.id) {
-        promises.push(
-          fetchUser(creator.id).then(userData => {
-            setCreator(userData)
-          }).catch(error => {
-            console.error('Erreur lors du chargement du créateur:', error)
-          })
-        )
-      }
-      
-      // Charger les exports si pas encore fait
-      if (!isLoadingExports && downloadUrls.length === 0) {
-        promises.push(
-          setIsLoadingExports(true),
-          basicApiCall('/video/exports', { videoId: video.id }).then(response => {
-            const downloadUrls = response as string[]
-            setDownloadUrls(downloadUrls || [])
-          }).catch(error => {
-            console.error('Erreur lors du chargement des exports:', error)
-            setDownloadUrls([])
-          }).finally(() => {
-            setIsLoadingExports(false)
-          })
-        )
-      }
-      
-      // Exécuter toutes les promesses en parallèle
-      if (promises.length > 0) {
-        await Promise.allSettled(promises)
+    if (isOpen && !isLoadingExports && downloadUrls.length === 0) {
+      // Charger les exports seulement
+      setIsLoadingExports(true)
+      try {
+        const response = await basicApiCall('/video/exports', { videoId: video.id })
+        const downloadUrls = response as string[]
+        setDownloadUrls(downloadUrls || [])
+      } catch (error) {
+        console.error('Erreur lors du chargement des exports:', error)
+        setDownloadUrls([])
+      } finally {
+        setIsLoadingExports(false)
       }
     }
   }
