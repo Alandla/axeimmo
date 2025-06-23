@@ -106,6 +106,7 @@ export interface IVideo {
   settings?: {
     avatarHeightRatio?: number;
   };
+  extractedMedia?: IMedia[];
   video?: {
     thumbnail: string;
     subtitle: any;

@@ -3,6 +3,7 @@ import { CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import SequenceSettingsSearch from "./sequence-settings-search";
 import SequenceSettingsAssets from "./sequence-settings-assets";
+import SequenceSettingsExtracted from "./sequence-settings-extracted";
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
 import { IconEyeSlash } from "../icons/eye-slash";
@@ -10,7 +11,7 @@ import { IconEyeLowVision } from "../icons/eye-low-vision";
 import { IconEye } from "../icons/eye";
 import VideoTrim from "./video-trim";
 
-export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId, hadAvatar, keywords }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string, hadAvatar: boolean, keywords: string[] }) {
+export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId, hadAvatar, keywords, extractedMedia }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string, hadAvatar: boolean, keywords: string[], extractedMedia?: IMedia[] }) {
 
   const t = useTranslations('edit.sequence-edit')
 
@@ -58,9 +59,12 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
         )}
 
         <Tabs defaultValue="search">
-          <TabsList className="grid w-full grid-cols-2 mb-4">
+          <TabsList className={`grid w-full mb-4 ${extractedMedia && extractedMedia.length > 0 ? 'grid-cols-3' : 'grid-cols-2'}`}>
             <TabsTrigger value="search">{t('search')}</TabsTrigger>
             <TabsTrigger value="assets">{t('assets')}</TabsTrigger>
+            {extractedMedia && extractedMedia.length > 0 && (
+              <TabsTrigger value="extracted">{t('extracted')}</TabsTrigger>
+            )}
           </TabsList>
           <TabsContent value="search">
             <SequenceSettingsSearch sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} keywords={keywords} />
@@ -68,6 +72,11 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
           <TabsContent value="assets">
             <SequenceSettingsAssets sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={spaceId} />
           </TabsContent>
+          {extractedMedia && extractedMedia.length > 0 && (
+            <TabsContent value="extracted">
+              <SequenceSettingsExtracted sequence={sequence} sequenceIndex={sequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={spaceId} extractedMedia={extractedMedia} />
+            </TabsContent>
+          )}
         </Tabs>
       </CardContent>
       </>

@@ -383,9 +383,14 @@
       "sequence-edit": {
         "search": "Search",
         "assets": "Assets",
+        "extracted": "Extracted",
         "hide-button": "Hide",
         "half-button": "Half",
         "full-button": "Full"
+      },
+      "sequence-edit-extracted": {
+        "description": "Media extracted from URLs or articles used when creating the video.",
+        "no-extracted-media": "No extracted media available for this video."
       },
       "sequence-edit-assets": {
         "upload-file-button": "Upload a file",

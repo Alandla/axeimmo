@@ -374,9 +374,14 @@
       "sequence-edit": {
         "search": "Recherche",
         "assets": "Médias",
+        "extracted": "Extrait",
         "hide-button": "Masquer",
         "half-button": "Moitié",
         "full-button": "Entier"
+      },
+      "sequence-edit-extracted": {
+        "description": "Médias extraits des URL ou articles utilisés lors de la création de la vidéo.",
+        "no-extracted-media": "Aucun média extrait disponible pour cette vidéo."
       },
       "video-trim": {
         "trim": "Ajuster",

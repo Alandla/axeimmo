@@ -70,7 +70,8 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
       }
 
     const cleanupMediaByType = (mediaToSet: IMedia): IMedia => {
-        const cleanedMedia = { ...mediaToSet };
+        // Use destructuring to exclude properties that might overwrite existing sequence settings
+        const { show, ...cleanedMedia } = mediaToSet;
         
         if (mediaToSet.type === 'video') {
             cleanedMedia.image = undefined;
@@ -78,7 +79,7 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
             cleanedMedia.video = undefined;
         }
 
-        return cleanedMedia;
+        return cleanedMedia as IMedia;
     };
 
     const handleSelectMedia = () => {
@@ -106,18 +107,20 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
             handleDeleteAsset={handleDeleteMedia}
         />
         <motion.div 
-            className={`group relative overflow-hidden mb-4 break-inside-avoid cursor-pointer`}
+            className={`group relative overflow-hidden mb-2 break-inside-avoid cursor-pointer`}
             variants={container}
             initial={isLargeScreen ? "hidden" : "visible"}
             whileHover={isLargeScreen ? "visible" : ""}
             onClick={handleSelectMedia}
         >
-            <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-1/4 bg-gradient-to-t from-black to-transparent rounded-lg z-10"></div>
+            {media.name && (
+                <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-1/4 bg-gradient-to-t from-black to-transparent rounded-lg z-10"></div>
+            )}
 
             {media.type === 'video' ? (
                 <SkeletonVideo
                     srcVideo={media.video?.link || ''}
-                    className={`w-full h-fit rounded-md object-cover ${media.video?.link === sequence.media?.video?.link && sequence.media?.type === 'video' ? 'border-2 border-primary rounded-lg' : ''}`}
+                    className={`w-full h-fit rounded-md object-cover ${media.video?.link === sequence.media?.video?.link && sequence.media?.type === 'video' ? 'border border-primary rounded-lg' : ''}`}
                     thumbnailImage={media.image?.link || (media.video?.frames && media.video.frames.length > 0 ? media.video.frames[0] : undefined)}
                 />
             ) : (
@@ -126,16 +129,18 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
                     alt={media.name}
                     width={media.image?.width || 100}
                     height={media.image?.height || 100}
-                    className={`w-full h-fit rounded-md object-cover ${media.image?.link === sequence.media?.image?.link && sequence.media?.type === 'image' ? 'border-2 border-primary rounded-md' : ''}`}
+                    className={`w-full h-fit rounded-md object-cover ${media.image?.link === sequence.media?.image?.link && sequence.media?.type === 'image' ? 'border border-primary rounded-md' : ''}`}
                     unoptimized={source === 'web'}
                 />
             )}
-            <motion.div
-                className="absolute bottom-0 left-0 bg-opacity-50 p-2 text-sm text-white z-20"
-                variants={itemAnimation}
-            >
-                {media.name}
-            </motion.div>
+            {media.name && (
+                <motion.div
+                    className="absolute bottom-0 left-0 bg-opacity-50 p-2 text-sm text-white z-20"
+                    variants={itemAnimation}
+                >
+                    {media.name}
+                </motion.div>
+            )}
             {canRemove && (
                 <motion.div 
                     className="absolute top-2 right-2"

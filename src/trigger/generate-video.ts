@@ -60,6 +60,7 @@ export const generateVideoTask = task({
     let cost = 0
     const mediaSource = payload.mediaSource || "PEXELS";
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
+    let extractedMedias: IMedia[] = [];
 
     const isDevelopment = ctx.environment.type === "DEVELOPMENT"
 
@@ -169,6 +170,11 @@ export const generateVideoTask = task({
         const mediasToAddToSpace = analyzedMedias.filter(mediaSpace => 
           mediaSpace.media.source !== 'extracted'
         );
+
+        // Keep extracted medias to add them to the video
+        extractedMedias = analyzedMedias.filter(mediaSpace => 
+          mediaSpace.media.source === 'extracted'
+        ).map(mediaSpace => mediaSpace.media);
 
         if (mediasToAddToSpace.length > 0) {
           logger.log(`[ANALYZE] Adding ${mediasToAddToSpace.length} analyzed medias to space (excluding ${analyzedMedias.length - mediasToAddToSpace.length} extracted images)`);
@@ -1553,6 +1559,7 @@ export const generateVideoTask = task({
         type: 'done',
       },
       settings: space?.lastUsed?.config,
+      extractedMedia: extractedMedias.length > 0 ? extractedMedias : undefined,
       video: {
         audio: {
           voices: voices,

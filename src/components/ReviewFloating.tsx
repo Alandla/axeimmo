@@ -91,7 +91,7 @@ export const ReviewFloating = ({ videoId, onClose }: ReviewFloatingProps) => {
   };
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-md mx-auto">
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-md mx-auto z-50">
       <div className="bg-white border rounded-lg shadow-lg p-4 m-4 relative animate-in slide-in-from-bottom duration-500">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-base font-medium text-gray-600">

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
 import sequenceSchema from "./Sequence";
+import mediaSchema from "./Media";
 
 // VIDEO SCHEMA
 const videoSchema = new mongoose.Schema({
@@ -31,6 +32,7 @@ const videoSchema = new mongoose.Schema({
     settings: {
       avatarHeightRatio: Number,
     },
+    extractedMedia: [mediaSchema],
     history: [{
       step: String,
       user: {
