@@ -39,7 +39,8 @@ export const addSpaceToUser = async (userId: string, spaceId: string) => {
 export const isUserInSpace = async (userId: string, spaceId: string) => {
   try {
     return await executeWithRetry(async () => {
-      const user = await UserModel.findById(userId);
+      const user = await UserModel.findById(userId).select('spaces');
+      if (!user) return false;
       return user.spaces.includes(spaceId);
     });
   } catch (error) {

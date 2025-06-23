@@ -31,6 +31,7 @@ export const getVideosBySpaceId = async (
         updatedAt: 1,
         title: 1,
         settings: 1,
+        spaceId: 1,
         'video.metadata': 1,
         'video.thumbnail': 1,
         'video.avatar': 1,
