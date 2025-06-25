@@ -29,6 +29,7 @@ import {
   cleanupPolling 
 } from '@/src/utils/asset-polling'
 import { AssetFilters, useAssetFilters } from '@/src/components/asset-filters'
+import { useAssetFiltersStore } from '@/src/store/assetFiltersStore'
 
 export interface UploadingMedia {
   id: string
@@ -56,7 +57,8 @@ export default function AssetsPage() {
   const [containerHeight, setContainerHeight] = useState(0)
 
   // Utilisation des filtres pour les assets
-  const { filters, setFilters, filteredAssets } = useAssetFilters(assets)
+  const { filteredAssets } = useAssetFilters(assets)
+  const { filters, clearFilters } = useAssetFiltersStore()
 
   // Vérifier si l'utilisateur a un plan Pro ou Entreprise
   const hasPlan = activeSpace?.planName === PlanName.PRO || activeSpace?.planName === PlanName.ENTREPRISE
@@ -362,7 +364,7 @@ export default function AssetsPage() {
           </div>
 
           <div className="ml-4">
-            <AssetFilters filters={filters} setFilters={setFilters} />
+            <AssetFilters />
           </div>
           
           <div className="p-4">
@@ -396,7 +398,7 @@ export default function AssetsPage() {
                   {filters.length > 0 && (
                     <Button 
                       variant="outline" 
-                      onClick={() => setFilters([])}
+                      onClick={clearFilters}
                       className="mb-4"
                     >
                       {t('clear-filters')}

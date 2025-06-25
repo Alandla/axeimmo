@@ -15,6 +15,8 @@ import { Sparkles, VideoOff } from "lucide-react"
 import { Button } from "@/src/components/ui/button";
 import { useScreenSize } from "@/src/hooks/use-screen-size";
 import { PaginationControls } from "@/src/components/ui/pagination-controls"
+import { VideoFilters } from "@/src/components/video-filters"
+import { useVideoFiltersStore } from "@/src/store/videoFiltersStore"
 
 export default function Dashboard() {
   const t = useTranslations('videos')
@@ -28,6 +30,7 @@ export default function Dashboard() {
   const { activeSpace } = useActiveSpaceStore()
   const { fetchVideos, clearSpaceCache } = useVideosStore()
   const { itemsPerPage, screenSize } = useScreenSize()
+  const { filters, clearFilters } = useVideoFiltersStore()
 
   // Réinitialiser la page lors du changement d'espace
   useEffect(() => {
@@ -42,7 +45,7 @@ export default function Dashboard() {
       try {
         setIsLoading(true);
 
-        const videosFromApi = await fetchVideos(activeSpace.id, currentPage, itemsPerPage);
+        const videosFromApi = await fetchVideos(activeSpace.id, currentPage, itemsPerPage, filters);
 
         setVideos(videosFromApi.videos);
         setTotalPages(videosFromApi.totalPages);
@@ -60,7 +63,7 @@ export default function Dashboard() {
     };
     
     loadVideos();
-  }, [activeSpace?.id, currentPage, itemsPerPage]);
+  }, [activeSpace?.id, currentPage, itemsPerPage, filters]);
 
   const handleDeleteVideo = async (video: IVideo) => {
     try {
@@ -74,7 +77,7 @@ export default function Dashboard() {
       // Rafraîchir la page actuelle après suppression
       if (activeSpace?.id) {
         clearSpaceCache(activeSpace.id);
-        const videosFromApi = await fetchVideos(activeSpace.id, currentPage, itemsPerPage, true);
+        const videosFromApi = await fetchVideos(activeSpace.id, currentPage, itemsPerPage, filters, true);
         setVideos(videosFromApi.videos);
         setTotalPages(videosFromApi.totalPages);
         setTotalCount(videosFromApi.totalCount);
@@ -102,6 +105,9 @@ export default function Dashboard() {
       <ModalConfirmDelete isOpen={isModalConfirmDeleteOpen} setIsOpen={setIsModalConfirmDeleteOpen} handleDeleteVideo={handleDeleteVideo} />
       <div className="flex flex-col h-full">
         <div className="flex-1">
+          <div className="ml-4">
+            <VideoFilters />
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
             {isLoading ? (
               Array.from({ length: itemsPerPage }).map((_, index) => (
@@ -110,16 +116,24 @@ export default function Dashboard() {
             ) : videos.length === 0 && totalCount === 0 ? (
               <div className="col-span-full flex flex-col items-center justify-center py-20">
                 <VideoOff className="w-12 h-12 text-gray-400 mb-4" />
-                <h2 className="text-2xl font-semibold mb-2">{t('no-videos')}</h2>
+                <h2 className="text-2xl font-semibold mb-2">
+                  {filters.length > 0 ? t('no-filtered-videos') : t('no-videos')}
+                </h2>
                 <p className="text-gray-500 mb-6 text-center">
-                  {t('no-videos-description')}
+                  {filters.length > 0 ? t('no-filtered-videos-description') : t('no-videos-description')}
                 </p>
-                <Link href="/dashboard/create">
-                  <Button size="lg">
-                    <Sparkles className="w-4 h-4" />
-                    {t('create-video')}
+                {filters.length > 0 ? (
+                  <Button variant="outline" onClick={clearFilters} className="mb-4">
+                    {t('clear-filters')}
                   </Button>
-                </Link>
+                ) : (
+                  <Link href="/dashboard/create">
+                    <Button size="lg">
+                      <Sparkles className="w-4 h-4" />
+                      {t('create-video')}
+                    </Button>
+                  </Link>
+                )}
               </div>
             ) : (
               videos.map((video) => (

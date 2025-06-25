@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/src/components/ui/popover";
 import { cn } from "@/src/lib/utils";
-import { ListFilter, Image, Video, User, Bot, Calendar, UserCircle } from "lucide-react";
+import { ListFilter, Image, Video, User, Bot, Calendar, UserCircle, Filter, FilterX } from "lucide-react";
 import { nanoid } from "nanoid";
 import * as React from "react";
 import { useTranslations } from "next-intl";
@@ -24,34 +24,33 @@ import { AnimateChangeInHeight, FilterOperator } from "@/src/components/ui/gener
 import GenericFilters, { GenericFilter, FilterConfig, FilterOption } from "@/src/components/ui/generic-filters";
 import { IMediaSpace } from "@/src/types/space";
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
+import { useAssetFiltersStore } from "@/src/store/assetFiltersStore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
+import { 
+  AssetFilterType, 
+  AssetType, 
+  AIGenerated, 
+  DateRange 
+} from "@/src/types/filters";
 
-// Types de filtres pour les assets
-export enum AssetFilterType {
-  TYPE = "Type",
-  UPLOADED_BY = "Uploaded by",
-  AI_GENERATED = "AI Generated",
-  CREATED_DATE = "Created date",
-}
-
-// Options pour chaque type de filtre
-export enum AssetType {
-  IMAGE = "Image",
-  VIDEO = "Video",
-}
-
-export enum AIGenerated {
-  YES = "Yes",
-  NO = "No",
-}
-
-export enum DateRange {
-  TODAY = "Today",
-  YESTERDAY = "Yesterday", 
-  LAST_7_DAYS = "Last 7 days",
-  LAST_30_DAYS = "Last 30 days",
-  LAST_90_DAYS = "Last 90 days",
-}
+// Composant pour les avatars d'utilisateurs
+const UserAvatar = ({ 
+  userName, 
+  members 
+}: { 
+  userName: string; 
+  members?: Array<{ id: string; name: string; image?: string }> 
+}) => {
+  const member = members?.find(m => m.name === userName);
+  return (
+    <Avatar className="size-4 rounded-sm">
+      {member?.image && <AvatarImage src={member.image} alt={member.name ?? ''} />}
+      <AvatarFallback className="rounded-sm">
+        {userName.charAt(0).toUpperCase()}
+      </AvatarFallback>
+    </Avatar>
+  );
+};
 
 const AssetFilterIcon = ({
   type,
@@ -72,31 +71,22 @@ const AssetFilterIcon = ({
     case AssetType.VIDEO:
       return <Video className="size-3.5 text-green-500" />;
     case AIGenerated.YES:
-      return <Bot className="size-3.5 text-purple-500" />;
     case AIGenerated.NO:
-      return <User className="size-3.5 text-gray-500" />;
+      return null;
     default:
-      // Pour les utilisateurs, créer un avatar
-      if (typeof type === 'string' && !Object.values(DateRange).includes(type as DateRange)) {
-        return (
-          <Avatar className="size-3.5 rounded-full text-[9px]">
-            <AvatarFallback className="bg-blue-300 text-white text-xs">
-              {type.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        );
-      }
       return <Calendar className="size-3.5" />;
   }
 };
 
 // Configuration des filtres pour les assets
 const createAssetFilterConfig = (
-  members: Array<{ id: string; name: string; image: string }> = []
+  members: Array<{ id: string; name: string; image?: string }> = [],
+  t: any
 ): FilterConfig<AssetFilterType> => {
   const typeFilterOptions: FilterOption<string>[] = Object.values(AssetType).map(
     (type) => ({
       name: type,
+      label: t(`asset-types-values.${type}`),
       icon: <AssetFilterIcon type={type} />,
     })
   );
@@ -104,13 +94,14 @@ const createAssetFilterConfig = (
   const uploadedByFilterOptions: FilterOption<string>[] = members.map(
     (member) => ({
       name: member.name,
-      icon: <AssetFilterIcon type={member.name} />,
+      icon: <UserAvatar userName={member.name} members={members} />,
     })
   );
 
   const aiGeneratedFilterOptions: FilterOption<string>[] = Object.values(AIGenerated).map(
     (value) => ({
       name: value,
+      label: t(`boolean.${value}`),
       icon: <AssetFilterIcon type={value} />,
     })
   );
@@ -118,6 +109,7 @@ const createAssetFilterConfig = (
   const dateFilterOptions: FilterOption<string>[] = Object.values(DateRange).map(
     (date) => ({
       name: date,
+      label: t(`date-ranges.${date}`),
       icon: undefined,
     })
   );
@@ -146,14 +138,46 @@ const createAssetFilterConfig = (
           return [];
       }
     },
-    getFilterIcon: (type: AssetFilterType | string) => <AssetFilterIcon type={type} />,
+    getFilterIcon: (type: AssetFilterType | string) => {
+      // Si c'est un nom d'utilisateur (pas dans les enums), utiliser UserAvatar
+      if (typeof type === 'string' && 
+          !Object.values(AssetFilterType).includes(type as AssetFilterType) &&
+          !Object.values(AssetType).includes(type as AssetType) &&
+          !Object.values(AIGenerated).includes(type as AIGenerated) &&
+          !Object.values(DateRange).includes(type as DateRange)) {
+        return <UserAvatar userName={type} members={members} />;
+      }
+      return <AssetFilterIcon type={type} />;
+    },
+    getFilterLabel: (value: string) => {
+      // Pour les types d'assets
+      if (Object.values(AssetType).includes(value as AssetType)) {
+        return t(`asset-types-values.${value}`);
+      }
+      if (Object.values(AIGenerated).includes(value as AIGenerated)) {
+        return t(`boolean.${value}`);
+      }
+      if (Object.values(DateRange).includes(value as DateRange)) {
+        return t(`date-ranges.${value}`);
+      }
+      
+      // Pour les noms d'utilisateurs ou autres valeurs
+      return value;
+    },
+    getFilterTypeLabel: (type: AssetFilterType) => {
+      return t(`asset-types.${type}`);
+    },
+    getSelectedText: (count: number) => {
+      const key = count > 1 ? 'selected-plural' : 'selected';
+      return `${count} ${t(`ui.${key}`)}`;
+    },
   };
 };
 
 // Hook pour filtrer les assets
 export const useAssetFilters = (assets: IMediaSpace[]) => {
   const { activeSpace } = useActiveSpaceStore();
-  const [filters, setFilters] = React.useState<GenericFilter<AssetFilterType>[]>([]);
+  const { filters, setFilters, clearFilters, updateFilter, removeFilter } = useAssetFiltersStore();
 
   const filteredAssets = React.useMemo(() => {
     if (filters.length === 0) return assets;
@@ -175,7 +199,12 @@ export const useAssetFilters = (assets: IMediaSpace[]) => {
             break;
 
           case AssetFilterType.AI_GENERATED:
-            const isAIGenerated = asset.media.requestId ? AIGenerated.YES : AIGenerated.NO;
+            // Vérifier si c'est généré par AI : video.id contient "animated" ou image.id existe
+            const isAIGenerated = (
+              (asset.media.video?.id && asset.media.video.id.includes('animated')) ||
+              (asset.media.image?.id && asset.media.image.id.includes('animated'))
+            ) ? AIGenerated.YES : AIGenerated.NO;
+            
             if (operator === FilterOperator.IS) {
               return value.includes(isAIGenerated);
             } else if (operator === FilterOperator.IS_NOT) {
@@ -208,6 +237,8 @@ export const useAssetFilters = (assets: IMediaSpace[]) => {
                   return diffDays <= 1;
                 case DateRange.YESTERDAY:
                   return diffDays === 2;
+                case DateRange.LAST_3_DAYS:
+                  return diffDays <= 3;
                 case DateRange.LAST_7_DAYS:
                   return diffDays <= 7;
                 case DateRange.LAST_30_DAYS:
@@ -234,51 +265,64 @@ export const useAssetFilters = (assets: IMediaSpace[]) => {
   return {
     filters,
     setFilters,
+    clearFilters,
+    updateFilter,
+    removeFilter,
     filteredAssets,
   };
 };
 
 // Composant de filtres pour les assets
-interface AssetFiltersProps {
-  filters: GenericFilter<AssetFilterType>[];
-  setFilters: React.Dispatch<React.SetStateAction<GenericFilter<AssetFilterType>[]>>;
-}
-
-export function AssetFilters({ filters, setFilters }: AssetFiltersProps) {
+export function AssetFilters() {
   const t = useTranslations('assets');
+  const tFilters = useTranslations('filters');
   const { activeSpace } = useActiveSpaceStore();
+  const { filters, setFilters, clearFilters } = useAssetFiltersStore();
   const [open, setOpen] = React.useState(false);
   const [selectedView, setSelectedView] = React.useState<AssetFilterType | null>(null);
   const [commandInput, setCommandInput] = React.useState("");
   const commandInputRef = React.useRef<HTMLInputElement>(null);
 
-  const config = createAssetFilterConfig(activeSpace?.members);
+  // Adapter pour GenericFilters qui s'attend à une signature de useState
+  const setFiltersForGeneric = React.useCallback((updater: React.SetStateAction<GenericFilter<AssetFilterType>[]>) => {
+    if (typeof updater === 'function') {
+      setFilters(updater(filters));
+    } else {
+      setFilters(updater);
+    }
+  }, [filters, setFilters]);
+
+  const config = createAssetFilterConfig(activeSpace?.members, tFilters);
 
   const filterViewOptions: FilterOption<AssetFilterType>[][] = [
     [
       {
         name: AssetFilterType.TYPE,
+        label: tFilters(`asset-types.${AssetFilterType.TYPE}`),
         icon: <AssetFilterIcon type={AssetFilterType.TYPE} />,
       },
       {
         name: AssetFilterType.AI_GENERATED,
+        label: tFilters(`asset-types.${AssetFilterType.AI_GENERATED}`),
         icon: <AssetFilterIcon type={AssetFilterType.AI_GENERATED} />,
       },
       {
         name: AssetFilterType.UPLOADED_BY,
+        label: tFilters(`asset-types.${AssetFilterType.UPLOADED_BY}`),
         icon: <AssetFilterIcon type={AssetFilterType.UPLOADED_BY} />,
       },
     ],
     [
       {
         name: AssetFilterType.CREATED_DATE,
+        label: tFilters(`asset-types.${AssetFilterType.CREATED_DATE}`),
         icon: <AssetFilterIcon type={AssetFilterType.CREATED_DATE} />,
       },
     ],
   ];
 
   return (
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex gap-2 flex-wrap items-center">
       <Popover
         open={open}
         onOpenChange={(open: boolean) => {
@@ -293,7 +337,7 @@ export function AssetFilters({ filters, setFilters }: AssetFiltersProps) {
       >
         <PopoverTrigger asChild>
           <Button
-            variant="ghost"
+            variant="outline"
             role="combobox"
             aria-expanded={open}
             size="sm"
@@ -302,7 +346,7 @@ export function AssetFilters({ filters, setFilters }: AssetFiltersProps) {
               filters.length > 0 && "w-6"
             )}
           >
-            <ListFilter className="size-3 shrink-0 transition-all text-muted-foreground group-hover:text-primary" />
+            <Filter className="shrink-0 transition-all text-muted-foreground group-hover:text-primary" />
             {!filters.length && t('filter')}
           </Button>
         </PopoverTrigger>
@@ -327,15 +371,15 @@ export function AssetFilters({ filters, setFilters }: AssetFiltersProps) {
                         <CommandItem
                           className="group text-muted-foreground flex gap-2 items-center"
                           key={filter.name}
-                          value={filter.name}
+                          value={filter.label || filter.name}
                           onSelect={(currentValue) => {
-                            setFilters((prev) => [
-                              ...prev,
+                            setFilters([
+                              ...filters,
                               {
                                 id: nanoid(),
                                 type: selectedView,
                                 operator: FilterOperator.IS,
-                                value: [currentValue],
+                                value: [filter.name],
                               },
                             ]);
                             setTimeout(() => {
@@ -347,13 +391,8 @@ export function AssetFilters({ filters, setFilters }: AssetFiltersProps) {
                         >
                           {filter.icon}
                           <span className="text-accent-foreground">
-                            {filter.name}
+                            {filter.label || filter.name}
                           </span>
-                          {filter.label && (
-                            <span className="text-muted-foreground text-xs ml-auto">
-                              {filter.label}
-                            </span>
-                          )}
                         </CommandItem>
                       )
                     )}
@@ -367,16 +406,16 @@ export function AssetFilters({ filters, setFilters }: AssetFiltersProps) {
                             <CommandItem
                               className="group text-muted-foreground flex gap-2 items-center"
                               key={filter.name}
-                              value={filter.name}
+                              value={filter.label || filter.name}
                               onSelect={(currentValue) => {
-                                setSelectedView(currentValue as AssetFilterType);
+                                setSelectedView(filter.name);
                                 setCommandInput("");
                                 commandInputRef.current?.focus();
                               }}
                             >
                               {filter.icon}
                               <span className="text-accent-foreground">
-                                {filter.name}
+                                {filter.label || filter.name}
                               </span>
                             </CommandItem>
                           ))}
@@ -396,18 +435,20 @@ export function AssetFilters({ filters, setFilters }: AssetFiltersProps) {
       
       <GenericFilters
         filters={filters}
-        setFilters={setFilters}
+        setFilters={setFiltersForGeneric}
         config={config}
         isDateFilter={(filterType) => filterType === AssetFilterType.CREATED_DATE}
+        tFilters={tFilters}
       />
       
-      {filters.filter((filter) => filter.value?.length > 0).length > 0 && (
+      {filters.filter((filter) => filter.value?.length > 0).length > 1 && (
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           className="transition group h-6 text-xs items-center rounded-sm"
-          onClick={() => setFilters([])}
+          onClick={clearFilters}
         >
+          <FilterX />
           Clear
         </Button>
       )}

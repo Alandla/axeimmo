@@ -1,3 +1,5 @@
+"use client";
+
 import { Checkbox } from "@/src/components/ui/checkbox";
 import {
   Command,
@@ -96,6 +98,9 @@ export interface FilterConfig<T extends string = string> {
   filterOptions: Record<string, FilterOption<string>[]>;
   filterOperators: (filterType: T, filterValues: string[]) => FilterOperator[];
   getFilterIcon: (type: T | string) => React.ReactNode;
+  getFilterLabel?: (value: string) => string;
+  getFilterTypeLabel?: (type: T) => string;
+  getSelectedText?: (count: number) => string;
 }
 
 const FilterOperatorDropdown = <T extends string>({
@@ -104,26 +109,28 @@ const FilterOperatorDropdown = <T extends string>({
   filterValues,
   setOperator,
   config,
+  tFilters,
 }: {
   filterType: T;
   operator: FilterOperator;
   filterValues: string[];
   setOperator: (operator: FilterOperator) => void;
   config: FilterConfig<T>;
+  tFilters?: any;
 }) => {
   const operators = config.filterOperators(filterType, filterValues);
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="bg-muted hover:bg-muted/50 px-1.5 py-1 text-muted-foreground hover:text-primary transition shrink-0">
-        {operator}
+      <DropdownMenuTrigger className="hover:bg-accent px-1.5 text-muted-foreground hover:text-accent-foreground transition shrink-0 border-l border-input h-full flex items-center">
+        {tFilters ? tFilters(`operators.${operator}`) : operator}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-fit min-w-fit">
-        {operators.map((operator) => (
+        {operators.map((op) => (
           <DropdownMenuItem
-            key={operator}
-            onClick={() => setOperator(operator)}
+            key={op}
+            onClick={() => setOperator(op)}
           >
-            {operator}
+            {tFilters ? tFilters(`operators.${op}`) : op}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
@@ -162,8 +169,7 @@ const FilterValueCombobox = <T extends string>({
       }}
     >
       <PopoverTrigger
-        className="rounded-none px-1.5 py-1 bg-muted hover:bg-muted/50 transition
-  text-muted-foreground hover:text-primary shrink-0"
+        className="px-1.5 hover:bg-accent transition hover:text-accent-foreground shrink-0 border-l border-input h-full flex items-center"
       >
         <div className="flex gap-1.5 items-center">
           <div className="flex items-center flex-row -space-x-1.5">
@@ -182,15 +188,15 @@ const FilterValueCombobox = <T extends string>({
             </AnimatePresence>
           </div>
           {filterValues?.length === 1
-            ? filterValues?.[0]
-            : `${filterValues?.length} selected`}
+            ? (config.getFilterLabel ? config.getFilterLabel(filterValues[0]) : filterValues[0])
+            : (config.getSelectedText ? config.getSelectedText(filterValues?.length || 0) : `${filterValues?.length} selected`)}
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <AnimateChangeInHeight>
           <Command>
             <CommandInput
-              placeholder={String(filterType)}
+              placeholder={config.getFilterTypeLabel ? config.getFilterTypeLabel(filterType) : String(filterType)}
               className="h-9"
               value={commandInput}
               onInputCapture={(e) => {
@@ -215,7 +221,7 @@ const FilterValueCombobox = <T extends string>({
                   >
                     <Checkbox checked={true} />
                     {config.getFilterIcon(value)}
-                    {value}
+                    {config.getFilterLabel ? config.getFilterLabel(value) : value}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -227,9 +233,9 @@ const FilterValueCombobox = <T extends string>({
                       <CommandItem
                         className="group flex gap-2 items-center"
                         key={filter.name}
-                        value={filter.name}
+                        value={filter.label || filter.name}
                         onSelect={(currentValue: string) => {
-                          setFilterValues([...filterValues, currentValue]);
+                          setFilterValues([...filterValues, filter.name]);
                           setTimeout(() => {
                             setCommandInput("");
                           }, 200);
@@ -242,13 +248,8 @@ const FilterValueCombobox = <T extends string>({
                         />
                         {filter.icon}
                         <span className="text-accent-foreground">
-                          {filter.name}
+                          {filter.label || filter.name}
                         </span>
-                        {filter.label && (
-                          <span className="text-muted-foreground text-xs ml-auto">
-                            {filter.label}
-                          </span>
-                        )}
                       </CommandItem>
                     ))}
                   </CommandGroup>
@@ -290,16 +291,15 @@ const FilterValueDateCombobox = <T extends string>({
       }}
     >
       <PopoverTrigger
-        className="rounded-none px-1.5 py-1 bg-muted hover:bg-muted/50 transition
-  text-muted-foreground hover:text-primary shrink-0"
+        className="px-1.5 hover:bg-accent transition hover:text-accent-foreground shrink-0 border-l border-input h-full flex items-center"
       >
-        {filterValues?.[0]}
+        {config.getFilterLabel ? config.getFilterLabel(filterValues[0]) : filterValues[0]}
       </PopoverTrigger>
       <PopoverContent className="w-fit p-0">
         <AnimateChangeInHeight>
           <Command>
             <CommandInput
-              placeholder={String(filterType)}
+              placeholder={config.getFilterTypeLabel ? config.getFilterTypeLabel(filterType) : String(filterType)}
               className="h-9"
               value={commandInput}
               onInputCapture={(e) => {
@@ -315,9 +315,9 @@ const FilterValueDateCombobox = <T extends string>({
                     <CommandItem
                       className="group flex gap-2 items-center"
                       key={filter.name}
-                      value={filter.name}
+                      value={filter.label || filter.name}
                       onSelect={(currentValue: string) => {
-                        setFilterValues([currentValue]);
+                        setFilterValues([filter.name]);
                         setTimeout(() => {
                           setCommandInput("");
                         }, 200);
@@ -325,7 +325,7 @@ const FilterValueDateCombobox = <T extends string>({
                       }}
                     >
                       <span className="text-accent-foreground">
-                        {filter.name}
+                        {filter.label || filter.name}
                       </span>
                       <Check
                         className={cn(
@@ -352,11 +352,13 @@ export default function GenericFilters<T extends string>({
   setFilters,
   config,
   isDateFilter,
+  tFilters,
 }: {
   filters: GenericFilter<T>[];
   setFilters: Dispatch<SetStateAction<GenericFilter<T>[]>>;
   config: FilterConfig<T>;
   isDateFilter?: (filterType: T) => boolean;
+  tFilters?: any;
 }) {
   const activeFilters = filters.filter((filter) => filter.value?.length > 0);
   
@@ -367,10 +369,10 @@ export default function GenericFilters<T extends string>({
   return (
     <div className="flex gap-2">
       {activeFilters.map((filter) => (
-        <div key={filter.id} className="flex gap-[1px] items-center text-xs">
-          <div className="flex gap-1.5 shrink-0 rounded-l bg-muted px-1.5 py-1 items-center">
+        <div key={filter.id} className="flex items-center text-xs border border-input rounded-sm overflow-hidden h-6">
+          <div className="flex gap-1.5 shrink-0 px-1.5 items-center h-full">
             {config.getFilterIcon(filter.type)}
-            {String(filter.type)}
+            {config.getFilterTypeLabel ? config.getFilterTypeLabel(filter.type) : String(filter.type)}
           </div>
           <FilterOperatorDropdown
             filterType={filter.type}
@@ -382,17 +384,35 @@ export default function GenericFilters<T extends string>({
               );
             }}
             config={config}
+            tFilters={tFilters}
           />
           {isDateFilter && isDateFilter(filter.type) ? (
             <FilterValueDateCombobox
               filterType={filter.type}
               filterValues={filter.value}
               setFilterValues={(filterValues) => {
-                setFilters((prev) =>
-                  prev.map((f) =>
-                    f.id === filter.id ? { ...f, value: filterValues } : f
-                  )
-                );
+                setFilters((prev) => {
+                  if (filterValues.length === 0) {
+                    // Supprimer le filtre si plus de valeurs
+                    return prev.filter((f) => f.id !== filter.id);
+                  }
+                  
+                  return prev.map((f) => {
+                    if (f.id === filter.id) {
+                      // Mettre à jour l'opérateur en fonction du nombre de valeurs
+                      const availableOperators = config.filterOperators(f.type, filterValues);
+                      let newOperator = f.operator;
+                      
+                      // Si l'opérateur actuel n'est plus disponible, prendre le premier disponible
+                      if (!availableOperators.includes(f.operator)) {
+                        newOperator = availableOperators[0] || f.operator;
+                      }
+                      
+                      return { ...f, value: filterValues, operator: newOperator };
+                    }
+                    return f;
+                  });
+                });
               }}
               config={config}
             />
@@ -401,11 +421,28 @@ export default function GenericFilters<T extends string>({
               filterType={filter.type}
               filterValues={filter.value}
               setFilterValues={(filterValues) => {
-                setFilters((prev) =>
-                  prev.map((f) =>
-                    f.id === filter.id ? { ...f, value: filterValues } : f
-                  )
-                );
+                setFilters((prev) => {
+                  if (filterValues.length === 0) {
+                    // Supprimer le filtre si plus de valeurs
+                    return prev.filter((f) => f.id !== filter.id);
+                  }
+                  
+                  return prev.map((f) => {
+                    if (f.id === filter.id) {
+                      // Mettre à jour l'opérateur en fonction du nombre de valeurs
+                      const availableOperators = config.filterOperators(f.type, filterValues);
+                      let newOperator = f.operator;
+                      
+                      // Si l'opérateur actuel n'est plus disponible, prendre le premier disponible
+                      if (!availableOperators.includes(f.operator)) {
+                        newOperator = availableOperators[0] || f.operator;
+                      }
+                      
+                      return { ...f, value: filterValues, operator: newOperator };
+                    }
+                    return f;
+                  });
+                });
               }}
               config={config}
             />
@@ -416,7 +453,7 @@ export default function GenericFilters<T extends string>({
             onClick={() => {
               setFilters((prev) => prev.filter((f) => f.id !== filter.id));
             }}
-            className="bg-muted rounded-l-none rounded-r-sm h-6 w-6 text-muted-foreground hover:text-primary hover:bg-muted/50 transition shrink-0"
+            className="h-6 w-6 text-muted-foreground hover:text-accent-foreground hover:bg-accent transition shrink-0 border-l border-input rounded-none"
           >
             <X className="size-3" />
           </Button>

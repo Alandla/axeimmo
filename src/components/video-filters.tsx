@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/src/components/ui/popover";
 import { cn } from "@/src/lib/utils";
-import { ListFilter, Clock, User, Calendar, UserCircle, Video } from "lucide-react";
+import { ListFilter, Clock, User, Bot, Calendar, UserCircle, Filter, FilterX, Video } from "lucide-react";
 import { nanoid } from "nanoid";
 import * as React from "react";
 import { useTranslations } from "next-intl";
@@ -24,46 +24,39 @@ import { AnimateChangeInHeight, FilterOperator } from "@/src/components/ui/gener
 import GenericFilters, { GenericFilter, FilterConfig, FilterOption } from "@/src/components/ui/generic-filters";
 import { IVideo } from "@/src/types/video";
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
+import { useVideoFiltersStore } from "@/src/store/videoFiltersStore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
+import { 
+  VideoFilterType, 
+  VideoDuration, 
+  HasAvatar, 
+  IsOutdated, 
+  DateRange 
+} from "@/src/types/filters";
 
-// Types de filtres pour les vidéos (préparés pour plus tard)
-export enum VideoFilterType {
-  DURATION = "Duration",
-  CREATED_BY = "Created by", 
-  HAS_AVATAR = "Has avatar",
-  IS_OUTDATED = "Is outdated",
-  CREATED_DATE = "Created date",
-}
-
-// Options pour chaque type de filtre
-export enum VideoDuration {
-  SHORT = "Short (< 30s)",
-  MEDIUM = "Medium (30s-2m)",
-  LONG = "Long (> 2m)",
-}
-
-export enum HasAvatar {
-  YES = "Yes",
-  NO = "No",
-}
-
-export enum IsOutdated {
-  YES = "Yes",
-  NO = "No",
-}
-
-export enum VideoDateRange {
-  TODAY = "Today",
-  YESTERDAY = "Yesterday", 
-  LAST_7_DAYS = "Last 7 days",
-  LAST_30_DAYS = "Last 30 days",
-  LAST_90_DAYS = "Last 90 days",
-}
+// Composant pour les avatars d'utilisateurs
+const UserAvatar = ({ 
+  userName, 
+  members 
+}: { 
+  userName: string; 
+  members?: Array<{ id: string; name: string; image?: string }> 
+}) => {
+  const member = members?.find(m => m.name === userName);
+  return (
+    <Avatar className="size-4 rounded-sm">
+      {member?.image && <AvatarImage src={member.image} alt={member.name ?? ''} />}
+      <AvatarFallback className="rounded-sm">
+        {userName.charAt(0).toUpperCase()}
+      </AvatarFallback>
+    </Avatar>
+  );
+};
 
 const VideoFilterIcon = ({
   type,
 }: {
-  type: VideoFilterType | VideoDuration | HasAvatar | IsOutdated | VideoDateRange | string;
+  type: VideoFilterType | VideoDuration | HasAvatar | IsOutdated | DateRange | string;
 }) => {
   switch (type) {
     case VideoFilterType.DURATION:
@@ -71,47 +64,36 @@ const VideoFilterIcon = ({
     case VideoFilterType.CREATED_BY:
       return <UserCircle className="size-3.5" />;
     case VideoFilterType.HAS_AVATAR:
-      return <User className="size-3.5" />;
+      return <Bot className="size-3.5" />;
     case VideoFilterType.IS_OUTDATED:
       return <Video className="size-3.5" />;
     case VideoFilterType.CREATED_DATE:
       return <Calendar className="size-3.5" />;
-    case VideoDuration.SHORT:
-      return <Clock className="size-3.5 text-green-500" />;
-    case VideoDuration.MEDIUM:
-      return <Clock className="size-3.5 text-orange-500" />;
-    case VideoDuration.LONG:
-      return <Clock className="size-3.5 text-red-500" />;
+    case VideoDuration.LESS_THAN_30S:
+    case VideoDuration.BETWEEN_30S_1MIN:
+    case VideoDuration.BETWEEN_1MIN_2MIN:
+    case VideoDuration.BETWEEN_2MIN_5MIN:
+    case VideoDuration.MORE_THAN_5MIN:
+      return <Clock className="size-3.5 text-blue-500" />;
     case HasAvatar.YES:
-      return <User className="size-3.5 text-purple-500" />;
     case HasAvatar.NO:
-      return <User className="size-3.5 text-gray-500" />;
     case IsOutdated.YES:
-      return <Video className="size-3.5 text-red-500" />;
     case IsOutdated.NO:
-      return <Video className="size-3.5 text-green-500" />;
+      return null;
     default:
-      // Pour les utilisateurs, créer un avatar
-      if (typeof type === 'string' && !Object.values(VideoDateRange).includes(type as VideoDateRange)) {
-        return (
-          <Avatar className="size-3.5 rounded-full text-[9px]">
-            <AvatarFallback className="bg-blue-300 text-white text-xs">
-              {type.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        );
-      }
       return <Calendar className="size-3.5" />;
   }
 };
 
-// Configuration des filtres pour les vidéos (préparée pour plus tard)
+// Configuration des filtres pour les vidéos
 const createVideoFilterConfig = (
-  members: Array<{ id: string; name: string; image: string }> = []
+  members: Array<{ id: string; name: string; image?: string }> = [],
+  t: any
 ): FilterConfig<VideoFilterType> => {
   const durationFilterOptions: FilterOption<string>[] = Object.values(VideoDuration).map(
     (duration) => ({
       name: duration,
+      label: t(`durations.${duration}`),
       icon: <VideoFilterIcon type={duration} />,
     })
   );
@@ -119,13 +101,14 @@ const createVideoFilterConfig = (
   const createdByFilterOptions: FilterOption<string>[] = members.map(
     (member) => ({
       name: member.name,
-      icon: <VideoFilterIcon type={member.name} />,
+      icon: <UserAvatar userName={member.name} members={members} />,
     })
   );
 
   const hasAvatarFilterOptions: FilterOption<string>[] = Object.values(HasAvatar).map(
     (value) => ({
       name: value,
+      label: t(`boolean.${value}`),
       icon: <VideoFilterIcon type={value} />,
     })
   );
@@ -133,13 +116,15 @@ const createVideoFilterConfig = (
   const isOutdatedFilterOptions: FilterOption<string>[] = Object.values(IsOutdated).map(
     (value) => ({
       name: value,
+      label: t(`boolean.${value}`),
       icon: <VideoFilterIcon type={value} />,
     })
   );
 
-  const dateFilterOptions: FilterOption<string>[] = Object.values(VideoDateRange).map(
+  const dateFilterOptions: FilterOption<string>[] = Object.values(DateRange).map(
     (date) => ({
       name: date,
+      label: t(`date-ranges.${date}`),
       icon: undefined,
     })
   );
@@ -170,133 +155,99 @@ const createVideoFilterConfig = (
           return [];
       }
     },
-    getFilterIcon: (type: VideoFilterType | string) => <VideoFilterIcon type={type} />,
+    getFilterIcon: (type: VideoFilterType | string) => {
+      if (typeof type === 'string' && 
+          !Object.values(VideoFilterType).includes(type as VideoFilterType) &&
+          !Object.values(VideoDuration).includes(type as VideoDuration) &&
+          !Object.values(HasAvatar).includes(type as HasAvatar) &&
+          !Object.values(IsOutdated).includes(type as IsOutdated) &&
+          !Object.values(DateRange).includes(type as DateRange)) {
+        return <UserAvatar userName={type} members={members} />;
+      }
+      return <VideoFilterIcon type={type} />;
+    },
+    getFilterLabel: (value: string) => {
+      // Pour les valeurs spécifiques
+      if (Object.values(VideoDuration).includes(value as VideoDuration)) {
+        return t(`durations.${value}`);
+      }
+      if (Object.values(HasAvatar).includes(value as HasAvatar) || 
+          Object.values(IsOutdated).includes(value as IsOutdated)) {
+        return t(`boolean.${value}`);
+      }
+      if (Object.values(DateRange).includes(value as DateRange)) {
+        return t(`date-ranges.${value}`);
+      }
+      
+      // Pour les noms d'utilisateurs ou autres valeurs
+      return value;
+    },
+    getFilterTypeLabel: (type: VideoFilterType) => {
+      return t(`video-types.${type}`);
+    },
+    getSelectedText: (count: number) => {
+      const key = count > 1 ? 'selected-plural' : 'selected';
+      return `${count} ${t(`ui.${key}`)}`;
+    },
   };
 };
 
-// Hook pour filtrer les vidéos (pour plus tard)
-export const useVideoFilters = (videos: IVideo[]) => {
-  const { activeSpace } = useActiveSpaceStore();
-  const [filters, setFilters] = React.useState<GenericFilter<VideoFilterType>[]>([]);
-
-  const filteredVideos = React.useMemo(() => {
-    if (filters.length === 0) return videos;
-
-    return videos.filter((video) => {
-      return filters.every((filter) => {
-        const { operator, value, type } = filter;
-        
-        switch (type) {
-          case VideoFilterType.DURATION:
-            // Implémenter la logique de filtrage par durée
-            // Cette partie sera implémentée lors de l'utilisation côté serveur
-            break;
-
-          case VideoFilterType.HAS_AVATAR:
-            const hasAvatar = video.video?.avatar ? HasAvatar.YES : HasAvatar.NO;
-            if (operator === FilterOperator.IS) {
-              return value.includes(hasAvatar);
-            } else if (operator === FilterOperator.IS_NOT) {
-              return !value.includes(hasAvatar);
-            } else if (operator === FilterOperator.IS_ANY_OF) {
-              return value.includes(hasAvatar);
-            }
-            break;
-
-          case VideoFilterType.IS_OUTDATED:
-            const isOutdated = video.archived ? IsOutdated.YES : IsOutdated.NO;
-            if (operator === FilterOperator.IS) {
-              return value.includes(isOutdated);
-            } else if (operator === FilterOperator.IS_NOT) {
-              return !value.includes(isOutdated);
-            } else if (operator === FilterOperator.IS_ANY_OF) {
-              return value.includes(isOutdated);
-            }
-            break;
-
-          case VideoFilterType.CREATED_BY:
-            // Implémenter la logique de filtrage par créateur
-            // Cette partie sera implémentée lors de l'utilisation côté serveur
-            break;
-
-          case VideoFilterType.CREATED_DATE:
-            // Implémenter la logique de filtrage par date
-            // Cette partie sera implémentée lors de l'utilisation côté serveur
-            break;
-        }
-        return true;
-      });
-    });
-  }, [videos, filters, activeSpace]);
-
-  return {
-    filters,
-    setFilters,
-    filteredVideos,
-  };
-};
-
-// Composant de filtres pour les vidéos (pour plus tard)
-interface VideoFiltersProps {
-  filters: GenericFilter<VideoFilterType>[];
-  setFilters: React.Dispatch<React.SetStateAction<GenericFilter<VideoFilterType>[]>>;
-}
-
-export function VideoFilters({ filters, setFilters }: VideoFiltersProps) {
+// Composant de filtres pour les vidéos
+export function VideoFilters() {
   const t = useTranslations('videos');
+  const tFilters = useTranslations('filters');
   const { activeSpace } = useActiveSpaceStore();
+  const { filters, setFilters, clearFilters } = useVideoFiltersStore();
   const [open, setOpen] = React.useState(false);
   const [selectedView, setSelectedView] = React.useState<VideoFilterType | null>(null);
   const [commandInput, setCommandInput] = React.useState("");
   const commandInputRef = React.useRef<HTMLInputElement>(null);
 
-  const config = createVideoFilterConfig(activeSpace?.members);
+  // Adapter pour GenericFilters qui s'attend à une signature de useState
+  const setFiltersForGeneric = React.useCallback((updater: React.SetStateAction<GenericFilter<VideoFilterType>[]>) => {
+    if (typeof updater === 'function') {
+      setFilters(updater(filters));
+    } else {
+      setFilters(updater);
+    }
+  }, [filters, setFilters]);
+
+  const config = createVideoFilterConfig(activeSpace?.members, tFilters);
 
   const filterViewOptions: FilterOption<VideoFilterType>[][] = [
     [
       {
         name: VideoFilterType.DURATION,
+        label: tFilters(`video-types.${VideoFilterType.DURATION}`),
         icon: <VideoFilterIcon type={VideoFilterType.DURATION} />,
       },
       {
         name: VideoFilterType.HAS_AVATAR,
+        label: tFilters(`video-types.${VideoFilterType.HAS_AVATAR}`),
         icon: <VideoFilterIcon type={VideoFilterType.HAS_AVATAR} />,
       },
       {
         name: VideoFilterType.IS_OUTDATED,
+        label: tFilters(`video-types.${VideoFilterType.IS_OUTDATED}`),
         icon: <VideoFilterIcon type={VideoFilterType.IS_OUTDATED} />,
       },
       {
         name: VideoFilterType.CREATED_BY,
+        label: tFilters(`video-types.${VideoFilterType.CREATED_BY}`),
         icon: <VideoFilterIcon type={VideoFilterType.CREATED_BY} />,
       },
     ],
     [
       {
         name: VideoFilterType.CREATED_DATE,
+        label: tFilters(`video-types.${VideoFilterType.CREATED_DATE}`),
         icon: <VideoFilterIcon type={VideoFilterType.CREATED_DATE} />,
       },
     ],
   ];
 
   return (
-    <div className="flex gap-2 flex-wrap">
-      <GenericFilters
-        filters={filters}
-        setFilters={setFilters}
-        config={config}
-        isDateFilter={(filterType) => filterType === VideoFilterType.CREATED_DATE}
-      />
-      {filters.filter((filter) => filter.value?.length > 0).length > 0 && (
-        <Button
-          variant="outline"
-          size="sm"
-          className="transition group h-6 text-xs items-center rounded-sm"
-          onClick={() => setFilters([])}
-        >
-          Clear
-        </Button>
-      )}
+    <div className="flex gap-2 flex-wrap items-center">
       <Popover
         open={open}
         onOpenChange={(open: boolean) => {
@@ -311,20 +262,20 @@ export function VideoFilters({ filters, setFilters }: VideoFiltersProps) {
       >
         <PopoverTrigger asChild>
           <Button
-            variant="ghost"
+            variant="outline"
             role="combobox"
             aria-expanded={open}
             size="sm"
             className={cn(
-              "transition group h-6 text-xs items-center rounded-sm flex gap-1.5 items-center",
+              "transition group h-6 text-xs rounded-sm flex gap-1.5",
               filters.length > 0 && "w-6"
             )}
           >
-            <ListFilter className="size-3 shrink-0 transition-all text-muted-foreground group-hover:text-primary" />
+            <Filter className="shrink-0 transition-all text-muted-foreground group-hover:text-primary" />
             {!filters.length && t('filter')}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-[200px] p-0" align="start">
           <AnimateChangeInHeight>
             <Command>
               <CommandInput
@@ -345,15 +296,15 @@ export function VideoFilters({ filters, setFilters }: VideoFiltersProps) {
                         <CommandItem
                           className="group text-muted-foreground flex gap-2 items-center"
                           key={filter.name}
-                          value={filter.name}
+                          value={filter.label || filter.name}
                           onSelect={(currentValue) => {
-                            setFilters((prev) => [
-                              ...prev,
+                            setFilters([
+                              ...filters,
                               {
                                 id: nanoid(),
                                 type: selectedView,
                                 operator: FilterOperator.IS,
-                                value: [currentValue],
+                                value: [filter.name],
                               },
                             ]);
                             setTimeout(() => {
@@ -365,13 +316,8 @@ export function VideoFilters({ filters, setFilters }: VideoFiltersProps) {
                         >
                           {filter.icon}
                           <span className="text-accent-foreground">
-                            {filter.name}
+                            {filter.label || filter.name}
                           </span>
-                          {filter.label && (
-                            <span className="text-muted-foreground text-xs ml-auto">
-                              {filter.label}
-                            </span>
-                          )}
                         </CommandItem>
                       )
                     )}
@@ -385,16 +331,16 @@ export function VideoFilters({ filters, setFilters }: VideoFiltersProps) {
                             <CommandItem
                               className="group text-muted-foreground flex gap-2 items-center"
                               key={filter.name}
-                              value={filter.name}
+                              value={filter.label || filter.name}
                               onSelect={(currentValue) => {
-                                setSelectedView(currentValue as VideoFilterType);
+                                setSelectedView(filter.name);
                                 setCommandInput("");
                                 commandInputRef.current?.focus();
                               }}
                             >
                               {filter.icon}
                               <span className="text-accent-foreground">
-                                {filter.name}
+                                {filter.label || filter.name}
                               </span>
                             </CommandItem>
                           ))}
@@ -411,6 +357,26 @@ export function VideoFilters({ filters, setFilters }: VideoFiltersProps) {
           </AnimateChangeInHeight>
         </PopoverContent>
       </Popover>
+      
+      <GenericFilters
+        filters={filters}
+        setFilters={setFiltersForGeneric}
+        config={config}
+        isDateFilter={(filterType) => filterType === VideoFilterType.CREATED_DATE}
+        tFilters={tFilters}
+      />
+      
+      {filters.filter((filter: GenericFilter<VideoFilterType>) => filter.value?.length > 0).length > 1 && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="transition group h-6 text-xs items-center rounded-sm"
+          onClick={clearFilters}
+        >
+          <FilterX />
+          Clear
+        </Button>
+      )}
     </div>
   );
 } 

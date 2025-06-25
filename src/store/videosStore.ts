@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { IVideo } from '../types/video'
 import { basicApiCall } from '@/src/lib/api'
+import { GenericFilter } from '@/src/components/ui/generic-filters'
+import { VideoFilterType } from '@/src/types/filters'
 
 interface PaginationInfo {
   currentPage: number
@@ -9,11 +11,11 @@ interface PaginationInfo {
 }
 
 interface VideosStoreState {
-  videosBySpace: Map<string, Map<number, IVideo[]>>
+  videosBySpace: Map<string, Map<string, IVideo[]>>
   paginationBySpace: Map<string, PaginationInfo>
   totalVideoCountBySpace: Map<string, number>
-  setVideos: (spaceId: string, page: number, videos: IVideo[], paginationInfo: PaginationInfo) => void
-  fetchVideos: (spaceId: string, page?: number, limit?: number, forceRefresh?: boolean) => Promise<{ 
+  setVideos: (spaceId: string, cacheKey: string, videos: IVideo[], paginationInfo: PaginationInfo) => void
+  fetchVideos: (spaceId: string, page?: number, limit?: number, filters?: GenericFilter<VideoFilterType>[], forceRefresh?: boolean) => Promise<{ 
     videos: IVideo[], 
     totalCount: number,
     currentPage: number,
@@ -23,12 +25,20 @@ interface VideosStoreState {
   clearSpaceCache: (spaceId: string) => void
 }
 
+// Fonction pour créer une clé de cache basée sur la page et les filtres
+const createCacheKey = (page: number, filters?: GenericFilter<VideoFilterType>[]): string => {
+  const filtersStr = filters && filters.length > 0 
+    ? JSON.stringify(filters.map(f => ({ type: f.type, operator: f.operator, value: f.value })))
+    : 'no-filters';
+  return `page-${page}-filters-${filtersStr}`;
+};
+
 export const useVideosStore = create<VideosStoreState>((set, get) => ({
   videosBySpace: new Map(),
   paginationBySpace: new Map(),
   totalVideoCountBySpace: new Map(),
   
-  setVideos: (spaceId: string, page: number, videos: IVideo[], paginationInfo: PaginationInfo) => {
+  setVideos: (spaceId: string, cacheKey: string, videos: IVideo[], paginationInfo: PaginationInfo) => {
     set(state => {
       const newVideosBySpace = new Map(state.videosBySpace);
       const newPaginationBySpace = new Map(state.paginationBySpace);
@@ -38,7 +48,7 @@ export const useVideosStore = create<VideosStoreState>((set, get) => ({
       }
       
       const spaceVideos = newVideosBySpace.get(spaceId)!;
-      spaceVideos.set(page, videos);
+      spaceVideos.set(cacheKey, videos);
       
       newPaginationBySpace.set(spaceId, paginationInfo);
       
@@ -49,9 +59,11 @@ export const useVideosStore = create<VideosStoreState>((set, get) => ({
     });
   },
   
-  fetchVideos: async (spaceId: string, page: number = 1, limit: number = 20, forceRefresh: boolean = false) => {
+  fetchVideos: async (spaceId: string, page: number = 1, limit: number = 20, filters?: GenericFilter<VideoFilterType>[], forceRefresh: boolean = false) => {
     const state = get();
-    const cachedVideos = state.videosBySpace.get(spaceId)?.get(page);
+    console.log("filters", filters);
+    const cacheKey = createCacheKey(page, filters);
+    const cachedVideos = state.videosBySpace.get(spaceId)?.get(cacheKey);
     const cachedPagination = state.paginationBySpace.get(spaceId);
     
     if (!forceRefresh && cachedVideos && cachedPagination) {
@@ -67,7 +79,8 @@ export const useVideosStore = create<VideosStoreState>((set, get) => ({
       const { videos, totalCount, currentPage, totalPages } = await basicApiCall('/space/getVideos', { 
         spaceId, 
         page, 
-        limit 
+        limit,
+        filters
       }) as { 
         videos: IVideo[], 
         totalCount: number,
@@ -75,7 +88,7 @@ export const useVideosStore = create<VideosStoreState>((set, get) => ({
         totalPages: number
       };
 
-      get().setVideos(spaceId, page, videos, { currentPage, totalPages, totalCount });
+      get().setVideos(spaceId, cacheKey, videos, { currentPage, totalPages, totalCount });
       
       return { videos, totalCount, currentPage, totalPages };
     } catch (error) {
