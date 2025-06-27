@@ -86,7 +86,7 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
         video.title = editedTitle;
         await basicApiCall('/video/save', {
           video: {
-            ...video,
+            id: video.id,
             title: editedTitle
           }
         });
