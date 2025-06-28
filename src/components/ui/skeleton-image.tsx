@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-export default function SkeletonImage({ src, style, alt, width, height, className, unoptimized = true }: { src: string, style?: React.CSSProperties, alt: string, width: number, height: number, className?: string, unoptimized?: boolean }) {
+export default function SkeletonImage({ src, style, alt, width, height, className, unoptimized = true, onError }: { src: string, style?: React.CSSProperties, alt: string, width: number, height: number, className?: string, unoptimized?: boolean, onError?: () => void }) {
   const [loaded, setLoaded] = useState(false);
 
   return (
@@ -14,6 +14,7 @@ export default function SkeletonImage({ src, style, alt, width, height, classNam
         style={style}
         alt={alt}
         onLoad={() => setLoaded(true)}
+        onError={onError}
         unoptimized={unoptimized}
       />
     </div>

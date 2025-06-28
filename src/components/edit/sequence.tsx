@@ -75,6 +75,7 @@ export default function Sequence({
     const [editingWordIndex, setEditingWordIndex] = useState<number | null>(null);
     const t = useTranslations('edit.sequence')
     const [inputDuration, setInputDuration] = useState<number | null>(null);
+    const [imageError, setImageError] = useState(false);
     
     // Calculer la durée dynamiquement à partir de la séquence
     const duration = sequence.end - sequence.start;
@@ -223,13 +224,14 @@ export default function Sequence({
                         ) : sequence.media?.show === 'half' && avatar?.thumbnail ? (
                             <div className="w-12 h-12 sm:w-24 sm:h-24 rounded-md overflow-hidden relative">
                                 <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden">
-                                    {sequence.media?.image ? (
+                                    {sequence.media?.image && !imageError ? (
                                         <SkeletonImage
                                             src={sequence.media.image.link}
                                             height={600}
                                             width={315}
                                             alt={sequence.text}
                                             className="w-full h-full object-cover"
+                                            onError={() => setImageError(true)}
                                         />
                                     ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
                                         <SkeletonVideoFrame
@@ -253,13 +255,14 @@ export default function Sequence({
                                     />
                                 </div>
                             </div>
-                        ) : sequence.media?.image ? (
+                        ) : sequence.media?.image && !imageError ? (
                             <SkeletonImage
                                 src={sequence.media.image.link}
                                 height={1200}
                                 width={630}
                                 alt={sequence.text}
                                 className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
+                                onError={() => setImageError(true)}
                             />
                         ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
                             <SkeletonVideoFrame
