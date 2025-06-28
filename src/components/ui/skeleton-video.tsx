@@ -6,17 +6,20 @@ const SkeletonVideo = ({
   className, 
   disableHoverPlay = false,
   startAt = 0,
-  thumbnailImage
+  thumbnailImage,
+  fallbackThumbnail
 }: { 
   srcVideo: string, 
   className: string,
   disableHoverPlay?: boolean,
   startAt?: number,
-  thumbnailImage?: string
+  thumbnailImage?: string,
+  fallbackThumbnail?: string
 }) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(!thumbnailImage);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(!thumbnailImage && !fallbackThumbnail);
+  const [thumbnailError, setThumbnailError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleVideoLoaded = () => {
@@ -31,6 +34,8 @@ const SkeletonVideo = ({
       }
     }
   };
+
+  const currentThumbnail = thumbnailImage && !thumbnailError ? thumbnailImage : fallbackThumbnail;
 
   const handleMouseEnter = () => {
     if (disableHoverPlay) return;
@@ -65,26 +70,27 @@ const SkeletonVideo = ({
       onMouseLeave={handleMouseLeave}
     >
       {/* Image de vignette (priorité) */}
-      {thumbnailImage && (
+      {currentThumbnail && (
         <div 
           className={`transition-opacity duration-200 ${
             isHovering && isVideoLoaded ? 'opacity-0' : 'opacity-100'
           }`}
         >
           <Image
-            src={thumbnailImage}
+            src={currentThumbnail}
             alt=""
             width={800}
             height={450}
             className="w-full h-auto object-cover rounded-md"
-            unoptimized={thumbnailImage.includes('pexels.com')}
+            unoptimized={currentThumbnail.includes('pexels.com')}
+            onError={() => setThumbnailError(true)}
           />
         </div>
       )}
 
       {/* Vidéo (chargée seulement au hover ou si pas d'image) */}
       {shouldLoadVideo && (
-        <div className={`${thumbnailImage ? 'absolute inset-0' : 'relative'} w-full h-full`}>
+        <div className={`${currentThumbnail ? 'absolute inset-0' : 'relative'} w-full h-full`}>
           <video
             key={`${srcVideo}-${startAt}`} // Force remount quand srcVideo ou startAt change
             ref={videoRef}
@@ -93,7 +99,7 @@ const SkeletonVideo = ({
             loop={isHovering && !disableHoverPlay}
             preload="metadata"
             className={`w-full h-full object-cover rounded-md ${
-              thumbnailImage 
+              currentThumbnail 
                 ? (isHovering && isVideoLoaded ? 'opacity-100' : 'opacity-0') 
                 : (isVideoLoaded ? 'opacity-100' : 'opacity-0')
             } transition-opacity duration-200`}
@@ -107,7 +113,7 @@ const SkeletonVideo = ({
       )}
 
       {/* Skeleton loader si aucune image et vidéo pas encore chargée */}
-      {!thumbnailImage && !isVideoLoaded && (
+      {!currentThumbnail && !isVideoLoaded && (
         <div className="absolute inset-0 bg-gray-200 animate-pulse" />
       )}
     </div>
