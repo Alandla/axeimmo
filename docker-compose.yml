@@ -1,12 +1,11 @@
 version: '3.8'
 services:
   mongodb:
-    image: mongodb/mongodb-community-server:latest
+    image: mongodb/mongodb-community-server:8.0-ubuntu2204
+    user: root
+    command: mongod --noauth --bind_ip_all
     ports:
       - "27017:27017"
-    environment:
-      - MONGODB_INITDB_ROOT_USERNAME=admin
-      - MONGODB_INITDB_ROOT_PASSWORD=password
     volumes:
       - mongodb_data:/data/db
 

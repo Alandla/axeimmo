@@ -44,6 +44,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(mediaSpace.media.name)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [imageError, setImageError] = useState(false)
   const { media } = mediaSpace
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -156,7 +157,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
           className="relative bg-muted aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group" 
           onClick={onClick}
         >
-          {media.image?.link ? (
+          {media.image?.link && !imageError ? (
             <div className="relative w-full h-full">
               <div className="absolute inset-0 bg-black/90">
                 <Image
@@ -166,6 +167,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
                   objectFit="cover"
                   priority
                   className="blur-md scale-110"
+                  onError={() => setImageError(true)}
                 />
               </div>
               <Image
@@ -175,6 +177,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
                 objectFit="contain"
                 priority
                 className="relative z-10"
+                onError={() => setImageError(true)}
               />
               <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
                 <Eye className="text-white w-8 h-8" />
