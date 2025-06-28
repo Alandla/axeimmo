@@ -1350,7 +1350,8 @@
       },
       "ui": {
         "selected": "selected",
-        "selected-plural": "selected"
+        "selected-plural": "selected",
+        "no-results": "No results found"
       }
     },
     "onboarding": {

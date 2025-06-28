@@ -143,11 +143,13 @@ const FilterValueCombobox = <T extends string>({
   filterValues,
   setFilterValues,
   config,
+  tFilters,
 }: {
   filterType: T;
   filterValues: string[];
   setFilterValues: (filterValues: string[]) => void;
   config: FilterConfig<T>;
+  tFilters?: any;
 }) => {
   const [open, setOpen] = useState(false);
   const [commandInput, setCommandInput] = useState("");
@@ -172,21 +174,55 @@ const FilterValueCombobox = <T extends string>({
         className="px-1.5 hover:bg-accent transition hover:text-accent-foreground shrink-0 border-l border-input h-full flex items-center"
       >
         <div className="flex gap-1.5 items-center">
-          <div className="flex items-center flex-row -space-x-1.5">
-            <AnimatePresence mode="popLayout">
-              {filterValues?.slice(0, 3).map((value) => (
-                <motion.div
-                  key={value}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {config.getFilterIcon(value)}
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+          {(() => {
+            // Récupérer toutes les icônes des valeurs sélectionnées
+            const allIcons = filterValues?.slice(0, 3).map((value, index) => ({
+              value,
+              icon: config.getFilterIcon(value),
+              index
+            })).filter(item => item.icon) || [];
+            
+            if (allIcons.length === 0) return null;
+            
+            // Déduplicater les icônes basées sur le filterType
+            // Les icônes du même filterType sont généralement identiques
+            const uniqueIcons = [];
+            const seenFilterTypes = new Set();
+            
+            for (const item of allIcons) {
+              // Pour le même filterType, toutes les icônes sont généralement identiques
+              // Sauf pour les utilisateurs qui ont chacun leur avatar
+              const isUserFilter = filterType.toString().includes('created-by') || 
+                                 filterType.toString().includes('uploaded-by');
+              
+              const iconKey = isUserFilter ? item.value : filterType.toString();
+              
+              if (!seenFilterTypes.has(iconKey)) {
+                seenFilterTypes.add(iconKey);
+                uniqueIcons.push(item);
+              }
+            }
+            
+            if (uniqueIcons.length === 0) return null;
+            
+            return (
+              <div className="flex items-center flex-row -space-x-1.5">
+                <AnimatePresence mode="popLayout">
+                  {uniqueIcons.map((item) => (
+                    <motion.div
+                      key={`${item.value}-${item.index}`}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {item.icon}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            );
+          })()}
           {filterValues?.length === 1
             ? (config.getFilterLabel ? config.getFilterLabel(filterValues[0]) : filterValues[0])
             : (config.getSelectedText ? config.getSelectedText(filterValues?.length || 0) : `${filterValues?.length} selected`)}
@@ -205,7 +241,7 @@ const FilterValueCombobox = <T extends string>({
               ref={commandInputRef}
             />
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>{tFilters ? tFilters('ui.no-results') : 'No results found'}</CommandEmpty>
               <CommandGroup>
                 {filterValues.map((value) => (
                   <CommandItem
@@ -268,11 +304,13 @@ const FilterValueDateCombobox = <T extends string>({
   filterValues,
   setFilterValues,
   config,
+  tFilters,
 }: {
   filterType: T;
   filterValues: string[];
   setFilterValues: (filterValues: string[]) => void;
   config: FilterConfig<T>;
+  tFilters?: any;
 }) => {
   const [open, setOpen] = useState(false);
   const [commandInput, setCommandInput] = useState("");
@@ -308,7 +346,7 @@ const FilterValueDateCombobox = <T extends string>({
               ref={commandInputRef}
             />
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>{tFilters ? tFilters('ui.no-results') : 'No results found'}</CommandEmpty>
               <CommandGroup>
                 {config.filterOptions[filterType].map(
                   (filter: FilterOption) => (
@@ -415,6 +453,7 @@ export default function GenericFilters<T extends string>({
                 });
               }}
               config={config}
+              tFilters={tFilters}
             />
           ) : (
             <FilterValueCombobox
@@ -445,6 +484,7 @@ export default function GenericFilters<T extends string>({
                 });
               }}
               config={config}
+              tFilters={tFilters}
             />
           )}
           <Button

@@ -1331,7 +1331,8 @@
       },
       "ui": {
         "selected": "sélectionné",
-        "selected-plural": "sélectionnés"
+        "selected-plural": "sélectionnés",
+        "no-results": "Aucun résultat trouvé"
       }
     },
     "onboarding": {

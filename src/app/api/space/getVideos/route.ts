@@ -2,12 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/src/lib/auth';
 import { isUserInSpace } from '@/src/dao/userDao';
 import { getVideosBySpaceId, VideoFilters } from '@/src/dao/videoDao';
-import { getSpaceById } from '@/src/dao/spaceDao';
 import { GenericFilter, FilterOperator } from '@/src/components/ui/generic-filters';
 import { VideoFilterType, VideoDuration, HasAvatar, IsOutdated, DateRange } from '@/src/types/filters';
 
 // Fonction pour convertir les filtres UI vers les filtres DAO
-const convertFiltersToDao = (uiFilters: GenericFilter<VideoFilterType>[], spaceMembers: any[]): VideoFilters => {
+const convertFiltersToDao = (uiFilters: GenericFilter<VideoFilterType>[]): VideoFilters => {
   const daoFilters: VideoFilters = {};
 
   for (const filter of uiFilters) {
@@ -48,15 +47,11 @@ const convertFiltersToDao = (uiFilters: GenericFilter<VideoFilterType>[], spaceM
         break;
 
       case VideoFilterType.CREATED_BY:
-        // Convertir les noms d'utilisateurs en IDs
-        const userIds = value.map(userName => {
-          const member = spaceMembers.find(m => m.name === userName);
-          return member?.id;
-        }).filter(Boolean);
-
-        if (userIds.length > 0) {
+        // Les valeurs sont déjà des IDs d'utilisateurs
+        console.log("value", value);
+        if (value.length > 0) {
           daoFilters.createdBy = {
-            userIds,
+            userIds: value,
             isNot: operator === "is not"
           };
         }
@@ -167,12 +162,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Récupérer les informations de l'espace pour les membres si on a des filtres
+    // Convertir les filtres UI vers les filtres DAO si on a des filtres
     let daoFilters: VideoFilters | undefined;
     if (filters && filters.length > 0) {
-      const space = await getSpaceById(spaceId);
-      const spaceMembers = space?.members || [];
-      daoFilters = convertFiltersToDao(filters, spaceMembers);
+      daoFilters = convertFiltersToDao(filters);
       console.log("daoFilters", daoFilters);
     }
 

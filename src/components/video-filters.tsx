@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/src/components/ui/popover";
 import { cn } from "@/src/lib/utils";
-import { ListFilter, Clock, User, Bot, Calendar, UserCircle, Filter, FilterX, Video } from "lucide-react";
+import { ListFilter, Clock, User, Bot, Calendar, UserCircle, Filter, FilterX, Video, VideoOff } from "lucide-react";
 import { nanoid } from "nanoid";
 import * as React from "react";
 import { useTranslations } from "next-intl";
@@ -64,9 +64,9 @@ const VideoFilterIcon = ({
     case VideoFilterType.CREATED_BY:
       return <UserCircle className="size-3.5" />;
     case VideoFilterType.HAS_AVATAR:
-      return <Bot className="size-3.5" />;
+      return <User className="size-3.5" />;
     case VideoFilterType.IS_OUTDATED:
-      return <Video className="size-3.5" />;
+      return <VideoOff className="size-3.5" />;
     case VideoFilterType.CREATED_DATE:
       return <Calendar className="size-3.5" />;
     case VideoDuration.LESS_THAN_30S:
@@ -100,7 +100,8 @@ const createVideoFilterConfig = (
 
   const createdByFilterOptions: FilterOption<string>[] = members.map(
     (member) => ({
-      name: member.name,
+      name: member.id,
+      label: member.name,
       icon: <UserAvatar userName={member.name} members={members} />,
     })
   );
@@ -109,7 +110,7 @@ const createVideoFilterConfig = (
     (value) => ({
       name: value,
       label: t(`boolean.${value}`),
-      icon: <VideoFilterIcon type={value} />,
+      icon: undefined,
     })
   );
 
@@ -117,7 +118,7 @@ const createVideoFilterConfig = (
     (value) => ({
       name: value,
       label: t(`boolean.${value}`),
-      icon: <VideoFilterIcon type={value} />,
+      icon: undefined,
     })
   );
 
@@ -162,8 +163,18 @@ const createVideoFilterConfig = (
           !Object.values(HasAvatar).includes(type as HasAvatar) &&
           !Object.values(IsOutdated).includes(type as IsOutdated) &&
           !Object.values(DateRange).includes(type as DateRange)) {
-        return <UserAvatar userName={type} members={members} />;
+        // type est un ID d'utilisateur, trouver le nom correspondant
+        const member = members.find(m => m.id === type);
+        const userName = member ? member.name : type;
+        return <UserAvatar userName={userName} members={members} />;
       }
+      
+      // Retourner undefined pour les types qui n'ont pas d'icône
+      if (Object.values(HasAvatar).includes(type as HasAvatar) ||
+          Object.values(IsOutdated).includes(type as IsOutdated)) {
+        return undefined;
+      }
+      
       return <VideoFilterIcon type={type} />;
     },
     getFilterLabel: (value: string) => {
@@ -179,7 +190,13 @@ const createVideoFilterConfig = (
         return t(`date-ranges.${value}`);
       }
       
-      // Pour les noms d'utilisateurs ou autres valeurs
+      // Pour les IDs d'utilisateurs, afficher le nom
+      const member = members.find(m => m.id === value);
+      if (member) {
+        return member.name;
+      }
+      
+      // Pour les autres valeurs
       return value;
     },
     getFilterTypeLabel: (type: VideoFilterType) => {
@@ -279,7 +296,7 @@ export function VideoFilters() {
           <AnimateChangeInHeight>
             <Command>
               <CommandInput
-                placeholder={selectedView ? selectedView : t('filter-placeholder')}
+                placeholder={selectedView ? tFilters(`video-types.${selectedView}`) : t('filter-placeholder')}
                 className="h-9"
                 value={commandInput}
                 onInputCapture={(e) => {
@@ -288,7 +305,7 @@ export function VideoFilters() {
                 ref={commandInputRef}
               />
               <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
+                <CommandEmpty>{tFilters('ui.no-results')}</CommandEmpty>
                 {selectedView ? (
                   <CommandGroup>
                     {config.filterOptions[selectedView].map(
@@ -374,7 +391,7 @@ export function VideoFilters() {
           onClick={clearFilters}
         >
           <FilterX />
-          Clear
+          {t('clear-filters')}
         </Button>
       )}
     </div>

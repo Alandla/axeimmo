@@ -111,12 +111,34 @@ export const getVideosBySpaceId = async (
 
         // Filtre par statut outdated
         if (filters.isOutdated !== undefined) {
-          const isOutdatedCondition = filters.isOutdated.value;
-          
-          if (filters.isOutdated.isNot) {
-            mongoQuery.archived = isOutdatedCondition ? { $ne: true } : true;
+          if (filters.isOutdated.value) {
+            // Vidéo outdated : pas de voices ou voices vide
+            const outdatedCondition = {
+              $or: [
+                { "video.audio.voices": { $exists: false } },
+                { "video.audio.voices": { $size: 0 } }
+              ]
+            };
+            
+            if (filters.isOutdated.isNot) {
+              // NOT outdated : a des voices non vides
+              mongoQuery["video.audio.voices"] = { $exists: true, $not: { $size: 0 } };
+            } else {
+              // IS outdated
+              mongoQuery.$or = outdatedCondition.$or;
+            }
           } else {
-            mongoQuery.archived = isOutdatedCondition ? true : { $ne: true };
+            // Vidéo non outdated : a des voices
+            if (filters.isOutdated.isNot) {
+              // NOT non-outdated = IS outdated
+              mongoQuery.$or = [
+                { "video.audio.voices": { $exists: false } },
+                { "video.audio.voices": { $size: 0 } }
+              ];
+            } else {
+              // IS non-outdated
+              mongoQuery["video.audio.voices"] = { $exists: true, $not: { $size: 0 } };
+            }
           }
         }
 
@@ -140,6 +162,7 @@ export const getVideosBySpaceId = async (
 
         // Filtre par créateur (utiliser l'historique)
         if (filters.createdBy && filters.createdBy.userIds.length > 0) {
+          console.log("filters.createdBy.userIds", filters.createdBy.userIds);
           const creatorCondition = {
             $elemMatch: {
               step: 'CREATE',

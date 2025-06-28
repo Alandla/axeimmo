@@ -102,7 +102,7 @@ const createAssetFilterConfig = (
     (value) => ({
       name: value,
       label: t(`boolean.${value}`),
-      icon: <AssetFilterIcon type={value} />,
+      icon: undefined,
     })
   );
 
@@ -147,6 +147,12 @@ const createAssetFilterConfig = (
           !Object.values(DateRange).includes(type as DateRange)) {
         return <UserAvatar userName={type} members={members} />;
       }
+      
+      // Retourner undefined pour les types qui n'ont pas d'icône
+      if (Object.values(AIGenerated).includes(type as AIGenerated)) {
+        return undefined;
+      }
+      
       return <AssetFilterIcon type={type} />;
     },
     getFilterLabel: (value: string) => {
@@ -202,7 +208,8 @@ export const useAssetFilters = (assets: IMediaSpace[]) => {
             // Vérifier si c'est généré par AI : video.id contient "animated" ou image.id existe
             const isAIGenerated = (
               (asset.media.video?.id && asset.media.video.id.includes('animated')) ||
-              (asset.media.image?.id && asset.media.image.id.includes('animated'))
+              (asset.media.image?.id && asset.media.image.id.includes('animated')) ||
+              asset.media.requestId
             ) ? AIGenerated.YES : AIGenerated.NO;
             
             if (operator === FilterOperator.IS) {
@@ -354,7 +361,7 @@ export function AssetFilters() {
           <AnimateChangeInHeight>
             <Command>
               <CommandInput
-                placeholder={selectedView ? selectedView : t('filter-placeholder')}
+                placeholder={selectedView ? tFilters(`asset-types.${selectedView}`) : t('filter-placeholder')}
                 className="h-9"
                 value={commandInput}
                 onInputCapture={(e) => {
@@ -363,7 +370,7 @@ export function AssetFilters() {
                 ref={commandInputRef}
               />
               <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
+                <CommandEmpty>{tFilters('ui.no-results')}</CommandEmpty>
                 {selectedView ? (
                   <CommandGroup>
                     {config.filterOptions[selectedView].map(
@@ -449,7 +456,7 @@ export function AssetFilters() {
           onClick={clearFilters}
         >
           <FilterX />
-          Clear
+          {t('clear-filters')}
         </Button>
       )}
     </div>
