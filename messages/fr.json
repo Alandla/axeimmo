@@ -205,7 +205,8 @@
         "brand-space": "Espace de marque",
         "social-media-agent": "Agent stratège de médias sociaux",
         "video-producer-agent": "Agent producteur de contenu vidéo",
-        "community-manager-agent": "Agent community manager"
+        "community-manager-agent": "Agent community manager",
+        "ai-model-ultra": "Modèle IA Ultra"
       }
     },
     "plan": {

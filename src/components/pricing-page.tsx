@@ -111,6 +111,15 @@ export const features = [
         icon: <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0" />,
       },
       {
+        name: "ai-model-ultra",
+        start: false,
+        pro: false,
+        enterprise: true,
+        soon: false,
+        tooltip: "Access to our most advanced AI model for superior video generation quality and enhanced performance.",
+        icon: <Gem className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
+      {
         name: "web",
         start: true,
         pro: true,
