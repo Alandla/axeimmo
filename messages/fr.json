@@ -487,7 +487,12 @@
       "extracted-images-found": "J'ai trouvé {count} images dans les articles. Veux-tu que je les anime ?",
       "skip-animation": "Passer l'animation",
       "animate-images": "Animer les images",
-      "credits": "crédits"
+      "credits": "crédits",
+      "url-detected": {
+        "title": "Plan Pro requis pour les URLs",
+        "description": "Mettez à niveau votre plan pour créer des vidéos à partir d'URLs.",
+        "upgrade": "Mettre à niveau vers Pro"
+      }
     },
     "select": {
       "duration": {

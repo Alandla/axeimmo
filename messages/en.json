@@ -496,7 +496,12 @@
       "extracted-images-found": "I found {count} images in the articles. Do you want me to animate them?",
       "skip-animation": "Skip animation",
       "animate-images": "Animate images",
-      "credits": "credits"
+      "credits": "credits",
+      "url-detected": {
+        "title": "Pro Plan Required for URLs",
+        "description": "Upgrade to using URLs for creating videos.",
+        "upgrade": "Upgrade to Pro"
+      }
     },
     "select": {
       "duration": {

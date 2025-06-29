@@ -1,4 +1,4 @@
-import { Check, Paperclip, Send, Globe, X } from "lucide-react";
+import { Check, Paperclip, Send, Globe, X, ExternalLink } from "lucide-react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import SelectDuration, { DurationOption } from "./ui/select/select-duration";
@@ -13,6 +13,7 @@ import { Badge } from "./ui/badge";
 import { useActiveSpaceStore } from "../store/activeSpaceStore";
 import { usePremiumToast } from "@/src/utils/premium-toast";
 import { KLING_GENERATION_COSTS } from "../lib/fal";
+import { Alert, AlertDescription } from "./ui/alert";
 
 export function AiChatTab({ 
   creationStep, 
@@ -42,6 +43,17 @@ export function AiChatTab({
     const planT = useTranslations('plan');
     const durationT = useTranslations('select.duration');
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>({ name: durationT('options.30-seconds'), value: 468, requiredPlan: PlanName.FREE });
+
+    // Function to detect URLs in text
+    const detectUrls = (text: string): boolean => {
+        const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[^\s]+\.[a-z]{2,})/gi;
+        return urlRegex.test(text);
+    };
+
+    // Check if current plan is FREE or START and if URL is detected
+    const isUrlDetected = detectUrls(inputMessage);
+    const shouldShowUrlWarning = isUrlDetected && 
+        (activeSpace?.planName === PlanName.FREE || activeSpace?.planName === PlanName.START);
 
     const adjustTextareaHeight = (event: React.FormEvent<HTMLTextAreaElement>) => {
       const target = event.target as HTMLTextAreaElement;
@@ -133,15 +145,39 @@ export function AiChatTab({
       }
     };
 
+    const handleUpgradeClick = () => {
+      window.open('/dashboard/pricing', '_blank');
+    };
+
     return (
         <div className="w-full max-w-xl">
           {creationStep === CreationStep.START ? (
-            <div 
-              className={`relative rounded-lg`}
-              onDrop={!isDisabled ? handleDrop : undefined}
-              onDragOver={!isDisabled ? handleDragOver : undefined}
-              onDragLeave={!isDisabled ? handleDragLeave : undefined}
-            >
+            <>
+              {shouldShowUrlWarning && (
+                <Alert className="mb-4 border-amber-200 bg-amber-50">
+                  <AlertDescription className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <strong className="font-medium text-amber-800">{t('url-detected.title')}</strong>
+                      <p className="text-amber-700 mt-1">{t('url-detected.description')}</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleUpgradeClick}
+                      className="ml-4 border-amber-300 text-amber-800 hover:bg-amber-100"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      {t('url-detected.upgrade')}
+                    </Button>
+                  </AlertDescription>
+                </Alert>
+              )}
+              <div 
+                className={`relative rounded-lg`}
+                onDrop={!isDisabled ? handleDrop : undefined}
+                onDragOver={!isDisabled ? handleDragOver : undefined}
+                onDragLeave={!isDisabled ? handleDragLeave : undefined}
+              >
               <div className={`relative rounded-lg border p-2 ${isDragging ? 'border-dashed border-2 border-gray-300' : ''} ${isDisabled ? 'opacity-60' : ''}`}>
                 {isDragging && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-white/50 z-10">
@@ -267,6 +303,7 @@ export function AiChatTab({
                 </div>
               </div>
             </div>
+            </>
           ) : creationStep === CreationStep.SCRIPT ? (
             <div className="rounded-lg border p-2">
               <div className="flex items-end">
