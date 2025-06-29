@@ -28,7 +28,7 @@ export default function Dashboard() {
   const [totalPages, setTotalPages] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
   const { activeSpace } = useActiveSpaceStore()
-  const { fetchVideos, fetchVideosInBackground, getCachedVideos, clearSpaceCache } = useVideosStore()
+  const { fetchVideosInBackground, getCachedVideos, clearSpaceCache } = useVideosStore()
   const { itemsPerPage, screenSize } = useScreenSize()
   const { filters, clearFilters } = useVideoFiltersStore()
 

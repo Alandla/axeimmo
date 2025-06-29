@@ -16,7 +16,6 @@ import sentencesNoTranscriptionMock from "../test/mockup/sentencesNoTranscriptio
 import sentencesWithNewTranscriptionMock from "../test/mockup/sentencesWithNewTranscription.json";
 
 import { createLightTranscription, getTranscription, ISentence, splitSentences } from "../lib/transcription";
-import { calculateElevenLabsCost } from "../lib/cost";
 import { mediaToMediaSpace, searchMediaForKeywords, searchGoogleImagesForQueries } from "../service/media.service";
 import { IMedia, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
