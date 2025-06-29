@@ -256,6 +256,10 @@
         "ads": "Publicité",
         "square": "Carré"
       },
+      "select-avatar": "Sélectionner un avatar",
+      "no-avatar": "Aucun avatar",
+      "confirm": "Confirmer",
+      "cancel": "Annuler",
       "modal-pricing-not-enough-credits": "Pas assez de crédits",
       "modal-pricing-description-not-enough-credits": "Tu n'as pas assez de crédits pour exporter ta vidéo, passe à un plan supérieur pour exporter ta vidéo.",
       "modal-pricing-avatar-on-free-title": "Pas d'avatar sur le plan gratuit.",

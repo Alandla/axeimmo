@@ -68,7 +68,11 @@ function NoAvatarCard() {
   )
 }
 
-export function AvatarGridComponent() {
+interface AvatarGridComponentProps {
+  mode?: 'default' | 'large';
+}
+
+export function AvatarGridComponent({ mode = 'default' }: AvatarGridComponentProps) {
   const t = useTranslations('avatars')
   const tCommon = useTranslations('common')
 
@@ -77,7 +81,7 @@ export function AvatarGridComponent() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedGender, setSelectedGender] = useState<string>(selectedVoice?.gender || 'all')
   const [currentPage, setCurrentPage] = useState(1)
-  const avatarsPerPage = 6
+  const avatarsPerPage = mode === 'large' ? 12 : 6
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null)
   const [avatars, setAvatars] = useState<Avatar[]>(avatarsConfig)
@@ -86,7 +90,7 @@ export function AvatarGridComponent() {
 
   // Ajouter l'état pour la pagination des looks
   const [currentLookPage, setCurrentLookPage] = useState(1)
-  const looksPerPage = 6
+  const looksPerPage = mode === 'large' ? 12 : 6
 
   // Obtenir tous les tags uniques
   const allTags = Array.from(new Set(avatars.flatMap(avatar => avatar.tags)))
@@ -419,7 +423,7 @@ export function AvatarGridComponent() {
         )}
       </HorizontalScrollList>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
+      <div className={`grid gap-4 ${mode === 'large' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-2'}`}>
         {activeAvatar ? (
           // Afficher les looks de l'avatar sélectionné
           (currentLooks as AvatarLook[]).length > 0 ? (

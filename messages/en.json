@@ -265,6 +265,10 @@
         "ads": "Ads",
         "square": "Square"
       },
+      "select-avatar": "Select avatar",
+      "no-avatar": "No avatar",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
       "modal-pricing-not-enough-credits": "Not enough credits",
       "modal-pricing-description-not-enough-credits": "You don't have enough credits to export your video, upgrade to a higher plan to export your video.",
       "modal-pricing-avatar-on-free-title": "No avatar on the free plan",

@@ -8,6 +8,9 @@ import { AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ReviewFloating } from "@/src/components/ReviewFloating";
 import VideoFormatSelector from "@/src/components/edit/video-format-selector";
+import AvatarSelector from "@/src/components/edit/avatar-selector";
+import { AvatarSelectionModal } from "@/src/components/modal/avatar-selection-modal";
+import { AvatarLook } from "@/src/types/avatar";
 
 export default function VideoPreview({ 
     playerRef, 
@@ -19,7 +22,8 @@ export default function VideoPreview({
     onAvatarHeightRatioChange,
     onAvatarPositionChange,
     onMediaPositionChange,
-    onVideoFormatChange
+    onVideoFormatChange,
+    onAvatarChange
 }: { 
     playerRef: React.RefObject<PlayerRef>, 
     video: IVideo | null, 
@@ -30,12 +34,14 @@ export default function VideoPreview({
     onAvatarHeightRatioChange?: (ratio: number) => void,
     onAvatarPositionChange?: (position: { x: number, y: number }) => void,
     onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
-    onVideoFormatChange?: (format: VideoFormat) => void
+    onVideoFormatChange?: (format: VideoFormat) => void,
+    onAvatarChange?: (avatar: AvatarLook | null) => void
 }) {
     const t = useTranslations('edit');
     const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
     const [showReview, setShowReview] = useState(false);
     const [hasInteractedWithReview, setHasInteractedWithReview] = useState(false);
+    const [showAvatarModal, setShowAvatarModal] = useState(false);
 
     // Get video dimensions based on format
     const dimensions = getVideoDimensions(video?.video?.format || 'vertical');
@@ -117,10 +123,18 @@ export default function VideoPreview({
             )}
             {video?.video && onVideoFormatChange && (
                 <div className="w-full mb-4">
-                    <VideoFormatSelector
-                        value={video.video.format || 'vertical'}
-                        onValueChange={onVideoFormatChange}
-                    />
+                    <div className="grid grid-cols-2 gap-2">
+                        <VideoFormatSelector
+                            value={video.video.format || 'vertical'}
+                            onValueChange={onVideoFormatChange}
+                        />
+                        {video.video.avatar && onAvatarChange && (
+                            <AvatarSelector
+                                selectedAvatar={video.video.avatar}
+                                onAvatarSelect={() => setShowAvatarModal(true)}
+                            />
+                        )}
+                    </div>
                 </div>
             )}
             <div className="relative w-full h-full transition-all duration-300 ease-in-out">
@@ -161,6 +175,15 @@ export default function VideoPreview({
                 <ReviewFloating
                     videoId={video.id}
                     onClose={handleCloseReview}
+                />
+            )}
+            
+            {video?.video?.avatar && onAvatarChange && (
+                <AvatarSelectionModal
+                    isOpen={showAvatarModal}
+                    onClose={() => setShowAvatarModal(false)}
+                    currentAvatar={video.video.avatar}
+                    onAvatarChange={onAvatarChange}
                 />
             )}
         </div>

@@ -14,6 +14,7 @@ import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
 import { ISequence, IVideo, IWord, ITransition, VideoFormat } from '@/src/types/video'
+import { AvatarLook } from '@/src/types/avatar'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
 import { IMedia } from '@/src/types/video'
@@ -1021,6 +1022,22 @@ export default function VideoEditor() {
     });
   };
 
+  const handleAvatarChange = (avatar: AvatarLook | null) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video) return prevVideo;
+      
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          avatar: avatar || undefined
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
   return (
     <>
     {isLoading && (
@@ -1223,6 +1240,7 @@ export default function VideoEditor() {
                         onAvatarPositionChange={handleAvatarPositionChange}
                         onMediaPositionChange={handleMediaPositionChange}
                         onVideoFormatChange={handleVideoFormatChange}
+                        onAvatarChange={handleAvatarChange}
                     />
                 )}
             </Card>
@@ -1248,6 +1266,7 @@ export default function VideoEditor() {
                 onAvatarPositionChange={handleAvatarPositionChange}
                 onMediaPositionChange={handleMediaPositionChange}
                 onVideoFormatChange={handleVideoFormatChange}
+                onAvatarChange={handleAvatarChange}
             />
           )}
         </div>
