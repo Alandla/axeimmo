@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { useTranslations } from "next-intl";
 import SkeletonVideo from "../ui/skeleton-video";
 import SkeletonVideoFrame from "../ui/skeleton-video-frame";
+import SkeletonImage from "../ui/skeleton-image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +21,8 @@ interface TransitionProps {
   index: number;
   sequenceThumbnail: string;
   sequenceVideoUrl?: string;
+  sequenceStartAt?: number;
+  sequenceFrames?: string[];
   onDeleteTransition: (index: number) => void;
   selectedIndex?: number;
   setSelectedIndex?: (index: number) => void;
@@ -32,6 +35,8 @@ export default function Transition({
   index,
   sequenceThumbnail,
   sequenceVideoUrl,
+  sequenceStartAt,
+  sequenceFrames,
   onDeleteTransition,
   selectedIndex,
   setSelectedIndex,
@@ -67,11 +72,22 @@ export default function Transition({
           />
         ) : sequenceVideoUrl ? (
           <div className="absolute inset-0 w-full h-11 overflow-hidden">
-            <SkeletonVideoFrame
-              srcVideo={sequenceVideoUrl}
-              className="w-full h-11 object-cover blur-sm scale-125"
-              startAt={0}
-            />
+            {/* Si on a un média vidéo avec startAt à 0 et des frames disponibles, utiliser la première frame */}
+            {sequenceStartAt === 0 && sequenceFrames && sequenceFrames.length > 0 ? (
+              <SkeletonImage
+                src={sequenceFrames[0]}
+                height={400}
+                width={400}
+                alt="Sequence background"
+                className="w-full h-11 object-cover blur-sm scale-125"
+              />
+            ) : (
+              <SkeletonVideoFrame
+                srcVideo={sequenceVideoUrl}
+                className="w-full h-11 object-cover blur-sm scale-125"
+                startAt={0}
+              />
+            )}
           </div>
         ) : null}
 

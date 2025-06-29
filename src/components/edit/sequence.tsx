@@ -234,11 +234,22 @@ export default function Sequence({
                                             onError={() => setImageError(true)}
                                         />
                                     ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
-                                        <SkeletonVideoFrame
-                                            srcVideo={sequence.media.video.link}
-                                            className='w-full h-full object-cover'
-                                            startAt={sequence.media.startAt || 0}
-                                        />
+                                        // Si on a un média vidéo avec startAt à 0 et des frames disponibles, utiliser la première frame
+                                        sequence.media.startAt === 0 && sequence.media.video.frames && sequence.media.video.frames.length > 0 ? (
+                                            <SkeletonImage
+                                                src={sequence.media.video.frames[0]}
+                                                height={600}
+                                                width={315}
+                                                alt={sequence.text}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <SkeletonVideoFrame
+                                                srcVideo={sequence.media.video.link}
+                                                className='w-full h-full object-cover'
+                                                startAt={sequence.media.startAt || 0}
+                                            />
+                                        )
                                     ) : (
                                         <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                                             <VideoIcon className="text-gray-400 text-sm" />
@@ -265,11 +276,22 @@ export default function Sequence({
                                 onError={() => setImageError(true)}
                             />
                         ) : sequence.media?.type === 'video' && sequence.media?.video?.link ? (
-                            <SkeletonVideoFrame
-                                srcVideo={sequence.media.video.link}
-                                className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
-                                startAt={sequence.media.startAt || 0}
-                            />
+                            // Si on a un média vidéo avec startAt à 0 et des frames disponibles, utiliser la première frame
+                            sequence.media.startAt === 0 && sequence.media.video.frames && sequence.media.video.frames.length > 0 ? (
+                                <SkeletonImage
+                                    src={sequence.media.video.frames[0]}
+                                    height={1200}
+                                    width={630}
+                                    alt={sequence.text}
+                                    className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
+                                />
+                            ) : (
+                                <SkeletonVideoFrame
+                                    srcVideo={sequence.media.video.link}
+                                    className='w-12 h-12 sm:w-24 sm:h-24 rounded-md object-cover'
+                                    startAt={sequence.media.startAt || 0}
+                                />
+                            )
                         ) : (
                             <div className="w-12 h-12 sm:w-24 sm:h-24 rounded-md bg-gray-200 flex items-center justify-center">
                                 {sequence.media?.show === 'hide' && avatar ? (

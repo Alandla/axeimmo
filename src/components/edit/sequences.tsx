@@ -120,6 +120,8 @@ export default function Sequences({
                                     index={transitionIndex}
                                     sequenceThumbnail={sequence.media?.image?.link || ""}
                                     sequenceVideoUrl={sequence.media?.type === 'video' && sequence.media.video?.link ? sequence.media.video.link : undefined}
+                                    sequenceStartAt={sequence.media?.startAt}
+                                    sequenceFrames={sequence.media?.video?.frames}
                                     selectedIndex={selectedTransitionIndex}
                                     setSelectedIndex={handleTransitionClick}
                                     setActiveTabMobile={setActiveTabMobile}
