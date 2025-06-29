@@ -14,27 +14,37 @@ import Link from "next/link"
 
 export function NavMain({
   items,
+  title,
 }: {
   items: {
     name: string
     url: string
-    icon: LucideIcon
+    icon: LucideIcon | React.ComponentType<any>
+    external?: boolean
   }[]
+  title?: string
 }) {
   const { isMobile } = useSidebar()
   const t = useTranslations('sidebar')
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>{t('links.title')}</SidebarGroupLabel>
+      <SidebarGroupLabel>{title || t('links.title')}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild tooltip={item.name}>
-              <Link href={item.url} prefetch={true}>
-                <item.icon />
-                <span>{item.name}</span>
-              </Link>
+              {item.external ? (
+                <a href={item.url} target="_blank" rel="noopener noreferrer">
+                  <item.icon />
+                  <span>{item.name}</span>
+                </a>
+              ) : (
+                <Link href={item.url} prefetch={true}>
+                  <item.icon />
+                  <span>{item.name}</span>
+                </Link>
+              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
