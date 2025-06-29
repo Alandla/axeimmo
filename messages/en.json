@@ -507,6 +507,10 @@
           "1-minute": "1 minute",
           "2-minutes": "2 minutes",
           "5-minutes": "5 minutes"
+        },
+        "toast": {
+          "title-upgrade-required": "Plan upgrade required",
+          "description-upgrade-required": "The duration \"{duration}\" is only available with the {plan} plan. Upgrade to access longer video durations."
         }
       }
     },

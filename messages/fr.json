@@ -498,6 +498,10 @@
           "1-minute": "1 minute",
           "2-minutes": "2 minutes",
           "5-minutes": "5 minutes"
+        },
+        "toast": {
+          "title-upgrade-required": "Mise à niveau du plan requise",
+          "description-upgrade-required": "La durée \"{duration}\" n'est disponible qu'avec le plan {plan}. Mettez à niveau pour accéder à des durées de vidéo plus longues."
         }
       }
     },

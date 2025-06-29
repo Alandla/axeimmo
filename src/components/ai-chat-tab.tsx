@@ -1,7 +1,7 @@
 import { Check, Paperclip, Send, Globe, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import SelectDuration from "./ui/select/select-duration";
+import SelectDuration, { DurationOption } from "./ui/select/select-duration";
 import { useState, useEffect } from "react";
 import { CreationStep, PlanName } from "../types/enums";
 import { useTranslations } from "next-intl";
@@ -13,11 +13,6 @@ import { Badge } from "./ui/badge";
 import { useActiveSpaceStore } from "../store/activeSpaceStore";
 import { usePremiumToast } from "@/src/utils/premium-toast";
 import { KLING_GENERATION_COSTS } from "../lib/fal";
-
-interface DurationOption {
-  name: string;
-  value: number;
-}
 
 export function AiChatTab({ 
   creationStep, 
@@ -46,7 +41,7 @@ export function AiChatTab({
     const pricingT = useTranslations('pricing');
     const planT = useTranslations('plan');
     const durationT = useTranslations('select.duration');
-    const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>({ name: durationT('options.30-seconds'), value: 468 });
+    const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>({ name: durationT('options.30-seconds'), value: 468, requiredPlan: PlanName.FREE });
 
     const adjustTextareaHeight = (event: React.FormEvent<HTMLTextAreaElement>) => {
       const target = event.target as HTMLTextAreaElement;
