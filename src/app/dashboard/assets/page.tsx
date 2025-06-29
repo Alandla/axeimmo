@@ -28,6 +28,8 @@ import {
   startLegacyPolling,
   cleanupPolling 
 } from '@/src/utils/asset-polling'
+import { AssetFilters, useAssetFilters } from '@/src/components/asset-filters'
+import { useAssetFiltersStore } from '@/src/store/assetFiltersStore'
 
 export interface UploadingMedia {
   id: string
@@ -53,6 +55,10 @@ export default function AssetsPage() {
   const [isUploadingFiles, setIsUploadingFiles] = useState(false)
   const [uploadingMedias, setUploadingMedias] = useState<UploadingMedia[]>([])
   const [containerHeight, setContainerHeight] = useState(0)
+
+  // Utilisation des filtres pour les assets
+  const { filteredAssets } = useAssetFilters(assets)
+  const { filters, clearFilters } = useAssetFiltersStore()
 
   // Vérifier si l'utilisateur a un plan Pro ou Entreprise
   const hasPlan = activeSpace?.planName === PlanName.PRO || activeSpace?.planName === PlanName.ENTREPRISE
@@ -356,6 +362,10 @@ export default function AssetsPage() {
               {t('upload-button')}
             </Button>
           </div>
+
+          <div className="ml-4">
+            <AssetFilters />
+          </div>
           
           <div className="p-4">
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -376,16 +386,27 @@ export default function AssetsPage() {
                 Array.from({ length: 8 }).map((_, index) => (
                   <VideoCardSkeleton key={index} />
                 ))
-              ) : assets.length === 0 && uploadingMedias.length === 0 ? (
+              ) : filteredAssets.length === 0 && uploadingMedias.length === 0 ? (
                 <div className="col-span-full flex flex-col items-center justify-center py-20">
                   <ImageOff className="w-12 h-12 text-gray-400 mb-4" />
-                  <h2 className="text-2xl font-semibold mb-2">{t('no-assets')}</h2>
+                  <h2 className="text-2xl font-semibold mb-2">
+                    {filters.length > 0 ? t('no-filtered-assets') : t('no-assets')}
+                  </h2>
                   <p className="text-gray-500 mb-6 text-center">
-                    {t('no-assets-description')}
+                    {filters.length > 0 ? t('no-filtered-assets-description') : t('no-assets-description')}
                   </p>
+                  {filters.length > 0 && (
+                    <Button 
+                      variant="outline" 
+                      onClick={clearFilters}
+                      className="mb-4"
+                    >
+                      {t('clear-filters')}
+                    </Button>
+                  )}
                 </div>
               ) : (
-                assets.map((asset) => {
+                filteredAssets.map((asset) => {
                   // Afficher GeneratingCard si l'asset est en génération
                   if (asset.media.generationStatus === 'generating-video' || asset.media.generationStatus === 'generating-image') {
                     return (

@@ -48,6 +48,11 @@
       "no-videos": "Aucune vidéo trouvée",
       "create-video": "Créer une vidéo",
       "no-videos-description": "Commencez par créer votre première vidéo pour la voir ici.",
+      "no-filtered-videos": "Aucune vidéo trouvée",
+      "no-filtered-videos-description": "Aucune vidéo ne correspond aux filtres sélectionnés. Essayez d'ajuster vos critères de recherche.",
+      "clear-filters": "Effacer les filtres",
+      "filter": "Filtrer",
+      "filter-placeholder": "Filtrer...",
       "dropdown-menu": {
         "edit": "Editer",
         "rename": "Renommer",
@@ -1181,6 +1186,11 @@
       "title": "Médiathèque",
       "more-options": "Plus d'options",
       "no-assets": "Aucun média",
+      "no-filtered-assets": "Aucun média trouvé",
+      "no-filtered-assets-description": "Aucun média ne correspond aux filtres sélectionnés. Essayez d'ajuster vos critères de recherche.",
+      "clear-filters": "Effacer les filtres",
+      "filter": "Filtrer",
+      "filter-placeholder": "Filtrer...",
       "enhance-button": "Transformer en vidéo",
       "enhance-title": "Améliorer votre média",
       "enhance-description": "Générez des vidéos ou améliorez vos images grâce à l'IA",
@@ -1267,6 +1277,62 @@
         "generation-error-description": "Une erreur est survenue lors de la génération de la description",
         "enhancement-started": "Génération démarrée",
         "enhancement-started-description": "La génération a été lancée avec succès"
+      }
+    },
+    "filters": {
+      "video-types": {
+        "duration": "Durée",
+        "created-by": "Créé par",
+        "has-avatar": "A un avatar",
+        "is-outdated": "Est obsolète",
+        "created-date": "Date de création"
+      },
+      "asset-types": {
+        "type": "Type",
+        "uploaded-by": "Importé par",
+        "ai-generated": "Généré par IA",
+        "created-date": "Date de création"
+      },
+      "durations": {
+        "less-than-30s": "Moins de 30s",
+        "30s-1min": "30s - 1min",
+        "1min-2min": "1-2min",
+        "2min-5min": "2-5min",
+        "more-than-5min": "Plus de 5min"
+      },
+      "asset-types-values": {
+        "image": "Image",
+        "video": "Vidéo"
+      },
+      "boolean": {
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "date-ranges": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "last-3-days": "3 derniers jours",
+        "last-7-days": "7 derniers jours",
+        "last-30-days": "30 derniers jours",
+        "last-90-days": "90 derniers jours"
+      },
+      "operators": {
+        "is": "est",
+        "is not": "n'est pas",
+        "is any of": "est parmi",
+        "include": "inclut",
+        "do not include": "n'inclut pas",
+        "include all of": "inclut tous",
+        "include any of": "inclut au moins un",
+        "exclude all of": "exclut tous",
+        "exclude if any of": "exclut si au moins un",
+        "before": "avant",
+        "after": "après"
+      },
+      "ui": {
+        "selected": "sélectionné",
+        "selected-plural": "sélectionnés",
+        "no-results": "Aucun résultat trouvé"
       }
     },
     "onboarding": {

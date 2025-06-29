@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     const space = await getSpaceById(spaceId);
 
-    return NextResponse.json({ data: space.medias })
+    return NextResponse.json({ data: space.medias.reverse() })
   } catch (error) {
     console.error('Error getting space medias:', error)
     return NextResponse.json({ error: 'Error getting space medias' }, { status: 500 })

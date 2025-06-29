@@ -1,6 +1,7 @@
 import { executeWithRetry } from "../lib/db";
 import Video from "../models/Video";
 import { IVideo } from "../types/video";
+import mongoose from "mongoose";
 
 export const getVideoById = async (id: string): Promise<IVideo | null> => {
   try {
@@ -13,10 +14,36 @@ export const getVideoById = async (id: string): Promise<IVideo | null> => {
   }
 }
 
+export interface VideoFilters {
+  duration?: {
+    min?: number;
+    max?: number;
+    isNot?: boolean;
+  };
+  createdBy?: {
+    userIds: string[];
+    isNot?: boolean;
+  };
+  hasAvatar?: {
+    value: boolean;
+    isNot?: boolean;
+  };
+  isOutdated?: {
+    value: boolean;
+    isNot?: boolean;
+  };
+  createdDate?: {
+    startDate?: Date;
+    endDate?: Date;
+    isNot?: boolean;
+  };
+}
+
 export const getVideosBySpaceId = async (
   spaceId: string, 
   page: number = 1, 
-  limit: number = 20
+  limit: number = 20,
+  filters?: VideoFilters
 ): Promise<{ videos: IVideo[], totalCount: number, currentPage: number, totalPages: number }> => {
   try {
     return await executeWithRetry(async () => {
@@ -40,12 +67,123 @@ export const getVideosBySpaceId = async (
         'video.audio.voices': 1
       };
       
+      // Construction du filtre MongoDB
+      const mongoQuery: any = { 
+        spaceId, 
+        archived: { $ne: true } 
+      };
+
+      // Appliquer les filtres
+      if (filters) {
+        // Filtre par durée (utiliser audio_duration)
+        if (filters.duration) {
+          const durationFilter: any = {};
+          if (filters.duration.min !== undefined) {
+            durationFilter.$gte = filters.duration.min;
+          }
+          if (filters.duration.max !== undefined) {
+            durationFilter.$lte = filters.duration.max;
+          }
+          if (Object.keys(durationFilter).length > 0) {
+            if (filters.duration.isNot) {
+              mongoQuery['video.metadata.audio_duration'] = { $not: durationFilter };
+            } else {
+              mongoQuery['video.metadata.audio_duration'] = durationFilter;
+            }
+          }
+        }
+
+        // Filtre par avatar
+        if (filters.hasAvatar !== undefined) {
+          const hasAvatarCondition = filters.hasAvatar.value 
+            ? { $exists: true, $ne: null } 
+            : { $exists: false };
+          
+          if (filters.hasAvatar.isNot) {
+            // Inverser la condition
+            mongoQuery['video.avatar'] = filters.hasAvatar.value 
+              ? { $exists: false }
+              : { $exists: true, $ne: null };
+          } else {
+            mongoQuery['video.avatar'] = hasAvatarCondition;
+          }
+        }
+
+        // Filtre par statut outdated
+        if (filters.isOutdated !== undefined) {
+          if (filters.isOutdated.value) {
+            // Vidéo outdated : pas de voices ou voices vide
+            const outdatedCondition = {
+              $or: [
+                { "video.audio.voices": { $exists: false } },
+                { "video.audio.voices": { $size: 0 } }
+              ]
+            };
+            
+            if (filters.isOutdated.isNot) {
+              // NOT outdated : a des voices non vides
+              mongoQuery["video.audio.voices"] = { $exists: true, $not: { $size: 0 } };
+            } else {
+              // IS outdated
+              mongoQuery.$or = outdatedCondition.$or;
+            }
+          } else {
+            // Vidéo non outdated : a des voices
+            if (filters.isOutdated.isNot) {
+              // NOT non-outdated = IS outdated
+              mongoQuery.$or = [
+                { "video.audio.voices": { $exists: false } },
+                { "video.audio.voices": { $size: 0 } }
+              ];
+            } else {
+              // IS non-outdated
+              mongoQuery["video.audio.voices"] = { $exists: true, $not: { $size: 0 } };
+            }
+          }
+        }
+
+        // Filtre par date de création
+        if (filters.createdDate) {
+          const dateFilter: any = {};
+          if (filters.createdDate.startDate) {
+            dateFilter.$gte = filters.createdDate.startDate;
+          }
+          if (filters.createdDate.endDate) {
+            dateFilter.$lte = filters.createdDate.endDate;
+          }
+          if (Object.keys(dateFilter).length > 0) {
+            if (filters.createdDate.isNot) {
+              mongoQuery.createdAt = { $not: dateFilter };
+            } else {
+              mongoQuery.createdAt = dateFilter;
+            }
+          }
+        }
+
+        // Filtre par créateur (utiliser l'historique)
+        if (filters.createdBy && filters.createdBy.userIds.length > 0) {
+          console.log("filters.createdBy.userIds", filters.createdBy.userIds);
+          const creatorCondition = {
+            $elemMatch: {
+              step: 'CREATE',
+              user: { $in: filters.createdBy.userIds.map(id => new mongoose.Types.ObjectId(id)) }
+            }
+          };
+          
+          if (filters.createdBy.isNot) {
+            mongoQuery.history = { $not: creatorCondition };
+          } else {
+            mongoQuery.history = creatorCondition;
+          }
+        }
+      }
+      
       const [videos, totalCount] = await Promise.all([
-        Video.find({ spaceId, archived: { $ne: true } }, projection)
+        Video.find(mongoQuery, projection)
           .sort({ createdAt: -1 })
           .skip(skip)
           .limit(limit),
-        Video.countDocuments({ spaceId, archived: { $ne: true } })
+        Video.countDocuments(mongoQuery)
       ]);
       
       const totalPages = Math.ceil(totalCount / limit);

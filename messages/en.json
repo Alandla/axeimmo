@@ -39,6 +39,11 @@
       "no-videos": "No videos found",
       "create-video": "Create a video",
       "no-videos-description": "Start by creating your first video to see it here.",
+      "no-filtered-videos": "No videos found",
+      "no-filtered-videos-description": "No videos match the selected filters. Try adjusting your search criteria.",
+      "clear-filters": "Clear filters",
+      "filter": "Filter",
+      "filter-placeholder": "Filter...",
       "dropdown-menu": {
         "edit": "Edit",
         "rename": "Rename",
@@ -1190,6 +1195,11 @@
       "title": "Media Library",
       "more-options": "More options",
       "no-assets": "No assets",
+      "no-filtered-assets": "No assets found",
+      "no-filtered-assets-description": "No assets match the selected filters. Try adjusting your search criteria.",
+      "clear-filters": "Clear filters",
+      "filter": "Filter",
+      "filter-placeholder": "Filter...",
       "enhance-button": "Turn into video",
       "enhance-title": "Enhance your media",
       "enhance-description": "Generate videos or enhance your images with AI",
@@ -1286,6 +1296,62 @@
         "cancel": "Cancel",
         "delete": "Delete",
         "deleting": "Deleting..."
+      }
+    },
+    "filters": {
+      "video-types": {
+        "duration": "Duration",
+        "created-by": "Created by",
+        "has-avatar": "Has avatar",
+        "is-outdated": "Is outdated",
+        "created-date": "Created date"
+      },
+      "asset-types": {
+        "type": "Type",
+        "uploaded-by": "Uploaded by",
+        "ai-generated": "AI Generated",
+        "created-date": "Created date"
+      },
+      "durations": {
+        "less-than-30s": "Less than 30s",
+        "30s-1min": "30s - 1min",
+        "1min-2min": "1-2min",
+        "2min-5min": "2-5min",
+        "more-than-5min": "More than 5min"
+      },
+      "asset-types-values": {
+        "image": "Image",
+        "video": "Video"
+      },
+      "boolean": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "date-ranges": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "last-3-days": "Last 3 days",
+        "last-7-days": "Last 7 days",
+        "last-30-days": "Last 30 days",
+        "last-90-days": "Last 90 days"
+      },
+      "operators": {
+        "is": "is",
+        "is not": "is not",
+        "is any of": "is any of",
+        "include": "include",
+        "do not include": "do not include",
+        "include all of": "include all of",
+        "include any of": "include any of",
+        "exclude all of": "exclude all of",
+        "exclude if any of": "exclude if any of",
+        "before": "before",
+        "after": "after"
+      },
+      "ui": {
+        "selected": "selected",
+        "selected-plural": "selected",
+        "no-results": "No results found"
       }
     },
     "onboarding": {
