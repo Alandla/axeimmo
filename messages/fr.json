@@ -296,7 +296,7 @@
         "edit-word": "Editer le mot",
         "add-word": "Ajouter un mot",
         "remove-word": "Supprimer le mot",
-        "regeneration-needed": "Régénération audio nécessaire",
+        "regeneration-needed": "Besoin de régénérer l'audio ?",
         "button-regenerate": "Regénérer l'audio",
         "button-delete": "Supprimer la séquence",
         "add-sequence": "Ajouter une séquence",

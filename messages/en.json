@@ -305,7 +305,7 @@
         "edit-word": "Edit word",
         "add-word": "Add word",
         "remove-word": "Remove word",
-        "regeneration-needed": "Audio regeneration needed",
+        "regeneration-needed": "Need audio regeneration ?",
         "button-regenerate": "Regenerate audio",
         "button-delete": "Delete sequence",
         "add-sequence": "Add sequence",

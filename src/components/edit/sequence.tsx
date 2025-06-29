@@ -345,7 +345,7 @@ export default function Sequence({
 
                         <div className="flex items-center gap-2">
                             {sequence.needsAudioRegeneration && (
-                                <Badge variant="destructive" onClick={() => onRegenerateAudio(index)}>
+                                <Badge variant="warning" onClick={() => onRegenerateAudio(index)}>
                                     <AlertTriangle className="w-3 h-3 mr-1" />
                                     {t('regeneration-needed')}
                                 </Badge>
