@@ -45,12 +45,22 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
   </svg>
 );
 
-export function AvatarCard({ avatar, onClick, isLastUsed }: { avatar: Avatar; onClick: () => void; isLastUsed?: boolean }) {
-    const { selectedAvatarName } = useCreationStore()
+interface AvatarCardProps {
+  avatar: Avatar;
+  onClick: () => void;
+  isLastUsed?: boolean;
+  selectedAvatarName?: string | String | null;
+}
+
+export function AvatarCard({ avatar, onClick, isLastUsed, selectedAvatarName: propSelectedAvatarName }: AvatarCardProps) {
+    const { selectedAvatarName: storeSelectedAvatarName } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
     const { showPremiumToast } = usePremiumToast()
     const t = useTranslations('avatars')
     const pricingT = useTranslations('pricing')
+    
+    // Utiliser la prop si fournie, sinon utiliser le store
+    const selectedAvatarName = propSelectedAvatarName !== undefined ? propSelectedAvatarName : storeSelectedAvatarName
     const isSelected = selectedAvatarName === avatar.name;
 
     const handleAvatarSelection = () => {

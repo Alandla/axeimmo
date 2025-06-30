@@ -19,18 +19,21 @@ export function PreviewModal({ previewUrl, avatarName, lookPlace, children }: Pr
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[800px] max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
             <DialogTitle>
                 {avatarName} - {lookPlace}
             </DialogTitle>
         </DialogHeader>
-        <video 
-          src={previewUrl} 
-          controls 
-          autoPlay 
-          className="w-full rounded-lg"
-        />
+        <div className="flex-1 flex items-center justify-center min-h-0">
+          <video 
+            src={previewUrl} 
+            controls 
+            autoPlay 
+            className="max-w-full max-h-[60vh] rounded-lg"
+            style={{ objectFit: 'contain' }}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   )

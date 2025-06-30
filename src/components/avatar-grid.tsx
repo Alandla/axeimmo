@@ -31,14 +31,21 @@ import { HorizontalScrollList } from './ui/horizontal-scroll-list'
 import { Card, CardContent } from "@/src/components/ui/card"
 
 // Composant pour la carte "No avatar"
-function NoAvatarCard() {
+function NoAvatarCard({ 
+  selectedLook, 
+  onLookChange, 
+  onAvatarNameChange 
+}: { 
+  selectedLook: AvatarLook | null, 
+  onLookChange: (look: AvatarLook | null) => void,
+  onAvatarNameChange: (name: string | null) => void 
+}) {
   const t = useTranslations('avatars')
-  const { selectedLook, setSelectedLook, setSelectedAvatarName } = useCreationStore()
   const isSelected = !selectedLook
 
   const handleClick = () => {
-    setSelectedLook(null)
-    setSelectedAvatarName(null)
+    onLookChange(null)
+    onAvatarNameChange(null)
   }
 
   return (
@@ -70,13 +77,53 @@ function NoAvatarCard() {
 
 interface AvatarGridComponentProps {
   mode?: 'default' | 'large';
+  // Props pour le mode contrôlé
+  selectedLook?: AvatarLook | null;
+  onLookChange?: (look: AvatarLook | null) => void;
+  selectedAvatarName?: string | null;
+  onAvatarNameChange?: (name: string | null) => void;
+  // Props pour personnaliser le comportement
+  showNoAvatar?: boolean;
 }
 
-export function AvatarGridComponent({ mode = 'default' }: AvatarGridComponentProps) {
+export function AvatarGridComponent({ 
+  mode = 'default',
+  selectedLook: controlledSelectedLook,
+  onLookChange,
+  selectedAvatarName: controlledSelectedAvatarName,
+  onAvatarNameChange,
+  showNoAvatar = true
+}: AvatarGridComponentProps) {
   const t = useTranslations('avatars')
   const tCommon = useTranslations('common')
 
-  const { selectedVoice, setSelectedLook, selectedLook } = useCreationStore()
+  // Déterminer si on est en mode contrôlé
+  const isControlled = controlledSelectedLook !== undefined || onLookChange !== undefined
+
+  // Store hooks (utilisés seulement en mode non-contrôlé)
+  const storeState = useCreationStore()
+  const { selectedVoice, setSelectedLook: setStoreSelectedLook, selectedLook: storeSelectedLook } = storeState
+
+  // Valeurs effectives (contrôlées ou du store)
+  const selectedLook = isControlled ? controlledSelectedLook : storeSelectedLook
+  const selectedAvatarName = isControlled ? controlledSelectedAvatarName : storeState.selectedAvatarName
+
+  // Fonctions de mise à jour
+  const setSelectedLook = (look: AvatarLook | null) => {
+    if (isControlled && onLookChange) {
+      onLookChange(look)
+    } else if (!isControlled) {
+      setStoreSelectedLook(look)
+    }
+  }
+
+  const setSelectedAvatarName = (name: string | null) => {
+    if (isControlled && onAvatarNameChange) {
+      onAvatarNameChange(name)
+    } else if (!isControlled) {
+      storeState.setSelectedAvatarName(name)
+    }
+  }
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedGender, setSelectedGender] = useState<string>(selectedVoice?.gender || 'all')
@@ -199,7 +246,7 @@ export function AvatarGridComponent({ mode = 'default' }: AvatarGridComponentPro
 
   // Pour la première page, on affiche la carte "No avatar" + (avatarsPerPage - 1) avatars
   // Pour les autres pages, on affiche avatarsPerPage avatars normaux
-  const showNoAvatarCard = !activeAvatar && currentPage === 1
+  const showNoAvatarCard = !activeAvatar && currentPage === 1 && showNoAvatar
   const avatarsToShow = showNoAvatarCard 
     ? currentAvatars.slice(0, avatarsPerPage - 1) 
     : currentAvatars
@@ -433,6 +480,9 @@ export function AvatarGridComponent({ mode = 'default' }: AvatarGridComponentPro
                 look={look}
                 avatarName={activeAvatar.name}
                 isLastUsed={look.id ? lastUsedParameters?.avatars?.includes(look.id) : false}
+                selectedLook={selectedLook}
+                onLookChange={setSelectedLook}
+                onAvatarNameChange={setSelectedAvatarName}
               />
             ))
           ) : (
@@ -443,13 +493,20 @@ export function AvatarGridComponent({ mode = 'default' }: AvatarGridComponentPro
         ) : (
           // Afficher la liste des avatars avec la carte "No avatar" en première position uniquement sur la première page
           <>
-            {showNoAvatarCard && <NoAvatarCard />}
+            {showNoAvatarCard && (
+              <NoAvatarCard 
+                selectedLook={selectedLook || null}
+                onLookChange={setSelectedLook}
+                onAvatarNameChange={setSelectedAvatarName}
+              />
+            )}
             {(avatarsToShow as Avatar[]).map((avatar: Avatar) => (
               <AvatarCard
                 key={avatar.id}
                 avatar={avatar}
                 onClick={() => setActiveAvatar(avatar)}
                 isLastUsed={avatar.looks.some(look => look.id && lastUsedParameters?.avatars?.includes(look.id))}
+                selectedAvatarName={selectedAvatarName}
               />
             ))}
           </>

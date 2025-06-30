@@ -5,8 +5,7 @@ import { Button } from "@/src/components/ui/button";
 import { useTranslations } from "next-intl";
 import { AvatarGridComponent } from "@/src/components/avatar-grid";
 import { AvatarLook } from "@/src/types/avatar";
-import { useCreationStore } from "@/src/store/creationStore";
-import { useEffect } from "react";
+import { useState } from "react";
 
 interface AvatarSelectionModalProps {
   isOpen: boolean;
@@ -22,35 +21,52 @@ export function AvatarSelectionModal({
   onAvatarChange
 }: AvatarSelectionModalProps) {
   const t = useTranslations("edit");
-  const { selectedLook, setSelectedLook } = useCreationStore();
+  
+  // État local pour la sélection dans le modal
+  const [localSelectedLook, setLocalSelectedLook] = useState<AvatarLook | null>(currentAvatar);
+  const [localSelectedAvatarName, setLocalSelectedAvatarName] = useState<string | null>(
+    currentAvatar ? currentAvatar.name || null : null
+  );
 
-  // Initialize selected look with current avatar when modal opens
-  useEffect(() => {
-    if (isOpen && currentAvatar) {
-      setSelectedLook(currentAvatar);
+  // Réinitialiser la sélection locale quand le modal s'ouvre
+  const handleModalOpen = (open: boolean) => {
+    if (open) {
+      setLocalSelectedLook(currentAvatar);
+      setLocalSelectedAvatarName(currentAvatar ? currentAvatar.name || null : null);
     }
-  }, [isOpen, currentAvatar, setSelectedLook]);
+  };
 
   const handleConfirm = () => {
-    onAvatarChange(selectedLook);
+    onAvatarChange(localSelectedLook);
     onClose();
   };
 
   const handleCancel = () => {
     // Reset to current avatar
-    setSelectedLook(currentAvatar);
+    setLocalSelectedLook(currentAvatar);
+    setLocalSelectedAvatarName(currentAvatar ? currentAvatar.name || null : null);
     onClose();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleCancel}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) handleCancel();
+      handleModalOpen(open);
+    }}>
       <DialogContent className="max-w-6xl max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle>{t('select-avatar')}</DialogTitle>
         </DialogHeader>
         
         <div className="flex-1 overflow-visible">
-          <AvatarGridComponent mode="large" />
+          <AvatarGridComponent 
+            mode="large" 
+            selectedLook={localSelectedLook}
+            onLookChange={setLocalSelectedLook}
+            selectedAvatarName={localSelectedAvatarName}
+            onAvatarNameChange={setLocalSelectedAvatarName}
+            showNoAvatar={true}
+          />
         </div>
         
         <div className="flex justify-end gap-2 pt-4 border-t">

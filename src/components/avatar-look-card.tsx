@@ -48,20 +48,43 @@ interface AvatarLookCardProps {
   look: AvatarLook
   avatarName: String
   isLastUsed?: boolean
+  selectedLook?: AvatarLook | null
+  onLookChange?: (look: AvatarLook | null) => void
+  onAvatarNameChange?: (name: string | null) => void
 }
 
-export function AvatarLookCard({ look, avatarName, isLastUsed }: AvatarLookCardProps) {
-  const { selectedLook, setSelectedLook, setSelectedAvatarName } = useCreationStore()
-  const isSelected = selectedLook?.id === look.id;
+export function AvatarLookCard({ 
+  look, 
+  avatarName, 
+  isLastUsed,
+  selectedLook: propSelectedLook,
+  onLookChange,
+  onAvatarNameChange
+}: AvatarLookCardProps) {
+  const { selectedLook: storeSelectedLook, setSelectedLook: setStoreSelectedLook, setSelectedAvatarName: setStoreSelectedAvatarName } = useCreationStore()
   const t = useTranslations('avatars')
+
+  const selectedLook = propSelectedLook !== undefined ? propSelectedLook : storeSelectedLook
+  const isSelected = selectedLook?.id === look.id;
+
+  const handleClick = () => {
+    if (onLookChange) {
+      onLookChange(look)
+    } else {
+      setStoreSelectedLook(look)
+    }
+    
+    if (onAvatarNameChange) {
+      onAvatarNameChange(avatarName as string)
+    } else {
+      setStoreSelectedAvatarName(avatarName)
+    }
+  }
 
   return (
     <Card 
       className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
-      onClick={() => {
-        setSelectedLook(look)
-        setSelectedAvatarName(avatarName)
-      }}
+      onClick={handleClick}
     >
       {(isSelected || isLastUsed) && (
         <div className="absolute top-2 right-2 transition-all duration-150">
