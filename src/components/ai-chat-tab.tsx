@@ -50,10 +50,10 @@ export function AiChatTab({
         return urlRegex.test(text);
     };
 
-    // Check if current plan is FREE or START and if URL is detected
+    // Check if current plan is FREE and if URL is detected
     const isUrlDetected = detectUrls(inputMessage);
     const shouldShowUrlWarning = isUrlDetected && 
-        (activeSpace?.planName === PlanName.FREE || activeSpace?.planName === PlanName.START);
+        (activeSpace?.planName === PlanName.FREE);
 
     const adjustTextareaHeight = (event: React.FormEvent<HTMLTextAreaElement>) => {
       const target = event.target as HTMLTextAreaElement;

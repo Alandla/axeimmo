@@ -494,9 +494,9 @@
       "animate-images": "Animer les images",
       "credits": "crédits",
       "url-detected": {
-        "title": "Plan Pro requis pour les URLs",
+        "title": "Plan Start requis pour les URLs",
         "description": "Mettez à niveau votre plan pour créer des vidéos à partir d'URLs.",
-        "upgrade": "Mettre à niveau vers Pro"
+        "upgrade": "Mettre à niveau vers Start"
       }
     },
     "select": {

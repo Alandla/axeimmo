@@ -503,9 +503,9 @@
       "animate-images": "Animate images",
       "credits": "credits",
       "url-detected": {
-        "title": "Pro Plan Required for URLs",
+        "title": "Start Plan Required for URLs",
         "description": "Upgrade to using URLs for creating videos.",
-        "upgrade": "Upgrade to Pro"
+        "upgrade": "Upgrade to Start"
       }
     },
     "select": {
