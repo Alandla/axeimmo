@@ -60,11 +60,15 @@ function NoAvatarCard({
       )}
       <CardContent className="flex flex-col justify-between p-4 h-full">
         <div>
-          <h3 className="text-lg font-semibold mb-2">{t('no-avatar-name')}</h3>
+          <div className="flex items-center mb-2">
+            <h3 className="text-lg font-semibold">{t('no-avatar-name')}</h3>
+          </div>
           <div className="mb-4">
-            <Badge variant="secondary" className="shrink-0 whitespace-nowrap">
-              {t('no-avatar-description')}
-            </Badge>
+            <div className="flex gap-1 min-w-min">
+              <Badge variant="secondary" className="shrink-0 whitespace-nowrap">
+                {t('no-avatar-description')}
+              </Badge>
+            </div>
           </div>
           <div className="w-full aspect-square rounded-md overflow-hidden bg-gray-100 flex items-center justify-center">
             <UserRoundX className="h-12 w-12 text-gray-400" />

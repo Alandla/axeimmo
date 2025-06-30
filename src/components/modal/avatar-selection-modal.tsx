@@ -53,12 +53,12 @@ export function AvatarSelectionModal({
       if (!open) handleCancel();
       handleModalOpen(open);
     }}>
-      <DialogContent className="max-w-6xl max-h-[80vh] overflow-hidden flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-6xl max-h-[80vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle>{t('select-avatar')}</DialogTitle>
         </DialogHeader>
         
-        <div className="flex-1 overflow-visible">
+        <div className="flex-1 overflow-visible min-h-0">
           <AvatarGridComponent 
             mode="large" 
             selectedLook={localSelectedLook}
