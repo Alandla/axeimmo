@@ -12,7 +12,11 @@ export const CrispChat = () => {
   useEffect(() => {
     Crisp.configure("ddcd3b39-f7b4-46f7-92c0-ca6180926e1b");
 
-    Crisp.chat.show();
+    if (pathname.includes('/onboarding')) {
+      Crisp.chat.hide();
+    } else {
+      Crisp.chat.show();
+    }
   }, [pathname]);
 
   // Add User Unique ID to Crisp to easily identify users when reaching support (optional)
