@@ -39,7 +39,7 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
   const isStorageFull = storagePercentage >= 100
 
   // Désactiver le bouton d'upload si l'utilisateur n'a pas de plan ou si le stockage est plein
-  const isUploadDisabled = isUploadingFiles || !activeSpace?.id || isStorageFull
+  const isUploadDisabled = isUploadingFiles || isStorageFull
 
   useEffect(() => {
     // Vérifier si les assets sont déjà dans le store pour ce spaceId
@@ -121,7 +121,8 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
         }) as { addedMedias: IMediaSpace[], usedStorageBytes: number }
 
         mediasToAnalyze = addedMedias.filter(mediaSpace => {
-          return !mediaSpace.media.description || mediaSpace.media.description[0].text === "";
+          return !mediaSpace.media.description || 
+                 !mediaSpace.media.description[0]?.text;
         });
 
         setAssetsInStore(spaceId, addedMedias);
@@ -185,7 +186,7 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
         {t('upload-file-button')}
       </Button>
       <div className="mt-4 columns-3 gap-2">
-          {assetsToDisplay.map((asset, index) => (
+          {assetsToDisplay.slice().reverse().map((asset, index) => (
               <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} spaceId={spaceId} media={asset.media} source='aws' canRemove={true} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
           ))}
       </div>
