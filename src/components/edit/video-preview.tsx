@@ -123,7 +123,7 @@ export default function VideoPreview({
             )}
             {video?.video && onVideoFormatChange && (
                 <div className="w-full mb-4">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className={`grid gap-2 ${video.video.avatar && onAvatarChange ? 'grid-cols-2' : 'grid-cols-1'}`}>
                         <VideoFormatSelector
                             value={video.video.format || 'vertical'}
                             onValueChange={onVideoFormatChange}
