@@ -215,14 +215,15 @@ export default function VideoEditor() {
   };
 
   const onExportVideo = async () => {
-    await basicApiCall('/video/save', { video })
     try {
-      if (planName === PlanName.FREE && video?.video?.avatar?.id) {
-        setModalPricingTitle(t('modal-pricing-avatar-on-free-title'))
-        setModalPricingDescription(t('modal-pricing-avatar-on-free-description'))
+      if (planName === PlanName.FREE) {
+        setModalPricingTitle(t('modal-pricing-export-on-free-title'))
+        setModalPricingDescription(t('modal-pricing-export-on-free-description'))
         setShowModalPricing(true)
         return undefined
       }
+
+      await basicApiCall('/video/save', { video })
 
       const exportResult : IExport = await basicApiCall('/export/create', { videoId: video?.id, spaceId: video?.spaceId })
       return exportResult.id

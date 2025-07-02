@@ -115,6 +115,9 @@ export async function POST(req: Request) {
 
         await updateSpacePlan(spaceId as string, planSpace);
         
+        // Attribution des crédits initiaux pour le premier abonnement
+        await setCreditsToSpace(spaceId as string, plan.credits);
+        
         if (fbc || fbp) {
           trackOrderFacebook(user?.email, session?.invoice as string, session?.subscription as string, user?.id?.toString(), priceAmount, priceData.currency.toUpperCase(), fbc, fbp);
         }
@@ -242,12 +245,23 @@ export async function POST(req: Request) {
 
         const space : ISpace = await getSpaceById(spaceId);
 
-        const creditToAdd = space.credits * 0.3;
+        // Renouvellement mensuel avec logique des 30% de bonus sur crédits restants
+        const creditsMonth = space.plan.creditsMonth;
+        const currentCredits = space.credits;
+        const maxPossibleCredits = creditsMonth + Math.floor(creditsMonth * 0.3 * 3); // 3 mois de bonus max
+        
         let finalCredit;
-        if (creditToAdd >= (space.plan.creditsMonth*0.3)*3) {
-          finalCredit = space.plan.creditsMonth;
+        
+        if (currentCredits >= maxPossibleCredits) {
+          // L'utilisateur a déjà le maximum possible (3 mois de bonus), on remet aux crédits de base
+          finalCredit = creditsMonth;
         } else {
-          finalCredit = space.plan.creditsMonth + creditToAdd;
+          // On calcule le bonus : 30% des crédits restants
+          const bonusCredits = Math.floor(currentCredits * 0.3);
+          const newTotal = creditsMonth + bonusCredits;
+          
+          // On vérifie qu'on ne dépasse pas le maximum autorisé
+          finalCredit = Math.min(newTotal, maxPossibleCredits);
         }
 
         await setCreditsToSpace(spaceId, finalCredit);

@@ -45,8 +45,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "not-enough-credits" }, { status: 400 });
     }
 
-    if (video.video?.avatar?.id && space.plan.name === PlanName.FREE) {
-      return NextResponse.json({ error: "avatar-not-available-on-free-plan" }, { status: 400 });
+    if (space.plan.name === PlanName.FREE) {
+      return NextResponse.json({ error: "export-not-available-on-free-plan" }, { status: 400 });
     }
 
     const exportData: IExport = {

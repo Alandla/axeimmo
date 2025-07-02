@@ -1,19 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Star, Heart, Diamond, Gem, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight, Database, Globe, Sparkles } from 'lucide-react'
+import { Star, Heart, Diamond, Gem, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight, Database, Globe, Sparkles, Link2 } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card'
 import { Button } from '@/src/components/ui/button'
 import { useTranslations } from 'next-intl'
 import { PlanName } from '../types/enums'
-import { discount, plans } from '../config/plan.config'
-import { Plan } from '../types/plan'
-import { basicApiCall, basicApiGetCall } from '../lib/api'
-import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import Link from 'next/link'
 import DiscountBanner from './discount-banner'
-import { track } from '@/src/utils/mixpanel'
-import { MixpanelEvent } from '@/src/types/events'
 import PlanPeriodToggle from './plan-period-toggle'
 import {
   Select,
@@ -22,8 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select"
-import { getCookie } from '../lib/cookies'
 import { formatBytes } from '../utils/format'
+import { usePricing } from '../hooks/use-pricing'
 
 // Définition des fonctionnalités avec leurs catégories pour remplacer plan.features
 export const features = [
@@ -128,6 +121,14 @@ export const features = [
         icon: <Globe className="h-4 w-4 mt-0.5 flex-shrink-0" />,
       },
       {
+        name: "url-to-video",
+        start: true,
+        pro: true,
+        enterprise: true,
+        soon: false,
+        icon: <Link2 className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
+      {
         name: "voice-cloning",
         start: false,
         pro: false,
@@ -229,112 +230,22 @@ export const features = [
 export default function PricingPage({ isSimplified = false }: { isSimplified?: boolean }) {
   const tPlan = useTranslations('plan')
   const tPricing = useTranslations('pricing')
-  const [isAnnual, setIsAnnual] = useState(false)
-  const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
-  const { activeSpace } = useActiveSpaceStore()
-  const [currency, setCurrency] = useState("USD")
   
-  useEffect(() => {
-    async function detectUserCurrency() {
-      try {
-        const { recommendedCurrency } = await basicApiGetCall<{ recommendedCurrency: string }>('/geolocation');
-        if (recommendedCurrency) {
-          setCurrency(recommendedCurrency);
-        }
-      } catch (error) {
-        console.error("Error detecting user currency:", error);
-      }
-    }
-    
-    detectUserCurrency();
-  }, []);
-
-  const getCurrencySymbol = () => {
-    return currency === "EUR" ? "€" : "$";
-  }
-
-  const handlePayment = async (plan: Plan) => {
-    try {
-      setLoadingPlan(plan.name);
-
-      const priceValue = isAnnual ? plan.annualPrice : plan.monthlyPrice;
-      const discountedPrice = applyDiscount(priceValue);
-
-      track(MixpanelEvent.GO_TO_CHECKOUT, {
-        plan: plan.name,
-        subscriptionType: isAnnual ? 'annual' : 'monthly',
-        price: discountedPrice,
-        currency: currency,
-      });
-
-      if (activeSpace?.planName === PlanName.FREE) {
-        const priceId = isAnnual ? plan.priceId.annual : plan.priceId.month;
-
-        const price = currency === "EUR" ? priceId.euros : priceId.dollars;
-        
-        const toltReferral = typeof window !== 'undefined' && window.tolt_referral ? window.tolt_referral : undefined;
-        const fbc = getCookie("_fbc") || undefined;
-        const fbp = getCookie("_fbp") || undefined;
-        
-        const url: string = await basicApiCall('/stripe/createCheckout', {
-          priceId: price,
-          spaceId: activeSpace?.id,
-          mode: 'subscription',
-          couponId: discount.active ? discount.couponId : undefined,
-          successUrl: window.location.href,
-          cancelUrl: window.location.href,
-          toltReferral: toltReferral,
-          price: discountedPrice,
-          currency: currency,
-          fbc: fbc,
-          fbp: fbp,
-        })
-
-        window.location.href = url;
-      } else {
-        const stripePortalURL: string = await basicApiCall('/stripe/createPortal', {
-          spaceId: activeSpace?.id,
-          returnUrl: window.location.href,
-        });
-        if (stripePortalURL) {
-          window.location.href = stripePortalURL;
-        }
-      }
-      setLoadingPlan(null);
-    } catch (error) {
-      setLoadingPlan(null);
-    }
-  }
-
-  const applyDiscount = (price: number) => {
-    if (!discount.active) return price;
-    if (discount.mode === "all" 
-      || (discount.mode === "year" && isAnnual) 
-      || (discount.mode === "month" && !isAnnual)) {
-      return price * discount.reduction;
-    }
-    return price;
-  };
-
-  const calculateAnnualDiscount = (monthly: number, annual: number) => {
-    return Math.round(((monthly - annual) / monthly) * 100);
-  };
-
-  const getButtonProps = (planName: PlanName) => {
-    if (!activeSpace?.planName) return { text: tPricing('upgrade'), disabled: false }
-    
-    const currentPlanIndex = plans.findIndex(p => p.name === activeSpace.planName)
-    const thisPlanIndex = plans.findIndex(p => p.name === planName)
-    
-    if (planName === activeSpace.planName) {
-      return { text: tPricing('current-plan'), disabled: true }
-    }
-    
-    return {
-      text: thisPlanIndex > currentPlanIndex ? tPricing('upgrade') : tPricing('downgrade'),
-      disabled: false
-    }
-  }
+  // Utilisation du hook partagé
+  const {
+    isAnnual,
+    setIsAnnual,
+    loadingPlan,
+    currency,
+    setCurrency,
+    getCurrencySymbol,
+    handlePayment,
+    getButtonProps,
+    getPlanPrice,
+    getSavePercentage,
+    plans,
+    discount
+  } = usePricing()
 
   return (
     <div className="container my-auto mx-auto px-4 sm:max-w-7xl">
@@ -414,14 +325,9 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
 
       <div className="flex flex-col md:flex-row gap-8 mb-8 items-start">
         {plans.map((plan) => {
-          const basePrice = isAnnual ? plan.annualPrice : plan.monthlyPrice;
-          const discountedPrice = applyDiscount(basePrice);
-          const buttonProps = getButtonProps(plan.name)
-          
-          const promoSavePercentage = discount.active ? Math.round((1 - discount.reduction) * 100) : 0;
-          const annualSavePercentage = calculateAnnualDiscount(plan.monthlyPrice, plan.annualPrice);
-          
-          const savePercentage = discount.active ? promoSavePercentage : (isAnnual ? annualSavePercentage : 0);
+          const discountedPrice = getPlanPrice(plan);
+          const buttonProps = getButtonProps(plan.name, tPricing)
+          const savePercentage = getSavePercentage(plan);
           
           return (
             <div key={plan.name} className="flex-1 w-full">
@@ -468,7 +374,7 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
                           ? 'bg-white text-black hover:bg-gray-100' 
                           : ''
                     }`}
-                    onClick={() => handlePayment(plan)}
+                    onClick={() => handlePayment(plan, 'pricing_page')}
                     disabled={loadingPlan === plan.name || buttonProps.disabled}
                   >
                     {buttonProps.text}

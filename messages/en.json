@@ -139,6 +139,7 @@
     },
     "pricing": {
       "upgrade": "Upgrade",
+      "loading": "Loading...",
       "downgrade": "Downgrade",
       "current-plan": "Current plan",
       "monthly": "Monthly",
@@ -179,6 +180,21 @@
         "hours": "hours",
         "minutes": "mins"
       },
+      "modal": {
+        "title": "Your stats deserve 10x more attention",
+        "description": "A paid account is needed to export your creation.",
+        "what-you-get": "What you will get:",
+        "video-exports": "Video exports",
+        "watermark-removal": "Watermark removal",
+        "url-to-video": "URL to video generation",
+        "unlimited-exports": "Unlimited exports",
+        "lifetime-updates": "Lifetime updates",
+        "best-deal": "Best deal (for real)",
+        "see-all-plans": "See all plans",
+        "upgrade-to": "Upgrade to {plan}",
+        "lifetime-deal": "Lifetime deal",
+        "loading": "Loading..."
+      },
       "feature": {
         "1-member": "1 member",
         "2-members": "2 members",
@@ -215,7 +231,8 @@
         "social-media-agent": "Social Media Strategist Agent",
         "video-producer-agent": "Video Content Producer Agent",
         "community-manager-agent": "Community Manager Agent",
-        "ai-model-ultra": "AI Model Ultra"
+        "ai-model-ultra": "AI Model Ultra",
+        "url-to-video": "URL to video generation"
       }
     },
     "plan": {
@@ -271,8 +288,8 @@
       "cancel": "Cancel",
       "modal-pricing-not-enough-credits": "Not enough credits",
       "modal-pricing-description-not-enough-credits": "You don't have enough credits to export your video, upgrade to a higher plan to export your video.",
-      "modal-pricing-avatar-on-free-title": "No avatar on the free plan",
-      "modal-pricing-avatar-on-free-description": "The avatar feature is not available on the Free plan due to high demand. If you would like to test the result, please contact us or choose a paid plan.",
+      "modal-pricing-export-on-free-title": "Export not available on free plan",
+      "modal-pricing-export-on-free-description": "Video export requires a paid plan. Upgrade to a paid plan to export your videos.",
       "mobile-disclaimer": {
         "title": "Desktop version recommended",
         "description": "For better performance and optimal experience, we recommend using a computer.",
@@ -304,7 +321,8 @@
         "description-regenerated": "The audio has been regenerated successfully.",
         "description-regeneration-error": "An error occurred while regenerating the audio.",
         "description-premium-voice-error": "This voice is only available in paid plans. Upgrade your subscription to access it.",
-        "description-premium-avatar-error": "This avatar is only available in paid plans. Upgrade your subscription to access it."
+        "description-premium-avatar-error": "This avatar is only available in paid plans. Upgrade your subscription to access it.",
+        "description-export-not-available-on-free-plan": "Video export requires a paid plan."
       },
       "sequence": {
         "edit-word": "Edit word",

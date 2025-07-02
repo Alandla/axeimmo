@@ -131,6 +131,7 @@
     },
     "pricing": {
       "upgrade": "Mettre à niveau",
+      "loading": "Chargement...",
       "downgrade": "Rétrograder",
       "current-plan": "Plan actuel",
       "monthly": "Mensuel",
@@ -170,6 +171,21 @@
         "hours": "heures",
         "minutes": "mins"
       },
+      "modal": {
+        "title": "Vos stats méritent 10x plus d'attention",
+        "description": "Un compte payant est nécessaire pour exporter votre création.",
+        "what-you-get": "Ce que vous obtenez :",
+        "video-exports": "Exports de vidéos",
+        "watermark-removal": "Suppression du filigrane",
+        "url-to-video": "Création de vidéo depuis URL",
+        "unlimited-exports": "Exports illimités",
+        "lifetime-updates": "Mises à jour à vie",
+        "best-deal": "Meilleure offre (pour de vrai)",
+        "see-all-plans": "Voir tous les plans",
+        "upgrade-to": "Passer à {plan}",
+        "lifetime-deal": "Offre à vie",
+        "loading": "Chargement..."
+      },
       "feature": {
         "1-member": "1 membre",
         "2-members": "2 membres",
@@ -206,7 +222,8 @@
         "social-media-agent": "Agent stratège de médias sociaux",
         "video-producer-agent": "Agent producteur de contenu vidéo",
         "community-manager-agent": "Agent community manager",
-        "ai-model-ultra": "Modèle IA Ultra"
+        "ai-model-ultra": "Modèle IA Ultra",
+        "url-to-video": "Création de vidéo depuis URL"
       }
     },
     "plan": {
@@ -262,8 +279,8 @@
       "cancel": "Annuler",
       "modal-pricing-not-enough-credits": "Pas assez de crédits",
       "modal-pricing-description-not-enough-credits": "Tu n'as pas assez de crédits pour exporter ta vidéo, passe à un plan supérieur pour exporter ta vidéo.",
-      "modal-pricing-avatar-on-free-title": "Pas d'avatar sur le plan gratuit.",
-      "modal-pricing-avatar-on-free-description": "La fonctionnalité avatar n'est pas disponible avec le plan Gratuit en raison d'une forte demande. Si vous souhaitez tester le résultat, veuillez nous contacter ou passer à un plan supérieur.",
+      "modal-pricing-export-on-free-title": "Export non disponible sur le plan gratuit",
+      "modal-pricing-export-on-free-description": "L'export de vidéos nécessite un plan payant. Passez à un plan payant pour pouvoir exporter vos vidéos.",
       "mobile-disclaimer": {
         "title": "Version ordinateur recommandée",
         "description": "Pour de meilleures performances et une expérience optimale, nous recommandons d'utiliser un ordinateur.",
@@ -295,7 +312,8 @@
         "description-regenerated": "L'audio a été regénéré avec succès.",
         "description-regeneration-error": "Une erreur est survenue lors de la regénération de l'audio.",
         "description-premium-voice-error": "Cette voix n'est disponible que dans les plans payants. Mettez à niveau votre abonnement pour y accéder.",
-        "description-premium-avatar-error": "Cet avatar n'est disponible que dans les plans payants. Mettez à niveau votre abonnement pour y accéder."
+        "description-premium-avatar-error": "Cet avatar n'est disponible que dans les plans payants. Mettez à niveau votre abonnement pour y accéder.",
+        "description-export-not-available-on-free-plan": "L'export de vidéos nécessite un plan payant."
       },
       "sequence": {
         "edit-word": "Editer le mot",

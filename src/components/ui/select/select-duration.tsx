@@ -101,6 +101,13 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, disabled, onChan
         }) : ''}
         isOpen={isPricingModalOpen}
         setIsOpen={setIsPricingModalOpen}
+        features={{
+          credits: true,
+          videoExports: true,
+          watermarkRemoval: true,
+          videoMinutes: true
+        }}
+        recommendedPlan={selectedRestrictedOption?.requiredPlan || PlanName.PRO}
       />
     </div>
   );
