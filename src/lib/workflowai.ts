@@ -195,7 +195,7 @@ const videoSequenceAnalysis = workflowAI.agent<VideoSequenceAnalysisInput, Video
 const mediaSequenceMatching = workflowAI.agent<MediaSequenceMatchingInput, MediaSequenceMatchingOutput>({
   id: "media-sequence-matching",
   schemaId: 2,
-  version: process.env.NODE_ENV === 'development' ? '4.2' : 'production',
+  version: process.env.NODE_ENV === 'development' ? '5.3' : 'production',
   useCache: process.env.NODE_ENV === 'development' ? 'never' : 'auto'
 })
 

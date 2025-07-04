@@ -35,7 +35,7 @@ export const VideoGenerate = ({
 			{ data.video.audio.url && <Audio src={data.video.audio.url} volume={data.video.audio.volume} /> }
 			{ data.video.audio.voices && <Voices voices={data.video.audio.voices} volume={data.video.audio.volume} /> }
 			{ data.video.audio.music && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
-			{showWatermark && <Watermark />}
+			{ showWatermark && <Watermark />}
 			{ data.video.avatar ? <BackgroundWithAvatar 
 				sequences={data.video.sequences} 
 				avatar={data.video.avatar} 

@@ -29,7 +29,7 @@ import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { useRealtimeRun } from '@trigger.dev/react-hooks'
 import { ToolDisplay, ToolCall } from './tool-display'
 import { ExtractedImagesDisplay } from './extracted-images-display'
-import { extractedImagesToMediaBasic } from '../lib/extracted-images'
+import { extractedImagesToMedia, analyzeAndFilterExtractedImages } from '../lib/extracted-images'
 
 enum MessageType {
   TEXT = 'text',
@@ -283,15 +283,25 @@ export function AiChat() {
             const allImages = results.flat();
             console.log("Images extraites:", allImages);
             
-            // Transformer les URLs d'images en format IMedia
+            // Transformer les URLs d'images en format IMedia et enregistrer immédiatement
             if (allImages.length > 0) {
-              try {
-                const imagesMedia = extractedImagesToMediaBasic(allImages);
-                console.log("Images transformées en IMedia:", imagesMedia);
-                setExtractedImagesMedia(imagesMedia);
-              } catch (error) {
-                console.error("Erreur lors de la transformation des images en IMedia:", error);
-              }
+              console.log("Enregistrement rapide des images extraites...");
+              extractedImagesToMedia(allImages)
+                .then(imagesMedia => {
+                  console.log("Images enregistrées rapidement dans le store:", imagesMedia);
+                  setExtractedImagesMedia(imagesMedia);
+                  
+                  // Lancer l'analyse en arrière-plan pour obtenir les vraies dimensions
+                  console.log("Lancement de l'analyse des dimensions en arrière-plan...");
+                  
+                  analyzeAndFilterExtractedImages(allImages, (filteredImages) => {
+                    console.log("Mise à jour du store avec les images filtrées:", filteredImages);
+                    setExtractedImagesMedia(filteredImages);
+                  });
+                })
+                .catch(error => {
+                  console.error("Erreur lors de l'enregistrement rapide des images:", error);
+                });
             }
           }).catch(error => {
             console.error("Erreur lors de l'extraction d'images:", error);
