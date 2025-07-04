@@ -16,7 +16,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/38f41688231f4f26be60187f3404a4ab/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/38f41688231f4f26be60187f3404a4ab/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/1ece6fe4-fd67-424b-9123-22d832c5047d.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -76,7 +76,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/9912cf2e72ce4e3394c32706265d2df7/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/9912cf2e72ce4e3394c32706265d2df7/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/227183c7-aba8-405e-a613-933030abdc9e.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -118,7 +118,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/3c91c09e694e4ee28db498e54a1284d6/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/3c91c09e694e4ee28db498e54a1284d6/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/d5cf9ecb-3eee-41d7-b1ae-1df8ae3e072f.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -159,7 +159,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/3b1ad77b161048d1a390847881cb9f01/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/3b1ad77b161048d1a390847881cb9f01/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/4421dc5d-cb64-4d55-8e18-954e52f9a0f3.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -181,7 +181,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/7dbaf3540c074da8a44f9dc3e80b9ac2/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/7dbaf3540c074da8a44f9dc3e80b9ac2/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/94069a96-fc8f-4e01-8279-1c47c3814f7c.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -203,7 +203,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/dd256943281d4b409ca0a9f992596e77/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/dd256943281d4b409ca0a9f992596e77/full/2.2/preview_video_target.mp4'
+                previewUrl: 'https://assets.hoox.video/3a1e084d-e1ce-4a68-be8e-3707e935f2b9.mp4'
             }
         ]
     },
@@ -241,7 +241,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/d99063378b524a8e9874f2723847bbe5/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/d99063378b524a8e9874f2723847bbe5/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/d110f3a1-85cf-4f7f-a16a-2dfcf1173b2d.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -263,7 +263,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/7a37e8822cdd4097ad81fe1c6b0e8db8/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/7a37e8822cdd4097ad81fe1c6b0e8db8/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/93839d0b-91c6-4744-ad11-2a4b770879d9.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -285,7 +285,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/c4cdd56fba9347ce8b0fb7ac1fdcefa7/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/c4cdd56fba9347ce8b0fb7ac1fdcefa7/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/efe590d1-8b94-4707-8aa3-78105ef5149e.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -307,7 +307,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/a3745cd0d98d4b78bdd5c5f4cbfb5be9/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/a3745cd0d98d4b78bdd5c5f4cbfb5be9/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/753aed03-7ffa-426e-83e3-dbf2bb092de5.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -368,7 +368,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/bbf8d733ced94fa0b5ff8c3ae8f6f50d/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/bbf8d733ced94fa0b5ff8c3ae8f6f50d/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/e397c10b-84c8-47b8-84cb-590bb1e966b5.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -466,7 +466,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/46e660c678294326a8fadc48fbfe7fe5/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/46e660c678294326a8fadc48fbfe7fe5/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/fe1494ce-7dcd-4133-9922-65e1501b315a.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -488,7 +488,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/f652bc4d09374bdea13777cfc9208dc5/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/f652bc4d09374bdea13777cfc9208dc5/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/b4e818ab-a97d-4853-9b3c-a5994669fe79.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -529,7 +529,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/61487e7c151345a28c2a0a60ceda7339/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/61487e7c151345a28c2a0a60ceda7339/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/6b7d61a3-b65c-4d54-a0f0-9ae1c6284783.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -747,7 +747,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/f71947a7ab6c4c50b216844d1a660427/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/f71947a7ab6c4c50b216844d1a660427/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/171eb2b1-04bd-4b69-9e61-6d4c9494b3e7.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -807,7 +807,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/9f570b0ea93646df898fdc785b1e8b3c/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/9f570b0ea93646df898fdc785b1e8b3c/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/2489b3cf-0f39-4439-8551-d127a616ea25.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -848,7 +848,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/7e413f4bad214727b9cca5f399b2ed80/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/7e413f4bad214727b9cca5f399b2ed80/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/f1496b71-8d86-40b6-b8ab-5d9b5161149c.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -870,7 +870,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/7e26221448ee4db7b0243820673165f0/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/7e26221448ee4db7b0243820673165f0/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/15d24ce7-a033-475b-9517-ffdb01ea583f.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -892,7 +892,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/c4cdd56fba9347ce8b0fb7ac1fdcefa7/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/c4cdd56fba9347ce8b0fb7ac1fdcefa7/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/efe590d1-8b94-4707-8aa3-78105ef5149e.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -933,7 +933,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/70d5bf66598f45efa238cd0d7dca0b79/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/70d5bf66598f45efa238cd0d7dca0b79/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/f3622a5f-a243-4343-863d-0aa46120ee53.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -974,7 +974,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/b7146291f7644fe29ab398e9a9260f1e/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/b7146291f7644fe29ab398e9a9260f1e/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/0fa92925-27aa-4bbf-bf70-2467ff8543fe.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -1035,7 +1035,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/b7cf3d075ffb4f87b1ef3c3ad15965a4/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/b7cf3d075ffb4f87b1ef3c3ad15965a4/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/eb0b7993-7132-42d9-9981-564580d73206.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -1077,7 +1077,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/dd256943281d4b409ca0a9f992596e77/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/dd256943281d4b409ca0a9f992596e77/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/3a1e084d-e1ce-4a68-be8e-3707e935f2b9.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -1138,7 +1138,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/5c8971c329e74b87b7bf87b68f4e36e7/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/5c8971c329e74b87b7bf87b68f4e36e7/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/f28743ad-95d1-4772-a208-cd84a5923cba.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -1160,7 +1160,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/1170559e7bcd4b21aadfee96d3389388/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/1170559e7bcd4b21aadfee96d3389388/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/b8164d49-6b67-4550-95ba-5ad01b6679d1.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
@@ -1183,7 +1183,7 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ['UGC'],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/e55c56a547684da9b15c379de857f3cc/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/e55c56a547684da9b15c379de857f3cc/full/2.2/preview_video_target.mp4',
+                previewUrl: 'https://assets.hoox.video/dc957e4e-8980-4f60-bbb5-e1528e475f25.mp4',
                 settings: {
                     heygenType: 'talking_photo'
                 }
