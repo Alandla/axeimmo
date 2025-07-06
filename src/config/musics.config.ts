@@ -2256,7 +2256,7 @@ export const music: MusicWithStyle[] = [
     {
         name: 'Deep House Crazy Flute',
         genre: Genre.INFORMATIVE,
-        url: 'https://music.hoox.video/deep-house-crazy-flute-259015.mp3',
+        url: 'https://music.hoox.video/deep-house-crazy-flute-259015%20(1).mp3',
         style: {
             ...genreStyles[Genre.INFORMATIVE],
             rotate: 150,
