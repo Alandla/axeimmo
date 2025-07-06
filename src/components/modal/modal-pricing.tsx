@@ -6,10 +6,10 @@ import {
   DialogContent,
 } from "@/src/components/ui/dialog"
 import { Button } from '@/src/components/ui/button'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { PlanName } from '../../types/enums'
 import PlanPeriodToggle from '../plan-period-toggle'
-import { ArrowRight, Check, Sparkles, Layers, Video, X, Clock, Star, Heart, Gem, Link } from 'lucide-react'
+import { ArrowRight, Check, Sparkles, Layers, Video, X, Clock, Star, Heart, Gem, Link, Image } from 'lucide-react'
 import { Loader2 } from 'lucide-react'
 import { usePricing } from '../../hooks/use-pricing'
 import { SlidingNumber } from '../ui/sliding-number'
@@ -26,6 +26,7 @@ interface ModalPricingProps {
     watermarkRemoval?: boolean
     videoMinutes?: boolean
     urlToVideo?: boolean
+    imageToVideoLimit?: boolean
   }
   recommendedPlan?: PlanName
   onSeeAllPlans?: () => void
@@ -41,13 +42,15 @@ export default function ModalPricing({
     videoExports: true,
     watermarkRemoval: true,
     videoMinutes: true,
-    urlToVideo: true
+    urlToVideo: true,
+    imageToVideoLimit: true
   },
   recommendedPlan = PlanName.PRO,
   onSeeAllPlans
 }: ModalPricingProps) {
   const tPlan = useTranslations('plan')
   const tPricing = useTranslations('pricing')
+  const locale = useLocale()
   
   // Utilisation du hook partagé
   const {
@@ -94,7 +97,7 @@ export default function ModalPricing({
         <div className="p-4 pt-8 md:p-8 md:pt-12">
           {/* Titre centré avec avatars */}
           <div className="text-center mb-4 md:mb-6">
-            <div className="flex justify-center mb-4">
+            <div className="hidden md:flex justify-center mb-4">
               <div className="flex -space-x-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-2 border-white"></div>
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-2 border-white"></div>
@@ -260,6 +263,36 @@ export default function ModalPricing({
                       <span className="text-gray-700 text-xs md:text-base">{tPricing('modal.url-to-video')}</span>
                     </div>
                   )}
+                  {features.imageToVideoLimit && selectedPlanData && (
+                    <div className="flex items-center gap-1 md:gap-2">
+                      <div className={`w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center ${
+                        selectedPlanData?.name === PlanName.START 
+                          ? 'bg-red-100' 
+                          : 'bg-green-100'
+                      }`}>
+                        {selectedPlanData?.name === PlanName.START ? (
+                          <X className="h-2 w-2 md:h-3 md:w-3 text-red-600" />
+                        ) : (
+                          <Image className="h-2 w-2 md:h-3 md:w-3 text-green-600" />
+                        )}
+                      </div>
+                      <span className={`text-xs md:text-base ${
+                        selectedPlanData?.name === PlanName.START 
+                          ? 'text-red-600 line-through' 
+                          : 'text-gray-700'
+                      }`}>
+                        {selectedPlanData.imageToVideoLimit === 999 ? (
+                          locale === 'fr' ? (
+                            <>{tPricing('modal.image-to-video-limit')} <span className="font-semibold">{tPricing('modal.unlimited')}</span></>
+                          ) : (
+                            <><span className="font-semibold">{tPricing('modal.unlimited')}</span> {tPricing('modal.image-to-video-limit')}</>
+                          )
+                        ) : (
+                          <><span className="font-semibold">{selectedPlanData.imageToVideoLimit}</span> {tPricing('modal.image-to-video-limit')}</>
+                        )}
+                      </span>
+                    </div>
+                  )}
                   {features.credits && selectedPlanData && (
                     <div className="flex items-center gap-1 md:gap-2">
                       <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-green-100 flex items-center justify-center">
@@ -311,14 +344,6 @@ export default function ModalPricing({
 
           {/* Boutons */}
           <div className="flex flex-col gap-2">
-            <Button 
-              variant="outline" 
-              className="w-full h-12 md:h-14 text-sm md:text-base"
-              onClick={handleSeeAllPlans}
-            >
-              {tPricing('modal.see-all-plans')}
-            </Button>
-            
             {selectedPlanData && (
               <Button 
                 className="w-full h-12 md:h-14 text-sm md:text-base"
@@ -339,6 +364,14 @@ export default function ModalPricing({
                 )}
               </Button>
             )}
+            
+            <Button 
+              variant="ghost" 
+              className="w-full text-xs md:text-sm text-gray-600 hover:text-gray-900"
+              onClick={handleSeeAllPlans}
+            >
+              {tPricing('modal.see-all-plans')}
+            </Button>
           </div>
         </div>
       </DialogContent>

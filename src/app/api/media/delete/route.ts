@@ -21,17 +21,17 @@ export async function POST(req: NextRequest) {
 
     const medias : IMediaSpace[] = await deleteMediaFromSpace(spaceId, media);
 
-    if (media.image?.link) {
+    if (media.type === 'image' && media.image?.link) {
       const keyImage = await getKeyFromUrl(media.image.link)
       await deleteFromS3(keyImage, 'medias-users')
     }
 
-    if (media.video?.link) {
+    if (media.type === 'video' && media.video?.link) {
       const keyVideo = await getKeyFromUrl(media.video.link)
       await deleteFromS3(keyVideo, 'medias-users')
     }
     
-    if (media.audio?.link) {
+    if (media.type === 'audio' && media.audio?.link) {
       const keyAudio = await getKeyFromUrl(media.audio.link)
       await deleteFromS3(keyAudio, 'medias-users')
     }

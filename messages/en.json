@@ -187,6 +187,8 @@
         "video-exports": "Video exports",
         "watermark-removal": "Watermark removal",
         "url-to-video": "URL to video generation",
+        "image-to-video-limit": "Image to video generations",
+        "unlimited": "Unlimited",
         "unlimited-exports": "Unlimited exports",
         "lifetime-updates": "Lifetime updates",
         "best-deal": "Best deal (for real)",
@@ -1239,9 +1241,14 @@
       "filter": "Filter",
       "filter-placeholder": "Filter...",
       "enhance-button": "Turn into video",
+      "enhance-button-image": "Turn image into video",
       "enhance-title": "Enhance your media",
-      "enhance-description": "Generate videos or enhance your images with AI",
-      "generate-video": "Generate video",
+      "video-generation-premium-title": "Need paid plan to turn image into video",
+      "video-generation-premium-description": "Transform your static assets into dynamic videos in one click. This feature is available from the Pro plan.",
+      "ai-generating": "AI generating",
+      "image-to-video-modal": {
+        "title": "Transform image to video"
+      },
       "enhance-image": "Enhance image",
       "enhancement-context": "Context",
       "enhancement-context-placeholder": "If you want a specific result, you can describe the video you expect by adding details...",
@@ -1324,7 +1331,10 @@
         "description-generated-description": "The description has been successfully generated",
         "generation-error-description": "An error occurred while generating the description",
         "enhancement-started": "Generation started",
-        "enhancement-started-description": "The generation has been successfully started"
+        "enhancement-started-description": "The generation has been successfully started",
+        "video-generation-started": "Video generation started",
+        "video-generation-started-description": "Video generation has been successfully started. You can track the progress in your media.",
+        "staging-ideas-error": "Could not retrieve staging ideas"
       }
     },
     "modals": {

@@ -59,6 +59,15 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, disabled, onChan
     }
   };
 
+  const getRecommendedPlan = (requiredPlan: PlanName): PlanName => {
+    // Si le plan requis est FREE, on recommande START (le plan le plus bas disponible)
+    if (requiredPlan === PlanName.FREE) {
+      return PlanName.START;
+    }
+    // Sinon, on recommande le plan requis
+    return requiredPlan;
+  };
+
   return (
     <div>
       <Select
@@ -103,11 +112,12 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, disabled, onChan
         setIsOpen={setIsPricingModalOpen}
         features={{
           credits: true,
-          videoExports: true,
-          watermarkRemoval: true,
-          videoMinutes: true
+          watermarkRemoval: false,
+          videoMinutes: true,
+          urlToVideo: true,
+          videoExports: true
         }}
-        recommendedPlan={selectedRestrictedOption?.requiredPlan || PlanName.PRO}
+        recommendedPlan={selectedRestrictedOption ? getRecommendedPlan(selectedRestrictedOption.requiredPlan) : PlanName.PRO}
       />
     </div>
   );

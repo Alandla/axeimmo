@@ -44,6 +44,7 @@ export default function AssetsPage() {
   const { activeSpace, setActiveSpace } = useActiveSpaceStore()
   const { assetsBySpace, setAssets: setStoreAssets, fetchAssets } = useAssetsStore()
   const { toast } = useToast()
+  
   const containerRef = useRef<HTMLDivElement>(null)
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const falPollingIntervalRef = useRef<NodeJS.Timeout | null>(null)

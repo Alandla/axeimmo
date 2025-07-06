@@ -10,15 +10,67 @@ import { IconEyeSlash } from "../icons/eye-slash";
 import { IconEyeLowVision } from "../icons/eye-low-vision";
 import { IconEye } from "../icons/eye";
 import VideoTrim from "./video-trim";
+import { Sparkles } from 'lucide-react';
+import ImageToVideoModal from '@/src/components/modal/image-to-video-modal';
+import ModalPricing from '@/src/components/modal/modal-pricing';
+import { useActiveSpaceStore } from '@/src/store/activeSpaceStore';
+import { PlanName } from '@/src/types/enums';
+import { useAssetsStore } from '@/src/store/assetsStore';
+import { IMediaSpace } from '@/src/types/space';
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
+import { useTranslations as useAssetsTranslations } from 'next-intl';
 
 export default function SequenceSettings({ sequence, sequenceIndex, setSequenceMedia, spaceId, hadAvatar, keywords, extractedMedia }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string, hadAvatar: boolean, keywords: string[], extractedMedia?: IMedia[] }) {
 
   const t = useTranslations('edit.sequence-edit')
+  const tAssets = useAssetsTranslations('assets')
+
+  const { activeSpace } = useActiveSpaceStore()
+  const { assetsBySpace, setAssets: setAssetsInStore } = useAssetsStore()
+  const { data: session } = useSession()
+
+  const [showImageToVideoModal, setShowImageToVideoModal] = useState(false)
+  const [showModalPricing, setShowModalPricing] = useState(false)
+  const [modalPricingTitle, setModalPricingTitle] = useState('')
+  const [modalPricingDescription, setModalPricingDescription] = useState('')
+
+  const handleGenerateVideoClick = () => {
+    if (!sequence.media || sequence.media.type !== 'image') return
+
+    if (activeSpace?.planName === PlanName.FREE || activeSpace?.planName === PlanName.START) {
+      setModalPricingTitle(tAssets('video-generation-premium-title'))
+      setModalPricingDescription(tAssets('video-generation-premium-description'))
+      setShowModalPricing(true)
+      return
+    }
+
+    setShowImageToVideoModal(true)
+  }
+
+  const handleImageToVideoSuccess = (generatedMediaSpace: IMediaSpace) => {
+    if (!activeSpace?.id) return
+    const currentAssets = assetsBySpace.get(activeSpace.id) || []
+    setAssetsInStore(activeSpace.id, [...currentAssets, generatedMediaSpace])
+  }
 
   return (
     <>
       <CardHeader className="p-2 sm:p-6">
-        <CardTitle>Media {sequenceIndex + 1}</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>Media {sequenceIndex + 1}</CardTitle>
+          {sequence.media && sequence.media.type === 'image' && (sequence.media as any).id && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleGenerateVideoClick}
+              className="flex items-center"
+            >
+              <Sparkles className="h-4 w-4" />
+              {tAssets('enhance-button-image')}
+            </Button>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">
         {sequence.media?.type === 'video' && (
@@ -79,6 +131,35 @@ export default function SequenceSettings({ sequence, sequenceIndex, setSequenceM
           )}
         </Tabs>
       </CardContent>
-      </>
+
+      {/* Modals */}
+      {sequence.media && sequence.media.type === 'image' && (
+        <ImageToVideoModal
+          mediaSpace={{
+            id: (sequence.media as any).id,
+            media: sequence.media,
+            uploadedBy: session?.user?.id || '',
+            uploadedAt: new Date()
+          }}
+          open={showImageToVideoModal}
+          onClose={() => setShowImageToVideoModal(false)}
+          onSuccess={handleImageToVideoSuccess}
+        />
+      )}
+
+      <ModalPricing
+        title={modalPricingTitle}
+        description={modalPricingDescription}
+        isOpen={showModalPricing}
+        setIsOpen={setShowModalPricing}
+        features={{
+          credits: true,
+          videoMinutes: true,
+          videoExports: true,
+          imageToVideoLimit: true,
+          urlToVideo: false
+        }}
+      />
+    </>
   )
 }

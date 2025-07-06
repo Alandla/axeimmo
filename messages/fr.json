@@ -178,6 +178,8 @@
         "video-exports": "Exports de vidéos",
         "watermark-removal": "Suppression du filigrane",
         "url-to-video": "Création de vidéo depuis URL",
+        "image-to-video-limit": "Générations image vers vidéo",
+        "unlimited": "Illimité",
         "unlimited-exports": "Exports illimités",
         "lifetime-updates": "Mises à jour à vie",
         "best-deal": "Meilleure offre (pour de vrai)",
@@ -1230,9 +1232,15 @@
       "filter": "Filtrer",
       "filter-placeholder": "Filtrer...",
       "enhance-button": "Transformer en vidéo",
+      "enhance-button-image": "Transformer l'image en vidéo",
       "enhance-title": "Améliorer votre média",
       "enhance-description": "Générez des vidéos ou améliorez vos images grâce à l'IA",
-      "generate-video": "Générer une vidéo",
+      "video-generation-premium-title": "Générer une vidéo avec l'IA",
+      "video-generation-premium-description": "Transformez vos images en vidéos captivantes grâce à l'intelligence artificielle. Cette fonctionnalité est disponible avec un plan payant.",
+      "ai-generating": "IA en cours",
+      "image-to-video-modal": {
+        "title": "Transformer l'image en vidéo"
+      },
       "enhance-image": "Améliorer l'image",
       "enhancement-context": "Contexte",
       "enhancement-context-placeholder": "Si vous souhaitez un résultat précis, vous pouvez décrire la vidéo que vous attendez en ajoutant des détails...",
@@ -1314,7 +1322,10 @@
         "description-generated-description": "La description a été générée avec succès",
         "generation-error-description": "Une erreur est survenue lors de la génération de la description",
         "enhancement-started": "Génération démarrée",
-        "enhancement-started-description": "La génération a été lancée avec succès"
+        "enhancement-started-description": "La génération a été lancée avec succès",
+        "video-generation-started": "Génération de vidéo démarrée",
+        "video-generation-started-description": "La génération de vidéo a été lancée avec succès. Vous pouvez suivre le progrès dans vos médias.",
+        "staging-ideas-error": "Impossible de récupérer les idées de mise en scène"
       }
     },
     "filters": {

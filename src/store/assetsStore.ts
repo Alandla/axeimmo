@@ -13,9 +13,16 @@ export const useAssetsStore = create<AssetsStoreState>((set, get) => ({
   assetsBySpace: new Map(),
   
   setAssets: (spaceId: string, assets: IMediaSpace[]) => {
+    // Toujours stocker du plus récent au plus ancien
+    const sortedAssets = [...assets].sort((a, b) => {
+      const dateA = new Date(a.uploadedAt).getTime();
+      const dateB = new Date(b.uploadedAt).getTime();
+      return dateB - dateA; // plus récent d'abord
+    });
+
     set(state => {
       const newAssetsBySpace = new Map(state.assetsBySpace);
-      newAssetsBySpace.set(spaceId, assets);
+      newAssetsBySpace.set(spaceId, sortedAssets);
       return { assetsBySpace: newAssetsBySpace };
     });
   },

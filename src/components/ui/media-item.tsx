@@ -107,7 +107,7 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
             handleDeleteAsset={handleDeleteMedia}
         />
         <motion.div 
-            className={`group relative overflow-hidden mb-2 break-inside-avoid cursor-pointer`}
+            className={`group relative overflow-hidden break-inside-avoid cursor-pointer`}
             variants={container}
             initial={isLargeScreen ? "hidden" : "visible"}
             whileHover={isLargeScreen ? "visible" : ""}

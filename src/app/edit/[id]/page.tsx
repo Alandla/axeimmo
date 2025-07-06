@@ -42,6 +42,7 @@ import { usePremiumToast } from '@/src/utils/premium-toast'
 import MobileDisclaimerModal from '@/src/components/modal/mobile-disclaimer'
 import { useAssetsStore } from '@/src/store/assetsStore'
 import { useVideoFramesStore } from '@/src/store/videoFramesStore'
+import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -55,6 +56,7 @@ export default function VideoEditor() {
   const { setSubtitleStyles } = useSubtitleStyleStore()
   const assetsStore = useAssetsStore()
   const { clearOldFrames } = useVideoFramesStore()
+  const { activeSpace: storeActiveSpace, setActiveSpaceFromISpace } = useActiveSpaceStore()
 
   const [video, setVideo] = useState<IVideo | null>(null)
   const [loadingMessage, setLoadingMessage] = useState('loading-video-data')
@@ -311,6 +313,11 @@ export default function VideoEditor() {
         // Vérifier si une review existe déjà
         const reviewResponse = await basicApiGetCall(`/reviews/${id}`);
         setHasExistingReview(!!reviewResponse);
+
+        // Si aucun espace actif n'est défini dans le store, on le définit à partir de la réponse complète
+        if (!storeActiveSpace) {
+          setActiveSpaceFromISpace(spaceResponse)
+        }
 
       } catch (error) {
         console.error(error);
@@ -1054,6 +1061,13 @@ export default function VideoEditor() {
       description={modalPricingDescription}
       isOpen={showModalPricing}
       setIsOpen={setShowModalPricing}
+      features={{
+        credits: true,
+        videoExports: true,
+        watermarkRemoval: true,
+        videoMinutes: true,
+        urlToVideo: false
+      }}
     />
     <MobileDisclaimerModal
         isOpen={showMobileDisclaimer}

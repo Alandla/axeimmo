@@ -1,7 +1,7 @@
 import { IMedia, ISequence } from "@/src/types/video";
 import { Loader2, Upload } from "lucide-react";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { basicApiCall } from "@/src/lib/api";
 import MediaItem from "../ui/media-item";
 import { FileToUpload } from "@/src/types/files";
@@ -16,18 +16,19 @@ import { PlanName } from "@/src/types/enums";
 import { storageLimit } from "@/src/config/plan.config";
 import { UsageStorage } from "../ui/usage-storage";
 import { useAssetsStore } from "@/src/store/assetsStore";
+import { startFalPolling, startLegacyPolling, cleanupPolling } from '@/src/utils/asset-polling';
+import GeneratingMediaItem from '../ui/generating-media-item';
 
 export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSequenceMedia, spaceId }: { sequence: ISequence, sequenceIndex: number, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, spaceId: string }) {
   const { data: session } = useSession()
   const t = useTranslations('edit.sequence-edit-assets')
   const { assetsBySpace, fetchAssets: fetchAssetsFromStore, setAssets: setAssetsInStore } = useAssetsStore()
 
+  const [assets, setAssets] = useState<IMediaSpace[]>([])
   const [isUploadingFiles, setIsUploadingFiles] = useState(false)
   const { setSpaceId } = useMediaToDeleteStore()
   const { toast } = useToast()
   const { activeSpace, setActiveSpace } = useActiveSpaceStore()
-
-  const assetsToDisplay = assetsBySpace.get(spaceId) || []
 
   // Vérifier si l'utilisateur a un plan Pro ou Entreprise
   const hasPlan = activeSpace?.planName === PlanName.PRO || activeSpace?.planName === PlanName.ENTREPRISE
@@ -41,19 +42,81 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
   // Désactiver le bouton d'upload si l'utilisateur n'a pas de plan ou si le stockage est plein
   const isUploadDisabled = isUploadingFiles || isStorageFull
 
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const falPollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
   useEffect(() => {
     // Vérifier si les assets sont déjà dans le store pour ce spaceId
-    const currentAssetsInStore = assetsBySpace.get(spaceId);
+    const cachedAssets = assetsBySpace.get(spaceId);
 
-    if (!currentAssetsInStore || currentAssetsInStore.length === 0) {
-      const loadInitialAssets = async () => {
-        await fetchAssetsFromStore(spaceId);
-      };
-      loadInitialAssets();
+    const loadAssets = async () => {
+      try {
+
+        const assetsFromApi = await fetchAssetsFromStore(spaceId, true);
+        setAssets(assetsFromApi);
+
+      } catch (error) {
+        console.error('Erreur lors du chargement des assets:', error);
+      }
+    };
+
+    if (cachedAssets) {
+      setAssets(cachedAssets);
+    } else {
+      loadAssets();
     }
+
     // setSpaceId pour useMediaToDeleteStore doit toujours être appelé lorsque spaceId change.
     setSpaceId(spaceId);
-  }, [spaceId, fetchAssetsFromStore, setSpaceId, assetsBySpace]); // Ajout de assetsBySpace aux dépendances
+  }, [spaceId, assetsBySpace]); // Ajout de assetsBySpace aux dépendances
+
+  // Polling pour mises à jour des médias en génération
+  useEffect(() => {
+    if (!activeSpace?.id) {
+      cleanupPolling(pollingIntervalRef, falPollingIntervalRef)
+      return
+    }
+
+    const assetsCurrent = assetsBySpace.get(spaceId) || []
+
+    const hasLegacyGenerating = assetsCurrent.some(asset =>
+      (asset.media.generationStatus === 'generating-video' || asset.media.generationStatus === 'generating-image') &&
+      !asset.media.requestId
+    )
+
+    const hasFalGenerating = assetsCurrent.some(asset =>
+      asset.media.generationStatus === 'generating-video' && asset.media.requestId
+    )
+
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
+
+    if (hasLegacyGenerating) {
+      startLegacyPolling(
+        spaceId,
+        5000,
+        fiveMinutesAgo,
+        pollingIntervalRef,
+        falPollingIntervalRef,
+        assetsCurrent,
+        setAssets,
+        fetchAssetsFromStore
+      )
+    }
+
+    if (hasFalGenerating) {
+      startFalPolling(
+        assetsCurrent,
+        spaceId,
+        falPollingIntervalRef,
+        assetsCurrent,
+        setAssets
+      )
+    }
+
+    return () => {
+      cleanupPolling(pollingIntervalRef, falPollingIntervalRef)
+    }
+  }, [activeSpace?.id, assetsBySpace, spaceId])
 
   const onDeleteMedia = async (media: IMedia) => {
     toast({
@@ -125,7 +188,8 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
                  !mediaSpace.media.description[0]?.text;
         });
 
-        setAssetsInStore(spaceId, addedMedias);
+        // Conserver l'ordre du plus récent au plus ancien, comme dans AssetsPage
+        setAssetsInStore(spaceId, addedMedias.reverse());
 
         if (activeSpace && activeSpace.id === spaceId) {
           setActiveSpace({
@@ -185,10 +249,35 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
         {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
         {t('upload-file-button')}
       </Button>
-      <div className="mt-4 columns-3 gap-2">
-          {assetsToDisplay.slice().reverse().map((asset, index) => (
-              <MediaItem key={index} sequence={sequence} sequenceIndex={sequenceIndex} spaceId={spaceId} media={asset.media} source='aws' canRemove={true} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
-          ))}
+            <div className="mt-4 flex gap-2">
+          {(() => {
+            
+            // Créer 3 colonnes vides
+            const columns = 3;
+            const columnWrappers: IMediaSpace[][] = Array.from({ length: columns }, () => []);
+            
+            // Répartir les assets en round-robin (tour par tour)
+            assets.forEach((asset, index) => {
+              const columnIndex = index % columns;
+              columnWrappers[columnIndex].push(asset);
+            });
+            
+            // Rendre chaque colonne
+            return columnWrappers.map((column, columnIndex) => (
+              <div key={columnIndex} className="flex-1 flex flex-col gap-2">
+                {column.map((asset, index) => {
+                  if (asset.media.generationStatus === 'generating-video' || asset.media.generationStatus === 'generating-image') {
+                    return (
+                      <GeneratingMediaItem key={`${asset.id || asset.media.id}-${columnIndex}-${index}`} mediaSpace={asset} />
+                    )
+                  }
+                  return (
+                    <MediaItem key={`${asset.media.id}-${columnIndex}-${index}`} sequence={sequence} sequenceIndex={sequenceIndex} spaceId={spaceId} media={asset.media} source='aws' canRemove={true} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
+                  )
+                })}
+              </div>
+            ));
+          })()}
       </div>
     </>
   )
