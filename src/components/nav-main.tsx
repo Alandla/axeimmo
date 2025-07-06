@@ -11,6 +11,7 @@ import {
 } from "@/src/components/ui/sidebar"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export function NavMain({
   items,
@@ -26,28 +27,43 @@ export function NavMain({
 }) {
   const { isMobile } = useSidebar()
   const t = useTranslations('sidebar')
+  const pathname = usePathname()
+
+  const isActiveLink = (url: string) => {
+    if (url === "/dashboard") {
+      return pathname === "/dashboard"
+    }
+    return pathname.startsWith(url)
+  }
 
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{title || t('links.title')}</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild tooltip={item.name}>
-              {item.external ? (
-                <a href={item.url} target="_blank" rel="noopener noreferrer">
-                  <item.icon />
-                  <span>{item.name}</span>
-                </a>
-              ) : (
-                <Link href={item.url} prefetch={true}>
-                  <item.icon />
-                  <span>{item.name}</span>
-                </Link>
-              )}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
+        {items.map((item) => {
+          const isActive = !item.external && isActiveLink(item.url)
+          return (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton 
+                asChild 
+                tooltip={item.name}
+                variant={isActive ? "outline" : "default"}
+              >
+                {item.external ? (
+                  <a href={item.url} target="_blank" rel="noopener noreferrer">
+                    <item.icon />
+                    <span>{item.name}</span>
+                  </a>
+                ) : (
+                  <Link href={item.url} prefetch={true}>
+                    <item.icon />
+                    <span>{item.name}</span>
+                  </Link>
+                )}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )
+        })}
       </SidebarMenu>
     </SidebarGroup>
   )

@@ -5,17 +5,21 @@ import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSideb
 import { useTranslations } from "next-intl"
 import { cn } from "@/src/lib/utils"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export function NavButtonVideo() {
   const { isMobile } = useSidebar()
   const t = useTranslations('sidebar')
+  const pathname = usePathname()
+
+  const isActive = pathname.startsWith("/dashboard/create")
 
   return (
     <SidebarGroup>
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton
-            variant="black"
+            variant={isActive ? "outline" : "black"}
             size="lg"
             asChild
             tooltip={t('createVideo')}

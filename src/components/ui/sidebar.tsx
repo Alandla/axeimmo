@@ -520,7 +520,7 @@ const sidebarMenuButtonVariants = cva(
         default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
         black: "bg-primary text-primary-foreground shadow cursor-pointer hover:bg-primary/90 hover:text-white",
         outline:
-          "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
+          "bg-white text-sidebar-foreground shadow-[0_0_0_1px_hsl(var(--sidebar-border))] data-[active=true]:bg-white data-[active=true]:text-sidebar-foreground data-[active=true]:shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },
       size: {
         default: "h-8 text-sm",
