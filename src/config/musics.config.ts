@@ -2386,7 +2386,7 @@ export const music: MusicWithStyle[] = [
     {
         name: 'Lofi Study Beat 1',
         genre: Genre.INFORMATIVE,
-        url: 'https://music.hoox.video/lofi-study-beat-1-245772.mp3',
+        url: 'https://music.hoox.video/lofi-study-beat-1-245772%20(1).mp3',
         style: {
             ...genreStyles[Genre.INFORMATIVE],
             rotate: 95,
