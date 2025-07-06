@@ -108,7 +108,7 @@ export default function SequenceSettingsSearch({ sequence, sequenceIndex, setSeq
               onClick={() => fetchResults(keyword, 1)}
             >
               {keyword}
-              <Search size={12} className="ml-1" />
+              <Search size={12} />
             </Button>
           ))}
         </HorizontalScrollList>

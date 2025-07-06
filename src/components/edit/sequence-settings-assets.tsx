@@ -272,7 +272,7 @@ export default function SequenceSettingsAssets({ sequence, sequenceIndex, setSeq
                     )
                   }
                   return (
-                    <MediaItem key={`${asset.media.id}-${columnIndex}-${index}`} sequence={sequence} sequenceIndex={sequenceIndex} spaceId={spaceId} media={asset.media} source='aws' canRemove={true} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
+                    <MediaItem key={`${asset.media.id}-${columnIndex}-${index}`} sequence={sequence} sequenceIndex={sequenceIndex} spaceId={spaceId} media={asset.media} source='aws' canRemove={true} withMargin={false} setSequenceMedia={setSequenceMedia} onDeleteMedia={onDeleteMedia} />
                   )
                 })}
               </div>

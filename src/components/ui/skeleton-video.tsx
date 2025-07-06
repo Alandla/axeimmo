@@ -72,7 +72,7 @@ const SkeletonVideo = ({
       {/* Image de vignette (priorité) */}
       {currentThumbnail && (
         <div 
-          className={`transition-opacity duration-200 ${
+          className={` ${
             isHovering && isVideoLoaded ? 'opacity-0' : 'opacity-100'
           }`}
         >
@@ -98,11 +98,12 @@ const SkeletonVideo = ({
             playsInline
             loop={isHovering && !disableHoverPlay}
             preload="metadata"
+            poster={currentThumbnail}
             className={`w-full h-full object-cover rounded-md ${
               currentThumbnail 
                 ? (isHovering && isVideoLoaded ? 'opacity-100' : 'opacity-0') 
                 : (isVideoLoaded ? 'opacity-100' : 'opacity-0')
-            } transition-opacity duration-200`}
+            }`}
             onLoadedData={handleVideoLoaded}
             disablePictureInPicture
             disableRemotePlayback

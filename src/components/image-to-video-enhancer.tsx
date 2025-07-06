@@ -217,6 +217,7 @@ export default function ImageToVideoEnhancer({
                 fill
                 className="object-contain"
                 priority
+                unoptimized={!((mediaSpace.media.image?.link || '').includes('hoox.video'))}
               />
             )
           )}

@@ -12,7 +12,7 @@ import ModalConfirmDeleteAsset from '../modal/confirm-delete-asset';
 import { basicApiCall } from '@/src/lib/api';
 import { useTranslations } from 'next-intl';
 
-const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', canRemove = false, setSequenceMedia, onDeleteMedia = () => {} }: { sequence: ISequence, sequenceIndex: number, spaceId?: string, media: IMedia, source?: 'aws' | 'web', canRemove?: boolean, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, onDeleteMedia?: (media: IMedia) => void }) => {
+const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', canRemove = false, setSequenceMedia, onDeleteMedia = () => {}, withMargin = true }: { sequence: ISequence, sequenceIndex: number, spaceId?: string, media: IMedia, source?: 'aws' | 'web', canRemove?: boolean, withMargin?: boolean, setSequenceMedia: (sequenceIndex: number, media: IMedia) => void, onDeleteMedia?: (media: IMedia) => void }) => {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 768);
     const [showModalDelete, setShowModalDelete] = useState(false);
     const t = useTranslations('assets')
@@ -107,7 +107,7 @@ const MediaItem = ({ sequence, sequenceIndex, spaceId, media, source = 'aws', ca
             handleDeleteAsset={handleDeleteMedia}
         />
         <motion.div 
-            className={`group relative overflow-hidden break-inside-avoid cursor-pointer`}
+            className={`group relative overflow-hidden break-inside-avoid cursor-pointer ${withMargin ? 'mb-2' : ''}`}
             variants={container}
             initial={isLargeScreen ? "hidden" : "visible"}
             whileHover={isLargeScreen ? "visible" : ""}
