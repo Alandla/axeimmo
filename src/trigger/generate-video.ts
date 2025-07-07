@@ -30,8 +30,7 @@ import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { getMostFrequentString } from "../lib/utils";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
-import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, generateKlingAnimationPrompt } from "../lib/workflowai";
-import { analyzeImage } from "../lib/ai";
+import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, generateKlingAnimationPrompt, imageAnalysisRun } from "../lib/workflowai";
 import { PlanName } from "../types/enums";
 import { startKlingVideoGeneration, checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode, KLING_GENERATION_COSTS } from "../lib/fal";
 
@@ -100,67 +99,92 @@ export const generateVideoTask = task({
         const mediasToAnalyze = payload.files.filter(file => file.usage === 'media');
         const analyzedMedias: IMediaSpace[] = [];
         
-        // Analyser les médias par batches de 7 pour éviter les crashs
-        const results = await processBatches(
-          mediasToAnalyze,
-          async (media) => {
-            try {
-              let descriptions: [{ start: number, duration?: number, text: string }] | undefined;
-              let updatedMedia = { ...media };
-              
-              if (media.type === 'video' && media.video?.link) {
-                // Utiliser la nouvelle méthode analyzeVideo
-                logger.log(`[ANALYZE] Analyzing video with analyzeVideo method: ${media.video.link}`);
-                const analysisResult = await analyzeVideo(media.video.link, media.id);
-                cost += analysisResult.cost;
-                
-                // Les descriptions sont déjà au bon format
-                descriptions = analysisResult.descriptions as [{ start: number, duration?: number, text: string }];
-                
-                // Ajouter les frames et durationInSeconds au média
-                updatedMedia = {
-                  ...media,
-                  video: {
-                    ...media.video,
-                    frames: analysisResult.frames,
-                    durationInSeconds: analysisResult.durationInSeconds
-                  }
-                };
-                
-              } else if (media.type === 'image' && media.image?.link) {
-                // Analyser l'image avec Groq
-                logger.log(`[ANALYZE] Analyzing image with Groq: ${media.image.link}`);
-                const analysis = await analyzeImage(media.image.link);
-                
-                if (analysis) {
-                  descriptions = [{
-                    start: 0,
-                    text: analysis.description
-                  }];
-                }
-              }
-              
-              if (descriptions) {
-                return mediaToMediaSpace([{
-                  ...updatedMedia,
-                  description: descriptions
-                }], payload.userId)[0];
-              }
-              
-              return null;
-            } catch (error) {
-              logger.error(`[ANALYZE] Error analyzing media:`, {
-                mediaId: media.id,
-                error: error instanceof Error ? error.message : String(error)
-              });
-              return null;
-            }
-          },
-          7 // Limite de 7 analyses vidéo en parallèle
-        );
+        // Séparer les vidéos et les images
+        const videoMedias = mediasToAnalyze.filter(media => media.type === 'video');
+        const imageMedias = mediasToAnalyze.filter(media => media.type === 'image');
         
-        // Filtrer les résultats null
-        const validResults = results.filter(result => result !== null) as IMediaSpace[];
+        // Lancer l'analyse des vidéos et des images en parallèle
+        const [videoResults, imageResults] = await Promise.all([
+          // Analyser les vidéos par batches de 7 maximum
+          processBatches(
+            videoMedias,
+            async (media) => {
+              try {
+                if (media.video?.link) {
+                  // Utiliser la nouvelle méthode analyzeVideo
+                  logger.log(`[ANALYZE] Analyzing video with analyzeVideo method: ${media.video.link}`);
+                  const analysisResult = await analyzeVideo(media.video.link, media.id);
+                  cost += analysisResult.cost;
+                  
+                  // Les descriptions sont déjà au bon format
+                  const descriptions = analysisResult.descriptions as [{ start: number, duration?: number, text: string }];
+                  
+                  // Ajouter les frames et durationInSeconds au média
+                  const updatedMedia = {
+                    ...media,
+                    video: {
+                      ...media.video,
+                      frames: analysisResult.frames,
+                      durationInSeconds: analysisResult.durationInSeconds
+                    }
+                  };
+                  
+                  return mediaToMediaSpace([{
+                    ...updatedMedia,
+                    description: descriptions
+                  }], payload.userId)[0];
+                }
+                
+                return null;
+              } catch (error) {
+                logger.error(`[ANALYZE] Error analyzing video:`, {
+                  mediaId: media.id,
+                  error: error instanceof Error ? error.message : String(error)
+                });
+                return null;
+              }
+            },
+            7 // Limite de 7 analyses vidéo en parallèle
+          ),
+          
+          // Analyser toutes les images en parallèle (sans limite)
+          Promise.all(
+            imageMedias.map(async (media) => {
+              try {
+                if (media.image?.link) {
+                  // Analyser l'image avec WorkflowAI
+                  logger.log(`[ANALYZE] Analyzing image with WorkflowAI: ${media.image.link}`);
+                  const { description: imageDescription, cost: imageCost } = await imageAnalysisRun(media.image.link);
+                  cost += imageCost;
+
+                  if (imageDescription) {
+                    const descriptions = [{
+                      start: 0,
+                      text: imageDescription
+                    }] as [{ start: number, duration?: number, text: string }];
+                    
+                    return mediaToMediaSpace([{
+                      ...media,
+                      description: descriptions
+                    }], payload.userId)[0];
+                  }
+                }
+                
+                return null;
+              } catch (error) {
+                logger.error(`[ANALYZE] Error analyzing image:`, {
+                  mediaId: media.id,
+                  error: error instanceof Error ? error.message : String(error)
+                });
+                return null;
+              }
+            })
+          )
+        ]);
+        
+        // Combiner les résultats et filtrer les null
+        const allResults = [...videoResults, ...imageResults];
+        const validResults = allResults.filter(result => result !== null) as IMediaSpace[];
         
         // Ajouter les résultats valides à analyzedMedias
         analyzedMedias.push(...validResults);
@@ -228,17 +252,18 @@ export const generateVideoTask = task({
             const media = result.media;
             
             if (media.type === 'image' && media.image?.link) {
-              // Analyser l'image avec Groq
-              logger.log(`[GOOGLE_IMAGES] Analyzing image with Groq: ${media.image.link}`);
-              const analysis = await analyzeImage(media.image.link);
-              logger.log(`[GOOGLE_IMAGES] Analysis result:`, { analysis });
+              // Analyser l'image avec WorkflowAI
+              logger.log(`[GOOGLE_IMAGES] Analyzing image with WorkflowAI: ${media.image.link}`);
+              const { description: imageDescription, cost: imageCost } = await imageAnalysisRun(media.image.link);
+              cost += imageCost;
+              logger.log(`[GOOGLE_IMAGES] Analysis result:`, { imageDescription });
               
-              if (analysis) {
+              if (imageDescription) {
                 const mediaWithDescription = {
                   ...media,
                   description: [{
                     start: 0,
-                    text: analysis.description
+                    text: imageDescription
                   }] as [{ start: number, duration?: number, text: string }]
                 };
                 

@@ -1,4 +1,4 @@
-import { analyzeImage } from "@/src/lib/ai";
+import { imageAnalysisRun } from "@/src/lib/workflowai";
 import { updateMedia } from "@/src/dao/spaceDao";
 import { tasks } from "@trigger.dev/sdk/v3";
 import { IMediaSpace } from "@/src/types/space";
@@ -42,12 +42,12 @@ export async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId:
         await updateMedia(spaceId, mediaId, updatedSpaceMedia);
       }
     } else if (media.type === "image") {
-      const imageAnalysis = await analyzeImage(mediaUrl);
+      const { description: imageDescription } = await imageAnalysisRun(mediaUrl);
       
-      if (imageAnalysis && imageAnalysis.description) {
+      if (imageDescription) {
         description = [{
           start: 0,
-          text: imageAnalysis.description
+          text: imageDescription
         }];
 
         const updatedSpaceMedia = {

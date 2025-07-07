@@ -157,6 +157,15 @@ export interface WebPageContentExtractionOutput {
   relevant_images?: string[]
 }
 
+// Types for image analysis
+export interface ImageAnalysisInput {
+  image_url?: string
+}
+
+export interface ImageAnalysisOutput {
+  description?: string
+}
+
 const videoScriptKeywordExtraction = workflowAI.agent<VideoScriptKeywordExtractionInput, VideoScriptKeywordExtractionOutput>({
   id: "video-script-keyword-extraction",
   schemaId: 2,
@@ -230,6 +239,14 @@ const imageStagingIdeas = workflowAI.agent<ImageStagingIdeasInput, ImageStagingI
 const webPageContentExtraction = workflowAI.agent<WebPageContentExtractionInput, WebPageContentExtractionOutput>({
   id: "web-page-content-extraction",
   schemaId: 2,
+  version: "production",
+  useCache: "auto"
+})
+
+// Image analysis agent
+const imageAnalysis = workflowAI.agent<ImageAnalysisInput, ImageAnalysisOutput>({
+  id: "image-analysis",
+  schemaId: 1,
   version: "production",
   useCache: "auto"
 })
@@ -574,5 +591,29 @@ export async function webPageContentExtractionRun(
   } catch (error) {
     console.error('Failed to extract web page content:', error);
     throw error;
+  }
+}
+
+// Run the image analysis agent
+export async function imageAnalysisRun(
+  imageUrl: string
+): Promise<{
+  cost: number
+  description: string
+}> {
+  const input: ImageAnalysisInput = {
+    image_url: imageUrl
+  }
+
+  try {
+    const response = await imageAnalysis(input) as WorkflowAIResponse<ImageAnalysisOutput>
+
+    return {
+      cost: response.data.cost_usd,
+      description: response.output.description || ""
+    }
+  } catch (error) {
+    console.error('Failed to run image analysis:', error)
+    throw error
   }
 }
