@@ -668,7 +668,8 @@
         "fitness": "Fitness",
         "microphone": "Microphone",
         "urban": "Urban",
-        "nature": "Nature"
+        "nature": "Nature",
+        "car": "Car"
       },
       "place": {
         "bedroom": "Bedroom",

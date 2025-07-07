@@ -659,7 +659,8 @@
         "fitness": "Fitness",
         "microphone": "Microphone",
         "urban": "Urban",
-        "nature": "Nature"
+        "nature": "Nature",
+        "car": "Voiture"
       },
       "place": {
         "bedroom": "Chambre",
@@ -700,7 +701,8 @@
         "street": "Rue",
         "balcony": "Balcon",
         "stadium": "Stade",
-        "library": "Librairie"
+        "library": "Librairie",
+        "coffee-shop": "Café"
       },
       "gender": {
         "male": "Masculin",
