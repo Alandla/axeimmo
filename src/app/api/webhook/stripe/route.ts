@@ -78,7 +78,7 @@ export async function POST(req: Request) {
             }
             user = await createUser(u);
             await addUserIdToContact(user.id, user.email);
-            const newSpace = await createPrivateSpaceForUser(user.id, user.name);
+            const newSpace = await createPrivateSpaceForUser(user.id, user.firstName || user.name);
             spaceId = newSpace.id;
           }
         } else {

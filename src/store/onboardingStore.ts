@@ -6,6 +6,7 @@ import { updateOnboarding } from '../service/user.service'
 import { setMixpanelUserProperties, track } from '@/src/utils/mixpanel'
 import { MixpanelEvent } from '../types/events'
 import { useActiveSpaceStore } from './activeSpaceStore'
+import { isProfessionalUser } from '@/src/utils/professional-detection'
 
 export const STEP_CATEGORIES = {
   PERSONAL: "personal-information",
@@ -51,9 +52,9 @@ interface OnboardingStore {
   updateCompanyData: (newData: Partial<CompanyOnboardingData>) => void
   setWebsiteValid: (isValid: boolean) => void
   fetchCompanyInfo: (website: string) => Promise<void>
-  saveData: (isComplete?: boolean) => Promise<boolean>
+  saveData: (isComplete?: boolean, userEmail?: string) => Promise<boolean>
   setCurrentStep: (step: number) => void
-  goToNextStep: () => void
+  goToNextStep: (userEmail?: string) => void
   goToPreviousStep: () => void
   validateCurrentStep: () => boolean
   calculateCurrentStep: (userData?: Partial<UserOnboardingData>, companyData?: Partial<CompanyOnboardingData>) => number
@@ -201,7 +202,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     }
   },
   
-  saveData: async (isComplete = false) => {
+  saveData: async (isComplete = false, userEmail?: string) => {
     try {
       const { dataUser, dataCompany, spaceId } = get();
 
@@ -223,6 +224,24 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
         });
         track(MixpanelEvent.FINISHED_ONBOARDING);
         set({ hasCompleted: true });
+        
+        // Check if user is professional and send email to maxime@hoox.video
+        try {
+          if (userEmail && isProfessionalUser(userEmail, dataCompany.website)) {
+            await basicApiCall('/mail/pro', {
+              name: dataUser.name,
+              firstName: dataUser.firstName,
+              email: userEmail,
+              role: dataUser.role,
+              website: dataCompany.website || '',
+              companyName: dataCompany.companyName
+            });
+            console.log('Professional lead email sent to maxime@hoox.video');
+          }
+        } catch (emailError) {
+          console.error('Error sending professional lead email:', emailError);
+          // Continue execution even if email fails
+        }
       }
       
       return true;
@@ -234,7 +253,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   
   setCurrentStep: (step) => set({ currentStep: step }),
   
-  goToNextStep: () => {
+  goToNextStep: (userEmail?: string) => {
     const { currentStep, saveData, dataCompany, fetchCompanyInfo, lastFetchedWebsite } = get();
     
     // If we're at step 4 (company information) and there's a valid website,
@@ -253,7 +272,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     const isComplete = nextStep > totalSteps;
     
     set({ currentStep: nextStep });
-    saveData(isComplete);
+    saveData(isComplete, userEmail);
   },
   
   goToPreviousStep: () => {

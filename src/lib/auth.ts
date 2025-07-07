@@ -12,8 +12,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async profile(profile) {
         return {
           id: profile.sub,
-          name: profile.name.split(" ")[0],
-          firstName: profile.name.split(" ")[1],
+          name: profile.name.split(" ")[1],
+          firstName: profile.name.split(" ")[0],
           email: profile.email,
           image: profile.image,
           createdAt: new Date(),
@@ -51,7 +51,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (user.options === undefined) {
           const contactProperties = {
-            firstName: user.name,
+            firstName: user.firstName || user.name,
             videosCount: 0,
             videosExported: 0
           };
@@ -79,7 +79,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       console.log("Create user event: ", user);
       if (user.user.id && user.user.email) {
         await addUserIdToContact(user.user.id, user.user.email);
-        await createPrivateSpaceForUser(user.user.id, user?.user?.name);
+        await createPrivateSpaceForUser(user.user.id, user?.user?.firstName || user?.user?.name);
       }
     },
   },

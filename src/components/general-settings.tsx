@@ -15,11 +15,11 @@ export function GeneralSettings({ user }: { user: User }) {
   const t = useTranslations('general-settings')
   const [isHovering, setIsHovering] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [name, setName] = useState(user.name || '')
+  const [name, setName] = useState((user.firstName || user.name) || '')
   const [language, setLanguage] = useState(user.options?.lang || 'en')
   const [avatarUrl, setAvatarUrl] = useState(user.image || undefined)
   const [avatarFileInUpload, setAvatarFileInUpload] = useState<File | undefined>(undefined)
-  const [originalName, setOriginalName] = useState(user.name || '')
+  const [originalName, setOriginalName] = useState((user.firstName || user.name) || '')
   const [originalLanguage, setOriginalLanguage] = useState(user.options?.lang || 'en')
   const [originalAvatarUrl, setOriginalAvatarUrl] = useState(user.image || undefined)
   const [isUploading, setIsUploading] = useState(false)
@@ -50,7 +50,7 @@ export function GeneralSettings({ user }: { user: User }) {
     setIsLoading(true)
     let updateData: Partial<IUser> = {};
     if (name !== originalName) {
-      updateData.name = name
+      updateData.firstName = name
       setOriginalName(name)
     }
     if (language !== originalLanguage) {
@@ -98,9 +98,9 @@ export function GeneralSettings({ user }: { user: User }) {
                 <Loader2 className="h-6 w-6 text-white animate-spin" />
               </div>
             )}
-            {avatarFileInUpload && <AvatarImage src={URL.createObjectURL(avatarFileInUpload)} alt={user.name ?? ''} />}
-            {!avatarFileInUpload && (avatarUrl || avatarUrl === undefined) && <AvatarImage src={avatarUrl} alt={user.name ?? ''} />}
-            <AvatarFallback className="rounded-lg">{user.name?.charAt(0).toUpperCase() ?? user.email?.charAt(0).toUpperCase() ?? ''}</AvatarFallback>
+            {avatarFileInUpload && <AvatarImage src={URL.createObjectURL(avatarFileInUpload)} alt={(user.firstName || user.name) ?? ''} />}
+            {!avatarFileInUpload && (avatarUrl || avatarUrl === undefined) && <AvatarImage src={avatarUrl} alt={(user.firstName || user.name) ?? ''} />}
+            <AvatarFallback className="rounded-lg">{(user.firstName || user.name)?.charAt(0).toUpperCase() ?? (user.email?.charAt(0).toUpperCase() ?? '')}</AvatarFallback>
             {isHovering && !isUploading && avatarUrl === undefined && (
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
                 <Camera className="h-6 w-6 text-white" />
