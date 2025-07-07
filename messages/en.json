@@ -25,7 +25,8 @@
       "Create": "Create",
       "Pricing": "Pricing",
       "Assets": "Assets",
-      "Enhance": "Enhance"
+      "Enhance": "Enhance",
+      "Settings": "Settings"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -121,8 +122,21 @@
       }
     },
     "settings": {
+      "title": "Settings",
+      "subtitle": "Manage your space settings and preferences",
+      "general": {
+        "title": "General",
+        "description": "Basic space information"
+      },      
+      "brand-kit": {
+        "title": "Brand Kit",
+        "description": "Customize your space brand kit",
+        "coming-soon": "Brand kit customization features coming soon"
+      },
+     
       "space": {
         "title": "Space Settings",
+        "general-description": "Configure the basic information of your space",
         "name-label": "Name",
         "name-placeholder": "Enter space name",
         "name-description": "The name of your space visible to all members",

@@ -24,7 +24,7 @@ import { SimpleSpace } from "../types/space"
 import { useState } from "react"
 import { basicApiCall } from "../lib/api"
 import { useToast } from "../hooks/use-toast"
-import { SpaceSettingsDrawer } from "./space-settings-drawer"
+import { useRouter } from "next/navigation"
 
 export function SpaceSwitcher({
   spaces
@@ -34,10 +34,10 @@ export function SpaceSwitcher({
   const t = useTranslations('sidebar')
   const tPlan = useTranslations('plan')
   const [isLoadingBilling, setIsLoadingBilling] = useState(false);
-  const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
   const { toast } = useToast();
   const { activeSpace, setActiveSpace } = useActiveSpaceStore()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const router = useRouter();
   const openStripePortal = async () => {
     setIsLoadingBilling(true);
     try {
@@ -59,20 +59,12 @@ export function SpaceSwitcher({
   };
 
   const handleSettingsClick = () => {
-    setIsSettingsDrawerOpen(true);
+    router.push('/dashboard/settings');
     setIsDropdownOpen(false);
-  };
-
-  const handleDrawerClose = () => {
-    setIsSettingsDrawerOpen(false);
   };
 
   return (
     <>
-      <SpaceSettingsDrawer 
-        open={isSettingsDrawerOpen}
-        onClose={handleDrawerClose}
-      />
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
