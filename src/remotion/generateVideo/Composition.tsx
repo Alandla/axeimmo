@@ -10,6 +10,7 @@ import { SubtitlesDaniel } from './subtitles/daniel/subtitlesDaniel';
 import { SubtitlesModern } from './subtitles/modern/subtitlesModern';
 import { Voices } from './components/Audios';
 import { Transitions } from './components/Transitions';
+import { SpaceLogo } from './components/SpaceLogo';
 
 export const VideoGenerate = ({ 
 	data, 
@@ -36,6 +37,7 @@ export const VideoGenerate = ({
 			{ data.video.audio.voices && <Voices voices={data.video.audio.voices} volume={data.video.audio.volume} /> }
 			{ data.video.audio.music && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
 			{ showWatermark && <Watermark />}
+			<SpaceLogo />
 			{ data.video.avatar ? <BackgroundWithAvatar 
 				sequences={data.video.sequences} 
 				avatar={data.video.avatar} 

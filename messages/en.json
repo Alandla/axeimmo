@@ -131,7 +131,29 @@
       "brand-kit": {
         "title": "Brand Kit",
         "description": "Customize your space brand kit",
-        "coming-soon": "Brand kit customization features coming soon"
+        "coming-soon": "Brand kit customization features coming soon",
+        "logo": {
+          "title": "Logo",
+          "description": "Your space logo that will be used in your videos",
+          "change": "Change",
+          "upload": "Upload a logo",
+          "remove": "Remove logo",
+          "show": "Show logo",
+          "show-description": "Enable this option to display the logo in your videos"
+        },
+        "position": {
+          "title": "Logo position",
+          "description": "Choose where to position your logo on your videos",
+          "top-left": "Top left",
+          "top-right": "Top right",
+          "middle-left": "Middle left",
+          "middle-right": "Middle right",
+          "bottom-left": "Bottom left",
+          "bottom-right": "Bottom right"
+        },
+        "save-button": "Save",
+        "update-success-title": "Logo updated",
+        "update-success-description": "Your space logo has been successfully updated"
       },
      
       "space": {

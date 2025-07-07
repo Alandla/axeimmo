@@ -1,18 +1,40 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslations } from "next-intl"
-import { Settings, Building2, Users, CreditCard, Palette, Mic } from "lucide-react"
+import { useSearchParams, useRouter } from "next/navigation"
+import { Settings, Building2, Palette } from "lucide-react"
 import { cn } from "@/src/lib/utils"
 import { SpaceSettingsForm } from "@/src/components/space-settings-form"
+import { BrandKitSettings } from "@/src/components/brand-kit-settings"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Separator } from "@/src/components/ui/separator"
+import { Button } from "@/src/components/ui/button"
 
 type SettingsTab = "general" | "brand-kit"
 
 export default function SettingsPage() {
   const t = useTranslations('settings')
+  const searchParams = useSearchParams()
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState<SettingsTab>("general")
+
+  // Initialize tab from URL on component mount
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab') as SettingsTab
+    if (tabFromUrl && ["general", "brand-kit"].includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl)
+    }
+  }, [searchParams])
+
+  const handleTabChange = (tab: SettingsTab) => {
+    setActiveTab(tab)
+    
+    // Update URL with new tab
+    const params = new URLSearchParams(searchParams)
+    params.set('tab', tab)
+    router.push(`/dashboard/settings?${params.toString()}`, { scroll: false })
+  }
 
   const tabs = [
     {
@@ -35,19 +57,7 @@ export default function SettingsPage() {
         return <SpaceSettingsForm />
      
       case "brand-kit":
-        return (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t('brand-kit.title')}</CardTitle>
-                <CardDescription>{t('brand-kit.description')}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">{t('brand-kit.coming-soon')}</p>
-              </CardContent>
-            </Card>
-          </div>
-        )
+        return <BrandKitSettings />
       default:
         return null
     }
@@ -55,8 +65,8 @@ export default function SettingsPage() {
 
   return (
     <div className="flex h-full">
-      {/* Sidebar */}
-      <div className="w-64 border-r bg-muted/40 p-6">
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block w-64 border-r bg-muted/40 p-6">
         <div className="space-y-6">
           <div>
             <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -76,7 +86,7 @@ export default function SettingsPage() {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => handleTabChange(tab.id)}
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2 text-left rounded-lg transition-colors",
                     activeTab === tab.id
@@ -99,6 +109,38 @@ export default function SettingsPage() {
       {/* Content */}
       <div className="flex-1 p-6">
         <div className="max-w-4xl">
+          {/* Mobile Header with Tabs */}
+          <div className="lg:hidden mb-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Settings className="h-5 w-5" />
+              <h1 className="text-xl font-semibold">{t('title')}</h1>
+            </div>
+            
+            <div className="flex gap-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon
+                return (
+                  <Button
+                    key={tab.id}
+                    variant={activeTab === tab.id ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleTabChange(tab.id)}
+                    className="flex items-center gap-2"
+                  >
+                    <Icon className="h-4 w-4" />
+                    {tab.label}
+                  </Button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Desktop Header */}
+          <div className="hidden lg:block mb-6">
+            <h1 className="text-2xl font-semibold">{t('title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
+          </div>
+
           {renderTabContent()}
         </div>
       </div>

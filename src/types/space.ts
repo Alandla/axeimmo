@@ -52,6 +52,9 @@ export interface SimpleSpace {
   videoIdeas?: string[];
   companyMission?: string;
   companyTarget?: string;
+  logoUrl?: string;
+  logoPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'middle-left' | 'middle-right';
+  showLogo?: boolean;
   usedStorageBytes?: number;
   storageLimit?: number;
   imageToVideoLimit?: number;
@@ -89,4 +92,7 @@ export interface ISpace {
   lastUsed: ILastUsed;
   usedStorageBytes: number;
   imageToVideoUsed: number;
+  logoUrl: string;
+  logoPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'middle-left' | 'middle-right';
+  showLogo?: boolean;
 }

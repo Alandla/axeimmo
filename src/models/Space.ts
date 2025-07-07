@@ -139,6 +139,19 @@ const spaceSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    logoUrl: {
+      type: String,
+      trim: true,
+    },
+    logoPosition: {
+      type: String,
+      enum: ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'middle-left', 'middle-right'],
+      default: 'bottom-right',
+    },
+    showLogo: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

@@ -1524,7 +1524,29 @@
       "brand-kit": {
         "title": "Brand kit",
         "description": "Personnalisez votre Brand kit",
-        "coming-soon": "Les fonctionnalités de personnalisation d'apparence arrivent bientôt"
+        "coming-soon": "Les fonctionnalités de personnalisation d'apparence arrivent bientôt",
+        "logo": {
+          "title": "Logo",
+          "description": "Le logo de votre espace qui sera utilisé dans vos vidéos",
+          "change": "Changer",
+          "upload": "Télécharger un logo",
+          "remove": "Supprimer le logo",
+          "show": "Afficher le logo",
+          "show-description": "Activez cette option pour afficher le logo dans vos vidéos"
+        },
+        "position": {
+          "title": "Position du logo",
+          "description": "Choisissez où positionner votre logo sur vos vidéos",
+          "top-left": "Haut gauche",
+          "top-right": "Haut droite",
+          "middle-left": "Milieu gauche",
+          "middle-right": "Milieu droite",
+          "bottom-left": "Bas gauche",
+          "bottom-right": "Bas droite"
+        },
+        "save-button": "Sauvegarder",
+        "update-success-title": "Logo mis à jour",
+        "update-success-description": "Le logo de votre espace a été mis à jour avec succès"
       },
     
       "space": {
