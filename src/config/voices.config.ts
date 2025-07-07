@@ -922,7 +922,7 @@ export const voicesConfig: Voice[] = [
     name: 'Olympe',
     language: 'french',
     accent: 'french',
-    gender: 'female',
+    gender: 'male',
     age: 'young',
     tags: ['narration'],
     plan: PlanName.ENTREPRISE,
