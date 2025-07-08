@@ -12,12 +12,14 @@ import AvatarSelector from "@/src/components/edit/avatar-selector";
 import { AvatarSelectionModal } from "@/src/components/modal/avatar-selection-modal";
 import { AvatarLook } from "@/src/types/avatar";
 
+
 export default function VideoPreview({ 
     playerRef, 
     video, 
     isMobile, 
     showWatermark, 
     hasExistingReview, 
+    muteBackgroundMusic,
     onSubtitleStyleChange,
     onAvatarHeightRatioChange,
     onAvatarPositionChange,
@@ -30,6 +32,7 @@ export default function VideoPreview({
     isMobile: boolean, 
     showWatermark: boolean, 
     hasExistingReview: boolean, 
+    muteBackgroundMusic?: boolean,
     onSubtitleStyleChange?: (newStyle: any) => void,
     onAvatarHeightRatioChange?: (ratio: number) => void,
     onAvatarPositionChange?: (position: { x: number, y: number }) => void,
@@ -137,6 +140,7 @@ export default function VideoPreview({
                     </div>
                 </div>
             )}
+
             <div className="relative w-full h-full transition-all duration-300 ease-in-out">
                 <Player
                     acknowledgeRemotionLicense={true}
@@ -149,6 +153,7 @@ export default function VideoPreview({
                     inputProps={{
                         data: video,
                         showWatermark,
+                        muteBackgroundMusic,
                         onSubtitleStyleChange,
                         onAvatarHeightRatioChange,
                         onAvatarPositionChange,

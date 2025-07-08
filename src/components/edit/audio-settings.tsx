@@ -2,16 +2,21 @@
 
 import { useTranslations } from 'next-intl'
 import { CardContent, CardHeader, CardTitle } from '../ui/card'
-import { Volume1, Volume2, VolumeX } from 'lucide-react'
+import { Volume1, Volume2, VolumeX, AlertCircle } from 'lucide-react'
 import { Slider } from '../ui/slider'
+import { Button } from '../ui/button'
+import { useBrowserDetection } from '@/src/hooks/use-browser-detection'
 
 interface AudioProps {
   video: any
   updateAudioSettings: (settings: any) => void
+  muteBackgroundMusic?: boolean
+  onMuteBackgroundMusicChange?: (mute: boolean) => void
 }
 
-export default function AudioSettings({ video, updateAudioSettings }: AudioProps) {
+export default function AudioSettings({ video, updateAudioSettings, muteBackgroundMusic, onMuteBackgroundMusicChange }: AudioProps) {
   const t = useTranslations('edit.audio')
+  const { isIOS } = useBrowserDetection()
 
   const handleVolumeChange = (value: number[]) => {
     updateAudioSettings({ 
@@ -36,6 +41,24 @@ export default function AudioSettings({ video, updateAudioSettings }: AudioProps
             <CardTitle>{t('title')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">
+        {isIOS && (
+          <div className="rounded-lg border bg-orange-50 text-orange-800 px-4 py-3 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              <span className="text-sm">
+                {t('ios-background-music-disabled')}
+              </span>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => onMuteBackgroundMusicChange?.(!muteBackgroundMusic)}
+              className="text-orange-800 border-orange-200 hover:bg-orange-100"
+            >
+              {muteBackgroundMusic ? t('enable-music') : t('disable-music')}
+            </Button>
+          </div>
+        )}
         <div className="flex items-center justify-between w-full">
           <span className="flex items-center gap-2 min-w-20">
             {video?.video?.audio?.volume === 0 ? (

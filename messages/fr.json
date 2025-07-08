@@ -469,6 +469,9 @@
         "search": "Rechercher une musique...",
         "volume-music-title": "Volume de la musique",
         "volume-voice-title": "Volume de la voix",
+        "ios-background-music-disabled": "Sur iOS, la musique de fond est désactivée car le volume n'est pas gérable.",
+        "enable-music": "Activer la musique",
+        "disable-music": "Désactiver la musique",
         "genres": {
           "dramatic": "Dramatique",
           "relaxing": "Relaxant",

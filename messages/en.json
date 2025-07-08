@@ -472,6 +472,9 @@
         "search": "Search a music...",
         "volume-music-title": "Music volume",
         "volume-voice-title": "Voice volume",
+        "ios-background-music-disabled": "On iOS, background music is disabled because volume is not manageable.",
+        "enable-music": "Enable music",
+        "disable-music": "Disable music",
         "genres": {
           "dramatic": "Dramatic",
           "relaxing": "Relaxing",

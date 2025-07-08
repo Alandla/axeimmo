@@ -30,7 +30,8 @@ export const RemotionRoot = () => {
 				height={dimensions.height}
 				defaultProps={{
 					data: result,
-					showWatermark: true
+					showWatermark: true,
+					muteBackgroundMusic: false
 				}}
 				calculateMetadata={calculateMetadata}
 			/>

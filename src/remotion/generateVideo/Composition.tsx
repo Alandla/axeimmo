@@ -14,6 +14,7 @@ import { Transitions } from './components/Transitions';
 export const VideoGenerate = ({ 
 	data, 
 	showWatermark = true,
+	muteBackgroundMusic = false,
 	onSubtitleStyleChange,
 	onAvatarHeightRatioChange,
 	onAvatarPositionChange,
@@ -21,6 +22,7 @@ export const VideoGenerate = ({
 }: { 
 	data: any, 
 	showWatermark?: boolean,
+	muteBackgroundMusic?: boolean,
 	onSubtitleStyleChange?: (newStyle: any) => void,
 	onAvatarHeightRatioChange?: (ratio: number) => void,
 	onAvatarPositionChange?: (position: { x: number, y: number }) => void,
@@ -34,7 +36,7 @@ export const VideoGenerate = ({
 		<>
 			{ data.video.audio.url && <Audio src={data.video.audio.url} volume={data.video.audio.volume} /> }
 			{ data.video.audio.voices && <Voices voices={data.video.audio.voices} volume={data.video.audio.volume} /> }
-			{ data.video.audio.music && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
+			{ data.video.audio.music && !muteBackgroundMusic && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
 			{ showWatermark && <Watermark />}
 			{ data.video.avatar ? <BackgroundWithAvatar 
 				sequences={data.video.sequences} 

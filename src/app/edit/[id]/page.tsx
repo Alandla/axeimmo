@@ -43,6 +43,7 @@ import MobileDisclaimerModal from '@/src/components/modal/mobile-disclaimer'
 import { useAssetsStore } from '@/src/store/assetsStore'
 import { useVideoFramesStore } from '@/src/store/videoFramesStore'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
+import { useBrowserDetection } from '@/src/hooks/use-browser-detection'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -52,6 +53,7 @@ export default function VideoEditor() {
   const pricingT = useTranslations('pricing')
   const planT = useTranslations('plan')
   const { showPremiumToast } = usePremiumToast()
+  const { isIOS, isMobile, isClient } = useBrowserDetection()
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
   const assetsStore = useAssetsStore()
@@ -70,7 +72,6 @@ export default function VideoEditor() {
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
   const [showModalExport, setShowModalExport] = useState(false)
   const [showModalPricing, setShowModalPricing] = useState(false)
   const [modalPricingTitle, setModalPricingTitle] = useState('')
@@ -79,6 +80,7 @@ export default function VideoEditor() {
   const [hasExistingReview, setHasExistingReview] = useState(false)
   const [showMobileDisclaimer, setShowMobileDisclaimer] = useState(false)
   const [spaceCredits, setSpaceCredits] = useState<number | undefined>(undefined)
+  const [muteBackgroundMusic, setMuteBackgroundMusic] = useState(isIOS)
   
   const updateVideo = (newVideoData: any) => {
     setVideo(newVideoData)
@@ -347,22 +349,12 @@ export default function VideoEditor() {
   }, [selectedSequenceIndex, selectedTransitionIndex])
 
   useEffect(() => {
-    const checkIsMobile = () => {
-      const mobile = window.innerWidth < 1024; // 1024px est la breakpoint lg de Tailwind
-      setIsMobile(mobile);
-      // Check localStorage and mobile status to show disclaimer
-      if (mobile && !localStorage.getItem('mobileDisclaimerShown')) {
-        setShowMobileDisclaimer(true);
-      }
-    };
-
-    checkIsMobile(); // Check on initial mount
-
-    window.addEventListener('resize', checkIsMobile);
-    return () => {
-      window.removeEventListener('resize', checkIsMobile);
-    };
-  }, []); // Empty dependency array ensures this runs only once on mount for the initial check
+    setMuteBackgroundMusic(isIOS)
+    // Check localStorage and mobile status to show disclaimer
+    if (isClient && isMobile && !localStorage.getItem('mobileDisclaimerShown')) {
+      setShowMobileDisclaimer(true);
+    }
+  }, [isMobile, isClient]);
 
   const handleCloseMobileDisclaimer = () => {
     setShowMobileDisclaimer(false);
@@ -1046,6 +1038,10 @@ export default function VideoEditor() {
     });
   };
 
+  const handleMuteBackgroundMusicChange = (mute: boolean) => {
+    setMuteBackgroundMusic(mute);
+  };
+
   return (
     <>
     {isLoading && (
@@ -1220,7 +1216,12 @@ export default function VideoEditor() {
                 </ScrollArea>
               ) : activeTab1 === 'audio' ? (
                 <ScrollArea className="h-[calc(100vh-5rem)]">
-                  <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
+                  <AudioSettings 
+                    video={video} 
+                    updateAudioSettings={updateAudioSettings} 
+                    muteBackgroundMusic={muteBackgroundMusic}
+                    onMuteBackgroundMusicChange={handleMuteBackgroundMusicChange}
+                  />
                 </ScrollArea>
               ) : (
                 <ScrollArea className="h-[calc(100vh-5rem)]">
@@ -1243,13 +1244,14 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-                {!isMobile && (
+                {isClient && !isMobile && (
                     <VideoPreview 
                         playerRef={playerRef} 
                         video={video} 
                         isMobile={isMobile} 
                         showWatermark={showWatermark} 
                         hasExistingReview={hasExistingReview}
+                        muteBackgroundMusic={muteBackgroundMusic}
                         onSubtitleStyleChange={handleSubtitleStyleChange}
                         onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
                         onAvatarPositionChange={handleAvatarPositionChange}
@@ -1269,13 +1271,14 @@ export default function VideoEditor() {
           ref={previewRef}
           className={`sticky top-[57px] z-20 transition-all duration-300 h-96`}
         >
-          {isMobile && (
+          {isClient && isMobile && (
             <VideoPreview 
                 playerRef={playerRef} 
                 video={video} 
                 isMobile={isMobile} 
                 showWatermark={showWatermark} 
                 hasExistingReview={hasExistingReview}
+                muteBackgroundMusic={muteBackgroundMusic}
                 onSubtitleStyleChange={handleSubtitleStyleChange}
                 onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
                 onAvatarPositionChange={handleAvatarPositionChange}
@@ -1366,7 +1369,12 @@ export default function VideoEditor() {
             </TabsContent>
             <TabsContent value="settings-audio">
               <ScrollArea className="h-[calc(100vh-25rem)]">
-                <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
+                <AudioSettings 
+                  video={video} 
+                  updateAudioSettings={updateAudioSettings} 
+                  muteBackgroundMusic={muteBackgroundMusic}
+                  onMuteBackgroundMusicChange={handleMuteBackgroundMusicChange}
+                />
               </ScrollArea>
             </TabsContent>
           </Tabs>
