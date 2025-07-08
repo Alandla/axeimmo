@@ -933,7 +933,7 @@ export const voicesConfig: Voice[] = [
     accent: 'french',
     gender: 'male',
     age: 'middle aged',
-    tags: ['audiobooks', 'podcasts', 'storytelling'],
+    tags: ['audiobooks', 'podcast', 'storytelling'],
     plan: PlanName.PRO,
     previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/PBm6YPbx7WbrxFTZwj3E/D8U7C2MgPxZt3MVgeFjn.mp3',
     mode: 'elevenlabs'

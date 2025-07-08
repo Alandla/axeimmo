@@ -575,7 +575,6 @@
         "story": "Story",
         "characters_animation": "Animation Characters",
         "audiobooks": "Audiobooks",
-        "podcasts": "Podcasts",
         "storytelling": "Storytelling",
         "journalism": "Journalism",
         "entertainment": "Entertainment",
@@ -612,7 +611,9 @@
         "italian": "Italian",
         "latin american": "Latin American",
         "arabic": "Arabic",
-        "peninsular": "Peninsular"
+        "peninsular": "Peninsular",
+        "mandarin": "Mandarin",
+        "korean": "Korean"
       }
     },
     "avatars": {
@@ -672,7 +673,8 @@
         "microphone": "Microphone",
         "urban": "Urban",
         "nature": "Nature",
-        "car": "Car"
+        "car": "Car",
+        "podcast": "Podcast"
       },
       "place": {
         "bedroom": "Bedroom",
