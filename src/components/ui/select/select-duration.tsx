@@ -88,7 +88,7 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, disabled, onChan
                 disabled={false} // On n'utilise plus disabled pour permettre le clic
                 rightContent={!isAvailable ? (
                   <div className="flex items-center gap-1">
-                    <Badge variant="secondary" className="bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white text-xs border-none shadow-sm font-semibold">
+                    <Badge variant="plan">
                       {planT(option.requiredPlan)}
                     </Badge>
                     <Lock className="h-3 w-3 text-gray-400" />

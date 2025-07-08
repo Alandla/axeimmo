@@ -477,7 +477,8 @@
           "informative": "Informatif",
           "entertaining": "Divertissant",
           "educational": "Éducatif",
-          "humorous": "Humoristique"
+          "humorous": "Humoristique",
+          "wellness": "Bien-être"
         },
         "listen": "Écouter",
         "pause": "Pause"
@@ -571,7 +572,9 @@
         "entertainment": "Divertissement",
         "tv": "TV",
         "sales": "Ventes",
-        "podcast": "Podcast"
+        "podcast": "Podcast",
+        "wellness": "Bien-être",
+        "business": "Business"
       },
       "gender": {
         "male": "Masculin",

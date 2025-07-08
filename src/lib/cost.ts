@@ -15,7 +15,7 @@ export function calculateAnthropicCost(usage: TokenUsage): number {
 }
 
 export function calculateElevenLabsCost(text: string, isTurbo: boolean = false): number {
-  const COST_PER_1000_CHARS = 0.12;
+  const COST_PER_1000_CHARS = 0.24;
   const TURBO_DISCOUNT = 0.5;
 
   // Calculer le coût de base pour 1000 caractères
@@ -23,6 +23,13 @@ export function calculateElevenLabsCost(text: string, isTurbo: boolean = false):
   
   // Calculer le coût pour la longueur réelle du texte
   return (text.length / 1000) * baseRate;
+}
+
+export function calculateMinimaxCost(text: string): number {
+  const COST_PER_1000_CHARS = 0.06;
+  
+  // Calculer le coût pour la longueur réelle du texte
+  return (text.length / 1000) * COST_PER_1000_CHARS;
 }
 
 export function calculateHeygenCost(durationInSeconds: number): number {

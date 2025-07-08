@@ -14,4 +14,5 @@ export type Voice = {
         stability: number
         similarity_boost: number
     }
+    mode?: string
 }

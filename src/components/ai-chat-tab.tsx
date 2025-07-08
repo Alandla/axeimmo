@@ -296,7 +296,7 @@ export function AiChatTab({
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="flex items-center gap-2">
-                            <Badge variant="secondary" className="bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white border-none">
+                            <Badge variant="plan">
                               Start
                             </Badge>
                             <p>{t('web-mode-tooltip')}</p>

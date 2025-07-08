@@ -2,8 +2,7 @@ import { logger, metadata, task, wait } from "@trigger.dev/sdk";
 import { Steps } from "../types/step";
 import { Voice } from "../types/voice";
 import { AvatarLook } from "../types/avatar";
-import { createAudioTTS } from "../lib/elevenlabs";
-import { uploadToS3Audio } from "../lib/r2";
+import { createTextToSpeech } from "../lib/tts";
 import { transitions, sounds } from "../config/transitions.config";
 import { ITransition, ISequence } from "../types/video";
 import { analyzeVideo, VideoAnalysisResult } from "../lib/video-analysis";
@@ -60,7 +59,7 @@ export const generateVideoTask = task({
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
     let extractedMedias: IMedia[] = [];
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;
@@ -510,19 +509,14 @@ export const generateVideoTask = task({
         const batchPromises = batch.map(async (text, batchIndex) => {
           const globalIndex = i + batchIndex; // Global index to maintain order
           try {
-            const audioResult = await createAudioTTS(
-              payload.voice.id,
+            const audioResult = await createTextToSpeech(
+              payload.voice,
               text.trim(),
-              payload.voice.voiceSettings,
               true
             );
             
-            // Upload directly after generation
-            const audioUrl = await uploadToS3Audio(audioResult.data, 'medias-users');
-            
             // Add cost to total
             cost += audioResult.cost;
-
 
             processedCount++
             await metadata.replace({
@@ -533,20 +527,17 @@ export const generateVideoTask = task({
             return {
               index: globalIndex,
               text: text.trim(),
-              audioUrl
+              audioUrl: audioResult.audioUrl
             };
           } catch (error: any) {
             if (error.response?.status === 422) {
               await wait.for({ seconds: 2 });
 
-              const retryResult = await createAudioTTS(
-                payload.voice.id,
+              const retryResult = await createTextToSpeech(
+                payload.voice,
                 text.trim(),
-                payload.voice.voiceSettings,
                 true
               );
-
-              const audioUrl = await uploadToS3Audio(retryResult.data, 'medias-users');
               
               // Add cost to total
               cost += retryResult.cost;
@@ -560,7 +551,7 @@ export const generateVideoTask = task({
               return {
                 index: globalIndex,
                 text: text.trim(),
-                audioUrl
+                audioUrl: retryResult.audioUrl
               };
             }
             throw error;
