@@ -159,7 +159,7 @@ export interface WebPageContentExtractionOutput {
 
 // Types for image analysis
 export interface ImageAnalysisInput {
-  image_url?: string
+  image_url?: Image
 }
 
 export interface ImageAnalysisOutput {
@@ -246,8 +246,8 @@ const webPageContentExtraction = workflowAI.agent<WebPageContentExtractionInput,
 // Image analysis agent
 const imageAnalysis = workflowAI.agent<ImageAnalysisInput, ImageAnalysisOutput>({
   id: "image-analysis",
-  schemaId: 1,
-  version: "production",
+  schemaId: 2,
+  version: process.env.NODE_ENV === 'development' ? '2.2' : 'production',
   useCache: "auto"
 })
 
@@ -602,7 +602,9 @@ export async function imageAnalysisRun(
   description: string
 }> {
   const input: ImageAnalysisInput = {
-    image_url: imageUrl
+    image_url: {
+      url: imageUrl
+    }
   }
 
   try {
