@@ -215,25 +215,6 @@ export const avatarsConfig: Avatar[] = [
         ]
     },
     {
-        id: '169',
-        name: 'Winter',
-        gender: 'male',
-        age: 'undefined',
-        tags: ["UGC"],
-        thumbnail: 'https://files2.heygen.ai/avatar/v3/9d9623b074434903b369b4b4b9af15aa/full/2.2/preview_target.webp',
-        looks: [
-            {
-                id: '9d9623b074434903b369b4b4b9af15aa',
-                name: 'Winter Room',
-                place: 'room',
-                format: 'vertical',
-                tags: ["UGC"],
-                thumbnail: 'https://files2.heygen.ai/avatar/v3/9d9623b074434903b369b4b4b9af15aa/full/2.2/preview_target.webp',
-                previewUrl: 'https://files2.heygen.ai/avatar/v3/9d9623b074434903b369b4b4b9af15aa/full/2.2/preview_video_target.mp4'
-            }
-        ]
-    },
-    {
         id: '170',
         name: 'Bill',
         gender: 'male',
@@ -445,7 +426,7 @@ export const avatarsConfig: Avatar[] = [
     {
         id: '181',
         name: 'Winter',
-        gender: 'male',
+        gender: 'female',
         age: 'undefined',
         tags: ["UGC"],
         thumbnail: 'https://files2.heygen.ai/avatar/v3/04762b3b995c4b39a1ea0d4c3b1b9f8c/full/2.2/preview_target.webp',
@@ -882,7 +863,7 @@ export const avatarsConfig: Avatar[] = [
     {
         id: '204',
         name: 'Doctor',
-        gender: 'male',
+        gender: 'female',
         age: 'undefined',
         tags: ["UGC"],
         thumbnail: 'https://files2.heygen.ai/avatar/v3/cd0f9db9d45641c59807f57069d4c8c0/full/2.2/preview_target.webp',

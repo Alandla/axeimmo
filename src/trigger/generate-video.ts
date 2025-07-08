@@ -459,7 +459,7 @@ export const generateVideoTask = task({
         audioUrl: voiceFile.audio?.link || "",
       })
     } else if (!avatarFile) {
-      logger.log(`[VOICE] Generate voice with elevenlabs...`)
+      logger.log(`[VOICE] Generate voice...`)
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
