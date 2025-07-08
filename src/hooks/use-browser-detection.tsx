@@ -38,7 +38,7 @@ export function useBrowserDetection(): BrowserInfo {
     const userAgentLower = userAgent.toLowerCase();
 
     // Détection iOS
-    const isIOS =true
+    const isIOS = /iphone|ipad|ipod/.test(userAgentLower);
     
     // Détection des navigateurs
     const isSafari = /safari/.test(userAgentLower) && !/chrome/.test(userAgentLower);
