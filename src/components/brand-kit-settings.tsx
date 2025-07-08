@@ -4,7 +4,7 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { Switch } from "@/src/components/ui/switch"
-import { Camera, Save, Loader2, X, Image } from 'lucide-react'
+import { Camera, Save, Loader2, X, Image, Eye, Move } from 'lucide-react'
 import { useTranslations } from "next-intl"
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
 import { basicApiCall } from "../lib/api"
@@ -169,7 +169,10 @@ export function BrandKitSettings() {
           <>
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <Label className="text-base">{t('logo.show')}</Label>
+                <div className="flex items-center gap-2">
+                  <Eye className="h-4 w-4" />
+                  <Label className="text-base">{t('logo.show')}</Label>
+                </div>
                 <p className="text-xs sm:text-sm text-muted-foreground">
                   {t('logo.show-description')}
                 </p>
@@ -181,10 +184,23 @@ export function BrandKitSettings() {
             </div>
 
             {showLogo && (
-              <LogoPositionSelector
-                value={logoPosition}
-                onChange={setLogoPosition}
-              />
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Move className="h-4 w-4" />
+                    <Label className="text-base">{t('position.title')}</Label>
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    {t('position.description')}
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <LogoPositionSelector
+                    value={logoPosition}
+                    onChange={setLogoPosition}
+                  />
+                </div>
+              </div>
             )}
           </>
         )}
