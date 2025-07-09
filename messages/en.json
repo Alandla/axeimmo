@@ -195,7 +195,24 @@
         "see-all-plans": "See all plans",
         "upgrade-to": "Upgrade to {plan}",
         "lifetime-deal": "Lifetime deal",
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "billed-annually": "Billed annually",
+        "save-percent": "Save {percent}%",
+        "features": {
+          "export-no-watermark": {
+            "title": "Export without watermark",
+            "description": "Download your videos without watermark to post them and increase your presence automatically"
+          },
+          "credits": {
+            "title": "{credits} Credits",
+            "description": "Equivalent to approximately {minutes} minutes of video per month"
+          },
+          "high-quality-voices": {
+            "title": "{count} High-quality voices",
+            "description": "Increase the quality of your videos with realistic and natural voices"
+          }
+        },
+        "see-all-benefits": "See all benefits"
       },
       "feature": {
         "1-member": "1 member",
@@ -289,9 +306,9 @@
       "confirm": "Confirm",
       "cancel": "Cancel",
       "modal-pricing-not-enough-credits": "Not enough credits",
-      "modal-pricing-description-not-enough-credits": "You don't have enough credits to export your video, upgrade to a higher plan to export your video.",
+      "modal-pricing-description-not-enough-credits": "Not enough credits to export your video, upgrade to a higher plan to export your video.",
       "modal-pricing-export-on-free-title": "Export not available on free plan",
-      "modal-pricing-export-on-free-description": "Video export requires a paid plan. Upgrade to a paid plan to export your videos.",
+      "modal-pricing-export-on-free-description": "Upgrade to a paid plan to export your videos.",
       "mobile-disclaimer": {
         "title": "Desktop version recommended",
         "description": "For better performance and optimal experience, we recommend using a computer.",

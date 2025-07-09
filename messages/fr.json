@@ -186,7 +186,24 @@
         "see-all-plans": "Voir tous les plans",
         "upgrade-to": "Passer à {plan}",
         "lifetime-deal": "Offre à vie",
-        "loading": "Chargement..."
+        "loading": "Chargement...",
+        "billed-annually": "Facturé annuellement",
+        "save-percent": "Économise {percent}%",
+        "features": {
+          "export-no-watermark": {
+            "title": "Export sans watermark",
+            "description": "Télécharge tes vidéos sans filigrane pour les poster et augmenter votre présence automatiquement"
+          },
+          "credits": {
+            "title": "{credits} Crédits",
+            "description": "Équivalent à environ {minutes} minutes de vidéo par mois"
+          },
+          "high-quality-voices": {
+            "title": "{count} Voix de haute qualité",
+            "description": "Augmente la qualité de tes vidéos avec des voix réalistes et naturelles"
+          }
+        },
+        "see-all-benefits": "Voir tous les avantages"
       },
       "feature": {
         "1-member": "1 membre",
@@ -282,7 +299,7 @@
       "modal-pricing-not-enough-credits": "Pas assez de crédits",
       "modal-pricing-description-not-enough-credits": "Tu n'as pas assez de crédits pour exporter ta vidéo, passe à un plan supérieur pour exporter ta vidéo.",
       "modal-pricing-export-on-free-title": "Export non disponible sur le plan gratuit",
-      "modal-pricing-export-on-free-description": "L'export de vidéos nécessite un plan payant. Passez à un plan payant pour pouvoir exporter vos vidéos.",
+      "modal-pricing-export-on-free-description": "Passez à un plan payant pour pouvoir exporter vos vidéos.",
       "mobile-disclaimer": {
         "title": "Version ordinateur recommandée",
         "description": "Pour de meilleures performances et une expérience optimale, nous recommandons d'utiliser un ordinateur.",
