@@ -1605,13 +1605,7 @@ export const generateVideoTask = task({
         subtitle: {
           name: subtitle.name,
           style: subtitle.style,
-        },
-        logo: space?.logo?.url && space?.logo?.position ? {
-          url: space.logo.url,
-          position: space.logo.position,
-          show: space.logo.show ?? true,
-          size: space.logo.size
-        } : undefined
+        }
       }
     }
 
