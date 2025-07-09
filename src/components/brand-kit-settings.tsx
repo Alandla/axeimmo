@@ -10,10 +10,8 @@ import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
 import { basicApiCall } from "../lib/api"
 import { useToast } from "../hooks/use-toast"
 import { getMediaUrlFromFileByPresignedUrl } from "../service/upload.service"
-import { SimpleSpace } from "../types/space"
+import { SimpleSpace, LogoPosition, Logo } from "../types/space"
 import { LogoPositionSelector } from "@/src/components/ui/logo-position-selector"
-
-type LogoPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'middle-left' | 'middle-right'
 
 export function BrandKitSettings() {
   const t = useTranslations('settings.brand-kit')
@@ -23,21 +21,21 @@ export function BrandKitSettings() {
   const [isHovering, setIsHovering] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
-  const [logoUrl, setLogoUrl] = useState(activeSpace?.logoUrl || undefined)
+  const [logoUrl, setLogoUrl] = useState(activeSpace?.logo?.url || undefined)
   const [logoFileInUpload, setLogoFileInUpload] = useState<File | undefined>(undefined)
-  const [originalLogoUrl, setOriginalLogoUrl] = useState(activeSpace?.logoUrl || undefined)
-  const [logoPosition, setLogoPosition] = useState<LogoPosition>(activeSpace?.logoPosition || 'bottom-right')
-  const [originalLogoPosition, setOriginalLogoPosition] = useState<LogoPosition>(activeSpace?.logoPosition || 'bottom-right')
-  const [showLogo, setShowLogo] = useState(activeSpace?.showLogo ?? true)
-  const [originalShowLogo, setOriginalShowLogo] = useState(activeSpace?.showLogo ?? true)
+  const [originalLogoUrl, setOriginalLogoUrl] = useState(activeSpace?.logo?.url || undefined)
+  const [logoPosition, setLogoPosition] = useState<LogoPosition>(activeSpace?.logo?.position || { x: 85, y: 85 })
+  const [originalLogoPosition, setOriginalLogoPosition] = useState<LogoPosition>(activeSpace?.logo?.position || { x: 85, y: 85 })
+  const [showLogo, setShowLogo] = useState(activeSpace?.logo?.show ?? true)
+  const [originalShowLogo, setOriginalShowLogo] = useState(activeSpace?.logo?.show ?? true)
 
   useEffect(() => {
-    setOriginalLogoUrl(activeSpace?.logoUrl || undefined)
-    setOriginalLogoPosition(activeSpace?.logoPosition || 'bottom-right')
-    setOriginalShowLogo(activeSpace?.showLogo ?? true)
-    setLogoUrl(activeSpace?.logoUrl || undefined)
-    setLogoPosition(activeSpace?.logoPosition || 'bottom-right')
-    setShowLogo(activeSpace?.showLogo ?? true)
+    setOriginalLogoUrl(activeSpace?.logo?.url || undefined)
+    setOriginalLogoPosition(activeSpace?.logo?.position || { x: 85, y: 85 })
+    setOriginalShowLogo(activeSpace?.logo?.show ?? true)
+    setLogoUrl(activeSpace?.logo?.url || undefined)
+    setLogoPosition(activeSpace?.logo?.position || { x: 85, y: 85 })
+    setShowLogo(activeSpace?.logo?.show ?? true)
   }, [activeSpace])
   
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,9 +71,11 @@ export function BrandKitSettings() {
     
     try {
       const updatedSpace: SimpleSpace = await basicApiCall(`/space/${activeSpace.id}`, {
-        logoUrl: logoUrl,
-        logoPosition: logoPosition,
-        showLogo: showLogo
+        logo: {
+          url: logoUrl,
+          position: logoPosition,
+          show: showLogo
+        }
       })
       setActiveSpace(updatedSpace)
       setOriginalLogoUrl(logoUrl)

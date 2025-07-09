@@ -11,33 +11,55 @@ import { SubtitlesModern } from './subtitles/modern/subtitlesModern';
 import { Voices } from './components/Audios';
 import { Transitions } from './components/Transitions';
 import { SpaceLogo } from './components/SpaceLogo';
+import { LogoPosition } from '@/src/types/space';
+
+interface LogoData {
+  url?: string;
+  position?: LogoPosition;
+  show?: boolean;
+  size?: number;
+}
 
 export const VideoGenerate = ({ 
 	data, 
 	showWatermark = true,
+	logo,
 	onSubtitleStyleChange,
 	onAvatarHeightRatioChange,
 	onAvatarPositionChange,
-	onMediaPositionChange
+	onMediaPositionChange,
+	onLogoPositionChange,
+	onLogoSizeChange
 }: { 
 	data: any, 
 	showWatermark?: boolean,
+	logo?: LogoData,
 	onSubtitleStyleChange?: (newStyle: any) => void,
 	onAvatarHeightRatioChange?: (ratio: number) => void,
 	onAvatarPositionChange?: (position: { x: number, y: number }) => void,
-	onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void
+	onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
+	onLogoPositionChange?: (position: LogoPosition) => void,
+	onLogoSizeChange?: (size: number) => void
 }) => {
+	
 	if (!data || !data.video.sequences.length || data.video.sequences.length === 0) {
       return <div>Loading...</div>;
     }
 	
 	return (
-		<>
+		<>			
 			{ data.video.audio.url && <Audio src={data.video.audio.url} volume={data.video.audio.volume} /> }
 			{ data.video.audio.voices && <Voices voices={data.video.audio.voices} volume={data.video.audio.volume} /> }
 			{ data.video.audio.music && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
 			{ showWatermark && <Watermark />}
-			<SpaceLogo />
+			<SpaceLogo 
+				logoUrl={logo?.url}
+				logoPosition={logo?.position}
+				showLogo={logo?.show}
+				logoSize={logo?.size}
+				onPositionChange={onLogoPositionChange}
+				onSizeChange={onLogoSizeChange}
+			/>
 			{ data.video.avatar ? <BackgroundWithAvatar 
 				sequences={data.video.sequences} 
 				avatar={data.video.avatar} 

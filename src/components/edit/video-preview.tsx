@@ -11,6 +11,8 @@ import VideoFormatSelector from "@/src/components/edit/video-format-selector";
 import AvatarSelector from "@/src/components/edit/avatar-selector";
 import { AvatarSelectionModal } from "@/src/components/modal/avatar-selection-modal";
 import { AvatarLook } from "@/src/types/avatar";
+import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
+import { LogoPosition } from "@/src/types/space";
 
 export default function VideoPreview({ 
     playerRef, 
@@ -23,7 +25,9 @@ export default function VideoPreview({
     onAvatarPositionChange,
     onMediaPositionChange,
     onVideoFormatChange,
-    onAvatarChange
+    onAvatarChange,
+    onLogoPositionChange,
+    onLogoSizeChange
 }: { 
     playerRef: React.RefObject<PlayerRef>, 
     video: IVideo | null, 
@@ -35,9 +39,12 @@ export default function VideoPreview({
     onAvatarPositionChange?: (position: { x: number, y: number }) => void,
     onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
     onVideoFormatChange?: (format: VideoFormat) => void,
-    onAvatarChange?: (avatar: AvatarLook | null) => void
+    onAvatarChange?: (avatar: AvatarLook | null) => void,
+    onLogoPositionChange?: (position: LogoPosition) => void,
+    onLogoSizeChange?: (size: number) => void
 }) {
     const t = useTranslations('edit');
+    const { activeSpace } = useActiveSpaceStore();
     const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
     const [showReview, setShowReview] = useState(false);
     const [hasInteractedWithReview, setHasInteractedWithReview] = useState(false);
@@ -45,6 +52,14 @@ export default function VideoPreview({
 
     // Get video dimensions based on format
     const dimensions = getVideoDimensions(video?.video?.format || 'vertical');
+
+    // Récupérer les données du logo depuis activeSpace
+    const logoData = activeSpace?.logo ? {
+        url: activeSpace.logo.url,
+        position: activeSpace.logo.position,
+        show: activeSpace.logo.show,
+        size: activeSpace.logo.size
+    } : undefined;
 
     useEffect(() => {
         if (!video?.video?.sequences) return;
@@ -149,10 +164,13 @@ export default function VideoPreview({
                     inputProps={{
                         data: video,
                         showWatermark,
+                        logo: logoData,
                         onSubtitleStyleChange,
                         onAvatarHeightRatioChange,
                         onAvatarPositionChange,
-                        onMediaPositionChange
+                        onMediaPositionChange,
+                        onLogoPositionChange,
+                        onLogoSizeChange
                     }}
                     numberOfSharedAudioTags={12}
                     controls

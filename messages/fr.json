@@ -271,6 +271,7 @@
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Sous-titres",
       "audio-tabs-title": "Audio",
+      "settings-tabs-title": "Paramètres",
       "video-format": {
         "vertical": "Vertical",
         "ads": "Publicité",
@@ -1542,7 +1543,8 @@
           "middle-left": "Milieu gauche",
           "middle-right": "Milieu droite",
           "bottom-left": "Bas gauche",
-          "bottom-right": "Bas droite"
+          "bottom-right": "Bas droite",
+          "custom": "Position personnalisée"
         },
         "save-button": "Sauvegarder",
         "update-success-title": "Logo mis à jour",

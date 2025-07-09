@@ -149,7 +149,8 @@
           "middle-left": "Middle left",
           "middle-right": "Middle right",
           "bottom-left": "Bottom left",
-          "bottom-right": "Bottom right"
+          "bottom-right": "Bottom right",
+          "custom": "Custom position"
         },
         "save-button": "Save",
         "update-success-title": "Logo updated",
@@ -315,6 +316,7 @@
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Subtitles",
       "audio-tabs-title": "Audio",
+      "settings-tabs-title": "Settings",
       "video-format": {
         "vertical": "Vertical",
         "ads": "Ads",

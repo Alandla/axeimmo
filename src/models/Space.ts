@@ -139,18 +139,35 @@ const spaceSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    logoUrl: {
-      type: String,
-      trim: true,
-    },
-    logoPosition: {
-      type: String,
-      enum: ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'middle-left', 'middle-right'],
-      default: 'bottom-right',
-    },
-    showLogo: {
-      type: Boolean,
-      default: true,
+    logo: {
+      url: {
+        type: String,
+        trim: true,
+      },
+      position: {
+        x: {
+          type: Number,
+          min: 0,
+          max: 100,
+          default: 90, // Position par défaut à droite
+        },
+        y: {
+          type: Number,
+          min: 0,
+          max: 100,
+          default: 10, // Position par défaut en bas
+        },
+      },
+      show: {
+        type: Boolean,
+        default: true,
+      },
+      size: {
+        type: Number,
+        min: 0,
+        max: 100,
+        default: 19,
+      },
     },
   },
   {

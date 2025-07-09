@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl"
-
-type LogoPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'middle-left' | 'middle-right'
+import { LogoPosition } from "@/src/types/space"
+import React, { useRef, useLayoutEffect, useState } from "react"
 
 interface LogoPositionSelectorProps {
   value: LogoPosition
@@ -9,84 +9,128 @@ interface LogoPositionSelectorProps {
 
 export function LogoPositionSelector({ value, onChange }: LogoPositionSelectorProps) {
   const t = useTranslations('settings.brand-kit')
+  const PADDING = 12
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [dimensions, setDimensions] = useState({ width: 120, height: 213.33 }) // 9/16 ratio
 
-  const positions: { key: LogoPosition; label: string; className: string }[] = [
-    { key: 'top-left', label: t('position.top-left'), className: 'col-start-1 row-start-1' },
-    { key: 'top-right', label: t('position.top-right'), className: 'col-start-3 row-start-1' },
-    { key: 'middle-left', label: t('position.middle-left'), className: 'col-start-1 row-start-2' },
-    { key: 'middle-right', label: t('position.middle-right'), className: 'col-start-3 row-start-2' },
-    { key: 'bottom-left', label: t('position.bottom-left'), className: 'col-start-1 row-start-3' },
-    { key: 'bottom-right', label: t('position.bottom-right'), className: 'col-start-3 row-start-3' },
+  useLayoutEffect(() => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect()
+      setDimensions({ width: rect.width, height: rect.height })
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    function handleResize() {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect()
+        setDimensions({ width: rect.width, height: rect.height })
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Convertit un pourcentage (0-100) en px dans la zone totale
+  function percentToPx(percent: number, size: number) {
+    return (size * percent) / 100
+  }
+
+  // Convertit une position en px dans la zone totale en pourcentage (0-100)
+  function pxToPercent(px: number, size: number) {
+    return (px / size) * 100
+  }
+
+  const predefinedPositions: { key: string; label: string; position: LogoPosition }[] = [
+    { key: 'top-left', label: t('position.top-left'), position: { x: 15, y: 10 } },
+    { key: 'top-right', label: t('position.top-right'), position: { x: 85, y: 10 } },
+    { key: 'middle-left', label: t('position.middle-left'), position: { x: 15, y: 50 } },
+    { key: 'middle-right', label: t('position.middle-right'), position: { x: 85, y: 50 } },
+    { key: 'bottom-left', label: t('position.bottom-left'), position: { x: 15, y: 90 } },
+    { key: 'bottom-right', label: t('position.bottom-right'), position: { x: 85, y: 90 } },
   ]
+
+  const handlePositionClick = (x: number, y: number) => {
+    onChange({ x, y })
+  }
+
+  const handleDrag = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const xPx = e.clientX - rect.left
+    const yPx = e.clientY - rect.top
+    // Limiter les positions pour éviter que le logo soit trop près des bords
+    const x = Math.max(10, Math.min(90, pxToPercent(xPx, rect.width)))
+    const y = Math.max(10, Math.min(90, pxToPercent(yPx, rect.height)))
+    onChange({ x, y })
+  }
 
   return (
     <div className="relative">
       <div className="w-full max-w-[120px] mx-auto">
-        <div className="relative aspect-[9/16] bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border border-gray-200" style={{ minHeight: 200, padding: 0 }}>
-          {(() => {
-            const PAD = 12
-            const SIZE = 24
-            const leftPct = `${(PAD / (120 - SIZE)) * 100}%`
-            const rightPct = `${100 - (PAD / (120 - SIZE)) * 100}%`
-            const topPct = `${(PAD / (200 - SIZE)) * 100}%`
-            const bottomPct = `${100 - (PAD / (200 - SIZE)) * 100}%`
-            const coords = {
-              'top-left':      { left: leftPct,   top: topPct },
-              'top-right':     { left: rightPct,  top: topPct },
-              'bottom-left':   { left: leftPct,   top: bottomPct },
-              'bottom-right':  { left: rightPct,  top: bottomPct },
-              'middle-left':   { left: leftPct,   top: '50%' },
-              'middle-right':  { left: rightPct,  top: '50%' },
-            }
-            const offset = 'translate(-50%, -50%)'
-            const selected = coords[value]
-            return (
-              <>
-                {Object.entries(coords).map(([key, pos]) => (
-                  <button
-                    key={key}
-                    onClick={() => onChange(key as LogoPosition)}
-                    className="absolute z-10 rounded-md border border-gray-300 bg-white hover:border-black transition-all duration-100"
-                    style={{
-                      width: SIZE,
-                      height: SIZE,
-                      left: pos.left,
-                      top: pos.top,
-                      transform: offset,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    title={positions.find(p => p.key === key)?.label}
-                  >
-                    <span className="w-1 h-1 rounded-full bg-gray-700" />
-                  </button>
-                ))}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
-                  <span className="w-2 h-2 rounded-md bg-gray-200" />
-                </div>
-                <div
-                  className="absolute z-20 rounded-md border border-black bg-black transition-all duration-300"
-                  style={{
-                    width: SIZE,
-                    height: SIZE,
-                    left: selected.left,
-                    top: selected.top,
-                    transform: offset,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <span className="w-1 h-1 rounded-full bg-white" />
-                </div>
-              </>
-            )
-          })()}
+        <div
+          ref={containerRef}
+          className="relative aspect-[9/16] bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border border-gray-200 cursor-crosshair"
+          style={{ minHeight: 200, boxSizing: 'border-box' }}
+          onMouseDown={handleDrag}
+        >
+          {/* Points prédéfinis */}
+          {predefinedPositions.map(({ key, position }) => (
+            <button
+              key={key}
+              onClick={e => {
+                e.stopPropagation()
+                handlePositionClick(position.x, position.y)
+              }}
+              className="absolute z-10 rounded-md border border-gray-300 bg-white hover:border-black transition-all duration-100"
+              style={{
+                width: 24,
+                height: 24,
+                left: percentToPx(position.x, dimensions.width),
+                top: percentToPx(position.y, dimensions.height),
+                transform: 'translate(-50%, -50%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              title={key}
+            >
+              <span className="w-1 h-1 rounded-full bg-gray-700" />
+            </button>
+          ))}
+
+          {/* Point central de référence */}
+          <div
+            className="absolute flex items-center justify-center"
+            style={{
+              left: percentToPx(50, dimensions.width),
+              top: percentToPx(50, dimensions.height),
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <span className="w-2 h-2 rounded-md bg-gray-200" />
+          </div>
+
+          {/* Position actuelle */}
+          <div
+            className="absolute z-20 rounded-md border border-black bg-black transition-all duration-300"
+            style={{
+              width: 24,
+              height: 24,
+              left: percentToPx(value.x, dimensions.width),
+              top: percentToPx(value.y, dimensions.height),
+              transform: 'translate(-50%, -50%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <span className="w-1 h-1 rounded-full bg-white" />
+          </div>
         </div>
         <div className="mt-2 text-center">
           <p className="text-xs font-medium text-gray-500">
-            {positions.find(p => p.key === value)?.label}
+            {t('position.custom')} ({Math.round(value.x)}%, {Math.round(value.y)}%)
           </p>
         </div>
       </div>

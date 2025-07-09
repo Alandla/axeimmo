@@ -60,7 +60,7 @@ export const generateVideoTask = task({
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
     let extractedMedias: IMedia[] = [];
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;
@@ -1605,7 +1605,13 @@ export const generateVideoTask = task({
         subtitle: {
           name: subtitle.name,
           style: subtitle.style,
-        }
+        },
+        logo: space?.logo?.url && space?.logo?.position ? {
+          url: space.logo.url,
+          position: space.logo.position,
+          show: space.logo.show ?? true,
+          size: space.logo.size
+        } : undefined
       }
     }
 

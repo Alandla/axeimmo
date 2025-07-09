@@ -7,7 +7,7 @@ import { Card } from "@/src/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/src/components/ui/breadcrumb"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
-import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2, Rocket } from 'lucide-react'
+import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2, Rocket, Settings } from 'lucide-react'
 import Link from 'next/link'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
@@ -43,6 +43,7 @@ import MobileDisclaimerModal from '@/src/components/modal/mobile-disclaimer'
 import { useAssetsStore } from '@/src/store/assetsStore'
 import { useVideoFramesStore } from '@/src/store/videoFramesStore'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
+import { LogoPosition } from '@/src/types/space'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -79,6 +80,8 @@ export default function VideoEditor() {
   const [hasExistingReview, setHasExistingReview] = useState(false)
   const [showMobileDisclaimer, setShowMobileDisclaimer] = useState(false)
   const [spaceCredits, setSpaceCredits] = useState<number | undefined>(undefined)
+  const [originalLogoPosition, setOriginalLogoPosition] = useState<LogoPosition | null>(null)
+  const [originalLogoSize, setOriginalLogoSize] = useState<number | null>(null)
   
   const updateVideo = (newVideoData: any) => {
     setVideo(newVideoData)
@@ -113,8 +116,33 @@ export default function VideoEditor() {
     setIsSaving(true);
     
     try {
-
-      await basicApiCall('/video/save', { video });
+      const savePromises = [basicApiCall('/video/save', { video })];
+      
+      // Vérifier si la position du logo a changé et sauvegarder le space si nécessaire
+      if (originalLogoPosition && storeActiveSpace?.logo?.position && 
+          (originalLogoPosition.x !== storeActiveSpace.logo.position.x || 
+           originalLogoPosition.y !== storeActiveSpace.logo.position.y ||
+           originalLogoSize !== storeActiveSpace.logo.size)) {
+        
+        const spaceUpdateData = {
+          logo: {
+            ...storeActiveSpace.logo,
+            position: storeActiveSpace.logo.position,
+            size: storeActiveSpace.logo.size
+          }
+        };
+        savePromises.push(basicApiCall(`/space/${storeActiveSpace.id}`, spaceUpdateData));
+      }
+      
+      await Promise.all(savePromises);
+      
+      // Mettre à jour la position originale après sauvegarde
+      if (storeActiveSpace?.logo?.position) {
+        setOriginalLogoPosition(storeActiveSpace.logo.position);
+      }
+      if (storeActiveSpace?.logo?.size) {
+        setOriginalLogoSize(storeActiveSpace.logo.size);
+      }
       
       setIsDirty(false);
       
@@ -256,9 +284,38 @@ export default function VideoEditor() {
   const handleSilentSave = async () => {
     if (isDirty && process.env.NODE_ENV !== 'development' && (session?.user?.email !== 'alan@hoox.video' && session?.user?.email !== 'maxime@hoox.video')) {
       setIsSaving(true)
-      await basicApiCall('/video/save', { video })
-      setIsDirty(false)
-      setIsSaving(false)
+      
+      try {
+        const savePromises = [basicApiCall('/video/save', { video })];
+        
+        // Vérifier si la position du logo a changé et sauvegarder le space si nécessaire
+        if (originalLogoPosition && storeActiveSpace?.logo?.position && 
+            (originalLogoPosition.x !== storeActiveSpace.logo.position.x || 
+             originalLogoPosition.y !== storeActiveSpace.logo.position.y)) {
+          
+          const spaceUpdateData = {
+            logo: {
+              ...storeActiveSpace.logo,
+              position: storeActiveSpace.logo.position
+            }
+          };
+          
+          savePromises.push(basicApiCall(`/space/${storeActiveSpace.id}`, spaceUpdateData));
+        }
+        
+        await Promise.all(savePromises);
+        
+        // Mettre à jour la position originale après sauvegarde
+        if (storeActiveSpace?.logo?.position) {
+          setOriginalLogoPosition(storeActiveSpace.logo.position);
+        }
+        
+        setIsDirty(false)
+      } catch (error) {
+        console.error('Error during silent save:', error);
+      } finally {
+        setIsSaving(false)
+      }
     }
   }
 
@@ -317,6 +374,11 @@ export default function VideoEditor() {
         // Si aucun espace actif n'est défini dans le store, on le définit à partir de la réponse complète
         if (!storeActiveSpace) {
           setActiveSpaceFromISpace(spaceResponse)
+        }
+
+        // Sauvegarder la position originale du logo
+        if (spaceResponse.logo?.position) {
+          setOriginalLogoPosition(spaceResponse.logo.position);
         }
 
       } catch (error) {
@@ -1046,6 +1108,49 @@ export default function VideoEditor() {
     });
   };
 
+  const handleLogoPositionChange = (newPosition: LogoPosition) => {
+    if (storeActiveSpace && video?.spaceId) {
+      // Vérifier si la position change réellement en comparant les valeurs x et y
+      const currentPosition = storeActiveSpace.logo?.position;
+      if (currentPosition && 
+          currentPosition.x === newPosition.x && 
+          currentPosition.y === newPosition.y) {
+        return; // Ne rien faire si la position est déjà la même
+      }
+      
+      const updatedSpace = {
+        ...storeActiveSpace,
+        logo: {
+          ...storeActiveSpace.logo,
+          position: newPosition
+        }
+      };
+      // Mettre à jour le store directement avec l'objet SimpleSpace
+      useActiveSpaceStore.getState().setActiveSpace(updatedSpace);
+      setIsDirty(true);
+    }
+  };
+
+  const handleLogoSizeChange = (newSize: number) => {
+    if (storeActiveSpace && video?.spaceId) {
+      // Vérifier si la taille change réellement
+      if (storeActiveSpace.logo?.size === newSize) {
+        return; // Ne rien faire si la taille est déjà la même
+      }
+      
+      const updatedSpace = {
+        ...storeActiveSpace,
+        logo: {
+          ...storeActiveSpace.logo,
+          size: newSize
+        }
+      };
+      // Mettre à jour le store directement avec l'objet SimpleSpace
+      useActiveSpaceStore.getState().setActiveSpace(updatedSpace);
+      setIsDirty(true);
+    }
+  };
+
   return (
     <>
     {isLoading && (
@@ -1204,7 +1309,7 @@ export default function VideoEditor() {
                     </TabsContent>
                     <TabsContent value="audio">
                       <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
-                        <Musics video={video} updateAudioSettings={updateAudioSettings} />
+                        <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
                       </ScrollArea>
                     </TabsContent>
                 </Tabs>
@@ -1212,32 +1317,47 @@ export default function VideoEditor() {
             </Card>
           </ResizablePanel>
           <ResizableHandle className="w-[1px] bg-transparent" />
-          <ResizablePanel defaultSize={30} minSize={20}>
+          <ResizablePanel defaultSize={50} minSize={30}>
             <Card className="h-full">
-              {activeTab1 === 'subtitle' ? (
-                <ScrollArea className="h-[calc(100vh-5rem)]">
-                  <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} />
-                </ScrollArea>
-              ) : activeTab1 === 'audio' ? (
-                <ScrollArea className="h-[calc(100vh-5rem)]">
-                  <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
-                </ScrollArea>
-              ) : (
-                <ScrollArea className="h-[calc(100vh-5rem)]">
-                  {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                    <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
-                  )}
-                  {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
-                    <TransitionSettings 
-                      video={video} 
-                      transition={video.video.transitions[selectedTransitionIndex]} 
-                      transitionIndex={selectedTransitionIndex} 
-                      spaceId={video.spaceId}
-                      updateTransition={handleUpdateTransition}
-                    />
-                  )}
-                </ScrollArea>
-              )}
+                {activeTab1 === 'sequences' ? (
+                  <ScrollArea className="h-[calc(100vh-5rem)]">
+                    {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
+                      <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
+                    )}
+                    {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                      <TransitionSettings 
+                        video={video} 
+                        transition={video.video.transitions[selectedTransitionIndex]} 
+                        transitionIndex={selectedTransitionIndex} 
+                        spaceId={video.spaceId}
+                        updateTransition={handleUpdateTransition}
+                      />
+                    )}
+                  </ScrollArea>
+                ) : activeTab1 === 'subtitle' ? (
+                  <ScrollArea className="h-[calc(100vh-5rem)]">
+                    <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} />
+                  </ScrollArea>
+                ) : activeTab1 === 'audio' ? (
+                  <ScrollArea className="h-[calc(100vh-5rem)]">
+                    <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
+                  </ScrollArea>
+                ) : (
+                  <ScrollArea className="h-[calc(100vh-5rem)]">
+                    {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
+                      <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
+                    )}
+                    {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                      <TransitionSettings 
+                        video={video} 
+                        transition={video.video.transitions[selectedTransitionIndex]} 
+                        transitionIndex={selectedTransitionIndex} 
+                        spaceId={video.spaceId}
+                        updateTransition={handleUpdateTransition}
+                      />
+                    )}
+                  </ScrollArea>
+                )}
             </Card>
           </ResizablePanel>
           <ResizableHandle className="w-[1px] bg-transparent" />
@@ -1256,6 +1376,8 @@ export default function VideoEditor() {
                         onMediaPositionChange={handleMediaPositionChange}
                         onVideoFormatChange={handleVideoFormatChange}
                         onAvatarChange={handleAvatarChange}
+                        onLogoPositionChange={handleLogoPositionChange}
+                        onLogoSizeChange={handleLogoSizeChange}
                     />
                 )}
             </Card>
@@ -1282,95 +1404,88 @@ export default function VideoEditor() {
                 onMediaPositionChange={handleMediaPositionChange}
                 onVideoFormatChange={handleVideoFormatChange}
                 onAvatarChange={handleAvatarChange}
+                onLogoPositionChange={handleLogoPositionChange}
+                onLogoSizeChange={handleLogoSizeChange}
             />
           )}
         </div>
-        <Card className="mt-4">
-          <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>
-            <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="sequences" className="flex items-center gap-2">
-                    <ListVideo className="w-4 h-4" />
-                    {t('sequences-tabs-title')}
-                </TabsTrigger>
-                <TabsTrigger value="subtitle" className="flex items-center gap-2">
-                    <SubtitlesIcon className="w-4 h-4" />
-                    {t('subtitles-tabs-title')}
-                </TabsTrigger>
-                <TabsTrigger value="audio" className="flex items-center gap-2">
-                    <Volume2 className="w-4 h-4" />
-                    {t('audio-tabs-title')}
-                </TabsTrigger>
-            </TabsList>
-            <TabsContent value="sequences">
-              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
-                <Sequences 
-                  sequences={video?.video?.sequences || []} 
-                  transitions={video?.video?.transitions}
-                  selectedSequenceIndex={selectedSequenceIndex} 
-                  selectedTransitionIndex={selectedTransitionIndex}
-                  setSelectedSequenceIndex={setSelectedSequenceIndex} 
-                  setSelectedTransitionIndex={setSelectedTransitionIndex}
-                  setActiveTabMobile={setActiveTabMobile}
-                  isMobile={isMobile}
-                  handleWordInputChange={handleWordInputChange} 
-                  handleWordAdd={handleWordAdd}
-                  handleWordDelete={handleWordDelete}
-                  handleCutSequence={handleCutSequence}
-                  onRegenerateAudio={handleRegenerateAudio}
-                  onDeleteSequence={handleDeleteSequence}
-                  onDeleteTransition={handleDeleteTransition}
-                  onAddSequence={handleAddSequence}
-                  onAddTransition={handleAddTransition}
-                  onUpdateDuration={handleUpdateDuration}
-                  playerRef={playerRef}
-                  avatar={video?.video?.avatar}
-                  handleMergeWordWithPrevious={handleMergeWordWithPrevious}
-                  handleMergeWordWithNext={handleMergeWordWithNext}
+        <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile} className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="sequences" className="flex items-center gap-2">
+              <ListVideo className="w-4 h-4" />
+              {t('sequences-tabs-title')}
+            </TabsTrigger>
+            <TabsTrigger value="subtitle" className="flex items-center gap-2">
+              <SubtitlesIcon className="w-4 h-4" />
+              {t('subtitles-tabs-title')}
+            </TabsTrigger>
+            <TabsTrigger value="audio" className="flex items-center gap-2">
+              <Volume2 className="w-4 h-4" />
+              {t('audio-tabs-title')}
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              {t('settings-tabs-title')}
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="sequences">
+            <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+              <Sequences 
+                sequences={video?.video?.sequences || []} 
+                transitions={video?.video?.transitions}
+                selectedSequenceIndex={selectedSequenceIndex} 
+                selectedTransitionIndex={selectedTransitionIndex}
+                setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                setSelectedTransitionIndex={setSelectedTransitionIndex}
+                setActiveTabMobile={setActiveTabMobile}
+                isMobile={isMobile}
+                handleWordInputChange={handleWordInputChange} 
+                handleWordAdd={handleWordAdd}
+                handleWordDelete={handleWordDelete}
+                handleCutSequence={handleCutSequence}
+                onRegenerateAudio={handleRegenerateAudio}
+                onDeleteSequence={handleDeleteSequence}
+                onDeleteTransition={handleDeleteTransition}
+                onAddSequence={handleAddSequence}
+                onAddTransition={handleAddTransition}
+                onUpdateDuration={handleUpdateDuration}
+                playerRef={playerRef}
+                avatar={video?.video?.avatar}
+                handleMergeWordWithPrevious={handleMergeWordWithPrevious}
+                handleMergeWordWithNext={handleMergeWordWithNext}
+              />
+            </ScrollArea>
+          </TabsContent>
+          <TabsContent value="subtitle">
+            <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+              <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} setActiveTabMobile={setActiveTabMobile} isMobile={isMobile} />
+            </ScrollArea>
+          </TabsContent>
+          <TabsContent value="audio">
+            <ScrollArea className="h-[calc(100vh-25rem)] mx-2 overflow-visible">
+              <Musics video={video} updateAudioSettings={updateAudioSettings} isMobile={isMobile} setActiveTabMobile={setActiveTabMobile} />
+            </ScrollArea>
+          </TabsContent>
+          <TabsContent value="settings">
+            <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+              {activeTabMobile === 'settings-sequence' && video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
+                <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
+              )}
+              {activeTabMobile === 'settings-transition' && video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                <TransitionSettings 
+                  video={video} 
+                  transition={video.video.transitions[selectedTransitionIndex]} 
+                  transitionIndex={selectedTransitionIndex} 
+                  spaceId={video.spaceId}
+                  updateTransition={handleUpdateTransition}
                 />
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="subtitle">
-              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
-                <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} setActiveTabMobile={setActiveTabMobile} isMobile={isMobile} />
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="audio">
-              <ScrollArea className="h-[calc(100vh-25rem)] mx-2 overflow-visible">
-                <Musics video={video} updateAudioSettings={updateAudioSettings} isMobile={isMobile} setActiveTabMobile={setActiveTabMobile} />
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="settings-sequence">
-              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
-                {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
-                )}
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="settings-transition">
-              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
-                {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
-                  <TransitionSettings 
-                    video={video} 
-                    transition={video.video.transitions[selectedTransitionIndex]} 
-                    transitionIndex={selectedTransitionIndex} 
-                    spaceId={video.spaceId}
-                    updateTransition={handleUpdateTransition}
-                  />
-                )}
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="settings-subtitle">
-              <ScrollArea className="h-[calc(100vh-25rem)]">
+              )}
+              {activeTabMobile === 'settings-subtitle' && (
                 <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} isMobile={isMobile} />
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="settings-audio">
-              <ScrollArea className="h-[calc(100vh-25rem)]">
-                <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
-              </ScrollArea>
-            </TabsContent>
-          </Tabs>
-        </Card>
+              )}
+            </ScrollArea>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
     </>

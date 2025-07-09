@@ -84,8 +84,8 @@ export function SpaceSwitcher({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  {activeSpace?.logoUrl ? (
-                    <AvatarImage src={activeSpace.logoUrl} alt={activeSpace.name} />
+                  {activeSpace?.logo?.url ? (
+                    <AvatarImage src={activeSpace.logo.url} alt={activeSpace.name} />
                   ) : null}
                   <AvatarFallback className="rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     {activeSpace?.name?.charAt(0) ?? ''}
