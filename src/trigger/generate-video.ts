@@ -29,9 +29,10 @@ import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { getMostFrequentString } from "../lib/utils";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
-import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, generateKlingAnimationPrompt, imageAnalysisRun } from "../lib/workflowai";
+import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, imageAnalysisRun } from "../lib/workflowai";
+import { generateKlingAnimation } from "../service/kling-animation.service";
 import { PlanName } from "../types/enums";
-import { startKlingVideoGeneration, checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode, KLING_GENERATION_COSTS } from "../lib/fal";
+import { checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode, KLING_GENERATION_COSTS } from "../lib/fal";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -1146,29 +1147,19 @@ export const generateVideoTask = task({
                   throw new Error('Image URL not found');
                 }
 
-                // Generate animation prompt
-                const promptResult = await generateKlingAnimationPrompt(
-                  seq.media.image.link,
-                  'Add camera movement'
-                );
-
-                const imageWidth = seq.media.image.width || 1920;
-                const imageHeight = seq.media.image.height || 1080;
-                const aspectRatio = imageWidth >= imageHeight ? "16:9" : "9:16";
-
-                // Start Kling video generation
-                const falResult = await startKlingVideoGeneration({
-                  prompt: promptResult.enhancedPrompt,
-                  image_url: seq.media.image.link,
+                // Generate animation with Kling service
+                const animationResult = await generateKlingAnimation({
+                  imageUrl: seq.media.image.link,
+                  context: 'Add camera movement',
+                  imageWidth: seq.media.image.width || 1920,
+                  imageHeight: seq.media.image.height || 1080,
                   duration: "5",
-                  aspect_ratio: aspectRatio
-                }, payload.animationMode);
-
-                cost += promptResult.cost;
+                  mode: payload.animationMode
+                });
 
                 return {
                   sequenceIndex: index,
-                  requestId: falResult.request_id,
+                  requestId: animationResult.request_id,
                   originalMedia: seq.media
                 };
               } catch (error) {

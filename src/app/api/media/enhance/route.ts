@@ -4,8 +4,8 @@ import { addMediasToSpace, updateMedia, getUserSpaces, removeCreditsToSpace, inc
 import { waitUntil } from "@vercel/functions";
 import { IMediaSpace } from "@/src/types/space";
 import { IMedia } from "@/src/types/video";
-import { generateKlingAnimationPrompt } from "@/src/lib/workflowai";
-import { startKlingVideoGeneration, KlingGenerationMode, KLING_GENERATION_COSTS } from "@/src/lib/fal";
+import { generateKlingAnimation } from "@/src/service/kling-animation.service";
+import { KlingGenerationMode, KLING_GENERATION_COSTS } from "@/src/lib/fal";
 import { PlanName } from "@/src/types/enums";
 
 export async function POST(req: NextRequest) {
@@ -171,29 +171,17 @@ async function enhanceMediaInBackground(
 
       console.log('Generating animation prompt for image:', imageUrl);
       
-      // Générer le prompt d'animation avec WorkflowAI
-      const promptResult = await generateKlingAnimationPrompt(
+      // Générer l'animation avec le service Kling
+      const animationResult = await generateKlingAnimation({
         imageUrl,
-        context // Contexte utilisé comme prompt de base
-      );
-      
-      console.log('Generated animation prompt:', promptResult.enhancedPrompt);
-      console.log('Prompt generation cost:', promptResult.cost);
-
-      const imageWidth = mediaSpace.media.image?.width || 1920;
-      const imageHeight = mediaSpace.media.image?.height || 1080;
-      const aspectRatio = imageWidth >= imageHeight ? "16:9" : "9:16";
-      
-      console.log(`Image dimensions: ${imageWidth}x${imageHeight}, using aspect ratio: ${aspectRatio}`);
-      
-      // Démarrer la génération vidéo avec Fal.ai
-      console.log(`Starting Kling video generation with mode: ${mode}`);
-      const falResult = await startKlingVideoGeneration({
-        prompt: promptResult.enhancedPrompt,
-        image_url: imageUrl,
+        context,
+        imageWidth: mediaSpace.media.image?.width || 1920,
+        imageHeight: mediaSpace.media.image?.height || 1080,
         duration: "5",
-        aspect_ratio: aspectRatio
-      }, mode);
+        mode: mode
+      });
+      
+      console.log('Generated animation with request ID:', animationResult.request_id);
 
       if (type === 'video') {
         const requiredCredits = KLING_GENERATION_COSTS[mode as KlingGenerationMode];
@@ -202,18 +190,18 @@ async function enhanceMediaInBackground(
         await incrementImageToVideoUsage(spaceId);
       }
       
-      console.log('Fal.ai request submitted with ID:', falResult.request_id);
+      console.log('Fal.ai request submitted with ID:', animationResult.request_id);
       
       // Mettre à jour le media avec le requestId
       const updatedMedia = {
         ...JSON.parse(JSON.stringify(mediaSpace.media)),
         _id: mediaSpace.media.id,
-        requestId: falResult.request_id,
+        requestId: animationResult.request_id,
         generationMode: mode
       };
       
       await updateMedia(spaceId, mediaSpace.id!, updatedMedia);
-      console.log(`Video generation request started for media ${mediaSpace.id} with request ID: ${falResult.request_id} and mode: ${mode}`);
+      console.log(`Video generation request started for media ${mediaSpace.id} with request ID: ${animationResult.request_id} and mode: ${mode}`);
       
     }
 
