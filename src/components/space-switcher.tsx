@@ -135,8 +135,8 @@ export function SpaceSwitcher({
                   onClick={() => setActiveSpace(space)}
                 >
                   <Avatar className="h-6 w-6 rounded-sm">
-                    {space.logoUrl ? (
-                      <AvatarImage src={space.logoUrl} alt={space.name} />
+                    {space.logo?.url ? (
+                      <AvatarImage src={space.logo.url} alt={space.name} />
                     ) : null}
                     <AvatarFallback className="rounded-sm text-xs">
                       {space.name?.charAt(0) ?? ''}
