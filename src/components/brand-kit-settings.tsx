@@ -198,6 +198,8 @@ export function BrandKitSettings() {
                   <LogoPositionSelector
                     value={logoPosition}
                     onChange={setLogoPosition}
+                    hideBottomPositions={true}
+                    predefinedOnly={true}
                   />
                 </div>
               </div>

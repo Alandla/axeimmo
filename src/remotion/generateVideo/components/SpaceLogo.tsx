@@ -9,18 +9,8 @@ interface SpaceLogoProps {
   onPositionChange?: (position: LogoPosition) => void;
   logoSize?: number; // Taille en pourcentage de la largeur de composition
   onSizeChange?: (size: number) => void;
+  onLogoClick?: () => void; // Nouveau callback pour ouvrir le sélecteur
 }
-
-// Positions prédéfinies pour les ancres magnétiques
-// Ajustées pour correspondre à l'espace utilisable (avec padding)
-const MAGNETIC_POSITIONS: LogoPosition[] = [
-  { x: 15, y: 10 }, // top-left (plus haut)
-  { x: 85, y: 10 }, // top-right (plus haut)
-  { x: 15, y: 50 }, // middle-left
-  { x: 85, y: 50 }, // middle-right
-  { x: 15, y: 90 }, // bottom-left (plus bas)
-  { x: 85, y: 90 }, // bottom-right (plus bas)
-];
 
 const MIN_SIZE = 5; // Taille minimale en pourcentage
 const MAX_SIZE = 50; // Taille maximale en pourcentage
@@ -32,6 +22,7 @@ export const SpaceLogo = ({
   onPositionChange,
   logoSize = 19,
   onSizeChange,
+  onLogoClick,
 }: SpaceLogoProps) => {
   const { width: compositionWidth, height: compositionHeight } =
     useVideoConfig();
@@ -39,13 +30,14 @@ export const SpaceLogo = ({
   const [isResizing, setIsResizing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showResizeHandle, setShowResizeHandle] = useState(false);
-  const [showAnchors, setShowAnchors] = useState(false);
   const [logoPercent, setLogoPercent] = useState<LogoPosition | null>(null);
   const [currentDragPosition, setCurrentDragPosition] =
     useState<LogoPosition | null>(null);
   const [currentSize, setCurrentSize] = useState(logoSize);
   const logoRef = useRef<HTMLImageElement>(null);
   const playerElementRef = useRef<HTMLElement | null>(null);
+  const [hasMoved, setHasMoved] = useState(false);
+  const [mouseDownTime, setMouseDownTime] = useState(0);
 
   useEffect(() => {
     setCurrentSize(logoSize);
@@ -77,24 +69,53 @@ export const SpaceLogo = ({
   const handleLogoClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // Si on a bougé ou si on est en train de drag, ne pas ouvrir le sélecteur
+    if (hasMoved || isDragging) return;
+    
+    // Vérifier que c'est un clic rapide (pas un drag)
+    const clickDuration = Date.now() - mouseDownTime;
+    if (clickDuration > 200) return; // Plus de 200ms = probablement un drag
+    
+    // Afficher la poignée de redimensionnement
     setShowResizeHandle(true);
-    setShowAnchors(true);
-  }, []);
+    
+    // Ouvrir le sélecteur de position
+    if (onLogoClick) {
+      onLogoClick();
+    }
+  }, [hasMoved, isDragging, mouseDownTime, onLogoClick]);
 
-  const handleAnchorClick = useCallback(
-    (position: LogoPosition) => {
-      setLogoPercent(position);
-      if (onPositionChange) {
-        onPositionChange(position);
+  // Fermer la poignée de resize quand on clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        showResizeHandle &&
+        logoRef.current &&
+        !logoRef.current.contains(event.target as Node)
+      ) {
+        setShowResizeHandle(false);
       }
-    },
-    [onPositionChange]
-  );
+    };
+
+    if (showResizeHandle) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showResizeHandle]);
 
   const startDragging = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      
+      // Enregistrer le temps de début du mouseDown
+      setMouseDownTime(Date.now());
+      setHasMoved(false);
+      
       const playerElement = findPlayerElement();
       if (!playerElement) return;
       const playerRect = playerElement.getBoundingClientRect();
@@ -113,6 +134,9 @@ export const SpaceLogo = ({
 
       const onMouseMove = (moveEvent: PointerEvent) => {
         moveEvent.preventDefault();
+
+        // Marquer qu'on a bougé
+        setHasMoved(true);
 
         const now = performance.now();
         if (now - lastUpdateTime < THROTTLE_MS) {
@@ -168,8 +192,7 @@ export const SpaceLogo = ({
         upEvent.stopPropagation();
         setIsDragging(false);
         setCurrentDragPosition(null);
-        // Ne pas afficher les points après le drag
-        setShowAnchors(false);
+        // Fermer la poignée de resize après le drag
         setShowResizeHandle(false);
         if (animationFrameId) {
           cancelAnimationFrame(animationFrameId);
@@ -195,6 +218,11 @@ export const SpaceLogo = ({
     (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      
+      // Enregistrer le temps de début du mouseDown pour éviter le clic
+      setMouseDownTime(Date.now());
+      setHasMoved(false);
+      
       const playerElement = findPlayerElement();
       if (!playerElement) return;
       const playerRect = playerElement.getBoundingClientRect();
@@ -209,6 +237,9 @@ export const SpaceLogo = ({
 
       const onMouseMove = (moveEvent: PointerEvent) => {
         moveEvent.preventDefault();
+
+        // Marquer qu'on a bougé
+        setHasMoved(true);
 
         const now = performance.now();
         if (now - lastUpdateTime < THROTTLE_MS) {
@@ -293,28 +324,6 @@ export const SpaceLogo = ({
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);
 
-  // Fermer la poignée de resize et les ancres quand on clique ailleurs
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        (showResizeHandle || showAnchors) &&
-        logoRef.current &&
-        !logoRef.current.contains(event.target as Node)
-      ) {
-        setShowResizeHandle(false);
-        setShowAnchors(false);
-      }
-    };
-
-    if (showResizeHandle || showAnchors) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showResizeHandle, showAnchors]);
-
   // Ne pas afficher le logo si showLogo est false ou si pas d'URL
   if (!showLogo || !logoUrl) {
     return null;
@@ -336,65 +345,13 @@ export const SpaceLogo = ({
     cursor: isDragging ? "grabbing" : isHovered ? "grab" : "pointer",
     userSelect: "none",
     touchAction: "none",
+    border: isHovered || showResizeHandle ? "4px solid #3b82f6" : "none",
+    borderRadius: "4px",
+    transition: "border 0.2s ease",
   };
 
   return (
     <AbsoluteFill>
-      {/* Overlay des ancres - visible seulement après clic sur le logo */}
-      {showAnchors && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: 999,
-            pointerEvents: "none",
-          }}
-        >
-          {MAGNETIC_POSITIONS.map((position, index) => {
-            return (
-              <div
-                key={index}
-                style={{
-                  position: "absolute",
-                  width: 48,
-                  height: 48,
-                  left: `${(position.x / 100) * compositionWidth}px`,
-                  top: `${(position.y / 100) * compositionHeight}px`,
-                  transform: "translate(-50%, -50%)",
-                  borderRadius: "50%",
-                  border: "4px solid #000",
-                  backgroundColor: "rgba(255, 255, 255, 0.95)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "all 0.2s ease",
-                  boxShadow: "0 6px 16px rgba(0, 0, 0, 0.4)",
-                  cursor: "pointer",
-                  pointerEvents: "auto",
-                }}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleAnchorClick(position);
-                }}
-              >
-                <div
-                  style={{
-                    width: 16,
-                    height: 16,
-                    borderRadius: "50%",
-                    backgroundColor: "#000",
-                  }}
-                />
-              </div>
-            );
-          })}
-        </div>
-      )}
-
       <Img
         ref={logoRef}
         src={logoUrl}

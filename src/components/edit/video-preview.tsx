@@ -13,6 +13,7 @@ import { AvatarSelectionModal } from "@/src/components/modal/avatar-selection-mo
 import { AvatarLook } from "@/src/types/avatar";
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
 import { LogoPosition } from "@/src/types/space";
+import { LogoPositionSelector } from "@/src/components/ui/logo-position-selector";
 
 export default function VideoPreview({ 
     playerRef, 
@@ -49,6 +50,8 @@ export default function VideoPreview({
     const [showReview, setShowReview] = useState(false);
     const [hasInteractedWithReview, setHasInteractedWithReview] = useState(false);
     const [showAvatarModal, setShowAvatarModal] = useState(false);
+    const [showLogoSelector, setShowLogoSelector] = useState(false);
+    const [logoPositionChanged, setLogoPositionChanged] = useState(false);
 
     // Get video dimensions based on format
     const dimensions = getVideoDimensions(video?.video?.format || 'vertical');
@@ -60,6 +63,9 @@ export default function VideoPreview({
         show: activeSpace.logo.show,
         size: activeSpace.logo.size
     } : undefined;
+
+    // Clé unique pour forcer la mise à jour du player quand la position du logo change via le sélecteur
+    const playerKey = logoPositionChanged ? `player-${activeSpace?.logo?.position?.x}-${activeSpace?.logo?.position?.y}-${activeSpace?.logo?.size}-${Date.now()}` : 'player-default';
 
     useEffect(() => {
         if (!video?.video?.sequences) return;
@@ -128,6 +134,28 @@ export default function VideoPreview({
         setHasInteractedWithReview(true);
     };
 
+    const handleLogoClick = () => {
+        setShowLogoSelector(true);
+    };
+
+    const handleLogoPositionChange = (newPosition: LogoPosition) => {
+        if (onLogoPositionChange) {
+            onLogoPositionChange(newPosition);
+        }
+        setShowLogoSelector(false);
+        setLogoPositionChanged(true);
+    };
+
+    // Réinitialiser logoPositionChanged après la mise à jour du player
+    useEffect(() => {
+        if (logoPositionChanged) {
+            const timer = setTimeout(() => {
+                setLogoPositionChanged(false);
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [logoPositionChanged]);
+
     return (
         <div className={`h-full flex flex-col items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
             {video?.video?.avatar && (
@@ -152,8 +180,31 @@ export default function VideoPreview({
                     </div>
                 </div>
             )}
+            
+            {/* Logo Position Selector */}
+            {showLogoSelector && activeSpace?.logo?.position && (
+                <div className="w-full mb-4 p-4 bg-background border rounded-lg shadow-lg">
+                    <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-sm font-medium">Position du logo</h3>
+                        <button
+                            onClick={() => setShowLogoSelector(false)}
+                            className="text-muted-foreground hover:text-foreground"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                    <LogoPositionSelector
+                        value={activeSpace.logo.position}
+                        onChange={handleLogoPositionChange}
+                        isSquare={true}
+                        predefinedOnly={true}
+                    />
+                </div>
+            )}
+            
             <div className="relative w-full h-full transition-all duration-300 ease-in-out">
                 <Player
+                    key={playerKey}
                     acknowledgeRemotionLicense={true}
                     ref={playerRef}
                     component={VideoGenerate}
@@ -170,7 +221,8 @@ export default function VideoPreview({
                         onAvatarPositionChange,
                         onMediaPositionChange,
                         onLogoPositionChange,
-                        onLogoSizeChange
+                        onLogoSizeChange,
+                        onLogoClick: handleLogoClick
                     }}
                     numberOfSharedAudioTags={12}
                     controls
