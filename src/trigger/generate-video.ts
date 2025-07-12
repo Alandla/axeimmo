@@ -68,6 +68,21 @@ export const generateVideoTask = task({
 
     logger.log("Generating video...", { payload, ctx });
 
+    /*
+    /
+    /   Get Space information at the beginning
+    /
+    */
+    logger.log(`[SPACE] Getting space information...`);
+    const space = await getSpaceById(payload.spaceId);
+    
+    if (!space) {
+      throw new Error(`Space not found: ${payload.spaceId}`);
+    }
+
+    spacePlan = space.plan?.name || PlanName.FREE;
+    logger.log(`[SPACE] Space plan: ${spacePlan}, Credits: ${space.credits || 0}`);
+
     let video : IVideo = {
       spaceId: payload.spaceId,
       state: {
@@ -311,23 +326,14 @@ export const generateVideoTask = task({
     let userMediasFilteredPromise: Promise<IMediaSpace[]> | null = null;
     let userMediasFiltered: IMediaSpace[] = [];
     
-    // Récupérer les informations du space pour connaître le plan
-    logger.log(`[MEDIA] Getting space information for media filtering...`);
-    const getSpaceAndFilterMedias = async (videoScript: string) => {
+    // Filtrer les médias si PRO/ENTREPRISE
+    logger.log(`[MEDIA] Filtering media for ${spacePlan} plan...`);
+    const filterSpaceMedias = async (videoScript: string, spaceData: ISpace) => {
       try {
-        // Récupérer les informations sur le space
-        const space = await getSpaceById(payload.spaceId);
-        
-        if (!space) {
-          logger.error(`[MEDIA] Space not found: ${payload.spaceId}`);
-          return [];
-        }
+        if (spaceData.plan && (spaceData.plan.name === PlanName.PRO || spaceData.plan.name === PlanName.ENTREPRISE)) {
 
-        spacePlan = space.plan?.name;
-        if (space.plan && (space.plan.name === PlanName.PRO || space.plan.name === PlanName.ENTREPRISE)) {
-
-          if (videoScript && space.medias && space.medias.length > 0) {
-            const availableMedias = space.medias
+          if (videoScript && spaceData.medias && spaceData.medias.length > 0) {
+            const availableMedias = spaceData.medias
               .filter((mediaSpace: IMediaSpace) => 
                 mediaSpace.autoPlacement !== false && 
                 mediaSpace.media.description && 
@@ -351,7 +357,7 @@ export const generateVideoTask = task({
               logger.log(`[MEDIA] Filtering cost: $${filterCost}`);
 
               if (recommendedMedia.length > 0) {
-                const filteredMedias = space.medias.filter((mediaSpace: IMediaSpace) => 
+                const filteredMedias = spaceData.medias.filter((mediaSpace: IMediaSpace) => 
                   recommendedMedia.includes(mediaSpace.media.id || "")
                 );
                 
@@ -367,7 +373,7 @@ export const generateVideoTask = task({
             logger.log(`[MEDIA] No script or medias available for filtering`);
           }
         } else {
-          logger.log(`[MEDIA] Plan ${space.plan?.name} doesn't support media filtering`);
+          logger.log(`[MEDIA] Plan ${spaceData.plan?.name} doesn't support media filtering`);
         }
         
         return [];
@@ -381,7 +387,7 @@ export const generateVideoTask = task({
     
     // Lancer la promesse de filtrage des médias en parallèle si on a déjà un script
     if (payload.script) {
-      userMediasFilteredPromise = getSpaceAndFilterMedias(payload.script);
+      userMediasFilteredPromise = filterSpaceMedias(payload.script, space);
       logger.log(`[MEDIA] Media filtering process started in background with provided script`);
     }
 
@@ -709,7 +715,7 @@ export const generateVideoTask = task({
       
       // Lancer le filtrage des médias si nous n'avions pas de script au départ
       if (!userMediasFilteredPromise) {
-        userMediasFilteredPromise = getSpaceAndFilterMedias(script);
+        userMediasFilteredPromise = filterSpaceMedias(script, space);
       }
 
       // Lancer la recherche d'images Google si nous n'avions pas de script au départ
@@ -1131,9 +1137,32 @@ export const generateVideoTask = task({
         });
 
         // Find sequences with extracted images
-        const sequencesToAnimate = sequences
+        let sequencesToAnimate = sequences
           .map((seq, index) => ({ seq, index }))
-          .filter(({ seq }) => seq.media?.type === 'image' && seq.media?.source === 'extracted')
+          .filter(({ seq }) => seq.media?.type === 'image' && seq.media?.source === 'extracted');
+
+        // Check credits before animation
+        if (sequencesToAnimate.length > 0) {
+          const creditsPerAnimation = KLING_GENERATION_COSTS[payload.animationMode];
+          const totalCreditsNeeded = sequencesToAnimate.length * creditsPerAnimation;
+          const availableCredits = space.credits || 0;
+
+          logger.log(`[ANIMATE] Credits check: need ${totalCreditsNeeded}, available ${availableCredits}`);
+
+          if (availableCredits < totalCreditsNeeded) {
+            const maxAnimations = Math.floor(availableCredits / creditsPerAnimation);
+            logger.log(`[ANIMATE] Not enough credits for all animations. Can only animate ${maxAnimations} out of ${sequencesToAnimate.length} images`);
+            
+            if (maxAnimations > 0) {
+              // Keep only the first maxAnimations sequences
+              sequencesToAnimate = sequencesToAnimate.slice(0, maxAnimations);
+              logger.log(`[ANIMATE] Limited to ${sequencesToAnimate.length} animations due to credit constraints`);
+            } else {
+              logger.log(`[ANIMATE] No credits available for animation, skipping all animations`);
+              sequencesToAnimate = [];
+            }
+          }
+        }
           
 
         if (sequencesToAnimate.length > 0) {
@@ -1154,7 +1183,8 @@ export const generateVideoTask = task({
                   imageWidth: seq.media.image.width || 1920,
                   imageHeight: seq.media.image.height || 1080,
                   duration: "5",
-                  mode: payload.animationMode
+                  mode: payload.animationMode,
+                  upscale: true
                 });
 
                 return {
@@ -1532,18 +1562,18 @@ export const generateVideoTask = task({
       };
     });
 
-    const space : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
+    const updatedSpace : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
 
     let subtitle = subtitles[1]
     let videoFormat: "vertical" | "ads" | "square" = "vertical"; // Format par défaut
-    if (space && space.lastUsed?.subtitles) {
-      const mostFrequent = getMostFrequentString(space.lastUsed.subtitles)
+    if (updatedSpace && updatedSpace.lastUsed?.subtitles) {
+      const mostFrequent = getMostFrequentString(updatedSpace.lastUsed.subtitles)
       if (mostFrequent) {
-        const subtitleFind = subtitles.find((subtitle) => subtitle.name === mostFrequent);
+        const subtitleFind = subtitles.find((subtitleItem) => subtitleItem.name === mostFrequent);
         if (subtitleFind) {
           subtitle = subtitleFind;
         } else {
-          const subtitleFindFromSpace = space.subtitleStyle.find((subtitle) => subtitle.name === mostFrequent);
+          const subtitleFindFromSpace = updatedSpace.subtitleStyle.find((subtitleItem) => subtitleItem.name === mostFrequent);
           if (subtitleFindFromSpace) {
             subtitle = subtitleFindFromSpace;
           }
@@ -1551,8 +1581,8 @@ export const generateVideoTask = task({
       }
     }
 
-    if (space && space.lastUsed?.formats && space.lastUsed.formats.length > 0) {
-      const mostFrequentFormat = getMostFrequentString(space.lastUsed.formats);
+    if (updatedSpace && updatedSpace.lastUsed?.formats && updatedSpace.lastUsed.formats.length > 0) {
+      const mostFrequentFormat = getMostFrequentString(updatedSpace.lastUsed.formats);
       if (mostFrequentFormat && ['vertical', 'ads', 'square'].includes(mostFrequentFormat)) {
         videoFormat = mostFrequentFormat as "vertical" | "ads" | "square";
       }
@@ -1564,7 +1594,7 @@ export const generateVideoTask = task({
       state: {
         type: 'done',
       },
-      settings: space?.lastUsed?.config,
+      settings: updatedSpace?.lastUsed?.config,
       extractedMedia: extractedMedias.length > 0 ? extractedMedias : undefined,
       video: {
         audio: {

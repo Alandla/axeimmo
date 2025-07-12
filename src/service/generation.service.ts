@@ -4,6 +4,8 @@ import { Steps, StepState } from '../types/step'
 import { uploadFiles } from './upload.service'
 import { IMedia } from '../types/video'
 
+const EXCLUDED_SOURCE = "EXCLUDED"
+
 // Create hooks for components to use
 export const useGenerationProcess = () => {
   const startGeneration = async (userId: string, spaceId: string) => {
@@ -25,9 +27,10 @@ export const useGenerationProcess = () => {
       uploadedFiles = await uploadFiles(files, updateStepProgress)
     }
 
-    // Add extracted images media to uploaded files if they exist
+    // Add extracted images media to uploaded files if they exist, excluding those marked as excluded
     if (extractedImagesMedia.length > 0) {
-      uploadedFiles = [...uploadedFiles, ...extractedImagesMedia]
+      const selectedImages = extractedImagesMedia.filter(media => media.source !== EXCLUDED_SOURCE)
+      uploadedFiles = [...uploadedFiles, ...selectedImages]
     }
 
     updateStepProgress(Steps.QUEUE, 20)
