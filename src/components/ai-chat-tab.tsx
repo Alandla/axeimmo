@@ -12,7 +12,7 @@ import { FileToUpload } from "../types/files";
 import { Badge } from "./ui/badge";
 import { useActiveSpaceStore } from "../store/activeSpaceStore";
 import { usePremiumToast } from "@/src/utils/premium-toast";
-import { KLING_GENERATION_COSTS } from "../lib/fal";
+import { KLING_GENERATION_COSTS } from "../lib/cost";
 import { Alert, AlertDescription } from "./ui/alert";
 
 // Estime le nombre de séquences vidéo selon la longueur du script, à partir des statistiques :

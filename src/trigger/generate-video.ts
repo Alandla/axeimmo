@@ -32,7 +32,8 @@ import { track } from "../utils/mixpanel-server";
 import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, imageAnalysisRun } from "../lib/workflowai";
 import { generateKlingAnimation } from "../service/kling-animation.service";
 import { PlanName } from "../types/enums";
-import { checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode, KLING_GENERATION_COSTS } from "../lib/fal";
+import { checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode } from "../lib/fal";
+import { KLING_GENERATION_COSTS } from "../lib/cost";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -1186,6 +1187,9 @@ export const generateVideoTask = task({
                   mode: payload.animationMode,
                   upscale: true
                 });
+
+                // Add animation cost to total cost
+                cost += animationResult.cost;
 
                 return {
                   sequenceIndex: index,

@@ -17,13 +17,6 @@ export const KLING_ENDPOINTS = {
   [KlingGenerationMode.MASTER]: "fal-ai/kling-video/v2.1/master/image-to-video"
 } as const;
 
-// Coûts en crédits pour chaque mode de génération
-export const KLING_GENERATION_COSTS = {
-  [KlingGenerationMode.STANDARD]: 4,
-  [KlingGenerationMode.PRO]: 7,
-  [KlingGenerationMode.MASTER]: 10
-} as const;
-
 export interface KlingRequest {
   prompt: string;
   image_url: string;

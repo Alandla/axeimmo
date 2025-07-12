@@ -1,6 +1,7 @@
 import { generateKlingAnimationPrompt } from "@/src/lib/workflowai";
 import { startKlingVideoGeneration, KlingGenerationMode, upscaleImage } from "@/src/lib/fal";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
+import { calculateKlingAnimationCost } from "@/src/lib/cost";
 
 interface KlingAnimationParams {
   prompt: string;
@@ -11,6 +12,7 @@ interface KlingAnimationParams {
 
 interface KlingAnimationResult {
   request_id: string;
+  cost: number;
   usedR2Url?: string; // URL R2 utilisée si upload nécessaire
 }
 
@@ -27,7 +29,7 @@ interface GenerateKlingAnimationOptions {
 /**
  * Génère une animation Kling avec retry automatique et upload R2 si nécessaire
  * @param options - Options pour la génération d'animation
- * @returns Résultat de la génération avec request_id et URL R2 utilisée si applicable
+ * @returns Résultat de la génération avec request_id, coût total et URL R2 utilisée si applicable
  */
 export async function generateKlingAnimation(
   options: GenerateKlingAnimationOptions
@@ -36,19 +38,19 @@ export async function generateKlingAnimation(
   
   let finalImageUrl = imageUrl;
   let usedR2Url: string | undefined;
+  let upscaleCount = 0;
 
-  // Étape 0: Upscale si nécessaire
   if (upscale && (imageWidth < 1080 || imageHeight < 1080)) {
     try {
       console.log("Upscaling image before animation generation...");
       const upscaled = await upscaleImage(imageUrl);
       finalImageUrl = upscaled.url;
+      upscaleCount = 1;
       console.log("Image upscaled successfully");
     } catch (upscaleError) {
       console.error("Error upscaling image, uploading to R2 and retrying upscale:", upscaleError);
       
       try {
-        // Si l'upscale échoue, on upload sur R2
         const fileName = `image-${Date.now()}`;
         const r2Url = await uploadImageFromUrlToS3(imageUrl, "medias-users", fileName);
         usedR2Url = r2Url;
@@ -58,6 +60,7 @@ export async function generateKlingAnimation(
           console.log("Retrying upscale with R2 URL...");
           const upscaled = await upscaleImage(r2Url);
           finalImageUrl = upscaled.url;
+          upscaleCount = 1;
           console.log("Image upscaled successfully with R2 URL");
         } catch (secondUpscaleError) {
           console.error("Error upscaling with R2 URL, using R2 URL directly:", secondUpscaleError);
@@ -110,7 +113,11 @@ export async function generateKlingAnimation(
     aspect_ratio: aspectRatio
   }, mode);
 
+  // Étape 4: Calculer le coût total
+  const totalCost = calculateKlingAnimationCost(mode, upscaleCount);
+
   return {
     request_id: falResult.request_id,
+    cost: totalCost,
   };
 } 

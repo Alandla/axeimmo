@@ -5,7 +5,8 @@ import { waitUntil } from "@vercel/functions";
 import { IMediaSpace } from "@/src/types/space";
 import { IMedia } from "@/src/types/video";
 import { generateKlingAnimation } from "@/src/service/kling-animation.service";
-import { KlingGenerationMode, KLING_GENERATION_COSTS } from "@/src/lib/fal";
+import { KlingGenerationMode } from "@/src/lib/fal";
+import { KLING_GENERATION_COSTS } from "@/src/lib/cost";
 import { PlanName } from "@/src/types/enums";
 
 export async function POST(req: NextRequest) {
