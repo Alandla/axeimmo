@@ -2,7 +2,7 @@ import { logger, metadata, task, wait } from "@trigger.dev/sdk";
 import { updateExport } from "../dao/exportDao";
 import { getVideoById, updateVideo } from "../dao/videoDao";
 import { getProgress, renderVideo, renderAudio } from "../lib/render";
-import { uploadImageFromUrlToS3 } from "../lib/r2";
+import { uploadImageFromUrlToS3, uploadVideoFromUrlToS3 } from "../lib/r2";
 import { IVideo } from "../types/video";
 import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
 import { IExport } from "../types/export";
@@ -88,7 +88,14 @@ export const exportVideoTask = task({
         if (avatarVideoUrl) {
           const cost = calculateHeygenCost(video.video.metadata.audio_duration);
           video.costToGenerate = (video.costToGenerate || 0) + cost;
-          video.video.avatar.videoUrl = avatarVideoUrl;
+          
+          // Upload the avatar video to R2 instead of using Heygen's temporary URL
+          logger.log("Uploading avatar video to R2...");
+          const fileName = `avatar-${video.id}-${Date.now()}`;
+          const r2VideoUrl = await uploadVideoFromUrlToS3(avatarVideoUrl, "medias-users", fileName);
+          
+          video.video.avatar.videoUrl = r2VideoUrl;
+          logger.log("Avatar video uploaded to R2", { r2VideoUrl });
           await updateVideo(video);
         }
       }
