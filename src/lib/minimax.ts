@@ -2,7 +2,7 @@ import axios from 'axios';
 import { calculateMinimaxCost } from './cost';
 
 const MODEL = "speech-02-turbo";
-const DEFAULT_SPEED = 1.25;
+const DEFAULT_SPEED = 1.18;
 
 // Map language codes to Minimax language boost values
 const getLanguageBoost = (language: string): string => {
