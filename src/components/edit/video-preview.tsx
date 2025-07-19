@@ -126,14 +126,14 @@ export default function VideoPreview({
             )}
             {video?.video && onVideoFormatChange && (
                 <div className="w-full mb-4">
-                    <div className={`grid gap-2 ${video.video.avatar && onAvatarChange ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                    <div className={`grid gap-2 ${onAvatarChange ? 'grid-cols-2' : 'grid-cols-1'}`}>
                         <VideoFormatSelector
                             value={video.video.format || 'vertical'}
                             onValueChange={onVideoFormatChange}
                         />
-                        {video.video.avatar && onAvatarChange && (
+                        {onAvatarChange && (
                             <AvatarSelector
-                                selectedAvatar={video.video.avatar}
+                                selectedAvatar={video.video.avatar || null}
                                 onAvatarSelect={() => setShowAvatarModal(true)}
                             />
                         )}
@@ -183,11 +183,11 @@ export default function VideoPreview({
                 />
             )}
             
-            {video?.video?.avatar && onAvatarChange && (
+            {onAvatarChange && (
                 <AvatarSelectionModal
                     isOpen={showAvatarModal}
                     onClose={() => setShowAvatarModal(false)}
-                    currentAvatar={video.video.avatar}
+                    currentAvatar={video?.video?.avatar || null}
                     onAvatarChange={onAvatarChange}
                 />
             )}
