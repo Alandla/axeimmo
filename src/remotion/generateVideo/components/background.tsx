@@ -140,7 +140,7 @@ export const MediaBackground = ({
                                     }}
                                     muted
                                 />
-                                {media.source && <MediaSource source={media.source} />}
+                                {media.source && media.source !== 'extracted' && <MediaSource source={media.source} />}
                                 {/* Overlay pour capturer les événements de drag */}
                                 {isPlayer && (
                                     <AbsoluteFill
