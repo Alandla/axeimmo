@@ -314,9 +314,13 @@ export const generateVideoTask = task({
     };
 
     // Lancer la recherche d'images Google en parallèle si on a un script et webSearch est activé
-    if (payload.script && payload.webSearch) {
+    // mais seulement si on n'a pas de médias extracted
+    const hasExtractedMedia = payload.files.some(file => file.source === 'extracted');
+    if (payload.script && payload.webSearch && !hasExtractedMedia) {
       logger.log(`[GOOGLE_IMAGES] Starting Google Images search in parallel with provided script`);
       googleImagesSearchPromise = searchAndAnalyzeGoogleImages(payload.script);
+    } else if (hasExtractedMedia) {
+      logger.log(`[GOOGLE_IMAGES] Skipping Google Images search - extracted media already available`);
     }
 
     /*
@@ -720,7 +724,8 @@ export const generateVideoTask = task({
       }
 
       // Lancer la recherche d'images Google si nous n'avions pas de script au départ
-      if (payload.webSearch && !googleImagesSearchPromise) {
+      // mais seulement si on n'a pas de médias extracted
+      if (payload.webSearch && !googleImagesSearchPromise && !hasExtractedMedia) {
         logger.log(`[GOOGLE_IMAGES] Starting Google Images search with transcribed script`);
         googleImagesSearchPromise = searchAndAnalyzeGoogleImages(script);
       }
