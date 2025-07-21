@@ -62,8 +62,8 @@ export const getProgress = async (renderId: string, bucketName: string, isAudio:
         renderId: renderId,
         bucketName: bucketName,
         functionName: speculateFunctionName({
-            diskSizeInMb: isAudio ? 4096 : 10240,
-            memorySizeInMb: isAudio ? 2048 : memorySizeInMb,
+            diskSizeInMb: 10240,
+            memorySizeInMb: isAudio ? 1024 : memorySizeInMb,
             timeoutInSeconds: isAudio ? 300 : 600,
         }),
         region: "eu-west-3",
