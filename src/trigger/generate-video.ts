@@ -61,7 +61,7 @@ export const generateVideoTask = task({
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
     let extractedMedias: IMedia[] = [];
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;
@@ -478,7 +478,22 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      const sentencesCut = payload.script
+      // Remove emojis before processing sentences to avoid interference with sentence splitting
+      const removeEmojis = (text: string): string => {
+        // Remove common emoji ranges and symbols
+        return text
+          .replace(/[\u2600-\u26FF]/g, '') // Miscellaneous Symbols
+          .replace(/[\u2700-\u27BF]/g, '') // Dingbats
+          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '') // Surrogate pairs (emojis)
+          .replace(/[\u2194-\u2199\u21A9-\u21AA]/g, '') // Arrows
+          .replace(/[\u231A-\u231B\u23E9-\u23EC\u23F0\u23F3]/g, '') // Clock and media symbols
+          .replace(/[\u25FD-\u25FE]/g, '') // Squares
+          .replace(/[\u2B50\u2B55]/g, '') // Stars and circles
+          .replace(/✅/g, '') // Check mark
+          .replace(/💬/g, ''); // Speech balloon
+      };
+
+      const sentencesCut = removeEmojis(payload.script)
         .replace(/\.\.\./g, '___ELLIPSIS___') // Remplace temporary points of ellipsis
         .split(/(?<=[.!?])\s+(?=[A-Z])/g)
         .map(sentence => sentence.trim())
@@ -512,6 +527,11 @@ export const generateVideoTask = task({
           rawSentences.push(currentSentence);
         }
       }
+
+      logger.log('Raw sentences', { rawSentences })
+
+      return;
+
       let processedCount = 0;
 
       // Process sentences by batches of 5
