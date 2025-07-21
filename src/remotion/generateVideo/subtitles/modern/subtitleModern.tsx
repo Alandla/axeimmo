@@ -111,18 +111,33 @@ export const SubtitleModern = ({ subtitleSequence, start, style, videoFormat, on
     }, []);
 
     useEffect(() => {
-        const loadFontByName = async (fontSelected: string) => {
+        const loadFontByName = async (fontSelected: string, weights?: string[], isItalic?: boolean) => {
             const font = googleFonts.find((font) => font.family === fontSelected);
             if (font) {
-                await font.load();
+                await font.load(weights, isItalic);
             }
         };
 
-        loadFontByName(style?.fontFamily || 'Montserrat');
+        // Initialize weight arrays directly with values
+        const mainWeights: string[] = [(style?.fontWeight || 700).toString()];
+        const secondLineWeights: string[] = [(style?.secondLine?.fontWeight || 700).toString()];
+
+        // Load main font
+        loadFontByName(
+            style?.fontFamily || 'Montserrat', 
+            mainWeights,
+            style?.isItalic || false
+        );
+
+        // Load second line font if different
         if (style?.secondLine?.isActive && style?.secondLine?.fontFamily !== style?.fontFamily) {
-            loadFontByName(style?.secondLine?.fontFamily || 'Montserrat');
+            loadFontByName(
+                style?.secondLine?.fontFamily || 'Montserrat',
+                secondLineWeights,
+                style?.secondLine?.isItalic || false
+            );
         }
-    }, [style?.fontFamily]);
+    }, [style?.fontFamily, style?.fontWeight, style?.isItalic, style?.secondLine?.fontFamily, style?.secondLine?.fontWeight, style?.secondLine?.isItalic, style?.secondLine?.isActive]);
 
     const shadowColor = style.shadow.color ? style.shadow.color : 'black';
 

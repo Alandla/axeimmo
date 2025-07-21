@@ -100,13 +100,14 @@ export const exportVideoTask = task({
         }
       }
 
-      const render = await renderVideo(video, showWatermark);
+        const render = await renderVideo(video, showWatermark, ctx.attempt.number === 2 ? 4096 : 2048);
       await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
 
       const renderStatus : RenderStatus = await pollRenderStatus(
         render.renderId, 
         render.bucketName,
-        'render'
+        'render',
+        ctx.attempt.number === 2 ? 4096 : 2048
       );
 
       if (renderStatus.status === 'failed') {
@@ -197,14 +198,14 @@ export const exportVideoTask = task({
   },
 });
 
-const pollRenderStatus = async (renderId: string, bucketName: string, step: string = 'render') => {
+const pollRenderStatus = async (renderId: string, bucketName: string, step: string = 'render', memorySizeInMb: number = 2048) => {
   let attempts = 0;
   const maxAttempts = step === 'render' ? 1000 : 500;
   const delayBetweenAttempts = 6;
 
   while (attempts < maxAttempts) {
     try {
-      const renderStatus = await getProgress(renderId, bucketName, step === 'render-audio');
+      const renderStatus = await getProgress(renderId, bucketName, step === 'render-audio', memorySizeInMb);
 
       if (renderStatus.status === 'processing' && renderStatus.progress) {
         await metadata.replace({

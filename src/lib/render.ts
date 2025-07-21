@@ -1,13 +1,13 @@
 import { getRenderProgress, renderMediaOnLambda, speculateFunctionName, renderStillOnLambda } from '@remotion/lambda/client';
 
-export const renderVideo = async (video: any, showWatermark: boolean = true) => {
+export const renderVideo = async (video: any, showWatermark: boolean = true, memorySizeInMb: number = 2048) => {
     console.log("Rendering video, props:")
     console.log(video)
     return await renderMediaOnLambda({
         region: "eu-west-3",
         functionName: speculateFunctionName({
             diskSizeInMb: 10240,
-            memorySizeInMb: 2048,
+            memorySizeInMb: memorySizeInMb,
             timeoutInSeconds: 600
         }),
         serveUrl: process.env.REMOTION_SERVE_URL || '',
@@ -37,8 +37,8 @@ export const renderAudio = async (video: any) => {
     return await renderMediaOnLambda({
         region: "eu-west-3",
         functionName: speculateFunctionName({
-            diskSizeInMb: 4096,
-            memorySizeInMb: 2048,
+            diskSizeInMb: 10240,
+            memorySizeInMb: 1024,
             timeoutInSeconds: 300
         }),
         serveUrl: process.env.REMOTION_AUDIO_SERVE_URL || '',
@@ -57,13 +57,13 @@ export const renderAudio = async (video: any) => {
     });
 };
 
-export const getProgress = async (renderId: string, bucketName: string, isAudio: boolean = false) => {
+export const getProgress = async (renderId: string, bucketName: string, isAudio: boolean = false, memorySizeInMb: number = 2048) => {
     const progress = await getRenderProgress({
         renderId: renderId,
         bucketName: bucketName,
         functionName: speculateFunctionName({
             diskSizeInMb: isAudio ? 4096 : 10240,
-            memorySizeInMb: 2048,
+            memorySizeInMb: isAudio ? 2048 : memorySizeInMb,
             timeoutInSeconds: isAudio ? 300 : 600,
         }),
         region: "eu-west-3",
@@ -96,7 +96,7 @@ export const generateThumbnail = async (video: any) => {
         const result = await renderStillOnLambda({
             region: "eu-west-3",
             functionName: speculateFunctionName({
-                diskSizeInMb: 2048,
+                diskSizeInMb: 10240,
                 memorySizeInMb: 2048,
                 timeoutInSeconds: 60
             }),
