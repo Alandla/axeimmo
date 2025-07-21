@@ -530,8 +530,6 @@ export const generateVideoTask = task({
 
       logger.log('Raw sentences', { rawSentences })
 
-      return;
-
       let processedCount = 0;
 
       // Process sentences by batches of 5
