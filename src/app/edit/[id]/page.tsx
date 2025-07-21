@@ -398,27 +398,35 @@ export default function VideoEditor() {
 
   const handleWordDelete = (sequenceIndex: number, wordIndex: number) => {
     if (video && video.video) {
-      const newSequences = [...video.video.sequences];
-      const sequence = newSequences[sequenceIndex];
+      const sequence = video.video.sequences[sequenceIndex];
       
-      const wordToDelete = sequence.words[wordIndex];
+      // Si la séquence n'a qu'un seul mot, supprimer la séquence entière
+      if (sequence.words.length === 1) {
+        handleDeleteSequence(sequenceIndex);
+        return;
+      }
+      
+      const newSequences = [...video.video.sequences];
+      const sequenceToUpdate = newSequences[sequenceIndex];
+      
+      const wordToDelete = sequenceToUpdate.words[wordIndex];
       const durationToAdd = wordToDelete.durationInFrames;
       
       if (wordIndex > 0) {
-        sequence.words[wordIndex - 1].durationInFrames += durationToAdd;
-      } else if (wordIndex < sequence.words.length - 1) {
-        sequence.words[wordIndex + 1].durationInFrames += durationToAdd;
+        sequenceToUpdate.words[wordIndex - 1].durationInFrames += durationToAdd;
+      } else if (wordIndex < sequenceToUpdate.words.length - 1) {
+        sequenceToUpdate.words[wordIndex + 1].durationInFrames += durationToAdd;
       }
 
-      sequence.words.splice(wordIndex, 1);
+      sequenceToUpdate.words.splice(wordIndex, 1);
 
-      const newText = sequence.words.map(word => word.word).join(' ');
-      sequence.text = newText;
+      const newText = sequenceToUpdate.words.map(word => word.word).join(' ');
+      sequenceToUpdate.text = newText;
 
-      if (newText === sequence.originalText) {
-        sequence.needsAudioRegeneration = false;
+      if (newText === sequenceToUpdate.originalText) {
+        sequenceToUpdate.needsAudioRegeneration = false;
       } else {
-        sequence.needsAudioRegeneration = true;
+        sequenceToUpdate.needsAudioRegeneration = true;
       }
       
       updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
