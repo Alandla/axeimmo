@@ -31,6 +31,7 @@ import { useRealtimeRun } from '@trigger.dev/react-hooks'
 import { ToolDisplay, ToolCall } from './tool-display'
 import { ExtractedImagesDisplay } from './extracted-images-display'
 import { extractedImagesToMedia, analyzeAndFilterExtractedImages } from '../lib/extracted-images'
+import { scrapeFairmooveUrls, FairmooveScrapeResult, ExtractedImagesResponse } from '../lib/fairmoove-scraper'
 
 enum MessageType {
   TEXT = 'text',
@@ -51,10 +52,7 @@ interface Message {
   showTools: boolean;
 }
 
-interface ExtractedImagesResponse {
-  relevantImages: string[];
-  cost: number;
-}
+
 
 export function AiChat() {
   const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, isWebMode, setExtractedImagesMedia, extractedImagesMedia } = useCreationStore()
@@ -210,7 +208,7 @@ export function AiChat() {
       MessageType.TEXT
     );
 
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'development') {
       setTimeout(() => {
         setMessages(prevMessages => prevMessages.map(msg => {
           if (msg.id === messageAiId) {
@@ -251,124 +249,101 @@ export function AiChat() {
       }));
       
       try {
-        // Phase 1: Quick content extraction using BrowserBase (for fast script generation)
-        const enhancedResults = await Promise.all(
-          urls.map(async (url) => {
-            try {
-              const result: any = await basicApiCall('/article/extract-enhanced', { url });
-              return {
-                url,
-                markdown: result.content,
-                title: result.title,
-                sessionId: result.sessionId,
-                connectUrl: result.connectUrl,
-                hasBackgroundProcessing: result.hasBackgroundProcessing,
-                success: true
-              };
-            } catch (error) {
-              console.error(`Enhanced extraction failed for ${url}:`, error);
-              return { url, markdown: '', title: '', sessionId: null, hasBackgroundProcessing: false, success: false };
-            }
-          })
-        );
+        // Séparer les URLs fairmoove et les autres
+        const fairmooveUrls = urls.filter(url => url.includes('fairmoove.fr'));
+        const otherUrls = urls.filter(url => !url.includes('fairmoove.fr'));
+        
+        let urlContents: FirecrawlBatchResponse;
+        
+        // Traitement spécial pour les URLs fairmoove avec BrowserBase
+        if (fairmooveUrls.length > 0) {
+          console.log("Utilisation de BrowserBase pour fairmoove.fr URLs:", fairmooveUrls);
+          
+          const fairmooveResults = await scrapeFairmooveUrls(fairmooveUrls, setExtractedImagesMedia, extractedImagesMedia);
+          
+          // Si il y a aussi d'autres URLs, les traiter avec FireCrawl
+          if (otherUrls.length > 0) {
+            console.log("Utilisation de FireCrawl pour les autres URLs:", otherUrls);
+            const otherResults = await basicApiCall<FirecrawlBatchResponse>('/search/url', {
+              urls: otherUrls,
+              planName: activeSpace.planName
+            });
+            
+            // Combiner les résultats
+            urlContents = {
+              results: [...fairmooveResults, ...otherResults.results]
+            };
+          } else {
+            // Seulement des URLs fairmoove
+            urlContents = {
+              results: fairmooveResults
+            };
+          }
+        } else {
+          // Toutes les URLs sont non-fairmoove, utiliser FireCrawl
+          console.log("Utilisation de FireCrawl pour toutes les URLs:", urls);
+          urlContents = await basicApiCall<FirecrawlBatchResponse>('/search/url', {
+            urls,
+            planName: activeSpace.planName
+          });
+        }
 
-        console.log("enhancedResults", enhancedResults)
-
-        // Format results to match expected structure
-        const urlContents = {
-          results: enhancedResults.filter(r => r.success)
-        };
-
-        console.log("urlContents", urlContents)
+        console.log("urlContents", urlContents);
 
         urlScrapingResult = urlContents.results;
         
-        // Phase 2: Start background image extraction using the same BrowserBase sessions
+        // Lancer l'extraction d'images en parallèle pour les URLs non-fairmoove (sans attendre le résultat)
         if (urlContents.results && urlContents.results.length > 0) {
-          const urlsWithBackground = urlContents.results.filter(r => r.hasBackgroundProcessing && r.sessionId);
+          // Filtrer seulement les résultats non-fairmoove pour l'extraction d'images AI
+          const nonFairmooveResults = urlContents.results.filter(result => 
+            !result.url || !result.url.includes('fairmoove.fr')
+          );
           
-          if (urlsWithBackground.length > 0) {
-            console.log("Lancement de l'extraction d'images en arrière-plan avec BrowserBase...");
-            
-            // Process background image extraction for each URL
-            urlsWithBackground.forEach(async (result) => {
-              try {
-                // Wait a bit to let the DOM content be processed for script generation first
-                setTimeout(async () => {
-                  try {
-                    console.log(`Récupération des images en arrière-plan pour ${result.url}...`);
-                    const imageResult: any = await basicApiCall('/article/extract-enhanced', {
-                      url: result.url,
-                      phase: 'get-images',
-                      connectUrl: result.connectUrl
-                    });
-                    
-                    const backgroundImages = imageResult.images || [];
-                    console.log(`${backgroundImages.length} images trouvées en arrière-plan pour ${result.url}`);
-                    
-                    if (backgroundImages.length > 0) {
-                      // Extract image URLs from BrowserBase results
-                      const imageUrls = backgroundImages
-                        .map((img: any) => img.src)
-                        .filter(Boolean);
-                      
-                      // Transform and save images
-                      const imagesMedia = await extractedImagesToMedia(imageUrls);
-                      console.log("Images BrowserBase arrière-plan enregistrées:", imagesMedia);
-                      
-                      // Update store with current images + new background images
-                      const existingUrls = new Set(extractedImagesMedia.map((img: any) => img.link));
-                      const newImages = imagesMedia.filter((img: any) => !existingUrls.has(img.link));
-                      setExtractedImagesMedia([...extractedImagesMedia, ...newImages]);
-                      
-                      // Launch dimension analysis
-                                              analyzeAndFilterExtractedImages(imageUrls, (filteredImages: any) => {
-                          // Replace images with analyzed versions
-                          const filteredMap = new Map(filteredImages.map((img: any) => [img.link, img]));
-                          setExtractedImagesMedia(extractedImagesMedia.map((img: any) => filteredMap.get(img.link) || img));
-                        });
-                    }
-                  } catch (error) {
-                    console.error(`Erreur lors de l'extraction d'images en arrière-plan pour ${result.url}:`, error);
-                  }
-                }, 2000); // 2 seconds delay to prioritize script generation
-                
-              } catch (error) {
-                console.error(`Erreur lors du lancement de l'extraction arrière-plan pour ${result.url}:`, error);
-              }
-            });
-          }
-          
-          // Fallback: use AI extraction on markdown content if no background processing
-          const urlsWithoutBackground = urlContents.results.filter(r => !r.hasBackgroundProcessing);
-          if (urlsWithoutBackground.length > 0) {
-            console.log("Utilisation du fallback AI pour les URLs sans traitement arrière-plan...");
-            const imageExtractionPromises = urlsWithoutBackground.map(async (result) => {
+          if (nonFairmooveResults.length > 0) {
+            // Traiter chaque URL individuellement pour éviter les erreurs en cascade
+            const imageExtractionPromises = nonFairmooveResults.map(async (result) => {
               try {
                 const imageResult = await basicApiCall<ExtractedImagesResponse>('/ai/extract-images', {
                   markdownContent: result.markdown
                 });
+
+                console.log("imageResult", imageResult);
+                
                 return imageResult.relevantImages || [];
               } catch (error) {
-                console.error(`Erreur lors de l'extraction AI pour ${result.url}:`, error);
+                console.error(`Erreur lors de l'extraction d'images pour ${result.url}:`, error);
                 return [];
               }
             });
             
+            // Traiter tous les résultats en parallèle
             Promise.all(imageExtractionPromises).then(results => {
-              const fallbackImages = results.flat();
-              if (fallbackImages.length > 0) {
-                extractedImagesToMedia(fallbackImages)
+              // Fusionner toutes les images en une seule liste
+              const allImages = results.flat();
+              console.log("Images extraites:", allImages);
+              
+              // Transformer les URLs d'images en format IMedia et enregistrer immédiatement
+              if (allImages.length > 0) {
+                console.log("Enregistrement rapide des images extraites...");
+                extractedImagesToMedia(allImages)
                   .then(imagesMedia => {
+                    console.log("Images enregistrées rapidement dans le store:", imagesMedia);
                     setExtractedImagesMedia([...extractedImagesMedia, ...imagesMedia]);
-                    analyzeAndFilterExtractedImages(fallbackImages, (filteredImages: IMedia[]) => {
+                    
+                    // Lancer l'analyse en arrière-plan pour obtenir les vraies dimensions
+                    console.log("Lancement de l'analyse des dimensions en arrière-plan...");
+                    
+                    analyzeAndFilterExtractedImages(allImages, (filteredImages) => {
+                      console.log("Mise à jour du store avec les images filtrées:", filteredImages);
                       setExtractedImagesMedia(filteredImages);
                     });
                   })
                   .catch(error => {
-                    console.error("Erreur lors de l'enregistrement des images fallback:", error);
+                    console.error("Erreur lors de l'enregistrement rapide des images:", error);
                   });
               }
+            }).catch(error => {
+              console.error("Erreur lors de l'extraction d'images:", error);
             });
           }
         }
@@ -423,8 +398,6 @@ export function AiChat() {
     setMessages(prevMessages => prevMessages.map(msg => 
       msg.id === messageUserId ? { ...msg, prompt } : msg
     ));
-    
-    return;
 
     let stream;
     if (improve) {

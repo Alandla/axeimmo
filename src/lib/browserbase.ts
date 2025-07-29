@@ -2,7 +2,6 @@ import { chromium, Browser, Page } from 'playwright';
 import { Readability } from '@mozilla/readability';
 import { JSDOM } from 'jsdom';
 import { Browserbase } from '@browserbasehq/sdk';
-import { analyzeDOMForInteraction } from './ai';
 
 export interface BrowserBaseConfig {
   apiKey: string;
@@ -193,225 +192,35 @@ export async function extractImagesFromPage(page: Page): Promise<ExtractedImage[
   }
 }
 
-/**
- * Clean DOM content for AI analysis by removing unnecessary elements and attributes
- */
-function cleanDOMForAnalysis(htmlContent: string): string {
-  try {
-    const dom = new JSDOM(htmlContent);
-    const document = dom.window.document;
-
-    // Remove unnecessary elements
-    const elementsToRemove = [
-      'script',
-      'style', 
-      'meta',
-      'link',
-      'noscript',
-      'iframe',
-      'embed',
-      'object',
-      'svg',
-      'path',
-      'head'
-    ];
-
-    elementsToRemove.forEach(tagName => {
-      const elements = document.querySelectorAll(tagName);
-      elements.forEach(el => el.remove());
-    });
-
-    // Remove comments
-    const walker = dom.window.document.createTreeWalker(
-      document.body || document,
-      dom.window.NodeFilter.SHOW_COMMENT
-    );
-    const comments: Node[] = [];
-    let node;
-    while (node = walker.nextNode()) {
-      comments.push(node);
-    }
-    comments.forEach(comment => {
-      if (comment.parentNode) {
-        comment.parentNode.removeChild(comment);
-      }
-    });
-
-    // Clean attributes - keep only essential ones
-    const keepAttributes = [
-      'id',
-      'href',
-      'alt',
-      'title',
-      'aria-label',
-      'data-testid',
-      'role',
-      'type',
-      'value',
-      'placeholder',
-      'class'
-    ];
-
-    const allElements = document.querySelectorAll('*');
-    allElements.forEach(element => {
-      // Get all attribute names
-      const attributeNames = Array.from(element.attributes).map(attr => attr.name);
-      
-      // Remove attributes not in keepAttributes list
-      attributeNames.forEach(attrName => {
-        if (!keepAttributes.includes(attrName)) {
-          element.removeAttribute(attrName);
-        }
-      });
-
-      // Clean class attribute - keep only meaningful classes
-      const className = element.getAttribute('class');
-      if (className) {
-        const meaningfulClasses = className
-          .split(' ')
-          .filter(cls => {
-            const lowerCls = cls.toLowerCase();
-            return (
-              lowerCls.includes('button') ||
-              lowerCls.includes('btn') ||
-              lowerCls.includes('link') ||
-              lowerCls.includes('nav') ||
-              lowerCls.includes('menu') ||
-              lowerCls.includes('cookie') ||
-              lowerCls.includes('consent') ||
-              lowerCls.includes('privacy') ||
-              lowerCls.includes('banner') ||
-              lowerCls.includes('modal') ||
-              lowerCls.includes('popup') ||
-              lowerCls.includes('gallery') ||
-              lowerCls.includes('image') ||
-              lowerCls.includes('photo') ||
-              lowerCls.includes('more') ||
-              lowerCls.includes('expand') ||
-              lowerCls.includes('show') ||
-              lowerCls.includes('load')
-            );
-          });
-        
-        if (meaningfulClasses.length > 0) {
-          element.setAttribute('class', meaningfulClasses.join(' '));
-        } else {
-          element.removeAttribute('class');
-        }
-      }
-    });
-
-    // Remove empty elements (but keep structural ones)
-    const structuralTags = ['div', 'section', 'article', 'main', 'nav', 'header', 'footer', 'aside', 'ul', 'ol', 'li'];
-    allElements.forEach(element => {
-      const tagName = element.tagName.toLowerCase();
-      if (!structuralTags.includes(tagName) && 
-          !element.textContent?.trim() && 
-          !element.querySelector('img, button, input, a')) {
-        element.remove();
-      }
-    });
-
-    // Get the cleaned HTML - focus on body content
-    const bodyContent = document.body?.innerHTML || document.documentElement.innerHTML;
-    
-    // Further compress by removing excessive whitespace
-    return bodyContent
-      .replace(/\s+/g, ' ')
-      .replace(/>\s+</g, '><')
-      .trim();
-
-  } catch (error) {
-    console.error('Error cleaning DOM:', error);
-    // Fallback: basic cleanup with regex
-    return htmlContent
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-      .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-      .replace(/<!--[\s\S]*?-->/g, '')
-      .replace(/\s+/g, ' ')
-      .trim();
-  }
-}
-
-/**
- * Enhanced image extraction with dynamic DOM analysis
- */
 export async function enhancedImageExtraction(page: Page): Promise<ExtractedImage[]> {
   try {
-    console.log('Starting dynamic image extraction...');
 
-    // Get current DOM content for analysis
-    const rawDomContent = await page.content();
+    // Click the predefined XPath to expand images
+    console.log('Accepting cookies');
     
-    // Clean DOM content before sending to AI
-    console.log('Cleaning DOM content for AI analysis...');
-    const cleanedDomContent = cleanDOMForAnalysis(rawDomContent);
-    console.log(`DOM size reduced from ${rawDomContent.length} to ${cleanedDomContent.length} characters`);
-    
-    // Analyze cleaned DOM for interactive elements
-    const analysis = await analyzeDOMForInteraction(cleanedDomContent);
-    
-    console.log("analysis", analysis)
+    const xpathCookies = '/html/body/dialog/div[2]/div/div[2]/div[2]/div[2]/div[3]/button';
 
-    if (!analysis) {
-      console.log('No interactive elements found, proceeding with basic extraction');
-      return await extractImagesFromPage(page);
+    await page.locator(`xpath=${xpathCookies}`).click();
+    
+    const xpath = '/html/body/div[1]/div/main/div/div[2]/div[1]/div[2]/div[3]/div/div';
+    
+    try {
+      console.log("Clicking image expansion button with predefined XPath...");
+      await page.waitForTimeout(3000);
+      await page.locator(`xpath=${xpath}`).click();
+      console.log('Successfully clicked image expansion button');
+    } catch (clickError) {
+      console.log('Could not click image expansion button, continuing with basic extraction');
     }
 
-    const { xpath, needCookies } = analysis;
+    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1000);
 
-    if (!xpath) {
-      console.log('No XPath found, proceeding with basic extraction');
-      return await extractImagesFromPage(page);
-    }
+    console.info("Check images")
 
-    if (needCookies) {
-      console.log('Cookie banner detected, accepting cookies...');
-      try {
-        await page.waitForTimeout(2000);
-        await page.locator(`xpath=${xpath}`).click();
-        console.log('Successfully accepted cookies');
-        
-        // Wait a bit for the page to update after accepting cookies
-        await page.waitForTimeout(3000);
-        
-        // Re-analyze DOM for image expansion buttons after accepting cookies
-        const updatedRawDomContent = await page.content();
-        const updatedCleanedDomContent = cleanDOMForAnalysis(updatedRawDomContent);
-        const updatedAnalysis = await analyzeDOMForInteraction(updatedCleanedDomContent);
-
-        console.log("updatedAnalysis", updatedAnalysis)
-        
-        if (updatedAnalysis && updatedAnalysis.xpath && !updatedAnalysis.needCookies) {
-          console.log('Found image expansion button after accepting cookies...');
-          try {
-            await page.locator(`xpath=${updatedAnalysis.xpath}`).click();
-            console.log('Successfully clicked image expansion button');
-            await page.waitForTimeout(3000);
-          } catch (clickError) {
-            console.log('Could not click image expansion button after cookies, continuing with basic extraction');
-          }
-        }
-      } catch (cookieError) {
-        console.log('Could not accept cookies, continuing with basic extraction');
-      }
-    } else {
-      console.log('Image expansion button detected, clicking...');
-      try {
-        await page.waitForTimeout(2000);
-        await page.locator(`xpath=${xpath}`).click();
-        console.log('Successfully clicked image expansion button');
-        await page.waitForTimeout(3000);
-      } catch (clickError) {
-        console.log('Could not click image expansion button, continuing with basic extraction');
-      }
-    }
-
-    console.log('Extracting images after interactions...');
-    
-    // Extract images after all interactions
+    // Extract images after interactions
     const imagesAfter = await extractImagesFromPage(page);
-    console.log(`Images found after dynamic interactions: ${imagesAfter.length}`);
+    console.log(`Images found after interactions: ${imagesAfter.length}`);
 
     return imagesAfter;
 

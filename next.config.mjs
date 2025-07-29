@@ -17,20 +17,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn'],
     } : false,
-  },
-  // Exclude problematic packages from webpack bundling
-  experimental: {
-    serverComponentsExternalPackages: ['@browserbasehq/stagehand', 'playwright'],
-  },
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = [...(config.externals || []), {
-        '@browserbasehq/stagehand': 'commonjs @browserbasehq/stagehand',
-        'playwright': 'commonjs playwright',
-      }];
-    }
-    return config;
-  },
+  }
 };
  
 export default withNextIntl(nextConfig);
