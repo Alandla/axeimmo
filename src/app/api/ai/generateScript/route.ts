@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     if (urlScrapingResult && Array.isArray(urlScrapingResult) && urlScrapingResult.length > 0) {
         userPrompt += "\n\nHere is some information extracted from URL scraping, use this precise data to write the script without inventing values:\n";
         urlScrapingResult.forEach((result, idx) => {
-            userPrompt += `\n[${idx + 1}] Title: ${result.metadata.title}\nText: ${result.markdown}\n`;
+            userPrompt += `\n[${idx + 1}] Title: ${result.metadata?.title ? result.metadata.title : result.title}\nText: ${result.markdown}\n`;
         });
     }
 
