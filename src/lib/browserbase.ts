@@ -1,16 +1,14 @@
-import { Stagehand } from '@browserbasehq/stagehand';
+import { chromium, Browser, Page } from 'playwright';
 import { Readability } from '@mozilla/readability';
 import { JSDOM } from 'jsdom';
+import { Browserbase } from '@browserbasehq/sdk';
+import { analyzeDOMForInteraction } from './ai';
 
 export interface BrowserBaseConfig {
   apiKey: string;
   projectId: string;
-  openaiApiKey: string;
   region?: string;
   keepAlive?: boolean;
-  browserSettings?: {
-    recordSession?: boolean;
-  };
 }
 
 export interface ExtractedContent {
@@ -54,72 +52,53 @@ function mapVercelToBrowserBaseRegion(vercelRegion?: string): string {
   };
 
   if (!vercelRegion || vercelRegion === 'dev1') {
-    return 'us-west-2'; // Default BrowserBase region
+    return 'eu-central-1'; // Default BrowserBase region
   }
 
-  return regionMap[vercelRegion] || 'us-west-2';
+  return regionMap[vercelRegion] || 'eu-central-1';
 }
 
 /**
  * Create a new BrowserBase session optimized for the current region
  */
-export async function createBrowserBaseSession(config: BrowserBaseConfig): Promise<string> {
+export async function createBrowserBaseSession(config: BrowserBaseConfig): Promise<{ sessionId: string; connectUrl: string }> {
   const browserBaseRegion = mapVercelToBrowserBaseRegion(config.region);
   
   console.log(`Creating BrowserBase session in region: ${browserBaseRegion} (mapped from Vercel region: ${config.region})`);
 
-  const response = await fetch('https://www.browserbase.com/v1/sessions', {
-    method: 'POST',
-    headers: {
-      'x-bb-api-key': config.apiKey,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ 
-      projectId: config.projectId,
-      region: browserBaseRegion
-    }),
+  const bb = new Browserbase({
+    apiKey: config.apiKey,
   });
 
-  if (!response.ok) {
-    throw new Error(`Failed to create BrowserBase session: ${response.statusText}`);
-  }
+  const session = await bb.sessions.create({
+    projectId: config.projectId,
+    region: browserBaseRegion as any,
+  });
 
-  const { id } = await response.json();
-  return id;
+  return {
+    sessionId: session.id,
+    connectUrl: session.connectUrl,
+  };
 }
 
 /**
- * Initialize Stagehand with BrowserBase session
+ * Initialize Playwright browser with BrowserBase session
  */
-export function initializeStagehand(sessionId: string, config: BrowserBaseConfig): Stagehand {
-  return new Stagehand({
-    env: 'BROWSERBASE',
-    apiKey: config.apiKey,
-    projectId: config.projectId,
-    browserbaseSessionID: sessionId,
-    modelName: 'gpt-4.1-mini',
-    modelClientOptions: {
-      apiKey: config.openaiApiKey,
-      baseURL: 'https://api.openai.com/v1'
-    }
-  });
+export async function initializeBrowser(connectUrl: string): Promise<{ browser: Browser; page: Page }> {
+  const browser = await chromium.connectOverCDP(connectUrl);
+  const contexts = browser.contexts();
+  const context = contexts[0] || await browser.newContext();
+  const pages = context.pages();
+  const page = pages[0] || await context.newPage();
+  
+  return { browser, page };
 }
 
 /**
  * Extract clean content from a URL using Readability
  */
-export async function extractCleanContent(page: any, url: string): Promise<Omit<ExtractedContent, 'images' | 'extractionMethod'>> {
+export async function extractCleanContent(page: Page, url: string): Promise<Omit<ExtractedContent, 'images' | 'extractionMethod'>> {
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
-
-  console.log('Looking for photo expansion buttons...');
-    
-  const observeResult = await page.act("Find out if there is a button to view all photos, plus photos, show more images, or see all pictures. Look for any buttons that might reveal additional photos.");
-  console.log("observeResult", observeResult)
-
-  if (observeResult && observeResult.length > 0) {
-    const [photoAction] = observeResult;
-    console.log('Found photo expansion action:', photoAction);
-  }
   
   const content = await page.content();
   const dom = new JSDOM(content);
@@ -134,84 +113,13 @@ export async function extractCleanContent(page: any, url: string): Promise<Omit<
 }
 
 /**
- * Clean XPath selector by removing /text() nodes at the end
- * Handles both string selectors and action objects with selector property
+ * Extract images from the current page without any interactions
  */
-function cleanXPathSelector(selectorOrAction: any): any {
-  // If it's an object with a selector property, clean the selector
-  if (selectorOrAction && typeof selectorOrAction === 'object' && selectorOrAction.selector) {
-    const textNodePattern = /\/text\(\)(\[\d+\])?$/;
-    if (textNodePattern.test(selectorOrAction.selector)) {
-      const cleanedSelector = selectorOrAction.selector.replace(textNodePattern, '');
-      console.log(`Cleaned XPath selector in action object: ${selectorOrAction.selector} -> ${cleanedSelector}`);
-      
-      // Return a copy of the object with the cleaned selector
-      return {
-        ...selectorOrAction,
-        selector: cleanedSelector
-      };
-    }
-  }
-  
-  return selectorOrAction;
-}
-
-/**
- * Enhanced image extraction with AI-powered interaction
- */
-export async function enhancedImageExtraction(page: any): Promise<ExtractedImage[]> {
+export async function extractImagesFromPage(page: Page): Promise<ExtractedImage[]> {
   try {
-    // Step 1: Observe photo expansion buttons (cached action)
-    console.log('Looking for photo expansion buttons...');
-    
-    const observeResult = await page.observe({
-      instruction: "Find out if there is a button to view all photos, plus photos, show more images, or see all pictures. Look for any buttons that might reveal additional photos."
-    });
-
-    if (observeResult && observeResult.length > 0) {
-      const [photoAction] = observeResult;
-      console.log('Found photo expansion action:', photoAction);
-      
-      // Clean the selector if it contains /text() nodes
-      const cleanedPhotoAction = cleanXPathSelector(photoAction);
-      
-      
-      try {
-        // Use the cleaned action
-        await page.act(cleanedPhotoAction);
-        await page.waitForTimeout(1000);
-        console.log('Successfully expanded photo gallery');
-      } catch (clickError) {
-        // Step 2: Handle cookies if click failed
-        console.log('Click failed, trying to handle cookies...');
-        await page.waitForTimeout(30000);
-        try {
-          const cookieObserve = await page.observe({
-            instruction: "If there is a cookie banner, you must accept them."
-          });
-          console.log("cookieObserve", cookieObserve)
-          if (cookieObserve && cookieObserve.length > 0) {
-            const [cookieAction] = cookieObserve;
-            console.log("cookieAction", cookieAction)
-            await page.act(cookieAction);
-            console.log("cookieAction done")
-            await page.waitForTimeout(1000);
-            
-            // Retry photo expansion with cleaned action
-            await page.act(cleanedPhotoAction);
-            await page.waitForTimeout(1000);
-            console.log('Successfully expanded photos after handling cookies');
-          }
-        } catch (retryError) {
-          console.log('Could not expand photos after cookie handling');
-        }
-      }
-    }
-
-    // Step 3: Extract all relevant images
     const images = await page.evaluate(() => {
       const imgs = Array.from(document.querySelectorAll('img'));
-      console.log("imgs", imgs)
+      console.log("imgs found : ", imgs.length)
       return imgs.map(img => {
         return {
           src: img.src,
@@ -227,7 +135,10 @@ export async function enhancedImageExtraction(page: any): Promise<ExtractedImage
         };
       }).filter(img => {
         // Filter criteria for relevant images
-        if (img.width < 100 || img.height < 100) return false;
+        if (img.width < 250 && img.height < 250) {
+          console.log(`[BrowserBase] Image exclue car trop petite : ${img.src} (${img.width}x${img.height})`);
+          return false;
+        }
         
         const parentClass = img.parentInfo.className.toLowerCase();
         const parentId = img.parentInfo.id.toLowerCase();
@@ -238,27 +149,26 @@ export async function enhancedImageExtraction(page: any): Promise<ExtractedImage
           parentClass.includes(keyword) || parentId.includes(keyword)
         );
         
-        if (isExcluded) return false;
+        if (isExcluded) {
+          console.log(`[BrowserBase] Image exclue car parent class/id contient un mot-clé exclu : ${img.src} (class: ${parentClass}, id: ${parentId})`);
+          return false;
+        }
         
         // Prefer images in main content areas or larger images
-        return img.parentInfo.isInMainContent || img.width > 200;
+        const isRelevant = img.parentInfo.isInMainContent || img.width > 200;
+        if (!isRelevant) {
+          console.log(`[BrowserBase] Image exclue car hors contenu principal et trop petite : ${img.src} (${img.width}x${img.height})`);
+        }
+        return isRelevant;
       });
     });
 
-    console.log(`Enhanced extraction found ${images.length} relevant images`);
     return images;
-
   } catch (error) {
-    console.error('Error in enhanced image extraction:', error);
-    
-    // Check if the error is related to a closed session
-    if (error instanceof Error && error.message.includes('closed')) {
-      console.log('Browser session closed, cannot extract images');
-      return [];
-    }
+    console.error('Error in basic image extraction:', error);
     
     try {
-      // Fallback: basic image extraction (only if session is still active)
+      // Fallback: simple image extraction
       const basicImages = await page.evaluate(() => {
         const imgs = Array.from(document.querySelectorAll('img'));
         return imgs.map(img => ({
@@ -284,42 +194,261 @@ export async function enhancedImageExtraction(page: any): Promise<ExtractedImage
 }
 
 /**
+ * Clean DOM content for AI analysis by removing unnecessary elements and attributes
+ */
+function cleanDOMForAnalysis(htmlContent: string): string {
+  try {
+    const dom = new JSDOM(htmlContent);
+    const document = dom.window.document;
+
+    // Remove unnecessary elements
+    const elementsToRemove = [
+      'script',
+      'style', 
+      'meta',
+      'link',
+      'noscript',
+      'iframe',
+      'embed',
+      'object',
+      'svg',
+      'path',
+      'head'
+    ];
+
+    elementsToRemove.forEach(tagName => {
+      const elements = document.querySelectorAll(tagName);
+      elements.forEach(el => el.remove());
+    });
+
+    // Remove comments
+    const walker = dom.window.document.createTreeWalker(
+      document.body || document,
+      dom.window.NodeFilter.SHOW_COMMENT
+    );
+    const comments: Node[] = [];
+    let node;
+    while (node = walker.nextNode()) {
+      comments.push(node);
+    }
+    comments.forEach(comment => {
+      if (comment.parentNode) {
+        comment.parentNode.removeChild(comment);
+      }
+    });
+
+    // Clean attributes - keep only essential ones
+    const keepAttributes = [
+      'id',
+      'href',
+      'alt',
+      'title',
+      'aria-label',
+      'data-testid',
+      'role',
+      'type',
+      'value',
+      'placeholder',
+      'class'
+    ];
+
+    const allElements = document.querySelectorAll('*');
+    allElements.forEach(element => {
+      // Get all attribute names
+      const attributeNames = Array.from(element.attributes).map(attr => attr.name);
+      
+      // Remove attributes not in keepAttributes list
+      attributeNames.forEach(attrName => {
+        if (!keepAttributes.includes(attrName)) {
+          element.removeAttribute(attrName);
+        }
+      });
+
+      // Clean class attribute - keep only meaningful classes
+      const className = element.getAttribute('class');
+      if (className) {
+        const meaningfulClasses = className
+          .split(' ')
+          .filter(cls => {
+            const lowerCls = cls.toLowerCase();
+            return (
+              lowerCls.includes('button') ||
+              lowerCls.includes('btn') ||
+              lowerCls.includes('link') ||
+              lowerCls.includes('nav') ||
+              lowerCls.includes('menu') ||
+              lowerCls.includes('cookie') ||
+              lowerCls.includes('consent') ||
+              lowerCls.includes('privacy') ||
+              lowerCls.includes('banner') ||
+              lowerCls.includes('modal') ||
+              lowerCls.includes('popup') ||
+              lowerCls.includes('gallery') ||
+              lowerCls.includes('image') ||
+              lowerCls.includes('photo') ||
+              lowerCls.includes('more') ||
+              lowerCls.includes('expand') ||
+              lowerCls.includes('show') ||
+              lowerCls.includes('load')
+            );
+          });
+        
+        if (meaningfulClasses.length > 0) {
+          element.setAttribute('class', meaningfulClasses.join(' '));
+        } else {
+          element.removeAttribute('class');
+        }
+      }
+    });
+
+    // Remove empty elements (but keep structural ones)
+    const structuralTags = ['div', 'section', 'article', 'main', 'nav', 'header', 'footer', 'aside', 'ul', 'ol', 'li'];
+    allElements.forEach(element => {
+      const tagName = element.tagName.toLowerCase();
+      if (!structuralTags.includes(tagName) && 
+          !element.textContent?.trim() && 
+          !element.querySelector('img, button, input, a')) {
+        element.remove();
+      }
+    });
+
+    // Get the cleaned HTML - focus on body content
+    const bodyContent = document.body?.innerHTML || document.documentElement.innerHTML;
+    
+    // Further compress by removing excessive whitespace
+    return bodyContent
+      .replace(/\s+/g, ' ')
+      .replace(/>\s+</g, '><')
+      .trim();
+
+  } catch (error) {
+    console.error('Error cleaning DOM:', error);
+    // Fallback: basic cleanup with regex
+    return htmlContent
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+      .replace(/<!--[\s\S]*?-->/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+}
+
+/**
+ * Enhanced image extraction with dynamic DOM analysis
+ */
+export async function enhancedImageExtraction(page: Page): Promise<ExtractedImage[]> {
+  try {
+    console.log('Starting dynamic image extraction...');
+
+    // Get current DOM content for analysis
+    const rawDomContent = await page.content();
+    
+    // Clean DOM content before sending to AI
+    console.log('Cleaning DOM content for AI analysis...');
+    const cleanedDomContent = cleanDOMForAnalysis(rawDomContent);
+    console.log(`DOM size reduced from ${rawDomContent.length} to ${cleanedDomContent.length} characters`);
+    
+    // Analyze cleaned DOM for interactive elements
+    const analysis = await analyzeDOMForInteraction(cleanedDomContent);
+    
+    console.log("analysis", analysis)
+
+    if (!analysis) {
+      console.log('No interactive elements found, proceeding with basic extraction');
+      return await extractImagesFromPage(page);
+    }
+
+    const { xpath, needCookies } = analysis;
+
+    if (!xpath) {
+      console.log('No XPath found, proceeding with basic extraction');
+      return await extractImagesFromPage(page);
+    }
+
+    if (needCookies) {
+      console.log('Cookie banner detected, accepting cookies...');
+      try {
+        await page.waitForTimeout(2000);
+        await page.locator(`xpath=${xpath}`).click();
+        console.log('Successfully accepted cookies');
+        
+        // Wait a bit for the page to update after accepting cookies
+        await page.waitForTimeout(3000);
+        
+        // Re-analyze DOM for image expansion buttons after accepting cookies
+        const updatedRawDomContent = await page.content();
+        const updatedCleanedDomContent = cleanDOMForAnalysis(updatedRawDomContent);
+        const updatedAnalysis = await analyzeDOMForInteraction(updatedCleanedDomContent);
+
+        console.log("updatedAnalysis", updatedAnalysis)
+        
+        if (updatedAnalysis && updatedAnalysis.xpath && !updatedAnalysis.needCookies) {
+          console.log('Found image expansion button after accepting cookies...');
+          try {
+            await page.locator(`xpath=${updatedAnalysis.xpath}`).click();
+            console.log('Successfully clicked image expansion button');
+            await page.waitForTimeout(3000);
+          } catch (clickError) {
+            console.log('Could not click image expansion button after cookies, continuing with basic extraction');
+          }
+        }
+      } catch (cookieError) {
+        console.log('Could not accept cookies, continuing with basic extraction');
+      }
+    } else {
+      console.log('Image expansion button detected, clicking...');
+      try {
+        await page.waitForTimeout(2000);
+        await page.locator(`xpath=${xpath}`).click();
+        console.log('Successfully clicked image expansion button');
+        await page.waitForTimeout(3000);
+      } catch (clickError) {
+        console.log('Could not click image expansion button, continuing with basic extraction');
+      }
+    }
+
+    console.log('Extracting images after interactions...');
+    
+    // Extract images after all interactions
+    const imagesAfter = await extractImagesFromPage(page);
+    console.log(`Images found after dynamic interactions: ${imagesAfter.length}`);
+
+    return imagesAfter;
+
+  } catch (error) {
+    console.error('Error in enhanced image extraction:', error);
+    return await extractImagesFromPage(page);
+  }
+}
+
+/**
  * Quick DOM extraction (Phase 1) - Returns content fast for script generation
  */
 export async function extractQuickContent(
   url: string,
   config: BrowserBaseConfig
-): Promise<{ content: Omit<ExtractedContent, 'images' | 'extractionMethod'>; sessionId: string }> {
-  const sessionId = await createBrowserBaseSession(config);
+): Promise<{ content: Omit<ExtractedContent, 'images' | 'extractionMethod'>; sessionId: string; connectUrl: string }> {
+  const { sessionId, connectUrl } = await createBrowserBaseSession(config);
   console.log("Session ID", sessionId)
-  const stagehand = initializeStagehand(sessionId, config);
-  console.log("Stagehand create")
+  
+  const { browser, page } = await initializeBrowser(connectUrl);
+  console.log("Browser initialized")
   
   try {
-    console.log("Waiting for stagehand to initialize")
-    await stagehand.init();
-    console.log("Stagehand initialized")
-    
-    // Add a small delay to ensure full initialization
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const page = stagehand.page;
-
     const cleanContent = await extractCleanContent(page, url);
     
-    // Don't close Stagehand - keep session alive for background processing
+    // Don't close browser - keep session alive for background processing
     return {
       content: cleanContent,
-      sessionId
+      sessionId,
+      connectUrl
     };
   } catch (error) {
     console.error('Error in quick content extraction:', error);
-    // Make sure to close Stagehand on error
-    console.log("Closing Stagehand 3")
     try {
-      await stagehand.close();
+      await browser.close();
     } catch (closeError) {
-      console.error('Error closing Stagehand after extraction error:', closeError);
+      console.error('Error closing browser after extraction error:', closeError);
     }
     throw error;
   }
@@ -330,21 +459,15 @@ export async function extractQuickContent(
  * No page.goto needed - we're already on the page from Phase 1
  */
 export async function extractBackgroundImages(
-  sessionId: string,
-  config: BrowserBaseConfig
+  connectUrl: string
 ): Promise<ExtractedImage[]> {
-  let stagehand: Stagehand | null = null;
+  let browser: Browser | null = null;
 
-  console.log("extractBackgroundImages", sessionId, config)
+  console.log("extractBackgroundImages", connectUrl)
 
   try {
-    stagehand = initializeStagehand(sessionId, config);
-    await stagehand.init();
-
-    // Add a small delay to ensure full initialization
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    const page = stagehand.page;
+    const { browser: browserInstance, page } = await initializeBrowser(connectUrl);
+    browser = browserInstance;
     
     // No need for page.goto - we're already on the page from Phase 1
     // Just run enhanced image extraction on the current page
@@ -355,12 +478,12 @@ export async function extractBackgroundImages(
     throw error;
   } finally {
     // Now we can close the session
-    console.log("Closing Stagehand 2")
-    if (stagehand) {
+    console.log("Closing browser")
+    if (browser) {
       try {
-        await stagehand.close();
+        await browser.close();
       } catch (error) {
-        console.error('Error closing Stagehand in background extraction:', error);
+        console.error('Error closing browser in background extraction:', error);
       }
     }
   }
@@ -373,16 +496,13 @@ export async function extractContentWithImages(
   url: string, 
   config: BrowserBaseConfig
 ): Promise<ExtractedContent> {
-  let sessionId: string | null = null;
-  let stagehand: Stagehand | null = null;
+  let browser: Browser | null = null;
 
   try {
-    // Create session and initialize Stagehand
-    sessionId = await createBrowserBaseSession(config);
-    stagehand = initializeStagehand(sessionId, config);
-    await stagehand.init();
-
-    const page = stagehand.page;
+    // Create session and initialize browser
+    const { connectUrl } = await createBrowserBaseSession(config);
+    const { browser: browserInstance, page } = await initializeBrowser(connectUrl);
+    browser = browserInstance;
 
     // Extract clean content
     const cleanContent = await extractCleanContent(page, url);
@@ -398,12 +518,12 @@ export async function extractContentWithImages(
 
   } finally {
     // Clean up resources
-    console.log("Closing Stagehand 1")
-    if (stagehand) {
+    console.log("Closing browser")
+    if (browser) {
       try {
-        await stagehand.close();
+        await browser.close();
       } catch (error) {
-        console.error('Error closing Stagehand:', error);
+        console.error('Error closing browser:', error);
       }
     }
   }
@@ -415,10 +535,9 @@ export async function extractContentWithImages(
 export function getBrowserBaseConfig(): BrowserBaseConfig {
   const apiKey = process.env.BROWSERBASE_API_KEY;
   const projectId = process.env.BROWSERBASE_PROJECT_ID;
-  const openaiApiKey = process.env.OPENAI_API_KEY;
 
-  if (!apiKey || !projectId || !openaiApiKey) {
-    throw new Error('Missing BrowserBase or OpenAI configuration. Check BROWSERBASE_API_KEY, BROWSERBASE_PROJECT_ID, and OPENAI_API_KEY environment variables.');
+  if (!apiKey || !projectId) {
+    throw new Error('Missing BrowserBase configuration. Check BROWSERBASE_API_KEY and BROWSERBASE_PROJECT_ID environment variables.');
   }
 
   // Get the Vercel region (will be mapped to BrowserBase region in createBrowserBaseSession)
@@ -427,11 +546,7 @@ export function getBrowserBaseConfig(): BrowserBaseConfig {
   return {
     apiKey,
     projectId,
-    openaiApiKey,
     region,
-    keepAlive: true,
-    browserSettings: {
-      recordSession: true
-    }
+    keepAlive: true
   };
 }

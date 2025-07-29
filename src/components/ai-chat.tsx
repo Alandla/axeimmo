@@ -261,6 +261,7 @@ export function AiChat() {
                 markdown: result.content,
                 title: result.title,
                 sessionId: result.sessionId,
+                connectUrl: result.connectUrl,
                 hasBackgroundProcessing: result.hasBackgroundProcessing,
                 success: true
               };
@@ -298,7 +299,8 @@ export function AiChat() {
                     console.log(`Récupération des images en arrière-plan pour ${result.url}...`);
                     const imageResult: any = await basicApiCall('/article/extract-enhanced', {
                       url: result.url,
-                      phase: 'get-images'
+                      phase: 'get-images',
+                      connectUrl: result.connectUrl
                     });
                     
                     const backgroundImages = imageResult.images || [];
@@ -421,6 +423,8 @@ export function AiChat() {
     setMessages(prevMessages => prevMessages.map(msg => 
       msg.id === messageUserId ? { ...msg, prompt } : msg
     ));
+    
+    return;
 
     let stream;
     if (improve) {

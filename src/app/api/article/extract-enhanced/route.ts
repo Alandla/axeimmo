@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   console.log("POST /api/article/extract-enhanced by user: ", session.user.id);
 
   const params = await req.json();
-  const { url, phase, sessionId } = params;
+  const { url, phase, connectUrl } = params;
 
   if (!url) {
     return NextResponse.json({ error: "URL is required" }, { status: 400 });
@@ -21,19 +21,23 @@ export async function POST(req: NextRequest) {
   const config = getBrowserBaseConfig();
 
   try {
-    // Phase 2: Return background images using new session with JS enabled
+    // Phase 2: Return background images using existing session
     if (phase === 'get-images') {
+      if (!connectUrl) {
+        return NextResponse.json({ error: "connectUrl is required for get-images phase" }, { status: 400 });
+      }
+      
       console.log(`Getting background images for URL: ${url}...`);
-      const images = await extractBackgroundImages(url, config);
+      const images = await extractBackgroundImages(connectUrl);
       
       return NextResponse.json({ 
         data: { images, imageCount: images.length }
       });
     }
 
-    // Phase 1: Quick content extraction + return sessionId for background processing
+    // Phase 1: Quick content extraction + return sessionId and connectUrl for background processing
     console.log(`Phase 1: Quick content extraction for ${url}...`);
-    const { content, sessionId: newSessionId } = await extractQuickContent(url, config);
+    const { content, sessionId: newSessionId, connectUrl: newConnectUrl } = await extractQuickContent(url, config);
     
     console.log(`Quick content extracted for ${url}, session ${newSessionId} kept alive for background processing`);
 
@@ -41,6 +45,7 @@ export async function POST(req: NextRequest) {
       data: {
         ...content,
         sessionId: newSessionId,
+        connectUrl: newConnectUrl,
         extractionMethod: 'browserbase-parallel',
         hasBackgroundProcessing: true
       }
