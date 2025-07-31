@@ -346,7 +346,21 @@
         "add-transition": "Ajouter une transition",
         "edit": "Modifier la séquence",
         "merge-with-previous": "Fusionner avec la séquence précédente",
-        "merge-with-next": "Fusionner avec la séquence suivante"
+        "merge-with-next": "Fusionner avec la séquence suivante",
+        "zoom": {
+          "none": "Aucun",
+          "categories": {
+            "zoom-in": "Zoom avant",
+            "zoom-out": "Zoom arrière"
+          },
+          "types": {
+            "classic": "Classique",
+            "fast": "Rapide",
+            "impact": "Impact",
+            "instant": "Instantané",
+            "continuous": "Continu"
+          }
+        }
       },
       "transition": {
         "transition": "Transition",

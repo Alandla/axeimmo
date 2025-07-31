@@ -1,10 +1,10 @@
-import { ISequence } from "@/src/types/video";
+import { ISequence, ZoomType } from "@/src/types/video";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
 import SkeletonVideo from "../ui/skeleton-video";
 import SkeletonVideoFrame from "../ui/skeleton-video-frame";
-import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen, Video as VideoIcon, User, ArrowUp, ArrowDown } from "lucide-react";
-import { motion } from 'framer-motion';
+import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen, Video as VideoIcon, User, ArrowUp, ArrowDown, ZoomIn, ZoomOut, X, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from 'framer-motion';
 import React, { useRef, useState, useCallback } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -16,6 +16,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select"
+import * as SelectPrimitive from "@radix-ui/react-select"
 import { RefreshCw } from "lucide-react"
 import { cn } from "@/src/lib/utils";
 import { useTranslations } from "next-intl";
@@ -44,6 +52,7 @@ interface SequenceProps {
   handleMergeWordWithNext?: (sequenceIndex: number, wordIndex: number) => void;
   canMergeWithPrevious?: boolean;
   canMergeWithNext?: boolean;
+  onWordZoomChange?: (sequenceIndex: number, wordIndex: number, zoom: ZoomType | undefined) => void;
 }
 
 export default function Sequence({ 
@@ -68,11 +77,14 @@ export default function Sequence({
   handleMergeWordWithNext = () => {},
   canMergeWithPrevious = false,
   canMergeWithNext = false,
+  onWordZoomChange = () => {},
 }: SequenceProps) {
 
     const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editingWordIndex, setEditingWordIndex] = useState<number | null>(null);
+    const [justAddedZoom, setJustAddedZoom] = useState<number | null>(null);
+    const [openSelectIndex, setOpenSelectIndex] = useState<number | null>(null);
     const t = useTranslations('edit.sequence')
     const [inputDuration, setInputDuration] = useState<number | null>(null);
     const [imageError, setImageError] = useState(false);
@@ -179,7 +191,15 @@ export default function Sequence({
         const target = e.target as HTMLElement;
         const clickedOnAnotherWord = target.hasAttribute('contenteditable');
         
-        if (!target.closest('[contenteditable="true"]') && !target.closest('button')) {
+        // Check if clicked on Select elements (Radix UI components)
+        const isSelectElement = target.closest('[data-radix-select-trigger]') || 
+                               target.closest('[data-radix-select-content]') || 
+                               target.closest('[data-radix-select-item]') ||
+                               target.closest('[data-radix-popper-content-wrapper]') ||
+                               target.closest('[role="option"]') ||
+                               target.closest('[role="listbox"]');
+        
+        if (!target.closest('[contenteditable="true"]') && !target.closest('button') && !isSelectElement) {
             setEditingWordIndex(null);
             setIsEditing(false);
         } else if (clickedOnAnotherWord) {
@@ -222,6 +242,26 @@ export default function Sequence({
         if (e.key === 'Enter') {
             e.currentTarget.blur();
         }
+    };
+
+    const handleAddZoom = (wordIndex: number) => {
+        setJustAddedZoom(wordIndex);
+        onWordZoomChange(index, wordIndex, 'zoom-in');
+        // Reset after animation
+        setTimeout(() => setJustAddedZoom(null), 300);
+    };
+
+    const handleZoomChange = (wordIndex: number, zoom: ZoomType) => {
+        console.log('Changing zoom for word', wordIndex, 'to', zoom);
+        onWordZoomChange(index, wordIndex, zoom);
+    };
+
+    const handleRemoveZoom = (wordIndex: number) => {
+        onWordZoomChange(index, wordIndex, undefined);
+    };
+
+    const getCurrentWordZoom = (wordIndex: number): ZoomType | 'none' => {
+        return sequence.words[wordIndex]?.zoom || 'none';
     };
 
     return (
@@ -457,19 +497,119 @@ export default function Sequence({
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.15 }}
-                                        className="absolute bottom-full left-0 mb-2 flex items-center gap-1 bg-white border shadow-lg rounded-md p-1 z-10"
+                                        className="absolute bottom-full left-0 mb-2 bg-white border shadow-lg rounded-md p-1 z-50"
                                     >
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-6 w-6"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleWordAddWithFocus(wordIndex);
-                                            }}
-                                        >
-                                            <Plus className="h-4 w-4" />
-                                        </Button>
+                                        <div className="flex items-center gap-1">
+                                            {/* Bouton zoom - se transforme selon l'état */}
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className={cn(
+                                                    "h-6 w-6",
+                                                    sequence.words[wordIndex]?.zoom 
+                                                        ? "hover:bg-red-200 text-destructive hover:text-destructive" 
+                                                        : ""
+                                                )}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (sequence.words[wordIndex]?.zoom) {
+                                                        handleRemoveZoom(wordIndex);
+                                                    } else {
+                                                        handleAddZoom(wordIndex);
+                                                    }
+                                                }}
+                                            >
+                                                {sequence.words[wordIndex]?.zoom ? (
+                                                    <ZoomOut className="h-4 w-4" />
+                                                ) : (
+                                                    <ZoomIn className="h-4 w-4" />
+                                                )}
+                                            </Button>
+                                            
+                                            {/* Sélecteur de zoom (apparaît si zoom actif) */}
+                                            <AnimatePresence mode="wait">
+                                                {sequence.words[wordIndex]?.zoom && (
+                                                    <motion.div 
+                                                        key={`zoom-selector-${wordIndex}`}
+                                                        initial={justAddedZoom === wordIndex ? { opacity: 0, width: 0 } : false}
+                                                        animate={{ opacity: 1, width: "auto" }}
+                                                        exit={{ opacity: 0, width: 0 }}
+                                                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                        layout
+                                                        className="flex items-center overflow-hidden"
+                                                        onMouseDown={(e) => e.stopPropagation()}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        onPointerDown={(e) => e.stopPropagation()}
+                                                    >
+                                                        <Select 
+                                                            value={getCurrentWordZoom(wordIndex)} 
+                                                            open={openSelectIndex === wordIndex}
+                                                            onOpenChange={(open) => setOpenSelectIndex(open ? wordIndex : null)}
+                                                            onValueChange={(value: string) => {
+                                                                if (value === "none") {
+                                                                    handleRemoveZoom(wordIndex);
+                                                                } else {
+                                                                    handleZoomChange(wordIndex, value as ZoomType);
+                                                                }
+                                                            }}
+                                                        >
+                                                            <SelectPrimitive.Trigger className="flex h-6 items-center justify-between text-sm bg-transparent focus:outline-none gap-1 min-w-0">
+                                                                <SelectValue />
+                                                                <ChevronDown className={cn("h-3 w-3 opacity-50 shrink-0 transition-transform duration-200", openSelectIndex === wordIndex && "rotate-180")} />
+                                                            </SelectPrimitive.Trigger>
+                                                            <SelectContent align="center" sideOffset={4}>
+                                                                {/* Option "Aucun" */}
+                                                                <SelectItem value="none" className="text-muted-foreground">
+                                                                    {t('zoom.none')}
+                                                                </SelectItem>
+                                                                
+                                                                {/* Séparateur */}
+                                                                <div className="h-px bg-border my-1"></div>
+                                                                
+                                                                {/* Zoom In */}
+                                                                <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+                                                                    {t('zoom.categories.zoom-in')}
+                                                                </div>
+                                                                <SelectItem value="zoom-in">{t('zoom.types.classic')}</SelectItem>
+                                                                <SelectItem value="zoom-in-fast">{t('zoom.types.fast')}</SelectItem>
+                                                                <SelectItem value="zoom-in-impact">{t('zoom.types.impact')}</SelectItem>
+                                                                <SelectItem value="zoom-in-instant">{t('zoom.types.instant')}</SelectItem>
+                                                                <SelectItem value="zoom-in-continuous">{t('zoom.types.continuous')}</SelectItem>
+                                                                
+                                                                {/* Séparateur */}
+                                                                <div className="h-px bg-border my-1"></div>
+                                                                
+                                                                {/* Zoom Out */}
+                                                                <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+                                                                    {t('zoom.categories.zoom-out')}
+                                                                </div>
+                                                                <SelectItem value="zoom-out">{t('zoom.types.classic')}</SelectItem>
+                                                                <SelectItem value="zoom-out-fast">{t('zoom.types.fast')}</SelectItem>
+                                                                <SelectItem value="zoom-out-impact">{t('zoom.types.impact')}</SelectItem>
+                                                                <SelectItem value="zoom-out-instant">{t('zoom.types.instant')}</SelectItem>
+                                                                <SelectItem value="zoom-out-continuous">{t('zoom.types.continuous')}</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                            
+                                            {sequence.words[wordIndex]?.zoom && (
+                                                <div className="w-px h-4 bg-border mx-1"></div>
+                                            )}
+                                            
+                                            {/* Autres boutons de la toolbar */}
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-6 w-6"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleWordAddWithFocus(wordIndex);
+                                                }}
+                                            >
+                                                <Plus className="h-4 w-4" />
+                                            </Button>
                                         {wordIndex === 0 && index > 0 && canMergeWithPrevious && (
                                             <Button
                                                 variant="ghost"
@@ -509,14 +649,19 @@ export default function Sequence({
                                         >
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
+                                        </div>
                                     </motion.div>
                                 )}
-                                <div 
-                                    ref={(el) => {
-                                        wordRefs.current[wordIndex] = el;
-                                    }}
-                                    contentEditable="true"
-                                    suppressContentEditableWarning={true}
+                                <div className="flex items-center">
+                                    {sequence.words[wordIndex]?.zoom && (
+                                        <ZoomIn className="h-3 w-3 mr-1 text-blue-500" />
+                                    )}
+                                    <div 
+                                        ref={(el) => {
+                                            wordRefs.current[wordIndex] = el;
+                                        }}
+                                        contentEditable="true"
+                                        suppressContentEditableWarning={true}
                                     onBlur={(e) => {
                                         handleWordInputChange(index, wordIndex, e.currentTarget.textContent || '');
                                         setIsEditing(false);
@@ -534,7 +679,8 @@ export default function Sequence({
                                         editingWordIndex === wordIndex ? "ring-1 ring-border" : ""
                                     )}
                                 >
-                                    {word.word}
+                                        {word.word}
+                                    </div>
                                 </div>
                             </div>
                         ))}
