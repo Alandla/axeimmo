@@ -4,7 +4,7 @@ import { Voice } from "../types/voice";
 import { AvatarLook } from "../types/avatar";
 import { createTextToSpeech } from "../lib/tts";
 import { transitions, sounds } from "../config/transitions.config";
-import { ITransition, ISequence } from "../types/video";
+import { ITransition, ISequence, ZoomType } from "../types/video";
 import { analyzeVideo, VideoAnalysisResult } from "../lib/video-analysis";
 
 import transcriptionMock from "../test/mockup/transcriptionComplete.json";
@@ -14,7 +14,7 @@ import sentencesMock from "../test/mockup/sentences.json";
 import sentencesNoTranscriptionMock from "../test/mockup/sentencesNoTranscription.json";
 import sentencesWithNewTranscriptionMock from "../test/mockup/sentencesWithNewTranscription.json";
 
-import { createLightTranscription, getTranscription, ISentence, splitSentences } from "../lib/transcription";
+import { createLightTranscription, getTranscription, ISentence, splitSentences, createZoomInputFromRawSequences } from "../lib/transcription";
 import { mediaToMediaSpace, searchMediaForKeywords, searchGoogleImagesForQueries } from "../service/media.service";
 import { IMedia, IVideo } from "../types/video";
 import { createVideo, updateVideo } from "../dao/videoDao";
@@ -29,7 +29,7 @@ import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { getMostFrequentString } from "../lib/utils";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
-import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, imageAnalysisRun } from "../lib/workflowai";
+import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, imageAnalysisRun, videoZoomInsertionRun } from "../lib/workflowai";
 import { generateKlingAnimation } from "../service/kling-animation.service";
 import { PlanName } from "../types/enums";
 import { checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode } from "../lib/fal";
@@ -61,7 +61,7 @@ export const generateVideoTask = task({
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
     let extractedMedias: IMedia[] = [];
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;
@@ -691,13 +691,29 @@ export const generateVideoTask = task({
 
     logger.info('Sentences with transcription', { sentences })
 
-    let { sequences, videoMetadata } = splitSentences(sentences);
+    let { sequences, rawSequences, videoMetadata } = splitSentences(sentences);
     const lightTranscription = createLightTranscription(sequences);
     const voices = extractVoiceSegments(sequences, sentences, payload.voice ? payload.voice.id : undefined);
 
     logger.info('Sequences', { sequences })
     logger.info('Light transcription', { lightTranscription })
     logger.info('Voices', { voices })
+    
+    /*
+    /
+    /   Generate zoom recommendations in parallel
+    /
+    */
+    logger.log(`[ZOOM] Starting zoom insertion analysis in parallel...`);
+    
+    const zoomInputSequences = createZoomInputFromRawSequences(rawSequences);
+    
+    // Lancer l'analyse des zooms en parallèle si on a des séquences
+    let zoomPromise: Promise<{ cost: number, zooms: any[] }> | null = null;
+    if (zoomInputSequences.length > 0 && !isDevelopment) {
+      zoomPromise = videoZoomInsertionRun(zoomInputSequences);
+      logger.log(`[ZOOM] Zoom insertion analysis started in background`);
+    }
     
     // Si pas de script en entrée, générer les mots-clés à partir du script transcrit
     if (!payload.script && !keywordsPromise) {
@@ -734,6 +750,12 @@ export const generateVideoTask = task({
         })
 
         logger.log(`[KEYWORDS] Keyword generation from transcription started`)
+      }
+      
+      // Lancer l'analyse des zooms si on ne l'avait pas fait avant (pas de script initial)
+      if (!zoomPromise && zoomInputSequences.length > 0 && !isDevelopment) {
+        zoomPromise = videoZoomInsertionRun(zoomInputSequences);
+        logger.log(`[ZOOM] Zoom insertion analysis started with transcribed content`);
       }
       
       // Lancer le filtrage des médias si nous n'avions pas de script au départ
@@ -1538,6 +1560,56 @@ export const generateVideoTask = task({
     });
 
     logger.info('Sequences', { sequences })
+
+    /*
+    /
+    /   Apply zoom recommendations to sequences
+    /
+    */
+    if (zoomPromise) {
+      logger.log(`[ZOOM] Waiting for zoom insertion analysis to complete...`);
+      
+      try {
+        const { cost: zoomCost, zooms } = await zoomPromise;
+        cost += zoomCost;
+        
+        logger.log(`[ZOOM] Zoom analysis completed with ${zooms.length} recommendations`, { 
+          zoomCost,
+          zooms: zooms.slice(0, 5) // Log premiers 5 pour debug
+        });
+
+        // Appliquer les zooms aux séquences (approche optimisée avec index)
+        if (zooms.length > 0) {
+          zooms.forEach(zoomRecommendation => {
+            const sequenceIndex = zoomRecommendation.sequence;
+            const wordIndex = zoomRecommendation.word;
+            
+            // Vérifier que la séquence et le mot existent
+            if (sequenceIndex !== undefined && wordIndex !== undefined && 
+                sequenceIndex >= 0 && sequenceIndex < sequences.length) {
+              const sequence = sequences[sequenceIndex];
+              
+              if (wordIndex >= 0 && wordIndex < sequence.words.length && zoomRecommendation.type) {
+                const targetWord = sequence.words[wordIndex].word;
+                
+                logger.log(`[ZOOM] Applying ${zoomRecommendation.type} zoom to word "${targetWord}" (index ${wordIndex}) in sequence ${sequenceIndex}`, {
+                  intent: zoomRecommendation.intent
+                });
+                
+                // Appliquer directement le zoom au mot par index
+                sequences[sequenceIndex].words[wordIndex].zoom = zoomRecommendation.type as ZoomType;
+              }
+            }
+          });
+
+          logger.log(`[ZOOM] Applied ${zooms.length} zoom effects to sequences`);
+        }
+      } catch (error) {
+        logger.error(`[ZOOM] Error processing zoom analysis:`, {
+          error: error instanceof Error ? error.message : String(error)
+        });
+      }
+    }
 
     let avatar;
     if (avatarFile) {
