@@ -11,6 +11,7 @@ export interface IExport {
   creditCost: number;
   renderCost?: number;
   errorMessage?: string;
+  webhookUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

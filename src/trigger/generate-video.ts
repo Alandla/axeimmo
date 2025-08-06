@@ -46,6 +46,9 @@ interface GenerateVideoPayload {
   webSearch: boolean
   animateImages: boolean
   animationMode: KlingGenerationMode
+  webhookUrl?: string
+  useSpaceMedia?: boolean // Par défaut true - utiliser les médias du space
+  saveMediaToSpace?: boolean // Par défaut true - sauvegarder les médias dans le space
 }
 
 export const generateVideoTask = task({
@@ -215,9 +218,11 @@ export const generateVideoTask = task({
           mediaSpace.media.source === 'extracted'
         ).map(mediaSpace => mediaSpace.media);
 
-        if (mediasToAddToSpace.length > 0) {
+        if (mediasToAddToSpace.length > 0 && payload.saveMediaToSpace !== false) {
           logger.log(`[ANALYZE] Adding ${mediasToAddToSpace.length} analyzed medias to space (excluding ${analyzedMedias.length - mediasToAddToSpace.length} extracted images)`);
           await addMediasToSpace(payload.spaceId, mediasToAddToSpace);
+        } else if (payload.saveMediaToSpace === false) {
+          logger.log(`[ANALYZE] Skipping adding medias to space (saveMediaToSpace=false)`);
         }
         
         return analyzedMedias;
@@ -390,10 +395,12 @@ export const generateVideoTask = task({
       }
     };
     
-    // Lancer la promesse de filtrage des médias en parallèle si on a déjà un script
-    if (payload.script) {
+    // Lancer la promesse de filtrage des médias en parallèle si on a déjà un script et si useSpaceMedia n'est pas false
+    if (payload.script && payload.useSpaceMedia !== false) {
       userMediasFilteredPromise = filterSpaceMedias(payload.script, space);
       logger.log(`[MEDIA] Media filtering process started in background with provided script`);
+    } else if (payload.useSpaceMedia === false) {
+      logger.log(`[MEDIA] Skipping space media filtering (useSpaceMedia=false)`);
     }
 
     // Initialiser un objet pour stocker la promesse de génération des mots-clés
@@ -736,8 +743,8 @@ export const generateVideoTask = task({
         logger.log(`[KEYWORDS] Keyword generation from transcription started`)
       }
       
-      // Lancer le filtrage des médias si nous n'avions pas de script au départ
-      if (!userMediasFilteredPromise) {
+      // Lancer le filtrage des médias si nous n'avions pas de script au départ et si useSpaceMedia n'est pas false
+      if (!userMediasFilteredPromise && payload.useSpaceMedia !== false) {
         userMediasFilteredPromise = filterSpaceMedias(script, space);
       }
 
@@ -1692,8 +1699,28 @@ export const generateVideoTask = task({
       })
     }
 
+    // Envoyer webhook si configuré
+    if (payload.webhookUrl) {
+      try {
+        const { sendWebhookWithRetry } = await import('../lib/webhooks');
+        await sendWebhookWithRetry(payload.webhookUrl, {
+          job_id: ctx.run.id,
+          status: 'completed',
+          result: {
+            video_id: newVideo.id,
+            thumbnail_url: newVideo.video?.thumbnail,
+            cost: cost,
+            created_at: new Date().toISOString()
+          }
+        });
+      } catch (error) {
+        logger.error('[WEBHOOK] Error sending completion webhook:', { error: error instanceof Error ? error.message : String(error) });
+      }
+    }
+
     return {
       videoId: newVideo.id,
+      cost: cost
     }
   },
 });

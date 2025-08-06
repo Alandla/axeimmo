@@ -52,6 +52,10 @@ const exportSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    webhookUrl: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

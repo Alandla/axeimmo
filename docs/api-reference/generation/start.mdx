@@ -1,0 +1,232 @@
+---
+title: "Start Video Generation"
+api: "POST https://api.hoox.video/v1/generation/start"
+description: "Start generating a video from a prompt, script, or media files"
+---
+
+## Authentication
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token with your API key: `Bearer hx_live_your_api_key_here`
+</ParamField>
+
+## Body Parameters
+
+<ParamField body="prompt" type="string">
+  Text prompt for video generation. Required if no script, voice_url, or avatar_url is provided.
+</ParamField>
+
+<ParamField body="script" type="string">
+  Pre-written script for the video. Optional, allows generating a video from a predefined script.
+</ParamField>
+
+<ParamField body="voice_id" type="string">
+  ID of the voice to use. Required if no voice_url or avatar_url is provided.
+</ParamField>
+
+<ParamField body="voice_url" type="string">
+  URL of a pre-recorded voiceover to use for the video.
+</ParamField>
+
+<ParamField body="avatar_id" type="string">
+  ID of the avatar to use (optional).
+</ParamField>
+
+<ParamField body="avatar_url" type="string">
+  URL of an avatar video, which makes script, prompt, voice_id, voice_url, and avatar_id optional.
+</ParamField>
+
+<ParamField body="format" type="string" default="vertical">
+  Video format. Options: `vertical` (9:16), `square` (1:1), `ads` (4:5)
+</ParamField>
+
+<ParamField body="media_urls" type="array">
+  Array of image or video URLs to be used as b-roll and automatically placed in the video.
+</ParamField>
+
+<ParamField body="webSearch" type="object">
+  Web search configuration:
+  - `script` (boolean): Enable web search for script generation (default: false)
+  - `images` (boolean): Enable web search for images that illustrate the video (default: false)
+</ParamField>
+
+<ParamField body="animate_image" type="boolean" default="false">
+  Enable animation of static images into videos.
+</ParamField>
+
+<ParamField body="animate_mode" type="string" default="standard">
+  Animation model to use if animate_image is true. Options: `standard`, `pro`
+</ParamField>
+
+<ParamField body="animate_image_max" type="number">
+  Maximum number of images to animate to control video costs. No limit if not set.
+</ParamField>
+
+<ParamField body="webhook_url" type="string">
+  URL to receive webhook notifications when generation is complete.
+</ParamField>
+
+<ParamField body="use_space_media" type="boolean" default="true">
+  Whether to use media from the workspace. Set to false to skip using workspace media.
+</ParamField>
+
+<ParamField body="save_media_to_space" type="boolean" default="true">
+  Whether to save generated media to the workspace. Set to false to skip saving.
+</ParamField>
+
+## Response
+
+<ResponseField name="job_id" type="string">
+  Unique identifier for the generation job
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Current status of the job. Will be `pending` initially.
+</ResponseField>
+
+<ResponseField name="estimated_credits" type="number">
+  Estimated number of credits this generation will consume
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.hoox.video/v1/generation/start" \
+  -H "Authorization: Bearer hx_live_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Create an explanatory video about artificial intelligence",
+    "voice_id": "en-US-JennyNeural",
+    "format": "vertical",
+    "webSearch": {
+      "script": true,
+      "images": true
+    },
+    "animate_image": true,
+    "animate_mode": "standard"
+  }'
+```
+
+```javascript Node.js
+const response = await fetch('https://api.hoox.video/v1/generation/start', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer hx_live_your_api_key_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    prompt: "Create an explanatory video about artificial intelligence",
+    voice_id: "en-US-JennyNeural",
+    format: "vertical",
+    webSearch: {
+      script: true,
+      images: true
+    },
+    animate_image: true,
+    animate_mode: "standard"
+  })
+});
+
+const data = await response.json();
+console.log('Job started:', data.data.job_id);
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.hoox.video/v1/generation/start',
+    headers={
+        'Authorization': 'Bearer hx_live_your_api_key_here',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'prompt': 'Create an explanatory video about artificial intelligence',
+        'voice_id': 'en-US-JennyNeural',
+        'format': 'vertical',
+        'webSearch': {
+            'script': True,
+            'images': True
+        },
+        'animate_image': True,
+        'animate_mode': 'standard'
+    }
+)
+
+data = response.json()
+print(f"Job started: {data['data']['job_id']}")
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success Response
+{
+  "data": {
+    "job_id": "run_01234567890abcdef",
+    "status": "pending",
+    "estimated_credits": 8
+  }
+}
+```
+
+```json Error Response
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "code": "missing_content",
+      "message": "At least one of 'prompt', 'script', 'voice_url', or 'avatar_url' must be provided"
+    }
+  ]
+}
+```
+
+</ResponseExample>
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| `missing_content` | No content provided (prompt, script, voice_url, or avatar_url required) |
+| `missing_voice` | Script provided but no voice specified |
+| `invalid_voice_id` | The specified voice_id was not found |
+| `invalid_avatar_id` | The specified avatar_id was not found |
+| `invalid_format` | Invalid video format specified |
+| `invalid_animate_mode` | Invalid animation mode specified |
+| `insufficient_credits` | Not enough credits to complete the generation |
+| `rate_limit_exceeded` | Too many requests, please slow down |
+
+## Usage Examples
+
+### Simple prompt-based generation
+```json
+{
+  "prompt": "Create a video about climate change",
+  "voice_id": "en-US-JennyNeural"
+}
+```
+
+### Script with custom media
+```json
+{
+  "script": "Welcome to our product demo...",
+  "voice_id": "en-US-AriaNeural",
+  "media_urls": [
+    "https://example.com/image1.jpg",
+    "https://example.com/video1.mp4"
+  ],
+  "format": "square"
+}
+```
+
+### Avatar-based video
+```json
+{
+  "script": "Hello, I'm here to explain our new features",
+  "voice_id": "en-US-DavisNeural",
+  "avatar_id": "avatar_business_male_01",
+  "format": "vertical"
+}
+```

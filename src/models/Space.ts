@@ -139,6 +139,38 @@ const spaceSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    apiKey: {
+      keyHash: String,
+      keyPrefix: String, // Pour affichage (premiers 12 caractères)
+      name: {
+        type: String,
+        default: 'API Key'
+      },
+      lastUsedAt: Date,
+      permissions: [{
+        type: String,
+        enum: [
+          'video:generate',
+          'video:export', 
+          'resources:read',
+          'webhooks:manage'
+        ],
+        default: ['video:generate', 'video:export', 'resources:read']
+      }],
+      isActive: {
+        type: Boolean,
+        default: true
+      },
+      revokedAt: Date,
+      rateLimitPerMinute: {
+        type: Number,
+        default: 100
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    }
   },
   {
     timestamps: true,
@@ -148,5 +180,14 @@ const spaceSchema = new mongoose.Schema(
 
 spaceSchema.plugin(toJSON);
 mediaSpaceSchema.plugin(toJSON);
+
+// Index pour optimiser les requêtes de validation des clés API
+spaceSchema.index({ 
+  'apiKey.keyPrefix': 1, 
+  'apiKey.isActive': 1 
+}, { 
+  sparse: true,
+  name: 'apikey_validation_index'
+});
 
 export default mongoose.models.Space || mongoose.model("Space", spaceSchema);

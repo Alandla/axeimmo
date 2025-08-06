@@ -1,0 +1,249 @@
+---
+title: 'Quick Start'
+description: 'Start using the Hoox API in just a few minutes'
+---
+
+## Step 1: Get your API key
+
+1. Log in to your [Hoox dashboard](https://app.hoox.video)
+2. Make sure you have an **Enterprise** plan
+3. Go to **Settings** > **API**
+4. Click **Generate API Key**
+5. **Copy and save** your key (it will only be shown once)
+
+<Warning>
+  Keep your API key secret! Never share it publicly.
+</Warning>
+
+## Step 2: Your first request
+
+Here's how to generate your first video:
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.hoox.video/v1/generation/start" \
+  -H "Authorization: Bearer hx_live_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Create an explanatory video about renewable energy",
+    "voice_id": "en-US-JennyNeural",
+    "format": "vertical",
+    "webSearch": {
+      "script": true,
+      "images": true
+    }
+  }'
+```
+
+```javascript Node.js
+const response = await fetch('https://api.hoox.video/v1/generation/start', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer hx_live_your_api_key_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    prompt: "Create an explanatory video about renewable energy",
+    voice_id: "en-US-JennyNeural",
+    format: "vertical",
+    webSearch: {
+      script: true,
+      images: true
+    }
+  })
+});
+
+const data = await response.json();
+console.log('Job ID:', data.data.job_id);
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.hoox.video/v1/generation/start',
+    headers={
+        'Authorization': 'Bearer hx_live_your_api_key_here',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'prompt': 'Create an explanatory video about renewable energy',
+        'voice_id': 'en-US-JennyNeural',
+        'format': 'vertical',
+        'webSearch': {
+            'script': True,
+            'images': True
+        }
+    }
+)
+
+data = response.json()
+print(f"Job ID: {data['data']['job_id']}")
+```
+
+</CodeGroup>
+
+## Step 3: Check the status
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.hoox.video/v1/generation/status/YOUR_JOB_ID" \
+  -H "Authorization: Bearer hx_live_your_api_key_here"
+```
+
+```javascript Node.js
+const statusResponse = await fetch(
+  `https://api.hoox.video/v1/generation/status/${jobId}`,
+  {
+    headers: {
+      'Authorization': 'Bearer hx_live_your_api_key_here'
+    }
+  }
+);
+
+const status = await statusResponse.json();
+console.log('Status:', status.data.status);
+```
+
+```python Python
+status_response = requests.get(
+    f'https://api.hoox.video/v1/generation/status/{job_id}',
+    headers={
+        'Authorization': 'Bearer hx_live_your_api_key_here'
+    }
+)
+
+status = status_response.json()
+print(f"Status: {status['data']['status']}")
+```
+
+</CodeGroup>
+
+## Step 4: Export the video
+
+Once generation is complete:
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.hoox.video/v1/export/start" \
+  -H "Authorization: Bearer hx_live_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "video_id": "YOUR_VIDEO_ID",
+    "format": "vertical"
+  }'
+```
+
+```javascript Node.js
+const exportResponse = await fetch('https://api.hoox.video/v1/export/start', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer hx_live_your_api_key_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    video_id: videoId,
+    format: 'vertical'
+  })
+});
+```
+
+```python Python
+export_response = requests.post(
+    'https://api.hoox.video/v1/export/start',
+    headers={
+        'Authorization': 'Bearer hx_live_your_api_key_here',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'video_id': video_id,
+        'format': 'vertical'
+    }
+)
+```
+
+</CodeGroup>
+
+## Complete example with webhook
+
+```javascript
+const WEBHOOK_URL = 'https://your-app.com/webhook/hoox';
+
+// 1. Start generation
+const generation = await fetch('https://api.hoox.video/v1/generation/start', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer hx_live_your_api_key_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    script: "Here's a script for my explanatory video...",
+    voice_id: "en-US-JennyNeural",
+    format: "vertical",
+    webhook_url: WEBHOOK_URL
+  })
+});
+
+const { job_id } = await generation.json();
+
+// 2. The webhook will be called automatically
+// Your webhook endpoint will receive:
+// {
+//   "job_id": "job_123",
+//   "status": "completed",
+//   "result": {
+//     "video_id": "video_456",
+//     "cost": 5
+//   }
+// }
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Authentication"
+    icon="key"
+    href="/authentication"
+  >
+    Learn how to secure your API calls
+  </Card>
+  <Card
+    title="Video Generation"
+    icon="video"
+    href="/video-generation/overview"
+  >
+    Explore all generation options
+  </Card>
+  <Card
+    title="Error Handling"
+    icon="exclamation-triangle"
+    href="/errors"
+  >
+    Handle errors and return codes
+  </Card>
+  <Card
+    title="Webhooks"
+    icon="webhook"
+    href="/webhooks/overview"
+  >
+    Configure automatic notifications
+  </Card>
+</CardGroup>
+
+## Getting Started Tips
+
+<Tip>
+  **Start simple**: First use a simple `prompt` with a `voice_id` to get familiar with the API.
+</Tip>
+
+<Tip>
+  **Monitor your credits**: Each generation consumes credits. Check your balance regularly.
+</Tip>
+
+<Tip>
+  **Use webhooks**: For production applications, configure webhooks to be notified automatically.
+</Tip>
