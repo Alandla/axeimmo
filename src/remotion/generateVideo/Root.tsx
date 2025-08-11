@@ -32,6 +32,7 @@ export const RemotionRoot = () => {
 					data: result,
 					showWatermark: true,
 					logo: undefined
+					muteBackgroundMusic: false
 				}}
 				calculateMetadata={calculateMetadata}
 			/>

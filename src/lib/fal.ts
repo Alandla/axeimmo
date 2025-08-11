@@ -17,13 +17,6 @@ export const KLING_ENDPOINTS = {
   [KlingGenerationMode.MASTER]: "fal-ai/kling-video/v2.1/master/image-to-video"
 } as const;
 
-// Coûts en crédits pour chaque mode de génération
-export const KLING_GENERATION_COSTS = {
-  [KlingGenerationMode.STANDARD]: 4,
-  [KlingGenerationMode.PRO]: 7,
-  [KlingGenerationMode.MASTER]: 10
-} as const;
-
 export interface KlingRequest {
   prompt: string;
   image_url: string;
@@ -190,6 +183,36 @@ export async function getKlingRequestResult(
     };
   } catch (error) {
     console.error('Error getting Kling request result:', error);
+    throw error;
+  }
+} 
+
+/**
+ * Upscale an image to 1080p using fal-ai/recraft/upscale/crisp
+ * @param imageUrl URL of the image to upscale (must be PNG)
+ * @returns { url: string, content_type: string, file_name: string, file_size: number }
+ */
+export async function upscaleImage(
+  imageUrl: string
+): Promise<{ url: string; content_type: string; file_name: string; file_size: number }> {
+  try {
+    const result = await fal.subscribe("fal-ai/recraft/upscale/crisp", {
+      input: {
+        image_url: imageUrl,
+        enable_safety_checker: false
+      },
+      logs: false
+    });
+    const image = result.data?.image;
+    if (!image?.url) throw new Error("No upscaled image returned");
+    return {
+      url: image.url,
+      content_type: image.content_type,
+      file_name: image.file_name,
+      file_size: image.file_size
+    };
+  } catch (error) {
+    console.error("Error upscaling image:", error);
     throw error;
   }
 } 

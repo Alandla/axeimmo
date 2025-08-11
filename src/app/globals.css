@@ -102,3 +102,80 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Terms of Service Styles */
+.tos-content {
+  @apply text-gray-800 leading-relaxed;
+}
+
+.tos-main-title {
+  @apply text-center font-bold text-2xl mb-8 text-gray-900 border-b-2 border-gray-200 pb-4;
+}
+
+.tos-section-title {
+  @apply font-semibold text-xl mb-4 text-gray-900 border-l-4 border-blue-500 pl-4;
+}
+
+.tos-subsection-title {
+  @apply font-medium text-lg mb-3 text-gray-800 border-l-2 border-blue-300 pl-3;
+}
+
+.tos-subsubsection-title {
+  @apply font-medium text-base mb-2 text-gray-700 border-l border-blue-200 pl-2;
+}
+
+.tos-section-content {
+  @apply text-gray-700 leading-relaxed;
+}
+
+.tos-section-content strong,
+.tos-section-content .font-bold {
+  @apply font-semibold text-gray-900;
+}
+
+.tos-section-content mark,
+.tos-highlight {
+  @apply bg-yellow-200 px-1 rounded;
+}
+
+.tos-table {
+  @apply w-full border-collapse bg-white shadow-sm;
+}
+
+.tos-table-row {
+  @apply flex;
+}
+
+.tos-table-header {
+  @apply bg-gray-50 font-semibold text-gray-900 border-r border-gray-300 flex items-start;
+  min-width: 33.333333%;
+  max-width: 33.333333%;
+}
+
+.tos-table-cell {
+  @apply bg-white text-gray-700 flex-1;
+}
+
+.tos-table-row:last-child .tos-table-header,
+.tos-table-row:last-child .tos-table-cell {
+  @apply border-b-0;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .tos-table-row {
+    @apply flex-col;
+  }
+  
+  .tos-table-header {
+    @apply border-r-0 border-b border-gray-300 min-w-full max-w-full;
+  }
+  
+  .tos-section-title {
+    @apply text-lg;
+  }
+  
+  .tos-main-title {
+    @apply text-xl;
+  }
+}

@@ -11,6 +11,7 @@ import { SubscriptionType } from "@/src/types/enums";
 import { track } from "@/src/utils/mixpanel-server";
 import { MixpanelEvent } from "@/src/types/events";
 import { trackOrderFacebook } from "@/src/lib/facebook";
+import connectMongo from "@/src/lib/mongoose";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -41,6 +42,8 @@ export async function POST(req: Request) {
         // First payment is successful and a subscription is created (if mode was set to "subscription" in ButtonCheckout)
         // ✅ Grant access to the product
         console.log("STRIPE EVENT: checkout.session.completed")
+
+        await connectMongo();
 
         const checkoutId = event.data.object.id;
 
@@ -78,7 +81,7 @@ export async function POST(req: Request) {
             }
             user = await createUser(u);
             await addUserIdToContact(user.id, user.email);
-            const newSpace = await createPrivateSpaceForUser(user.id, user.name);
+            const newSpace = await createPrivateSpaceForUser(user.id, user.firstName || user.name);
             spaceId = newSpace.id;
           }
         } else {
@@ -252,7 +255,7 @@ export async function POST(req: Request) {
         
         let finalCredit;
         
-        if (currentCredits >= maxPossibleCredits) {
+        if (currentCredits >= maxPossibleCredits || currentCredits === creditsMonth) {
           // L'utilisateur a déjà le maximum possible (3 mois de bonus), on remet aux crédits de base
           finalCredit = creditsMonth;
         } else {

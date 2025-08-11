@@ -4,7 +4,8 @@ import { useTranslations } from 'next-intl'
 import { Label } from '@/src/components/ui/label'
 import { Badge } from '@/src/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/src/components/ui/select'
-import { KlingGenerationMode, KLING_GENERATION_COSTS } from '@/src/lib/fal'
+import { KlingGenerationMode } from '@/src/lib/fal'
+import { KLING_GENERATION_COSTS } from '@/src/lib/cost'
 import { PlanName } from '@/src/types/enums'
 import { SimpleSpace } from '@/src/types/space'
 import { Zap, Gem, Crown } from 'lucide-react'
@@ -90,7 +91,7 @@ export function GenerationModeSelector({
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{t('mode-ultra')}</span>
                     {activeSpace?.planName !== PlanName.ENTREPRISE && (
-                      <Badge variant="secondary" className="bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white text-xs border-none shadow-sm font-semibold">
+                      <Badge variant="plan">
                         {planT(PlanName.ENTREPRISE)}
                       </Badge>
                     )}

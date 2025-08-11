@@ -2,6 +2,7 @@ import { imageAnalysisRun } from "@/src/lib/workflowai";
 import { updateMedia } from "@/src/dao/spaceDao";
 import { tasks } from "@trigger.dev/sdk/v3";
 import { IMediaSpace } from "@/src/types/space";
+import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 
 export async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId: string) {
   try {
@@ -42,7 +43,26 @@ export async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId:
         await updateMedia(spaceId, mediaId, updatedSpaceMedia);
       }
     } else if (media.type === "image") {
-      const { description: imageDescription } = await imageAnalysisRun(mediaUrl);
+      let imageDescription;
+      
+      try {
+        const result = await imageAnalysisRun(mediaUrl);
+        imageDescription = result.description;
+      } catch (error) {
+        console.error("Error analyzing image with original URL, uploading to R2 and retrying:", error);
+        
+        try {
+          // Upload image to R2 and retry analysis
+          const fileName = `image-${Date.now()}`;
+          const r2Url = await uploadImageFromUrlToS3(mediaUrl, "medias-users", fileName);
+          
+          const result = await imageAnalysisRun(r2Url);
+          imageDescription = result.description;
+        } catch (retryError) {
+          console.error("Error analyzing image even after uploading to R2:", retryError);
+          return;
+        }
+      }
       
       if (imageDescription) {
         description = [{

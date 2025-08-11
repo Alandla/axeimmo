@@ -145,6 +145,36 @@ export default function Sequence({
         }
     };
 
+    const handlePaste = (e: React.ClipboardEvent, wordIndex: number) => {
+        e.preventDefault();
+        
+        const pastedText = e.clipboardData.getData('text');
+        const words = pastedText.split(/\s+/).filter(word => word.trim() !== '');
+        
+        if (words.length === 0) return;
+        
+        // Replace current word with first pasted word
+        handleWordInputChange(index, wordIndex, words[0]);
+        
+        // Add remaining words as new words
+        let currentWordIndex = wordIndex;
+        for (let i = 1; i < words.length; i++) {
+            currentWordIndex = handleWordAdd(index, currentWordIndex);
+            handleWordInputChange(index, currentWordIndex, words[i]);
+        }
+        
+        // Focus on the last added word
+        if (words.length > 1) {
+            setEditingWordIndex(currentWordIndex);
+            setIsEditing(true);
+            focusWord(currentWordIndex);
+        } else {
+            // If only one word, just update the current div
+            const target = e.currentTarget as HTMLDivElement;
+            target.textContent = words[0];
+        }
+    };
+
     const handleClickOutside = useCallback((e: MouseEvent) => {
         const target = e.target as HTMLElement;
         const clickedOnAnotherWord = target.hasAttribute('contenteditable');
@@ -492,6 +522,7 @@ export default function Sequence({
                                         setIsEditing(false);
                                     }}
                                     onKeyDown={(e) => handleKeyDown(e, wordIndex)}
+                                    onPaste={(e) => handlePaste(e, wordIndex)}
                                     onMouseDown={(e) => {
                                         e.stopPropagation();
                                         handleClickOnWord(wordIndex);

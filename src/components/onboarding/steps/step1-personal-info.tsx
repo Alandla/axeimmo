@@ -19,23 +19,8 @@ export default function Step1PersonalInfo({ errors = {} }: Step1Props) {
 
       <div className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="name" className="flex justify-between">
-            <span>{t('name-label')}</span>
-          </Label>
-          <Input
-            id="name"
-            value={dataUser.name}
-            onChange={(e) => updateUserData({ name: e.target.value })}
-            placeholder={t('name-label')}
-            className={errors.name ? "border-red-500" : ""}
-          />
-          {errors.name && <p className="text-xs text-red-500 mt-1">{t('name-error')}</p>}
-        </div>
-
-        <div className="space-y-2">
           <Label htmlFor="firstName" className="flex justify-between">
             <span>{t('firstName-label')}</span>
-            <span className="text-xs text-gray-500">{t('optional')}</span>
           </Label>
           <Input
             id="firstName"
@@ -45,6 +30,21 @@ export default function Step1PersonalInfo({ errors = {} }: Step1Props) {
             className={errors.firstName ? "border-red-500" : ""}
           />
           {errors.firstName && <p className="text-xs text-red-500 mt-1">{t('firstName-error')}</p>}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="name" className="flex justify-between">
+            <span>{t('name-label')}</span>
+            <span className="text-xs text-gray-500">{t('optional')}</span>
+          </Label>
+          <Input
+            id="name"
+            value={dataUser.name}
+            onChange={(e) => updateUserData({ name: e.target.value })}
+            placeholder={t('name-label')}
+            className={errors.name ? "border-red-500" : ""}
+          />
+          {errors.name && <p className="text-xs text-red-500 mt-1">{t('name-error')}</p>}
         </div>
       </div>
     </div>

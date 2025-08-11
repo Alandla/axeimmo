@@ -15,12 +15,14 @@ import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
 import { LogoPosition } from "@/src/types/space";
 import { LogoPositionSelector } from "@/src/components/ui/logo-position-selector";
 
+
 export default function VideoPreview({ 
     playerRef, 
     video, 
     isMobile, 
     showWatermark, 
     hasExistingReview, 
+    muteBackgroundMusic,
     onSubtitleStyleChange,
     onAvatarHeightRatioChange,
     onAvatarPositionChange,
@@ -35,6 +37,7 @@ export default function VideoPreview({
     isMobile: boolean, 
     showWatermark: boolean, 
     hasExistingReview: boolean, 
+    muteBackgroundMusic?: boolean,
     onSubtitleStyleChange?: (newStyle: any) => void,
     onAvatarHeightRatioChange?: (ratio: number) => void,
     onAvatarPositionChange?: (position: { x: number, y: number }) => void,
@@ -166,14 +169,14 @@ export default function VideoPreview({
             )}
             {video?.video && onVideoFormatChange && (
                 <div className="w-full mb-4">
-                    <div className={`grid gap-2 ${video.video.avatar && onAvatarChange ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                    <div className={`grid gap-2 ${onAvatarChange ? 'grid-cols-2' : 'grid-cols-1'}`}>
                         <VideoFormatSelector
                             value={video.video.format || 'vertical'}
                             onValueChange={onVideoFormatChange}
                         />
-                        {video.video.avatar && onAvatarChange && (
+                        {onAvatarChange && (
                             <AvatarSelector
-                                selectedAvatar={video.video.avatar}
+                                selectedAvatar={video.video.avatar || null}
                                 onAvatarSelect={() => setShowAvatarModal(true)}
                             />
                         )}
@@ -202,6 +205,7 @@ export default function VideoPreview({
                 </div>
             )}
             
+
             <div className="relative w-full h-full transition-all duration-300 ease-in-out">
                 <Player
                     key={playerKey}
@@ -216,6 +220,7 @@ export default function VideoPreview({
                         data: video,
                         showWatermark,
                         logo: logoData,
+                        muteBackgroundMusic,
                         onSubtitleStyleChange,
                         onAvatarHeightRatioChange,
                         onAvatarPositionChange,
@@ -248,11 +253,11 @@ export default function VideoPreview({
                 />
             )}
             
-            {video?.video?.avatar && onAvatarChange && (
+            {onAvatarChange && (
                 <AvatarSelectionModal
                     isOpen={showAvatarModal}
                     onClose={() => setShowAvatarModal(false)}
-                    currentAvatar={video.video.avatar}
+                    currentAvatar={video?.video?.avatar || null}
                     onAvatarChange={onAvatarChange}
                 />
             )}

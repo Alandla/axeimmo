@@ -261,25 +261,25 @@ export const updateSpaceLastUsed = async (
       let { voices, avatars, subtitles, formats, config: lastUsedConfig } = space.lastUsed;
   
       if (voiceId) {
-        voices.push(voiceId);
+        voices.unshift(voiceId);
         if (voices.length > 5) {
           voices.pop();
         }
       }
       if (avatarId) {
-        avatars.push(avatarId);
+        avatars.unshift(avatarId);
         if (avatars.length > 5) {
           avatars.pop();
         }
       }
       if (subtitleId) {
-        subtitles.push(subtitleId);
+        subtitles.unshift(subtitleId);
         if (subtitles.length > 5) {
           subtitles.pop();
         }
       }
       if (format) {
-        formats.push(format);
+        formats.unshift(format);
         if (formats.length > 5) {
           formats.pop();
         }

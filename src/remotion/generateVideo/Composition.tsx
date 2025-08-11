@@ -13,17 +13,10 @@ import { Transitions } from './components/Transitions';
 import { SpaceLogo } from './components/SpaceLogo';
 import { LogoPosition } from '@/src/types/space';
 
-interface LogoData {
-  url?: string;
-  position?: LogoPosition;
-  show?: boolean;
-  size?: number;
-}
-
-export const VideoGenerate = ({
-	data,
-	showWatermark,
-	logo,
+export const VideoGenerate = ({ 
+	data, 
+	showWatermark = true,
+	muteBackgroundMusic = false,
 	onSubtitleStyleChange,
 	onAvatarHeightRatioChange,
 	onAvatarPositionChange,
@@ -31,14 +24,14 @@ export const VideoGenerate = ({
 	onLogoPositionChange,
 	onLogoSizeChange,
 	onLogoClick,
-}: {
-	data: any;
-	showWatermark: boolean;
-	logo?: LogoData;
-	onSubtitleStyleChange?: (newStyle: any) => void;
-	onAvatarHeightRatioChange?: (ratio: number) => void;
-	onAvatarPositionChange?: (position: { x: number, y: number }) => void;
-	onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void;
+}: { 
+	data: any, 
+	showWatermark?: boolean,
+	muteBackgroundMusic?: boolean,
+	onSubtitleStyleChange?: (newStyle: any) => void,
+	onAvatarHeightRatioChange?: (ratio: number) => void,
+	onAvatarPositionChange?: (position: { x: number, y: number }) => void,
+	onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
 	onLogoPositionChange?: (position: LogoPosition) => void;
 	onLogoSizeChange?: (size: number) => void;
 	onLogoClick?: () => void;
@@ -49,10 +42,10 @@ export const VideoGenerate = ({
 	}
 
 	return (
-		<>			
-			{ data.video.audio?.url && <Audio src={data.video.audio.url} volume={data.video.audio.volume} /> }
-			{ data.video.audio?.voices && <Voices voices={data.video.audio.voices} volume={data.video.audio.volume} /> }
-			{ data.video.audio?.music && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
+		<>
+			{ data.video.audio.url && <Audio src={data.video.audio.url} volume={data.video.audio.volume} /> }
+			{ data.video.audio.voices && <Voices voices={data.video.audio.voices} volume={data.video.audio.volume} /> }
+			{ data.video.audio.music && !muteBackgroundMusic && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
 			{ showWatermark && <Watermark />}
 			<SpaceLogo 
 				logoUrl={logo?.url}

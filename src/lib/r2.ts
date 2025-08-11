@@ -119,3 +119,31 @@ export async function uploadImageFromUrlToS3(imageUrl: string, bucket: string, f
     throw error;
   }
 }
+
+export async function uploadVideoFromUrlToS3(videoUrl: string, bucket: string, fileName: string) {
+  try {
+    const response = await fetch(videoUrl);
+    const arrayBuffer = await response.arrayBuffer();
+    const videoBuffer = Buffer.from(arrayBuffer);
+
+    const params: PutObjectCommandInput = {
+      Bucket: bucket,
+      Key: `${fileName}.mp4`,
+      Body: videoBuffer,
+      ContentType: 'video/mp4',
+      ACL: 'public-read'
+    };
+
+    const uploadResponse = await new Upload({
+      client: s3,
+      params
+    }).done();
+
+    const key = uploadResponse?.Key || '';
+    const url = `https://media.hoox.video/${key}`;
+    return url;
+  } catch (error: any) {
+    console.error("Error downloading and uploading video:", error.message);
+    throw error;
+  }
+}

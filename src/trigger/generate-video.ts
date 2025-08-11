@@ -2,8 +2,7 @@ import { logger, metadata, task, wait } from "@trigger.dev/sdk";
 import { Steps } from "../types/step";
 import { Voice } from "../types/voice";
 import { AvatarLook } from "../types/avatar";
-import { createAudioTTS } from "../lib/elevenlabs";
-import { uploadToS3Audio } from "../lib/r2";
+import { createTextToSpeech } from "../lib/tts";
 import { transitions, sounds } from "../config/transitions.config";
 import { ITransition, ISequence } from "../types/video";
 import { analyzeVideo, VideoAnalysisResult } from "../lib/video-analysis";
@@ -30,9 +29,11 @@ import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { getMostFrequentString } from "../lib/utils";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
-import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, generateKlingAnimationPrompt, imageAnalysisRun } from "../lib/workflowai";
+import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, imageAnalysisRun } from "../lib/workflowai";
+import { generateKlingAnimation } from "../service/kling-animation.service";
 import { PlanName } from "../types/enums";
-import { startKlingVideoGeneration, checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode, KLING_GENERATION_COSTS } from "../lib/fal";
+import { checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode } from "../lib/fal";
+import { KLING_GENERATION_COSTS } from "../lib/cost";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -67,6 +68,21 @@ export const generateVideoTask = task({
     let scriptLength = payload.script ? payload.script.length : 0;
 
     logger.log("Generating video...", { payload, ctx });
+
+    /*
+    /
+    /   Get Space information at the beginning
+    /
+    */
+    logger.log(`[SPACE] Getting space information...`);
+    const space = await getSpaceById(payload.spaceId);
+    
+    if (!space) {
+      throw new Error(`Space not found: ${payload.spaceId}`);
+    }
+
+    spacePlan = space.plan?.name || PlanName.FREE;
+    logger.log(`[SPACE] Space plan: ${spacePlan}, Credits: ${space.credits || 0}`);
 
     let video : IVideo = {
       spaceId: payload.spaceId,
@@ -298,9 +314,13 @@ export const generateVideoTask = task({
     };
 
     // Lancer la recherche d'images Google en parallèle si on a un script et webSearch est activé
-    if (payload.script && payload.webSearch) {
+    // mais seulement si on n'a pas de médias extracted
+    const hasExtractedMedia = payload.files.some(file => file.source === 'extracted');
+    if (payload.script && payload.webSearch && !hasExtractedMedia) {
       logger.log(`[GOOGLE_IMAGES] Starting Google Images search in parallel with provided script`);
       googleImagesSearchPromise = searchAndAnalyzeGoogleImages(payload.script);
+    } else if (hasExtractedMedia) {
+      logger.log(`[GOOGLE_IMAGES] Skipping Google Images search - extracted media already available`);
     }
 
     /*
@@ -311,23 +331,14 @@ export const generateVideoTask = task({
     let userMediasFilteredPromise: Promise<IMediaSpace[]> | null = null;
     let userMediasFiltered: IMediaSpace[] = [];
     
-    // Récupérer les informations du space pour connaître le plan
-    logger.log(`[MEDIA] Getting space information for media filtering...`);
-    const getSpaceAndFilterMedias = async (videoScript: string) => {
+    // Filtrer les médias si PRO/ENTREPRISE
+    logger.log(`[MEDIA] Filtering media for ${spacePlan} plan...`);
+    const filterSpaceMedias = async (videoScript: string, spaceData: ISpace) => {
       try {
-        // Récupérer les informations sur le space
-        const space = await getSpaceById(payload.spaceId);
-        
-        if (!space) {
-          logger.error(`[MEDIA] Space not found: ${payload.spaceId}`);
-          return [];
-        }
+        if (spaceData.plan && (spaceData.plan.name === PlanName.PRO || spaceData.plan.name === PlanName.ENTREPRISE)) {
 
-        spacePlan = space.plan?.name;
-        if (space.plan && (space.plan.name === PlanName.PRO || space.plan.name === PlanName.ENTREPRISE)) {
-
-          if (videoScript && space.medias && space.medias.length > 0) {
-            const availableMedias = space.medias
+          if (videoScript && spaceData.medias && spaceData.medias.length > 0) {
+            const availableMedias = spaceData.medias
               .filter((mediaSpace: IMediaSpace) => 
                 mediaSpace.autoPlacement !== false && 
                 mediaSpace.media.description && 
@@ -351,7 +362,7 @@ export const generateVideoTask = task({
               logger.log(`[MEDIA] Filtering cost: $${filterCost}`);
 
               if (recommendedMedia.length > 0) {
-                const filteredMedias = space.medias.filter((mediaSpace: IMediaSpace) => 
+                const filteredMedias = spaceData.medias.filter((mediaSpace: IMediaSpace) => 
                   recommendedMedia.includes(mediaSpace.media.id || "")
                 );
                 
@@ -367,7 +378,7 @@ export const generateVideoTask = task({
             logger.log(`[MEDIA] No script or medias available for filtering`);
           }
         } else {
-          logger.log(`[MEDIA] Plan ${space.plan?.name} doesn't support media filtering`);
+          logger.log(`[MEDIA] Plan ${spaceData.plan?.name} doesn't support media filtering`);
         }
         
         return [];
@@ -381,7 +392,7 @@ export const generateVideoTask = task({
     
     // Lancer la promesse de filtrage des médias en parallèle si on a déjà un script
     if (payload.script) {
-      userMediasFilteredPromise = getSpaceAndFilterMedias(payload.script);
+      userMediasFilteredPromise = filterSpaceMedias(payload.script, space);
       logger.log(`[MEDIA] Media filtering process started in background with provided script`);
     }
 
@@ -460,14 +471,29 @@ export const generateVideoTask = task({
         audioUrl: voiceFile.audio?.link || "",
       })
     } else if (!avatarFile) {
-      logger.log(`[VOICE] Generate voice with elevenlabs...`)
+      logger.log(`[VOICE] Generate voice...`)
 
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
       })
 
-      const sentencesCut = payload.script
+      // Remove emojis before processing sentences to avoid interference with sentence splitting
+      const removeEmojis = (text: string): string => {
+        // Remove common emoji ranges and symbols
+        return text
+          .replace(/[\u2600-\u26FF]/g, '') // Miscellaneous Symbols
+          .replace(/[\u2700-\u27BF]/g, '') // Dingbats
+          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '') // Surrogate pairs (emojis)
+          .replace(/[\u2194-\u2199\u21A9-\u21AA]/g, '') // Arrows
+          .replace(/[\u231A-\u231B\u23E9-\u23EC\u23F0\u23F3]/g, '') // Clock and media symbols
+          .replace(/[\u25FD-\u25FE]/g, '') // Squares
+          .replace(/[\u2B50\u2B55]/g, '') // Stars and circles
+          .replace(/✅/g, '') // Check mark
+          .replace(/💬/g, ''); // Speech balloon
+      };
+
+      const sentencesCut = removeEmojis(payload.script)
         .replace(/\.\.\./g, '___ELLIPSIS___') // Remplace temporary points of ellipsis
         .split(/(?<=[.!?])\s+(?=[A-Z])/g)
         .map(sentence => sentence.trim())
@@ -501,6 +527,9 @@ export const generateVideoTask = task({
           rawSentences.push(currentSentence);
         }
       }
+
+      logger.log('Raw sentences', { rawSentences })
+
       let processedCount = 0;
 
       // Process sentences by batches of 5
@@ -510,19 +539,14 @@ export const generateVideoTask = task({
         const batchPromises = batch.map(async (text, batchIndex) => {
           const globalIndex = i + batchIndex; // Global index to maintain order
           try {
-            const audioResult = await createAudioTTS(
-              payload.voice.id,
+            const audioResult = await createTextToSpeech(
+              payload.voice,
               text.trim(),
-              payload.voice.voiceSettings,
               true
             );
             
-            // Upload directly after generation
-            const audioUrl = await uploadToS3Audio(audioResult.data, 'medias-users');
-            
             // Add cost to total
             cost += audioResult.cost;
-
 
             processedCount++
             await metadata.replace({
@@ -533,20 +557,17 @@ export const generateVideoTask = task({
             return {
               index: globalIndex,
               text: text.trim(),
-              audioUrl
+              audioUrl: audioResult.audioUrl
             };
           } catch (error: any) {
             if (error.response?.status === 422) {
               await wait.for({ seconds: 2 });
 
-              const retryResult = await createAudioTTS(
-                payload.voice.id,
+              const retryResult = await createTextToSpeech(
+                payload.voice,
                 text.trim(),
-                payload.voice.voiceSettings,
                 true
               );
-
-              const audioUrl = await uploadToS3Audio(retryResult.data, 'medias-users');
               
               // Add cost to total
               cost += retryResult.cost;
@@ -560,7 +581,7 @@ export const generateVideoTask = task({
               return {
                 index: globalIndex,
                 text: text.trim(),
-                audioUrl
+                audioUrl: retryResult.audioUrl
               };
             }
             throw error;
@@ -717,11 +738,12 @@ export const generateVideoTask = task({
       
       // Lancer le filtrage des médias si nous n'avions pas de script au départ
       if (!userMediasFilteredPromise) {
-        userMediasFilteredPromise = getSpaceAndFilterMedias(script);
+        userMediasFilteredPromise = filterSpaceMedias(script, space);
       }
 
       // Lancer la recherche d'images Google si nous n'avions pas de script au départ
-      if (payload.webSearch && !googleImagesSearchPromise) {
+      // mais seulement si on n'a pas de médias extracted
+      if (payload.webSearch && !googleImagesSearchPromise && !hasExtractedMedia) {
         logger.log(`[GOOGLE_IMAGES] Starting Google Images search with transcribed script`);
         googleImagesSearchPromise = searchAndAnalyzeGoogleImages(script);
       }
@@ -1139,9 +1161,32 @@ export const generateVideoTask = task({
         });
 
         // Find sequences with extracted images
-        const sequencesToAnimate = sequences
+        let sequencesToAnimate = sequences
           .map((seq, index) => ({ seq, index }))
-          .filter(({ seq }) => seq.media?.type === 'image' && seq.media?.source === 'extracted')
+          .filter(({ seq }) => seq.media?.type === 'image' && seq.media?.source === 'extracted');
+
+        // Check credits before animation
+        if (sequencesToAnimate.length > 0) {
+          const creditsPerAnimation = KLING_GENERATION_COSTS[payload.animationMode];
+          const totalCreditsNeeded = sequencesToAnimate.length * creditsPerAnimation;
+          const availableCredits = space.credits || 0;
+
+          logger.log(`[ANIMATE] Credits check: need ${totalCreditsNeeded}, available ${availableCredits}`);
+
+          if (availableCredits < totalCreditsNeeded) {
+            const maxAnimations = Math.floor(availableCredits / creditsPerAnimation);
+            logger.log(`[ANIMATE] Not enough credits for all animations. Can only animate ${maxAnimations} out of ${sequencesToAnimate.length} images`);
+            
+            if (maxAnimations > 0) {
+              // Keep only the first maxAnimations sequences
+              sequencesToAnimate = sequencesToAnimate.slice(0, maxAnimations);
+              logger.log(`[ANIMATE] Limited to ${sequencesToAnimate.length} animations due to credit constraints`);
+            } else {
+              logger.log(`[ANIMATE] No credits available for animation, skipping all animations`);
+              sequencesToAnimate = [];
+            }
+          }
+        }
           
 
         if (sequencesToAnimate.length > 0) {
@@ -1155,29 +1200,23 @@ export const generateVideoTask = task({
                   throw new Error('Image URL not found');
                 }
 
-                // Generate animation prompt
-                const promptResult = await generateKlingAnimationPrompt(
-                  seq.media.image.link,
-                  'Add camera movement'
-                );
-
-                const imageWidth = seq.media.image.width || 1920;
-                const imageHeight = seq.media.image.height || 1080;
-                const aspectRatio = imageWidth >= imageHeight ? "16:9" : "9:16";
-
-                // Start Kling video generation
-                const falResult = await startKlingVideoGeneration({
-                  prompt: promptResult.enhancedPrompt,
-                  image_url: seq.media.image.link,
+                // Generate animation with Kling service
+                const animationResult = await generateKlingAnimation({
+                  imageUrl: seq.media.image.link,
+                  context: 'Add camera movement',
+                  imageWidth: seq.media.image.width || 1920,
+                  imageHeight: seq.media.image.height || 1080,
                   duration: "5",
-                  aspect_ratio: aspectRatio
-                }, payload.animationMode);
+                  mode: payload.animationMode,
+                  upscale: true
+                });
 
-                cost += promptResult.cost;
+                // Add animation cost to total cost
+                cost += animationResult.cost;
 
                 return {
                   sequenceIndex: index,
-                  requestId: falResult.request_id,
+                  requestId: animationResult.request_id,
                   originalMedia: seq.media
                 };
               } catch (error) {
@@ -1550,18 +1589,18 @@ export const generateVideoTask = task({
       };
     });
 
-    const space : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
+    const updatedSpace : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
 
     let subtitle = subtitles[1]
     let videoFormat: "vertical" | "ads" | "square" = "vertical"; // Format par défaut
-    if (space && space.lastUsed?.subtitles) {
-      const mostFrequent = getMostFrequentString(space.lastUsed.subtitles)
+    if (updatedSpace && updatedSpace.lastUsed?.subtitles) {
+      const mostFrequent = getMostFrequentString(updatedSpace.lastUsed.subtitles)
       if (mostFrequent) {
-        const subtitleFind = subtitles.find((subtitle) => subtitle.name === mostFrequent);
+        const subtitleFind = subtitles.find((subtitleItem) => subtitleItem.name === mostFrequent);
         if (subtitleFind) {
           subtitle = subtitleFind;
         } else {
-          const subtitleFindFromSpace = space.subtitleStyle.find((subtitle) => subtitle.name === mostFrequent);
+          const subtitleFindFromSpace = updatedSpace.subtitleStyle.find((subtitleItem) => subtitleItem.name === mostFrequent);
           if (subtitleFindFromSpace) {
             subtitle = subtitleFindFromSpace;
           }
@@ -1569,8 +1608,8 @@ export const generateVideoTask = task({
       }
     }
 
-    if (space && space.lastUsed?.formats && space.lastUsed.formats.length > 0) {
-      const mostFrequentFormat = getMostFrequentString(space.lastUsed.formats);
+    if (updatedSpace && updatedSpace.lastUsed?.formats && updatedSpace.lastUsed.formats.length > 0) {
+      const mostFrequentFormat = getMostFrequentString(updatedSpace.lastUsed.formats);
       if (mostFrequentFormat && ['vertical', 'ads', 'square'].includes(mostFrequentFormat)) {
         videoFormat = mostFrequentFormat as "vertical" | "ads" | "square";
       }
@@ -1582,7 +1621,7 @@ export const generateVideoTask = task({
       state: {
         type: 'done',
       },
-      settings: space?.lastUsed?.config,
+      settings: updatedSpace?.lastUsed?.config,
       extractedMedia: extractedMedias.length > 0 ? extractedMedias : undefined,
       video: {
         audio: {

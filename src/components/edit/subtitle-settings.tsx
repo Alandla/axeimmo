@@ -122,7 +122,7 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
               </TooltipTrigger>
               <TooltipContent>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white border-none">
+                  <Badge variant="plan">
                     Pro
                   </Badge>
                   <p>{t('save-button-tooltip')}</p>

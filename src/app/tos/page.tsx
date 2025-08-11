@@ -1,130 +1,575 @@
 import { Button } from "@/src/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-
-// CHATGPT PROMPT TO GENERATE YOUR TERMS & SERVICES — replace with your own data 👇
-
-// 1. Go to https://chat.openai.com/
-// 2. Copy paste bellow
-// 3. Replace the data with your own (if needed)
-// 4. Paste the answer from ChatGPT directly in the <pre> tag below
-
-// You are an excellent lawyer.
-
-// I need your help to write a simple Terms & Services for my website. Here is some context:
-// - Website: https://shipfa.st
-// - Name: ShipFast
-// - Contact information: marc@shipfa.st
-// - Description: A JavaScript code boilerplate to help entrepreneurs launch their startups faster
-// - Ownership: when buying a package, users can download code to create apps. They own the code but they do not have the right to resell it. They can ask for a full refund within 7 day after the purchase.
-// - User data collected: name, email and payment information
-// - Non-personal data collection: web cookies
-// - Link to privacy-policy: https://shipfa.st/privacy-policy
-// - Governing Law: France
-// - Updates to the Terms: users will be updated by email
-
-// Please write a simple Terms & Services for my site. Add the current date. Do not add or explain your reasoning. Answer:
+import { useTranslations } from 'next-intl';
 
 const TOS = () => {
+  const t = useTranslations('tos');
+
+  const renderContent = (content: string) => {
+    return content.split('\n').map((line, index) => {
+      if (line.trim() === '') {
+        return <br key={index} />;
+      }
+      
+      // Handle bullet points
+      if (line.trim().startsWith('- ')) {
+        const bulletContent = line.trim().substring(2);
+        return (
+          <div key={index} className="ml-4 mb-1">
+            • {renderInlineFormatting(bulletContent)}
+          </div>
+        );
+      }
+      
+      return <div key={index} className="mb-2">{renderInlineFormatting(line)}</div>;
+    });
+  };
+
+  const renderInlineFormatting = (text: string) => {
+    // Process text step by step to avoid conflicts
+    const processFormatting = (str: string): React.ReactNode[] => {
+      const parts: React.ReactNode[] = [];
+      let remaining = str;
+      let keyIndex = 0;
+
+      // Split by different patterns one at a time
+      const boldPattern = /\*\*(.*?)\*\*/;
+      const highlightPattern = /==(.*?)==/;
+      const quotePattern = /"([^"]+)"/;
+
+      while (remaining.length > 0) {
+        // Check for bold
+        const boldMatch = remaining.match(boldPattern);
+        const highlightMatch = remaining.match(highlightPattern);
+        const quoteMatch = remaining.match(quotePattern);
+
+        // Find the earliest match
+        let earliestMatch = null;
+        let earliestIndex = remaining.length;
+        let matchType = '';
+
+        if (boldMatch && boldMatch.index !== undefined && boldMatch.index < earliestIndex) {
+          earliestMatch = boldMatch;
+          earliestIndex = boldMatch.index;
+          matchType = 'bold';
+        }
+        if (highlightMatch && highlightMatch.index !== undefined && highlightMatch.index < earliestIndex) {
+          earliestMatch = highlightMatch;
+          earliestIndex = highlightMatch.index;
+          matchType = 'highlight';
+        }
+        if (quoteMatch && quoteMatch.index !== undefined && quoteMatch.index < earliestIndex) {
+          earliestMatch = quoteMatch;
+          earliestIndex = quoteMatch.index;
+          matchType = 'quote';
+        }
+
+        if (earliestMatch && earliestMatch.index !== undefined) {
+          // Add text before the match
+          if (earliestMatch.index > 0) {
+            parts.push(remaining.substring(0, earliestMatch.index));
+          }
+
+          // Add the formatted element
+          switch (matchType) {
+            case 'bold':
+              parts.push(<strong key={keyIndex++}>{earliestMatch[1]}</strong>);
+              break;
+            case 'highlight':
+              parts.push(<mark key={keyIndex++} className="tos-highlight">{earliestMatch[1]}</mark>);
+              break;
+            case 'quote':
+              parts.push(<span key={keyIndex++} className="font-semibold text-blue-800">« {earliestMatch[1]} »</span>);
+              break;
+          }
+
+          // Continue with the rest
+          remaining = remaining.substring(earliestMatch.index + earliestMatch[0].length);
+        } else {
+          // No more matches, add the remaining text
+          parts.push(remaining);
+          break;
+        }
+      }
+
+      return parts;
+    };
+
+    const formattedParts = processFormatting(text);
+    return <>{formattedParts}</>;
+  };
+
   return (
-    <main className="max-w-xl mx-auto">
+    <main className="max-w-4xl mx-auto">
       <div className="p-5">
         <Button variant="link" asChild>
           <Link href="/">
             <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
+            {t('back')}
           </Link>
         </Button>
+        
         <h1 className="text-3xl font-extrabold pb-6">
-          Terms and Conditions for Hoox
+          {t('title')}
         </h1>
 
-        <pre
-          className="leading-relaxed whitespace-pre-wrap"
-          style={{ fontFamily: "sans-serif" }}
-        >
-          {`TERMS OF SERVICE
+        <div className="tos-content">
+          {/* Main Title */}
+          <h2 className="tos-main-title text-2xl font-bold mb-8 text-center">
+            {t('main-title')}
+          </h2>
 
-Last Updated: December 14, 2023
+          {/* Section 1 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section1.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section1.content'))}
+            </div>
+          </section>
 
-1. ACCEPTANCE OF TERMS
+          {/* Section 2 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section2.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section2.content'))}
+            </div>
+          </section>
 
-By accessing and using Hoox (https://hoox.video), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use our services.
+          {/* Section 3 - with table */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section3.title')}
+            </h3>
+            <div className="tos-table border border-gray-300 rounded-lg overflow-hidden">
+              <div className="tos-table-row border-b border-gray-300">
+                <div className="tos-table-header bg-gray-50 p-4 font-semibold border-r border-gray-300 w-1/3">
+                  {t('section3.table.function-title')}
+                </div>
+                <div className="tos-table-cell p-4">
+                  {renderContent(t('section3.table.function-content'))}
+                </div>
+              </div>
+              <div className="tos-table-row border-b border-gray-300">
+                <div className="tos-table-header bg-gray-50 p-4 font-semibold border-r border-gray-300 w-1/3">
+                  {t('section3.table.location-title')}
+                </div>
+                <div className="tos-table-cell p-4">
+                  {renderContent(t('section3.table.location-content'))}
+                </div>
+              </div>
+              <div className="tos-table-row">
+                <div className="tos-table-header bg-gray-50 p-4 font-semibold border-r border-gray-300 w-1/3">
+                  {t('section3.table.acceptance-title')}
+                </div>
+                <div className="tos-table-cell p-4">
+                  {renderContent(t('section3.table.acceptance-content'))}
+                </div>
+              </div>
+            </div>
+          </section>
 
-2. DESCRIPTION OF SERVICE
+          {/* Section 4 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section4.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section4.content'))}
+            </div>
+          </section>
 
-Hoox provides AI-powered video generation services for social media content ("Service"). We reserve the right to modify, suspend, or discontinue the Service at any time.
+          {/* Section 5 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section5.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section5.content'))}
+            </div>
+          </section>
 
-3. USER ACCOUNTS
+          {/* Section 6 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section6.title')}
+            </h3>
+            
+            {/* Section 6.1 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section6.subsection6_1.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section6.subsection6_1.content'))}
+              </div>
+            </div>
 
-3.1. You must provide accurate, current, and complete information when creating an account.
-3.2. You are responsible for maintaining the confidentiality of your account credentials.
+            {/* Section 6.2 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section6.subsection6_2.title')}
+              </h4>
+              
+              {/* Section 6.2.1 - Maintenance */}
+              <div className="mb-4 ml-8">
+                <h5 className="tos-subsubsection-title text-base font-medium mb-2">
+                  {t('section6.subsection6_2.maintenance.title')}
+                </h5>
+                <div className="tos-section-content">
+                  {renderContent(t('section6.subsection6_2.maintenance.content'))}
+                </div>
+              </div>
 
-4. PAYMENT TERMS
+              {/* Section 6.2.2 - Hosting */}
+              <div className="mb-4 ml-8">
+                <h5 className="tos-subsubsection-title text-base font-medium mb-2">
+                  {t('section6.subsection6_2.hosting.title')}
+                </h5>
+                <div className="tos-section-content">
+                  {renderContent(t('section6.subsection6_2.hosting.content'))}
+                </div>
+              </div>
 
-4.1. Prices are subject to change with notice.
-4.2. All payments are non-refundable unless otherwise specified.
-4.3. You agree to provide current, complete, and accurate payment information.
+              {/* Section 6.2.3 - Support */}
+              <div className="mb-4 ml-8">
+                <h5 className="tos-subsubsection-title text-base font-medium mb-2">
+                  {t('section6.subsection6_2.support.title')}
+                </h5>
+                <div className="tos-section-content">
+                  {renderContent(t('section6.subsection6_2.support.content'))}
+                </div>
+              </div>
+            </div>
+          </section>
 
-5. USER CONTENT AND CONDUCT
+          {/* Section 7 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section7.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section7.content'))}
+            </div>
+          </section>
 
-5.1. You retain full ownership of all content generated through our Service.
-5.2. You are solely responsible for your use of the Service and any content you create.
-5.3. Prohibited content includes but is not limited to:
-   - Illegal content
-   - Fraudulent or misleading content
-   - Hate speech
-   - Explicit adult content
-   - Content that infringes on intellectual property rights
-   - Content promoting violence or terrorism
+          {/* Section 8 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section8.title')}
+            </h3>
+            
+            {/* Section 8.1 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section8.subsection8_1.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section8.subsection8_1.content'))}
+              </div>
+            </div>
 
-6. INTELLECTUAL PROPERTY
+            {/* Section 8.2 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section8.subsection8_2.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section8.subsection8_2.content'))}
+              </div>
+            </div>
 
-6.1. Hoox retains all rights to the Service, including software, features, and interfaces.
-6.2. Users may not copy, modify, distribute, sell, or lease any part of our Service.
+            {/* Section 8.3 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section8.subsection8_3.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section8.subsection8_3.content'))}
+              </div>
+            </div>
+          </section>
 
-7. LIMITATION OF LIABILITY
+          {/* Section 9 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section9.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section9.content'))}
+            </div>
+          </section>
 
-7.1. The Service is provided "as is" without warranties of any kind.
-7.2. Hoox shall not be liable for any indirect, incidental, special, consequential, or punitive damages.
-7.3. Our maximum liability shall not exceed the amount paid by you for the Service in the past 12 months.
+          {/* Section 10 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section10.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section10.content'))}
+            </div>
+          </section>
 
-8. INDEMNIFICATION
+          {/* Section 11 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section11.title')}
+            </h3>
+            
+            {/* Section 11.1 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section11.subsection11_1.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section11.subsection11_1.content'))}
+              </div>
+            </div>
 
-You agree to indemnify and hold Hoox harmless from any claims, damages, or expenses arising from your use of the Service or violation of these Terms.
+            {/* Section 11.2 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section11.subsection11_2.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section11.subsection11_2.content'))}
+              </div>
+            </div>
 
-9. TERMINATION
+            {/* Section 11.3 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section11.subsection11_3.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section11.subsection11_3.content'))}
+              </div>
+            </div>
 
-9.1. We may terminate or suspend your account for any reason, including violation of these Terms.
-9.2. You may terminate your account at any time by contacting us.
+            {/* Section 11.4 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section11.subsection11_4.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section11.subsection11_4.content'))}
+              </div>
+            </div>
+          </section>
 
-10. MODIFICATIONS TO TERMS
+          {/* Section 12 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section12.title')}
+            </h3>
+            
+            {/* Section 12.1 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section12.subsection12_1.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section12.subsection12_1.content'))}
+              </div>
+            </div>
 
-We reserve the right to modify these Terms at any time. Users will be notified of changes via email.
+            {/* Section 12.2 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section12.subsection12_2.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section12.subsection12_2.content'))}
+              </div>
+            </div>
 
-11. GOVERNING LAW
+            {/* Section 12.3 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section12.subsection12_3.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section12.subsection12_3.content'))}
+              </div>
+            </div>
+          </section>
 
-These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflicts of law principles.
+          {/* Section 13 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section13.title')}
+            </h3>
+            
+            {/* Introduction */}
+            <div className="tos-section-content mb-6">
+              {renderContent(t('section13.intro'))}
+            </div>
+            
+            {/* Section 13.1 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section13.subsection13_1.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section13.subsection13_1.content'))}
+              </div>
+            </div>
 
-12. DISPUTE RESOLUTION
+            {/* Section 13.2 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section13.subsection13_2.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section13.subsection13_2.content'))}
+              </div>
+            </div>
 
-Any dispute arising from these Terms shall be resolved through binding arbitration.
+            {/* Section 13.3 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section13.subsection13_3.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section13.subsection13_3.content'))}
+              </div>
+            </div>
 
-13. SEVERABILITY
+            {/* Section 13.4 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section13.subsection13_4.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section13.subsection13_4.content'))}
+              </div>
+            </div>
 
-If any provision of these Terms is found to be unenforceable, the remaining provisions will remain in effect.
+            {/* Section 13.5 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section13.subsection13_5.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section13.subsection13_5.content'))}
+              </div>
+            </div>
 
-14. CONTACT INFORMATION
+            {/* Section 13.6 */}
+            <div className="mb-6">
+              <h4 className="tos-subsection-title text-lg font-medium mb-3 ml-4">
+                {t('section13.subsection13_6.title')}
+              </h4>
+              <div className="tos-section-content ml-4">
+                {renderContent(t('section13.subsection13_6.content'))}
+              </div>
+            </div>
+          </section>
 
-For questions about these Terms, contact us at:
-Email: contact@hoox.video
+          {/* Section 14 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section14.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section14.content'))}
+            </div>
+          </section>
 
-15. ENTIRE AGREEMENT
+          {/* Section 15 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section15.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section15.content'))}
+            </div>
+          </section>
 
-These Terms constitute the entire agreement between you and Hoox regarding the Service.
+          {/* Section 16 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section16.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section16.content'))}
+            </div>
+          </section>
 
-By using Hoox, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.`}
-        </pre>
+          {/* Section 17 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section17.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section17.content'))}
+            </div>
+          </section>
+
+          {/* Section 18 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section18.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section18.content'))}
+            </div>
+          </section>
+
+          {/* Section 19 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section19.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section19.content'))}
+            </div>
+          </section>
+
+          {/* Section 20 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section20.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section20.content'))}
+            </div>
+          </section>
+
+          {/* Section 21 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section21.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section21.content'))}
+            </div>
+          </section>
+
+          {/* Section 22 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section22.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section22.content'))}
+            </div>
+          </section>
+
+          {/* Section 23 */}
+          <section className="mb-8">
+            <h3 className="tos-section-title text-xl font-semibold mb-4">
+              {t('section23.title')}
+            </h3>
+            <div className="tos-section-content">
+              {renderContent(t('section23.content'))}
+            </div>
+          </section>
+        </div>
       </div>
     </main>
   );

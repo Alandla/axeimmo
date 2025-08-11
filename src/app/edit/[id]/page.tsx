@@ -44,6 +44,7 @@ import { useAssetsStore } from '@/src/store/assetsStore'
 import { useVideoFramesStore } from '@/src/store/videoFramesStore'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import { LogoPosition } from '@/src/types/space'
+import { useBrowserDetection } from '@/src/hooks/use-browser-detection'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -53,6 +54,7 @@ export default function VideoEditor() {
   const pricingT = useTranslations('pricing')
   const planT = useTranslations('plan')
   const { showPremiumToast } = usePremiumToast()
+  const { isIOS, isMobile, isClient } = useBrowserDetection()
 
   const { setSubtitleStyles } = useSubtitleStyleStore()
   const assetsStore = useAssetsStore()
@@ -71,7 +73,6 @@ export default function VideoEditor() {
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
   const [showModalExport, setShowModalExport] = useState(false)
   const [showModalPricing, setShowModalPricing] = useState(false)
   const [modalPricingTitle, setModalPricingTitle] = useState('')
@@ -82,6 +83,7 @@ export default function VideoEditor() {
   const [spaceCredits, setSpaceCredits] = useState<number | undefined>(undefined)
   const [originalLogoPosition, setOriginalLogoPosition] = useState<LogoPosition | null>(null)
   const [originalLogoSize, setOriginalLogoSize] = useState<number | null>(null)
+  const [muteBackgroundMusic, setMuteBackgroundMusic] = useState(isIOS)
   
   const updateVideo = (newVideoData: any) => {
     setVideo(newVideoData)
@@ -409,22 +411,12 @@ export default function VideoEditor() {
   }, [selectedSequenceIndex, selectedTransitionIndex])
 
   useEffect(() => {
-    const checkIsMobile = () => {
-      const mobile = window.innerWidth < 1024; // 1024px est la breakpoint lg de Tailwind
-      setIsMobile(mobile);
-      // Check localStorage and mobile status to show disclaimer
-      if (mobile && !localStorage.getItem('mobileDisclaimerShown')) {
-        setShowMobileDisclaimer(true);
-      }
-    };
-
-    checkIsMobile(); // Check on initial mount
-
-    window.addEventListener('resize', checkIsMobile);
-    return () => {
-      window.removeEventListener('resize', checkIsMobile);
-    };
-  }, []); // Empty dependency array ensures this runs only once on mount for the initial check
+    setMuteBackgroundMusic(isIOS)
+    // Check localStorage and mobile status to show disclaimer
+    if (isClient && isMobile && !localStorage.getItem('mobileDisclaimerShown')) {
+      setShowMobileDisclaimer(true);
+    }
+  }, [isMobile, isClient]);
 
   const handleCloseMobileDisclaimer = () => {
     setShowMobileDisclaimer(false);
@@ -468,27 +460,35 @@ export default function VideoEditor() {
 
   const handleWordDelete = (sequenceIndex: number, wordIndex: number) => {
     if (video && video.video) {
-      const newSequences = [...video.video.sequences];
-      const sequence = newSequences[sequenceIndex];
+      const sequence = video.video.sequences[sequenceIndex];
       
-      const wordToDelete = sequence.words[wordIndex];
+      // Si la séquence n'a qu'un seul mot, supprimer la séquence entière
+      if (sequence.words.length === 1) {
+        handleDeleteSequence(sequenceIndex);
+        return;
+      }
+      
+      const newSequences = [...video.video.sequences];
+      const sequenceToUpdate = newSequences[sequenceIndex];
+      
+      const wordToDelete = sequenceToUpdate.words[wordIndex];
       const durationToAdd = wordToDelete.durationInFrames;
       
       if (wordIndex > 0) {
-        sequence.words[wordIndex - 1].durationInFrames += durationToAdd;
-      } else if (wordIndex < sequence.words.length - 1) {
-        sequence.words[wordIndex + 1].durationInFrames += durationToAdd;
+        sequenceToUpdate.words[wordIndex - 1].durationInFrames += durationToAdd;
+      } else if (wordIndex < sequenceToUpdate.words.length - 1) {
+        sequenceToUpdate.words[wordIndex + 1].durationInFrames += durationToAdd;
       }
 
-      sequence.words.splice(wordIndex, 1);
+      sequenceToUpdate.words.splice(wordIndex, 1);
 
-      const newText = sequence.words.map(word => word.word).join(' ');
-      sequence.text = newText;
+      const newText = sequenceToUpdate.words.map(word => word.word).join(' ');
+      sequenceToUpdate.text = newText;
 
-      if (newText === sequence.originalText) {
-        sequence.needsAudioRegeneration = false;
+      if (newText === sequenceToUpdate.originalText) {
+        sequenceToUpdate.needsAudioRegeneration = false;
       } else {
-        sequence.needsAudioRegeneration = true;
+        sequenceToUpdate.needsAudioRegeneration = true;
       }
       
       updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
@@ -1149,6 +1149,8 @@ export default function VideoEditor() {
       useActiveSpaceStore.getState().setActiveSpace(updatedSpace);
       setIsDirty(true);
     }
+  const handleMuteBackgroundMusicChange = (mute: boolean) => {
+    setMuteBackgroundMusic(mute);
   };
 
   return (
@@ -1319,57 +1321,48 @@ export default function VideoEditor() {
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={50} minSize={30}>
             <Card className="h-full">
-                {activeTab1 === 'sequences' ? (
-                  <ScrollArea className="h-[calc(100vh-5rem)]">
-                    {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                      <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
-                    )}
-                    {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
-                      <TransitionSettings 
-                        video={video} 
-                        transition={video.video.transitions[selectedTransitionIndex]} 
-                        transitionIndex={selectedTransitionIndex} 
-                        spaceId={video.spaceId}
-                        updateTransition={handleUpdateTransition}
-                      />
-                    )}
-                  </ScrollArea>
-                ) : activeTab1 === 'subtitle' ? (
-                  <ScrollArea className="h-[calc(100vh-5rem)]">
-                    <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} />
-                  </ScrollArea>
-                ) : activeTab1 === 'audio' ? (
-                  <ScrollArea className="h-[calc(100vh-5rem)]">
-                    <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
-                  </ScrollArea>
-                ) : (
-                  <ScrollArea className="h-[calc(100vh-5rem)]">
-                    {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                      <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
-                    )}
-                    {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
-                      <TransitionSettings 
-                        video={video} 
-                        transition={video.video.transitions[selectedTransitionIndex]} 
-                        transitionIndex={selectedTransitionIndex} 
-                        spaceId={video.spaceId}
-                        updateTransition={handleUpdateTransition}
-                      />
-                    )}
-                  </ScrollArea>
-                )}
+              {activeTab1 === 'subtitle' ? (
+                <ScrollArea className="h-[calc(100vh-5rem)]">
+                  <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} />
+                </ScrollArea>
+              ) : activeTab1 === 'audio' ? (
+                <ScrollArea className="h-[calc(100vh-5rem)]">
+                  <AudioSettings 
+                    video={video} 
+                    updateAudioSettings={updateAudioSettings} 
+                    muteBackgroundMusic={muteBackgroundMusic}
+                    onMuteBackgroundMusicChange={handleMuteBackgroundMusicChange}
+                  />
+                </ScrollArea>
+              ) : (
+                <ScrollArea className="h-[calc(100vh-5rem)]">
+                  {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
+                    <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
+                  )}
+                  {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                    <TransitionSettings 
+                      video={video} 
+                      transition={video.video.transitions[selectedTransitionIndex]} 
+                      transitionIndex={selectedTransitionIndex} 
+                      spaceId={video.spaceId}
+                      updateTransition={handleUpdateTransition}
+                    />
+                  )}
+                </ScrollArea>
+              )}
             </Card>
           </ResizablePanel>
           <ResizableHandle className="w-[1px] bg-transparent" />
           <ResizablePanel defaultSize={20} minSize={10}>
             <Card className="h-full">
-                {!isMobile && (
+                {isClient && !isMobile && (
                     <VideoPreview 
                         playerRef={playerRef} 
                         video={video} 
                         isMobile={isMobile} 
                         showWatermark={showWatermark} 
                         hasExistingReview={hasExistingReview}
+                        muteBackgroundMusic={muteBackgroundMusic}
                         onSubtitleStyleChange={handleSubtitleStyleChange}
                         onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
                         onAvatarPositionChange={handleAvatarPositionChange}
@@ -1391,13 +1384,14 @@ export default function VideoEditor() {
           ref={previewRef}
           className={`sticky top-[57px] z-20 transition-all duration-300 h-96`}
         >
-          {isMobile && (
+          {isClient && isMobile && (
             <VideoPreview 
                 playerRef={playerRef} 
                 video={video} 
                 isMobile={isMobile} 
                 showWatermark={showWatermark} 
                 hasExistingReview={hasExistingReview}
+                muteBackgroundMusic={muteBackgroundMusic}
                 onSubtitleStyleChange={handleSubtitleStyleChange}
                 onAvatarHeightRatioChange={handleAvatarHeightRatioChange}
                 onAvatarPositionChange={handleAvatarPositionChange}
@@ -1482,10 +1476,20 @@ export default function VideoEditor() {
               )}
               {activeTabMobile === 'settings-subtitle' && (
                 <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} isMobile={isMobile} />
-              )}
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-audio">
+              <ScrollArea className="h-[calc(100vh-25rem)]">
+                <AudioSettings 
+                  video={video} 
+                  updateAudioSettings={updateAudioSettings} 
+                  muteBackgroundMusic={muteBackgroundMusic}
+                  onMuteBackgroundMusicChange={handleMuteBackgroundMusicChange}
+                />
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
+        </Card>
       </div>
     </div>
     </>

@@ -1,8 +1,22 @@
+import { KlingGenerationMode } from "./fal";
+
 interface TokenUsage {
   completionTokens: number;
   promptTokens: number;
   totalTokens: number;
 }
+
+export const KLING_GENERATION_COSTS = {
+  [KlingGenerationMode.STANDARD]: 4,
+  [KlingGenerationMode.PRO]: 7,
+  [KlingGenerationMode.MASTER]: 10
+} as const;
+
+export const KLING_GENERATION_COSTS_GENERATE = {
+  [KlingGenerationMode.STANDARD]: 0.25,
+  [KlingGenerationMode.PRO]: 0.45,
+  [KlingGenerationMode.MASTER]: 1
+} as const;
 
 export function calculateAnthropicCost(usage: TokenUsage): number {
   const INPUT_COST_PER_TOKEN = 0.000003;  // $3 par million de tokens pour claude 3.5 sonnet
@@ -15,7 +29,7 @@ export function calculateAnthropicCost(usage: TokenUsage): number {
 }
 
 export function calculateElevenLabsCost(text: string, isTurbo: boolean = false): number {
-  const COST_PER_1000_CHARS = 0.12;
+  const COST_PER_1000_CHARS = 0.24;
   const TURBO_DISCOUNT = 0.5;
 
   // Calculer le coût de base pour 1000 caractères
@@ -23,6 +37,13 @@ export function calculateElevenLabsCost(text: string, isTurbo: boolean = false):
   
   // Calculer le coût pour la longueur réelle du texte
   return (text.length / 1000) * baseRate;
+}
+
+export function calculateMinimaxCost(text: string): number {
+  const COST_PER_1000_CHARS = 0.06;
+  
+  // Calculer le coût pour la longueur réelle du texte
+  return (text.length / 1000) * COST_PER_1000_CHARS;
 }
 
 export function calculateHeygenCost(durationInSeconds: number): number {
@@ -54,5 +75,18 @@ export function calculateWhisperSieveCost(durationInSeconds: number): number {
   const SIEVE_COST_PER_HOUR = 0.15;
   
   return durationInHours * SIEVE_COST_PER_HOUR;
+}
+
+export function calculateUpscaleCost(upscaleCount: number): number {
+  const COST_PER_UPSCALE = 0.004;
+  
+  return upscaleCount * COST_PER_UPSCALE;
+}
+
+export function calculateKlingAnimationCost(mode: KlingGenerationMode, upscaleCount: number = 0): number {
+  const animationCost = KLING_GENERATION_COSTS_GENERATE[mode];
+  const upscaleCost = calculateUpscaleCost(upscaleCount);
+  
+  return animationCost + upscaleCost;
 }
 

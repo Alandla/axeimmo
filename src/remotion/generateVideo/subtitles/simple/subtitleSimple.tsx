@@ -1,6 +1,7 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { Line, Word } from "../../type/subtitle";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
+import googleFonts from "../../config/googleFonts.config";
 
 export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChange }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void }) => {
     const frame = useCurrentFrame();
@@ -100,6 +101,35 @@ export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChang
     const handleMouseLeave = useCallback(() => {
         setIsHovered(false);
     }, []);
+    
+    useEffect(() => {
+        const loadFontByName = async (fontSelected: string, weights?: string[], isItalic?: boolean) => {
+            const font = googleFonts.find((font) => font.family === fontSelected);
+            if (font) {
+                await font.load(weights, isItalic);
+            }
+        };
+
+        // Initialize weight arrays directly with values
+        const mainWeights: string[] = [(style?.fontWeight || 700).toString()];
+        const activeWordWeights: string[] = [(style?.activeWord?.fontWeight || 700).toString()];
+
+        // Load main font
+        loadFontByName(
+            style?.fontFamily || 'Montserrat', 
+            mainWeights,
+            style?.isItalic || false
+        );
+
+        // Load active word font if different
+        if (style?.activeWord?.isActive && style?.activeWord?.fontFamily !== style?.fontFamily) {
+            loadFontByName(
+                style?.activeWord.fontFamily || 'Montserrat',
+                activeWordWeights,
+                style?.activeWord?.isItalic || false
+            );
+        }
+    }, [style?.fontFamily, style?.fontWeight, style?.isItalic, style?.activeWord?.fontFamily, style?.activeWord?.fontWeight, style?.activeWord?.isItalic, style?.activeWord?.isActive]);
     
     return (
         <AbsoluteFill>

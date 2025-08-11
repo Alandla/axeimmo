@@ -79,7 +79,7 @@ export default function OnboardingPage() {
     setAttemptedNext(true)
     
     if (validateCurrentStep()) {
-      goToNextStep()
+      goToNextStep(session?.user?.email || undefined)
       setAttemptedNext(false)
       return true
     }
