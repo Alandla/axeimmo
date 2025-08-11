@@ -1476,7 +1476,8 @@ export default function VideoEditor() {
               )}
               {activeTabMobile === 'settings-subtitle' && (
                 <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} isMobile={isMobile} />
-              </ScrollArea>
+              )}
+            </ScrollArea>
             </TabsContent>
             <TabsContent value="settings-audio">
               <ScrollArea className="h-[calc(100vh-25rem)]">
@@ -1489,7 +1490,6 @@ export default function VideoEditor() {
               </ScrollArea>
             </TabsContent>
           </Tabs>
-        </Card>
       </div>
     </div>
     </>
