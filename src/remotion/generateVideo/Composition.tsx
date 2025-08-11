@@ -13,9 +13,18 @@ import { Transitions } from './components/Transitions';
 import { SpaceLogo } from './components/SpaceLogo';
 import { LogoPosition } from '@/src/types/space';
 
+
+interface LogoData {
+	url?: string;
+	position?: LogoPosition;
+	show?: boolean;
+	size?: number;
+  }
+
 export const VideoGenerate = ({ 
 	data, 
 	showWatermark = true,
+	logo,
 	muteBackgroundMusic = false,
 	onSubtitleStyleChange,
 	onAvatarHeightRatioChange,
@@ -27,6 +36,7 @@ export const VideoGenerate = ({
 }: { 
 	data: any, 
 	showWatermark?: boolean,
+	logo?: LogoData,
 	muteBackgroundMusic?: boolean,
 	onSubtitleStyleChange?: (newStyle: any) => void,
 	onAvatarHeightRatioChange?: (ratio: number) => void,

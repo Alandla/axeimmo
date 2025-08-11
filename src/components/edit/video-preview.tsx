@@ -11,7 +11,6 @@ import VideoFormatSelector from "@/src/components/edit/video-format-selector";
 import AvatarSelector from "@/src/components/edit/avatar-selector";
 import { AvatarSelectionModal } from "@/src/components/modal/avatar-selection-modal";
 import { AvatarLook } from "@/src/types/avatar";
-import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
 import { LogoPosition } from "@/src/types/space";
 import { LogoPositionSelector } from "@/src/components/ui/logo-position-selector";
 
@@ -30,7 +29,8 @@ export default function VideoPreview({
     onVideoFormatChange,
     onAvatarChange,
     onLogoPositionChange,
-    onLogoSizeChange
+    onLogoSizeChange,
+    logoData
 }: { 
     playerRef: React.RefObject<PlayerRef>, 
     video: IVideo | null, 
@@ -45,30 +45,23 @@ export default function VideoPreview({
     onVideoFormatChange?: (format: VideoFormat) => void,
     onAvatarChange?: (avatar: AvatarLook | null) => void,
     onLogoPositionChange?: (position: LogoPosition) => void,
-    onLogoSizeChange?: (size: number) => void
+    onLogoSizeChange?: (size: number) => void,
+    logoData?: {
+        url: string;
+        position: LogoPosition;
+        show: boolean;
+        size: number;
+    }
 }) {
     const t = useTranslations('edit');
-    const { activeSpace } = useActiveSpaceStore();
     const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
     const [showReview, setShowReview] = useState(false);
     const [hasInteractedWithReview, setHasInteractedWithReview] = useState(false);
     const [showAvatarModal, setShowAvatarModal] = useState(false);
     const [showLogoSelector, setShowLogoSelector] = useState(false);
-    const [logoPositionChanged, setLogoPositionChanged] = useState(false);
 
     // Get video dimensions based on format
     const dimensions = getVideoDimensions(video?.video?.format || 'vertical');
-
-    // Récupérer les données du logo depuis activeSpace
-    const logoData = activeSpace?.logo ? {
-        url: activeSpace.logo.url,
-        position: activeSpace.logo.position,
-        show: activeSpace.logo.show,
-        size: activeSpace.logo.size
-    } : undefined;
-
-    // Clé unique pour forcer la mise à jour du player quand la position du logo change via le sélecteur
-    const playerKey = logoPositionChanged ? `player-${activeSpace?.logo?.position?.x}-${activeSpace?.logo?.position?.y}-${activeSpace?.logo?.size}-${Date.now()}` : 'player-default';
 
     useEffect(() => {
         if (!video?.video?.sequences) return;
@@ -146,18 +139,7 @@ export default function VideoPreview({
             onLogoPositionChange(newPosition);
         }
         setShowLogoSelector(false);
-        setLogoPositionChanged(true);
     };
-
-    // Réinitialiser logoPositionChanged après la mise à jour du player
-    useEffect(() => {
-        if (logoPositionChanged) {
-            const timer = setTimeout(() => {
-                setLogoPositionChanged(false);
-            }, 100);
-            return () => clearTimeout(timer);
-        }
-    }, [logoPositionChanged]);
 
     return (
         <div className={`h-full flex flex-col items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
@@ -185,7 +167,7 @@ export default function VideoPreview({
             )}
             
             {/* Logo Position Selector */}
-            {showLogoSelector && activeSpace?.logo?.position && (
+            {showLogoSelector && logoData?.position && (
                 <div className="w-full mb-4 p-4 bg-background border rounded-lg shadow-lg">
                     <div className="flex items-center justify-between mb-3">
                         <h3 className="text-sm font-medium">Position du logo</h3>
@@ -197,7 +179,7 @@ export default function VideoPreview({
                         </button>
                     </div>
                     <LogoPositionSelector
-                        value={activeSpace.logo.position}
+                        value={logoData.position}
                         onChange={handleLogoPositionChange}
                         isSquare={true}
                         predefinedOnly={true}
@@ -208,7 +190,6 @@ export default function VideoPreview({
 
             <div className="relative w-full h-full transition-all duration-300 ease-in-out">
                 <Player
-                    key={playerKey}
                     acknowledgeRemotionLicense={true}
                     ref={playerRef}
                     component={VideoGenerate}
