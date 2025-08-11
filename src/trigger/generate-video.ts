@@ -1617,7 +1617,7 @@ export const generateVideoTask = task({
 
     newVideo = {
       ...newVideo,
-      costToGenerate: cost + ctx.run.baseCostInCents,
+      costToGenerate: cost + (ctx.run.baseCostInCents || 0),
       state: {
         type: 'done',
       },
