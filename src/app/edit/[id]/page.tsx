@@ -1300,7 +1300,7 @@ export default function VideoEditor() {
                     </TabsContent>
                     <TabsContent value="audio">
                       <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
-                        <AudioSettings video={video} updateAudioSettings={updateAudioSettings} />
+                        <Musics video={video} updateAudioSettings={updateAudioSettings} />
                       </ScrollArea>
                     </TabsContent>
                 </Tabs>
