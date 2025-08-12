@@ -12,7 +12,6 @@ import AvatarSelector from "@/src/components/edit/avatar-selector";
 import { AvatarSelectionModal } from "@/src/components/modal/avatar-selection-modal";
 import { AvatarLook } from "@/src/types/avatar";
 import { LogoPosition } from "@/src/types/space";
-import { LogoPositionSelector } from "@/src/components/ui/logo-position-selector";
 
 
 export default function VideoPreview({ 
@@ -58,7 +57,7 @@ export default function VideoPreview({
     const [showReview, setShowReview] = useState(false);
     const [hasInteractedWithReview, setHasInteractedWithReview] = useState(false);
     const [showAvatarModal, setShowAvatarModal] = useState(false);
-    const [showLogoSelector, setShowLogoSelector] = useState(false);
+    // Removed floating LogoPositionSelector here; it is now shown above the logo inside the canvas
 
     // Get video dimensions based on format
     const dimensions = getVideoDimensions(video?.video?.format || 'vertical');
@@ -130,15 +129,12 @@ export default function VideoPreview({
         setHasInteractedWithReview(true);
     };
 
-    const handleLogoClick = () => {
-        setShowLogoSelector(true);
-    };
+    // Click on logo is now handled inside the canvas to open the floating selector
 
     const handleLogoPositionChange = (newPosition: LogoPosition) => {
         if (onLogoPositionChange) {
             onLogoPositionChange(newPosition);
         }
-        setShowLogoSelector(false);
     };
 
     return (
@@ -166,26 +162,7 @@ export default function VideoPreview({
                 </div>
             )}
             
-            {/* Logo Position Selector */}
-            {showLogoSelector && logoData?.position && (
-                <div className="w-full mb-4 p-4 bg-background border rounded-lg shadow-lg">
-                    <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-sm font-medium">Position du logo</h3>
-                        <button
-                            onClick={() => setShowLogoSelector(false)}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            ✕
-                        </button>
-                    </div>
-                    <LogoPositionSelector
-                        value={logoData.position}
-                        onChange={handleLogoPositionChange}
-                        isSquare={true}
-                        predefinedOnly={true}
-                    />
-                </div>
-            )}
+            {/* Logo Position Selector moved into the canvas overlay above the logo */}
             
 
             <div className="relative w-full h-full transition-all duration-300 ease-in-out">
@@ -197,6 +174,7 @@ export default function VideoPreview({
                     fps={60}
                     compositionWidth={dimensions.width}
                     compositionHeight={dimensions.height}
+                    overflowVisible
                     inputProps={{
                         data: video,
                         showWatermark,
@@ -208,7 +186,7 @@ export default function VideoPreview({
                         onMediaPositionChange,
                         onLogoPositionChange,
                         onLogoSizeChange,
-                        onLogoClick: handleLogoClick
+                        // onLogoClick no longer needed; SpaceLogo handles opening the selector overlay
                     }}
                     numberOfSharedAudioTags={12}
                     controls

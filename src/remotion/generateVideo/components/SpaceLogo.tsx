@@ -1,11 +1,11 @@
-import { AbsoluteFill, Img, useVideoConfig } from "remotion";
+import { AbsoluteFill, Img, useCurrentScale, useVideoConfig } from "remotion";
+import { LogoPositionSelector } from "@/src/components/ui/logo-position-selector";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { LogoPosition } from "@/src/types/space";
 
 interface SpaceLogoProps {
   logoUrl?: string;
   logoPosition?: LogoPosition;
-  showLogo?: boolean;
   onPositionChange?: (position: LogoPosition) => void;
   logoSize?: number; // Taille en pourcentage de la largeur de composition
   onSizeChange?: (size: number) => void;
@@ -18,26 +18,28 @@ const MAX_SIZE = 50; // Taille maximale en pourcentage
 export const SpaceLogo = ({
   logoUrl,
   logoPosition,
-  showLogo,
   onPositionChange,
   logoSize = 19,
   onSizeChange,
   onLogoClick,
 }: SpaceLogoProps) => {
-  const { width: compositionWidth, height: compositionHeight } =
-    useVideoConfig();
+  const { width: compositionWidth, height: compositionHeight } = useVideoConfig();
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showResizeHandle, setShowResizeHandle] = useState(false);
   const [logoPercent, setLogoPercent] = useState<LogoPosition | null>(null);
-  const [currentDragPosition, setCurrentDragPosition] =
-    useState<LogoPosition | null>(null);
+  const [currentDragPosition, setCurrentDragPosition] = useState<LogoPosition | null>(null);
   const [currentSize, setCurrentSize] = useState(logoSize);
   const logoRef = useRef<HTMLImageElement>(null);
   const playerElementRef = useRef<HTMLElement | null>(null);
   const [hasMoved, setHasMoved] = useState(false);
   const [mouseDownTime, setMouseDownTime] = useState(0);
+  const scale = useCurrentScale();
+  const [naturalRatio, setNaturalRatio] = useState<number>(0.5);
+  const [showSelector, setShowSelector] = useState(false);
+  const selectorWasOpenRef = useRef(false);
+  const selectorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCurrentSize(logoSize);
@@ -77,35 +79,33 @@ export const SpaceLogo = ({
     const clickDuration = Date.now() - mouseDownTime;
     if (clickDuration > 200) return; // Plus de 200ms = probablement un drag
     
-    // Afficher la poignée de redimensionnement
+    // Afficher la poignée de redimensionnement et le sélecteur flottant
     setShowResizeHandle(true);
-    
-    // Ouvrir le sélecteur de position
-    if (onLogoClick) {
-      onLogoClick();
-    }
-  }, [hasMoved, isDragging, mouseDownTime, onLogoClick]);
+    setShowSelector(true);
+  }, [hasMoved, isDragging, mouseDownTime]);
 
-  // Fermer la poignée de resize quand on clique ailleurs
+  // Fermer la poignée de resize / le sélecteur quand on clique ailleurs
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        showResizeHandle &&
+        (showResizeHandle || showSelector) &&
         logoRef.current &&
-        !logoRef.current.contains(event.target as Node)
+        !logoRef.current.contains(event.target as Node) &&
+        (!selectorRef.current || !selectorRef.current.contains(event.target as Node))
       ) {
         setShowResizeHandle(false);
+        setShowSelector(false);
       }
     };
 
-    if (showResizeHandle) {
+    if (showResizeHandle || showSelector) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showResizeHandle]);
+  }, [showResizeHandle, showSelector]);
 
   const startDragging = useCallback(
     (e: React.MouseEvent) => {
@@ -161,7 +161,7 @@ export const SpaceLogo = ({
           let compositionX = newCenterX * scaleX;
           let compositionY = newCenterY * scaleY;
           const logoWidth = compositionWidth * (currentSize / 100);
-          const logoHeight = logoWidth * 0.5;
+          const logoHeight = logoWidth * naturalRatio;
 
           // Calculer les limites en tenant compte de la taille actuelle du logo
           const minX = logoWidth / 2;
@@ -194,6 +194,10 @@ export const SpaceLogo = ({
         setCurrentDragPosition(null);
         // Fermer la poignée de resize après le drag
         setShowResizeHandle(false);
+        // Réafficher le sélecteur si il était ouvert avant drag
+        if (selectorWasOpenRef.current) {
+          setShowSelector(true);
+        }
         if (animationFrameId) {
           cancelAnimationFrame(animationFrameId);
         }
@@ -201,6 +205,9 @@ export const SpaceLogo = ({
         window.removeEventListener("mouseup", onMouseUp);
       };
 
+      // Cacher le sélecteur pendant le déplacement, puis le restaurer à la fin
+      selectorWasOpenRef.current = showSelector;
+      setShowSelector(false);
       setIsDragging(true);
       window.addEventListener("pointermove", onMouseMove, { passive: false });
       window.addEventListener("mouseup", onMouseUp, { passive: false });
@@ -214,8 +221,10 @@ export const SpaceLogo = ({
     ]
   );
 
+  type HandleType = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+
   const startResizing = useCallback(
-    (e: React.MouseEvent) => {
+    (e: React.MouseEvent, handle: HandleType) => {
       e.preventDefault();
       e.stopPropagation();
       
@@ -229,7 +238,16 @@ export const SpaceLogo = ({
       const logoRect = logoRef.current?.getBoundingClientRect();
       if (!logoRect) return;
       const initialSize = currentSize;
-      const initialX = e.clientX;
+
+      // Centre du logo en coordonnées composition
+      const currentPercent = logoPercent ?? getInitialLogoPercent();
+      const centerXComp = (currentPercent.x / 100) * compositionWidth;
+      const centerYComp = (currentPercent.y / 100) * compositionHeight;
+
+      // Distance initiale centre -> pointeur en coordonnées composition
+      const toCompX = (e.clientX - playerRect.left) * (compositionWidth / playerRect.width);
+      const toCompY = (e.clientY - playerRect.top) * (compositionHeight / playerRect.height);
+      const initialDistance = Math.max(1, Math.hypot(toCompX - centerXComp, toCompY - centerYComp));
 
       let animationFrameId: number;
       let lastUpdateTime = 0;
@@ -252,22 +270,25 @@ export const SpaceLogo = ({
         }
 
         animationFrameId = requestAnimationFrame(() => {
-          const deltaX = moveEvent.clientX - initialX;
-          const scaleX = compositionWidth / playerRect.width;
-          const deltaSize = ((deltaX * scaleX) / compositionWidth) * 100;
-          let newSize = initialSize - deltaSize;
+          const pointerXComp = (moveEvent.clientX - playerRect.left) * (compositionWidth / playerRect.width);
+          const pointerYComp = (moveEvent.clientY - playerRect.top) * (compositionHeight / playerRect.height);
+
+          // Distance actuelle du pointeur au centre, quelle que soit la poignée
+          const currentDistance = Math.max(1, Math.hypot(pointerXComp - centerXComp, pointerYComp - centerYComp));
+          const scaleFactor = currentDistance / initialDistance;
+
+          let newSize = initialSize * scaleFactor;
 
           // Limiter la taille entre MIN_SIZE et MAX_SIZE
           newSize = Math.max(MIN_SIZE, Math.min(MAX_SIZE, newSize));
 
           // Vérifier que la position reste dans les limites avec la nouvelle taille
           const newLogoWidth = compositionWidth * (newSize / 100);
-          const newLogoHeight = newLogoWidth * 0.5;
-          const currentPercent = logoPercent ?? getInitialLogoPercent();
-          const currentX = (currentPercent.x / 100) * compositionWidth;
-          const currentY = (currentPercent.y / 100) * compositionHeight;
+          const newLogoHeight = newLogoWidth * naturalRatio;
+          const currentX = centerXComp;
+          const currentY = centerYComp;
 
-          // Ajuster la position si nécessaire
+          // Ajuster la position si nécessaire pour rester dans le cadre
           const minX = newLogoWidth / 2;
           const maxX = compositionWidth - newLogoWidth / 2;
           const minY = newLogoHeight / 2;
@@ -284,7 +305,6 @@ export const SpaceLogo = ({
           setCurrentSize(newSize);
           setLogoPercent(adjustedPosition);
 
-          // Propager les changements
           if (onSizeChange) {
             onSizeChange(newSize);
           }
@@ -298,6 +318,10 @@ export const SpaceLogo = ({
         upEvent.preventDefault();
         upEvent.stopPropagation();
         setIsResizing(false);
+        // Réafficher le sélecteur si il était ouvert avant resize
+        if (selectorWasOpenRef.current) {
+          setShowSelector(true);
+        }
         if (animationFrameId) {
           cancelAnimationFrame(animationFrameId);
         }
@@ -305,6 +329,9 @@ export const SpaceLogo = ({
         window.removeEventListener("mouseup", onMouseUp);
       };
 
+      // Cacher le sélecteur pendant le resize
+      selectorWasOpenRef.current = showSelector;
+      setShowSelector(false);
       setIsResizing(true);
       window.addEventListener("pointermove", onMouseMove, { passive: false });
       window.addEventListener("mouseup", onMouseUp, { passive: false });
@@ -325,16 +352,17 @@ export const SpaceLogo = ({
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);
 
   // Ne pas afficher le logo si showLogo est false ou si pas d'URL
-  if (!showLogo || !logoUrl) {
+  if (!logoUrl) {
     return null;
   }
 
   const percent = logoPercent ?? getInitialLogoPercent();
   const size = currentSize;
   const logoWidth = compositionWidth * (size / 100);
-  const logoHeight = logoWidth * 0.5;
+  const logoHeight = logoWidth * naturalRatio;
+  const outlineBorder = Math.ceil(2 / Math.max(0.0001, scale));
 
-  const style: React.CSSProperties = {
+  const imgStyle: React.CSSProperties = {
     position: "absolute",
     width: `${size}%`,
     height: "auto",
@@ -342,12 +370,35 @@ export const SpaceLogo = ({
     zIndex: 1000,
     left: `${(percent.x / 100) * compositionWidth - logoWidth / 2}px`,
     top: `${(percent.y / 100) * compositionHeight - logoHeight / 2}px`,
-    cursor: isDragging ? "grabbing" : isHovered ? "grab" : "pointer",
+    pointerEvents: "none",
+  };
+
+  const outlineStyle: React.CSSProperties = {
+    position: "absolute",
+    left: `${(percent.x / 100) * compositionWidth - logoWidth / 2}px`,
+    top: `${(percent.y / 100) * compositionHeight - logoHeight / 2}px`,
+    width: `${logoWidth}px`,
+    height: `${logoHeight}px`,
+    outline:
+      (isHovered && !isResizing) || showResizeHandle
+        ? `${outlineBorder}px solid #0B84F3`
+        : undefined,
     userSelect: "none",
     touchAction: "none",
-    border: isHovered || showResizeHandle ? "4px solid #3b82f6" : "none",
-    borderRadius: "4px",
-    transition: "border 0.2s ease",
+    cursor: isDragging ? "grabbing" : isHovered ? "grab" : "pointer",
+    zIndex: 1001,
+  };
+
+  const handleSize = Math.max(6, Math.round(8 / Math.max(0.0001, scale)));
+  const handleBorder = 1 / Math.max(0.0001, scale);
+
+  const sharedHandleStyle: React.CSSProperties = {
+    position: "absolute",
+    width: handleSize,
+    height: handleSize,
+    backgroundColor: "white",
+    border: `${handleBorder}px solid #0B84F3`,
+    borderRadius: 2,
   };
 
   return (
@@ -355,50 +406,105 @@ export const SpaceLogo = ({
       <Img
         ref={logoRef}
         src={logoUrl}
-        style={style}
+        style={imgStyle}
+        onLoad={(e) => {
+          const img = e.currentTarget as HTMLImageElement;
+          if (img && img.naturalWidth) {
+            setNaturalRatio(img.naturalHeight / img.naturalWidth);
+          }
+        }}
+      />
+
+      {/* Overlay de sélection + handles */}
+      <div
+        style={outlineStyle}
         onMouseDown={startDragging}
         onClick={handleLogoClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-      />
+      >
+        {((isHovered && !isResizing) || showResizeHandle) && (
+          <>
+            {/* Top-Left */}
+            <div
+              style={{
+                ...sharedHandleStyle,
+                left: 0,
+                top: 0,
+                transform: "translate(-50%, -50%)",
+                cursor: "nwse-resize",
+              }}
+              onMouseDown={(ev) => startResizing(ev, "top-left")}
+            />
+            {/* Top-Right */}
+            <div
+              style={{
+                ...sharedHandleStyle,
+                left: "100%",
+                top: 0,
+                transform: "translate(-50%, -50%)",
+                cursor: "nesw-resize",
+              }}
+              onMouseDown={(ev) => startResizing(ev, "top-right")}
+            />
+            {/* Bottom-Left */}
+            <div
+              style={{
+                ...sharedHandleStyle,
+                left: 0,
+                top: "100%",
+                transform: "translate(-50%, -50%)",
+                cursor: "nesw-resize",
+              }}
+              onMouseDown={(ev) => startResizing(ev, "bottom-left")}
+            />
+            {/* Bottom-Right */}
+            <div
+              style={{
+                ...sharedHandleStyle,
+                left: "100%",
+                top: "100%",
+                transform: "translate(-50%, -50%)",
+                cursor: "nwse-resize",
+              }}
+              onMouseDown={(ev) => startResizing(ev, "bottom-right")}
+            />
+          </>
+        )}
 
-      {/* Poignée de redimensionnement */}
-      {showResizeHandle && (
-        <div
-          style={{
-            position: "absolute",
-            width: 32,
-            height: 32,
-            left: `${
-              (percent.x / 100) * compositionWidth - logoWidth / 2 - 16
-            }px`,
-            top: `${
-              (percent.y / 100) * compositionHeight - logoHeight / 2 - 16
-            }px`,
-            backgroundColor: "rgba(0, 0, 0, 0.9)",
-            borderRadius: "50%",
-            border: "3px solid white",
-            cursor: "nw-resize",
-            zIndex: 1001,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "all 0.2s ease",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-          }}
-          onMouseDown={startResizing}
-        >
+        {showSelector && (
           <div
+            ref={selectorRef}
+            onMouseDown={(ev) => ev.stopPropagation()}
+            onClick={(ev) => ev.stopPropagation()}
             style={{
-              width: 12,
-              height: 12,
-              backgroundColor: "white",
-              borderRadius: "2px",
-              transform: "rotate(45deg)",
+              position: "absolute",
+              left: "50%",
+              top: 0,
+              // Place the anchor above the logo by a visual 8px regardless of player scale
+              transform: `translate(-50%, -100%) translateY(-${8 / Math.max(0.0001, scale)}px)`,
+              zIndex: 1002,
             }}
-          />
-        </div>
-      )}
+          >
+            <div
+              style={{
+                transform: `scale(${1 / Math.max(0.0001, scale)})`,
+                transformOrigin: "bottom center",
+              }}
+            >
+              <LogoPositionSelector
+                value={{ x: percent.x, y: percent.y }}
+                onChange={(pos) => {
+                  setLogoPercent(pos);
+                  if (onPositionChange) onPositionChange(pos);
+                }}
+                isSquare={true}
+                predefinedOnly={true}
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </AbsoluteFill>
   );
 };

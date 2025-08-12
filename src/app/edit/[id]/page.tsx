@@ -1394,91 +1394,97 @@ export default function VideoEditor() {
             />
           )}
         </div>
-        <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="sequences" className="flex items-center gap-2">
-              <ListVideo className="w-4 h-4" />
-              {t('sequences-tabs-title')}
-            </TabsTrigger>
-            <TabsTrigger value="subtitle" className="flex items-center gap-2">
-              <SubtitlesIcon className="w-4 h-4" />
-              {t('subtitles-tabs-title')}
-            </TabsTrigger>
-            <TabsTrigger value="audio" className="flex items-center gap-2">
-              <Volume2 className="w-4 h-4" />
-              {t('audio-tabs-title')}
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2">
-              <Settings className="w-4 h-4" />
-              {t('settings-tabs-title')}
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="sequences">
-            <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
-              <Sequences 
-                sequences={video?.video?.sequences || []} 
-                transitions={video?.video?.transitions}
-                selectedSequenceIndex={selectedSequenceIndex} 
-                selectedTransitionIndex={selectedTransitionIndex}
-                setSelectedSequenceIndex={setSelectedSequenceIndex} 
-                setSelectedTransitionIndex={setSelectedTransitionIndex}
-                setActiveTabMobile={setActiveTabMobile}
-                isMobile={isMobile}
-                handleWordInputChange={handleWordInputChange} 
-                handleWordAdd={handleWordAdd}
-                handleWordDelete={handleWordDelete}
-                handleCutSequence={handleCutSequence}
-                onRegenerateAudio={handleRegenerateAudio}
-                onDeleteSequence={handleDeleteSequence}
-                onDeleteTransition={handleDeleteTransition}
-                onAddSequence={handleAddSequence}
-                onAddTransition={handleAddTransition}
-                onUpdateDuration={handleUpdateDuration}
-                playerRef={playerRef}
-                avatar={video?.video?.avatar}
-                handleMergeWordWithPrevious={handleMergeWordWithPrevious}
-                handleMergeWordWithNext={handleMergeWordWithNext}
-              />
-            </ScrollArea>
-          </TabsContent>
-          <TabsContent value="subtitle">
-            <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
-              <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} setActiveTabMobile={setActiveTabMobile} isMobile={isMobile} />
-            </ScrollArea>
-          </TabsContent>
-          <TabsContent value="audio">
-            <ScrollArea className="h-[calc(100vh-25rem)] mx-2 overflow-visible">
-              <Musics video={video} updateAudioSettings={updateAudioSettings} isMobile={isMobile} setActiveTabMobile={setActiveTabMobile} />
-            </ScrollArea>
-          </TabsContent>
-          <TabsContent value="settings">
-            <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
-              {activeTabMobile === 'settings-sequence' && video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
-                <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
-              )}
-              {activeTabMobile === 'settings-transition' && video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
-                <TransitionSettings 
-                  video={video} 
-                  transition={video.video.transitions[selectedTransitionIndex]} 
-                  transitionIndex={selectedTransitionIndex} 
-                  spaceId={video.spaceId}
-                  updateTransition={handleUpdateTransition}
+        <Card className="mt-4">
+          <Tabs value={activeTabMobile} onValueChange={setActiveTabMobile}>
+            <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="sequences" className="flex items-center gap-2">
+                    <ListVideo className="w-4 h-4" />
+                    {t('sequences-tabs-title')}
+                </TabsTrigger>
+                <TabsTrigger value="subtitle" className="flex items-center gap-2">
+                    <SubtitlesIcon className="w-4 h-4" />
+                    {t('subtitles-tabs-title')}
+                </TabsTrigger>
+                <TabsTrigger value="audio" className="flex items-center gap-2">
+                    <Volume2 className="w-4 h-4" />
+                    {t('audio-tabs-title')}
+                </TabsTrigger>
+            </TabsList>
+            <TabsContent value="sequences">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                <Sequences 
+                  sequences={video?.video?.sequences || []} 
+                  transitions={video?.video?.transitions}
+                  selectedSequenceIndex={selectedSequenceIndex} 
+                  selectedTransitionIndex={selectedTransitionIndex}
+                  setSelectedSequenceIndex={setSelectedSequenceIndex} 
+                  setSelectedTransitionIndex={setSelectedTransitionIndex}
+                  setActiveTabMobile={setActiveTabMobile}
+                  isMobile={isMobile}
+                  handleWordInputChange={handleWordInputChange} 
+                  handleWordAdd={handleWordAdd}
+                  handleWordDelete={handleWordDelete}
+                  handleCutSequence={handleCutSequence}
+                  onRegenerateAudio={handleRegenerateAudio}
+                  onDeleteSequence={handleDeleteSequence}
+                  onDeleteTransition={handleDeleteTransition}
+                  onAddSequence={handleAddSequence}
+                  onAddTransition={handleAddTransition}
+                  onUpdateDuration={handleUpdateDuration}
+                  playerRef={playerRef}
+                  avatar={video?.video?.avatar}
+                  handleMergeWordWithPrevious={handleMergeWordWithPrevious}
+                  handleMergeWordWithNext={handleMergeWordWithNext}
                 />
-              )}
-              {activeTabMobile === 'settings-subtitle' && (
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="subtitle">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                <Subtitles video={video} setSubtitleStyle={setSubtitleStyle} setActiveTabMobile={setActiveTabMobile} isMobile={isMobile} />
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="audio">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2 overflow-visible">
+                <Musics video={video} updateAudioSettings={updateAudioSettings} isMobile={isMobile} setActiveTabMobile={setActiveTabMobile} />
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-sequence">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                {video?.video?.sequences && video?.video?.sequences[selectedSequenceIndex] && (
+                  <SequenceSettings sequence={video.video.sequences[selectedSequenceIndex]} sequenceIndex={selectedSequenceIndex} setSequenceMedia={setSequenceMedia} spaceId={video.spaceId} hadAvatar={video.video.avatar ? true : false} keywords={video.video.keywords || []} extractedMedia={video.extractedMedia} />
+                )}
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-transition">
+              <ScrollArea className="h-[calc(100vh-25rem)] mx-2">
+                {video?.video?.transitions && video?.video?.transitions[selectedTransitionIndex] && (
+                  <TransitionSettings 
+                    video={video} 
+                    transition={video.video.transitions[selectedTransitionIndex]} 
+                    transitionIndex={selectedTransitionIndex} 
+                    spaceId={video.spaceId}
+                    updateTransition={handleUpdateTransition}
+                  />
+                )}
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-subtitle">
+              <ScrollArea className="h-[calc(100vh-25rem)]">
                 <SubtitleSettings video={video} updateSubtitleStyle={updateSubtitleStyle} handleSaveSubtitleStyle={handleSaveSubtitleStyle} isMobile={isMobile} />
-              )}
-              {activeTabMobile === 'settings-audio' && (
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="settings-audio">
+              <ScrollArea className="h-[calc(100vh-25rem)]">
                 <AudioSettings 
                   video={video} 
                   updateAudioSettings={updateAudioSettings} 
                   muteBackgroundMusic={muteBackgroundMusic}
                   onMuteBackgroundMusicChange={handleMuteBackgroundMusicChange}
                 />
-              )}
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
+        </Card>
       </div>
     </div>
     </>

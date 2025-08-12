@@ -57,15 +57,14 @@ export const VideoGenerate = ({
 			{ data.video.audio.voices && <Voices voices={data.video.audio.voices} volume={data.video.audio.volume} /> }
 			{ data.video.audio.music && !muteBackgroundMusic && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
 			{ showWatermark && <Watermark />}
-			<SpaceLogo 
+			{ logo?.show && logo?.url && <SpaceLogo 
 				logoUrl={logo?.url}
 				logoPosition={logo?.position}
-				showLogo={logo?.show}
 				logoSize={logo?.size}
 				onPositionChange={onLogoPositionChange}
 				onSizeChange={onLogoSizeChange}
 				onLogoClick={onLogoClick}
-			/>
+			/>}
 			{ data.video.avatar ? <BackgroundWithAvatar 
 				sequences={data.video.sequences} 
 				avatar={data.video.avatar} 
