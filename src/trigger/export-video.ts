@@ -142,13 +142,13 @@ export const exportVideoTask = task({
       if (renderStatus.status === 'completed' && renderStatus.url && renderStatus.costs) {
         await updateExport(exportId, { 
           downloadUrl: renderStatus.url, 
-          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost, 
+          renderCost: renderStatus.costs + (ctx.run.baseCostInCents || 0) + renderAudioCost, 
           status: 'completed' 
         });
         await metadata.replace({
           status: 'completed',
           downloadUrl: renderStatus.url,
-          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost
+          renderCost: renderStatus.costs + (ctx.run.baseCostInCents || 0) + renderAudioCost
         })
 
         try {
@@ -198,7 +198,7 @@ export const exportVideoTask = task({
         return { success: true, url: renderStatus.url };
       }
 
-      logger.info('Cost infra', { costInCents: ctx.run.costInCents });
+      logger.info('Cost infra', { costInCents: ctx.run.baseCostInCents });
     } catch (error : any) {
       logger.error('Erreur lors de l\'export:', error);
       throw error;

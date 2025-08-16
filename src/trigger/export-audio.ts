@@ -52,7 +52,7 @@ export const exportAudioTask = task({
         return { success: true, audioUrl: renderStatus.videoUrl, costs: renderStatus.costs };
       }
 
-      logger.info('Cost infra', { costInCents: ctx.run.costInCents });
+      logger.info('Cost infra', { costInCents: ctx.run.baseCostInCents });
     } catch (error : any) {
       logger.error('Erreur lors de l\'export audio:', error);
       throw error;
