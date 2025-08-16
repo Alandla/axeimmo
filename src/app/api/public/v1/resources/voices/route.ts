@@ -80,14 +80,11 @@ export async function GET(req: NextRequest) {
       accent: voice.accent,
       gender: voice.gender,
       tags: voice.tags,
-      preview_url: voice.previewUrl,
+      preview: voice.previewUrl,
     }));
 
     return NextResponse.json({ 
-      data: {
-        voices: formattedVoices,
-        total: formattedVoices.length
-      }
+      voices: formattedVoices,
     }, {
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
     });

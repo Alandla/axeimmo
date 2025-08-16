@@ -50,8 +50,8 @@ export function ApiKeyManagement() {
     try {
       setLoading(true);
       setError('');
-      const response = await basicApiGetCall<{data: ApiKeyData | null}>(`/space/${activeSpace.id}/api-key`);
-      setApiKey(response.data);
+      const response = await basicApiGetCall<ApiKeyData | null>(`/space/${activeSpace.id}/api-key`);
+      setApiKey(response);
     } catch (error: any) {
       if (error.response?.status === 403 && error.response?.data?.requiresUpgrade) {
         setRequiresUpgrade(true);
@@ -69,13 +69,13 @@ export function ApiKeyManagement() {
     try {
       setActionLoading(true);
       setError('');
-      const response = await basicApiCall<{data: {apiKey: ApiKeyData, plainKey: string}}>(`/space/${activeSpace.id}/api-key`, {
+      const response = await basicApiCall<{apiKey: ApiKeyData, plainKey: string}>(`/space/${activeSpace.id}/api-key`, {
         action: 'create',
         name: keyName
       });
       
-      setApiKey(response.data.apiKey);
-      setPlainKey(response.data.plainKey);
+      setApiKey(response.apiKey);
+      setPlainKey(response.plainKey);
       setShowPlainKey(true);
     } catch (error: any) {
       setError(error.response?.data?.error || 'Failed to create API key');
@@ -92,12 +92,12 @@ export function ApiKeyManagement() {
     try {
       setActionLoading(true);
       setError('');
-      const response = await basicApiCall<{data: {apiKey: ApiKeyData, plainKey: string}}>(`/space/${activeSpace.id}/api-key`, {
+      const response = await basicApiCall<{apiKey: ApiKeyData, plainKey: string}>(`/space/${activeSpace.id}/api-key`, {
         action: 'regenerate'
       });
       
-      setApiKey(response.data.apiKey);
-      setPlainKey(response.data.plainKey);
+      setApiKey(response.apiKey);
+      setPlainKey(response.plainKey);
       setShowPlainKey(true);
     } catch (error: any) {
       setError(error.response?.data?.error || 'Failed to regenerate API key');

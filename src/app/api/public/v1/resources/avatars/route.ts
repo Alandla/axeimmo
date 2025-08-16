@@ -71,13 +71,12 @@ export async function GET(req: NextRequest) {
       place: look.place,
       format: look.format,
       tags: look.tags,
+      thumbnail: look.thumbnail,
+      preview: look.previewUrl,
     }));
 
-    return NextResponse.json({ 
-      data: {
-        looks: formattedLooks,
-        total: formattedLooks.length
-      }
+    return NextResponse.json({
+      avatars: formattedLooks,
     }, {
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
     });

@@ -51,7 +51,6 @@
     "@remotion/webcodecs": "4.0.325",
     "@trigger.dev/react-hooks": "4.0.0-v4-beta.25",
     "@trigger.dev/sdk": "4.0.0-v4-beta.25",
-    "@types/bcryptjs": "^3.0.0",
     "@types/canvas-confetti": "^1.6.4",
     "@types/crypto-js": "^4.2.2",
     "@types/ioredis": "^5.0.0",
@@ -104,6 +103,7 @@
   },
   "devDependencies": {
     "@trigger.dev/build": "4.0.0-v4-beta.25",
+    "@types/bcryptjs": "^3.0.0",
     "@types/fluent-ffmpeg": "^2.1.27",
     "@types/jsdom": "^21.1.7",
     "@types/mixpanel-browser": "^2.54.0",

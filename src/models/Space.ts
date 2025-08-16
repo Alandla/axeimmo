@@ -159,7 +159,7 @@ const spaceSchema = new mongoose.Schema(
       }],
       isActive: {
         type: Boolean,
-        default: true
+        default: false
       },
       revokedAt: Date,
       rateLimitPerMinute: {

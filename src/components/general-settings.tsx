@@ -10,6 +10,7 @@ import { basicApiCall } from "../lib/api"
 import { useTranslations } from "next-intl"
 import { IUser } from "../types/user"
 import { getMediaUrlFromFileByPresignedUrl } from "../service/upload.service"
+import { ApiKeyManagement } from "./api-key-management"
 
 export function GeneralSettings({ user }: { user: User }) {
   const t = useTranslations('general-settings')
@@ -160,6 +161,11 @@ export function GeneralSettings({ user }: { user: User }) {
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           {t('save-button')}
         </Button>
+      </div>
+
+      {/* API Key Management Section */}
+      <div className="border-t pt-6">
+        <ApiKeyManagement />
       </div>
     </div>
   )
