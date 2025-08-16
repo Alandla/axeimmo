@@ -1,7 +1,7 @@
 import { AbsoluteFill, Img, useCurrentScale, useVideoConfig } from "remotion";
-import { LogoPositionSelector } from "@/src/components/ui/logo-position-selector";
+import { LogoPositionSelector } from "../../../components/ui/logo-position-selector";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { LogoPosition } from "@/src/types/space";
+import { LogoPosition } from "../type/space";
 
 interface SpaceLogoProps {
   logoUrl?: string;
@@ -9,7 +9,6 @@ interface SpaceLogoProps {
   onPositionChange?: (position: LogoPosition) => void;
   logoSize?: number; // Taille en pourcentage de la largeur de composition
   onSizeChange?: (size: number) => void;
-  onLogoClick?: () => void; // Nouveau callback pour ouvrir le sélecteur
 }
 
 const MIN_SIZE = 5; // Taille minimale en pourcentage
@@ -21,7 +20,6 @@ export const SpaceLogo = ({
   onPositionChange,
   logoSize = 19,
   onSizeChange,
-  onLogoClick,
 }: SpaceLogoProps) => {
   const { width: compositionWidth, height: compositionHeight } = useVideoConfig();
   const [isDragging, setIsDragging] = useState(false);
@@ -29,7 +27,6 @@ export const SpaceLogo = ({
   const [isHovered, setIsHovered] = useState(false);
   const [showResizeHandle, setShowResizeHandle] = useState(false);
   const [logoPercent, setLogoPercent] = useState<LogoPosition | null>(null);
-  const [currentDragPosition, setCurrentDragPosition] = useState<LogoPosition | null>(null);
   const [currentSize, setCurrentSize] = useState(logoSize);
   const logoRef = useRef<HTMLImageElement>(null);
   const playerElementRef = useRef<HTMLElement | null>(null);
@@ -177,7 +174,6 @@ export const SpaceLogo = ({
             y: (compositionY / compositionHeight) * 100,
           };
 
-          setCurrentDragPosition(rawPosition);
           setLogoPercent(rawPosition);
 
           // Propager le changement de position
@@ -191,11 +187,13 @@ export const SpaceLogo = ({
         upEvent.preventDefault();
         upEvent.stopPropagation();
         setIsDragging(false);
-        setCurrentDragPosition(null);
         // Fermer la poignée de resize après le drag
         setShowResizeHandle(false);
-        // Réafficher le sélecteur si il était ouvert avant drag
-        if (selectorWasOpenRef.current) {
+        // Afficher le sélecteur après le déplacement si on a bougé
+        if (hasMoved) {
+          setShowSelector(true);
+        } else if (selectorWasOpenRef.current) {
+          // Réafficher le sélecteur si il était ouvert avant et qu'on n'a pas bougé
           setShowSelector(true);
         }
         if (animationFrameId) {
@@ -318,8 +316,11 @@ export const SpaceLogo = ({
         upEvent.preventDefault();
         upEvent.stopPropagation();
         setIsResizing(false);
-        // Réafficher le sélecteur si il était ouvert avant resize
-        if (selectorWasOpenRef.current) {
+        // Afficher le sélecteur après le redimensionnement si on a bougé
+        if (hasMoved) {
+          setShowSelector(true);
+        } else if (selectorWasOpenRef.current) {
+          // Réafficher le sélecteur si il était ouvert avant et qu'on n'a pas bougé
           setShowSelector(true);
         }
         if (animationFrameId) {
@@ -482,7 +483,7 @@ export const SpaceLogo = ({
               left: "50%",
               top: 0,
               // Place the anchor above the logo by a visual 8px regardless of player scale
-              transform: `translate(-50%, -100%) translateY(-${8 / Math.max(0.0001, scale)}px)`,
+              transform: `translate(-50%, -100%) translateY(-${15 / Math.max(0.0001, scale)}px)`,
               zIndex: 1002,
             }}
           >
@@ -500,6 +501,8 @@ export const SpaceLogo = ({
                 }}
                 isSquare={true}
                 predefinedOnly={true}
+                hideBottomPositions={true}
+                hideLabel={true}
               />
             </div>
           </div>

@@ -67,8 +67,8 @@ export default function VideoEditor() {
   const [selectedTransitionIndex, setSelectedTransitionIndex] = useState<number>(-1)
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
-  const [showWatermark, setShowWatermark] = useState(true)
-  const [planName, setPlanName] = useState<PlanName>(PlanName.FREE)
+  const [showWatermark, setShowWatermark] = useState(() => { return storeActiveSpace?.planName === PlanName.FREE; })
+  const [planName, setPlanName] = useState<PlanName>(() => { return storeActiveSpace?.planName || PlanName.FREE; })
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -80,18 +80,30 @@ export default function VideoEditor() {
   const [isDirty, setIsDirty] = useState(false)
   const [hasExistingReview, setHasExistingReview] = useState(false)
   const [showMobileDisclaimer, setShowMobileDisclaimer] = useState(false)
-  const [spaceCredits, setSpaceCredits] = useState<number | undefined>(undefined)
-  const [originalLogoPosition, setOriginalLogoPosition] = useState<LogoPosition | null>(null)
-  const [originalLogoSize, setOriginalLogoSize] = useState<number | null>(null)
+  const [spaceCredits, setSpaceCredits] = useState<number | undefined>(() => { return storeActiveSpace?.credits; })
+  const [originalLogoPosition, setOriginalLogoPosition] = useState<LogoPosition | null>(() => { return storeActiveSpace?.logo?.position || null; })
+  const [originalLogoSize, setOriginalLogoSize] = useState<number | null>(() => { return storeActiveSpace?.logo?.size || null; })
   const [muteBackgroundMusic, setMuteBackgroundMusic] = useState(isIOS)
   
-  // État local pour les données du logo
+  // État local pour les données du logo initialisé avec le store si disponible
   const [logoData, setLogoData] = useState<{
     url: string;
     position: LogoPosition;
     show: boolean;
     size: number;
-  } | undefined>(undefined)
+  } | undefined>(() => {
+    // Initialiser avec les données du store si disponible
+    const storeLogo = storeActiveSpace?.logo;
+    if (storeLogo?.url && storeLogo?.position) {
+      return {
+        url: storeLogo.url,
+        position: storeLogo.position,
+        show: storeLogo.show ?? true,
+        size: storeLogo.size ?? 100
+      };
+    }
+    return undefined;
+  })
   
   const updateVideo = (newVideoData: any) => {
     setVideo(newVideoData)
@@ -138,7 +150,7 @@ export default function VideoEditor() {
           size: logoData.size
         }
       };
-      savePromises.push(basicApiCall(`/space/${storeActiveSpace?.id}`, spaceUpdateData));
+      savePromises.push(basicApiCall(`/space/${video?.spaceId}`, spaceUpdateData));
     }
     
     await Promise.all(savePromises);
@@ -358,6 +370,24 @@ export default function VideoEditor() {
         if (response.spaceId && (spaceResponse as any).medias && Array.isArray((spaceResponse as any).medias)) {
           assetsStore.setAssets(response.spaceId, (spaceResponse as any).medias);
         }
+
+        // Initialiser les données du logo localement si pas déjà initialisées depuis le store
+        if (spaceResponse.logo && spaceResponse.logo.url && spaceResponse.logo.position) {
+          if (!logoData) {
+            setLogoData({
+              url: spaceResponse.logo.url,
+              position: spaceResponse.logo.position,
+              show: spaceResponse.logo.show ?? true,
+              size: spaceResponse.logo.size ?? 100
+            });
+          }
+          if (!originalLogoPosition) {
+            setOriginalLogoPosition(spaceResponse.logo.position);
+          }
+          if (!originalLogoSize) {
+            setOriginalLogoSize(spaceResponse.logo.size ?? 100);
+          }
+        }
         
         // Vérifier si une review existe déjà
         const reviewResponse = await basicApiGetCall(`/reviews/${id}`);
@@ -366,21 +396,6 @@ export default function VideoEditor() {
         // Si aucun espace actif n'est défini dans le store, on le définit à partir de la réponse complète
         if (!storeActiveSpace) {
           setActiveSpaceFromISpace(spaceResponse)
-        }
-
-        // Initialiser les données du logo localement
-        if (spaceResponse.logo && spaceResponse.logo.url && spaceResponse.logo.position) {
-          setLogoData({
-            url: spaceResponse.logo.url,
-            position: spaceResponse.logo.position,
-            show: spaceResponse.logo.show ?? true,
-            size: spaceResponse.logo.size ?? 100
-          });
-        }
-
-        // Sauvegarder la position originale du logo
-        if (spaceResponse.logo?.position) {
-          setOriginalLogoPosition(spaceResponse.logo.position);
         }
 
       } catch (error) {

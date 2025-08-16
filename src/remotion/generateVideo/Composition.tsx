@@ -11,15 +11,7 @@ import { SubtitlesModern } from './subtitles/modern/subtitlesModern';
 import { Voices } from './components/Audios';
 import { Transitions } from './components/Transitions';
 import { SpaceLogo } from './components/SpaceLogo';
-import { LogoPosition } from '@/src/types/space';
-
-
-interface LogoData {
-	url?: string;
-	position?: LogoPosition;
-	show?: boolean;
-	size?: number;
-  }
+import { Logo, LogoPosition } from './type/space';
 
 export const VideoGenerate = ({ 
 	data, 
@@ -32,11 +24,10 @@ export const VideoGenerate = ({
 	onMediaPositionChange,
 	onLogoPositionChange,
 	onLogoSizeChange,
-	onLogoClick,
 }: { 
 	data: any, 
 	showWatermark?: boolean,
-	logo?: LogoData,
+	logo?: Logo,
 	muteBackgroundMusic?: boolean,
 	onSubtitleStyleChange?: (newStyle: any) => void,
 	onAvatarHeightRatioChange?: (ratio: number) => void,
@@ -44,7 +35,6 @@ export const VideoGenerate = ({
 	onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
 	onLogoPositionChange?: (position: LogoPosition) => void;
 	onLogoSizeChange?: (size: number) => void;
-	onLogoClick?: () => void;
 }) => {
 	// Vérification de sécurité pour éviter l'erreur quand data.video est null
 	if (!data?.video) {
@@ -63,7 +53,6 @@ export const VideoGenerate = ({
 				logoSize={logo?.size}
 				onPositionChange={onLogoPositionChange}
 				onSizeChange={onLogoSizeChange}
-				onLogoClick={onLogoClick}
 			/>}
 			{ data.video.avatar ? <BackgroundWithAvatar 
 				sequences={data.video.sequences} 

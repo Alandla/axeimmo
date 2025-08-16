@@ -56,7 +56,7 @@ export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps)
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent 
         side="bottom" 
-        className="h-[100vh] p-0 focus:outline-none rounded-t-lg"
+        className="h-[80vh] p-0 focus:outline-none rounded-t-lg"
       >
         <ScrollArea className="h-full">
           <div 

@@ -13,7 +13,6 @@ import { AvatarSelectionModal } from "@/src/components/modal/avatar-selection-mo
 import { AvatarLook } from "@/src/types/avatar";
 import { LogoPosition } from "@/src/types/space";
 
-
 export default function VideoPreview({ 
     playerRef, 
     video, 
@@ -186,7 +185,6 @@ export default function VideoPreview({
                         onMediaPositionChange,
                         onLogoPositionChange,
                         onLogoSizeChange,
-                        // onLogoClick no longer needed; SpaceLogo handles opening the selector overlay
                     }}
                     numberOfSharedAudioTags={12}
                     controls

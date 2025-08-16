@@ -108,7 +108,7 @@ export const exportVideoTask = task({
         }
       }
 
-        const render = await renderVideo(video, showWatermark, ctx.attempt.number === 2 ? 4096 : 2048, logoData);
+      const render = await renderVideo(video, showWatermark, ctx.attempt.number === 2 ? 4096 : 2048, logoData);
       await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
 
       const renderStatus : RenderStatus = await pollRenderStatus(

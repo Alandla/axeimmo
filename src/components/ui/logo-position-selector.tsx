@@ -8,9 +8,10 @@ interface LogoPositionSelectorProps {
   hideBottomPositions?: boolean
   predefinedOnly?: boolean
   isSquare?: boolean
+  hideLabel?: boolean
 }
 
-export function LogoPositionSelector({ value, onChange, hideBottomPositions = false, predefinedOnly = false, isSquare = false }: LogoPositionSelectorProps) {
+export function LogoPositionSelector({ value, onChange, hideBottomPositions = false, predefinedOnly = false, isSquare = false, hideLabel = false }: LogoPositionSelectorProps) {
   const t = useTranslations('settings.brand-kit')
   const PADDING = 12
   const containerRef = useRef<HTMLDivElement>(null)
@@ -170,11 +171,13 @@ export function LogoPositionSelector({ value, onChange, hideBottomPositions = fa
             <span className="w-1 h-1 rounded-full bg-white" />
           </div>
         </div>
-        <div className="mt-2 text-center">
-          <p className="text-xs font-medium text-gray-500 w-full min-w-[120px]">
-            {getCurrentPositionName()}
-          </p>
-        </div>
+        {!hideLabel && (
+          <div className="mt-2 text-center">
+            <p className="text-xs font-medium text-gray-500 w-full min-w-[120px]">
+              {getCurrentPositionName()}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   )
