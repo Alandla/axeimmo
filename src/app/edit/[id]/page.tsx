@@ -7,7 +7,7 @@ import { Card } from "@/src/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/src/components/ui/breadcrumb"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/src/components/ui/resizable"
-import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2, Rocket } from 'lucide-react'
+import { Download, Save, Loader2, ListVideo, Subtitles as SubtitlesIcon, Volume2, Rocket, Settings } from 'lucide-react'
 import Link from 'next/link'
 import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
@@ -43,6 +43,7 @@ import MobileDisclaimerModal from '@/src/components/modal/mobile-disclaimer'
 import { useAssetsStore } from '@/src/store/assetsStore'
 import { useVideoFramesStore } from '@/src/store/videoFramesStore'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
+import { LogoPosition } from '@/src/types/space'
 import { useBrowserDetection } from '@/src/hooks/use-browser-detection'
 
 export default function VideoEditor() {
@@ -66,8 +67,8 @@ export default function VideoEditor() {
   const [selectedTransitionIndex, setSelectedTransitionIndex] = useState<number>(-1)
   const [activeTabMobile, setActiveTabMobile] = useState('sequences')
   const [activeTab1, setActiveTab1] = useState('sequences')
-  const [showWatermark, setShowWatermark] = useState(true)
-  const [planName, setPlanName] = useState<PlanName>(PlanName.FREE)
+  const [showWatermark, setShowWatermark] = useState(() => { return storeActiveSpace?.planName === PlanName.FREE; })
+  const [planName, setPlanName] = useState<PlanName>(() => { return storeActiveSpace?.planName || PlanName.FREE; })
   const previewRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<PlayerRef>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -79,8 +80,30 @@ export default function VideoEditor() {
   const [isDirty, setIsDirty] = useState(false)
   const [hasExistingReview, setHasExistingReview] = useState(false)
   const [showMobileDisclaimer, setShowMobileDisclaimer] = useState(false)
-  const [spaceCredits, setSpaceCredits] = useState<number | undefined>(undefined)
+  const [spaceCredits, setSpaceCredits] = useState<number | undefined>(() => { return storeActiveSpace?.credits; })
+  const [originalLogoPosition, setOriginalLogoPosition] = useState<LogoPosition | null>(() => { return storeActiveSpace?.logo?.position || null; })
+  const [originalLogoSize, setOriginalLogoSize] = useState<number | null>(() => { return storeActiveSpace?.logo?.size || null; })
   const [muteBackgroundMusic, setMuteBackgroundMusic] = useState(isIOS)
+  
+  // État local pour les données du logo initialisé avec le store si disponible
+  const [logoData, setLogoData] = useState<{
+    url: string;
+    position: LogoPosition;
+    show: boolean;
+    size: number;
+  } | undefined>(() => {
+    // Initialiser avec les données du store si disponible
+    const storeLogo = storeActiveSpace?.logo;
+    if (storeLogo?.url && storeLogo?.position) {
+      return {
+        url: storeLogo.url,
+        position: storeLogo.position,
+        show: storeLogo.show ?? true,
+        size: storeLogo.size ?? 100
+      };
+    }
+    return undefined;
+  })
   
   const updateVideo = (newVideoData: any) => {
     setVideo(newVideoData)
@@ -111,20 +134,51 @@ export default function VideoEditor() {
     console.log("cutIndex", cutIndex)
   }
 
-  const handleSaveVideo = async () => {
-    setIsSaving(true);
+  const saveVideo = async (showToast: boolean = true) => {
+    const savePromises = [basicApiCall('/video/save', { video })];
     
-    try {
-
-      await basicApiCall('/video/save', { video });
+    // Vérifier si les données du logo ont changé et sauvegarder le space si nécessaire
+    if (originalLogoPosition && logoData && 
+        (originalLogoPosition.x !== logoData.position.x || 
+         originalLogoPosition.y !== logoData.position.y ||
+         originalLogoSize !== logoData.size)) {
       
-      setIsDirty(false);
-      
+      const spaceUpdateData = {
+        logo: {
+          ...logoData,
+          position: logoData.position,
+          size: logoData.size
+        }
+      };
+      savePromises.push(basicApiCall(`/space/${video?.spaceId}`, spaceUpdateData));
+    }
+    
+    await Promise.all(savePromises);
+    
+    // Mettre à jour les valeurs originales après sauvegarde
+    if (logoData?.position) {
+      setOriginalLogoPosition(logoData.position);
+    }
+    if (logoData?.size) {
+      setOriginalLogoSize(logoData.size);
+    }
+    
+    setIsDirty(false);
+    
+    if (showToast) {
       toast({
         title: t('toast.title-saved'),
         description: t('toast.description-saved'),
         variant: 'confirm',
       });
+    }
+  };
+
+  const handleSaveVideo = async () => {
+    setIsSaving(true);
+    
+    try {
+      await saveVideo(true);
     } catch (error) {
       toast({
         title: t('toast.title-error'),
@@ -258,9 +312,14 @@ export default function VideoEditor() {
   const handleSilentSave = async () => {
     if (isDirty && process.env.NODE_ENV !== 'development' && (session?.user?.email !== 'alan@hoox.video' && session?.user?.email !== 'maxime@hoox.video')) {
       setIsSaving(true)
-      await basicApiCall('/video/save', { video })
-      setIsDirty(false)
-      setIsSaving(false)
+      
+      try {
+        await saveVideo(false);
+      } catch (error) {
+        console.error('Error during silent save:', error);
+      } finally {
+        setIsSaving(false)
+      }
     }
   }
 
@@ -310,6 +369,24 @@ export default function VideoEditor() {
 
         if (response.spaceId && (spaceResponse as any).medias && Array.isArray((spaceResponse as any).medias)) {
           assetsStore.setAssets(response.spaceId, (spaceResponse as any).medias);
+        }
+
+        // Initialiser les données du logo localement si pas déjà initialisées depuis le store
+        if (spaceResponse.logo && spaceResponse.logo.url && spaceResponse.logo.position) {
+          if (!logoData) {
+            setLogoData({
+              url: spaceResponse.logo.url,
+              position: spaceResponse.logo.position,
+              show: spaceResponse.logo.show ?? true,
+              size: spaceResponse.logo.size ?? 100
+            });
+          }
+          if (!originalLogoPosition) {
+            setOriginalLogoPosition(spaceResponse.logo.position);
+          }
+          if (!originalLogoSize) {
+            setOriginalLogoSize(spaceResponse.logo.size ?? 100);
+          }
         }
         
         // Vérifier si une review existe déjà
@@ -1046,6 +1123,36 @@ export default function VideoEditor() {
     });
   };
 
+  const handleLogoPositionChange = (newPosition: LogoPosition) => {
+    if (logoData) {
+      // Vérifier si la position change réellement
+      if (logoData.position.x === newPosition.x && logoData.position.y === newPosition.y) {
+        return; // Ne rien faire si la position est déjà la même
+      }
+      
+      setLogoData({
+        ...logoData,
+        position: newPosition
+      });
+      setIsDirty(true);
+    }
+  };
+
+  const handleLogoSizeChange = (newSize: number) => {
+    if (logoData) {
+      // Vérifier si la taille change réellement
+      if (logoData.size === newSize) {
+        return; // Ne rien faire si la taille est déjà la même
+      }
+      
+      setLogoData({
+        ...logoData,
+        size: newSize
+      });
+      setIsDirty(true);
+    }
+  };
+
   const handleMuteBackgroundMusicChange = (mute: boolean) => {
     setMuteBackgroundMusic(mute);
   };
@@ -1266,6 +1373,9 @@ export default function VideoEditor() {
                         onMediaPositionChange={handleMediaPositionChange}
                         onVideoFormatChange={handleVideoFormatChange}
                         onAvatarChange={handleAvatarChange}
+                        onLogoPositionChange={handleLogoPositionChange}
+                        onLogoSizeChange={handleLogoSizeChange}
+                        logoData={logoData}
                     />
                 )}
             </Card>
@@ -1293,6 +1403,9 @@ export default function VideoEditor() {
                 onMediaPositionChange={handleMediaPositionChange}
                 onVideoFormatChange={handleVideoFormatChange}
                 onAvatarChange={handleAvatarChange}
+                onLogoPositionChange={handleLogoPositionChange}
+                onLogoSizeChange={handleLogoSizeChange}
+                logoData={logoData}
             />
           )}
         </div>

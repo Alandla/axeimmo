@@ -57,6 +57,14 @@ export const exportVideoTask = task({
       const space = await getSpaceById(video.spaceId);
       const showWatermark = space.plan.name === "FREE";
 
+      // Récupérer les données du logo depuis le space
+      const logoData = space.logo ? {
+        url: space.logo.url,
+        position: space.logo.position,
+        show: space.logo.show,
+        size: space.logo.size
+      } : undefined;
+
       // Intégration de l'export audio si un avatar est présent
       if (video.video?.avatar?.id && video.video?.audio?.voices && ctx.attempt.number === 1) {
         logger.log("Combinaison des audios...");
@@ -100,7 +108,7 @@ export const exportVideoTask = task({
         }
       }
 
-        const render = await renderVideo(video, showWatermark, ctx.attempt.number === 2 ? 4096 : 2048);
+      const render = await renderVideo(video, showWatermark, ctx.attempt.number === 2 ? 4096 : 2048, logoData);
       await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
 
       const renderStatus : RenderStatus = await pollRenderStatus(

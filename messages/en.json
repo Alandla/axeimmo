@@ -25,7 +25,8 @@
       "Create": "Create",
       "Pricing": "Pricing",
       "Assets": "Assets",
-      "Enhance": "Enhance"
+      "Enhance": "Enhance",
+      "Settings": "Settings"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -121,8 +122,48 @@
       }
     },
     "settings": {
+      "title": "Settings",
+      "subtitle": "Manage your space settings and preferences",
+      "general": {
+        "title": "General",
+        "description": "Basic space information"
+      },      
+      "brand-kit": {
+        "title": "Brand Kit",
+        "description": "Customize your space brand kit",
+        "coming-soon": "Brand kit customization features coming soon",
+        "logo": {
+          "title": "Logo",
+          "description": "Your space logo that will be used in your videos",
+          "change": "Change",
+          "upload": "Upload a logo",
+          "remove": "Remove logo",
+          "show": "Show logo",
+          "show-description": "Enable this option to display the logo in your videos"
+        },
+        "position": {
+          "title": "Logo position",
+          "description": "Choose where to position your logo on your videos",
+          "top-left": "Top left",
+          "top-right": "Top right",
+          "middle-left": "Middle left",
+          "middle-right": "Middle right",
+          "bottom-left": "Bottom left",
+          "bottom-right": "Bottom right",
+          "custom": "Custom position"
+        },
+        "save-button": "Save",
+        "update-success-title": "Logo updated",
+        "update-success-description": "Your space logo has been successfully updated",
+        "premium-access": "Premium Access",
+        "premium-access-description": "Unlock advanced brand kit features with our Pro or Enterprise plans",
+        "pro-enterprise-required": "Upgrade required",
+        "pro-enterprise-required-description": "Customize your videos with access to the brand kit, requires a Pro subscription.",
+        "upgrade-to-pro": "Upgrade to Pro"
+      },
       "space": {
         "title": "Space Settings",
+        "general-description": "Configure the basic information of your space",
         "name-label": "Name",
         "name-placeholder": "Enter space name",
         "name-description": "The name of your space visible to all members",
@@ -296,6 +337,7 @@
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Subtitles",
       "audio-tabs-title": "Audio",
+      "settings-tabs-title": "Settings",
       "video-format": {
         "vertical": "Vertical",
         "ads": "Ads",

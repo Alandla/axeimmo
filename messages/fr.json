@@ -34,7 +34,8 @@
       "Create": "Créer",
       "Pricing": "Tarifs",
       "Assets": "Médias",
-      "Enhance": "Améliorer"
+      "Enhance": "Améliorer",
+      "Settings": "Paramètres"
     },
     "dashboard": {
       "title": "Tableau de bord",
@@ -287,6 +288,7 @@
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Sous-titres",
       "audio-tabs-title": "Audio",
+      "settings-tabs-title": "Paramètres",
       "video-format": {
         "vertical": "Vertical",
         "ads": "Publicité",
@@ -1539,8 +1541,48 @@
       }
     },
     "settings": {
+      "title": "Paramètres",
+      "subtitle": "Gérez les paramètres et préférences de votre espace",
+      "general": {
+        "title": "Général",
+        "description": "Informations de base de l'espace"
+      },
+      "brand-kit": {
+        "title": "Brand kit",
+        "description": "Personnalisez votre Brand kit",
+        "coming-soon": "Les fonctionnalités de personnalisation d'apparence arrivent bientôt",
+        "logo": {
+          "title": "Logo",
+          "description": "Le logo de votre espace qui sera utilisé dans vos vidéos",
+          "change": "Changer",
+          "upload": "Télécharger un logo",
+          "remove": "Supprimer le logo",
+          "show": "Afficher le logo",
+          "show-description": "Activez cette option pour afficher le logo dans vos vidéos"
+        },
+        "position": {
+          "title": "Position du logo",
+          "description": "Choisissez où positionner votre logo sur vos vidéos",
+          "top-left": "Haut gauche",
+          "top-right": "Haut droite",
+          "middle-left": "Milieu gauche",
+          "middle-right": "Milieu droite",
+          "bottom-left": "Bas gauche",
+          "bottom-right": "Bas droite",
+          "custom": "Position personnalisée"
+        },
+        "save-button": "Sauvegarder",
+        "update-success-title": "Logo mis à jour",
+        "update-success-description": "Le logo de votre espace a été mis à jour avec succès",
+        "premium-access": "Accès Premium",
+        "premium-access-description": "Débloquez les fonctionnalités avancées du brand kit avec nos plans Pro ou Entreprise",
+        "pro-enterprise-required": "Mise à niveau requise",
+        "pro-enterprise-required-description": "Personnaliser vos vidéos avec l'accès au brand kit, nécessite un abonnement Pro.",
+        "upgrade-to-pro": "Passer au Pro"
+      },
       "space": {
         "title": "Paramètres de l'espace",
+        "general-description": "Configurez les informations de base de votre espace",
         "name-label": "Nom",
         "name-placeholder": "Entrez le nom de l'espace",
         "name-description": "Le nom de votre espace visible par tous les membres",

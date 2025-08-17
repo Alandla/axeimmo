@@ -1,0 +1,286 @@
+import { useEffect, useState } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
+import { Button } from "@/src/components/ui/button"
+import { Input } from "@/src/components/ui/input"
+import { Label } from "@/src/components/ui/label"
+import { Switch } from "@/src/components/ui/switch"
+import { Card, CardContent } from "@/src/components/ui/card"
+import { Camera, Save, Loader2, X, Image, Eye, Move, Rocket } from 'lucide-react'
+import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
+import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
+import { basicApiCall } from "../lib/api"
+import { useToast } from "../hooks/use-toast"
+import { getMediaUrlFromFileByPresignedUrl } from "../service/upload.service"
+import { SimpleSpace, LogoPosition, Logo } from "../types/space"
+import { LogoPositionSelector } from "@/src/components/ui/logo-position-selector"
+import { PlanName } from "../types/enums"
+
+interface BrandKitSettingsProps {
+  onClose?: () => void
+}
+
+export function BrandKitSettings({ onClose }: BrandKitSettingsProps = {}) {
+  const t = useTranslations('settings.brand-kit')
+  const tErrors = useTranslations('errors')
+  const { activeSpace, setActiveSpace } = useActiveSpaceStore()
+  const { toast } = useToast()
+  const router = useRouter()
+  const [isHovering, setIsHovering] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const [logoUrl, setLogoUrl] = useState(activeSpace?.logo?.url || undefined)
+
+  const [originalLogoUrl, setOriginalLogoUrl] = useState(activeSpace?.logo?.url || undefined)
+  const [logoPosition, setLogoPosition] = useState<LogoPosition>(activeSpace?.logo?.position || { x: 85, y: 85 })
+  const [originalLogoPosition, setOriginalLogoPosition] = useState<LogoPosition>(activeSpace?.logo?.position || { x: 85, y: 85 })
+  const [showLogo, setShowLogo] = useState(activeSpace?.logo?.show ?? true)
+  const [originalShowLogo, setOriginalShowLogo] = useState(activeSpace?.logo?.show ?? true)
+
+  useEffect(() => {
+    setOriginalLogoUrl(activeSpace?.logo?.url || undefined)
+    setOriginalLogoPosition(activeSpace?.logo?.position || { x: 85, y: 85 })
+    setOriginalShowLogo(activeSpace?.logo?.show ?? true)
+    setLogoUrl(activeSpace?.logo?.url || undefined)
+    setLogoPosition(activeSpace?.logo?.position || { x: 85, y: 85 })
+    setShowLogo(activeSpace?.logo?.show ?? true)
+  }, [activeSpace])
+  
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Check if user has required plan before allowing upload
+    if (!hasRequiredPlan) {
+      toast({
+        title: tErrors('unauthorized'),
+        description: t('pro-enterprise-required-description'),
+        variant: "destructive",
+      })
+      return
+    }
+    
+    setIsUploading(true)
+    const file = event.target.files?.[0]
+    if (!file) return
+    
+    try {
+      getMediaUrlFromFileByPresignedUrl(file).then(async (response) => {
+        setLogoUrl(response.mediaUrl)
+      })
+    } catch (error) {
+      console.error('Error uploading logo:', error)
+      toast({
+        title: tErrors('generic-title'),
+        description: tErrors('generic-description'),
+        variant: "destructive",
+      })
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleDeleteLogo = () => {
+    // Check if user has required plan before allowing delete
+    if (!hasRequiredPlan) {
+      toast({
+        title: tErrors('unauthorized'),
+        description: t('pro-enterprise-required-description'),
+        variant: "destructive",
+      })
+      return
+    }
+    
+    setLogoUrl(undefined)
+  }
+
+  const handleSave = async () => {
+    if (!activeSpace) return
+    
+    // Check if user has required plan before allowing save
+    if (!hasRequiredPlan) {
+      toast({
+        title: tErrors('unauthorized'),
+        description: t('pro-enterprise-required-description'),
+        variant: "destructive",
+      })
+      return
+    }
+    
+    setIsLoading(true)
+    
+    try {
+      const updatedSpace: SimpleSpace = await basicApiCall(`/space/${activeSpace.id}`, {
+        logo: {
+          url: logoUrl,
+          position: logoPosition,
+          show: showLogo
+        }
+      })
+      setActiveSpace(updatedSpace)
+      setOriginalLogoUrl(logoUrl)
+      setOriginalLogoPosition(logoPosition)
+      setOriginalShowLogo(showLogo)
+      toast({
+        title: t('update-success-title'),
+        description: t('update-success-description'),
+        variant: "confirm",
+      })
+    } catch (error) {
+      toast({
+        title: tErrors('generic-title'),
+        description: tErrors('generic-description'),
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const hasChanges = logoUrl !== originalLogoUrl || logoPosition !== originalLogoPosition || showLogo !== originalShowLogo
+
+  // Check if space has required plan for brand-kit access
+  const hasRequiredPlan = activeSpace?.planName === PlanName.PRO || activeSpace?.planName === PlanName.ENTREPRISE
+
+  return (
+    <div className="space-y-6">
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold">{t('title')}</h3>
+        <p className="text-sm text-muted-foreground">
+          {t('description')}
+        </p>
+      </div>
+
+      {!hasRequiredPlan && (
+        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-purple-500/5">
+          <CardContent className="flex items-center justify-between p-6">
+            <div className="flex items-center gap-4">
+              <div>
+                <h4 className="font-semibold text-foreground">{t('pro-enterprise-required')}</h4>
+                <p className="text-sm text-muted-foreground">
+                  {t('pro-enterprise-required-description')}
+                </p>
+              </div>
+            </div>
+            <Button 
+              onClick={() => {
+                onClose?.()
+                router.push('/dashboard/pricing')
+              }}
+              className="bg-primary hover:bg-primary/90"
+            >
+              <Rocket className="h-4 w-4" />
+              {t('upgrade-to-pro')}
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      <div className={`space-y-6 ${!hasRequiredPlan ? 'opacity-50 pointer-events-none' : ''}`}>
+        <div className="flex items-start justify-between lg:h-24">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Label htmlFor="logo" className="font-semibold">{t('logo.title')}</Label>
+            </div>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              {t('logo.description')}
+            </p>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="hidden sm:block"
+              onClick={() => document.getElementById('logo-upload')?.click()}
+              disabled={!hasRequiredPlan}
+            >
+              {t('logo.change')}
+            </Button>
+            <Avatar 
+              className={`h-16 w-16 relative rounded-lg ${hasRequiredPlan ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+              onMouseEnter={() => hasRequiredPlan && setIsHovering(true)}
+              onMouseLeave={() => hasRequiredPlan && setIsHovering(false)}
+              onClick={() => hasRequiredPlan && (logoUrl ? handleDeleteLogo() : document.getElementById('logo-upload')?.click())}
+            >
+              {isUploading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg z-10">
+                  <Loader2 className="h-6 w-6 text-white animate-spin" />
+                </div>
+              )}
+              {!isUploading && logoUrl && <AvatarImage src={logoUrl} alt="Logo" />}
+              <AvatarFallback className="rounded-lg">
+                <Image className="h-6 w-6" />
+              </AvatarFallback>
+              {isHovering && !isUploading && !logoUrl && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
+                  <Camera className="h-6 w-6 text-white" />
+                </div>
+              )}
+              {isHovering && !isUploading && logoUrl && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
+                  <X className="h-6 w-6 text-white" />
+                </div>
+              )}
+            </Avatar>
+          </div>
+          <Input 
+            type="file" 
+            className="hidden" 
+            id="logo-upload" 
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
+
+        {logoUrl && (
+          <>
+            <div className="flex items-start justify-between sm:h-24">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <Label className="font-semibold">{t('logo.show')}</Label>
+                </div>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  {t('logo.show-description')}
+                </p>
+              </div>
+              <Switch
+                checked={showLogo}
+                onCheckedChange={setShowLogo}
+                disabled={!hasRequiredPlan}
+              />
+            </div>
+
+            {showLogo && (
+              <div className="flex items-start justify-between sm:h-24">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Label className="font-semibold">{t('position.title')}</Label>
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    {t('position.description')}
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <LogoPositionSelector
+                    value={logoPosition}
+                    onChange={setLogoPosition}
+                    hideBottomPositions={true}
+                    predefinedOnly={true}
+                  />
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        <div className="flex items-start justify-between h-24">
+          <Button 
+            onClick={handleSave} 
+            disabled={isLoading || !hasChanges || !hasRequiredPlan} 
+            className="w-full sm:w-auto"
+          >
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {t('save-button')}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+} 
