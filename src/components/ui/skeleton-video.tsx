@@ -82,7 +82,11 @@ const SkeletonVideo = ({
             width={800}
             height={450}
             className="w-full h-auto object-cover rounded-md"
-            unoptimized={currentThumbnail.includes('pexels.com')}
+            unoptimized={
+              currentThumbnail &&
+              !currentThumbnail.includes('pexels.com') ||
+              !currentThumbnail.includes('media.hoox.video')
+            }
             onError={() => setThumbnailError(true)}
           />
         </div>

@@ -1,7 +1,6 @@
 import { auth } from '@/src/lib/auth';
 import { NextRequest, NextResponse } from "next/server";
-import { createAudioTTS } from "@/src/lib/elevenlabs";
-import { uploadToS3Audio } from "@/src/lib/r2";
+import { createTextToSpeech } from "@/src/lib/tts";
 import { voicesConfig } from '@/src/config/voices.config';
 import { calculateElevenLabsCost } from '@/src/lib/cost';
 import { getSpaceById } from '@/src/dao/spaceDao';
@@ -30,15 +29,16 @@ export async function POST(req: NextRequest) {
             const space : ISpace = await getSpaceById(spaceId);
             voice = space.voices.find(voice => voice.id === voiceId);
         }
-        const audioResult = await createAudioTTS(voiceId, text, voice?.voiceSettings);
 
-        const audioUrl = await uploadToS3Audio(audioResult.data, 'medias-users');
+        if (!voice) {
+            return NextResponse.json({ error: "Voice not found" }, { status: 404 });
+        }
 
-        const cost = audioResult.cost;
+        const audioResult = await createTextToSpeech(voice, text);
 
         const data = {
-            audioUrl,
-            cost,
+            audioUrl: audioResult.audioUrl,
+            cost: audioResult.cost,
         }
 
         return NextResponse.json({ data });

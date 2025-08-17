@@ -12,7 +12,7 @@ import { FileToUpload } from "../types/files";
 import { Badge } from "./ui/badge";
 import { useActiveSpaceStore } from "../store/activeSpaceStore";
 import { usePremiumToast } from "@/src/utils/premium-toast";
-import { KLING_GENERATION_COSTS } from "../lib/fal";
+import { KLING_GENERATION_COSTS } from "../lib/cost";
 import { Alert, AlertDescription } from "./ui/alert";
 
 // Estime le nombre de séquences vidéo selon la longueur du script, à partir des statistiques :
@@ -296,7 +296,7 @@ export function AiChatTab({
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="flex items-center gap-2">
-                            <Badge variant="secondary" className="bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white border-none">
+                            <Badge variant="plan">
                               Start
                             </Badge>
                             <p>{t('web-mode-tooltip')}</p>

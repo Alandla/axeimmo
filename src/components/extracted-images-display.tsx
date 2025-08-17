@@ -5,6 +5,7 @@ import { useCreationStore } from "../store/creationStore"
 import { GenerationModeSelector } from "./ui/generation-mode-selector"
 import { KlingGenerationMode } from "@/src/lib/fal"
 import { useActiveSpaceStore } from "../store/activeSpaceStore"
+import { Checkbox } from "@/src/components/ui/checkbox"
 import {
   Pagination,
   PaginationContent,
@@ -13,9 +14,11 @@ import {
   PaginationNext,
 } from "@/src/components/ui/pagination"
 
+const EXCLUDED_SOURCE = "EXCLUDED"
+
 export function ExtractedImagesDisplay() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const { extractedImagesMedia, animationMode, setAnimationMode } = useCreationStore()
+  const { extractedImagesMedia, animationMode, setAnimationMode, setExtractedImagesMedia } = useCreationStore()
   const { activeSpace } = useActiveSpaceStore()
 
   const handleNext = () => {
@@ -32,6 +35,19 @@ export function ExtractedImagesDisplay() {
 
   const handleModeChange = (value: string) => {
     setAnimationMode(value as KlingGenerationMode)
+  }
+
+  const handleImageSelection = (index: number, isSelected: boolean) => {
+    const updatedMedia = [...extractedImagesMedia]
+    updatedMedia[index] = {
+      ...updatedMedia[index],
+      source: isSelected ? undefined : EXCLUDED_SOURCE
+    }
+    setExtractedImagesMedia(updatedMedia)
+  }
+
+  const isImageSelected = (media: any) => {
+    return media.source !== EXCLUDED_SOURCE
   }
 
   if (extractedImagesMedia.length === 0) {
@@ -54,11 +70,22 @@ export function ExtractedImagesDisplay() {
         >
           {extractedImagesMedia.map((media, idx) => (
             <div key={idx} className="w-1/2 flex-shrink-0">
-              <div className="bg-white rounded-lg border p-4">
+              <div className="bg-white rounded-lg border p-4 relative">
+                {/* Checkbox de sélection en haut à droite */}
+                <div className="absolute top-2 right-2 z-10">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-md p-1">
+                    <Checkbox
+                      checked={isImageSelected(media)}
+                      onCheckedChange={(checked) => handleImageSelection(idx, checked as boolean)}
+                      className="w-5 h-5"
+                    />
+                  </div>
+                </div>
+                
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-lg font-semibold">Image {idx + 1}</h3>
                 </div>
-                <div className="w-full aspect-square rounded-md overflow-hidden mb-4">
+                <div className={`w-full aspect-square rounded-md overflow-hidden mb-4 ${!isImageSelected(media) ? 'opacity-50' : ''}`}>
                   <img 
                     src={media.image?.link} 
                     alt={media.name} 

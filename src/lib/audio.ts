@@ -135,6 +135,41 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
 
   updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, audioDuration, duration);
   
+  // Fix transitions positions after audio regeneration
+  let updatedTransitions = [...video?.video?.transitions || []];
+  
+  if (updatedTransitions.length > 0) {
+    // Calculate the number of old and new sequences
+    const oldSequenceCount = relatedSequences.length;
+    const newSequenceCount = updatedSequences.length;
+    const sequenceDifference = newSequenceCount - oldSequenceCount;
+
+    // Find the index of the last sequence in the old regenerated zone
+    const lastRelatedIndex = firstRelatedIndex + oldSequenceCount - 1;
+    
+    // Find the index of the last sequence in the new regenerated zone
+    const newLastRelatedIndex = firstRelatedIndex + newSequenceCount - 1;
+
+    updatedTransitions = updatedTransitions.map(transition => {
+      if (transition.indexSequenceBefore !== undefined) {
+        // Transitions that were in the regenerated zone (between firstRelatedIndex and lastRelatedIndex included)
+        if (transition.indexSequenceBefore >= firstRelatedIndex && transition.indexSequenceBefore <= lastRelatedIndex) {
+          return {
+            ...transition,
+            indexSequenceBefore: newLastRelatedIndex
+          };
+        }
+        else if (transition.indexSequenceBefore > lastRelatedIndex) {
+          return {
+            ...transition,
+            indexSequenceBefore: transition.indexSequenceBefore + sequenceDifference
+          };
+        }
+      }
+      return transition;
+    });
+  }
+  
   updatedVideo = {
       ...updatedVideo,
       video: {
@@ -145,7 +180,8 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
               audio_duration: 0,
               language: 'en'
           },
-          sequences: newSequences
+          sequences: newSequences,
+          transitions: updatedTransitions
       }
   };
 

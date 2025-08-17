@@ -70,6 +70,10 @@ export async function POST( req: NextRequest, { params }: { params: { id: string
       };
     }
     
+    if (simpleSpaceData.logo !== undefined) {
+      spaceUpdateData.logo = simpleSpaceData.logo;
+    }
+
     const updatedSpace = await updateSpace(spaceId, spaceUpdateData);
     
     return NextResponse.json({ data: updatedSpace });

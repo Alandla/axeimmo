@@ -90,18 +90,33 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat
     }, []);
 
     useEffect(() => {
-        const loadFontByName = async (fontSelected: string) => {
+        const loadFontByName = async (fontSelected: string, weights?: string[], isItalic?: boolean) => {
             const font = googleFonts.find((font) => font.family === fontSelected);
             if (font) {
-                await font.load();
+                await font.load(weights, isItalic);
             }
         };
 
-        loadFontByName(style?.fontFamily || 'Montserrat');
+        // Initialize weight arrays directly with values
+        const mainWeights: string[] = [(style?.fontWeight || 700).toString()];
+        const activeWordWeights: string[] = [(style?.activeWord?.fontWeight || 700).toString()];
+
+        // Load main font
+        loadFontByName(
+            style?.fontFamily || 'Montserrat', 
+            mainWeights,
+            style?.isItalic || false
+        );
+
+        // Load active word font if different
         if (style?.activeWord?.isActive && style?.activeWord?.fontFamily !== style?.fontFamily) {
-            loadFontByName(style?.activeWord.fontFamily || 'Montserrat');
+            loadFontByName(
+                style?.activeWord.fontFamily || 'Montserrat',
+                activeWordWeights,
+                style?.activeWord?.isItalic || false
+            );
         }
-    }, [style?.fontFamily]);
+    }, [style?.fontFamily, style?.fontWeight, style?.isItalic, style?.activeWord?.fontFamily, style?.activeWord?.fontWeight, style?.activeWord?.isItalic, style?.activeWord?.isActive]);
 
     const getAnimationValues = () => {
         let scale = 1;

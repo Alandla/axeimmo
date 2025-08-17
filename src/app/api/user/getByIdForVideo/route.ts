@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     
     const response = {
       id: user.id,
-      name: user.name,
+      name: user.firstName || user.name,
       image: user.image,
     }
 

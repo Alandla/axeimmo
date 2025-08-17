@@ -4,5 +4,8 @@ export const mails = {
     },
     videoExported: {
         id: "cm7xkij17060tw49m52zqlo75"
+    },
+    proLead: {
+        id: "cmct51hx904gpyu0ib8u2oyay"
     }
 }

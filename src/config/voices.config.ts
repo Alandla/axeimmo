@@ -3,6 +3,126 @@ import { Voice } from '../types/voice'
 
 export const voicesConfig: Voice[] = [
   {
+    id: 'English_expressive_narrator',
+    name: 'James',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration', 'storytelling'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/d51c0640-4693-40a3-9133-9f7aa48f82c1.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'English_radiant_girl',
+    name: 'Emily',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['social_media', 'entertainment'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/2b585f2e-51f7-43aa-9f71-df4a6ecb4837.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'English_magnetic_voiced_man',
+    name: 'William',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['advertising', 'entertainment'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/f8a97834-3fda-4ba5-af64-959572d81296.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'English_compelling_lady1',
+    name: 'Olivia',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['news', 'narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/896d9f73-1bdd-4167-b121-2f636c8ea72f.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'English_Aussie_Bloke',
+    name: 'Jack',
+    language: 'english',
+    accent: 'australian',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['conversational', 'entertainment'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/eb12f344-f3b8-4b7b-b72b-87e3a24d77fd.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'English_Trustworth_Man',
+    name: 'Benjamin',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['news', 'documentary'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/3dff610d-cb28-4b30-ba68-dd1b07f46a37.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'English_CalmWoman',
+    name: 'Grace',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['meditation', 'wellness'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/803e2ae2-7873-4528-9402-d351e97e2400.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'English_Graceful_Lady',
+    name: 'Charlotte',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration', 'storytelling'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/1500d57b-8dc7-41e6-a987-353a01071bd2.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'English_CaptivatingStoryteller',
+    name: 'Henry',
+    language: 'english',
+    accent: 'american',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['storytelling', 'narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/866dcd2c-1e03-4005-a5a4-4b26cca8d659.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'English_ConfidentWoman',
+    name: 'Sophia',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['business', 'news'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/2284c084-7516-4f47-bcda-6f45b7e241cc.mp3',
+    mode: 'minimax'
+  },
+  {
     id: '21m00Tcm4TlvDq8ikWAM',
     name: 'Rachel',
     language: 'english',
@@ -11,7 +131,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/21m00Tcm4TlvDq8ikWAM/df6788f9-5c96-470d-8312-aab3b3d8f50a.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/21m00Tcm4TlvDq8ikWAM/df6788f9-5c96-470d-8312-aab3b3d8f50a.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'CwhRBWXzGAHq8TQ4Fs17',
@@ -22,7 +143,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['social_media'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/CwhRBWXzGAHq8TQ4Fs17/58ee3ff5-f6f2-4628-93b8-e38eb31806b0.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/CwhRBWXzGAHq8TQ4Fs17/58ee3ff5-f6f2-4628-93b8-e38eb31806b0.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'FGY2WhTYpPnrIDTdsKH5',
@@ -33,7 +155,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/FGY2WhTYpPnrIDTdsKH5/67341759-ad08-41a5-be6e-de12fe448618.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/FGY2WhTYpPnrIDTdsKH5/67341759-ad08-41a5-be6e-de12fe448618.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '29vD33N1CtxCmqQRPOHJ',
@@ -44,7 +167,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['news'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/29vD33N1CtxCmqQRPOHJ/e8b52a3f-9732-440f-b78a-16d5e26407a1.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/29vD33N1CtxCmqQRPOHJ/e8b52a3f-9732-440f-b78a-16d5e26407a1.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '2EiwWnXFnvU5JabPnv8n',
@@ -55,7 +179,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['video-game'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/2EiwWnXFnvU5JabPnv8n/65d80f52-703f-4cae-a91d-75d4e200ed02.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/2EiwWnXFnvU5JabPnv8n/65d80f52-703f-4cae-a91d-75d4e200ed02.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'SAz9YHcvj6GT2YYXdXww',
@@ -66,7 +191,56 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['social_media'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SAz9YHcvj6GT2YYXdXww/e6c95f0b-2227-491a-b3d7-2249240decb7.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SAz9YHcvj6GT2YYXdXww/e6c95f0b-2227-491a-b3d7-2249240decb7.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'French_Male_Speech_New',
+    name: 'Pierre',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['news', 'documentary'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/2a480f4c-fb8f-4acc-ac2a-770dfce85b5a.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'French_Female_News Anchor',
+    name: 'Marie',
+    language: 'french',
+    accent: 'french',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['news', 'journalism'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/2a096860-8e9e-4a1d-8beb-ebc7a2477ef2.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'French_MovieLeadFemale',
+    name: 'Julie',
+    language: 'french',
+    accent: 'french',
+    gender: 'female',
+    age: 'young',
+    tags: ['entertainment', 'storytelling'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/8f0cbfba-ac3e-4227-85b8-eeef568ed407.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'French_MaleNarrator',
+    name: 'Luc',
+    language: 'french',
+    accent: 'french',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration', 'storytelling'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/5fc21166-d4fa-453a-82bd-4e2e077d6119.mp3',
+    mode: 'minimax'
   },
   {
     id: 'AmMsHJaCw4BtwV3KoUXF',
@@ -81,7 +255,8 @@ export const voicesConfig: Voice[] = [
         stability: 0.78,
         similarity_boost: 0.70
     },
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/1Mn4lcdhvCTTZOJZAqLZXhDzI913/voices/AmMsHJaCw4BtwV3KoUXF/dcfdf987-abaa-4677-bf1c-bd62db878c41.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/1Mn4lcdhvCTTZOJZAqLZXhDzI913/voices/AmMsHJaCw4BtwV3KoUXF/dcfdf987-abaa-4677-bf1c-bd62db878c41.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'hv6gVog5LgtIUX88Nmq8',
@@ -96,7 +271,8 @@ export const voicesConfig: Voice[] = [
         stability: 0.99,
         similarity_boost: 0.90
     },
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/hv6gVog5LgtIUX88Nmq8/tx8rwfCue7TqWMKmoWLv.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/hv6gVog5LgtIUX88Nmq8/tx8rwfCue7TqWMKmoWLv.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'IHngRooVccHyPqB4uQkG',
@@ -111,7 +287,8 @@ export const voicesConfig: Voice[] = [
         stability: 0.52,
         similarity_boost: 0.67
     },
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/IHngRooVccHyPqB4uQkG/yQPlGmXFNsSO01HV7Qsk.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/IHngRooVccHyPqB4uQkG/yQPlGmXFNsSO01HV7Qsk.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'wyZnrAs18zdIj8UgFSV8',
@@ -122,7 +299,44 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['story'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/wyZnrAs18zdIj8UgFSV8/DriAKIJgOzTr1mTMinLI.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/wyZnrAs18zdIj8UgFSV8/DriAKIJgOzTr1mTMinLI.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'Spanish_SereneWoman',
+    name: 'Carmen',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['meditation', 'wellness'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/0b5c036c-5b25-4b29-b279-6b25ea12e7cc.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Spanish_CaptivatingStoryteller',
+    name: 'Juan',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['storytelling', 'narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/f998d149-b1ea-4de9-8986-29fd309183c9.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Spanish_ConfidentWoman',
+    name: 'Lucia',
+    language: 'spanish',
+    accent: 'spanish',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['business', 'news'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/33cb8a1d-0812-42b9-9de6-a3ec716b9dbc.mp3',
+    mode: 'minimax'
   },
   {
     id: 'D7dkYvH17OKLgp4SLulf',
@@ -133,7 +347,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['advertising'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/D7dkYvH17OKLgp4SLulf/Fi93KkolvadvCJVGsgqE.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/D7dkYvH17OKLgp4SLulf/Fi93KkolvadvCJVGsgqE.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'ThT5KcBeYPX3keUQqHPh',
@@ -144,7 +359,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['children_stories'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ThT5KcBeYPX3keUQqHPh/981f0855-6598-48d2-9f8f-b6d92fbbe3fc.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ThT5KcBeYPX3keUQqHPh/981f0855-6598-48d2-9f8f-b6d92fbbe3fc.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'KmqhNPEmmOndTBOPk4mJ',
@@ -159,7 +375,8 @@ export const voicesConfig: Voice[] = [
         stability: 0.42,
         similarity_boost: 0.75
     },
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/Zj9ZLb9VaXcqr3nC8n9J55ADmaB2/voices/KmqhNPEmmOndTBOPk4mJ/Q2N4SM2u9Rc5dlcx4ZvR.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/Zj9ZLb9VaXcqr3nC8n9J55ADmaB2/voices/KmqhNPEmmOndTBOPk4mJ/Q2N4SM2u9Rc5dlcx4ZvR.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'dllHSct4GokGc1AH9JwT',
@@ -170,7 +387,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['entertainment'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/dllHSct4GokGc1AH9JwT/JXj5A2pcLMsfU01VbiHN.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/dllHSct4GokGc1AH9JwT/JXj5A2pcLMsfU01VbiHN.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'MNKK2Wl2wbbsEPQTHZGt',
@@ -181,7 +399,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['story', 'social_media', 'conversational'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/koOonD4HAsSMVyHuP4QTaatQ9cA2/voices/MNKK2Wl2wbbsEPQTHZGt/cBESg5mfxRaw8hEM3XnT.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/koOonD4HAsSMVyHuP4QTaatQ9cA2/voices/MNKK2Wl2wbbsEPQTHZGt/cBESg5mfxRaw8hEM3XnT.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'TnnHlREp9UyW7nQDycZx',
@@ -196,7 +415,8 @@ export const voicesConfig: Voice[] = [
         stability: 1,
         similarity_boost: 0.75
     },
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/PZVKCR3CEIRXaGs4kAkaa6xW9gu2/voices/TnnHlREp9UyW7nQDycZx/zd4Now7NNZt7XTpQfowW.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/PZVKCR3CEIRXaGs4kAkaa6xW9gu2/voices/TnnHlREp9UyW7nQDycZx/zd4Now7NNZt7XTpQfowW.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '5Q0t7uMcjvnagumLfvZi',
@@ -207,7 +427,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['news'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/5Q0t7uMcjvnagumLfvZi/1094515a-b080-4282-aac7-b1b8a553a3a8.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/5Q0t7uMcjvnagumLfvZi/1094515a-b080-4282-aac7-b1b8a553a3a8.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'AZnzlk1XvdvUeBnXmlld',
@@ -218,7 +439,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/AZnzlk1XvdvUeBnXmlld/508e12d0-a7f7-4d86-a0d3-f3884ff353ed.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/AZnzlk1XvdvUeBnXmlld/508e12d0-a7f7-4d86-a0d3-f3884ff353ed.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'CYw3kZ02Hs0563khs1Fj',
@@ -229,7 +451,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['video-game'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/CYw3kZ02Hs0563khs1Fj/872cb056-45d3-419e-b5c6-de2b387a93a0.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/CYw3kZ02Hs0563khs1Fj/872cb056-45d3-419e-b5c6-de2b387a93a0.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'D38z5RcWu1voky8WS1ja',
@@ -240,7 +463,8 @@ export const voicesConfig: Voice[] = [
     age: 'old',
     tags: ['video-game'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/D38z5RcWu1voky8WS1ja/a470ba64-1e72-46d9-ba9d-030c4155e2d2.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/D38z5RcWu1voky8WS1ja/a470ba64-1e72-46d9-ba9d-030c4155e2d2.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'EXAVITQu4vr4xnSDxMaL',
@@ -251,7 +475,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['news'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/EXAVITQu4vr4xnSDxMaL/6851ec91-9950-471f-8586-357c52539069.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/EXAVITQu4vr4xnSDxMaL/6851ec91-9950-471f-8586-357c52539069.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'ErXwobaYiN019PkySvjV',
@@ -262,7 +487,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ErXwobaYiN019PkySvjV/ee9ac367-91ee-4a56-818a-2bd1a9dbe83a.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ErXwobaYiN019PkySvjV/ee9ac367-91ee-4a56-818a-2bd1a9dbe83a.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'GBv7mTt0atIp3Br8iCZE',
@@ -273,7 +499,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['meditation'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/GBv7mTt0atIp3Br8iCZE/98542988-5267-4148-9a9e-baa8c4f14644.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/GBv7mTt0atIp3Br8iCZE/98542988-5267-4148-9a9e-baa8c4f14644.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'IKne3meq5aSn9XLyUdCD',
@@ -284,7 +511,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['conversational'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/IKne3meq5aSn9XLyUdCD/102de6f2-22ed-43e0-a1f1-111fa75c5481.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/IKne3meq5aSn9XLyUdCD/102de6f2-22ed-43e0-a1f1-111fa75c5481.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'JBFqnCBsd6RMkjVDRZzb',
@@ -295,7 +523,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/JBFqnCBsd6RMkjVDRZzb/e6206d1a-0721-4787-aafb-06a6e705cac5.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/JBFqnCBsd6RMkjVDRZzb/e6206d1a-0721-4787-aafb-06a6e705cac5.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'LcfcDJNUP1GQjkzn1xUU',
@@ -306,7 +535,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['meditation'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/LcfcDJNUP1GQjkzn1xUU/e4b994b7-9713-4238-84f3-add8fccaaccd.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/LcfcDJNUP1GQjkzn1xUU/e4b994b7-9713-4238-84f3-add8fccaaccd.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'MF3mGyEYCl7XYWbV9V6O',
@@ -317,7 +547,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration', 'news'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/MF3mGyEYCl7XYWbV9V6O/d8ecadea-9e48-4e5d-868a-2ec3d7397861.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/MF3mGyEYCl7XYWbV9V6O/d8ecadea-9e48-4e5d-868a-2ec3d7397861.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'N2lVS1w4EtoT3dr4eOWO',
@@ -328,7 +559,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['characters'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/N2lVS1w4EtoT3dr4eOWO/ac833bd8-ffda-4938-9ebc-b0f99ca25481.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/N2lVS1w4EtoT3dr4eOWO/ac833bd8-ffda-4938-9ebc-b0f99ca25481.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'ODq5zmih8GrVes37Dizd',
@@ -339,7 +571,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['video-game'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ODq5zmih8GrVes37Dizd/0ebec87a-2569-4976-9ea5-0170854411a9.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ODq5zmih8GrVes37Dizd/0ebec87a-2569-4976-9ea5-0170854411a9.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'SOYHLrjzK2X1ezoPC6cr',
@@ -350,7 +583,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['video-game'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SOYHLrjzK2X1ezoPC6cr/86d178f6-f4b6-4e0e-85be-3de19f490794.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SOYHLrjzK2X1ezoPC6cr/86d178f6-f4b6-4e0e-85be-3de19f490794.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'TX3LPaxmHKxFdv7VOQHJ',
@@ -361,7 +595,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/TX3LPaxmHKxFdv7VOQHJ/63148076-6363-42db-aea8-31424308b92c.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/TX3LPaxmHKxFdv7VOQHJ/63148076-6363-42db-aea8-31424308b92c.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'TxGEqnHWrfWFTfGW9XjX',
@@ -372,7 +607,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/TxGEqnHWrfWFTfGW9XjX/3ae2fc71-d5f9-4769-bb71-2a43633cd186.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/TxGEqnHWrfWFTfGW9XjX/3ae2fc71-d5f9-4769-bb71-2a43633cd186.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'VR6AewLTigWG4xSOukaG',
@@ -383,7 +619,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/VR6AewLTigWG4xSOukaG/316050b7-c4e0-48de-acf9-a882bb7fc43b.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/VR6AewLTigWG4xSOukaG/316050b7-c4e0-48de-acf9-a882bb7fc43b.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'XB0fDUnXU5powFXDhCwa',
@@ -394,7 +631,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['characters'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/XB0fDUnXU5powFXDhCwa/942356dc-f10d-4d89-bda5-4f8505ee038b.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/XB0fDUnXU5powFXDhCwa/942356dc-f10d-4d89-bda5-4f8505ee038b.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'Xb7hH8MSUJpSbSDYk0k2',
@@ -405,7 +643,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['news'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/Xb7hH8MSUJpSbSDYk0k2/d10f7534-11f6-41fe-a012-2de1e482d336.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/Xb7hH8MSUJpSbSDYk0k2/d10f7534-11f6-41fe-a012-2de1e482d336.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'XrExE9yKIg1WjnnlVkGX',
@@ -416,7 +655,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/XrExE9yKIg1WjnnlVkGX/b930e18d-6b4d-466e-bab2-0ae97c6d8535.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/XrExE9yKIg1WjnnlVkGX/b930e18d-6b4d-466e-bab2-0ae97c6d8535.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'ZQe5CZNOzWyzPSCn5a3c',
@@ -427,7 +667,8 @@ export const voicesConfig: Voice[] = [
     age: 'old',
     tags: ['news'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ZQe5CZNOzWyzPSCn5a3c/35734112-7b72-48df-bc2f-64d5ab2f791b.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/ZQe5CZNOzWyzPSCn5a3c/35734112-7b72-48df-bc2f-64d5ab2f791b.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'Zlb1dXrM653N07WRdFW3',
@@ -438,7 +679,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['news'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/Zlb1dXrM653N07WRdFW3/daa22039-8b09-4c65-b59f-c79c48646a72.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/Zlb1dXrM653N07WRdFW3/daa22039-8b09-4c65-b59f-c79c48646a72.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'bVMeCyTHy58xNoL34h3p',
@@ -449,7 +691,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/bVMeCyTHy58xNoL34h3p/66c47d58-26fd-4b30-8a06-07952116a72c.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/bVMeCyTHy58xNoL34h3p/66c47d58-26fd-4b30-8a06-07952116a72c.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'bIHbv24MWmeRgasZH58o',
@@ -460,7 +703,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/bIHbv24MWmeRgasZH58o/8caf8f3d-ad29-4980-af41-53f20c72d7a4.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/bIHbv24MWmeRgasZH58o/8caf8f3d-ad29-4980-af41-53f20c72d7a4.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'cgSgspJ2msm6clMCkdW9',
@@ -471,7 +715,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['conversational', 'advertising'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/cgSgspJ2msm6clMCkdW9/56a97bf8-b69b-448f-846c-c3a11683d45a.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/cgSgspJ2msm6clMCkdW9/56a97bf8-b69b-448f-846c-c3a11683d45a.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'cjVigY5qzO86Huf0OWal',
@@ -482,7 +727,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['conversational'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/cjVigY5qzO86Huf0OWal/d098fda0-6456-4030-b3d8-63aa048c9070.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/cjVigY5qzO86Huf0OWal/d098fda0-6456-4030-b3d8-63aa048c9070.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'qlfxsYlCv09qu8y6PkmY',
@@ -493,7 +739,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['advertising'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/IDjAiYAPz8WIBA9QLchInFTST2K2/voices/qlfxsYlCv09qu8y6PkmY/IUx8b3i3dkhJvQekActS.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/IDjAiYAPz8WIBA9QLchInFTST2K2/voices/qlfxsYlCv09qu8y6PkmY/IUx8b3i3dkhJvQekActS.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'flq6f7yk4E4fJM5XTYuZ',
@@ -504,7 +751,8 @@ export const voicesConfig: Voice[] = [
     age: 'old',
     tags: ['audiobook'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/flq6f7yk4E4fJM5XTYuZ/c6431a82-f7d2-4905-b8a4-a631960633d6.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/flq6f7yk4E4fJM5XTYuZ/c6431a82-f7d2-4905-b8a4-a631960633d6.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'g5CIjZEefAph4nQFvHAz',
@@ -515,7 +763,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['ASMR'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/g5CIjZEefAph4nQFvHAz/26acfa99-fdec-43b8-b2ee-e49e75a3ac16.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/g5CIjZEefAph4nQFvHAz/26acfa99-fdec-43b8-b2ee-e49e75a3ac16.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'jBpfuIE2acCO8z3wKNLl',
@@ -526,7 +775,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['animation'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/jBpfuIE2acCO8z3wKNLl/3a7e4339-78fa-404e-8d10-c3ef5587935b.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/jBpfuIE2acCO8z3wKNLl/3a7e4339-78fa-404e-8d10-c3ef5587935b.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'jsCqWAovK2LkecY7zXl4',
@@ -537,7 +787,32 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/jsCqWAovK2LkecY7zXl4/8e1f5240-556e-4fd5-892c-25df9ea3b593.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/jsCqWAovK2LkecY7zXl4/8e1f5240-556e-4fd5-892c-25df9ea3b593.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'German_FriendlyMan',
+    name: 'Lukas',
+    language: 'german',
+    accent: 'german',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['conversational', 'entertainment'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/2ce0d013-65ce-40db-b01f-6827ea5cd630.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'German_SweetLady',
+    name: 'Anna',
+    language: 'german',
+    accent: 'german',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['storytelling', 'narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/c69570ba-a14e-4b69-b5be-35b00daa890e.mp3',
+    mode: 'minimax'
   },
   {
     id: 'y8FeN9lFTEmQOYCaE07F',
@@ -548,7 +823,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['story'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/y8FeN9lFTEmQOYCaE07F/9bxoWAk64KX3ReXWWxzF.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/y8FeN9lFTEmQOYCaE07F/9bxoWAk64KX3ReXWWxzF.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'yl2ZDV1MzN4HbQJbMihG',
@@ -559,7 +835,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media', 'entertainment'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/yl2ZDV1MzN4HbQJbMihG/TxJIOexqYqCv1Dzexs6Y.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/yl2ZDV1MzN4HbQJbMihG/TxJIOexqYqCv1Dzexs6Y.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'wcGcDDfRHvH6LR9p07u4',
@@ -570,7 +847,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['documentary', 'tv'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/wcGcDDfRHvH6LR9p07u4/MwCrcs1GOzSgvpRzteGO.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/wcGcDDfRHvH6LR9p07u4/MwCrcs1GOzSgvpRzteGO.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '7H4vk4UjjbKDZiGTgH8K',
@@ -581,7 +859,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['news', 'social_media'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/cRXPVHkjb5YtcgDRqlqIZ9N7AdP2/voices/7H4vk4UjjbKDZiGTgH8K/tmQekACAPn5p2i4Z4Jtu.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/cRXPVHkjb5YtcgDRqlqIZ9N7AdP2/voices/7H4vk4UjjbKDZiGTgH8K/tmQekACAPn5p2i4Z4Jtu.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'rpw80tAFDqIOQ0Ve2QVJ',
@@ -592,7 +871,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['entertainment'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/LhidVU2Rn4OyolheNv4hiKZPyJj1/voices/rpw80tAFDqIOQ0Ve2QVJ/9a88462c-d0be-4d15-8443-fbf1c5fa7da7.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/LhidVU2Rn4OyolheNv4hiKZPyJj1/voices/rpw80tAFDqIOQ0Ve2QVJ/9a88462c-d0be-4d15-8443-fbf1c5fa7da7.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'ohItIVrXTBI80RrUECOD',
@@ -603,7 +883,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/ohItIVrXTBI80RrUECOD/9mwgJwmYqekI6JTMJTcv.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/ohItIVrXTBI80RrUECOD/9mwgJwmYqekI6JTMJTcv.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'GgV5QStPLpmkN7FOHJtY',
@@ -618,7 +899,8 @@ export const voicesConfig: Voice[] = [
         stability: 0.52,
         similarity_boost: 1
     },
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/GgV5QStPLpmkN7FOHJtY/bmKBkANSoceD0lpX6ZiA.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/GgV5QStPLpmkN7FOHJtY/bmKBkANSoceD0lpX6ZiA.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '9BWtsMINqrJLrRacOk9x',
@@ -629,7 +911,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['social_media'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/9BWtsMINqrJLrRacOk9x/405766b8-1f4e-4d3c-aba1-6f25333823ec.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/9BWtsMINqrJLrRacOk9x/405766b8-1f4e-4d3c-aba1-6f25333823ec.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'FpvROcY4IGWevepmBWO2',
@@ -640,7 +923,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['journalism', 'entertainment'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ZAS4o4vI8aVeceS8bWmtpuSYDqM2/voices/FpvROcY4IGWevepmBWO2/bS9p4qTvVCRqxuIqhvk3.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ZAS4o4vI8aVeceS8bWmtpuSYDqM2/voices/FpvROcY4IGWevepmBWO2/bS9p4qTvVCRqxuIqhvk3.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'PBm6YPbx7WbrxFTZwj3E',
@@ -649,9 +933,10 @@ export const voicesConfig: Voice[] = [
     accent: 'french',
     gender: 'male',
     age: 'middle aged',
-    tags: ['audiobooks', 'podcasts', 'storytelling'],
+    tags: ['audiobooks', 'podcast', 'storytelling'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/PBm6YPbx7WbrxFTZwj3E/D8U7C2MgPxZt3MVgeFjn.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/PBm6YPbx7WbrxFTZwj3E/D8U7C2MgPxZt3MVgeFjn.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'hPrNlxoc73WWsa2Bn4Xl',
@@ -662,7 +947,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/hPrNlxoc73WWsa2Bn4Xl/1ac32982-cda7-45e9-a8ae-1dc7e0654c7e.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/hPrNlxoc73WWsa2Bn4Xl/1ac32982-cda7-45e9-a8ae-1dc7e0654c7e.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'pNInz6obpgDQGcFmaJgB',
@@ -673,7 +959,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['audiobook', 'documentary'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pNInz6obpgDQGcFmaJgB/00a07690-41ef-4b37-9877-3521877fb517.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pNInz6obpgDQGcFmaJgB/00a07690-41ef-4b37-9877-3521877fb517.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'zcAOhNBS3c14rBihAFp1',
@@ -684,7 +971,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration', 'podcast'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/UeKvUoSIoHPIPa1EC4SF7awTS1O2/voices/zcAOhNBS3c14rBihAFp1/c0c8eb52-57f4-4e0c-bbb1-4132c68583bc.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/UeKvUoSIoHPIPa1EC4SF7awTS1O2/voices/zcAOhNBS3c14rBihAFp1/c0c8eb52-57f4-4e0c-bbb1-4132c68583bc.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'XpgPp3EWdH9jutj6iYCG',
@@ -695,7 +983,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration', 'storytelling'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/XpgPp3EWdH9jutj6iYCG/u0ahKTZK04PQzfRFMYNT.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/XpgPp3EWdH9jutj6iYCG/u0ahKTZK04PQzfRFMYNT.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'Lj1QjnOhnCRYdZ1z41yA',
@@ -706,7 +995,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['news', 'documentary'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/Lj1QjnOhnCRYdZ1z41yA/NXGVXlbtcwI6fTuGHO5H.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/Lj1QjnOhnCRYdZ1z41yA/NXGVXlbtcwI6fTuGHO5H.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'WuBPEavIaQB56EnsGvFh',
@@ -717,7 +1007,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['news', 'documentary'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/DdUt6lVFfrUOSikHrCbs3tesMgE2/voices/WuBPEavIaQB56EnsGvFh/3TZ2U2i8QlJlMuv3IEwF.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/DdUt6lVFfrUOSikHrCbs3tesMgE2/voices/WuBPEavIaQB56EnsGvFh/3TZ2U2i8QlJlMuv3IEwF.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'DbbNuBL7lf62XwY7arQb',
@@ -728,7 +1019,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['advertising'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/CnqbtUuTI7c3c9tg8rabjLsxs392/voices/DbbNuBL7lf62XwY7arQb/SWJaCUjKugbzdtfB3K5g.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/CnqbtUuTI7c3c9tg8rabjLsxs392/voices/DbbNuBL7lf62XwY7arQb/SWJaCUjKugbzdtfB3K5g.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'exxAZVMfY4Qs7F9CS1oN',
@@ -739,7 +1031,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/nhgk7oBcbxQC2q60UkxTfqILyJH2/voices/exxAZVMfY4Qs7F9CS1oN/85e5d7bf-1951-40ad-a895-aa36315a5eb9.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/nhgk7oBcbxQC2q60UkxTfqILyJH2/voices/exxAZVMfY4Qs7F9CS1oN/85e5d7bf-1951-40ad-a895-aa36315a5eb9.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '991lF4hc0xxfec4Y6B0i',
@@ -750,7 +1043,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/xkeMToCFOISTDezVTilP578UL8P2/voices/991lF4hc0xxfec4Y6B0i/nRrBNvwlFicCbjCwWpDU.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/xkeMToCFOISTDezVTilP578UL8P2/voices/991lF4hc0xxfec4Y6B0i/nRrBNvwlFicCbjCwWpDU.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'GBp66gF5eXCkPPSbXSDf',
@@ -761,7 +1055,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/7ucN3eeqpmVgx1aioqv50fxHYUy1/voices/GBp66gF5eXCkPPSbXSDf/0Idsn9IUbSjsPV0e8Blp.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/7ucN3eeqpmVgx1aioqv50fxHYUy1/voices/GBp66gF5eXCkPPSbXSDf/0Idsn9IUbSjsPV0e8Blp.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'it5NMxoQQ2INIh4XcO44',
@@ -772,7 +1067,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/yQsdngW2YfNcf21J76ZoeHWYWlF3/voices/it5NMxoQQ2INIh4XcO44/614c998f-9650-481e-bf2c-82c07d198c14.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/yQsdngW2YfNcf21J76ZoeHWYWlF3/voices/it5NMxoQQ2INIh4XcO44/614c998f-9650-481e-bf2c-82c07d198c14.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'byWOh4ohcovt7I8koF2I',
@@ -783,7 +1079,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ek2hAMyYf2bduef0Kx4Devyliyp1/voices/byWOh4ohcovt7I8koF2I/opQmsRyg7lcWOXCp1VNS.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ek2hAMyYf2bduef0Kx4Devyliyp1/voices/byWOh4ohcovt7I8koF2I/opQmsRyg7lcWOXCp1VNS.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'aUTn6mevnrM9pqtesisb',
@@ -794,7 +1091,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/qi0SL35A2VgBnfV6EJ3InVfTK4D3/voices/aUTn6mevnrM9pqtesisb/a6cf4206-bc5e-43d0-9a71-1f33871a7e97.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/qi0SL35A2VgBnfV6EJ3InVfTK4D3/voices/aUTn6mevnrM9pqtesisb/a6cf4206-bc5e-43d0-9a71-1f33871a7e97.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'rB5Qp6YdOmuEtJFRdSQ4',
@@ -805,7 +1103,32 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/7rRTLlFFfFWXTG0i2PYea6PMKxU2/voices/rB5Qp6YdOmuEtJFRdSQ4/cfd147f4-f9e1-45f1-a809-4f21f08ce2ec.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/7rRTLlFFfFWXTG0i2PYea6PMKxU2/voices/rB5Qp6YdOmuEtJFRdSQ4/cfd147f4-f9e1-45f1-a809-4f21f08ce2ec.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'Italian_Narrator',
+    name: 'Marco',
+    language: 'italian',
+    accent: 'italian',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['narration', 'storytelling'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/343d1729-3b7a-4b55-84d6-c511e545a49e.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Italian_BraveHeroine',
+    name: 'Giulia',
+    language: 'italian',
+    accent: 'italian',
+    gender: 'female',
+    age: 'young',
+    tags: ['entertainment', 'storytelling'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/1a9716bd-a37f-48f5-84f3-1281e8eb16ab.mp3',
+    mode: 'minimax'
   },
   {
     id: 'QQpLisLueobAksl21CaK',
@@ -816,7 +1139,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/WIxLfUzQwDefgXJDitEOMmWvdky1/voices/QQpLisLueobAksl21CaK/Q7fFitaSyjYwxx1sJ1dO.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/WIxLfUzQwDefgXJDitEOMmWvdky1/voices/QQpLisLueobAksl21CaK/Q7fFitaSyjYwxx1sJ1dO.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '58SnLsdWOv994RNKXLhV',
@@ -827,7 +1151,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/DFCSpya3TkNqWrV1PUbXKdcCAXH3/voices/58SnLsdWOv994RNKXLhV/246660cf-85b1-443c-816c-307f9f4c1e54.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/DFCSpya3TkNqWrV1PUbXKdcCAXH3/voices/58SnLsdWOv994RNKXLhV/246660cf-85b1-443c-816c-307f9f4c1e54.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'mFgXOmlOfXfr6suoQkRH',
@@ -838,7 +1163,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/bb3RJYk3MKfoNRCBCd7fDI6pfIg2/voices/mFgXOmlOfXfr6suoQkRH/614ee365-8e51-4545-93a7-0a3338c765f0.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/bb3RJYk3MKfoNRCBCd7fDI6pfIg2/voices/mFgXOmlOfXfr6suoQkRH/614ee365-8e51-4545-93a7-0a3338c765f0.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '75toWT7xwWkf5F7xSBgK',
@@ -849,7 +1175,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/0Pp4sLTnuHaJOE5r0xCjhGZGHCI2/voices/75toWT7xwWkf5F7xSBgK/0a04be0f-d6c3-427e-ad5e-40b92c8cda74.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/0Pp4sLTnuHaJOE5r0xCjhGZGHCI2/voices/75toWT7xwWkf5F7xSBgK/0a04be0f-d6c3-427e-ad5e-40b92c8cda74.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '8lbMAldPdNgaVy6tKwSs',
@@ -860,7 +1187,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ER39kT6PRBRm3Mn1puxCf29gDk22/voices/8lbMAldPdNgaVy6tKwSs/HchxVOKW4Gmw7VJt85y0.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ER39kT6PRBRm3Mn1puxCf29gDk22/voices/8lbMAldPdNgaVy6tKwSs/HchxVOKW4Gmw7VJt85y0.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'CiACFqHhFCzosBy47F4a',
@@ -871,7 +1199,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/IW0luuLA0rfha0Idd9mNs5vD30J2/voices/CiACFqHhFCzosBy47F4a/abce7301-fdd2-466f-9ac2-4dffbb51c65d.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/IW0luuLA0rfha0Idd9mNs5vD30J2/voices/CiACFqHhFCzosBy47F4a/abce7301-fdd2-466f-9ac2-4dffbb51c65d.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'orF2qy9215xjwqqxqsWW',
@@ -882,7 +1211,8 @@ export const voicesConfig: Voice[] = [
     age: 'old',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/sU82YAs205U4voRAto2MQACX1a12/voices/orF2qy9215xjwqqxqsWW/SJmtVEhMG2bXkGRJXG69.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/sU82YAs205U4voRAto2MQACX1a12/voices/orF2qy9215xjwqqxqsWW/SJmtVEhMG2bXkGRJXG69.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'dyLJ4nCukg4AOgAVlUR7',
@@ -893,7 +1223,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['entertainment'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/sU82YAs205U4voRAto2MQACX1a12/voices/orF2qy9215xjwqqxqsWW/SJmtVEhMG2bXkGRJXG69.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/sU82YAs205U4voRAto2MQACX1a12/voices/orF2qy9215xjwqqxqsWW/SJmtVEhMG2bXkGRJXG69.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'DveEBhc92f63T1jcpWTx',
@@ -904,7 +1235,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/RQNbgmuTlWUvhm0Mnm1nSsI0qXE3/voices/DveEBhc92f63T1jcpWTx/stv26KZlmXKsA8l3NixT.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/RQNbgmuTlWUvhm0Mnm1nSsI0qXE3/voices/DveEBhc92f63T1jcpWTx/stv26KZlmXKsA8l3NixT.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'FWCNEHwbQhB1Da2r1GKI',
@@ -915,18 +1247,20 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ozMB8jrBVqbaUOJusn3iJTWV1FJ3/voices/FWCNEHwbQhB1Da2r1GKI/c165f1c0-28c3-4726-8270-84be1fc4a629.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ozMB8jrBVqbaUOJusn3iJTWV1FJ3/voices/FWCNEHwbQhB1Da2r1GKI/c165f1c0-28c3-4726-8270-84be1fc4a629.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'QASMHppTyiZ0ijhb7hy0',
     name: 'Olympe',
     language: 'french',
     accent: 'french',
-    gender: 'female',
+    gender: 'male',
     age: 'young',
     tags: ['narration'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ozMB8jrBVqbaUOJusn3iJTWV1FJ3/voices/FWCNEHwbQhB1Da2r1GKI/c165f1c0-28c3-4726-8270-84be1fc4a629.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ozMB8jrBVqbaUOJusn3iJTWV1FJ3/voices/FWCNEHwbQhB1Da2r1GKI/c165f1c0-28c3-4726-8270-84be1fc4a629.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '7898AMdRTtesf0Y9zS54',
@@ -937,7 +1271,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration', 'audiobook', 'storytelling'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/7EAbDygyLsTi646EvIhijaFsquf1/voices/7898AMdRTtesf0Y9zS54/MqkGnRhMH2DhZRwdZc3M.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/7EAbDygyLsTi646EvIhijaFsquf1/voices/7898AMdRTtesf0Y9zS54/MqkGnRhMH2DhZRwdZc3M.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'rKTMR3hvTUh1jUArWIh4',
@@ -948,7 +1283,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration', 'podcast'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/94k6h2pxysYlEdIuLK0DMiLix0a2/voices/rKTMR3hvTUh1jUArWIh4/a7a521f3-8725-4cab-8dfb-902449e62242.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/94k6h2pxysYlEdIuLK0DMiLix0a2/voices/rKTMR3hvTUh1jUArWIh4/a7a521f3-8725-4cab-8dfb-902449e62242.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'VCgLBmBjldJmfphyB8sZ',
@@ -959,7 +1295,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media', 'storytelling'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/vVdW5WhvW0YA35KQmbv3XvRnAAg2/voices/VCgLBmBjldJmfphyB8sZ/MGNzMBHZI3BIDAE8cz38.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/vVdW5WhvW0YA35KQmbv3XvRnAAg2/voices/VCgLBmBjldJmfphyB8sZ/MGNzMBHZI3BIDAE8cz38.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '1cvhXKE3uxgoijz9BMLU',
@@ -970,7 +1307,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['social_media'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/YaCZfgbNdKPjxtvOo6e847AKrkM2/voices/1cvhXKE3uxgoijz9BMLU/fb68f4e2-b114-4bc4-8620-755f7e00e751.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/YaCZfgbNdKPjxtvOo6e847AKrkM2/voices/1cvhXKE3uxgoijz9BMLU/fb68f4e2-b114-4bc4-8620-755f7e00e751.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '6MoEUz34rbRrmmyxgRm4',
@@ -981,7 +1319,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['conversational'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/workspace/514d94e9241c48e8b7905375729c436f/voices/6MoEUz34rbRrmmyxgRm4/Y9GHbV3PIZPdGgq1nSLz.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/workspace/514d94e9241c48e8b7905375729c436f/voices/6MoEUz34rbRrmmyxgRm4/Y9GHbV3PIZPdGgq1nSLz.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'PukfMNJEERXCYO1uNJbI',
@@ -992,7 +1331,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/dlrXfcY3xqTyGXIAqZjfLJUoUAL2/voices/PukfMNJEERXCYO1uNJbI/fXcBAKB5ddnNFuheNM4U.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/dlrXfcY3xqTyGXIAqZjfLJUoUAL2/voices/PukfMNJEERXCYO1uNJbI/fXcBAKB5ddnNFuheNM4U.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'FZkK3TvQ0pjyDmT8fzIW',
@@ -1003,7 +1343,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media', 'storytelling'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/workspace/ed9b05e6324c457685490352e9a1ec90/voices/FZkK3TvQ0pjyDmT8fzIW/opgBS6JEyrQnlsYlwCAj.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/workspace/ed9b05e6324c457685490352e9a1ec90/voices/FZkK3TvQ0pjyDmT8fzIW/opgBS6JEyrQnlsYlwCAj.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'WHC0PNPIwjx2cCk34Hm8',
@@ -1014,7 +1355,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media', 'podcast', 'advertising', 'narration'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/JkMtMybti7dSnGjkDsVqAkUgccE3/voices/WHC0PNPIwjx2cCk34Hm8/vvnYVCeh4YA8zTuebOrd.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/JkMtMybti7dSnGjkDsVqAkUgccE3/voices/WHC0PNPIwjx2cCk34Hm8/vvnYVCeh4YA8zTuebOrd.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'iKX6IXB415Hh5bn2eNhP',
@@ -1025,7 +1367,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['documentary', 'narration', 'educational'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/eFmYIzNi7fVTAUiSkCFaPtNH8aQ2/voices/iKX6IXB415Hh5bn2eNhP/w1paVoAT8XGE71VHcaAi.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/eFmYIzNi7fVTAUiSkCFaPtNH8aQ2/voices/iKX6IXB415Hh5bn2eNhP/w1paVoAT8XGE71VHcaAi.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'picHqyHNqhfEq8cHUtCG',
@@ -1036,7 +1379,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['advertising', 'entertainment'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/aWnKUw0pyjYMNaT9LJ1L6nH5r693/voices/picHqyHNqhfEq8cHUtCG/rCq7wjrmSgaSRm9ANnOo.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/aWnKUw0pyjYMNaT9LJ1L6nH5r693/voices/picHqyHNqhfEq8cHUtCG/rCq7wjrmSgaSRm9ANnOo.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'nr2EGJNe96rzn9FRlTId',
@@ -1047,7 +1391,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration', 'podcast'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/KRHAVxDRPlRdjFaDHHWJQ0ClANE3/voices/nr2EGJNe96rzn9FRlTId/FvRYCe5PxmBMtHs8eNPV.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/KRHAVxDRPlRdjFaDHHWJQ0ClANE3/voices/nr2EGJNe96rzn9FRlTId/FvRYCe5PxmBMtHs8eNPV.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'cTNP6ZM2mLTKj2BFhxEh',
@@ -1058,7 +1403,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['podcast', 'journalism', 'documentary'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/koOonD4HAsSMVyHuP4QTaatQ9cA2/voices/cTNP6ZM2mLTKj2BFhxEh/fKLDrLD7nN8vSAKXkhzD.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/koOonD4HAsSMVyHuP4QTaatQ9cA2/voices/cTNP6ZM2mLTKj2BFhxEh/fKLDrLD7nN8vSAKXkhzD.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '9ebwxABSgElm9wISOP0J',
@@ -1069,7 +1415,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['entertainment', 'narration'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/jtTYnERxVfShx33UbofXQyQtghT2/voices/9ebwxABSgElm9wISOP0J/lPvHUX1sZYz0XxPX7Bk5.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/jtTYnERxVfShx33UbofXQyQtghT2/voices/9ebwxABSgElm9wISOP0J/lPvHUX1sZYz0XxPX7Bk5.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: '5OnMHwgTFgvPVwE8jP6B',
@@ -1080,7 +1427,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['informative_educational', 'podcast', 'news'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/FyWpm6xUx8PZjvR3q3SsYEXjmlj1/voices/5OnMHwgTFgvPVwE8jP6B/hyOFlAxqmCLW3fVQQMAG.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/FyWpm6xUx8PZjvR3q3SsYEXjmlj1/voices/5OnMHwgTFgvPVwE8jP6B/hyOFlAxqmCLW3fVQQMAG.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'nbiTBaMRdSobTQJDzIWm',
@@ -1091,7 +1439,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['informative_educational', 'narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/QkxEr0aPYcYgv9cCEfhUocIlVTJ3/voices/nbiTBaMRdSobTQJDzIWm/owCEge25nCYClDypQDDy.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/QkxEr0aPYcYgv9cCEfhUocIlVTJ3/voices/nbiTBaMRdSobTQJDzIWm/owCEge25nCYClDypQDDy.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'ViSNE020Z1wEV4uZomv5',
@@ -1102,7 +1451,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration', 'storytelling'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/s3weMIU8KcfFYrHmAQsazlF1M1o2/voices/ViSNE020Z1wEV4uZomv5/b953bac3-d2fd-4f6d-b1e8-701e09d1c374.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/s3weMIU8KcfFYrHmAQsazlF1M1o2/voices/ViSNE020Z1wEV4uZomv5/b953bac3-d2fd-4f6d-b1e8-701e09d1c374.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'meAbY2VpJkt1q46qk56T',
@@ -1113,7 +1463,68 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration', 'conversational'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/k3cwQyUC1jgnRz4wTDCaJg9CSPj2/voices/meAbY2VpJkt1q46qk56T/Agu3vmW6cBTB6JmqrZKO.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/k3cwQyUC1jgnRz4wTDCaJg9CSPj2/voices/meAbY2VpJkt1q46qk56T/Agu3vmW6cBTB6JmqrZKO.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'Korean_CheerfulBoyfriend',
+    name: 'Minjun',
+    language: 'korean',
+    accent: 'korean',
+    gender: 'male',
+    age: 'young',
+    tags: ['conversational', 'entertainment'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/fa11acbf-9354-42d4-b2a8-030ab0ad062e.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Korean_GentleWoman',
+    name: 'Jisoo',
+    language: 'korean',
+    accent: 'korean',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['storytelling', 'narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/73958e21-2892-4859-a25f-919aff0ad467.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Japanese_IntellectualSenior',
+    name: 'Haruto',
+    language: 'japanese',
+    accent: 'japanese',
+    gender: 'male',
+    age: 'old',
+    tags: ['educational', 'documentary'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/07656ba9-43cc-4b41-bafb-805ff27b248f.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Japanese_KindLady',
+    name: 'Yui',
+    language: 'japanese',
+    accent: 'japanese',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['storytelling', 'narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/006661cd-32bd-4c4c-b5fd-d1f0bf0ad924.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Japanese_OptimisticYouth',
+    name: 'Sota',
+    language: 'japanese',
+    accent: 'japanese',
+    gender: 'male',
+    age: 'young',
+    tags: ['social_media', 'entertainment'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/0b2358f8-a996-4735-b28b-fd75bb5edd88.mp3',
+    mode: 'minimax'
   },
   {
     id: 'JlPfrZoXeAKnNaogINHc',
@@ -1124,7 +1535,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['conversational', 'narration'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/Ebw6aIoLNBYbnP45ZSB5aHxmIAo2/voices/JlPfrZoXeAKnNaogINHc/KrEtDHvmgBd4TNe42CkZ.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/Ebw6aIoLNBYbnP45ZSB5aHxmIAo2/voices/JlPfrZoXeAKnNaogINHc/KrEtDHvmgBd4TNe42CkZ.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'BNgbHR0DNeZixGQVzloa',
@@ -1135,7 +1547,8 @@ export const voicesConfig: Voice[] = [
     age: 'old',
     tags: ['narration', 'storytelling'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/BNgbHR0DNeZixGQVzloa/40VSLvxrLAkmQgyrEA4t.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/BNgbHR0DNeZixGQVzloa/40VSLvxrLAkmQgyrEA4t.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'SaqYcK3ZpDKBAImA8AdW',
@@ -1146,7 +1559,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media', 'narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/8RYUsFHsalUXjwVG0LjhNwH1j022/voices/SaqYcK3ZpDKBAImA8AdW/KOywtby6BYBzQUyFHwHK.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/8RYUsFHsalUXjwVG0LjhNwH1j022/voices/SaqYcK3ZpDKBAImA8AdW/KOywtby6BYBzQUyFHwHK.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'Dt2jDzhoZC0pZw5bmy2S',
@@ -1157,7 +1571,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.START,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/P6pUmq42X5NZv0RV97gQ0XrmuXL2/voices/Dt2jDzhoZC0pZw5bmy2S/bbed96aa-bdaf-409c-8fd4-f3af1a33447d.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/P6pUmq42X5NZv0RV97gQ0XrmuXL2/voices/Dt2jDzhoZC0pZw5bmy2S/bbed96aa-bdaf-409c-8fd4-f3af1a33447d.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'xctasy8XvGp2cVO9HL9k',
@@ -1168,7 +1583,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['entertainment', 'news'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/xctasy8XvGp2cVO9HL9k/lsPc4Rdz6UBSdl9vu10A.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/xctasy8XvGp2cVO9HL9k/lsPc4Rdz6UBSdl9vu10A.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'NDeNvFOosDh4L0JoDYIq',
@@ -1179,7 +1595,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['news', 'entertainment'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/IgwDilkCraOI2af1CUCpv8HWGFt1/voices/NDeNvFOosDh4L0JoDYIq/5ed4032e-6181-49f1-975e-dedf1420303a.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/IgwDilkCraOI2af1CUCpv8HWGFt1/voices/NDeNvFOosDh4L0JoDYIq/5ed4032e-6181-49f1-975e-dedf1420303a.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'nPczCjzI2devNBz1zQrb',
@@ -1190,7 +1607,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/nPczCjzI2devNBz1zQrb/2dd3e72c-4fd3-42f1-93ea-abc5d4e5aa1d.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/nPczCjzI2devNBz1zQrb/2dd3e72c-4fd3-42f1-93ea-abc5d4e5aa1d.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'onwK4e9ZLuTAKqWW03F9',
@@ -1201,7 +1619,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['news'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/onwK4e9ZLuTAKqWW03F9/7eee0236-1a72-4b86-b303-5dcadc007ba9.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/onwK4e9ZLuTAKqWW03F9/7eee0236-1a72-4b86-b303-5dcadc007ba9.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'pFZP5JQG7iQjIQuC4Bku',
@@ -1212,7 +1631,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pFZP5JQG7iQjIQuC4Bku/89b68b35-b3dd-4348-a84a-a3c13a3c2b30.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pFZP5JQG7iQjIQuC4Bku/89b68b35-b3dd-4348-a84a-a3c13a3c2b30.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'pqHfZKP75CvOlQylNhV4',
@@ -1223,7 +1643,8 @@ export const voicesConfig: Voice[] = [
     age: 'old',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pqHfZKP75CvOlQylNhV4/d782b3ff-84ba-4029-848c-acf01285524d.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pqHfZKP75CvOlQylNhV4/d782b3ff-84ba-4029-848c-acf01285524d.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'dY1Qa8xkWbp1fM5ny2Lo',
@@ -1234,7 +1655,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/dY1Qa8xkWbp1fM5ny2Lo/Y6nHnD37GVdHFr4H0wIo.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/dY1Qa8xkWbp1fM5ny2Lo/Y6nHnD37GVdHFr4H0wIo.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'glDtoWIoIgk38YbycCwG',
@@ -1245,7 +1667,128 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['entertainment'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/glDtoWIoIgk38YbycCwG/UlDuroynnWOO94VjqAlF.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/glDtoWIoIgk38YbycCwG/UlDuroynnWOO94VjqAlF.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'Portuguese_Narrator',
+    name: 'Joana',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/6d414379-71fa-440c-8772-db47ec6a1809.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Portuguese_Rudolph',
+    name: 'Rudolph',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/01db7260-5a6f-43cd-959e-e6beb5523a50.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Portuguese_ElegantGirl',
+    name: 'Ana',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/a68dfc95-58c6-4539-ac74-c73e35d08c6d.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Portuguese_CaptivatingStoryteller',
+    name: 'João',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['storytelling', 'narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/701666c9-ff1b-42f1-99be-ec4c4715475f.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Portuguese_ConfidentWoman',
+    name: 'Beatriz',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['business', 'news'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/8412d011-9497-469d-83ba-66bda1e8cddc.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'aLFUti4k8YKvtQGXv0UO',
+    name: 'Paulo',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'male',
+    age: 'young',
+    tags: ['conversational'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/0E6B6ie19OUzDa7czZ3bI8JhtPg2/voices/aLFUti4k8YKvtQGXv0UO/WnPjbKRVPLGOhGpm1s47.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'iLelOQ6m5mpSeNH8fRob',
+    name: 'Maria',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/HsOclKALedO9LblBD6SsOKH3GvJ3/voices/iLelOQ6m5mpSeNH8fRob/3JXeSVIUFCgUKK8B8TI9.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'DMcOknq8n1B6XshFIJKJ',
+    name: 'Patricio',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'male',
+    age: 'young',
+    tags: ['conversational'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/LAcPqsnJ3BXuUxq5CakQII3mVQN2/voices/DMcOknq8n1B6XshFIJKJ/NqafcKLl75HEJ0qbtOGI.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'RROBrqjHiRb8zmRgGV11',
+    name: 'Dinis',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'male',
+    age: 'young',
+    tags: ['conversational'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/CSj98gOJ1kPgLfshxVAazD8VjRl2/voices/RROBrqjHiRb8zmRgGV11/24149c75-f20a-4cfc-85f1-0d62e38ba73a.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'WgE8iWzGVoJYLb5V7l2d',
+    name: 'Tiago',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/WgE8iWzGVoJYLb5V7l2d/U2qnCGN2ieoYP8CtTR8D.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'x8FWrDHAK5xiFTJLpnHq',
@@ -1256,7 +1799,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['social_media', 'sales'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/k9WcK5Z5XAXJknnN0IuLUYC1r5F2/voices/x8FWrDHAK5xiFTJLpnHq/zrpZge3z9EV0l2X3Utua.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/k9WcK5Z5XAXJknnN0IuLUYC1r5F2/voices/x8FWrDHAK5xiFTJLpnHq/zrpZge3z9EV0l2X3Utua.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'oWAxZDx7w5VEj9dCyTzz',
@@ -1267,7 +1811,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/oWAxZDx7w5VEj9dCyTzz/84a36d1c-e182-41a8-8c55-dbdd15cd6e72.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/oWAxZDx7w5VEj9dCyTzz/84a36d1c-e182-41a8-8c55-dbdd15cd6e72.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'pMsXgVXv3BLzUgSXRplE',
@@ -1278,7 +1823,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pMsXgVXv3BLzUgSXRplE/d61f18ed-e5b0-4d0b-a33c-5c6e7e33b053.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pMsXgVXv3BLzUgSXRplE/d61f18ed-e5b0-4d0b-a33c-5c6e7e33b053.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'piTKgcLEGmPE4e6mEKli',
@@ -1289,7 +1835,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['ASMR'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/piTKgcLEGmPE4e6mEKli/c269a54a-e2bc-44d0-bb46-4ed2666d6340.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/piTKgcLEGmPE4e6mEKli/c269a54a-e2bc-44d0-bb46-4ed2666d6340.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 't0jbNlBVZ17f02VDIeMI',
@@ -1300,7 +1847,8 @@ export const voicesConfig: Voice[] = [
     age: 'old',
     tags: ['characters'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/t0jbNlBVZ17f02VDIeMI/e26939e3-61a4-4872-a41d-33922cfbdcdc.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/t0jbNlBVZ17f02VDIeMI/e26939e3-61a4-4872-a41d-33922cfbdcdc.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'yoZ06aMxZJJ28mfd3POQ',
@@ -1311,7 +1859,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/yoZ06aMxZJJ28mfd3POQ/b017ad02-8d18-4456-ad92-55c85ecf6363.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/yoZ06aMxZJJ28mfd3POQ/b017ad02-8d18-4456-ad92-55c85ecf6363.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'z9fAnlkpzviPz146aGWa',
@@ -1322,7 +1871,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['characters'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/z9fAnlkpzviPz146aGWa/cbc60443-7b61-4ebb-b8e1-5c03237ea01d.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/z9fAnlkpzviPz146aGWa/cbc60443-7b61-4ebb-b8e1-5c03237ea01d.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'zcAOhNBS3c14rBihAFp1',
@@ -1333,7 +1883,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/zcAOhNBS3c14rBihAFp1/e7410f8f-4913-4cb8-8907-784abee5aff8.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/zcAOhNBS3c14rBihAFp1/e7410f8f-4913-4cb8-8907-784abee5aff8.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'zrHiDhphv9ZnVXBqCLjz',
@@ -1344,7 +1895,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['animation', 'children_stories'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/zrHiDhphv9ZnVXBqCLjz/decbf20b-0f57-4fac-985b-a4f0290ebfc4.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/zrHiDhphv9ZnVXBqCLjz/decbf20b-0f57-4fac-985b-a4f0290ebfc4.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'iP95p4xoKVk53GoZ742B',
@@ -1355,7 +1907,8 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['conversational'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/iP95p4xoKVk53GoZ742B/3f4bde72-cc48-40dd-829f-57fbf906f4d7.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/iP95p4xoKVk53GoZ742B/3f4bde72-cc48-40dd-829f-57fbf906f4d7.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'b6nVfb3l2zshrLZTvqbs',
@@ -1366,7 +1919,8 @@ export const voicesConfig: Voice[] = [
     age: 'young',
     tags: ['narration', 'social_media'],
     plan: PlanName.ENTREPRISE,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/irKqfkQeyjUF43rcPLuZQ7UAbpn2/voices/b6nVfb3l2zshrLZTvqbs/aDmlO46A7chafGRQAEy5.mp3'
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/irKqfkQeyjUF43rcPLuZQ7UAbpn2/voices/b6nVfb3l2zshrLZTvqbs/aDmlO46A7chafGRQAEy5.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'NYC9WEgkq1u4jiqBseQ9',
@@ -1377,8 +1931,45 @@ export const voicesConfig: Voice[] = [
     age: 'middle aged',
     tags: ['entertainment', 'news', 'documentary'],
     plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/NYC9WEgkq1u4jiqBseQ9/cK07157YMomRml8se448.mp3'
-  }
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/NYC9WEgkq1u4jiqBseQ9/cK07157YMomRml8se448.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'Chinese (Mandarin)_News_Anchor',
+    name: 'Wei',
+    language: 'chinese',
+    accent: 'mandarin',
+    gender: 'male',
+    age: 'middle aged',
+    tags: ['news', 'journalism'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/c5e45f4a-2442-4ab1-ab00-b992d20b112c.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Chinese (Mandarin)_Mature_Woman',
+    name: 'Lin',
+    language: 'chinese',
+    accent: 'mandarin',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['news', 'narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/a3c8a7c9-01c7-4272-bb71-384c7fdb4b4a.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Chinese (Mandarin)_Warm_Girl',
+    name: 'Mei',
+    language: 'chinese',
+    accent: 'mandarin',
+    gender: 'female',
+    age: 'young',
+    tags: ['social_media', 'conversational'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/8c6894de-c7a0-4c2c-bcee-710a3fda97fb.mp3',
+    mode: 'minimax'
+  },
 ]
 
 export const accentFlags: Record<string, string> = {
@@ -1401,5 +1992,7 @@ export const accentFlags: Record<string, string> = {
   'egyptian': '🇪🇬',
   'arabic': '🇸🇦',
   'peninsular': '🇪🇸',
-  'brazilian': '🇧🇷'
+  'brazilian': '🇧🇷',
+  'korean': '🇰🇷',
+  'mandarin': '🇨🇳',
 }

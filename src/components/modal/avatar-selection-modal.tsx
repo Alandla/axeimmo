@@ -23,18 +23,16 @@ export function AvatarSelectionModal({
   const t = useTranslations("edit");
   
   // État local pour la sélection dans le modal
-  const [localSelectedLook, setLocalSelectedLook] = useState<AvatarLook | null>(currentAvatar);
-  const [localSelectedAvatarName, setLocalSelectedAvatarName] = useState<string | null>(
-    currentAvatar ? currentAvatar.name || null : null
-  );
+  const [localSelectedLook, setLocalSelectedLook] = useState<AvatarLook | null>(null);
+  const [localSelectedAvatarName, setLocalSelectedAvatarName] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Réinitialiser la sélection locale quand le modal s'ouvre
-  const handleModalOpen = (open: boolean) => {
-    if (open) {
-      setLocalSelectedLook(currentAvatar);
-      setLocalSelectedAvatarName(currentAvatar ? currentAvatar.name || null : null);
-    }
-  };
+  // Initialiser les états une seule fois quand le modal s'ouvre
+  if (isOpen && !isInitialized) {
+    setLocalSelectedLook(currentAvatar);
+    setLocalSelectedAvatarName(currentAvatar ? currentAvatar.name || null : null);
+    setIsInitialized(true);
+  }
 
   const handleConfirm = () => {
     onAvatarChange(localSelectedLook);
@@ -42,23 +40,23 @@ export function AvatarSelectionModal({
   };
 
   const handleCancel = () => {
-    // Reset to current avatar
-    setLocalSelectedLook(currentAvatar);
-    setLocalSelectedAvatarName(currentAvatar ? currentAvatar.name || null : null);
+    // Reset states to null (will be re-initialized on next open)
+    setLocalSelectedLook(null);
+    setLocalSelectedAvatarName(null);
+    setIsInitialized(false);
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => {
       if (!open) handleCancel();
-      handleModalOpen(open);
     }}>
       <DialogContent className="max-w-6xl max-h-[80vh] flex flex-col">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle>{t('select-avatar')}</DialogTitle>
         </DialogHeader>
         
-        <div className="flex-1 overflow-visible min-h-0">
+        <div className="flex-1 overflow-auto min-h-0 w-full">
           <AvatarGridComponent 
             mode="large" 
             selectedLook={localSelectedLook}

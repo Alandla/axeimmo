@@ -13,6 +13,7 @@ export async function getSpaceById(id: string): Promise<SimpleSpace | null> {
             creditsPerMonth: response.plan.creditsMonth,
             credits: response.credits,
             videoIdeas: response.videoIdeas,
+            logo: response.logo,
             companyMission: response.details?.companyMission,
             companyTarget: response.details?.companyTarget,
             usedStorageBytes: response.usedStorageBytes,

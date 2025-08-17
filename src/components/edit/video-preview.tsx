@@ -11,6 +11,7 @@ import VideoFormatSelector from "@/src/components/edit/video-format-selector";
 import AvatarSelector from "@/src/components/edit/avatar-selector";
 import { AvatarSelectionModal } from "@/src/components/modal/avatar-selection-modal";
 import { AvatarLook } from "@/src/types/avatar";
+import { LogoPosition } from "@/src/types/space";
 
 export default function VideoPreview({ 
     playerRef, 
@@ -18,30 +19,44 @@ export default function VideoPreview({
     isMobile, 
     showWatermark, 
     hasExistingReview, 
+    muteBackgroundMusic,
     onSubtitleStyleChange,
     onAvatarHeightRatioChange,
     onAvatarPositionChange,
     onMediaPositionChange,
     onVideoFormatChange,
-    onAvatarChange
+    onAvatarChange,
+    onLogoPositionChange,
+    onLogoSizeChange,
+    logoData
 }: { 
     playerRef: React.RefObject<PlayerRef>, 
     video: IVideo | null, 
     isMobile: boolean, 
     showWatermark: boolean, 
     hasExistingReview: boolean, 
+    muteBackgroundMusic?: boolean,
     onSubtitleStyleChange?: (newStyle: any) => void,
     onAvatarHeightRatioChange?: (ratio: number) => void,
     onAvatarPositionChange?: (position: { x: number, y: number }) => void,
     onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
     onVideoFormatChange?: (format: VideoFormat) => void,
-    onAvatarChange?: (avatar: AvatarLook | null) => void
+    onAvatarChange?: (avatar: AvatarLook | null) => void,
+    onLogoPositionChange?: (position: LogoPosition) => void,
+    onLogoSizeChange?: (size: number) => void,
+    logoData?: {
+        url: string;
+        position: LogoPosition;
+        show: boolean;
+        size: number;
+    }
 }) {
     const t = useTranslations('edit');
     const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
     const [showReview, setShowReview] = useState(false);
     const [hasInteractedWithReview, setHasInteractedWithReview] = useState(false);
     const [showAvatarModal, setShowAvatarModal] = useState(false);
+    // Removed floating LogoPositionSelector here; it is now shown above the logo inside the canvas
 
     // Get video dimensions based on format
     const dimensions = getVideoDimensions(video?.video?.format || 'vertical');
@@ -113,6 +128,14 @@ export default function VideoPreview({
         setHasInteractedWithReview(true);
     };
 
+    // Click on logo is now handled inside the canvas to open the floating selector
+
+    const handleLogoPositionChange = (newPosition: LogoPosition) => {
+        if (onLogoPositionChange) {
+            onLogoPositionChange(newPosition);
+        }
+    };
+
     return (
         <div className={`h-full flex flex-col items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
             {video?.video?.avatar && (
@@ -123,20 +146,24 @@ export default function VideoPreview({
             )}
             {video?.video && onVideoFormatChange && (
                 <div className="w-full mb-4">
-                    <div className={`grid gap-2 ${video.video.avatar && onAvatarChange ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                    <div className={`grid gap-2 ${onAvatarChange ? 'grid-cols-2' : 'grid-cols-1'}`}>
                         <VideoFormatSelector
                             value={video.video.format || 'vertical'}
                             onValueChange={onVideoFormatChange}
                         />
-                        {video.video.avatar && onAvatarChange && (
+                        {onAvatarChange && (
                             <AvatarSelector
-                                selectedAvatar={video.video.avatar}
+                                selectedAvatar={video.video.avatar || null}
                                 onAvatarSelect={() => setShowAvatarModal(true)}
                             />
                         )}
                     </div>
                 </div>
             )}
+            
+            {/* Logo Position Selector moved into the canvas overlay above the logo */}
+            
+
             <div className="relative w-full h-full transition-all duration-300 ease-in-out">
                 <Player
                     acknowledgeRemotionLicense={true}
@@ -146,13 +173,18 @@ export default function VideoPreview({
                     fps={60}
                     compositionWidth={dimensions.width}
                     compositionHeight={dimensions.height}
+                    overflowVisible
                     inputProps={{
                         data: video,
                         showWatermark,
+                        logo: logoData,
+                        muteBackgroundMusic,
                         onSubtitleStyleChange,
                         onAvatarHeightRatioChange,
                         onAvatarPositionChange,
-                        onMediaPositionChange
+                        onMediaPositionChange,
+                        onLogoPositionChange,
+                        onLogoSizeChange,
                     }}
                     numberOfSharedAudioTags={12}
                     controls
@@ -178,11 +210,11 @@ export default function VideoPreview({
                 />
             )}
             
-            {video?.video?.avatar && onAvatarChange && (
+            {onAvatarChange && (
                 <AvatarSelectionModal
                     isOpen={showAvatarModal}
                     onClose={() => setShowAvatarModal(false)}
-                    currentAvatar={video.video.avatar}
+                    currentAvatar={video?.video?.avatar || null}
                     onAvatarChange={onAvatarChange}
                 />
             )}

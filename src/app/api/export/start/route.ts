@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/src/lib/auth';
 import { renderVideo } from '@/src/lib/render';
 import { updateExport } from '@/src/dao/exportDao';
+import { getSpaceById } from '@/src/dao/spaceDao';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -17,8 +18,11 @@ export async function POST(req: NextRequest) {
   const { video, exportId } = params;
 
   try {
+    // Récupérer les données du space pour le logo et le watermark
+    const space = await getSpaceById(video.spaceId);
+    const showWatermark = space.plan.name === "FREE";
 
-    const renderResult = await renderVideo(video);
+    const renderResult = await renderVideo(video, showWatermark, space.logo);
 
     console.log("Render result: ", renderResult)
 

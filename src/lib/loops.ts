@@ -86,3 +86,33 @@ export async function sendVerificationRequest({ identifier: email, url, deviceId
 
   return result;
 }
+
+export async function sendProLeadEmail({ 
+  name, 
+  firstName, 
+  email, 
+  role, 
+  website, 
+  companyName 
+}: { 
+  name: string, 
+  firstName: string, 
+  email: string, 
+  role: string, 
+  website: string, 
+  companyName: string 
+}) {
+  const result = await loops.sendTransactionalEmail({
+    transactionalId: mails.proLead.id,
+    email: 'maxime@hoox.video',
+    dataVariables: {
+      name,
+      firstname: firstName,
+      mail: email,
+      role,
+      site: website,
+      'company-name': companyName
+    }
+  })
+  return result;
+}

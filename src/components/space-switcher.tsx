@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronsUpDown, DollarSign, Loader2, Plus, Settings2 } from "lucide-react"
+import { Check, ChevronsUpDown, DollarSign, Loader2, Plus, Settings2, Image } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -17,6 +17,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/src/components/ui/sidebar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { useTranslations } from "next-intl"
 import { Skeleton } from "./ui/skeleton"
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
@@ -24,7 +25,7 @@ import { SimpleSpace } from "../types/space"
 import { useState } from "react"
 import { basicApiCall } from "../lib/api"
 import { useToast } from "../hooks/use-toast"
-import { useRouter } from "next/navigation"
+import { SpaceSettingsDrawer } from "./space-settings-drawer"
 
 export function SpaceSwitcher({
   spaces
@@ -34,10 +35,11 @@ export function SpaceSwitcher({
   const t = useTranslations('sidebar')
   const tPlan = useTranslations('plan')
   const [isLoadingBilling, setIsLoadingBilling] = useState(false);
+  const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
   const { toast } = useToast();
   const { activeSpace, setActiveSpace } = useActiveSpaceStore()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const router = useRouter();
+  
   const openStripePortal = async () => {
     setIsLoadingBilling(true);
     try {
@@ -59,12 +61,20 @@ export function SpaceSwitcher({
   };
 
   const handleSettingsClick = () => {
-    router.push('/dashboard/settings');
+    setIsSettingsDrawerOpen(true);
     setIsDropdownOpen(false);
+  };
+
+  const handleDrawerClose = () => {
+    setIsSettingsDrawerOpen(false);
   };
 
   return (
     <>
+      <SpaceSettingsDrawer 
+        open={isSettingsDrawerOpen}
+        onClose={handleDrawerClose}
+      />
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
@@ -73,11 +83,12 @@ export function SpaceSwitcher({
                 size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  {activeSpace?.name && (
-                    activeSpace.name?.charAt(0) ?? ''
-                  )}
-                </div>
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage src={activeSpace?.logo?.url || ""} alt={activeSpace?.name || ""} />
+                  <AvatarFallback className="rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                    {activeSpace?.name?.charAt(0) ?? ''}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
                   {!activeSpace?.name ? (
@@ -121,9 +132,12 @@ export function SpaceSwitcher({
                   className="gap-2 p-2"
                   onClick={() => setActiveSpace(space)}
                 >
-                  <div className={`flex size-6 items-center justify-center rounded-sm border`}>
-                    {space.name?.charAt(0) ?? ''}
-                  </div>
+                  <Avatar className="h-6 w-6 rounded-sm">
+                    <AvatarImage src={space.logo?.url || ""} alt={space.name || ""} />
+                    <AvatarFallback className="rounded-sm text-xs">
+                      {space.name?.charAt(0) ?? ''}
+                    </AvatarFallback>
+                  </Avatar>
                   {space.name}
                   {space === activeSpace && (
                     <div className="ml-auto text-xs tracking-widest opacity-60">

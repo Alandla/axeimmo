@@ -2,7 +2,7 @@ import { logger, metadata, task, wait } from "@trigger.dev/sdk";
 import { updateExport } from "../dao/exportDao";
 import { getVideoById, updateVideo } from "../dao/videoDao";
 import { getProgress, renderVideo, renderAudio } from "../lib/render";
-import { uploadImageFromUrlToS3 } from "../lib/r2";
+import { uploadImageFromUrlToS3, uploadVideoFromUrlToS3 } from "../lib/r2";
 import { IVideo } from "../types/video";
 import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
 import { IExport } from "../types/export";
@@ -57,6 +57,14 @@ export const exportVideoTask = task({
       const space = await getSpaceById(video.spaceId);
       const showWatermark = space.plan.name === "FREE";
 
+      // Récupérer les données du logo depuis le space
+      const logoData = space.logo ? {
+        url: space.logo.url,
+        position: space.logo.position,
+        show: space.logo.show,
+        size: space.logo.size
+      } : undefined;
+
       // Intégration de l'export audio si un avatar est présent
       if (video.video?.avatar?.id && video.video?.audio?.voices && ctx.attempt.number === 1) {
         logger.log("Combinaison des audios...");
@@ -88,18 +96,26 @@ export const exportVideoTask = task({
         if (avatarVideoUrl) {
           const cost = calculateHeygenCost(video.video.metadata.audio_duration);
           video.costToGenerate = (video.costToGenerate || 0) + cost;
-          video.video.avatar.videoUrl = avatarVideoUrl;
+          
+          // Upload the avatar video to R2 instead of using Heygen's temporary URL
+          logger.log("Uploading avatar video to R2...");
+          const fileName = `avatar-${video.id}-${Date.now()}`;
+          const r2VideoUrl = await uploadVideoFromUrlToS3(avatarVideoUrl, "medias-users", fileName);
+          
+          video.video.avatar.videoUrl = r2VideoUrl;
+          logger.log("Avatar video uploaded to R2", { r2VideoUrl });
           await updateVideo(video);
         }
       }
 
-      const render = await renderVideo(video, showWatermark);
+      const render = await renderVideo(video, showWatermark, ctx.attempt.number === 2 ? 4096 : 2048, logoData);
       await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
 
       const renderStatus : RenderStatus = await pollRenderStatus(
         render.renderId, 
         render.bucketName,
-        'render'
+        'render',
+        ctx.attempt.number === 2 ? 4096 : 2048
       );
 
       if (renderStatus.status === 'failed') {
@@ -126,13 +142,13 @@ export const exportVideoTask = task({
       if (renderStatus.status === 'completed' && renderStatus.url && renderStatus.costs) {
         await updateExport(exportId, { 
           downloadUrl: renderStatus.url, 
-          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost, 
+          renderCost: renderStatus.costs + (ctx.run.baseCostInCents || 0) + renderAudioCost, 
           status: 'completed' 
         });
         await metadata.replace({
           status: 'completed',
           downloadUrl: renderStatus.url,
-          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost
+          renderCost: renderStatus.costs + (ctx.run.baseCostInCents || 0) + renderAudioCost
         })
 
         try {
@@ -182,7 +198,7 @@ export const exportVideoTask = task({
         return { success: true, url: renderStatus.url };
       }
 
-      logger.info('Cost infra', { costInCents: ctx.run.costInCents });
+      logger.info('Cost infra', { costInCents: ctx.run.baseCostInCents });
     } catch (error : any) {
       logger.error('Erreur lors de l\'export:', error);
       throw error;
@@ -190,14 +206,14 @@ export const exportVideoTask = task({
   },
 });
 
-const pollRenderStatus = async (renderId: string, bucketName: string, step: string = 'render') => {
+const pollRenderStatus = async (renderId: string, bucketName: string, step: string = 'render', memorySizeInMb: number = 2048) => {
   let attempts = 0;
   const maxAttempts = step === 'render' ? 1000 : 500;
   const delayBetweenAttempts = 6;
 
   while (attempts < maxAttempts) {
     try {
-      const renderStatus = await getProgress(renderId, bucketName, step === 'render-audio');
+      const renderStatus = await getProgress(renderId, bucketName, step === 'render-audio', memorySizeInMb);
 
       if (renderStatus.status === 'processing' && renderStatus.progress) {
         await metadata.replace({

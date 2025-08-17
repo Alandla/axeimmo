@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { Input } from "@/src/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
-import { Button } from "@/src/components/ui/button"
 import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } from './voice-card'
 import { Badge } from "@/src/components/ui/badge"
 import { Check } from "lucide-react"
@@ -72,6 +71,7 @@ export function VoicesGridComponent() {
     const matchesAccent = selectedAccent === 'all' ? true : voice.accent === selectedAccent
     const matchesGender = selectedGender === 'all' ? true : voice.gender === selectedGender
     const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => voice.tags.includes(tag))
+    
     return matchesSearch && matchesAccent && matchesGender && matchesTags
   }))
 

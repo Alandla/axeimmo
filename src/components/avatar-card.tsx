@@ -100,7 +100,7 @@ export function AvatarCard({ avatar, onClick, isLastUsed, selectedAvatarName: pr
             )}
             <h3 className="text-lg font-semibold">{avatar.name}</h3>
             {avatar.premium && (
-              <Badge variant="secondary" className="ml-2 bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white text-xs border-none shadow-sm font-medium">
+              <Badge variant="plan" className="ml-2">
                 Pro
               </Badge>
             )}

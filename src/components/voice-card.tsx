@@ -12,6 +12,9 @@ import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { PlanName } from '../types/enums'
 import { usePremiumToast } from '@/src/utils/premium-toast'
 
+// Ordre des plans pour la comparaison
+const planOrder = [PlanName.FREE, PlanName.START, PlanName.PRO, PlanName.ENTREPRISE];
+
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
       viewBox="0 0 24 24"
@@ -55,15 +58,33 @@ export function VoiceCard({ voice, playingVoice, onPreviewVoice, isLastUsed }: {
     const planT = useTranslations('plan')
     const isSelected = selectedVoice?.id === voice.id;
     
+    // Afficher le badge si le plan de la voix est strictement supérieur au plan de l'utilisateur
+    const shouldShowBadge = () => {
+      if (!activeSpace?.planName) return false;
+      const userPlanIndex = planOrder.indexOf(activeSpace.planName);
+      const voicePlanIndex = planOrder.indexOf(voice.plan);
+      return voicePlanIndex > userPlanIndex;
+    }
+    
     const handleVoiceSelection = () => {
-      if ((voice.plan === PlanName.PRO && activeSpace?.planName !== PlanName.PRO && activeSpace?.planName !== PlanName.ENTREPRISE) || (voice.plan === PlanName.ENTREPRISE && activeSpace?.planName !== PlanName.ENTREPRISE)) {
+      // Vérifier les restrictions d'accès selon le plan
+      if (
+        // Restriction pour les voix PRO (besoin PRO ou ENTREPRISE)
+        (voice.plan === PlanName.PRO && activeSpace?.planName !== PlanName.PRO && activeSpace?.planName !== PlanName.ENTREPRISE) ||
+        // Restriction pour les voix ENTREPRISE (besoin ENTREPRISE)
+        (voice.plan === PlanName.ENTREPRISE && activeSpace?.planName !== PlanName.ENTREPRISE) ||
+        // Restriction pour les utilisateurs FREE (peuvent seulement utiliser les voix FREE)
+        (activeSpace?.planName === PlanName.FREE && voice.plan !== PlanName.FREE)
+      ) {
+        const targetPlan = activeSpace?.planName === PlanName.FREE ? PlanName.START : voice.plan;
         showPremiumToast(
           t('toast.title-error'),
-          t('toast.description-premium-error', { plan: planT(voice.plan) }),
+          t('toast.description-premium-error', { plan: planT(targetPlan) }),
           pricingT('upgrade')
         );
         return
       }
+      
       setSelectedVoice(voice)
     }
 
@@ -91,8 +112,8 @@ export function VoiceCard({ voice, playingVoice, onPreviewVoice, isLastUsed }: {
               <IconGenderFemale className="h-5 w-5 mr-2 text-pink-500" />
             )}
             <h3 className="text-lg font-semibold">{voice.name}</h3>
-            {(voice.plan === PlanName.ENTREPRISE || voice.plan === PlanName.PRO) && (
-              <Badge variant="secondary" className="ml-2 bg-gradient-to-r from-[#FB5688] to-[#9C2779] text-white text-xs border-none shadow-sm font-semibold">
+            {shouldShowBadge() && (
+              <Badge variant="plan" className="ml-2">
                 {planT(voice.plan)}
               </Badge>
             )}
@@ -108,6 +129,13 @@ export function VoiceCard({ voice, playingVoice, onPreviewVoice, isLastUsed }: {
               <Badge variant="secondary" className="shrink-0">
                 {accentFlags[voice.accent]}
               </Badge>
+              {(
+                (voice.plan === PlanName.PRO && activeSpace?.planName !== PlanName.PRO && activeSpace?.planName !== PlanName.ENTREPRISE) ||
+                (voice.plan === PlanName.ENTREPRISE && activeSpace?.planName !== PlanName.ENTREPRISE) ||
+                (activeSpace?.planName === PlanName.FREE && voice.plan !== PlanName.FREE)
+              ) && (
+                <Badge variant="secondary" className="shrink-0 whitespace-nowrap">🔒</Badge>
+              )}
               {voice.tags.map((tag, index) => (
                 <Badge key={index} variant="secondary" className="shrink-0 whitespace-nowrap">
                   {t(`tags.${tag}`)}

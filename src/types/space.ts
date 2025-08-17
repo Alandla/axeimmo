@@ -42,6 +42,18 @@ export interface IMediaSpace {
   baseMediaId?: string;
 }
 
+export interface LogoPosition {
+  x: number; // Position horizontale en pourcentage (0-100)
+  y: number; // Position verticale en pourcentage (0-100)
+}
+
+export interface Logo {
+  url?: string;
+  position?: LogoPosition;
+  show?: boolean;
+  size?: number; // Taille en pourcentage de la largeur de composition
+}
+
 export interface SimpleSpace {
   id: string;
   name: string;
@@ -52,6 +64,7 @@ export interface SimpleSpace {
   videoIdeas?: string[];
   companyMission?: string;
   companyTarget?: string;
+  logo?: Logo;
   usedStorageBytes?: number;
   storageLimit?: number;
   imageToVideoLimit?: number;
@@ -89,4 +102,5 @@ export interface ISpace {
   lastUsed: ILastUsed;
   usedStorageBytes: number;
   imageToVideoUsed: number;
+  logo: Logo;
 }

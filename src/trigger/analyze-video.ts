@@ -19,7 +19,7 @@ export const analyzeVideoTask = task({
   machine: {
     preset: "medium-1x"
   },
-  maxDuration: 120, // 2 minutes maximum
+  maxDuration: 600, // 10 minutes maximum
   run: async (payload: AnalyzeVideoPayload, { ctx }): Promise<VideoAnalysisResult> => {
     logger.log("[ANALYZE_TASK] Starting video analysis task...", { payload });
     

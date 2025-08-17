@@ -58,241 +58,273 @@ import { loadFont as loadZeyada } from "@remotion/google-fonts/Zeyada";
 
 export type Font = {
   family: string;
-  load: () => {};
+  load: (weights?: string[], isItalic?: boolean) => Promise<any>;
+};
+
+// Helper function to determine weights to load
+const getWeightsToLoad = (weights?: string[]): string[] => {
+  if (!weights || weights.length === 0) {
+    return ['400', '700']; // Default weights
+  }
+  return weights;
+};
+
+// Helper function to load font with optimized options
+const createFontLoader = (loadFunction: any, supportedWeights: string[] = ['100', '200', '300', '400', '500', '600', '700', '800', '900']) => {
+  return async (weights?: string[], isItalic: boolean = false): Promise<any> => {
+    const weightsToLoad = getWeightsToLoad(weights);
+    const filteredWeights = weightsToLoad.filter(w => supportedWeights.includes(w));
+    
+    if (filteredWeights.length === 0) {
+      throw new Error(`No valid weights found for this font. Supported weights: ${supportedWeights.join(', ')}`);
+    }
+
+    const style = isItalic ? 'italic' : 'normal';
+    
+    try {
+      return await loadFunction(style, {
+        weights: filteredWeights,
+        subsets: ['latin'], // Only load latin subset by default
+      });
+    } catch (error) {
+      console.warn(`Failed to load font with specific options, falling back to default:`, error);
+      return await loadFunction();
+    }
+  };
 };
 
 const googleFonts: Font[] = [
   {
     family: "Arial",
-    load: () => { return {} },
+    load: async () => ({ fontFamily: "Arial" }),
   },
   {
     family: "Montserrat",
-    load: loadMontserrat,
+    load: createFontLoader(loadMontserrat),
   },
   {
     family: "Poppins",
-    load: loadPoppins,
+    load: createFontLoader(loadPoppins),
   },
   {
     family: "Roboto",
-    load: loadRoboto,
+    load: createFontLoader(loadRoboto),
   },
   {
     family: "Inter",
-    load: loadInter,
+    load: createFontLoader(loadInter),
   },
   {
     family: "Lora",
-    load: loadLora,
+    load: createFontLoader(loadLora),
   },
   {
     family: "Schoolbell",
-    load: loadSchoolbell,
+    load: createFontLoader(loadSchoolbell, ['400']), // Schoolbell only has 400 weight
   },
   {
     family: 'Unbounded',
-    load: loadUnbounded,
+    load: createFontLoader(loadUnbounded, ['200', '300', '400', '500', '600', '700', '800', '900']),
   },
   {
     family: 'Fraunces',
-    load: loadFraunces,
+    load: createFontLoader(loadFraunces),
   },
   {
     family: "Acme",
-    load: loadAcme,
+    load: createFontLoader(loadAcme, ['400']),
   },
   {
     family: "Amatic SC",
-    load: loadAmaticSC,
+    load: createFontLoader(loadAmaticSC, ['400', '700']),
   },
   {
     family: "Anton",
-    load: loadAnton,
+    load: createFontLoader(loadAnton, ['400']),
   },
   {
     family: "Architects Daughter",
-    load: loadArchitectsDaughter,
+    load: createFontLoader(loadArchitectsDaughter, ['400']),
   },
   {
     family: "Archivo Black",
-    load: loadArchivoBlack,
+    load: createFontLoader(loadArchivoBlack, ['400']),
   },
   {
     family: "Archivo Narrow",
-    load: loadArchivoNarrow,
+    load: createFontLoader(loadArchivoNarrow, ['400', '500', '600', '700']),
   },
   {
     family: "Arimo",
-    load: loadArimo,
+    load: createFontLoader(loadArimo, ['400', '500', '600', '700']),
   },
   {
     family: "Atkinson Hyperlegible",
-    load: loadAtkinsonHyperlegible,
+    load: createFontLoader(loadAtkinsonHyperlegible, ['400', '700']),
   },
   {
     family: "Bad Script",
-    load: loadBadScript,
+    load: createFontLoader(loadBadScript, ['400']),
   },
   {
     family: "Barlow Semi Condensed",
-    load: loadBarlowSemiCondensed,
+    load: createFontLoader(loadBarlowSemiCondensed),
   },
   {
     family: "Be Vietnam Pro",
-    load: loadBeVietnamPro,
+    load: createFontLoader(loadBeVietnamPro),
   },
   {
     family: "Belanosima",
-    load: loadBelanosima,
+    load: createFontLoader(loadBelanosima, ['400', '600', '700']),
   },
   {
     family: "Caveat",
-    load: loadCaveat,
+    load: createFontLoader(loadCaveat, ['400', '500', '600', '700']),
   },
   {
     family: "Cormorant Garamond",
-    load: loadCormorantGaramond,
+    load: createFontLoader(loadCormorantGaramond, ['300', '400', '500', '600', '700']),
   },
   {
     family: "Dancing Script",
-    load: loadDancingScript,
+    load: createFontLoader(loadDancingScript, ['400', '500', '600', '700']),
   },
   {
     family: "DM Sans",
-    load: loadDMSans,
+    load: createFontLoader(loadDMSans),
   },
   {
     family: "Dosis",
-    load: loadDosis,
+    load: createFontLoader(loadDosis, ['200', '300', '400', '500', '600', '700', '800']),
   },
   {
     family: "Exo",
-    load: loadExo,
+    load: createFontLoader(loadExo),
   },
   {
     family: "Fira Sans Extra Condensed",
-    load: loadFiraSansExtraCondensed,
+    load: createFontLoader(loadFiraSansExtraCondensed),
   },
   {
     family: "Fjalla One",
-    load: loadFjallaOne,
+    load: createFontLoader(loadFjallaOne, ['400']),
   },
   {
     family: "Gloria Hallelujah",
-    load: loadGloriaHallelujah,
+    load: createFontLoader(loadGloriaHallelujah, ['400']),
   },
   {
     family: "Great Vibes",
-    load: loadGreatVibes,
+    load: createFontLoader(loadGreatVibes, ['400']),
   },
   {
     family: "Homemade Apple",
-    load: loadHomemadeApple,
+    load: createFontLoader(loadHomemadeApple, ['400']),
   },
   {
     family: "IBM Plex Serif",
-    load: loadIBMPlexSerif,
+    load: createFontLoader(loadIBMPlexSerif),
   },
   {
     family: "Indie Flower",
-    load: loadIndieFlower,
+    load: createFontLoader(loadIndieFlower, ['400']),
   },
   {
     family: "Josefin Sans",
-    load: loadJosefinSans,
+    load: createFontLoader(loadJosefinSans, ['100', '200', '300', '400', '500', '600', '700']),
   },
   {
     family: "Kaushan Script",
-    load: loadKaushanScript,
+    load: createFontLoader(loadKaushanScript, ['400']),
   },
   {
     family: "Lexend Deca",
-    load: loadLexendDeca,
+    load: createFontLoader(loadLexendDeca),
   },
   {
     family: "Lilita One",
-    load: loadLilitaOne,
+    load: createFontLoader(loadLilitaOne, ['400']),
   },
   {
     family: "Merriweather Sans",
-    load: loadMerriweatherSans,
+    load: createFontLoader(loadMerriweatherSans, ['300', '400', '500', '600', '700', '800']),
   },
   {
     family: "Oleo Script",
-    load: loadOleoScript,
+    load: createFontLoader(loadOleoScript, ['400', '700']),
   },
   {
     family: "Pacifico",
-    load: loadPacifico,
+    load: createFontLoader(loadPacifico, ['400']),
   },
   {
     family: "Patrick Hand",
-    load: loadPatrickHand,
+    load: createFontLoader(loadPatrickHand, ['400']),
   },
   {
     family: "Permanent Marker",
-    load: loadPermanentMarker,
+    load: createFontLoader(loadPermanentMarker, ['400']),
   },
   {
     family: "Public Sans",
-    load: loadPublicSans,
+    load: createFontLoader(loadPublicSans),
   },
   {
     family: "Questrial",
-    load: loadQuestrial,
+    load: createFontLoader(loadQuestrial, ['400']),
   },
   {
     family: "Reenie Beanie",
-    load: loadReenieBeanie,
+    load: createFontLoader(loadReenieBeanie, ['400']),
   },
   {
     family: "Rowdies",
-    load: loadRowdies,
+    load: createFontLoader(loadRowdies, ['300', '400', '700']),
   },
   {
     family: "Sacramento",
-    load: loadSacramento,
+    load: createFontLoader(loadSacramento, ['400']),
   },
   {
     family: "Satisfy",
-    load: loadSatisfy,
+    load: createFontLoader(loadSatisfy, ['400']),
   },
   {
     family: "Shadows Into Light",
-    load: loadShadowsIntoLight,
+    load: createFontLoader(loadShadowsIntoLight, ['400']),
   },
   {
     family: "Sofia Sans Condensed",
-    load: loadSofiaSansCondensed,
+    load: createFontLoader(loadSofiaSansCondensed),
   },
   {
     family: "Special Elite",
-    load: loadSpecialElite,
+    load: createFontLoader(loadSpecialElite, ['400']),
   },
   {
     family: "Suwannaphum",
-    load: loadSuwannaphum,
+    load: createFontLoader(loadSuwannaphum, ['100', '300', '400', '700', '900']),
   },
   {
     family: "Teko",
-    load: loadTeko,
+    load: createFontLoader(loadTeko, ['300', '400', '500', '600', '700']),
   },
   {
     family: "Titillium Web",
-    load: loadTitilliumWeb,
+    load: createFontLoader(loadTitilliumWeb, ['200', '300', '400', '600', '700', '900']),
   },
   {
     family: "Yantramanav",
-    load: loadYantramanav,
+    load: createFontLoader(loadYantramanav),
   },
   {
     family: "Yellowtail",
-    load: loadYellowtail,
+    load: createFontLoader(loadYellowtail, ['400']),
   },
   {
     family: "Zeyada",
-    load: loadZeyada,
+    load: createFontLoader(loadZeyada, ['400']),
   },
 ];
 

@@ -94,43 +94,49 @@ export function SpaceSettingsForm() {
         
         <div className="space-y-6">
           {/* Name field skeleton */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Building2 className="h-4 w-4" />
-              <Label className="text-base">{t('name-label')}</Label>
+          <div className="flex flex-col sm:flex-row items-start justify-between h-24">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Building2 className="h-4 w-4" />
+                <Label className="text-base">{t('name-label')}</Label>
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                {t('name-description')}
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              {t('name-description')}
-            </p>
-            <Skeleton className="h-10 w-full max-w-md" />
+            <Skeleton className="h-10 w-full sm:w-[250px]" />
           </div>
           
           {/* Mission field skeleton */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <MessageSquareText className="h-4 w-4" />
-              <Label className="text-base">{t('mission-label')}</Label>
+          <div className="flex flex-col sm:flex-row items-start justify-between">
+            <div className="space-y-1 sm:w-1/2">
+              <div className="flex items-center gap-2">
+                <MessageSquareText className="h-4 w-4" />
+                <Label className="text-base">{t('mission-label')}</Label>
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                {t('mission-description')}
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              {t('mission-description')}
-            </p>
-            <Skeleton className="h-24 w-full max-w-2xl" />
+            <Skeleton className="h-24 w-full sm:w-[400px]" />
           </div>
           
           {/* Target field skeleton */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Target className="h-4 w-4" />
-              <Label className="text-base">{t('target-label')}</Label>
+          <div className="flex flex-col sm:flex-row items-start justify-between">
+            <div className="space-y-1 sm:w-1/2">
+              <div className="flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                <Label className="text-base">{t('target-label')}</Label>
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                {t('target-description')}
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              {t('target-description')}
-            </p>
-            <Skeleton className="h-24 w-full max-w-2xl" />
+            <Skeleton className="h-24 w-full sm:w-[400px]" />
           </div>
           
           {/* Button skeleton */}
-          <div className="pt-4">
+          <div className="flex items-start justify-between h-24">
             <Skeleton className="h-10 w-24" />
           </div>
         </div>
@@ -154,18 +160,19 @@ export function SpaceSettingsForm() {
             name="name"
             render={({ field }: { field: ControllerRenderProps<SpaceSettingsFormValues, "name"> }) => (
               <FormItem>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4" />
-                    <Label htmlFor={field.name} className="text-base">{t('name-label')}</Label>
+                <div className="flex flex-col sm:flex-row items-start justify-between sm:h-24 space-y-2 sm:space-y-0">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor={field.name} className="font-semibold">{t('name-label')}</Label>
+                    </div>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
+                      {t('name-description')}
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {t('name-description')}
-                  </p>
                   <Input 
                     id={field.name}
                     placeholder={t('name-placeholder')} 
-                    className="w-full max-w-md" 
+                    className="w-full sm:w-[250px]" 
                     {...field} 
                   />
                 </div>
@@ -178,18 +185,19 @@ export function SpaceSettingsForm() {
             name="companyMission"
             render={({ field }: { field: ControllerRenderProps<SpaceSettingsFormValues, "companyMission"> }) => (
               <FormItem>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <MessageSquareText className="h-4 w-4" />
-                    <Label htmlFor={field.name} className="text-base">{t('mission-label')}</Label>
+                <div className="flex flex-col sm:flex-row items-start justify-between space-y-2 sm:space-y-0">
+                  <div className="space-y-1 sm:w-1/2">
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor={field.name} className="font-semibold">{t('mission-label')}</Label>
+                    </div>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
+                      {t('mission-description')}
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {t('mission-description')}
-                  </p>
                   <Textarea
                     id={field.name}
                     placeholder={t('mission-placeholder')}
-                    className="resize-none w-full max-w-2xl"
+                    className="resize-none w-full sm:w-[400px]"
                     rows={4}
                     {...field}
                   />
@@ -203,18 +211,19 @@ export function SpaceSettingsForm() {
             name="companyTarget"
             render={({ field }: { field: ControllerRenderProps<SpaceSettingsFormValues, "companyTarget"> }) => (
               <FormItem>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4" />
-                    <Label htmlFor={field.name} className="text-base">{t('target-label')}</Label>
+                <div className="flex flex-col sm:flex-row items-start justify-between space-y-2 sm:space-y-0">
+                  <div className="space-y-1 sm:w-1/2">
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor={field.name} className="font-semibold">{t('target-label')}</Label>
+                    </div>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
+                      {t('target-description')}
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {t('target-description')}
-                  </p>
                   <Textarea
                     id={field.name}
                     placeholder={t('target-placeholder')}
-                    className="resize-none w-full max-w-2xl"
+                    className="resize-none w-full sm:w-[400px]"
                     rows={4}
                     {...field}
                   />
@@ -223,12 +232,12 @@ export function SpaceSettingsForm() {
             )}
           />
           
-          <div className="pt-4">
-            <Button type="submit" disabled={isLoading}>
+          <div className="flex items-start justify-between h-24">
+            <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
               {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="h-4 w-4" />
               )}
               {t('save-button')}
             </Button>

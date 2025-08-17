@@ -19,7 +19,7 @@ import {
   CardDescription 
 } from "@/src/components/ui/card";
 import { IExport } from '../types/export';
-import { basicApiCall } from '../lib/api';
+import { basicApiCall, basicApiGetCall } from '../lib/api';
 import { IVideo } from '../types/video';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -50,7 +50,6 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
 
   // Effet pour traiter les mises à jour du run en temps réel
   useEffect(() => {
-    console.log("Run", run)
     if (run) {
       setStatus(run.metadata?.status as ExportStatus || status);
       
@@ -63,9 +62,13 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
       }
       
       if (run.status === "COMPLETED") {
-        setDownloadUrl(run.metadata?.downloadUrl as string);
-        setStatus('completed');
-        triggerConfetti();
+        if (run.metadata?.downloadUrl) {
+          setDownloadUrl(run.metadata?.downloadUrl as string);
+          setStatus('completed');
+          triggerConfetti();
+        } else {
+          refetchExportData();
+        }
       }
       
       if (run.status === "FAILED") {
@@ -73,7 +76,24 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
         setStatus('failed');
       }
     }
-  }, [run]);
+  }, [run, exportData]);
+
+  // Fonction pour récupérer les données d'export à nouveau
+  const refetchExportData = async () => {
+    if (!exportData?.id) return;
+    
+    try {
+      const response = await basicApiGetCall<IExport>(`/export/${exportData.id}`);
+      
+      if (response.downloadUrl) {
+        setDownloadUrl(response.downloadUrl);
+        setStatus('completed');
+        triggerConfetti();
+      }
+    } catch (error) {
+      console.error('Error refetching export data:', error);
+    }
+  };
 
   const triggerConfetti = () => {
     const end = Date.now() + 1000; // 1 seconde
