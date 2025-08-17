@@ -84,9 +84,7 @@ export function SpaceSwitcher({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  {activeSpace?.logo?.url ? (
-                    <AvatarImage src={activeSpace.logo.url} alt={activeSpace.name} />
-                  ) : null}
+                  <AvatarImage src={activeSpace?.logo?.url || ""} alt={activeSpace?.name || ""} />
                   <AvatarFallback className="rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     {activeSpace?.name?.charAt(0) ?? ''}
                   </AvatarFallback>
@@ -135,9 +133,7 @@ export function SpaceSwitcher({
                   onClick={() => setActiveSpace(space)}
                 >
                   <Avatar className="h-6 w-6 rounded-sm">
-                    {space.logo?.url ? (
-                      <AvatarImage src={space.logo.url} alt={space.name} />
-                    ) : null}
+                    <AvatarImage src={space.logo?.url || ""} alt={space.name || ""} />
                     <AvatarFallback className="rounded-sm text-xs">
                       {space.name?.charAt(0) ?? ''}
                     </AvatarFallback>

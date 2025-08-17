@@ -22,7 +22,7 @@ export function BrandKitSettings() {
   const [isLoading, setIsLoading] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [logoUrl, setLogoUrl] = useState(activeSpace?.logo?.url || undefined)
-  const [logoFileInUpload, setLogoFileInUpload] = useState<File | undefined>(undefined)
+
   const [originalLogoUrl, setOriginalLogoUrl] = useState(activeSpace?.logo?.url || undefined)
   const [logoPosition, setLogoPosition] = useState<LogoPosition>(activeSpace?.logo?.position || { x: 85, y: 85 })
   const [originalLogoPosition, setOriginalLogoPosition] = useState<LogoPosition>(activeSpace?.logo?.position || { x: 85, y: 85 })
@@ -41,7 +41,6 @@ export function BrandKitSettings() {
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsUploading(true)
     const file = event.target.files?.[0]
-    setLogoFileInUpload(file)
     if (!file) return
     
     try {
@@ -56,7 +55,6 @@ export function BrandKitSettings() {
         variant: "destructive",
       })
     } finally {
-      setLogoFileInUpload(undefined)
       setIsUploading(false)
     }
   }
@@ -109,11 +107,10 @@ export function BrandKitSettings() {
       </div>
 
       <div className="space-y-6">
-        <div className="flex items-start justify-between sm:h-24">
+        <div className="flex items-start justify-between lg:h-24">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Image className="h-4 w-4" />
-              <Label htmlFor="logo" className="text-base">{t('logo.title')}</Label>
+              <Label htmlFor="logo" className="font-semibold">{t('logo.title')}</Label>
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground">
               {t('logo.description')}
@@ -139,8 +136,7 @@ export function BrandKitSettings() {
                   <Loader2 className="h-6 w-6 text-white animate-spin" />
                 </div>
               )}
-              {logoFileInUpload && <AvatarImage src={URL.createObjectURL(logoFileInUpload)} alt="Logo" />}
-              {!logoFileInUpload && logoUrl && <AvatarImage src={logoUrl} alt="Logo" />}
+              {!isUploading && logoUrl && <AvatarImage src={logoUrl} alt="Logo" />}
               <AvatarFallback className="rounded-lg">
                 <Image className="h-6 w-6" />
               </AvatarFallback>
@@ -167,11 +163,10 @@ export function BrandKitSettings() {
 
         {logoUrl && (
           <>
-            <div className="flex items-center justify-between">
+            <div className="flex items-start justify-between sm:h-24">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  <Label className="text-base">{t('logo.show')}</Label>
+                  <Label className="font-semibold">{t('logo.show')}</Label>
                 </div>
                 <p className="text-xs sm:text-sm text-muted-foreground">
                   {t('logo.show-description')}
@@ -184,11 +179,10 @@ export function BrandKitSettings() {
             </div>
 
             {showLogo && (
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between sm:h-24">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <Move className="h-4 w-4" />
-                    <Label className="text-base">{t('position.title')}</Label>
+                    <Label className="font-semibold">{t('position.title')}</Label>
                   </div>
                   <p className="text-xs sm:text-sm text-muted-foreground">
                     {t('position.description')}

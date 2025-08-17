@@ -103,7 +103,7 @@ export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps)
               </div>
 
               {/* Contenu principal */}
-              <div className="flex-1 px-6 sm:px-12">
+              <div className="flex-1 px-6 lg:px-12">
                 {/* Tabs horizontaux mobile uniquement */}
                 <div className="mb-6 mt-6 lg:hidden">
                   <div className="flex gap-2">
