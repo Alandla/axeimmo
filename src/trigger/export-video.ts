@@ -57,6 +57,14 @@ export const exportVideoTask = task({
       const space = await getSpaceById(video.spaceId);
       const showWatermark = space.plan.name === "FREE";
 
+      // Récupérer les données du logo depuis le space
+      const logoData = space.logo ? {
+        url: space.logo.url,
+        position: space.logo.position,
+        show: space.logo.show,
+        size: space.logo.size
+      } : undefined;
+
       // Intégration de l'export audio si un avatar est présent
       if (video.video?.avatar?.id && video.video?.audio?.voices && ctx.attempt.number === 1) {
         logger.log("Combinaison des audios...");
@@ -100,7 +108,7 @@ export const exportVideoTask = task({
         }
       }
 
-        const render = await renderVideo(video, showWatermark, ctx.attempt.number === 2 ? 4096 : 2048);
+      const render = await renderVideo(video, showWatermark, ctx.attempt.number === 2 ? 4096 : 2048, logoData);
       await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
 
       const renderStatus : RenderStatus = await pollRenderStatus(
@@ -134,13 +142,13 @@ export const exportVideoTask = task({
       if (renderStatus.status === 'completed' && renderStatus.url && renderStatus.costs) {
         await updateExport(exportId, { 
           downloadUrl: renderStatus.url, 
-          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost, 
+          renderCost: renderStatus.costs + (ctx.run.baseCostInCents || 0) + renderAudioCost, 
           status: 'completed' 
         });
         await metadata.replace({
           status: 'completed',
           downloadUrl: renderStatus.url,
-          renderCost: renderStatus.costs + ctx.run.costInCents + renderAudioCost
+          renderCost: renderStatus.costs + (ctx.run.baseCostInCents || 0) + renderAudioCost
         })
 
         try {
@@ -190,7 +198,7 @@ export const exportVideoTask = task({
         return { success: true, url: renderStatus.url };
       }
 
-      logger.info('Cost infra', { costInCents: ctx.run.costInCents });
+      logger.info('Cost infra', { costInCents: ctx.run.baseCostInCents });
     } catch (error : any) {
       logger.error('Erreur lors de l\'export:', error);
       throw error;

@@ -68,12 +68,11 @@ export function GeneralSettings({ user }: { user: User }) {
   }
 
   return (
-    <div className="space-y-6 sm:px-12">
-      <div className="flex items-start justify-between sm:h-24">
+    <div className="space-y-6">
+      <div className="flex items-start justify-between lg:h-24">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Camera className="h-4 w-4" />
-            <Label htmlFor="avatar" className="text-base">Avatar</Label>
+            <Label htmlFor="avatar" className="font-semibold">Avatar</Label>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground">
             {t('avatar.description')}
@@ -123,11 +122,10 @@ export function GeneralSettings({ user }: { user: User }) {
           />
       </div>
 
-      <div className="flex flex-col sm:flex-row items-start justify-between h-24">
+      <div className="flex flex-col sm:flex-row items-start justify-between space-y-2 sm:space-y-0 sm:h-24">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <User2 className="h-4 w-4" />
-            <Label htmlFor="name" className="text-base">{t('name.title')}</Label>
+            <Label htmlFor="name" className="font-semibold">{t('name.title')}</Label>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground">
             {t('name.description')}
@@ -136,11 +134,10 @@ export function GeneralSettings({ user }: { user: User }) {
         <Input id="name" placeholder={t('name.placeholder')} className="w-full sm:w-[250px]" value={name} onChange={(e) => setName(e.target.value)} />
       </div>
 
-      <div className="flex flex-col sm:flex-row items-start justify-between h-24">
+      <div className="flex flex-col sm:flex-row items-start justify-between space-y-2 sm:space-y-0 sm:h-24">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Languages className="h-4 w-4" />
-            <Label htmlFor="language" className="text-base">{t('language.title')}</Label>
+            <Label htmlFor="language" className="font-semibold">{t('language.title')}</Label>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground">
             {t('language.description')}
@@ -156,7 +153,7 @@ export function GeneralSettings({ user }: { user: User }) {
           </SelectContent>
         </Select>
       </div>
-      <div className="flex items-start justify-between h-24">
+      <div className="flex items-start justify-between space-y-2 sm:space-y-0 h-24">
         <Button onClick={handleSave} disabled={isLoading} className="w-full sm:w-auto">
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           {t('save-button')}

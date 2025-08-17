@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "trigger:dev": "npx trigger.dev@v4-beta dev"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.51",
@@ -49,8 +50,8 @@
     "@remotion/preload": "4.0.325",
     "@remotion/transitions": "4.0.325",
     "@remotion/webcodecs": "4.0.325",
-    "@trigger.dev/react-hooks": "4.0.0-v4-beta.25",
-    "@trigger.dev/sdk": "4.0.0-v4-beta.25",
+    "@trigger.dev/react-hooks": "4.0.0-v4-beta.27",
+    "@trigger.dev/sdk": "4.0.0-v4-beta.27",
     "@types/canvas-confetti": "^1.6.4",
     "@types/crypto-js": "^4.2.2",
     "@types/ioredis": "^5.0.0",
@@ -102,7 +103,7 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
-    "@trigger.dev/build": "4.0.0-v4-beta.25",
+    "@trigger.dev/build": "4.0.0-v4-beta.27",
     "@types/bcryptjs": "^3.0.0",
     "@types/fluent-ffmpeg": "^2.1.27",
     "@types/jsdom": "^21.1.7",

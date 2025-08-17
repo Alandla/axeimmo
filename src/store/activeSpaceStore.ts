@@ -25,6 +25,7 @@ export const useActiveSpaceStore = create<ActiveSpaceStore>((set) => ({
       videoIdeas: space.videoIdeas,
       companyMission: space.details?.companyMission,
       companyTarget: space.details?.companyTarget,
+      logo: space.logo,
       usedStorageBytes: space.usedStorageBytes,
       storageLimit: space.plan.storageLimit,
       imageToVideoLimit: space.plan.imageToVideoLimit,

@@ -2,7 +2,7 @@ import { basicApiCall } from './api'
 import { IMedia } from '../types/video'
 import { extractedImagesToMedia, analyzeAndFilterExtractedImages } from './extracted-images'
 
-export interface FairmooveScrapeResult {
+export interface BrowserBaseScrapeResult {
   url: string;
   markdown: string;
   title: string;
@@ -17,11 +17,11 @@ export interface ExtractedImagesResponse {
   cost: number;
 }
 
-export const scrapeFairmooveUrls = async (
+export const scrapeBrowserBaseUrls = async (
   urls: string[],
   setExtractedImagesMedia: (images: IMedia[]) => void,
   extractedImagesMedia: IMedia[]
-): Promise<FairmooveScrapeResult[]> => {
+): Promise<BrowserBaseScrapeResult[]> => {
   // Phase 1: Quick content extraction using BrowserBase (for fast script generation)
   const enhancedResults = await Promise.all(
     urls.map(async (url) => {
@@ -66,6 +66,7 @@ export const scrapeFairmooveUrls = async (
           
           const backgroundImages = imageResult.images || [];
           console.log(`${backgroundImages.length} images trouvées en arrière-plan pour ${result.url}`);
+          console.log("backgroundImages", backgroundImages);
           
           if (backgroundImages.length > 0) {
             // Extract image URLs from BrowserBase results

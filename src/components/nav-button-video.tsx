@@ -8,7 +8,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 export function NavButtonVideo() {
-  const { isMobile } = useSidebar()
+  const { isMobile, setOpenMobile } = useSidebar()
   const t = useTranslations('sidebar')
   const pathname = usePathname()
 
@@ -25,7 +25,7 @@ export function NavButtonVideo() {
             tooltip={t('createVideo')}
             className="justify-center"
           >
-            <Link href="/dashboard/create" prefetch={true} className="flex items-center gap-2">
+            <Link href="/dashboard/create" prefetch={true} className="flex items-center gap-2" onClick={() => setOpenMobile(false)}>
               <Sparkles className="h-4 w-4" />
               <span className={cn("inline", "group-data-[collapsible=icon]:hidden")}>
                 {t('createVideo')}

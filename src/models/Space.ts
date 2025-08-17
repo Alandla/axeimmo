@@ -139,6 +139,36 @@ const spaceSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    logo: {
+      url: {
+        type: String,
+        trim: true,
+      },
+      position: {
+        x: {
+          type: Number,
+          min: 0,
+          max: 100,
+          default: 85, // Position par défaut à droite
+        },
+        y: {
+          type: Number,
+          min: 0,
+          max: 100,
+          default: 10, // Position par défaut en bas
+        },
+      },
+      show: {
+        type: Boolean,
+        default: true,
+      },
+      size: {
+        type: Number,
+        min: 0,
+        max: 100,
+        default: 19,
+      },
+    },
     apiKey: {
       keyHash: String,
       keyPrefix: String, // Pour affichage (premiers 12 caractères)
