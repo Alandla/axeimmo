@@ -21,16 +21,8 @@ export async function POST(req: NextRequest) {
     // Récupérer les données du space pour le logo et le watermark
     const space = await getSpaceById(video.spaceId);
     const showWatermark = space.plan.name === "FREE";
-    
-    // Récupérer les données du logo depuis le space
-    const logoData = space.logo ? {
-      url: space.logo.url,
-      position: space.logo.position,
-      show: space.logo.show,
-      size: space.logo.size
-    } : undefined;
 
-    const renderResult = await renderVideo(video, showWatermark, logoData);
+    const renderResult = await renderVideo(video, showWatermark, space.logo);
 
     console.log("Render result: ", renderResult)
 
