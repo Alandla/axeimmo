@@ -47,7 +47,7 @@ export const VideoGenerate = ({
 			{ data.video.audio.voices && <Voices voices={data.video.audio.voices} volume={data.video.audio.volume} /> }
 			{ data.video.audio.music && !muteBackgroundMusic && <Audio src={data.video.audio.music.url} volume={data.video.audio.music.volume} /> }
 			{ showWatermark && <Watermark />}
-			{ logo?.show && logo?.url && <SpaceLogo 
+			{ logo?.show && logo?.url && !showWatermark && <SpaceLogo 
 				logoUrl={logo?.url}
 				logoPosition={logo?.position}
 				logoSize={logo?.size}

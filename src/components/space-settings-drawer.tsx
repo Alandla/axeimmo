@@ -46,7 +46,7 @@ export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps)
       case "general":
         return <SpaceSettingsForm />
       case "brand-kit":
-        return <BrandKitSettings />
+        return <BrandKitSettings onClose={onClose} />
       default:
         return null
     }

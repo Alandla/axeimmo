@@ -154,9 +154,13 @@
         },
         "save-button": "Save",
         "update-success-title": "Logo updated",
-        "update-success-description": "Your space logo has been successfully updated"
+        "update-success-description": "Your space logo has been successfully updated",
+        "premium-access": "Premium Access",
+        "premium-access-description": "Unlock advanced brand kit features with our Pro or Enterprise plans",
+        "pro-enterprise-required": "Upgrade required",
+        "pro-enterprise-required-description": "Customize your videos with access to the brand kit, requires a Pro subscription.",
+        "upgrade-to-pro": "Upgrade to Pro"
       },
-     
       "space": {
         "title": "Space Settings",
         "general-description": "Configure the basic information of your space",

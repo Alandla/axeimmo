@@ -1573,9 +1573,13 @@
         },
         "save-button": "Sauvegarder",
         "update-success-title": "Logo mis à jour",
-        "update-success-description": "Le logo de votre espace a été mis à jour avec succès"
+        "update-success-description": "Le logo de votre espace a été mis à jour avec succès",
+        "premium-access": "Accès Premium",
+        "premium-access-description": "Débloquez les fonctionnalités avancées du brand kit avec nos plans Pro ou Entreprise",
+        "pro-enterprise-required": "Mise à niveau requise",
+        "pro-enterprise-required-description": "Personnaliser vos vidéos avec l'accès au brand kit, nécessite un abonnement Pro.",
+        "upgrade-to-pro": "Passer au Pro"
       },
-    
       "space": {
         "title": "Paramètres de l'espace",
         "general-description": "Configurez les informations de base de votre espace",

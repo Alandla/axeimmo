@@ -4,20 +4,28 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { Switch } from "@/src/components/ui/switch"
-import { Camera, Save, Loader2, X, Image, Eye, Move } from 'lucide-react'
+import { Card, CardContent } from "@/src/components/ui/card"
+import { Camera, Save, Loader2, X, Image, Eye, Move, Rocket } from 'lucide-react'
 import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
 import { basicApiCall } from "../lib/api"
 import { useToast } from "../hooks/use-toast"
 import { getMediaUrlFromFileByPresignedUrl } from "../service/upload.service"
 import { SimpleSpace, LogoPosition, Logo } from "../types/space"
 import { LogoPositionSelector } from "@/src/components/ui/logo-position-selector"
+import { PlanName } from "../types/enums"
 
-export function BrandKitSettings() {
+interface BrandKitSettingsProps {
+  onClose?: () => void
+}
+
+export function BrandKitSettings({ onClose }: BrandKitSettingsProps = {}) {
   const t = useTranslations('settings.brand-kit')
   const tErrors = useTranslations('errors')
   const { activeSpace, setActiveSpace } = useActiveSpaceStore()
   const { toast } = useToast()
+  const router = useRouter()
   const [isHovering, setIsHovering] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -39,6 +47,16 @@ export function BrandKitSettings() {
   }, [activeSpace])
   
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Check if user has required plan before allowing upload
+    if (!hasRequiredPlan) {
+      toast({
+        title: tErrors('unauthorized'),
+        description: t('pro-enterprise-required-description'),
+        variant: "destructive",
+      })
+      return
+    }
+    
     setIsUploading(true)
     const file = event.target.files?.[0]
     if (!file) return
@@ -60,11 +78,32 @@ export function BrandKitSettings() {
   }
 
   const handleDeleteLogo = () => {
+    // Check if user has required plan before allowing delete
+    if (!hasRequiredPlan) {
+      toast({
+        title: tErrors('unauthorized'),
+        description: t('pro-enterprise-required-description'),
+        variant: "destructive",
+      })
+      return
+    }
+    
     setLogoUrl(undefined)
   }
 
   const handleSave = async () => {
     if (!activeSpace) return
+    
+    // Check if user has required plan before allowing save
+    if (!hasRequiredPlan) {
+      toast({
+        title: tErrors('unauthorized'),
+        description: t('pro-enterprise-required-description'),
+        variant: "destructive",
+      })
+      return
+    }
+    
     setIsLoading(true)
     
     try {
@@ -97,6 +136,9 @@ export function BrandKitSettings() {
 
   const hasChanges = logoUrl !== originalLogoUrl || logoPosition !== originalLogoPosition || showLogo !== originalShowLogo
 
+  // Check if space has required plan for brand-kit access
+  const hasRequiredPlan = activeSpace?.planName === PlanName.PRO || activeSpace?.planName === PlanName.ENTREPRISE
+
   return (
     <div className="space-y-6">
       <div className="mb-6">
@@ -106,7 +148,32 @@ export function BrandKitSettings() {
         </p>
       </div>
 
-      <div className="space-y-6">
+      {!hasRequiredPlan && (
+        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-purple-500/5">
+          <CardContent className="flex items-center justify-between p-6">
+            <div className="flex items-center gap-4">
+              <div>
+                <h4 className="font-semibold text-foreground">{t('pro-enterprise-required')}</h4>
+                <p className="text-sm text-muted-foreground">
+                  {t('pro-enterprise-required-description')}
+                </p>
+              </div>
+            </div>
+            <Button 
+              onClick={() => {
+                onClose?.()
+                router.push('/dashboard/pricing')
+              }}
+              className="bg-primary hover:bg-primary/90"
+            >
+              <Rocket className="h-4 w-4" />
+              {t('upgrade-to-pro')}
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      <div className={`space-y-6 ${!hasRequiredPlan ? 'opacity-50 pointer-events-none' : ''}`}>
         <div className="flex items-start justify-between lg:h-24">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -122,14 +189,15 @@ export function BrandKitSettings() {
               size="sm" 
               className="hidden sm:block"
               onClick={() => document.getElementById('logo-upload')?.click()}
+              disabled={!hasRequiredPlan}
             >
               {t('logo.change')}
             </Button>
             <Avatar 
-              className="h-16 w-16 cursor-pointer relative rounded-lg"
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
-              onClick={() => logoUrl ? handleDeleteLogo() : document.getElementById('logo-upload')?.click()}
+              className={`h-16 w-16 relative rounded-lg ${hasRequiredPlan ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+              onMouseEnter={() => hasRequiredPlan && setIsHovering(true)}
+              onMouseLeave={() => hasRequiredPlan && setIsHovering(false)}
+              onClick={() => hasRequiredPlan && (logoUrl ? handleDeleteLogo() : document.getElementById('logo-upload')?.click())}
             >
               {isUploading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg z-10">
@@ -175,6 +243,7 @@ export function BrandKitSettings() {
               <Switch
                 checked={showLogo}
                 onCheckedChange={setShowLogo}
+                disabled={!hasRequiredPlan}
               />
             </div>
 
@@ -204,7 +273,7 @@ export function BrandKitSettings() {
         <div className="flex items-start justify-between h-24">
           <Button 
             onClick={handleSave} 
-            disabled={isLoading || !hasChanges} 
+            disabled={isLoading || !hasChanges || !hasRequiredPlan} 
             className="w-full sm:w-auto"
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
