@@ -64,10 +64,10 @@ export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps)
             tabIndex={-1}
             className="focus:outline-none px-0 sm:px-6 lg:px-0 h-full"
           >
-            <div className="flex flex-col lg:flex-row h-full min-h-[calc(100vh-1.5rem)]">
+            <div className="flex flex-col lg:flex-row h-full">
               {/* Sidebar desktop uniquement, h-full pour occuper toute la hauteur */}
-              <div className="hidden lg:flex flex-col w-64 min-w-64 border-r bg-muted/40 p-6 space-y-6 h-[100vh]">
-                <div>
+              <div className="hidden lg:flex flex-col w-64 min-w-64 border-r bg-muted/40 p-2 space-y-4 h-[80vh]">
+                <div className="p-2">
                   <h2 className="text-lg font-semibold flex items-center gap-2">
                     <Settings className="h-5 w-5" />
                     {t('title')}
