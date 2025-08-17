@@ -149,7 +149,7 @@ const spaceSchema = new mongoose.Schema(
           type: Number,
           min: 0,
           max: 100,
-          default: 90, // Position par défaut à droite
+          default: 85, // Position par défaut à droite
         },
         y: {
           type: Number,
