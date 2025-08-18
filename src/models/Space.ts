@@ -106,9 +106,10 @@ const apiKeySchema = new mongoose.Schema({
     default: Date.now
   }
 }, {
-  timestamps: true,
-  toJSON: { virtuals: true },
-});
+  timestamps: false, // Nous gérons createdAt manuellement
+  toJSON: { virtuals: true }
+}
+);
 
 const mediaSpaceSchema = new mongoose.Schema(
   {
@@ -216,6 +217,7 @@ const spaceSchema = new mongoose.Schema(
 
 spaceSchema.plugin(toJSON);
 mediaSpaceSchema.plugin(toJSON);
+apiKeySchema.plugin(toJSON);
 
 // Index pour optimiser les requêtes de validation des clés API
 spaceSchema.index({ 

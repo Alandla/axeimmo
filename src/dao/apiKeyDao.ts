@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { executeWithRetry } from '../lib/db';
 
 export interface IApiKey {
-  _id?: string;
+  id?: string; // Pour la compatibilité avec toJSON plugin
   keyHash: string;
   keyPrefix: string;
   name?: string;
@@ -66,22 +66,10 @@ export async function createApiKey(spaceId: string, name?: string): Promise<{ ap
 
       const { apiKeyData, plainKey } = createApiKeyData(undefined, name);
 
-      // Initialiser apiKeys si ce champ n'existe pas, puis ajouter la nouvelle clé
+      // Utiliser $push pour ajouter le nouveau sous-document et permettre à Mongoose de générer l'_id
       const updatedSpace = await SpaceModel.findByIdAndUpdate(
         spaceId,
-        [
-          {
-            $set: {
-              apiKeys: {
-                $cond: {
-                  if: { $isArray: "$apiKeys" },
-                  then: { $concatArrays: ["$apiKeys", [apiKeyData]] },
-                  else: [apiKeyData]
-                }
-              }
-            }
-          }
-        ],
+        { $push: { apiKeys: apiKeyData } },
         { new: true }
       );
       

@@ -42,7 +42,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
     return NextResponse.json({ 
       data: apiKeys.map(apiKey => ({
-        id: apiKey._id,
+        id: apiKey.id,
         keyPrefix: apiKey.keyPrefix,
         name: apiKey.name,
         lastUsedAt: apiKey.lastUsedAt,
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return NextResponse.json({ 
         data: {
           apiKey: {
-            id: apiKey._id,
+            id: apiKey.id,
             keyPrefix: apiKey.keyPrefix,
             name: apiKey.name,
             permissions: apiKey.permissions,
@@ -118,7 +118,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return NextResponse.json({ 
         data: {
           apiKey: {
-            id: apiKey._id,
+            id: apiKey.id,
             keyPrefix: apiKey.keyPrefix,
             name: apiKey.name,
             permissions: apiKey.permissions,
