@@ -73,6 +73,43 @@ const companyDetailsSchema = new mongoose.Schema({
   toJSON: { virtuals: true },
 });
 
+// Schéma pour les clés API
+const apiKeySchema = new mongoose.Schema({
+  keyHash: String,
+  keyPrefix: String, // Pour affichage (premiers 12 caractères)
+  name: {
+    type: String,
+    default: 'Production'
+  },
+  lastUsedAt: Date,
+  permissions: [{
+    type: String,
+    enum: [
+      'video:generate',
+      'video:export', 
+      'resources:read',
+      'webhooks:manage'
+    ],
+    default: ['video:generate', 'video:export', 'resources:read']
+  }],
+  isActive: {
+    type: Boolean,
+    default: true
+  },
+  revokedAt: Date,
+  rateLimitPerMinute: {
+    type: Number,
+    default: 100
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+});
+
 const mediaSpaceSchema = new mongoose.Schema(
   {
     media: mediaSchema,
@@ -169,38 +206,7 @@ const spaceSchema = new mongoose.Schema(
         default: 19,
       },
     },
-    apiKey: {
-      keyHash: String,
-      keyPrefix: String, // Pour affichage (premiers 12 caractères)
-      name: {
-        type: String,
-        default: 'API Key'
-      },
-      lastUsedAt: Date,
-      permissions: [{
-        type: String,
-        enum: [
-          'video:generate',
-          'video:export', 
-          'resources:read',
-          'webhooks:manage'
-        ],
-        default: ['video:generate', 'video:export', 'resources:read']
-      }],
-      isActive: {
-        type: Boolean,
-        default: false
-      },
-      revokedAt: Date,
-      rateLimitPerMinute: {
-        type: Number,
-        default: 100
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now
-      }
-    }
+    apiKeys: [apiKeySchema]
   },
   {
     timestamps: true,
@@ -213,11 +219,11 @@ mediaSpaceSchema.plugin(toJSON);
 
 // Index pour optimiser les requêtes de validation des clés API
 spaceSchema.index({ 
-  'apiKey.keyPrefix': 1, 
-  'apiKey.isActive': 1 
+  'apiKeys.keyPrefix': 1, 
+  'apiKeys.isActive': 1 
 }, { 
   sparse: true,
-  name: 'apikey_validation_index'
+  name: 'apikeys_validation_index'
 });
 
 export default mongoose.models.Space || mongoose.model("Space", spaceSchema);

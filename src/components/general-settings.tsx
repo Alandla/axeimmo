@@ -159,11 +159,6 @@ export function GeneralSettings({ user }: { user: User }) {
           {t('save-button')}
         </Button>
       </div>
-
-      {/* API Key Management Section */}
-      <div className="border-t pt-6">
-        <ApiKeyManagement />
-      </div>
     </div>
   )
 }

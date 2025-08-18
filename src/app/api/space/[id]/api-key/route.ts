@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/src/lib/auth';
 import { isUserInSpace } from '@/src/dao/userDao';
 import { getSpaceById } from '@/src/dao/spaceDao';
-import { createApiKey, getApiKeyBySpaceId, regenerateApiKey, revokeApiKey } from '@/src/dao/apiKeyDao';
+import { createApiKey, getApiKeysBySpaceId, getApiKeyById, regenerateApiKey, revokeApiKey } from '@/src/dao/apiKeyDao';
 import { PlanName } from '@/src/types/enums';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
@@ -38,17 +38,18 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       }, { status: 403 });
     }
 
-    const apiKey = await getApiKeyBySpaceId(params.id);
+    const apiKeys = await getApiKeysBySpaceId(params.id);
 
     return NextResponse.json({ 
-      data: apiKey ? {
+      data: apiKeys.map(apiKey => ({
+        id: apiKey._id,
         keyPrefix: apiKey.keyPrefix,
         name: apiKey.name,
         lastUsedAt: apiKey.lastUsedAt,
         permissions: apiKey.permissions,
         rateLimitPerMinute: apiKey.rateLimitPerMinute,
         createdAt: apiKey.createdAt
-      } : null
+      }))
     });
   } catch (error) {
     console.error('Error getting API key:', error);
@@ -89,7 +90,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       }, { status: 403 });
     }
 
-    const { action, name } = await req.json();
+    const { action, name, keyId } = await req.json();
 
     if (action === 'create') {
       const { apiKey, plainKey } = await createApiKey(params.id, name);
@@ -97,6 +98,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return NextResponse.json({ 
         data: {
           apiKey: {
+            id: apiKey._id,
             keyPrefix: apiKey.keyPrefix,
             name: apiKey.name,
             permissions: apiKey.permissions,
@@ -107,11 +109,16 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         }
       });
     } else if (action === 'regenerate') {
-      const { apiKey, plainKey } = await regenerateApiKey(params.id);
+      if (!keyId) {
+        return NextResponse.json({ error: "Key ID required for regeneration" }, { status: 400 });
+      }
+      
+      const { apiKey, plainKey } = await regenerateApiKey(params.id, keyId);
       
       return NextResponse.json({ 
         data: {
           apiKey: {
+            id: apiKey._id,
             keyPrefix: apiKey.keyPrefix,
             name: apiKey.name,
             permissions: apiKey.permissions,
@@ -154,7 +161,14 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       }
     }
 
-    const success = await revokeApiKey(params.id);
+    const { searchParams } = new URL(req.url);
+    const keyId = searchParams.get('keyId');
+    
+    if (!keyId) {
+      return NextResponse.json({ error: "Key ID required" }, { status: 400 });
+    }
+
+    const success = await revokeApiKey(params.id, keyId);
 
     if (!success) {
       return NextResponse.json({ error: "API key not found" }, { status: 404 });
