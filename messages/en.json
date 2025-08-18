@@ -467,10 +467,14 @@
         "dynamic-size-label": "Dynamic size",
         "select": {
           "weight-placeholder": "Select a weight",
+          "weight-thin": "Thin",
+          "weight-extra-light": "Extra Light",
           "weight-light": "Light",
           "weight-normal": "Normal",
           "weight-medium": "Medium",
+          "weight-semi-bold": "Semi Bold",
           "weight-bold": "Bold",
+          "weight-extra-bold": "Extra Bold",
           "weight-black": "Black",
           "font-placeholder": "Select a font"
         }

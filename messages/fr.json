@@ -418,10 +418,14 @@
         "dynamic-size-label": "Taille dynamique",
         "select": {
           "weight-placeholder": "Sélectionne une épaisseur",
+          "weight-thin": "Très fin",
+          "weight-extra-light": "Extra léger",
           "weight-light": "Léger",
           "weight-normal": "Normal",
           "weight-medium": "Moyen",
+          "weight-semi-bold": "Semi-gras",
           "weight-bold": "Gras",
+          "weight-extra-bold": "Extra gras",
           "weight-black": "Noir",
           "font-placeholder": "Sélectionne une police"
         }
