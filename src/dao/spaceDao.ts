@@ -212,7 +212,7 @@ export const getUserSpaces = async (userId: string) => {
 
       const spaces = await SpaceModel.find(
         { _id: { $in: user.spaces } },
-        'name plan credits members videoIdeas details usedStorageBytes imageToVideoUsed'
+        'name plan credits members videoIdeas details usedStorageBytes imageToVideoUsed logo'
       );
 
       return spaces.map((space) => {
@@ -224,6 +224,7 @@ export const getUserSpaces = async (userId: string) => {
           credits: space.credits,
           creditsPerMonth: space.plan.creditsMonth,
           userRole: userRole,
+          logo: space.logo,
           companyMission: space.details?.companyMission,
           companyTarget: space.details?.companyTarget,
           videoIdeas: space.videoIdeas,
@@ -378,7 +379,7 @@ export const updateSpace = async (spaceId: string, updateData: Partial<ISpace>) 
           flattenedUpdateData[`details.${detailKey}`] = detailValue;
         });
       }
-      
+  
       // Update with flattened data
       const updatedSpace = await SpaceModel.findByIdAndUpdate(
         spaceId,
@@ -397,6 +398,7 @@ export const updateSpace = async (spaceId: string, updateData: Partial<ISpace>) 
         creditsPerMonth: updatedSpace.plan.creditsMonth,
         companyMission: updatedSpace.details?.companyMission,
         companyTarget: updatedSpace.details?.companyTarget,
+        logo: updatedSpace.logo,
         videoIdeas: updatedSpace.videoIdeas,
         usedStorageBytes: updatedSpace.usedStorageBytes,
         storageLimit: updatedSpace.plan.storageLimit,

@@ -1,6 +1,6 @@
 import { imageAnalysisRun } from "@/src/lib/workflowai";
 import { updateMedia } from "@/src/dao/spaceDao";
-import { tasks } from "@trigger.dev/sdk/v3";
+import { tasks, runs } from "@trigger.dev/sdk/v3";
 import { IMediaSpace } from "@/src/types/space";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 
@@ -21,12 +21,13 @@ export async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId:
     }
 
     if (media.type === "video") {
-      const response = await tasks.triggerAndPoll("analyze-video", { 
-        videoUrl: mediaUrl, 
-        mediaId 
+      const handle = await tasks.trigger("analyze-video", {
+        videoUrl: mediaUrl,
+        mediaId,
       });
 
-      const result = response.output || {};
+      const run = await runs.poll(handle);
+      const result = (run as any)?.output ?? {};
       
       if (result.descriptions && result.descriptions.length > 0) {
         const updatedSpaceMedia = {

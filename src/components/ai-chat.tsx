@@ -31,7 +31,7 @@ import { useRealtimeRun } from '@trigger.dev/react-hooks'
 import { ToolDisplay, ToolCall } from './tool-display'
 import { ExtractedImagesDisplay } from './extracted-images-display'
 import { extractedImagesToMedia, analyzeAndFilterExtractedImages } from '../lib/extracted-images'
-import { scrapeFairmooveUrls, FairmooveScrapeResult, ExtractedImagesResponse } from '../lib/fairmoove-scraper'
+import { scrapeBrowserBaseUrls, BrowserBaseScrapeResult, ExtractedImagesResponse } from '../lib/browserbase-scraper'
 
 enum MessageType {
   TEXT = 'text',
@@ -249,17 +249,17 @@ export function AiChat() {
       }));
       
       try {
-        // Séparer les URLs fairmoove et les autres
-        const fairmooveUrls = urls.filter(url => url.includes('fairmoove.fr'));
-        const otherUrls = urls.filter(url => !url.includes('fairmoove.fr'));
+        // Séparer les URLs qui nécessitent BrowserBase et les autres
+        const browserBaseUrls = urls.filter(url => url.includes('fairmoove.fr') || url.includes('odisseias.com'));
+        const otherUrls = urls.filter(url => !url.includes('fairmoove.fr') && !url.includes('odisseias.com'));
         
         let urlContents: FirecrawlBatchResponse;
         
-        // Traitement spécial pour les URLs fairmoove avec BrowserBase
-        if (fairmooveUrls.length > 0) {
-          console.log("Utilisation de BrowserBase pour fairmoove.fr URLs:", fairmooveUrls);
+        // Traitement spécial pour les URLs qui nécessitent BrowserBase
+        if (browserBaseUrls.length > 0) {
+          console.log("Utilisation de BrowserBase pour URLs spéciales:", browserBaseUrls);
           
-          const fairmooveResults = await scrapeFairmooveUrls(fairmooveUrls, setExtractedImagesMedia, extractedImagesMedia);
+          const browserBaseResults = await scrapeBrowserBaseUrls(browserBaseUrls, setExtractedImagesMedia, extractedImagesMedia);
           
           // Si il y a aussi d'autres URLs, les traiter avec FireCrawl
           if (otherUrls.length > 0) {
@@ -271,16 +271,16 @@ export function AiChat() {
             
             // Combiner les résultats
             urlContents = {
-              results: [...fairmooveResults, ...otherResults.results]
+              results: [...browserBaseResults, ...otherResults.results]
             };
           } else {
-            // Seulement des URLs fairmoove
+            // Seulement des URLs BrowserBase
             urlContents = {
-              results: fairmooveResults
+              results: browserBaseResults
             };
           }
         } else {
-          // Toutes les URLs sont non-fairmoove, utiliser FireCrawl
+          // Toutes les URLs utilisent FireCrawl
           console.log("Utilisation de FireCrawl pour toutes les URLs:", urls);
           urlContents = await basicApiCall<FirecrawlBatchResponse>('/search/url', {
             urls,
@@ -292,16 +292,16 @@ export function AiChat() {
 
         urlScrapingResult = urlContents.results;
         
-        // Lancer l'extraction d'images en parallèle pour les URLs non-fairmoove (sans attendre le résultat)
+        // Lancer l'extraction d'images en parallèle pour les URLs qui n'utilisent pas BrowserBase (sans attendre le résultat)
         if (urlContents.results && urlContents.results.length > 0) {
-          // Filtrer seulement les résultats non-fairmoove pour l'extraction d'images AI
-          const nonFairmooveResults = urlContents.results.filter(result => 
-            !result.url || !result.url.includes('fairmoove.fr')
+          // Filtrer seulement les résultats qui n'utilisent pas BrowserBase pour l'extraction d'images AI
+          const nonBrowserBaseResults = urlContents.results.filter(result => 
+            !result.url || (!result.url.includes('fairmoove.fr') && !result.url.includes('odisseias.com'))
           );
           
-          if (nonFairmooveResults.length > 0) {
+          if (nonBrowserBaseResults.length > 0) {
             // Traiter chaque URL individuellement pour éviter les erreurs en cascade
-            const imageExtractionPromises = nonFairmooveResults.map(async (result) => {
+            const imageExtractionPromises = nonBrowserBaseResults.map(async (result) => {
               try {
                 const imageResult = await basicApiCall<ExtractedImagesResponse>('/ai/extract-images', {
                   markdownContent: result.markdown

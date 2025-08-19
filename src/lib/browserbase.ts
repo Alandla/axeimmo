@@ -192,7 +192,7 @@ export async function extractImagesFromPage(page: Page): Promise<ExtractedImage[
   }
 }
 
-export async function enhancedImageExtraction(page: Page): Promise<ExtractedImage[]> {
+export async function fairmooveImageExtraction(page: Page): Promise<ExtractedImage[]> {
   try {
 
     // Click the predefined XPath to expand images
@@ -225,7 +225,40 @@ export async function enhancedImageExtraction(page: Page): Promise<ExtractedImag
     return imagesAfter;
 
   } catch (error) {
-    console.error('Error in enhanced image extraction:', error);
+    console.error('Error in fairmoove image extraction:', error);
+    return await extractImagesFromPage(page);
+  }
+}
+
+export async function odisseiasImageExtraction(page: Page): Promise<ExtractedImage[]> {
+  try {
+    console.log('Starting odisseias image extraction');
+    
+    // Try to click image expansion button
+    const xpath = '/html/body/div[4]/div[5]/div[2]/div[1]/section/div[2]/div[1]/div[1]/div';
+    
+    try {
+      console.log("Clicking image expansion button for odisseias with predefined XPath...");
+      await page.waitForTimeout(2000);
+      await page.locator(`xpath=${xpath}`).click({ timeout: 5000 });
+      console.log('Successfully clicked odisseias image expansion button');
+    } catch (clickError) {
+      console.log('Could not click odisseias image expansion button, continuing with basic extraction');
+    }
+
+    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1000);
+
+    console.info("Check images for odisseias")
+
+    // Extract images after interactions
+    const imagesAfter = await extractImagesFromPage(page);
+    console.log(`Images found after interactions for odisseias: ${imagesAfter.length}`);
+
+    return imagesAfter;
+
+  } catch (error) {
+    console.error('Error in odisseias image extraction:', error);
     return await extractImagesFromPage(page);
   }
 }
@@ -268,19 +301,33 @@ export async function extractQuickContent(
  * No page.goto needed - we're already on the page from Phase 1
  */
 export async function extractBackgroundImages(
-  connectUrl: string
+  connectUrl: string,
+  url?: string
 ): Promise<ExtractedImage[]> {
   let browser: Browser | null = null;
 
-  console.log("extractBackgroundImages", connectUrl)
+  console.log("extractBackgroundImages", connectUrl, "for URL:", url)
 
   try {
     const { browser: browserInstance, page } = await initializeBrowser(connectUrl);
     browser = browserInstance;
     
     // No need for page.goto - we're already on the page from Phase 1
-    // Just run enhanced image extraction on the current page
-    return await enhancedImageExtraction(page);
+    // Choose extraction method based on URL
+    let extractionMethod: (page: Page) => Promise<ExtractedImage[]>;
+    
+    if (url?.includes('fairmoove.fr')) {
+      console.log('Using fairmoove extraction method');
+      extractionMethod = fairmooveImageExtraction;
+    } else if (url?.includes('odisseias.com')) {
+      console.log('Using odisseias extraction method');
+      extractionMethod = odisseiasImageExtraction;
+    } else {
+      console.log('Using basic extraction method');
+      extractionMethod = extractImagesFromPage;
+    }
+    
+    return await extractionMethod(page);
 
   } catch (error) {
     console.error('Error in background image extraction:', error);
@@ -316,8 +363,19 @@ export async function extractContentWithImages(
     // Extract clean content
     const cleanContent = await extractCleanContent(page, url);
     
+    // Choose extraction method based on URL
+    let extractionMethod: (page: Page) => Promise<ExtractedImage[]>;
+    
+    if (url.includes('fairmoove.fr')) {
+      extractionMethod = fairmooveImageExtraction;
+    } else if (url.includes('odisseias.com')) {
+      extractionMethod = odisseiasImageExtraction;
+    } else {
+      extractionMethod = extractImagesFromPage;
+    }
+    
     // Extract enhanced images
-    const images = await enhancedImageExtraction(page);
+    const images = await extractionMethod(page);
 
     return {
       ...cleanContent,

@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       }
       
       console.log(`Getting background images for URL: ${url}...`);
-      const images = await extractBackgroundImages(connectUrl);
+      const images = await extractBackgroundImages(connectUrl, url);
       
       return NextResponse.json({ 
         data: { images, imageCount: images.length }

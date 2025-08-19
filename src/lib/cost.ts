@@ -12,6 +12,12 @@ export const KLING_GENERATION_COSTS = {
   [KlingGenerationMode.MASTER]: 10
 } as const;
 
+export const KLING_GENERATION_COSTS_GENERATE = {
+  [KlingGenerationMode.STANDARD]: 0.25,
+  [KlingGenerationMode.PRO]: 0.45,
+  [KlingGenerationMode.MASTER]: 1
+} as const;
+
 export function calculateAnthropicCost(usage: TokenUsage): number {
   const INPUT_COST_PER_TOKEN = 0.000003;  // $3 par million de tokens pour claude 3.5 sonnet
   const OUTPUT_COST_PER_TOKEN = 0.000015;  // $15 par million de tokens pour claude 3.5 sonnet
@@ -78,7 +84,7 @@ export function calculateUpscaleCost(upscaleCount: number): number {
 }
 
 export function calculateKlingAnimationCost(mode: KlingGenerationMode, upscaleCount: number = 0): number {
-  const animationCost = KLING_GENERATION_COSTS[mode];
+  const animationCost = KLING_GENERATION_COSTS_GENERATE[mode];
   const upscaleCost = calculateUpscaleCost(upscaleCount);
   
   return animationCost + upscaleCost;

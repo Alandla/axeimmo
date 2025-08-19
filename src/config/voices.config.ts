@@ -1671,6 +1671,42 @@ export const voicesConfig: Voice[] = [
     mode: 'elevenlabs'
   },
   {
+    id: 'Portuguese_Narrator',
+    name: 'Joana',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/6d414379-71fa-440c-8772-db47ec6a1809.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Portuguese_Rudolph',
+    name: 'Rudolph',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/01db7260-5a6f-43cd-959e-e6beb5523a50.mp3',
+    mode: 'minimax'
+  },
+  {
+    id: 'Portuguese_ElegantGirl',
+    name: 'Ana',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'middle aged',
+    tags: ['narration'],
+    plan: PlanName.FREE,
+    previewUrl: 'https://media.hoox.video/a68dfc95-58c6-4539-ac74-c73e35d08c6d.mp3',
+    mode: 'minimax'
+  },
+  {
     id: 'Portuguese_CaptivatingStoryteller',
     name: 'João',
     language: 'portuguese',
@@ -1693,6 +1729,66 @@ export const voicesConfig: Voice[] = [
     plan: PlanName.FREE,
     previewUrl: 'https://media.hoox.video/8412d011-9497-469d-83ba-66bda1e8cddc.mp3',
     mode: 'minimax'
+  },
+  {
+    id: 'aLFUti4k8YKvtQGXv0UO',
+    name: 'Paulo',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'male',
+    age: 'young',
+    tags: ['conversational'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/0E6B6ie19OUzDa7czZ3bI8JhtPg2/voices/aLFUti4k8YKvtQGXv0UO/WnPjbKRVPLGOhGpm1s47.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'iLelOQ6m5mpSeNH8fRob',
+    name: 'Maria',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/HsOclKALedO9LblBD6SsOKH3GvJ3/voices/iLelOQ6m5mpSeNH8fRob/3JXeSVIUFCgUKK8B8TI9.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'DMcOknq8n1B6XshFIJKJ',
+    name: 'Patricio',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'male',
+    age: 'young',
+    tags: ['conversational'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/LAcPqsnJ3BXuUxq5CakQII3mVQN2/voices/DMcOknq8n1B6XshFIJKJ/NqafcKLl75HEJ0qbtOGI.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'RROBrqjHiRb8zmRgGV11',
+    name: 'Dinis',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'male',
+    age: 'young',
+    tags: ['conversational'],
+    plan: PlanName.START,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/CSj98gOJ1kPgLfshxVAazD8VjRl2/voices/RROBrqjHiRb8zmRgGV11/24149c75-f20a-4cfc-85f1-0d62e38ba73a.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'WgE8iWzGVoJYLb5V7l2d',
+    name: 'Tiago',
+    language: 'portuguese',
+    accent: 'brazilian',
+    gender: 'male',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.ENTREPRISE,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/WgE8iWzGVoJYLb5V7l2d/U2qnCGN2ieoYP8CtTR8D.mp3',
+    mode: 'elevenlabs'
   },
   {
     id: 'x8FWrDHAK5xiFTJLpnHq',

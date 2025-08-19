@@ -25,7 +25,7 @@ export function NavMain({
   }[]
   title?: string
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile, setOpenMobile } = useSidebar()
   const t = useTranslations('sidebar')
   const pathname = usePathname()
 
@@ -55,7 +55,7 @@ export function NavMain({
                     <span>{item.name}</span>
                   </a>
                 ) : (
-                  <Link href={item.url} prefetch={true}>
+                  <Link href={item.url} prefetch={true} onClick={() => setOpenMobile(false)}>
                     <item.icon />
                     <span>{item.name}</span>
                   </Link>

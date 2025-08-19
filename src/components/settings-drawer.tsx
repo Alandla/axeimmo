@@ -1,9 +1,10 @@
 import { useRef, useEffect } from "react"
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/src/components/ui/sheet"
+import { Sheet, SheetContent } from "@/src/components/ui/sheet"
 import { ScrollArea } from "@/src/components/ui/scroll-area"
 import { GeneralSettings } from "./general-settings"
 import { User } from "next-auth"
 import { useTranslations } from "next-intl"
+import { Settings } from "lucide-react"
 
 interface SettingsDrawerProps {
   open: boolean
@@ -28,16 +29,21 @@ export function SettingsDrawer({ open, onClose, user }: SettingsDrawerProps) {
         side="bottom" 
         className="h-[80vh] p-0 focus:outline-none rounded-t-lg"
       >
-        <SheetHeader className="p-6 pb-0 sm:px-12">
-          <SheetTitle>{t('title')}</SheetTitle>
-        </SheetHeader>
         <ScrollArea className="h-full">
           <div 
             ref={contentRef}
             tabIndex={-1}
-            className="mt-6 focus:outline-none"
+            className="focus:outline-none px-6 lg:px-12 h-full"
           >
-            <GeneralSettings user={user} />
+            <div className="mb-6 mt-6">
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Settings className="h-5 w-5" />
+                {t('title')}
+              </h2>
+            </div>
+            <div className="max-w-4xl">
+              <GeneralSettings user={user} />
+            </div>
           </div>
         </ScrollArea>
       </SheetContent>

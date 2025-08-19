@@ -34,7 +34,8 @@
       "Create": "Créer",
       "Pricing": "Tarifs",
       "Assets": "Médias",
-      "Enhance": "Améliorer"
+      "Enhance": "Améliorer",
+      "Settings": "Paramètres"
     },
     "dashboard": {
       "title": "Tableau de bord",
@@ -287,6 +288,7 @@
       "sequences-tabs-title": "Sequences",
       "subtitles-tabs-title": "Sous-titres",
       "audio-tabs-title": "Audio",
+      "settings-tabs-title": "Paramètres",
       "video-format": {
         "vertical": "Vertical",
         "ads": "Publicité",
@@ -430,10 +432,14 @@
         "dynamic-size-label": "Taille dynamique",
         "select": {
           "weight-placeholder": "Sélectionne une épaisseur",
+          "weight-thin": "Très fin",
+          "weight-extra-light": "Extra léger",
           "weight-light": "Léger",
           "weight-normal": "Normal",
           "weight-medium": "Moyen",
+          "weight-semi-bold": "Semi-gras",
           "weight-bold": "Gras",
+          "weight-extra-bold": "Extra gras",
           "weight-black": "Noir",
           "font-placeholder": "Sélectionne une police"
         }
@@ -1553,8 +1559,48 @@
       }
     },
     "settings": {
+      "title": "Paramètres",
+      "subtitle": "Gérez les paramètres et préférences de votre espace",
+      "general": {
+        "title": "Général",
+        "description": "Informations de base de l'espace"
+      },
+      "brand-kit": {
+        "title": "Brand kit",
+        "description": "Personnalisez votre Brand kit",
+        "coming-soon": "Les fonctionnalités de personnalisation d'apparence arrivent bientôt",
+        "logo": {
+          "title": "Logo",
+          "description": "Le logo de votre espace qui sera utilisé dans vos vidéos",
+          "change": "Changer",
+          "upload": "Télécharger un logo",
+          "remove": "Supprimer le logo",
+          "show": "Afficher le logo",
+          "show-description": "Activez cette option pour afficher le logo dans vos vidéos"
+        },
+        "position": {
+          "title": "Position du logo",
+          "description": "Choisissez où positionner votre logo sur vos vidéos",
+          "top-left": "Haut gauche",
+          "top-right": "Haut droite",
+          "middle-left": "Milieu gauche",
+          "middle-right": "Milieu droite",
+          "bottom-left": "Bas gauche",
+          "bottom-right": "Bas droite",
+          "custom": "Position personnalisée"
+        },
+        "save-button": "Sauvegarder",
+        "update-success-title": "Logo mis à jour",
+        "update-success-description": "Le logo de votre espace a été mis à jour avec succès",
+        "premium-access": "Accès Premium",
+        "premium-access-description": "Débloquez les fonctionnalités avancées du brand kit avec nos plans Pro ou Entreprise",
+        "pro-enterprise-required": "Mise à niveau requise",
+        "pro-enterprise-required-description": "Personnaliser vos vidéos avec l'accès au brand kit, nécessite un abonnement Pro.",
+        "upgrade-to-pro": "Passer au Pro"
+      },
       "space": {
         "title": "Paramètres de l'espace",
+        "general-description": "Configurez les informations de base de votre espace",
         "name-label": "Nom",
         "name-placeholder": "Entrez le nom de l'espace",
         "name-description": "Le nom de votre espace visible par tous les membres",
@@ -1567,6 +1613,189 @@
         "save-button": "Sauvegarder",
         "update-success-title": "Modifications enregistrées",
         "update-success-description": "Les paramètres de l'espace ont été mis à jour avec succès"
+      }
+    },
+    "tos": {
+      "title": "Conditions Générales d'Utilisation",
+      "back": "Retour",
+      "main-title": "CONDITIONS GENERALES",
+      "section1": {
+        "title": "1. Identification de HOOX",
+        "content": "La société **HOOX** (« HOOX ») est une société par actions simplifiée inscrite au RCS de Créteil sous le n°940148216, dont le siège social est à 14 avenue du Général de Gaulle 94160 SAINT-MANDE.\n\nHOOX peut être contactée aux coordonnées suivantes :\n- adresse e-mail : contact@hoox.video\n- numéro de téléphone : 06 70 44 94 05"
+      },
+      "section2": {
+        "title": "2. Services proposés",
+        "content": "HOOX propose à ses clients (les « Clients ») un service de création de vidéos (les « Services ») par le biais de la plateforme HOOX accessible sur le site www.hoox.video (la « Plateforme »)."
+      },
+      "section3": {
+        "title": "3. Informations sur les Conditions Générales",
+        "table": {
+          "function-title": "Fonction des Conditions Générales",
+          "function-content": "Les conditions générales (les \"Conditions Générales\") constituent l'**unique document** régissant la relation contractuelle de HOOX avec le Client et définissent :\n- les modalités d'utilisation de ses Services,\n- les obligations respectives des parties.",
+          "location-title": "Emplacement des Conditions Générales",
+          "location-content": "Le Client peut les trouver par un lien direct en bas de page de la Plateforme.",
+          "acceptance-title": "Modalités d'acceptation des Conditions Générales",
+          "acceptance-content": "Le Client accepte les \"Conditions Générales\" en **cochant une case** dans le formulaire d'inscription. S'il n'accepte pas l'intégralité des \"Conditions Générales\", il ne peut pas accéder aux Services.\n\nElles peuvent être complétées par des conditions particulières, qui, en cas de contradiction, prévalent sur les \"Conditions Générales\"."
+        }
+      },
+      "section4": {
+        "title": "4. Conditions d'accès aux Services",
+        "content": "Le Client est :\n- une personne physique disposant de la pleine capacité juridique,\n- ou une personne morale agissant par l'intermédiaire d'une personne physique disposant du pouvoir ou de l'habilitation requise pour contracter au nom du Client et pour son compte."
+      },
+      "section5": {
+        "title": "5. Modalités d'accès et de souscription aux Services",
+        "content": "Le Client peut accéder aux Services en allant directement sur la **Plateforme**.\n\nPour souscrire les Services, le Client doit :\n- remplir le formulaire prévu à cet effet sur la Plateforme, ou\n- être inscrit sur l'un des sites tiers indiqués sur la Plateforme, utiliser ses identifiants de connexion du site tiers sélectionné. Il autorise expressément HOOX à accéder aux données de son compte sur le site tiers concerné.\n\nLe Client doit fournir à HOOX l'ensemble des informations marquées comme obligatoires.\n\nL'inscription entraîne automatiquement l'ouverture d'un compte au nom du Client (le \"Compte\") qui lui permet d'accéder aux Services à l'aide de son lien de connexion."
+      },
+      "section6": {
+        "title": "6. Description des Services",
+        "subsection6_1": {
+          "title": "6.1. Les Services",
+          "content": "Avant toute souscription, le Client reconnait qu'il peut prendre connaissance sur le site www.hoox.video (le \"Site\") des caractéristiques des Services et de leurs contraintes, notamment techniques.\n\nLe Client reconnait que la mise en œuvre des Services nécessite d'être connecté à internet et que la qualité des Services dépend de cette connexion, dont **HOOX n'est pas responsable**.\n\nLes Services auxquels le Client a souscrit sont décrits sur la Plateforme.\n\nLa Plateforme propose notamment les fonctionnalités suivantes :\n- Génération automatique de vidéos à partir d'une idée, d'une url ou d'un prompt fournis par le Client (les \"Vidéos\"),\n- Possibilité pour le Client d'utiliser un contenu audio ou d'utiliser celui d'un avatar personnalisé,\n- Choix de la durée de la Vidéo selon les paramètres proposés,\n- Montage automatisé intégrant des éléments de post-production par intelligence artificielle.\n\nPour la création des Vidéos, le Client :\n- A accès à des librairies de médias (banque d'images, musique, etc.) proposées par des éditeurs tiers (les \"Librairies\"),\n- peut importer ses propres fichiers multimédias (les \"Fichiers\").\n\nLe Client souscrit aux Services sous forme d'abonnement (l'\"Abonnement\"). Chaque Abonnement comprend un nombre de crédits prédéterminés qui permet au Client d'utiliser les Services sur la Plateforme (les \"Crédits\"). Ces Crédits sont consommés (i) lors du téléchargement de la Vidéo en fonction du contenu et de la durée de la Vidéo et/ou (ii) lors de l'utilisation d'autres fonctionnalités présentes sur la Plateforme (comme la génération d'une vidéo sur la base d'une image).\n\n**HOOX se réserve la possibilité de proposer tout autre Service.**\n\nToute demande de modification des Services souscrits devra faire l'objet d'une nouvelle souscription."
+        },
+        "subsection6_2": {
+          "title": "6.2. Les prestations complémentaires",
+          "maintenance": {
+            "title": "6.2.1. Maintenance",
+            "content": "Le Client bénéficie pendant la durée des Services d'une **maintenance**, notamment corrective et évolutive. Dans ce cadre, l'accès à la Plateforme peut être limité ou suspendu.\n\nConcernant la maintenance corrective, HOOX fait ses meilleurs efforts pour fournir au Client une maintenance corrective afin de corriger tout dysfonctionnement ou bogue relevé sur la Plateforme.\n\nConcernant la maintenance évolutive, le Client bénéficie pendant la durée des Services d'une maintenance évolutive, que HOOX pourra réaliser automatiquement et sans information préalable, et qui comprend des améliorations des fonctionnalités de la Plateforme, l'ajout de nouvelles fonctionnalités et/ou installations techniques utilisées dans le cadre de la Plateforme (visant à introduire des extensions mineures ou majeures).\n\nL'accès à la Plateforme peut par ailleurs être limité ou suspendu pour des raisons de maintenance planifiée, qui peut inclure les opérations de maintenance corrective et évolutive susvisées."
+          },
+          "hosting": {
+            "title": "6.2.2. Hébergement",
+            "content": "HOOX assure, dans les termes d'une **obligation de moyens**, l'hébergement de la Plateforme, ainsi que des données produites et/ou saisies par/sur la Plateforme, par l'intermédiaire de prestataires d'hébergement professionnel."
+          },
+          "support": {
+            "title": "6.2.3. Assistance technique",
+            "content": "En cas de difficulté rencontrée lors de l'utilisation des Services, le Client peut contacter HOOX aux coordonnées mentionnées à l'article \"Identification de HOOX\".\n\nLe service d'assistance technique est accessible **du lundi au vendredi**, hors jours chômés ou fériés, de **8 heures à 18 heures**. En fonction du besoin identifié, HOOX estimera le délai de réponse et en tiendra le Client informé."
+          }
+        }
+      },
+      "section7": {
+        "title": "7. Durée de souscription aux Services",
+        "content": "L'Abonnement débute au jour de sa souscription pour une période initiale d'**un mois ou d'un an** en fonction de l'offre à laquelle il aura souscrit et qui sera indiquée sur la Plateforme.\n\nIl se renouvelle tacitement, pour des périodes successives de même durée que la période initiale (avec la période initiale, les \"Périodes\"), de date à date, sauf si l'Abonnement est dénoncé dans les conditions de l'article \"Fin des Services\".\n\nSelon l'article L215-1 du Code de la consommation :\n\n\"Pour les contrats de prestations de services conclus pour une durée déterminée avec une clause de reconduction tacite, le professionnel prestataire de services informe le consommateur par écrit, par lettre nominative ou courrier électronique dédiés, au plus tôt trois mois et au plus tard un mois avant le terme de la période autorisant le rejet de la reconduction, de la possibilité de ne pas reconduire le contrat qu'il a conclu avec une clause de reconduction tacite. Cette information, délivrée dans des termes clairs et compréhensibles, mentionne, dans un encadré apparent, la date limite de non-reconduction.\n\nLorsque cette information ne lui a pas été adressée conformément aux dispositions du premier alinéa, le consommateur peut mettre gratuitement un terme au contrat, à tout moment à compter de la date de reconduction.\n\nLes avances effectuées après la dernière date de reconduction ou, s'agissant des contrats à durée indéterminée, après la date de transformation du contrat initial à durée déterminée, sont dans ce cas remboursées dans un délai de trente jours à compter de la date de résiliation, déduction faite des sommes correspondant, jusqu'à celle-ci, à l'exécution du contrat. Les dispositions du présent article s'appliquent sans préjudice de celles qui soumettent légalement certains contrats à des règles particulières en ce qui concerne l'information du consommateur.\""
+      },
+      "section8": {
+        "title": "8. Conditions financières de HOOX",
+        "subsection8_1": {
+          "title": "8.1. Prix des Services",
+          "content": "Les prix des Services auxquels le Client a souscrit ainsi que les prix des packs de Crédits (les \"Packs de Crédits\") pouvant être achetés en complément sont indiqués sur la Plateforme.\n\nLes Crédits non utilisés seront traités selon le système suivant :\n- Pendant les **3 premiers mois** de l'Abonnement : **30% des Crédits** non utilisés pendant le mois concerné sont reportés sur le mois suivant.\n- A compter du **4e mois** de l'Abonnement : les Crédits non utilisés ne sont ni remboursés ni reportés.\n\nToute Période entamée est due dans son intégralité.\n\n**HOOX est libre de proposer des offres promotionnelles ou des réductions de prix.**\n\nLes prix de HOOX peuvent être révisés à tout moment dans les conditions de l'article \"Modification des Conditions Générales\"."
+        },
+        "subsection8_2": {
+          "title": "8.2. Modalités de facturation et de paiement de HOOX",
+          "content": "HOOX adresse au Client une **facture par Période** par tout moyen utile.\n\nLe paiement de l'Abonnement est effectué par prélèvement automatique à la souscription de l'Abonnement, puis à chaque renouvellement.\n\nLe paiement des Packs de Crédits s'effectue par **carte bancaire** à travers le service de paiement sécurisé en ligne précisé sur la Plateforme de HOOX.\n\nLe paiement est mis en œuvre par le biais du prestataire de services de paiement indiqué sur la Plateforme.\n\nLe Client garantit à HOOX disposer des autorisations nécessaires pour utiliser ce mode de paiement."
+        },
+        "subsection8_3": {
+          "title": "8.3. Conséquences en cas de retard ou de défaut de paiement",
+          "content": "En cas de défaut ou de retard de paiement, HOOX se réserve le droit, dès le lendemain de la date d'échéance figurant sur la facture, de :\n\n- suspendre immédiatement les Services en cours jusqu'au paiement de l'intégralité des sommes dues,\n\n- Pour les Clients professionnels : facturer à son profit un **intérêt de retard égal à 3 fois le taux d'intérêt légal**, assis sur le montant des sommes non réglées à l'échéance et d'une **indemnité forfaitaire de 40 euros** au titre des frais de recouvrement, sans préjudice d'une indemnisation complémentaire si les frais de recouvrement effectivement exposés sont supérieurs à ce montant."
+        }
+      },
+      "section9": {
+        "title": "9. Droit de rétractation du Client",
+        "content": "Le Client bénéficie d'un **droit de rétractation** :\n- si c'est un consommateur,\n- s'il est (i) un professionnel qui compte **5 salariés ou moins**, (ii) achète un bien ou un service n'entrant pas dans son champ d'activité principale (i.e. ne touche pas de près ou de loin aux Services) et que (iii) le contrat est conclu \"hors établissement\", à savoir :\n  - dans un lieu, différent des locaux de HOOX, où elle-même et le Client étaient présents ensemble physiquement et simultanément (par exemple : signature du devis chez le Client),\n  - dans les locaux du Client ou au moyen d'une technique de communication à distance, immédiatement après que HOOX ait sollicité personnellement et individuellement le Client (i) dans un lieu différent de celui des locaux de HOOX et (ii) où elle-même et le Client étaient présents ensemble physiquement et simultanément (par exemple : rendez-vous chez le Client ou lors d'un salon, remise d'un devis à cette occasion, puis signature par le Client dans ses locaux (de façon manuscrite ou souscription en ligne)).\n\nCe droit de rétractation est de 14 jours calendaires à compter de l'acceptation des \"Conditions Générales\". Le Client peut exercer ce droit **gratuitement** en envoyant à HOOX avant la fin du délai aux coordonnées mentionnées à l'article \"Identification de la Société\" :\n- le formulaire de rétractation complété disponible en Annexe 1,\n- ou toute autre déclaration, dénuée d'ambiguïté, exprimant la volonté du Client de se rétracter.\n\nSi le Client exerce son droit de rétractation, HOOX remboursera tous ses paiements reçus, en utilisant le même moyen de paiement que celui que le Client a utilisé (sauf s'il accepte expressément un moyen différent), sans retard excessif et au plus tard **14 jours calendaires** à compter du jour où HOOX a été informée de la volonté du Client de se rétracter.\n\nSi le Client demande à ce que les Services commencent avant l'expiration du délai de rétractation, en cochant la case à cet effet dans le formulaire, il est uniquement redevable du prix des Services calculé au prorata des Services fournis jusqu'au jour où HOOX a été informée de la volonté du Client de se rétracter."
+      },
+      "section10": {
+        "title": "10. Garantie légale de conformité",
+        "content": "Le consommateur a droit à la mise en œuvre de la **garantie légale de conformité** en cas d'apparition d'un défaut de conformité durant la durée de la relation contractuelle entre les parties. Durant ce délai, le consommateur n'est tenu d'établir que l'existence du défaut de conformité et non la date d'apparition de celui-ci.\n\nLa garantie légale de conformité emporte obligation de fournir toutes les **mises à jour nécessaires** au maintien de la conformité du contenu numérique ou du service numérique durant la durée de la relation contractuelle entre les parties.\n\nLa garantie légale de conformité donne au consommateur droit à la mise en conformité du contenu numérique ou du service numérique sans retard injustifié suivant sa demande, sans frais et sans inconvénient majeur pour lui.\n\nLe consommateur peut obtenir une **réduction du prix** en conservant le contenu numérique ou le service numérique, ou il peut **mettre fin au contrat** en se faisant rembourser intégralement contre renoncement au contenu numérique ou au service numérique, si :\n\n1° Le professionnel refuse de mettre le contenu numérique ou le service numérique en conformité,\n2° La mise en conformité du contenu numérique ou du service numérique est retardée de manière injustifiée,\n3° La mise en conformité du contenu numérique ou du service numérique ne peut intervenir sans frais imposés au consommateur,\n4° La mise en conformité du contenu numérique ou du service numérique occasionne un inconvénient majeur pour le consommateur,\n5° La non-conformité du contenu numérique ou du service numérique persiste en dépit de la tentative de mise en conformité du professionnel restée infructueuse.\n\nLe consommateur a également droit à une **réduction du prix** ou à la **résolution du contrat** lorsque le défaut de conformité est si grave qu'il justifie que la réduction du prix ou la résolution du contrat soit immédiate. Le consommateur n'est alors pas tenu de demander la mise en conformité du contenu numérique ou du service numérique au préalable.\n\nDans les cas où le défaut de conformité est mineur, le consommateur n'a droit à l'annulation du contrat que si le contrat ne prévoit pas le paiement d'un prix.\n\nToute période d'indisponibilité du contenu numérique ou du service numérique en vue de sa remise en conformité suspend la garantie qui restait à courir jusqu'à la fourniture du contenu numérique ou du service numérique de nouveau conforme.\n\nCes droits résultent de l'application des articles L. 224-25-1 à L. 224-25-31 du code de la consommation.\n\nLe professionnel qui fait obstacle de mauvaise foi à la mise en œuvre de la garantie légale de conformité encourt une **amende civile d'un montant maximal de 300 000 euros**, qui peut être porté jusqu'à 10 % du chiffre d'affaires moyen annuel (article L. 242-18-1 du code de la consommation).\n\nLe consommateur bénéficie également de la **garantie légale des vices cachés** en application des articles 1641 à 1649 du code civil, pendant une durée de **deux ans** à compter de la découverte du défaut. Cette garantie donne droit à une réduction de prix si le contenu numérique ou le service numérique est conservé, ou à un remboursement intégral contre renonciation au contenu numérique ou au service numérique."
+      },
+      "section11": {
+        "title": "11. Droits de propriété intellectuelle",
+        "subsection11_1": {
+          "title": "11.1. Droits de propriété intellectuelle sur la Plateforme",
+          "content": "La **Plateforme** est la propriété de HOOX, de même que les logiciels, infrastructures, bases de données et contenus de toute nature (textes, images, visuels, musiques, logos, marques, etc.) qu'elle exploite.\n\nIls sont protégés par tous droits de propriété intellectuelle ou droits des producteurs de bases de données en vigueur. La licence que HOOX consent au Client n'entraine aucun transfert de propriété.\n\nLe Client bénéficie d'une **licence en mode SaaS** non exclusive, personnelle et non transmissible d'utilisation de la Plateforme pour la durée prévue à l'article \"Durée de souscription aux Services\"."
+        },
+        "subsection11_2": {
+          "title": "11.2. Droits de propriété intellectuelle sur les Vidéos",
+          "content": "Sous réserve du respect par le Client des conditions d'utilisation décrites ci-après applicables (i) aux \"Librairies\" et (ii) aux \"Contenus Client\", HOOX accorde au Client une **licence non exclusive, personnelle et non transférable** sur les \"Vidéos\". HOOX ne peut pas accorder au Client de licence exclusive en raison de l'utilisation de l'intelligence artificielle. HOOX ne peut pas garantir qu'un autre client de HOOX ne fournira pas un script similaire ou identique et ne choisira pas les mêmes contenus que le Client, générant ainsi une vidéo similaire ou identique à celle qui fait l'objet de cette licence.\n\nLa licence est accordée pour toute la durée légale de protection du droit d'auteur et pour le **monde entier** sous les conditions et les restrictions (les \"Restrictions\") listées ci-dessous et sous réserve des conditions d'utilisation des \"Librairies\" dont le contenu peut être intégré par le Client dans les \"Vidéos\". Sous réserve des \"Restrictions\", la licence comprend :\n\na) le droit de reproduire et le droit de fixer la Vidéo sur tout support et par tout procédé matériel ou immatériel ;\nb) le droit de distribuer, de diffuser et de commercialiser la Vidéo ou de la diffuser à titre gratuit ou onéreux ;\nc) le droit de représenter et d'exposer publiquement la Vidéo, à titre gratuit ou onéreux, en tout lieu physique (salons et lieux publics, sans que cette liste soit exhaustive) ou immatériel, par tout média, tout réseau et tout moyen de diffusion autorisé ;\nd) le droit d'apporter des modifications à la Vidéo notamment via le recadrage, l'ajout de musique, de texte et de sous-titres, le changement du format de la vidéo ou l'apposition du nom, de la marque et du logo du Client.\n\nLes **Restrictions** de la licence sont les suivantes :\n- Le Client et les utilisateurs ne peuvent pas utiliser la Vidéo pour toute activité, utilisation ou contenu qui :\n  - constitue, encourage ou donne des instructions pour commettre une infraction pénale ou des activités dangereuses pouvant entraîner des blessures graves, la mort ou l'automutilation,\n  - diffuse de fausses informations nuisibles, telles que de fausses informations incitant à la haine ou aux préjugés, ou qui induisent en erreur ou influencent indûment des produits, des réglementations, des élections ou d'autres processus civiques,\n  - constitue ou est une menace de quelque nature que ce soit, intimide ou harcèle autrui, y compris la publication de tout contenu destiné à se moquer, humilier, embarrasser, intimider ou affecter une personne,\n  - est obscène, pornographique ou promeut un contenu sexuellement explicite ou implicite (par exemple en établissant un lien vers des sites web pour adultes ou pornographiques),\n  - haineux ou offensant,\n  - contient ou encourage la violence ou la discrimination fondée sur la race, l'origine ethnique, la nationalité, la religion, l'orientation sexuelle, le sexe, l'identité sexuelle, une maladie grave, un handicap ou l'âge,\n  - promeut ou permet des activités interdites,\n  - enfreint les règles des plateformes publicitaires,\n  - enfreint la réglementation applicable à l'influence commerciale ou exige l'ajout d'informations obligatoires (par exemple, contenu sponsorisé).\n\n- Le Client et les utilisateurs ne peuvent pas utiliser la Vidéo pour (i) créer une entreprise concurrente de celle de HOOX et (ii) faire de la publicité trompeuse ou mensongère.\n\nEn cas de non-respect des conditions et/ou des \"Restrictions\" de la licence :\n- le Client est **responsable de tout dommage** causé à HOOX et/ou au tiers en rapport avec ce non-respect.\n- HOOX peut demander au Client de supprimer toute Vidéo de tous les supports où elle est utilisée en cas de demande de retrait faite par le tiers dont les droits ont été lésés. Le Client s'engage alors à supprimer les \"Vidéos\" dans les délais demandés par HOOX.\n\nNonobstant ce qui précède, le Client reconnaît et accepte qu'en raison du caractère sensible du **droit à l'image**, HOOX pourra demander au Client de supprimer toutes les \"Vidéos\" de tous les supports où elles sont utilisées, en cas de demande de retrait formulée par le tiers dont les droits ont été lésés. Le Client s'engage alors à supprimer les \"Vidéos\" dans les délais demandés par HOOX.\n\nA l'exception des \"Contenus Client\", tels que définis ci-dessous, dont le Client est seul responsable, **HOOX garantit au Client qu'il détient tous les droits nécessaires** à l'octroi de la licence. Il garantit que la \"Vidéo\" ne constitue pas une atteinte aux droits des tiers, quels qu'ils soient."
+        },
+        "subsection11_3": {
+          "title": "11.3. Droits de propriété intellectuelle sur les Fichiers et contenus du Client",
+          "content": "Le script, les \"Fichiers\" et tout élément fourni par le Client pour être intégrés dans la \"Vidéo\" (ensemble les \"Contenus Client\") restent la propriété du Client et peuvent être protégés par tous les droits de propriété industrielle et intellectuelle.\n\nAfin de mettre en œuvre les Services décrits dans l'article \"Description des Services\", de générer les \"Vidéos\" et d'améliorer les Services, le Client accorde à HOOX, **à titre gratuit**, une licence mondiale d'utilisation des Contenus Client intégrés, qui comprend :\n- Le droit de reproduire et de fixer les éléments intégrés.\n- Le droit de représenter les éléments intégrés.\n- Le droit d'adapter, de traduire, de modifier, d'arranger, de transformer et de corriger les éléments intégrés, y compris, mais sans s'y limiter, par des retouches, des recadrages, des changements de format ou de couleur des éléments intégrés.\n- Le droit d'utiliser les \"Contenus Client\" auprès de services tiers, notamment pour l'analyse du contenu utilisé dans le cadre des Services.\n- Le droit de former les modèles d'intelligence artificielle de HOOX dans le but d'améliorer les Services.\n- Le droit de promouvoir les Services et l'activité de HOOX.\n\nLe Client s'interdit d'utiliser et garantit ne pas utiliser des \"Contenus Client\" (cette liste n'est pas exhaustive) :\n- portant atteinte à l'ordre public et aux bonnes mœurs (pornographiques, obscènes, indécents, choquants ou inadaptés à un public familial, diffamatoires, injurieux, violents, racistes, xénophobes ou révisionnistes),\n- portant atteinte aux droits de tiers (contenus contrefaisants, atteinte aux droits de la personnalité, etc.) et plus généralement violant une disposition contractuelle, législative ou règlementaire,\n- préjudiciable à des tiers de quelque manière que ce soit,\n- mensonger, trompeur ou proposant ou promouvant des activités illicites, frauduleuses ou trompeuses,\n- nuisible aux systèmes informatiques de tiers.\n\nPar conséquent le Client garantit que la présente licence ne porte pas atteinte aux droits des tiers, quels qu'ils soient.\n\nLe Client **garantit également HOOX contre toute atteinte aux droits des tiers**, et notamment contre toute réclamation, action, procédure ou revendication formulée par un tiers à l'encontre de HOOX en raison d'une violation des droits de propriété intellectuelle, des contrats, des droits de la personnalité, ou de toute autre violation légale ou réglementaire.\n\nLe Client reconnait et accepte qu'il relève de sa responsabilité de recueillir les autorisations d'utilisation de l'image (et le cas échéant du nom et/ou de la voix) de toute personne physique dont les attributs de la personnalité sont captés dans les \"Contenus Client\" intégrés par le Client dans les \"Vidéos\", et plus largement utilisés par le Client dans le cadre des Services, aux fins d'utilisation des \"Vidéos\" par le Client.\n\nLe Client est **seul responsable** de l'obtention des autorisations des droits de la personnalité des personnes apparaissant dans la \"Vidéo\" du Client pour les utilisations qu'il souhaite faire mais aussi pour les utilisations faites par HOOX comme indiqué ci-dessus. Le Client est seul responsable du respect des éventuelles limitations imposées par ces personnes."
+        },
+        "subsection11_4": {
+          "title": "11.4. Droit de propriété intellectuelle sur les Librairies",
+          "content": "Les présentes \"Conditions Générales\" n'affecte en rien les droits de propriété intellectuelle des éditeurs tiers propriétaires des \"Librairies\", qui en conservent la propriété intellectuelle.\n\nAinsi, le Client et les utilisateurs bénéficient d'une **licence d'utilisation des \"Librairies\"**, pour la durée prévue à l'article \"Durée de souscription aux Services\" et dans les conditions prévues au sein des conditions d'utilisation des propriétaires des \"Librairies\", répertoriées à l'adresse suivante : https://www.pexels.com/fr-FR/terms-of-service/"
+        }
+      },
+      "section12": {
+        "title": "12. Obligations et responsabilité du Client",
+        "subsection12_1": {
+          "title": "12.1. Concernant la fourniture d'informations",
+          "content": "Le Client s'engage à fournir à HOOX toutes les informations **nécessaires** pour la souscription et l'utilisation des Services."
+        },
+        "subsection12_2": {
+          "title": "12.2. Concernant le Compte du Client",
+          "content": "Le Client :\n- garantit que les informations transmises dans le formulaire sont exactes et s'engage à les mettre à jour,\n- reconnait que ces informations valent preuve de son identité et l'engagent dès leur validation,\n- est **responsable du maintien de la confidentialité** et de la sécurité de son identifiant. Tout accès à la Plateforme à l'aide de ces derniers étant réputé effectué par lui.\n\nLe Client doit immédiatement contacter HOOX aux coordonnées mentionnées à l'article \"Identification de HOOX\" s'il constate que son Compte a été utilisé à son insu. Il reconnait que HOOX aura le droit de prendre toutes mesures appropriées en pareil cas."
+        },
+        "subsection12_3": {
+          "title": "12.3. Concernant l'utilisation des Services",
+          "content": "Le Client est **responsable de son utilisation des Services** et de toute information qu'il partage dans ce cadre. Il s'engage à utiliser les Services personnellement et à ne permettre à aucun tiers de les utiliser à sa place ou pour son compte.\n\nLe Client s'interdit de détourner les Services à des fins autres que celles pour lesquelles ils ont été conçus, et notamment pour :\n- exercer une activité illégale ou frauduleuse,\n- porter atteinte à l'ordre public et aux bonnes mœurs,\n- porter atteinte à des tiers ou à leurs droits, de quelque manière que ce soit,\n- violer une disposition contractuelle, législative ou règlementaire,\n- exercer toute activité de nature à interférer dans le système informatique d'un tiers notamment aux fins d'en violer l'intégrité ou la sécurité,\n- effectuer des manœuvres visant à promouvoir ses services et/ou sites ou ceux d'un tiers,\n- aider ou inciter un tiers à commettre un ou plusieurs actes ou activités listés ci-dessus.\n\nLe Client s'interdit également de :\n- copier, modifier ou détourner tout élément appartenant à HOOX ou tout concept qu'elle exploite dans le cadre des Services,\n- adopter tout comportement de nature à interférer avec ou détourner les systèmes informatiques de HOOX ou porter atteinte à ses mesures de sécurité informatique,\n- porter atteinte aux droits et intérêts financiers, commerciaux ou moraux de HOOX,\n- commercialiser, transférer ou donner accès de quelque manière que ce soit aux Services, aux informations hébergées sur la Plateforme ou à tout élément appartenant à HOOX.\n\nLe Client est **responsable des \"Contenus Client\"** de toute nature qu'il diffuse dans le cadre des Services. En particulier, le Client :\n- Déclare et garantit qu'il est titulaire des droits nécessaires à l'utilisation et l'exploitation des \"Contenus Client\" ou qu'il dispose des autorisations requises ;\n- Assume l'entière responsabilité des \"Contenus Client\" importés, notamment en ce qui concerne le respect du droit d'auteur, du droit à l'image et de toute réglementation applicable ;\n- Reconnaît que HOOX ne pourra être tenue responsable des éventuelles atteintes aux droits de tiers résultant de l'utilisation de ces \"Contenus Client\".\n\nLe Client est informé que les vidéos/réponses fournies dans le cadre de la Plateforme sont générées par un **système d'intelligence artificielle**. Bien que conçues pour être précises et utiles, ces réponses :\n- sont produites de manière automatisée par un modèle de langage avancé,\n- peuvent contenir des erreurs ou des inexactitudes occasionnelles,\n- reflètent les connaissances du modèle jusqu'à sa dernière mise à jour,\n- peuvent évoluer ou être affinées au fil du temps avec l'amélioration du système.\n\nIl appartient au Client et aux utilisateurs de faire preuve de discernement dans l'interprétation et l'utilisation de ces informations/éléments généré(e)s par le système d'intelligence artificielle.\n\n**HOOX ne garantit pas** que les \"Vidéos\" générées sur la Plateforme correspondent exactement aux besoins du Client.\n\nHOOX ne souhaite pas que son système d'intelligence artificielle soit utilisé pour des usages à haut risque et ne souhaite pas être un fournisseur d'intelligence artificielle à haut risque. Par conséquent :\n- le Client s'interdit de modifier la Plateforme et/ou d'en faire un usage à haut risque,\n- le Client s'interdit de faire un usage indiqué comme à haut risque par le règlement sur l'intelligence artificielle et notamment, sans que cette liste ne soit exhaustive, s'interdit de l'utiliser (i) pour prendre des décisions influant sur les conditions des relations professionnelles, la promotion ou le licenciement, (ii) pour attribuer des taches ou (iii) pour suivre et évaluer les performances et le comportement de personnes.\n\nLe Client reconnaît que les systèmes d'intelligence artificielle (\"IA\") peuvent être sujets à des **biais** et qu'ils peuvent potentiellement affecter les résultats, recommandations ou décisions générés par le système d'intelligence artificielle.\n\nA ce titre, HOOX ne sera pas responsable des biais introduit par les \"Contenus Client\" fournis par le Client et des réponses générées sur la base des informations issues de ces \"Contenus Client\".\n\nHOOX met en œuvre ses meilleurs efforts pour corriger les biais inhérents à la conception du système d'intelligence artificielle sur lequel le fonctionnement de la Plateforme repose.\n\nA cet égard, HOOX s'engage à :\n- Effectuer régulièrement des requêtes pour identifier d'éventuels biais dans le système d'IA.\n- Mettre en œuvre des mesures correctives lorsque des biais significatifs sont détectés.\n\nLe Client **garantit HOOX** contre toute réclamation et/ou action qui pourrait être exercée à son encontre à la suite de la violation de l'une des obligations du Client. Le Client indemnisera HOOX du préjudice subi et la remboursera de toutes les sommes qu'elle pourrait avoir à supporter de ce fait."
+        }
+      },
+      "section13": {
+        "title": "13. Obligations et responsabilité de HOOX",
+        "intro": "HOOX s'engage à fournir les Services avec **diligence**, étant précisé qu'elle est tenue à une obligation de moyens.\n\nHOOX s'engage à respecter la règlementation en vigueur.",
+        "subsection13_1": {
+          "title": "13.1. Concernant la qualité des Services",
+          "content": "HOOX fait ses meilleurs efforts pour fournir au Client des Services de **qualité**.\n\nA cette fin, elle procède régulièrement à des contrôles afin de vérifier le fonctionnement et l'accessibilité de ses Services et peut ainsi réaliser une maintenance dans les conditions précisées à l'article \"Maintenance\".\n\nHOOX n'est néanmoins pas responsable des difficultés ou impossibilités momentanées d'accès à ses Services qui auraient pour origine :\n- des circonstances extérieures à son réseau (et notamment la défaillance partielle ou totale des serveurs du Client),\n- la défaillance d'un équipement, d'un câblage, de services ou de réseaux non inclus dans ses Services ou qui n'est pas sous sa responsabilité,\n- l'interruption des Services du fait des opérateurs télécoms ou fournisseurs d'accès à internet,\n- l'intervention du Client notamment via une mauvaise configuration appliquée sur les Services,\n- un cas de force majeure.\n\nHOOX est responsable du fonctionnement de ses serveurs, dont les limites extérieures sont constituées par les points de raccordement.\n\nPar ailleurs, elle ne garantit pas que les Services :\n- soumis à une recherche constante pour en améliorer notamment la performance et le progrès, seront totalement exempts d'erreurs, de vices ou défauts,\n- étant standards et nullement proposés en fonction des contraintes personnelles du Client, répondront spécifiquement à ses besoins et attentes."
+        },
+        "subsection13_2": {
+          "title": "13.2. Concernant la garantie de niveau de service de la Plateforme",
+          "content": "**HOOX ne propose aucune garantie de niveau de service** de la Plateforme.\n\nToutefois, HOOX fait ses meilleurs efforts pour maintenir un accès à la Plateforme 24h/24h et 7j/7j sauf en cas de maintenance planifiée dans les conditions définies à l'article \"Maintenance\" ou de force majeure."
+        },
+        "subsection13_3": {
+          "title": "13.3. Concernant la sauvegarde des données sur la Plateforme",
+          "content": "HOOX fait ses meilleurs efforts pour sauvegarder toutes données produites et/ou saisies par/sur la Plateforme.\n\nSauf en cas de **fautes avérées** de la part de HOOX, elle n'est néanmoins pas responsable de toute perte de données au cours des opérations de maintenance."
+        },
+        "subsection13_4": {
+          "title": "13.4. Concernant le stockage et la sécurité des données",
+          "content": "HOOX fournit des capacités de stockage suffisantes pour l'exploitation des Services.\n\nHOOX fait ses meilleurs efforts pour assurer la **sécurité des données** en mettant en œuvre des mesures de protection des infrastructures et de la Plateforme, de détection et prévention des actes malveillants et de récupération des données."
+        },
+        "subsection13_5": {
+          "title": "13.5. Concernant la publication de contenus",
+          "content": "HOOX intervient en qualité de **prestataire d'hébergement** pour les \"Contenus Client\" que le Client met en ligne. En conséquence, elle n'est pas responsable de ces \"Contenus Client\".\n\nSi HOOX reçoit une notification concernant un \"Contenu Client\" illicite, elle agira promptement pour le retirer ou en rendre son accès impossible, et elle pourra prendre les mesures décrites à l'article \"Sanctions en cas de manquement\"."
+        },
+        "subsection13_6": {
+          "title": "13.6. Concernant le recours à la sous-traitance et la cession",
+          "content": "HOOX peut recourir à des **sous-traitants** dans le cadre de l'exécution des Services, qui sont soumis aux mêmes obligations que les siennes dans le cadre de leur intervention. Elle reste néanmoins seule responsable de la bonne exécution des Services à l'égard du Client.\n\nHOOX peut se substituer toute personne qui sera subrogée dans tous ses droits et obligations au titre de sa relation contractuelle avec le Client. Le cas échéant, elle informera le Client de cette substitution par tout moyen écrit."
+        }
+      },
+      "section14": {
+        "title": "14. Limitation de la responsabilité de HOOX",
+        "content": "La responsabilité de HOOX est limitée aux seuls **dommages directs avérés** que le Client subit du fait de l'utilisation des Services.\n\nPour les Client professionnels, à l'exception des dommages corporels, décès et faute lourde, et sous réserve d'avoir émis une réclamation par lettre recommandée avec accusé de réception, dans un délai d'un mois suivant la survenance du dommage, la responsabilité de HOOX ne saurait être engagée pour un montant supérieur aux montants qu'elle a perçus pendant les 12 mois précédant le fait générateur de responsabilité ou la durée de fourniture de ses Services si cette durée est inférieure."
+      },
+      "section15": {
+        "title": "15. Modes de preuve admis",
+        "content": "La preuve peut être établie par **tout moyen**.\n\nLe Client est informé que les messages échangés par le biais de la Plateforme ainsi que les données recueillies sur la Plateforme et les équipements informatiques de HOOX constituent l'un des modes de preuve admis, notamment pour démontrer la réalité des Services réalisés et le calcul de leur prix."
+      },
+      "section16": {
+        "title": "16. Modalités de traitement des données à caractère personnel",
+        "content": "Les parties s'engagent, chacune pour ce qui la concerne, à se conformer à toutes les obligations légales et réglementaires qui leur incombent en matière de **protection des données à caractère personnel**, notamment la loi 78-17 du 6 janvier 1978 dans sa dernière version modifiée dite Loi Informatique et Libertés et le règlement UE 2016/679 du Parlement européen et du Conseil du 27 avril 2016 (ensemble la \"Réglementation applicable\").\n\nPour en savoir plus sur les traitements réalisés par HOOX, le Client est invité à prendre connaissance de la politique de confidentialité de HOOX disponible sur la Plateforme."
+      },
+      "section17": {
+        "title": "17. Force majeure",
+        "content": "HOOX ne peut être responsable des manquements ou retards dans l'exécution de ses obligations contractuelles dus à un **cas de force majeure** survenu pendant la durée de sa relation avec le Client, telle que définie à 1218 du Code civil.\n\nSi HOOX est empêchée d'exécuter ses obligations pour un cas de force majeure, elle doit en informer le Client par lettre recommandée avec demande d'avis de réception. Les obligations sont suspendues dès réception de la lettre, et devront être reprises dans un délai raisonnable dès la cessation du cas de force majeure.\n\nHOOX reste néanmoins tenue de l'exécution des obligations qui ne sont pas affectées par un cas de force majeure."
+      },
+      "section18": {
+        "title": "18. Fin des Services",
+        "content": "L'Abonnement doit être dénoncé au plus tard (i) **2 jours avant** la fin de la Période d'Abonnement si l'Abonnement est mensuel ou (ii) **un mois avant** la fin de la Période d'Abonnement si l'Abonnement est annuel, par :\n\n- Le Client, directement et gratuitement par l'intermédiaire de la fonctionnalité prévue à cet effet sur la Plateforme\n- HOOX, en adressant un email au Client.\n\nToute Période entamée est due dans son intégralité."
+      },
+      "section19": {
+        "title": "19. Sanctions en cas de manquement",
+        "content": "Constituent des **obligations essentielles** à l'égard du Client (les \"Obligations essentielles\") :\n- le paiement du prix,\n- ne pas fournir des informations erronées, incomplètes à HOOX,\n- respecter les règles usuelles de politesse et de courtoisie dans les échanges avec HOOX,\n- ne pas utiliser les Services pour un tiers,\n- ne pas exercer d'activités illégales, frauduleuses ou portant atteinte aux droits ou à la sécurité des tiers, l'atteinte à l'ordre public ou la violation des lois et règlements en vigueur.\n\nEn cas de manquement à l'une de ces \"Obligations essentielles\", HOOX peut :\n- suspendre ou supprimer l'accès du Client aux Services,\n- publier sur la Plateforme tout message d'information que HOOX juge utile,\n- avertir toute autorité compétente, coopérer avec elle et lui fournir toutes les informations utiles à la recherche et à la répression d'activités illégales ou illicites,\n- engager toute action judiciaire.\n\nCes sanctions sont **sans préjudice** de tous dommages et intérêts que HOOX pourrait réclamer au Client.\n\nEn cas de manquement à toute obligation autre qu'une \"Obligation essentielle\", HOOX demandera par tout moyen écrit utile au Client de remédier au manquement dans un délai maximum de **15 jours calendaires**. Les Services prendront fin à l'issue de ce délai à défaut de régularisation du manquement.\n\nLa fin des Services entraîne la suppression du Compte du Client."
+      },
+      "section20": {
+        "title": "20. Modification des Conditions Générales",
+        "content": "HOOX peut modifier ses \"Conditions Générales\" à tout moment et en informera le Client par tout moyen écrit (et notamment par email) 2 jours calendaires avant la fin de la Période d'Abonnement en cours si l'Abonnement est mensuel ou un mois avant la fin de la Période d'Abonnement en cours si l'Abonnement est annuel.\n\nLes \"Conditions Générales\" modifiées sont applicables lors du **renouvellement de l'Abonnement** du Client.\n\nSi le Client n'accepte pas ces modifications, il doit résilier son Abonnement selon les modalités prévues à l'article \"Fin des Services\".\n\nSi le Client utilise les Services après l'entrée en vigueur de ses \"Conditions Générales\" modifiées, HOOX considère que le Client les a **acceptées**."
+      },
+      "section21": {
+        "title": "21. Langue",
+        "content": "La **langue française** prévaut en cas de contradiction ou de contestation sur la signification d'un terme ou d'une disposition."
+      },
+      "section22": {
+        "title": "22. Médiation",
+        "content": "En cas de litige opposant le Client et HOOX, le Client peut recourir **gratuitement** au médiateur de la consommation suivant en vue d'une résolution amiable :\n\n**Centre de médiation de la consommation de conciliateurs de justice (CM2C)**\nAdresse postale : 14 rue Saint Jean 75017 Paris\nTéléphone : 01 89 47 00 14\nhttps://www.cm2c.net\n\nSi le Client est un consommateur étranger mais situé dans l'Union européenne, il peut se rendre sur la plateforme européenne de règlement des litiges de droit de la consommation accessible ici."
+      },
+      "section23": {
+        "title": "23. Loi applicable et juridictions compétentes",
+        "content": "Les \"Conditions Générales\" sont régies par la **loi française**.\n\nPour les Clients professionnels, en cas de litige opposant le Client et HOOX, et à défaut d'accord amiable dans les 2 mois suivant la première notification, celui-ci sera soumis à la compétence exclusive des **tribunaux de Paris (France)**, sauf dispositions impératives contraires."
       }
     }
   }
