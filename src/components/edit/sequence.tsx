@@ -654,7 +654,7 @@ export default function Sequence({
                                 )}
                                 <div className="flex items-center">
                                     {sequence.words[wordIndex]?.zoom && (
-                                        <ZoomIn className="h-3 w-3 mr-1 text-blue-500" />
+                                        <ZoomIn className="h-3 w-3 mr-1 text-muted-foreground" />
                                     )}
                                     <div 
                                         ref={(el) => {
