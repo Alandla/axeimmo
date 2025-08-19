@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticateApiKey, ApiError, API_ERROR_CODES, isValidUrl } from '@/src/lib/api-auth'
 import { applyRateLimit, getRateLimitHeaders } from '@/src/lib/rate-limiting'
-import { generateVideoScript } from '@/src/lib/script-generation'
+import { generateVideoScriptWithExtraction } from '@/src/lib/script-generation'
 import { transformUrlsToMedia } from '@/src/lib/media-transformer'
 import { voicesConfig } from '@/src/config/voices.config'
 import { avatarsConfig } from '@/src/config/avatars.config'
@@ -60,19 +60,33 @@ export async function POST(req: NextRequest) {
 
     console.log(`POST /api/public/v1/generation/start by space: ${space.id}`);
 
-    // 1. Gestion du script
+    // 1. Initialisation des variables
     let finalScript = params.script || '';
     let scriptCost = 0;
+    let files: any[] = [];
 
+    // 2. Gestion du script
     if (!finalScript && params.prompt && !params.voice_url && !params.avatar_url) {
       console.log("Generating script from prompt...");
       try {
-        const scriptResult = await generateVideoScript({
+        const scriptResult = await generateVideoScriptWithExtraction({
           prompt: params.prompt,
-          webSearch: params.webSearch?.script || false
+          webSearch: params.webSearch?.script || false,
+          planName: space.planName
         });
         finalScript = scriptResult.script;
         scriptCost = scriptResult.cost || 0;
+        
+        // Traiter les images extraites si il y en a
+        if (scriptResult.extractedImages.length > 0) {
+          try {
+            const imageFiles = await transformUrlsToMedia(scriptResult.extractedImages, 'media');
+            files.push(...imageFiles.map(file => ({ ...file, source: 'extracted' })));
+          } catch (error) {
+            console.error('Error processing extracted images:', error);
+            // Ne pas faire échouer la génération si les images ne peuvent pas être traitées
+          }
+        }
       } catch (error) {
         console.error('Script generation error:', error);
         return NextResponse.json({
@@ -85,8 +99,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 2. Transformation des médias
-    let files: any[] = [];
+    // 3. Transformation des médias
     
     if (params.media_urls?.length) {
       try {

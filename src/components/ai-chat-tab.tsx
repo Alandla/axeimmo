@@ -42,7 +42,7 @@ export function AiChatTab({
     const pricingT = useTranslations('pricing');
     const planT = useTranslations('plan');
     const durationT = useTranslations('select.duration');
-    const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>({ name: durationT('options.30-seconds'), value: 468, requiredPlan: PlanName.FREE });
+    const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>({ name: durationT('options.30-seconds'), value: 30, requiredPlan: PlanName.FREE });
 
     // Function to detect URLs in text
     const detectUrls = (text: string): boolean => {
@@ -217,7 +217,7 @@ export function AiChatTab({
                   onKeyDown={(e) => {
                     if (!isDisabled && e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
-                      handleSendMessage(inputMessage, videoDuration?.value || 468);
+                      handleSendMessage(inputMessage, videoDuration?.value || 30);
                     }
                   }}
                 />
@@ -282,7 +282,7 @@ export function AiChatTab({
                         <div>
                           <Button 
                             size="icon" 
-                            onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 468)} 
+                            onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 30)} 
                             disabled={
                               isDisabled ||
                               !files.some(file => file.usage === "voice" || file.usage === "avatar") && 

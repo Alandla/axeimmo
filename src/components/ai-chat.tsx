@@ -7,8 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { useSession } from 'next-auth/react'
 import { generateScript, improveScript, readStream } from '../lib/stream'
 import { extractUrls } from '../lib/article'
-import { basicApiCall } from '../lib/api'
-import { FirecrawlBatchResponse, FirecrawlScrapedResult } from '../lib/firecrawl'
+import { FirecrawlScrapedResult } from '../lib/firecrawl'
 import { CreationStep, PlanName } from '../types/enums'
 import { Textarea } from './ui/textarea'
 import { AiChatTab } from './ai-chat-tab'
@@ -24,14 +23,12 @@ import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { useVideosStore } from '../store/videosStore'
 import { useRouter } from 'next/navigation'
 import { ILastUsed } from '@/src/types/space'
-import { IMedia } from '../types/video'
 import { getSpaceLastUsed } from '../service/space.service'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { useRealtimeRun } from '@trigger.dev/react-hooks'
 import { ToolDisplay, ToolCall } from './tool-display'
 import { ExtractedImagesDisplay } from './extracted-images-display'
-import { extractedImagesToMedia, analyzeAndFilterExtractedImages } from '../lib/extracted-images'
-import { scrapeBrowserBaseUrls, BrowserBaseScrapeResult, ExtractedImagesResponse } from '../lib/browserbase-scraper'
+import { extractFromUrls } from '../lib/url-extraction-client'
 
 enum MessageType {
   TEXT = 'text',
@@ -249,104 +246,17 @@ export function AiChat() {
       }));
       
       try {
-        // Séparer les URLs qui nécessitent BrowserBase et les autres
-        const browserBaseUrls = urls.filter(url => url.includes('fairmoove.fr') || url.includes('odisseias.com'));
-        const otherUrls = urls.filter(url => !url.includes('fairmoove.fr') && !url.includes('odisseias.com'));
-        
-        let urlContents: FirecrawlBatchResponse;
-        
-        // Traitement spécial pour les URLs qui nécessitent BrowserBase
-        if (browserBaseUrls.length > 0) {
-          console.log("Utilisation de BrowserBase pour URLs spéciales:", browserBaseUrls);
-          
-          const browserBaseResults = await scrapeBrowserBaseUrls(browserBaseUrls, setExtractedImagesMedia, extractedImagesMedia);
-          
-          // Si il y a aussi d'autres URLs, les traiter avec FireCrawl
-          if (otherUrls.length > 0) {
-            console.log("Utilisation de FireCrawl pour les autres URLs:", otherUrls);
-            const otherResults = await basicApiCall<FirecrawlBatchResponse>('/search/url', {
-              urls: otherUrls,
-              planName: activeSpace.planName
-            });
-            
-            // Combiner les résultats
-            urlContents = {
-              results: [...browserBaseResults, ...otherResults.results]
-            };
-          } else {
-            // Seulement des URLs BrowserBase
-            urlContents = {
-              results: browserBaseResults
-            };
-          }
-        } else {
-          // Toutes les URLs utilisent FireCrawl
-          console.log("Utilisation de FireCrawl pour toutes les URLs:", urls);
-          urlContents = await basicApiCall<FirecrawlBatchResponse>('/search/url', {
-            urls,
-            planName: activeSpace.planName
-          });
-        }
+        // Utiliser la nouvelle méthode d'extraction d'URLs
+        const extractionResult = await extractFromUrls({
+          urls,
+          planName: activeSpace.planName,
+          enableImageExtraction: true,
+          setExtractedImagesMedia,
+          extractedImagesMedia
+        });
 
-        console.log("urlContents", urlContents);
-
-        urlScrapingResult = urlContents.results;
-        
-        // Lancer l'extraction d'images en parallèle pour les URLs qui n'utilisent pas BrowserBase (sans attendre le résultat)
-        if (urlContents.results && urlContents.results.length > 0) {
-          // Filtrer seulement les résultats qui n'utilisent pas BrowserBase pour l'extraction d'images AI
-          const nonBrowserBaseResults = urlContents.results.filter(result => 
-            !result.url || (!result.url.includes('fairmoove.fr') && !result.url.includes('odisseias.com'))
-          );
-          
-          if (nonBrowserBaseResults.length > 0) {
-            // Traiter chaque URL individuellement pour éviter les erreurs en cascade
-            const imageExtractionPromises = nonBrowserBaseResults.map(async (result) => {
-              try {
-                const imageResult = await basicApiCall<ExtractedImagesResponse>('/ai/extract-images', {
-                  markdownContent: result.markdown
-                });
-
-                console.log("imageResult", imageResult);
-                
-                return imageResult.relevantImages || [];
-              } catch (error) {
-                console.error(`Erreur lors de l'extraction d'images pour ${result.url}:`, error);
-                return [];
-              }
-            });
-            
-            // Traiter tous les résultats en parallèle
-            Promise.all(imageExtractionPromises).then(results => {
-              // Fusionner toutes les images en une seule liste
-              const allImages = results.flat();
-              console.log("Images extraites:", allImages);
-              
-              // Transformer les URLs d'images en format IMedia et enregistrer immédiatement
-              if (allImages.length > 0) {
-                console.log("Enregistrement rapide des images extraites...");
-                extractedImagesToMedia(allImages)
-                  .then(imagesMedia => {
-                    console.log("Images enregistrées rapidement dans le store:", imagesMedia);
-                    setExtractedImagesMedia([...extractedImagesMedia, ...imagesMedia]);
-                    
-                    // Lancer l'analyse en arrière-plan pour obtenir les vraies dimensions
-                    console.log("Lancement de l'analyse des dimensions en arrière-plan...");
-                    
-                    analyzeAndFilterExtractedImages(allImages, (filteredImages) => {
-                      console.log("Mise à jour du store avec les images filtrées:", filteredImages);
-                      setExtractedImagesMedia(filteredImages);
-                    });
-                  })
-                  .catch(error => {
-                    console.error("Erreur lors de l'enregistrement rapide des images:", error);
-                  });
-              }
-            }).catch(error => {
-              console.error("Erreur lors de l'extraction d'images:", error);
-            });
-          }
-        }
+        console.log("URL extraction result:", extractionResult);
+        urlScrapingResult = extractionResult.content;
         
         // Mettre à jour le status du tool call
         setMessages(prevMessages => prevMessages.map(msg => {
@@ -360,7 +270,7 @@ export function AiChat() {
                       result: {
                         success: true,
                         urlsAnalyzed: urls.length,
-                        content: urlContents
+                        content: { results: extractionResult.content }
                       },
                       status: 'completed'
                     }

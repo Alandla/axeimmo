@@ -67,6 +67,13 @@
       ]
     },
     {
+      "group": "Script Generation",
+      "pages": [
+        "script-generation/overview",
+        "script-generation/generate"
+      ]
+    },
+    {
       "group": "Video Export",
       "pages": [
         "video-export/overview",
@@ -93,6 +100,7 @@
       "pages": [
         "api-reference/generation/start",
         "api-reference/generation/status",
+        "api-reference/script/generate",
         "api-reference/export/start",
         "api-reference/export/status",
         "api-reference/resources/voices",

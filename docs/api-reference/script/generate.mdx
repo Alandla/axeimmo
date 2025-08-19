@@ -1,0 +1,148 @@
+---
+title: "Generate Script"
+api: "POST https://api.hoox.video/v1/script/generate"
+description: "Generate a video script from a prompt with optional URL content extraction"
+---
+
+## Authentication
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token with your API key: `Bearer hx_live_your_api_key_here`
+</ParamField>
+
+## Body Parameters
+
+<ParamField body="prompt" type="string" required>
+  Text prompt for script generation. This is the main instruction for what kind of script you want to generate.
+</ParamField>
+
+<ParamField body="duration" type="number" default={60}>
+  Desired script duration in seconds. Must be between 10 and 600 seconds.
+</ParamField>
+
+<ParamField body="urls" type="array">
+  Array of URLs to extract content from. Maximum 10 URLs allowed. The content from these URLs will be analyzed and incorporated into the script generation process.
+</ParamField>
+
+<ParamField body="webSearch" type="boolean" default={false}>
+  Enable web search functionality for enhanced script generation. When enabled, additional web research may be performed to enrich the script content.
+</ParamField>
+
+## Response
+
+<ResponseField name="script" type="string">
+  The generated script content ready to be used for video generation.
+</ResponseField>
+
+<ResponseField name="cost" type="number">
+  Total cost in credits for this script generation operation.
+</ResponseField>
+
+<ResponseField name="extractedImages" type="array">
+  Array of image URLs that were extracted from the provided URLs and can be used as visual content for the video.
+</ResponseField>
+
+## Cost Calculation
+
+The cost is calculated and deducted from your account automatically:
+
+- **Base cost**: 0.1 credit per 60 seconds of duration
+- **Web search**: +0.1 credit if `webSearch` is enabled
+- **URL processing**: +0.1 credit per URL in the `urls` array
+
+**Note**: The cost is calculated upfront based on your parameters and deducted from your account upon successful script generation. This ensures predictable pricing regardless of processing complexity.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.hoox.video/v1/script/generate" \
+  -H "Authorization: Bearer hx_live_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Create a script about sustainable energy solutions",
+    "duration": 120,
+    "urls": [
+      "https://example.com/solar-energy-article",
+      "https://example.com/wind-power-guide"
+    ],
+    "webSearch": true
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "data": {
+    "script": "Welcome to our exploration of sustainable energy solutions. Today, we'll dive into the revolutionary world of renewable energy, focusing on solar and wind power technologies that are transforming our energy landscape...",
+    "cost": 0.4,
+    "extractedImages": [
+      "https://example.com/solar-panel-image.jpg",
+      "https://example.com/wind-turbine-photo.jpg",
+      "https://example.com/renewable-energy-chart.png"
+    ]
+  }
+}
+```
+
+## Error Responses
+
+<ResponseField name="error" type="string">
+  Error message describing what went wrong.
+</ResponseField>
+
+<ResponseField name="code" type="string">
+  Error code for programmatic handling.
+</ResponseField>
+
+<ResponseField name="details" type="array">
+  Array of detailed validation errors with specific field information.
+</ResponseField>
+
+### Common Error Codes
+
+- `MISSING_FIELD`: Required field is missing
+- `INVALID_TYPE`: Field has wrong data type
+- `INVALID_VALUE`: Field value is outside acceptable range
+- `RATE_LIMIT_EXCEEDED`: Too many requests
+- `INSUFFICIENT_CREDITS`: Not enough credits in account (checked before processing)
+- `INTERNAL_ERROR`: Server error
+
+### Example Error Response
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "code": "MISSING_FIELD",
+      "message": "Prompt is required",
+      "field": "prompt"
+    }
+  ]
+}
+```
+
+### Insufficient Credits Error
+
+```json
+{
+  "error": "Insufficient credits. Required: 0.4, Available: 0.2",
+  "code": "INSUFFICIENT_CREDITS"
+}
+```
+
+## Use Cases
+
+1. **Content Creation**: Generate scripts for educational videos, tutorials, or marketing content
+2. **Research-Based Scripts**: Use URL extraction to create scripts based on specific articles or web content
+3. **Multi-Source Content**: Combine information from multiple URLs to create comprehensive scripts
+4. **Duration-Specific Content**: Generate scripts tailored to specific time constraints
+
+## Best Practices
+
+- **Clear prompts**: Provide specific and detailed prompts for better script quality
+- **Relevant URLs**: Include URLs that are directly related to your script topic
+- **Appropriate duration**: Choose duration that matches your content needs
+- **URL limits**: Stay within the 10 URL limit for optimal processing time
+- **Content rights**: Ensure you have rights to use content from provided URLs
