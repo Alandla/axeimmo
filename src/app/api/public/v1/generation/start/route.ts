@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
         selectedVoice = voicesConfig.find(v => v.id === params.voice_id);
       }
 
-       if (space.voices) {
+      if (!selectedVoice && space.voices) {
         selectedVoice = space.voices.find((v: any) => v.id === params.voice_id);
       }
       
@@ -171,27 +171,35 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 4. Résolution de l'avatar
+    // 4. Résolution de l'avatar (avatar_id correspond à un look.id)
     let selectedAvatar = null;
-    if (params.avatar_id) {
-      if (!selectedAvatar) {
-        const avatar = avatarsConfig.find(a => a.id === params.avatar_id);
-        if (avatar && avatar.looks?.length > 0) {
-          selectedAvatar = avatar.looks[0];
+    if (params.avatar_id) {      
+      // Recherche optimisée dans les avatars de configuration
+      for (const avatar of avatarsConfig) {
+        if (avatar.look_ids?.includes(params.avatar_id)) {
+          const look = avatar.looks?.find(look => look.id === params.avatar_id);
+          if (look) {
+            selectedAvatar = look;
+            break;
+          }
         }
       }
 
-      if (space.avatars) {
-        const spaceAvatar = space.avatars.find((a: any) => a.id === params.avatar_id);
-        if (spaceAvatar && spaceAvatar.looks?.length > 0) {
-          selectedAvatar = spaceAvatar.looks[0];
+      // Recherche dans les avatars du space si pas trouvé (méthode classique)
+      if (!selectedAvatar && space.avatars) {
+        for (const avatar of space.avatars) {
+          const look = avatar.looks?.find((look: any) => look.id === params.avatar_id);
+          if (look) {
+            selectedAvatar = look;
+            break;
+          }
         }
       }
       
       if (!selectedAvatar) {
         return NextResponse.json({
           error: "Invalid avatar_id",
-          details: [{ code: API_ERROR_CODES.INVALID_AVATAR_ID, message: `Avatar with ID "${params.avatar_id}" not found`, field: "avatar_id" }]
+          details: [{ code: API_ERROR_CODES.INVALID_AVATAR_ID, message: `Avatar look with ID "${params.avatar_id}" not found`, field: "avatar_id" }]
         }, { 
           status: 400,
           headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)

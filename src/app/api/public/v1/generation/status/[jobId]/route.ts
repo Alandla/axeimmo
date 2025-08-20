@@ -13,17 +13,25 @@ export async function GET(req: NextRequest, { params }: { params: { jobId: strin
     console.log(`GET /api/public/v1/generation/status/${params.jobId} by space: ${space.id}`);
 
     // Récupération du run
-    const run = await runs.retrieve(params.jobId);
-    
-    if (!run) {
-      return NextResponse.json({
-        error: "Job not found",
-        details: [{ code: API_ERROR_CODES.JOB_NOT_FOUND, message: `Job with ID "${params.jobId}" not found` }]
-      }, { 
-        status: 404,
-        headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
-      });
+    let run;
+    try {
+      run = await runs.retrieve(params.jobId);
+    } catch (retrieveError: any) {
+      // Si le job n'existe pas, Trigger.dev lance une NotFoundError
+      if (retrieveError.status === 404 || retrieveError.message?.includes('Not found')) {
+        return NextResponse.json({
+          error: "Job not found",
+          details: [{ code: API_ERROR_CODES.JOB_NOT_FOUND, message: `Job with ID "${params.jobId}" not found` }]
+        }, { 
+          status: 404,
+          headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
+        });
+      }
+      // Si c'est une autre erreur, on la relance
+      throw retrieveError;
     }
+
+    console.log('run', run);
 
     // Vérification que le job appartient bien au space (via les tags)
     const spaceTags = run.tags?.filter(tag => tag.startsWith('space:')) || [];
