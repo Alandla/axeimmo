@@ -703,7 +703,7 @@ export const generateVideoTask = task({
     /
     /   Generate zoom recommendations in parallel
     /
-    */
+    
     logger.log(`[ZOOM] Starting zoom insertion analysis in parallel...`);
     
     const zoomInputSequences = createZoomInputFromRawSequences(rawSequences);
@@ -714,6 +714,7 @@ export const generateVideoTask = task({
       zoomPromise = videoZoomInsertionRun(zoomInputSequences);
       logger.log(`[ZOOM] Zoom insertion analysis started in background`);
     }
+    */
     
     // Si pas de script en entrée, générer les mots-clés à partir du script transcrit
     if (!payload.script && !keywordsPromise) {
@@ -752,11 +753,12 @@ export const generateVideoTask = task({
         logger.log(`[KEYWORDS] Keyword generation from transcription started`)
       }
       
-      // Lancer l'analyse des zooms si on ne l'avait pas fait avant (pas de script initial)
+      /* Lancer l'analyse des zooms si on ne l'avait pas fait avant (pas de script initial)
       if (!zoomPromise && zoomInputSequences.length > 0 && !isDevelopment) {
         zoomPromise = videoZoomInsertionRun(zoomInputSequences);
         logger.log(`[ZOOM] Zoom insertion analysis started with transcribed content`);
       }
+      */
       
       // Lancer le filtrage des médias si nous n'avions pas de script au départ
       if (!userMediasFilteredPromise) {
@@ -1565,7 +1567,6 @@ export const generateVideoTask = task({
     /
     /   Apply zoom recommendations to sequences
     /
-    */
     if (zoomPromise) {
       logger.log(`[ZOOM] Waiting for zoom insertion analysis to complete...`);
       
@@ -1610,6 +1611,7 @@ export const generateVideoTask = task({
         });
       }
     }
+    */
 
     let avatar;
     if (avatarFile) {
