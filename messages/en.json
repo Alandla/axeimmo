@@ -397,7 +397,21 @@
         "add-transition": "Add a transition",
         "edit": "Edit sequence",
         "merge-with-previous": "Merge with previous sequence",
-        "merge-with-next": "Merge with next sequence"
+        "merge-with-next": "Merge with next sequence",
+        "zoom": {
+          "none": "None",
+          "categories": {
+            "zoom-in": "Zoom In",
+            "zoom-out": "Zoom Out"
+          },
+          "types": {
+            "classic": "Classic",
+            "fast": "Fast",
+            "impact": "Impact",
+            "instant": "Instant",
+            "continuous": "Continuous"
+          }
+        }
       },
       "transition": {
         "transition": "Transition",

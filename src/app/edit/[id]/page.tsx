@@ -13,7 +13,7 @@ import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { ISequence, IVideo, IWord, ITransition, VideoFormat } from '@/src/types/video'
+import { ISequence, IVideo, IWord, ITransition, VideoFormat, ZoomType } from '@/src/types/video'
 import { AvatarLook } from '@/src/types/avatar'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
@@ -627,6 +627,58 @@ export default function VideoEditor() {
       return wordIndex + 1;
     }
     return -1;
+  };
+
+  const handleWordZoomChange = (sequenceIndex: number, wordIndex: number, zoom: ZoomType | undefined) => {
+    if (video && video.video) {
+      const newSequences = [...video.video.sequences];
+      const sequence = newSequences[sequenceIndex];
+      const word = sequence.words[wordIndex];
+      
+      // Mettre à jour le zoom du mot
+      sequence.words[wordIndex].zoom = zoom;
+      
+      updateVideo({ ...video, video: { ...video.video, sequences: newSequences } });
+
+      // Prévisualiser le zoom si on en ajoute un
+      if (zoom && playerRef.current) {
+        // Configuration des durées de zoom (en frames à 60fps)
+        const ZOOM_DURATIONS = {
+          'zoom-in': 25,
+          'zoom-in-impact': 10,
+          'zoom-in-fast': 15,
+          'zoom-in-instant': 0,
+          'zoom-out': 25,
+          'zoom-out-impact': 10,
+          'zoom-out-fast': 15,
+          'zoom-out-instant': 0,
+          'zoom-in-continuous': 120, // 2 secondes pour prévisualisation
+          'zoom-out-continuous': 120, // 2 secondes pour prévisualisation
+        };
+
+        // Aller au début du mot
+        playerRef.current.seekTo(word.start * 60);
+        
+        // Attendre un petit délai pour que le seek soit effectif
+        setTimeout(() => {
+          if (playerRef.current) {
+            // Lancer la lecture
+            playerRef.current.play();
+            
+            // Calculer la durée de lecture (frames / 60fps = secondes)
+            const durationInFrames = ZOOM_DURATIONS[zoom] || 25;
+            const durationInMs = durationInFrames === 0 ? 500 : (durationInFrames / 60) * 1000; // 500ms pour les instants
+            
+            // Arrêter la lecture après la durée du zoom
+            setTimeout(() => {
+              if (playerRef.current) {
+                playerRef.current.pause();
+              }
+            }, durationInMs);
+          }
+        }, 100);
+      }
+    }
   };
 
   const handleDeleteSequence = (sequenceIndex: number) => {
@@ -1306,6 +1358,7 @@ export default function VideoEditor() {
                         avatar={video?.video?.avatar}
                         handleMergeWordWithPrevious={handleMergeWordWithPrevious}
                         handleMergeWordWithNext={handleMergeWordWithNext}
+                        onWordZoomChange={handleWordZoomChange}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
@@ -1450,6 +1503,7 @@ export default function VideoEditor() {
                   avatar={video?.video?.avatar}
                   handleMergeWordWithPrevious={handleMergeWordWithPrevious}
                   handleMergeWordWithNext={handleMergeWordWithNext}
+                  onWordZoomChange={handleWordZoomChange}
                 />
               </ScrollArea>
             </TabsContent>

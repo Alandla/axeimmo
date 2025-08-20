@@ -1,4 +1,4 @@
-import { ISequence, ITransition } from "@/src/types/video";
+import { ISequence, ITransition, ZoomType } from "@/src/types/video";
 import { ScrollArea } from "../ui/scroll-area";
 import Sequence from "./sequence";
 import Transition from "./transition";
@@ -34,6 +34,7 @@ interface SequencesProps {
     avatar?: { videoUrl?: string; previewUrl?: string; thumbnail?: string };
     handleMergeWordWithPrevious?: (sequenceIndex: number, wordIndex: number) => void;
     handleMergeWordWithNext?: (sequenceIndex: number, wordIndex: number) => void;
+    onWordZoomChange?: (sequenceIndex: number, wordIndex: number, zoom: ZoomType | undefined) => void;
 }
 
 export default function Sequences({ 
@@ -59,6 +60,7 @@ export default function Sequences({
     avatar,
     handleMergeWordWithPrevious,
     handleMergeWordWithNext,
+    onWordZoomChange,
 }: SequencesProps) {
     const t = useTranslations('edit.sequence');
 
@@ -111,6 +113,7 @@ export default function Sequences({
                             handleMergeWordWithNext={handleMergeWordWithNext}
                             canMergeWithPrevious={canMergeWithPrevious}
                             canMergeWithNext={canMergeWithNext}
+                            onWordZoomChange={onWordZoomChange}
                         />
                         {transitions.map((transition, transitionIndex) => 
                             transition.indexSequenceBefore === index && (

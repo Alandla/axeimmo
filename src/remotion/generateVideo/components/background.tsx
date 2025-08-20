@@ -1,6 +1,9 @@
 import { AbsoluteFill, Sequence, OffthreadVideo, Img, interpolate, useCurrentFrame, getRemotionEnvironment } from "remotion";
 import { useState, useCallback } from "react";
 import { MediaSource } from "./MediaSource";
+import { calculateZoomScale } from "../utils/zoomUtils";
+
+
 
 export const MediaBackground = ({ 
     sequences, 
@@ -78,11 +81,15 @@ export const MediaBackground = ({
                 const mediaPosition = getMediaPosition(index);
                 const objectPosition = `${mediaPosition.x}% ${mediaPosition.y}%`;
 
+                // Calculate zoom scale for this sequence
+                const currentFrameInSequence = frame - currentFrame;
+                const zoomScale = calculateZoomScale(sequences, index, currentFrameInSequence);
+
                 let element;
 
                 if (media.type === 'image') {
                     const file = media.image.link;
-                    const zoomProgress = interpolate(
+                    const baseZoomProgress = interpolate(
                         frame - currentFrame,
                         [0, duration],
                         [1, 1.2],
@@ -91,6 +98,9 @@ export const MediaBackground = ({
                             extrapolateRight: 'clamp',
                         }
                     );
+
+                    // Combine base zoom with word-based zoom
+                    const finalZoom = baseZoomProgress * zoomScale;
 
                     element = (
                         <Sequence key={index} premountFor={120} from={currentFrame} durationInFrames={duration}>
@@ -102,7 +112,7 @@ export const MediaBackground = ({
                                         height: '100%',
                                         objectFit: 'cover',
                                         objectPosition: objectPosition,
-                                        transform: `scale(${zoomProgress})`,
+                                        transform: `scale(${finalZoom})`,
                                         pointerEvents: 'none'
                                     }}
                                 />
@@ -136,6 +146,7 @@ export const MediaBackground = ({
                                         height: '100%',
                                         objectFit: 'cover',
                                         objectPosition: objectPosition,
+                                        transform: `scale(${zoomScale})`,
                                         pointerEvents: 'none'
                                     }}
                                     muted

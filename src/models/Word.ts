@@ -6,6 +6,7 @@ const wordSchema = new mongoose.Schema({
   end: Number,
   confidence: Number,
   durationInFrames: Number,
+  zoom: String,
 });
 
 export default wordSchema
