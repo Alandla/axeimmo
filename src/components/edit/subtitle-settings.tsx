@@ -21,7 +21,9 @@ import { Slider } from "@/src/components/ui/slider"
 import { Switch } from "@/src/components/ui/switch"
 import { templates } from "@/src/config/subtitles.config"
 import SelectFonts from "../ui/select/select-fonts"
+import SelectWeights, { findClosestWeight } from "../ui/select/select-weights"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
+import googleFonts from '@/src/config/googleFonts.config'
 import { Badge } from "@/src/components/ui/badge"
 
 export default function SubtitleSettings({ video, updateSubtitleStyle, handleSaveSubtitleStyle, isMobile = false }: { video: any, updateSubtitleStyle: any, handleSaveSubtitleStyle: any, isMobile?: boolean}) {
@@ -99,6 +101,19 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
     setIsSaving(false)
   }
 
+  // Fonction pour gérer le changement de police avec ajustement du poids
+  const handleFontChange = (fontFamily: string, currentWeight: string, updateCallback: (updates: any) => void) => {
+    const selectedFont = googleFonts.find(font => font.family === fontFamily);
+    const supportedWeights = selectedFont?.supportedWeights || ['400', '500', '600', '700', '800', '900'];
+    
+    let newWeight = currentWeight;
+    if (!supportedWeights.includes(currentWeight)) {
+      newWeight = findClosestWeight(currentWeight, supportedWeights);
+    }
+    
+    updateCallback({ fontFamily, fontWeight: newWeight });
+  }
+
   const currentTemplate = templates.find(t => t.name === video?.video?.subtitle?.style?.template)
   const showShadowOption = currentTemplate?.optionsAvailable.includes('shadow')
   const showBorderOption = currentTemplate?.optionsAvailable.includes('border')
@@ -134,19 +149,19 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
       </CardHeader>
       <CardContent className="space-y-4 p-2 pt-0 sm:p-6 sm:pt-0">
         <div className="flex gap-4 w-full">
-          <SelectFonts value={video?.video?.subtitle?.style?.fontFamily || "Montserrat"} onChange={(value) => updateStyle({ fontFamily: value })} />
-          <Select value={video?.video?.subtitle?.style?.fontWeight || "500"} onValueChange={(value) => updateStyle({ fontWeight: value })}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select Weight" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="300" className="font-light">{t('select.weight-light')}</SelectItem>
-              <SelectItem value="500" className="font-normal">{t('select.weight-normal')}</SelectItem>
-              <SelectItem value="600" className="font-medium">{t('select.weight-medium')}</SelectItem>
-              <SelectItem value="800" className="font-bold">{t('select.weight-bold')}</SelectItem>
-              <SelectItem value="900" className="font-black">{t('select.weight-black')}</SelectItem>
-            </SelectContent>
-          </Select>
+          <SelectFonts 
+            value={video?.video?.subtitle?.style?.fontFamily || "Montserrat"} 
+            onChange={(fontFamily) => handleFontChange(
+              fontFamily, 
+              video?.video?.subtitle?.style?.fontWeight || "500", 
+              updateStyle
+            )} 
+          />
+          <SelectWeights 
+            value={video?.video?.subtitle?.style?.fontWeight || "500"} 
+            onChange={(value) => updateStyle({ fontWeight: value })}
+            fontFamily={video?.video?.subtitle?.style?.fontFamily || "Montserrat"}
+          />
         </div>
 
         <div className="flex gap-4 w-full">
@@ -552,20 +567,20 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
               <AccordionContent>
                 <div className="space-y-4">
                   <div className="flex gap-4 w-full">
-                    <SelectFonts value={video?.video?.subtitle?.style?.activeWord?.fontFamily || "Montserrat"} onChange={(value) => updateStyle({ activeWord: { ...video?.video?.subtitle?.style?.activeWord, fontFamily: value } })} />
+                    <SelectFonts 
+                      value={video?.video?.subtitle?.style?.activeWord?.fontFamily || "Montserrat"} 
+                      onChange={(fontFamily) => handleFontChange(
+                        fontFamily, 
+                        video?.video?.subtitle?.style?.activeWord?.fontWeight || "500", 
+                        (updates) => updateStyle({ activeWord: { ...video?.video?.subtitle?.style?.activeWord, ...updates } })
+                      )} 
+                    />
 
-                    <Select value={video?.video?.subtitle?.style?.activeWord?.fontWeight || "500"} onValueChange={(value) => updateStyle({ activeWord: { ...video?.video?.subtitle?.style?.activeWord, fontWeight: value } })}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('select.weight-placeholder')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="300" className="font-light">{t('select.weight-light')}</SelectItem>
-                        <SelectItem value="500" className="font-normal">{t('select.weight-normal')}</SelectItem>
-                        <SelectItem value="600" className="font-medium">{t('select.weight-medium')}</SelectItem>
-                        <SelectItem value="800" className="font-bold">{t('select.weight-bold')}</SelectItem>
-                        <SelectItem value="900" className="font-black">{t('select.weight-black')}</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <SelectWeights 
+                      value={video?.video?.subtitle?.style?.activeWord?.fontWeight || "500"} 
+                      onChange={(value) => updateStyle({ activeWord: { ...video?.video?.subtitle?.style?.activeWord, fontWeight: value } })}
+                      fontFamily={video?.video?.subtitle?.style?.activeWord?.fontFamily || "Montserrat"}
+                    />
                   </div>
 
                   <div className="flex gap-4 w-full">
@@ -669,20 +684,20 @@ export default function SubtitleSettings({ video, updateSubtitleStyle, handleSav
               <AccordionContent>
                 <div className="space-y-4">
                   <div className="flex gap-4 w-full">
-                    <SelectFonts value={video?.video?.subtitle?.style?.secondLine?.fontFamily || "Montserrat"} onChange={(value) => updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, fontFamily: value } })} />
+                    <SelectFonts 
+                      value={video?.video?.subtitle?.style?.secondLine?.fontFamily || "Montserrat"} 
+                      onChange={(fontFamily) => handleFontChange(
+                        fontFamily, 
+                        video?.video?.subtitle?.style?.secondLine?.fontWeight || "500", 
+                        (updates) => updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, ...updates } })
+                      )} 
+                    />
 
-                    <Select value={video?.video?.subtitle?.style?.secondLine?.fontWeight || "500"} onValueChange={(value) => updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, fontWeight: value } })}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('select.weight-placeholder')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="300" className="font-light">{t('select.weight-light')}</SelectItem>
-                        <SelectItem value="500" className="font-normal">{t('select.weight-normal')}</SelectItem>
-                        <SelectItem value="600" className="font-medium">{t('select.weight-medium')}</SelectItem>
-                        <SelectItem value="800" className="font-bold">{t('select.weight-bold')}</SelectItem>
-                        <SelectItem value="900" className="font-black">{t('select.weight-black')}</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <SelectWeights 
+                      value={video?.video?.subtitle?.style?.secondLine?.fontWeight || "500"} 
+                      onChange={(value) => updateStyle({ secondLine: { ...video?.video?.subtitle?.style?.secondLine, fontWeight: value } })}
+                      fontFamily={video?.video?.subtitle?.style?.secondLine?.fontFamily || "Montserrat"}
+                    />
                   </div>
 
                   <div className="flex gap-4 w-full">
