@@ -2,6 +2,7 @@ import { useMemo, useState, useRef } from "react";
 import { AbsoluteFill, Sequence, OffthreadVideo, Img, interpolate, useCurrentFrame, Loop, getRemotionEnvironment, Video } from "remotion";
 import { AvatarLook } from "../type/avatar";
 import { MediaSource } from "./MediaSource";
+import { calculateZoomScale } from "../utils/zoomUtils";
 
 export const BackgroundWithAvatar = ({
     sequences, 
@@ -150,12 +151,12 @@ export const BackgroundWithAvatar = ({
                 return;
             }
 
-            const zoomProgress = interpolate(
-                frame - currentFrame,
-                [0, sequenceDuration],
-                [1, 1.2],
-                { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
-            );
+            // Calculate zoom scale for this sequence based on words
+            const currentFrameInSequence = frame - currentFrame;
+            // Only apply zoom to media when in full screen mode, not in split screen (half)
+            const mediaZoomScale = media?.show === "full" 
+                ? calculateZoomScale(sequences, index, currentFrameInSequence)
+                : 1.0;
 
             const mediaPosition = getMediaPosition(index);
             const objectPosition = `${mediaPosition.x}% ${mediaPosition.y}%`;
@@ -193,7 +194,7 @@ export const BackgroundWithAvatar = ({
                                         height: '100%',
                                         objectFit: 'cover',
                                         objectPosition: objectPosition,
-                                        transform: `scale(${zoomProgress})`,
+                                        transform: `scale(${mediaZoomScale})`,
                                     }}
                                 />
                             ) : (
@@ -204,7 +205,8 @@ export const BackgroundWithAvatar = ({
                                         width: '100%',
                                         height: '100%',
                                         objectFit: 'cover',
-                                        objectPosition: objectPosition
+                                        objectPosition: objectPosition,
+                                        transform: `scale(${mediaZoomScale})`,
                                     }}
                                     muted
                                 />
@@ -218,6 +220,33 @@ export const BackgroundWithAvatar = ({
         });
         return { mediaElements: mediaElementsArray, showResizeBar: shouldShowResizeBar, isCurrentMediaHidden: currentMediaHidden };
     }, [frame, sequences, currentRatio]);
+
+    // Calculate current sequence and zoom for avatar
+    const { currentSequenceIndex, currentFrameInSequence, avatarZoomScale } = useMemo(() => {
+        let frameCounter = 0;
+        let activeSequenceIndex = -1;
+        let frameInSequence = 0;
+        let zoomScale = 1.0;
+        
+        // Find which sequence we're currently in
+        for (let i = 0; i < sequences.length; i++) {
+            const sequenceDuration = sequences[i].durationInFrames;
+            if (frame >= frameCounter && frame < frameCounter + sequenceDuration) {
+                activeSequenceIndex = i;
+                frameInSequence = frame - frameCounter;
+                // Calculate zoom for this sequence
+                zoomScale = calculateZoomScale(sequences, i, frameInSequence);
+                break;
+            }
+            frameCounter += sequenceDuration;
+        }
+        
+        return {
+            currentSequenceIndex: activeSequenceIndex,
+            currentFrameInSequence: frameInSequence,
+            avatarZoomScale: zoomScale
+        };
+    }, [frame, sequences]);
 
     const avatarSequenceStyle: React.CSSProperties = {
         position: 'absolute',
@@ -275,6 +304,7 @@ export const BackgroundWithAvatar = ({
                                     height: '100%',
                                     objectFit: 'cover',
                                     objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
+                                    transform: `scale(${avatarZoomScale})`,
                                 }}
                                 muted
                             />
@@ -288,6 +318,7 @@ export const BackgroundWithAvatar = ({
                                         height: '100%',
                                         objectFit: 'cover',
                                         objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
+                                        transform: `scale(${avatarZoomScale})`,
                                     }}
                                     loop
                                     muted

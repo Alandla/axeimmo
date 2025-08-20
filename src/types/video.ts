@@ -8,12 +8,18 @@ export type GenerationStatus =
   | 'completed' 
   | 'failed';
 
+export type ZoomType = 
+  | 'zoom-in' | 'zoom-in-fast' | 'zoom-in-impact' | 'zoom-in-instant'
+  | 'zoom-out' | 'zoom-out-fast' | 'zoom-out-impact' | 'zoom-out-instant'
+  | 'zoom-in-continuous' | 'zoom-out-continuous';
+
 export interface IWord {
   word: string;
   start: number;
   end: number;
   confidence?: number;
   durationInFrames: number;
+  zoom?: ZoomType;
 }
 
 export interface IMedia {

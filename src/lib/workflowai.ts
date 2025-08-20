@@ -166,6 +166,27 @@ export interface ImageAnalysisOutput {
   description?: string
 }
 
+export interface VideoZoomInsertionInput {
+  sequences?: {
+    id?: number
+    words?: {
+      text?: string
+      start?: number
+      end?: number
+      silence?: number
+    }[]
+  }[]
+}
+
+export interface VideoZoomInsertionOutput {
+  zooms?: {
+    sequence?: number
+    word?: number
+    type?: ("zoom-out-impact" | "zoom-in-impact" | "zoom-in-fast" | "zoom-in-instant" | "zoom-out-instant" | "zoom-out-fast" | "zoom-in-continuous" | "zoom-out-continuous")
+    intent?: string
+  }[]
+}
+
 const videoScriptKeywordExtraction = workflowAI.agent<VideoScriptKeywordExtractionInput, VideoScriptKeywordExtractionOutput>({
   id: "video-script-keyword-extraction",
   schemaId: 2,
@@ -240,6 +261,13 @@ const webPageContentExtraction = workflowAI.agent<WebPageContentExtractionInput,
   id: "web-page-content-extraction",
   schemaId: 2,
   version: "production",
+  useCache: "auto"
+})
+
+const videoZoomInsertion = workflowAI.agent<VideoZoomInsertionInput, VideoZoomInsertionOutput>({
+  id: "video-zoom-insertion",
+  schemaId: 2,
+  version: "dev",
   useCache: "auto"
 })
 
@@ -617,5 +645,33 @@ export async function imageAnalysisRun(
   } catch (error) {
     console.error('Failed to run image analysis:', error)
     throw error
+  }
+}
+
+/**
+ * Analyse les séquences vidéo et génère des recommandations de zoom pour des mots spécifiques
+ * @param sequences Liste des séquences avec leurs mots et timings
+ * @returns Les recommandations de zoom et le coût de l'opération
+ */
+export async function videoZoomInsertionRun(
+  sequences: { id?: number, words?: { text?: string, start?: number, end?: number, silence?: number }[] }[]
+): Promise<{
+  cost: number,
+  zooms: { sequence?: number, word?: number, type?: string, intent?: string }[]
+}> {
+  const input: VideoZoomInsertionInput = {
+    sequences
+  }
+
+  try {
+    const response = await videoZoomInsertion(input) as WorkflowAIResponse<VideoZoomInsertionOutput>;
+    
+    return {
+      cost: response.data.cost_usd,
+      zooms: response.output.zooms || []
+    }
+  } catch (error) {
+    console.error('Failed to run video zoom insertion:', error);
+    throw error;
   }
 }

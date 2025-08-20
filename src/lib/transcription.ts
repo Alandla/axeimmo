@@ -21,6 +21,7 @@ interface TranscriptionMetadata {
 
 interface SplitSentencesResult {
   sequences: ISequence[];
+  rawSequences: ISequence[];
   videoMetadata: TranscriptionMetadata;
 }
 
@@ -42,6 +43,38 @@ export function createLightTranscription(sequences: ISequence[]): LightTranscrip
   return sequences.map((sequence, index) => ({
     id: index,
     text: sequence.text,
+  }));
+}
+
+/**
+ * Crée l'objet d'entrée pour l'analyse des zooms à partir des séquences brutes
+ * @param rawSeqs Séquences brutes avant ajustement des timings
+ * @returns Objet formaté pour VideoZoomInsertionInput
+ */
+export function createZoomInputFromRawSequences(rawSeqs: ISequence[]) {
+  return rawSeqs.map((seq, index) => ({
+    id: index,
+    words: seq.words.map((word, wordIndex) => {
+      // Calculer le silence après ce mot
+      let silence = 0;
+      if (wordIndex < seq.words.length - 1) {
+        // Il y a un mot suivant dans la même séquence
+        silence = seq.words[wordIndex + 1].start - word.end;
+      } else if (index < rawSeqs.length - 1) {
+        // C'est le dernier mot de la séquence, regarder le premier mot de la séquence suivante
+        const nextSeq = rawSeqs[index + 1];
+        if (nextSeq.words.length > 0) {
+          silence = nextSeq.words[0].start - word.end;
+        }
+      }
+      
+      return {
+        text: word.word,
+        start: word.start,
+        end: word.end,
+        silence: Math.max(0, silence) // Assurer que le silence n'est pas négatif
+      };
+    })
   }));
 }
 
@@ -115,6 +148,7 @@ export function splitSentences(sentences: ISentence[]): SplitSentencesResult {
 
   return {
     sequences: sequences,
+    rawSequences: finalSequences,
     videoMetadata: metadata
   };
 }
