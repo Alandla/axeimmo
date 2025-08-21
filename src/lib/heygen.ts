@@ -30,7 +30,7 @@ export async function generateAvatarVideo(avatar: AvatarLook, audioUrl: string) 
           character: {
             type: avatar.settings?.heygenType || 'avatar',
             ...(avatar.settings?.heygenType === 'talking_photo' ? { talking_photo_id: avatar.id } : { avatar_id: avatar.id }),
-            scale: avatar.format === 'vertical' ? 1 : 3.17,
+            scale: avatar.settings?.scale ?? (avatar.format === 'vertical' ? 1 : 3.17),
             offset: {
               x: xOffset,
               y: 0.0
