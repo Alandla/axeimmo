@@ -1,0 +1,190 @@
+---
+title: "Start Video Export"
+api: "POST https://api.hoox.video/v1/export/start"
+description: "Export a generated video to downloadable MP4 format"
+---
+
+## Overview
+
+This endpoint exports a completed video to a downloadable MP4 file. Use this after your video generation is complete to get the final downloadable video file.
+
+## Authentication
+
+<Info>
+This endpoint requires API key authentication. Export costs may apply depending on how the video was created.
+</Info>
+
+## Request Body
+
+<ParamField body="video_id" type="string" required>
+  The video ID returned from completed video generation.
+</ParamField>
+
+<ParamField body="format" type="string">
+  Export format override: `vertical` (9:16), `square` (1:1), or `ads` (16:9).
+  If not specified, uses the original video format.
+</ParamField>
+
+<ParamField body="webhook_url" type="string">
+  URL to receive webhook notifications when export completes.
+</ParamField>
+
+## Response
+
+<ResponseField name="job_id" type="string">
+  Unique identifier for the export job.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Current job status: `pending`.
+</ResponseField>
+
+<ResponseField name="estimated_credits" type="number">
+  Estimated credit cost for this export (0 for API-generated videos).
+</ResponseField>
+
+## Example
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.hoox.video/v1/export/start" \
+  -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "video_id": "vid_xyz789",
+    "format": "vertical",
+    "webhook_url": "https://your-app.com/webhooks/export"
+  }'
+```
+
+```python Python
+import requests
+
+url = "https://api.hoox.video/v1/export/start"
+headers = {
+    "Authorization": "Bearer your_api_key",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "video_id": "vid_xyz789",
+    "format": "vertical",
+    "webhook_url": "https://your-app.com/webhooks/export"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.hoox.video/v1/export/start', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your_api_key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    video_id: "vid_xyz789",
+    format: "vertical",
+    webhook_url: "https://your-app.com/webhooks/export"
+  })
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "job_id": "export_abcd1234",
+  "status": "pending",
+  "estimated_credits": 0
+}
+```
+
+</ResponseExample>
+
+## Export Formats
+
+### Format Options
+
+<CardGroup cols={3}>
+  <Card title="Vertical (9:16)" icon="mobile">
+    **1080x1920**
+    Perfect for TikTok, Instagram Stories, YouTube Shorts
+  </Card>
+  <Card title="Square (1:1)" icon="square">
+    **1080x1080**
+    Ideal for Instagram posts, Facebook, LinkedIn
+  </Card>
+  <Card title="Landscape (16:9)" icon="desktop">
+    **1920x1080**
+    Best for YouTube videos, presentations, ads
+  </Card>
+</CardGroup>
+
+## Credit Costs
+
+Export costs depend on how the video was created:
+
+- **API-generated videos**: **0 credits** (export included in generation cost)
+- **Dashboard-created videos**: Standard export cost applies (varies by video duration)
+
+<Info>
+Videos created through the API have export costs included in the initial generation cost, making exports free.
+</Info>
+
+## Prerequisites
+
+Before exporting a video:
+
+1. **Video must be completed**: Check generation status is `completed`
+2. **Valid video_id**: Use the `video_id` from generation result
+3. **Video ownership**: Video must belong to your space
+
+## Common Use Cases
+
+### 1. Standard Export
+```json
+{
+  "video_id": "vid_xyz789"
+}
+```
+
+### 2. Format Conversion
+```json
+{
+  "video_id": "vid_xyz789",
+  "format": "square"
+}
+```
+
+### 3. Export with Webhook
+```json
+{
+  "video_id": "vid_xyz789",
+  "webhook_url": "https://your-app.com/webhooks/export"
+}
+```
+
+## Error Codes
+
+- `MISSING_VIDEO_ID`: video_id parameter is required
+- `VIDEO_NOT_FOUND`: Video with specified ID doesn't exist
+- `UNAUTHORIZED_VIDEO`: Video doesn't belong to your space
+- `VIDEO_NOT_READY`: Video generation must be completed first
+- `INVALID_FORMAT`: Invalid export format specified
+- `INSUFFICIENT_CREDITS`: Not enough credits for export (dashboard videos only)
+
+## Next Steps
+
+After starting an export:
+
+1. **Monitor Progress**: Use `/export/status/{jobId}` to check export progress
+2. **Download Video**: Get the download URL when export completes
+3. **Webhook Integration**: Set up webhooks for automatic notifications

@@ -1,0 +1,407 @@
+---
+title: "List Available Avatars"
+api: "GET https://api.hoox.video/v1/resources/avatars"
+description: "Get list of available avatar looks for video generation"
+---
+
+## Overview
+
+This endpoint returns all available avatar looks that you can use in video generation. Avatar looks are specific appearances/styles of digital presenters that can deliver your video content.
+
+## Authentication
+
+<Info>
+This endpoint requires API key authentication. Include your API key in the `Authorization` header.
+</Info>
+
+## Query Parameters
+
+<ParamField query="gender" type="string">
+  Filter avatars by gender: `male` or `female`.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  Comma-separated list of tags to filter by (e.g., "business,professional").
+</ParamField>
+
+## Response
+
+<ResponseField name="avatars" type="array">
+  Array of available avatar look objects:
+  <Expandable title="Avatar Look Object">
+    <ResponseField name="id" type="string">
+      Unique identifier for the avatar look (use this in generation requests).
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Human-readable name of the avatar look.
+    </ResponseField>
+    <ResponseField name="gender" type="string">
+      Avatar gender: `male` or `female`.
+    </ResponseField>
+    <ResponseField name="place" type="string">
+      Setting/background of the avatar (e.g., "office", "studio", "outdoor").
+    </ResponseField>
+    <ResponseField name="format" type="string">
+      Optimal video format for this avatar (e.g., "vertical", "square").
+    </ResponseField>
+    <ResponseField name="tags" type="array">
+      Array of descriptive tags (e.g., ["business", "professional", "modern"]).
+    </ResponseField>
+    <ResponseField name="thumbnail" type="string">
+      URL to a static thumbnail image of the avatar.
+    </ResponseField>
+    <ResponseField name="preview" type="string">
+      URL to a short video preview of the avatar in action.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.hoox.video/v1/resources/avatars" \
+  -H "Authorization: Bearer your_api_key"
+
+# With filters
+curl -X GET "https://api.hoox.video/v1/resources/avatars?gender=female&tags=business" \
+  -H "Authorization: Bearer your_api_key"
+```
+
+```python Python
+import requests
+
+url = "https://api.hoox.video/v1/resources/avatars"
+headers = {
+    "Authorization": "Bearer your_api_key"
+}
+
+# Get all avatars
+response = requests.get(url, headers=headers)
+avatars = response.json()['avatars']
+
+# Filter for business avatars
+params = {
+    "gender": "female",
+    "tags": "business,professional"
+}
+response = requests.get(url, headers=headers, params=params)
+business_avatars = response.json()['avatars']
+
+print(f"Found {len(business_avatars)} business avatars")
+for avatar in business_avatars:
+    print(f"- {avatar['name']} ({avatar['id']}) - {avatar['place']}")
+```
+
+```javascript JavaScript
+// Get all avatars
+const response = await fetch('https://api.hoox.video/v1/resources/avatars', {
+  headers: {
+    'Authorization': 'Bearer your_api_key'
+  }
+});
+
+const data = await response.json();
+console.log(`Found ${data.avatars.length} avatars`);
+
+// Filter for specific criteria
+const filteredResponse = await fetch(
+  'https://api.hoox.video/v1/resources/avatars?gender=female&tags=business',
+  {
+    headers: {
+      'Authorization': 'Bearer your_api_key'
+    }
+  }
+);
+
+const filteredData = await filteredResponse.json();
+console.log('Business avatars:', filteredData.avatars);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "avatars": [
+    {
+      "id": "avatar_business_woman_office_1",
+      "name": "Professional Sarah - Office",
+      "gender": "female",
+      "place": "office",
+      "format": "vertical",
+      "tags": ["business", "professional", "modern", "office"],
+      "thumbnail": "https://storage.hoox.video/avatars/thumbnails/avatar_business_woman_office_1.jpg",
+      "preview": "https://storage.hoox.video/avatars/previews/avatar_business_woman_office_1.mp4"
+    },
+    {
+      "id": "avatar_business_man_studio_1",
+      "name": "Executive James - Studio",
+      "gender": "male",
+      "place": "studio",
+      "format": "square",
+      "tags": ["business", "executive", "authoritative", "studio"],
+      "thumbnail": "https://storage.hoox.video/avatars/thumbnails/avatar_business_man_studio_1.jpg",
+      "preview": "https://storage.hoox.video/avatars/previews/avatar_business_man_studio_1.mp4"
+    },
+    {
+      "id": "avatar_casual_woman_home_1",
+      "name": "Friendly Emma - Home",
+      "gender": "female",
+      "place": "home",
+      "format": "vertical",
+      "tags": ["casual", "friendly", "relatable", "home"],
+      "thumbnail": "https://storage.hoox.video/avatars/thumbnails/avatar_casual_woman_home_1.jpg",
+      "preview": "https://storage.hoox.video/avatars/previews/avatar_casual_woman_home_1.mp4"
+    },
+    {
+      "id": "custom_avatar_user_456",
+      "name": "My Brand Ambassador",
+      "gender": "female",
+      "place": "branded_office",
+      "format": "vertical",
+      "tags": ["custom", "brand", "professional"],
+      "thumbnail": "https://storage.hoox.video/avatars/thumbnails/custom_avatar_user_456.jpg",
+      "preview": "https://storage.hoox.video/avatars/previews/custom_avatar_user_456.mp4"
+    }
+  ]
+}
+```
+
+</ResponseExample>
+
+## Avatar Categories
+
+### System Avatars
+Professional AI-generated avatars available based on your plan:
+
+<CardGroup cols={2}>
+  <Card title="Business & Professional" icon="briefcase">
+    Office settings, business attire
+    Suitable for corporate content
+  </Card>
+  <Card title="Casual & Lifestyle" icon="home">
+    Home/studio settings, casual wear
+    Perfect for social media content
+  </Card>
+</CardGroup>
+
+### Custom Avatars
+Personalized avatars created for your brand:
+- Custom appearance and styling
+- Branded backgrounds and settings
+- Company-specific clothing/uniforms
+- Celebrity/influencer avatars (with licensing)
+
+## Avatar Settings & Backgrounds
+
+### Office Environments
+- **Modern Office**: Contemporary workspace with clean design
+- **Executive Office**: Luxury office setting for C-level content
+- **Meeting Room**: Professional meeting environment
+- **Co-working Space**: Casual, collaborative workspace
+
+### Studio Settings
+- **Clean Studio**: Minimalist background for focus on content
+- **Branded Studio**: Custom branded background
+- **News Studio**: Professional news/media environment
+- **Creative Studio**: Artistic, creative workspace
+
+### Casual Environments
+- **Home Office**: Comfortable, relatable home setting
+- **Living Room**: Cozy, personal environment
+- **Outdoor**: Natural outdoor settings
+- **Cafe**: Casual, friendly coffee shop atmosphere
+
+## Filtering Options
+
+### By Gender
+```bash
+# Female avatars only
+GET /resources/avatars?gender=female
+
+# Male avatars only
+GET /resources/avatars?gender=male
+```
+
+### By Tags
+Common avatar tags include:
+
+- **Setting**: `business`, `casual`, `executive`, `creative`
+- **Style**: `professional`, `friendly`, `authoritative`, `modern`
+- **Industry**: `tech`, `finance`, `education`, `healthcare`
+- **Audience**: `corporate`, `social`, `educational`, `marketing`
+
+```bash
+# Business professional avatars
+GET /resources/avatars?tags=business,professional
+
+# Casual, friendly avatars
+GET /resources/avatars?tags=casual,friendly
+```
+
+## Usage in Video Generation
+
+After selecting an avatar, use its `id` in video generation:
+
+```json
+{
+  "script": "Welcome to our product demo",
+  "voice_id": "voice_en_us_female_sarah",
+  "avatar_id": "avatar_business_woman_office_1",
+  "format": "vertical"
+}
+```
+
+## Avatar Preview
+
+Each avatar includes both thumbnail and preview:
+
+- **Thumbnail**: Static image showing the avatar's appearance
+- **Preview**: Short video clip showing the avatar in motion
+
+```javascript
+// Display avatar preview
+const video = document.createElement('video');
+video.src = avatar.preview;
+video.autoplay = true;
+video.loop = true;
+video.muted = true;
+```
+
+## Format Compatibility
+
+Avatars are optimized for specific video formats:
+
+| Format | Aspect Ratio | Best For | Avatar Positioning |
+|--------|-------------|----------|-------------------|
+| Vertical | 9:16 | TikTok, Instagram Stories | Upper body focus |
+| Square | 1:1 | Instagram posts, LinkedIn | Balanced framing |
+| Landscape | 16:9 | YouTube, presentations | Full scene view |
+
+<Tip>
+While avatars have optimal formats, they can be used in any format. The system will automatically adjust framing and positioning.
+</Tip>
+
+## Plan Limitations
+
+Avatar availability depends on your subscription plan:
+
+| Plan | Available Avatars | Custom Avatars | Background Options |
+|------|------------------|----------------|-------------------|
+| Free | 5 basic avatars | ❌ | Limited |
+| Start | 20+ avatars | ❌ | Standard |
+| Pro | 50+ avatars | ✅ 5 custom | Premium |
+| Enterprise | All avatars | ✅ Unlimited | Custom branded |
+
+## Best Practices
+
+### 1. Avatar Selection
+- **Match avatar to content type**: Professional for business, casual for social
+- **Consider your audience**: Age, demographics, cultural relevance
+- **Brand consistency**: Use similar avatar styles across content series
+
+### 2. Format Optimization
+```python
+def select_optimal_avatar(content_type, target_format):
+    """Select avatar optimized for specific format"""
+    params = {"format": target_format}
+    
+    if content_type == "business":
+        params["tags"] = "business,professional"
+    elif content_type == "social":
+        params["tags"] = "casual,friendly"
+    elif content_type == "educational":
+        params["tags"] = "educational,clear"
+    
+    response = requests.get(f"{API_BASE}/resources/avatars", params=params)
+    avatars = response.json()['avatars']
+    
+    return avatars[0]['id'] if avatars else None
+```
+
+### 3. Performance Tips
+- **Cache avatar data**: Store avatar information locally
+- **Preload previews**: Load thumbnails and previews for better UX
+- **Batch requests**: Get both voices and avatars in parallel
+
+```javascript
+// Parallel loading of resources
+const [voicesResponse, avatarsResponse] = await Promise.all([
+  fetch('/api/v1/resources/voices', { headers }),
+  fetch('/api/v1/resources/avatars', { headers })
+]);
+
+const voices = await voicesResponse.json();
+const avatars = await avatarsResponse.json();
+```
+
+## Custom Avatar Creation
+
+For Pro and Enterprise plans, you can create custom avatars:
+
+### Requirements
+- High-quality video samples (minimum 2 minutes)
+- Consistent lighting and background
+- Clear audio synchronization
+- Multiple poses and expressions
+
+### Process
+1. **Upload samples** via dashboard or API
+2. **AI training** (typically 24-48 hours)
+3. **Quality review** and approval
+4. **Avatar availability** in resources list
+
+## Error Codes
+
+- `UNAUTHORIZED`: Invalid or missing API key
+- `RATE_LIMIT_EXCEEDED`: Too many requests
+- `INTERNAL_ERROR`: Server error retrieving avatars
+
+## Integration Examples
+
+### Avatar Selector Component
+```javascript
+function AvatarSelector({ onSelect }) {
+  const [avatars, setAvatars] = useState([]);
+  const [filter, setFilter] = useState({ gender: '', tags: '' });
+
+  useEffect(() => {
+    loadAvatars(filter);
+  }, [filter]);
+
+  const loadAvatars = async (filters) => {
+    const params = new URLSearchParams(filters);
+    const response = await fetch(`/api/v1/resources/avatars?${params}`);
+    const data = await response.json();
+    setAvatars(data.avatars);
+  };
+
+  return (
+    <div className="avatar-selector">
+      <div className="filters">
+        <select onChange={(e) => setFilter({...filter, gender: e.target.value})}>
+          <option value="">All Genders</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      
+      <div className="avatar-grid">
+        {avatars.map(avatar => (
+          <div key={avatar.id} className="avatar-card" onClick={() => onSelect(avatar)}>
+            <img src={avatar.thumbnail} alt={avatar.name} />
+            <h3>{avatar.name}</h3>
+            <p>{avatar.place}</p>
+            <div className="tags">
+              {avatar.tags.map(tag => <span key={tag}>{tag}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```

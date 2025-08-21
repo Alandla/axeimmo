@@ -1,0 +1,864 @@
+---
+title: "Avatar Resources"
+description: "Discover and use available digital avatars for video presentations"
+---
+
+## Overview
+
+Avatars are AI-generated digital presenters that can deliver your video content with realistic human appearance and natural movements. Hoox offers a diverse library of professional avatars optimized for different use cases and video formats.
+
+## Available Avatars
+
+Avatar availability depends on your subscription plan:
+
+<CardGroup cols={4}>
+  <Card title="Free Plan" icon="gift">
+    **5 avatars**
+    - Basic selection
+    - Standard quality
+    - Limited backgrounds
+  </Card>
+  <Card title="Start Plan" icon="rocket">
+    **20+ avatars**
+    - Professional variety
+    - High quality
+    - Multiple settings
+  </Card>
+  <Card title="Pro Plan" icon="star">
+    **50+ avatars**
+    - Premium collection
+    - Custom avatar upload
+    - Branded backgrounds
+  </Card>
+  <Card title="Enterprise" icon="building">
+    **All avatars**
+    - Complete library
+    - Unlimited custom avatars
+    - Custom branded environments
+  </Card>
+</CardGroup>
+
+## Getting Available Avatars
+
+Use the resources API to retrieve avatars available for your account:
+
+```python
+import requests
+
+def get_available_avatars(gender=None, tags=None):
+    """Get available avatars with optional filters"""
+    url = "https://api.hoox.video/v1/resources/avatars"
+    headers = {"Authorization": "Bearer your_api_key"}
+    
+    params = {}
+    if gender:
+        params["gender"] = gender
+    if tags:
+        params["tags"] = ",".join(tags) if isinstance(tags, list) else tags
+    
+    response = requests.get(url, headers=headers, params=params)
+    response.raise_for_status()
+    
+    return response.json()["avatars"]
+
+# Get all avatars
+all_avatars = get_available_avatars()
+print(f"Available avatars: {len(all_avatars)}")
+
+# Filter for business avatars
+business_avatars = get_available_avatars(tags=["business", "professional"])
+print(f"Business avatars: {len(business_avatars)}")
+
+# Filter by gender
+female_avatars = get_available_avatars(gender="female")
+print(f"Female avatars: {len(female_avatars)}")
+```
+
+## Avatar Categories
+
+### By Professional Setting
+
+<Tabs>
+  <Tab title="Business & Corporate">
+    **Environments:**
+    - Modern office spaces
+    - Executive boardrooms
+    - Corporate meeting rooms
+    - Professional studios
+    
+    **Styling:**
+    - Business attire (suits, blazers)
+    - Professional grooming
+    - Confident posture
+    - Authoritative presence
+    
+    **Best For:**
+    - Corporate communications
+    - Training videos
+    - Product presentations
+    - Investor relations
+  </Tab>
+  
+  <Tab title="Educational">
+    **Environments:**
+    - Classroom settings
+    - Library backgrounds
+    - Clean studios
+    - Home office spaces
+    
+    **Styling:**
+    - Approachable appearance
+    - Clear articulation
+    - Engaging expressions
+    - Friendly demeanor
+    
+    **Best For:**
+    - Online courses
+    - Tutorial videos
+    - Educational content
+    - Training materials
+  </Tab>
+  
+  <Tab title="Creative & Lifestyle">
+    **Environments:**
+    - Creative studios
+    - Café settings
+    - Home environments
+    - Outdoor locations
+    
+    **Styling:**
+    - Casual, modern clothing
+    - Relaxed posture
+    - Expressive gestures
+    - Authentic feel
+    
+    **Best For:**
+    - Social media content
+    - Lifestyle brands
+    - Personal coaching
+    - Entertainment videos
+  </Tab>
+  
+  <Tab title="Healthcare & Wellness">
+    **Environments:**
+    - Medical office settings
+    - Wellness centers
+    - Clean, calming spaces
+    - Professional clinics
+    
+    **Styling:**
+    - Professional medical attire
+    - Trustworthy appearance
+    - Calm demeanor
+    - Empathetic expressions
+    
+    **Best For:**
+    - Medical explanations
+    - Health education
+    - Wellness content
+    - Patient communications
+  </Tab>
+</Tabs>
+
+### By Demographics
+
+<CardGroup cols={2}>
+  <Card title="Age Groups" icon="users">
+    **Young Professional (25-35)**
+    - Tech-savvy appearance
+    - Modern styling
+    - Dynamic presentations
+    - Startup-friendly
+    
+    **Experienced Professional (35-50)**
+    - Authoritative presence
+    - Executive styling
+    - Confident delivery
+    - Corporate-focused
+    
+    **Senior Expert (50+)**
+    - Distinguished appearance
+    - Industry expertise
+    - Trusted advisor look
+    - Wisdom and experience
+  </Card>
+  
+  <Card title="Cultural Diversity" icon="globe">
+    **Ethnic Representation**
+    - Caucasian
+    - African American
+    - Hispanic/Latino
+    - Asian
+    - Middle Eastern
+    - Mixed heritage
+    
+    **Global Appeal**
+    - Culturally appropriate
+    - Regional preferences
+    - Inclusive representation
+    - Universal accessibility
+  </Card>
+</CardGroup>
+
+### By Video Format Optimization
+
+Each avatar is optimized for specific video formats:
+
+| Format | Aspect Ratio | Avatar Framing | Best Use Cases |
+|--------|-------------|----------------|----------------|
+| **Vertical** | 9:16 | Upper body focus, close framing | TikTok, Instagram Stories, mobile content |
+| **Square** | 1:1 | Balanced torso shot | Instagram posts, LinkedIn, Facebook |
+| **Landscape** | 16:9 | Full scene, wider angle | YouTube, presentations, website embeds |
+
+```python
+def get_avatars_by_format(target_format):
+    """Get avatars optimized for specific video format"""
+    avatars = get_available_avatars()
+    
+    # Filter avatars optimized for the target format
+    format_optimized = [
+        avatar for avatar in avatars 
+        if avatar.get('format') == target_format
+    ]
+    
+    if format_optimized:
+        return format_optimized
+    else:
+        # Return all avatars if none specifically optimized
+        print(f"No avatars specifically optimized for {target_format}, returning all")
+        return avatars
+
+# Usage
+vertical_avatars = get_avatars_by_format("vertical")
+square_avatars = get_avatars_by_format("square")
+```
+
+## Avatar Selection Strategies
+
+### 1. Brand Alignment
+
+Match avatars to your brand personality:
+
+```python
+class BrandAvatarSelector:
+    def __init__(self, brand_type):
+        self.brand_type = brand_type
+        
+        # Define brand-avatar mappings
+        self.brand_preferences = {
+            "tech_startup": {
+                "tags": ["modern", "professional", "young"],
+                "settings": ["office", "studio"],
+                "gender": "any"
+            },
+            "financial_services": {
+                "tags": ["authoritative", "professional", "trustworthy"],
+                "settings": ["office", "executive"],
+                "gender": "any"
+            },
+            "healthcare": {
+                "tags": ["trustworthy", "professional", "caring"],
+                "settings": ["medical", "office"],
+                "gender": "any"
+            },
+            "education": {
+                "tags": ["friendly", "clear", "approachable"],
+                "settings": ["classroom", "studio"],
+                "gender": "any"
+            },
+            "lifestyle": {
+                "tags": ["casual", "friendly", "authentic"],
+                "settings": ["home", "studio"],
+                "gender": "female"
+            },
+            "luxury": {
+                "tags": ["sophisticated", "elegant", "premium"],
+                "settings": ["upscale", "studio"],
+                "gender": "any"
+            }
+        }
+    
+    def get_brand_avatars(self):
+        """Get avatars that match brand personality"""
+        preferences = self.brand_preferences.get(self.brand_type, 
+                                                {"tags": ["professional"]})
+        
+        avatars = get_available_avatars(
+            gender=preferences.get("gender") if preferences.get("gender") != "any" else None,
+            tags=preferences.get("tags", [])
+        )
+        
+        # Filter by setting if specified
+        if "settings" in preferences:
+            preferred_settings = preferences["settings"]
+            avatars = [
+                avatar for avatar in avatars
+                if any(setting in avatar.get("place", "").lower() 
+                      for setting in preferred_settings)
+            ]
+        
+        return avatars
+    
+    def select_primary_avatar(self, video_format="vertical"):
+        """Select the primary brand avatar"""
+        brand_avatars = self.get_brand_avatars()
+        
+        # Prefer format-optimized avatars
+        format_optimized = [
+            avatar for avatar in brand_avatars
+            if avatar.get("format") == video_format
+        ]
+        
+        if format_optimized:
+            return format_optimized[0]
+        elif brand_avatars:
+            return brand_avatars[0]
+        else:
+            # Fallback to any professional avatar
+            all_avatars = get_available_avatars(tags=["professional"])
+            return all_avatars[0] if all_avatars else None
+
+# Usage
+brand_selector = BrandAvatarSelector("tech_startup")
+primary_avatar = brand_selector.select_primary_avatar("vertical")
+print(f"Primary brand avatar: {primary_avatar['name']} ({primary_avatar['id']})")
+```
+
+### 2. Content Type Matching
+
+Different content types work better with specific avatar styles:
+
+```python
+def recommend_avatar_for_content(content_type, target_audience="general"):
+    """Recommend avatar based on content type and audience"""
+    
+    content_mapping = {
+        "product_demo": {
+            "tags": ["professional", "tech-savvy"],
+            "preferred_gender": "any",
+            "setting": ["office", "studio"]
+        },
+        "customer_support": {
+            "tags": ["friendly", "helpful", "approachable"],
+            "preferred_gender": "female",
+            "setting": ["office", "home"]
+        },
+        "executive_message": {
+            "tags": ["authoritative", "executive", "professional"],
+            "preferred_gender": "any",
+            "setting": ["executive", "office"]
+        },
+        "training_video": {
+            "tags": ["clear", "educational", "patient"],
+            "preferred_gender": "any",
+            "setting": ["classroom", "office"]
+        },
+        "marketing_video": {
+            "tags": ["energetic", "engaging", "modern"],
+            "preferred_gender": "any",
+            "setting": ["studio", "modern"]
+        },
+        "testimonial": {
+            "tags": ["authentic", "trustworthy", "relatable"],
+            "preferred_gender": "any",
+            "setting": ["office", "home"]
+        }
+    }
+    
+    criteria = content_mapping.get(content_type, {"tags": ["professional"]})
+    
+    # Adjust for target audience
+    if target_audience == "young_professionals":
+        criteria["tags"].extend(["modern", "dynamic"])
+    elif target_audience == "executives":
+        criteria["tags"].extend(["authoritative", "sophisticated"])
+    elif target_audience == "general_public":
+        criteria["tags"].extend(["friendly", "approachable"])
+    
+    return get_available_avatars(
+        gender=criteria.get("preferred_gender") if criteria.get("preferred_gender") != "any" else None,
+        tags=criteria.get("tags", [])
+    )
+
+# Usage
+support_avatars = recommend_avatar_for_content("customer_support", "general_public")
+exec_avatars = recommend_avatar_for_content("executive_message", "executives")
+```
+
+### 3. A/B Testing for Avatar Performance
+
+```python
+class AvatarPerformanceTracker:
+    def __init__(self):
+        self.performance_data = {}
+    
+    def track_avatar_performance(self, avatar_id, video_id, metrics):
+        """Track performance metrics for avatar usage"""
+        if avatar_id not in self.performance_data:
+            self.performance_data[avatar_id] = []
+        
+        self.performance_data[avatar_id].append({
+            "video_id": video_id,
+            "engagement_rate": metrics.get("engagement_rate", 0),
+            "completion_rate": metrics.get("completion_rate", 0),
+            "click_through_rate": metrics.get("click_through_rate", 0),
+            "timestamp": metrics.get("timestamp")
+        })
+    
+    def get_top_performing_avatars(self, metric="engagement_rate", limit=5):
+        """Get avatars ranked by performance metric"""
+        avatar_averages = {}
+        
+        for avatar_id, performances in self.performance_data.items():
+            if performances:
+                avg_performance = sum(p[metric] for p in performances) / len(performances)
+                avatar_averages[avatar_id] = avg_performance
+        
+        # Sort by performance and return top performers
+        sorted_avatars = sorted(avatar_averages.items(), 
+                              key=lambda x: x[1], reverse=True)
+        
+        return sorted_avatars[:limit]
+    
+    def recommend_based_on_performance(self, content_type):
+        """Recommend avatar based on historical performance"""
+        top_performers = self.get_top_performing_avatars()
+        
+        if top_performers:
+            # Get details for top performing avatars
+            avatar_ids = [avatar_id for avatar_id, _ in top_performers]
+            all_avatars = get_available_avatars()
+            
+            recommended = [
+                avatar for avatar in all_avatars
+                if avatar['id'] in avatar_ids
+            ]
+            
+            return recommended
+        else:
+            # Fallback to content-based recommendation
+            return recommend_avatar_for_content(content_type)
+
+# Usage
+tracker = AvatarPerformanceTracker()
+
+# Track performance after video is published
+tracker.track_avatar_performance(
+    "avatar_business_woman_1", 
+    "vid_123",
+    {
+        "engagement_rate": 0.85,
+        "completion_rate": 0.72,
+        "click_through_rate": 0.15,
+        "timestamp": "2024-01-15"
+    }
+)
+
+# Get recommendations based on performance
+best_avatars = tracker.recommend_based_on_performance("product_demo")
+```
+
+## Custom Avatars
+
+### For Pro and Enterprise Plans
+
+Create custom avatars that represent your brand or specific personalities:
+
+#### Custom Avatar Creation Process
+
+<Steps>
+  <Step title="Content Preparation">
+    Prepare high-quality video samples of the person you want to create an avatar from.
+    
+    **Requirements:**
+    - Minimum 2 minutes of frontal video
+    - Good lighting and stable camera
+    - Clear audio synchronization
+    - Multiple facial expressions and gestures
+  </Step>
+  
+  <Step title="Upload & Processing">
+    Submit video samples through the dashboard or API.
+    
+    **Processing includes:**
+    - AI facial analysis and mapping
+    - Voice synchronization training
+    - Gesture and expression modeling
+    - Quality optimization
+  </Step>
+  
+  <Step title="Review & Approval">
+    Review the generated avatar for quality and accuracy.
+    
+    **Typically includes:**
+    - Test video generation
+    - Quality assessment
+    - Refinement if needed
+    - Final approval
+  </Step>
+  
+  <Step title="Deployment">
+    Avatar becomes available in your resources list.
+    
+    **Ready for use in:**
+    - Video generation requests
+    - Brand-specific content
+    - Personalized communications
+    - Custom presentations
+  </Step>
+</Steps>
+
+#### Technical Requirements for Custom Avatars
+
+<Accordion title="Video Quality Requirements">
+  **Resolution & Format:**
+  - Minimum 1080p resolution
+  - MP4 or MOV format preferred
+  - Stable, tripod-mounted recording
+  - Good lighting (avoid shadows on face)
+  
+  **Duration & Content:**
+  - Minimum 2 minutes of speech
+  - Maximum 10 minutes per session
+  - Natural conversation, not scripted reading
+  - Include varied facial expressions
+</Accordion>
+
+<Accordion title="Environmental Requirements">
+  **Background & Setting:**
+  - Clean, uncluttered background
+  - Consistent lighting throughout
+  - Minimal background movement
+  - Professional or branded environment
+  
+  **Audio Quality:**
+  - Clear speech without echo
+  - Minimal background noise
+  - Consistent volume levels
+  - Good microphone quality
+</Accordion>
+
+<Accordion title="Subject Requirements">
+  **Appearance:**
+  - Face clearly visible throughout
+  - Consistent clothing/styling
+  - Natural gestures and expressions
+  - Direct eye contact with camera
+  
+  **Performance:**
+  - Natural speaking pace
+  - Clear pronunciation
+  - Varied emotional expressions
+  - Professional demeanor
+</Accordion>
+
+```python
+def check_custom_avatars():
+    """Check for custom avatars in your account"""
+    avatars = get_available_avatars()
+    custom_avatars = [a for a in avatars if 'custom' in a.get('tags', [])]
+    
+    print(f"Custom avatars available: {len(custom_avatars)}")
+    for avatar in custom_avatars:
+        print(f"- {avatar['name']} ({avatar['id']}) - {avatar['place']}")
+    
+    return custom_avatars
+
+# Usage
+my_custom_avatars = check_custom_avatars()
+```
+
+## Avatar Usage in Video Generation
+
+### Basic Usage
+
+```python
+def create_video_with_avatar(script, avatar_id, voice_id=None):
+    """Create video using specific avatar"""
+    payload = {
+        "script": script,
+        "avatar_id": avatar_id
+    }
+    
+    if voice_id:
+        payload["voice_id"] = voice_id
+    
+    response = requests.post(
+        "https://api.hoox.video/v1/generation/start",
+        headers={"Authorization": "Bearer your_api_key"},
+        json=payload
+    )
+    
+    return response.json()
+
+# Usage
+job = create_video_with_avatar(
+    script="Welcome to our quarterly business review.",
+    avatar_id="avatar_business_woman_office_1",
+    voice_id="voice_en_us_female_professional"
+)
+```
+
+### Avatar with Custom Media
+
+```python
+def create_video_with_custom_avatar(avatar_url, voice_url):
+    """Create video with custom avatar file"""
+    payload = {
+        "avatar_url": avatar_url,  # URL to your avatar video/image
+        "voice_url": voice_url     # URL to your audio file
+    }
+    
+    response = requests.post(
+        "https://api.hoox.video/v1/generation/start",
+        headers={"Authorization": "Bearer your_api_key"},
+        json=payload
+    )
+    
+    return response.json()
+
+# Usage
+job = create_video_with_custom_avatar(
+    avatar_url="https://yourdomain.com/avatars/ceo_avatar.mp4",
+    voice_url="https://yourdomain.com/audio/ceo_message.mp3"
+)
+```
+
+## Avatar Previews and Testing
+
+### Preview Avatar Appearance
+
+```python
+def preview_avatar_collection(avatar_ids=None, format_filter=None):
+    """Preview a collection of avatars"""
+    if avatar_ids:
+        all_avatars = get_available_avatars()
+        avatars = [a for a in all_avatars if a['id'] in avatar_ids]
+    else:
+        avatars = get_available_avatars()
+    
+    if format_filter:
+        avatars = [a for a in avatars if a.get('format') == format_filter]
+    
+    print(f"Previewing {len(avatars)} avatars:\n")
+    
+    for avatar in avatars:
+        print(f"🎭 {avatar['name']} ({avatar['id']})")
+        print(f"   Gender: {avatar['gender']} | Place: {avatar['place']}")
+        print(f"   Format: {avatar.get('format', 'any')} | Tags: {', '.join(avatar.get('tags', []))}")
+        print(f"   Thumbnail: {avatar['thumbnail']}")
+        print(f"   Preview: {avatar['preview']}")
+        print()
+
+# Usage
+preview_avatar_collection(format_filter="vertical")
+```
+
+### Test Avatar-Voice Combinations
+
+```python
+def test_avatar_voice_combinations(avatar_ids, voice_ids, test_script="Hello, this is a test message."):
+    """Generate test videos for avatar-voice combinations"""
+    test_results = []
+    
+    for avatar_id in avatar_ids:
+        for voice_id in voice_ids:
+            print(f"Testing: {avatar_id} + {voice_id}")
+            
+            try:
+                job = create_video_with_avatar(test_script, avatar_id, voice_id)
+                test_results.append({
+                    "avatar_id": avatar_id,
+                    "voice_id": voice_id,
+                    "job_id": job['job_id'],
+                    "status": "started"
+                })
+            except Exception as e:
+                test_results.append({
+                    "avatar_id": avatar_id,
+                    "voice_id": voice_id,
+                    "error": str(e),
+                    "status": "failed"
+                })
+    
+    return test_results
+
+# Usage
+avatar_candidates = ["avatar_business_woman_1", "avatar_business_man_1"]
+voice_candidates = ["voice_en_us_female_sarah", "voice_en_us_male_david"]
+
+test_results = test_avatar_voice_combinations(avatar_candidates, voice_candidates)
+```
+
+## Optimization and Best Practices
+
+### Performance Considerations
+
+```python
+class AvatarManager:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self._avatar_cache = {}
+        self._cache_timestamp = None
+        self.cache_duration = 1800  # 30 minutes
+    
+    def get_cached_avatars(self, **filters):
+        """Get avatars with caching for better performance"""
+        import time
+        
+        cache_key = str(sorted(filters.items()))
+        current_time = time.time()
+        
+        # Check cache validity
+        if (self._cache_timestamp and 
+            current_time - self._cache_timestamp < self.cache_duration and
+            cache_key in self._avatar_cache):
+            return self._avatar_cache[cache_key]
+        
+        # Fetch fresh data
+        avatars = get_available_avatars(**filters)
+        
+        # Update cache
+        self._avatar_cache[cache_key] = avatars
+        self._cache_timestamp = current_time
+        
+        return avatars
+    
+    def get_optimal_avatar(self, content_type, video_format, audience="general"):
+        """Get the most suitable avatar for specific requirements"""
+        
+        # Get avatars optimized for the video format first
+        format_avatars = self.get_cached_avatars()
+        format_optimized = [a for a in format_avatars if a.get('format') == video_format]
+        
+        if not format_optimized:
+            format_optimized = format_avatars  # Use all if none format-specific
+        
+        # Apply content-based filtering
+        content_avatars = recommend_avatar_for_content(content_type, audience)
+        content_ids = {a['id'] for a in content_avatars}
+        
+        # Find intersection
+        optimal = [a for a in format_optimized if a['id'] in content_ids]
+        
+        return optimal[0] if optimal else format_optimized[0] if format_optimized else None
+
+# Usage
+avatar_manager = AvatarManager("your_api_key")
+optimal_avatar = avatar_manager.get_optimal_avatar(
+    content_type="product_demo",
+    video_format="vertical",
+    audience="young_professionals"
+)
+```
+
+### Error Handling and Fallbacks
+
+```python
+def robust_avatar_selection(preferred_avatar_id, fallback_criteria):
+    """Select avatar with robust fallback logic"""
+    
+    # Try preferred avatar first
+    all_avatars = get_available_avatars()
+    preferred_avatar = next((a for a in all_avatars if a['id'] == preferred_avatar_id), None)
+    
+    if preferred_avatar:
+        return preferred_avatar
+    
+    print(f"⚠️  Preferred avatar {preferred_avatar_id} not available")
+    
+    # Try fallback criteria
+    fallback_avatars = get_available_avatars(**fallback_criteria)
+    if fallback_avatars:
+        selected = fallback_avatars[0]
+        print(f"✅ Using fallback avatar: {selected['name']} ({selected['id']})")
+        return selected
+    
+    # Ultimate fallback - any available avatar
+    if all_avatars:
+        ultimate_fallback = all_avatars[0]
+        print(f"⚠️  Using ultimate fallback: {ultimate_fallback['name']}")
+        return ultimate_fallback
+    
+    raise Exception("No avatars available!")
+
+# Usage
+avatar = robust_avatar_selection(
+    "avatar_custom_ceo_office",  # Preferred but might not exist
+    {"tags": ["business", "professional"], "gender": "male"}  # Fallback criteria
+)
+```
+
+## Multi-Format Content Strategy
+
+### Creating Platform-Specific Content
+
+```python
+def create_multi_format_content(script, voice_id, platform_configs):
+    """Create videos optimized for different platforms"""
+    
+    jobs = {}
+    
+    for platform, config in platform_configs.items():
+        # Get optimal avatar for this platform
+        avatar = robust_avatar_selection(
+            config.get("preferred_avatar"),
+            {
+                "tags": config.get("tags", ["professional"]),
+                "gender": config.get("gender")
+            }
+        )
+        
+        if avatar:
+            job = create_video_with_avatar(
+                script=script,
+                avatar_id=avatar['id'],
+                voice_id=voice_id
+            )
+            
+            jobs[platform] = {
+                "job_id": job['job_id'],
+                "avatar": avatar['name'],
+                "format": config['format']
+            }
+            
+            print(f"✅ Started {platform} video: {avatar['name']} ({config['format']})")
+    
+    return jobs
+
+# Usage
+platform_configs = {
+    "tiktok": {
+        "format": "vertical",
+        "tags": ["young", "energetic", "casual"],
+        "preferred_avatar": "avatar_casual_woman_home_1"
+    },
+    "linkedin": {
+        "format": "square", 
+        "tags": ["professional", "business"],
+        "preferred_avatar": "avatar_business_woman_office_1"
+    },
+    "youtube": {
+        "format": "landscape",
+        "tags": ["professional", "authoritative"],
+        "preferred_avatar": "avatar_executive_man_studio_1"
+    }
+}
+
+multi_platform_jobs = create_multi_format_content(
+    script="Introducing our latest product innovation...",
+    voice_id="voice_en_us_female_professional",
+    platform_configs=platform_configs
+)
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Voice Resources" href="/resources/voices" icon="microphone">
+    Learn about available voices to pair with your avatars
+  </Card>
+  <Card title="Video Generation" href="/video-generation/start-generation" icon="play">
+    Start creating videos with your selected avatars
+  </Card>
+</CardGroup>

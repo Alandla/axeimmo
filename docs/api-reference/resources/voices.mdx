@@ -1,0 +1,333 @@
+---
+title: "List Available Voices"
+api: "GET https://api.hoox.video/v1/resources/voices"
+description: "Get list of available voices for video generation"
+---
+
+## Overview
+
+This endpoint returns all available voices that you can use in video generation. The voices are filtered based on your plan level, and include both system voices and any custom voices you've uploaded.
+
+## Authentication
+
+<Info>
+This endpoint requires API key authentication. Include your API key in the `Authorization` header.
+</Info>
+
+## Query Parameters
+
+<ParamField query="language" type="string">
+  Filter voices by language code (e.g., "en", "fr", "es", "de").
+</ParamField>
+
+<ParamField query="gender" type="string">
+  Filter voices by gender: `male` or `female`.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  Comma-separated list of tags to filter by (e.g., "professional,friendly").
+</ParamField>
+
+## Response
+
+<ResponseField name="voices" type="array">
+  Array of available voice objects:
+  <Expandable title="Voice Object">
+    <ResponseField name="id" type="string">
+      Unique identifier for the voice (use this in generation requests).
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Human-readable name of the voice.
+    </ResponseField>
+    <ResponseField name="language" type="string">
+      Language code (e.g., "en", "fr", "es").
+    </ResponseField>
+    <ResponseField name="accent" type="string">
+      Specific accent or region (e.g., "US", "UK", "CA").
+    </ResponseField>
+    <ResponseField name="gender" type="string">
+      Voice gender: `male` or `female`.
+    </ResponseField>
+    <ResponseField name="tags" type="array">
+      Array of descriptive tags (e.g., ["professional", "warm", "energetic"]).
+    </ResponseField>
+    <ResponseField name="preview" type="string">
+      URL to a short audio preview of the voice.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.hoox.video/v1/resources/voices" \
+  -H "Authorization: Bearer your_api_key"
+
+# With filters
+curl -X GET "https://api.hoox.video/v1/resources/voices?language=en&gender=female&tags=professional" \
+  -H "Authorization: Bearer your_api_key"
+```
+
+```python Python
+import requests
+
+url = "https://api.hoox.video/v1/resources/voices"
+headers = {
+    "Authorization": "Bearer your_api_key"
+}
+
+# Get all voices
+response = requests.get(url, headers=headers)
+voices = response.json()['voices']
+
+# Filter for English female voices
+params = {
+    "language": "en",
+    "gender": "female",
+    "tags": "professional,friendly"
+}
+response = requests.get(url, headers=headers, params=params)
+filtered_voices = response.json()['voices']
+
+print(f"Found {len(filtered_voices)} matching voices")
+for voice in filtered_voices:
+    print(f"- {voice['name']} ({voice['id']})")
+```
+
+```javascript JavaScript
+// Get all voices
+const response = await fetch('https://api.hoox.video/v1/resources/voices', {
+  headers: {
+    'Authorization': 'Bearer your_api_key'
+  }
+});
+
+const data = await response.json();
+console.log(`Found ${data.voices.length} voices`);
+
+// Filter for specific criteria
+const filteredResponse = await fetch(
+  'https://api.hoox.video/v1/resources/voices?language=en&gender=female&tags=professional',
+  {
+    headers: {
+      'Authorization': 'Bearer your_api_key'
+    }
+  }
+);
+
+const filteredData = await filteredResponse.json();
+console.log('Filtered voices:', filteredData.voices);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "voices": [
+    {
+      "id": "voice_en_us_female_sarah",
+      "name": "Sarah",
+      "language": "en",
+      "accent": "US",
+      "gender": "female",
+      "tags": ["professional", "warm", "news"],
+      "preview": "https://storage.hoox.video/voices/previews/voice_en_us_female_sarah.mp3"
+    },
+    {
+      "id": "voice_en_uk_male_james",
+      "name": "James",
+      "language": "en",
+      "accent": "UK",
+      "gender": "male",
+      "tags": ["authoritative", "documentary", "deep"],
+      "preview": "https://storage.hoox.video/voices/previews/voice_en_uk_male_james.mp3"
+    },
+    {
+      "id": "voice_fr_fr_female_marie",
+      "name": "Marie",
+      "language": "fr",
+      "accent": "FR",
+      "gender": "female",
+      "tags": ["elegant", "professional", "clear"],
+      "preview": "https://storage.hoox.video/voices/previews/voice_fr_fr_female_marie.mp3"
+    },
+    {
+      "id": "custom_voice_user_123",
+      "name": "My Custom Voice",
+      "language": "en",
+      "accent": "US",
+      "gender": "female",
+      "tags": ["custom", "brand"],
+      "preview": "https://storage.hoox.video/voices/previews/custom_voice_user_123.mp3"
+    }
+  ]
+}
+```
+
+</ResponseExample>
+
+## Voice Categories
+
+### System Voices
+High-quality, professionally recorded voices available based on your plan:
+
+<CardGroup cols={4}>
+  <Card title="Free Plan" icon="gift">
+    3 basic voices
+    English only
+  </Card>
+  <Card title="Start Plan" icon="rocket">
+    15+ voices
+    English + French
+  </Card>
+  <Card title="Pro Plan" icon="star">
+    50+ voices
+    Multiple languages
+  </Card>
+  <Card title="Enterprise" icon="building">
+    All voices
+    Custom voice cloning
+  </Card>
+</CardGroup>
+
+### Custom Voices
+Voices you've uploaded to your space:
+- Voice cloning from audio samples
+- Brand-specific voices
+- Celebrity voice clones (with proper licensing)
+- Multi-language custom voices
+
+## Filtering Options
+
+### By Language
+```bash
+# English voices
+GET /resources/voices?language=en
+
+# French voices  
+GET /resources/voices?language=fr
+
+# Spanish voices
+GET /resources/voices?language=es
+```
+
+### By Gender
+```bash
+# Female voices only
+GET /resources/voices?gender=female
+
+# Male voices only
+GET /resources/voices?gender=male
+```
+
+### By Tags
+Common voice tags include:
+
+- **Tone**: `professional`, `casual`, `friendly`, `authoritative`
+- **Style**: `news`, `documentary`, `commercial`, `educational`
+- **Quality**: `warm`, `clear`, `deep`, `energetic`
+- **Special**: `custom`, `premium`, `ai-generated`
+
+```bash
+# Professional female voices
+GET /resources/voices?gender=female&tags=professional
+
+# Documentary-style voices
+GET /resources/voices?tags=documentary,authoritative
+```
+
+## Usage in Video Generation
+
+After selecting a voice, use its `id` in video generation:
+
+```json
+{
+  "script": "Your video script here",
+  "voice_id": "voice_en_us_female_sarah",
+  "avatar_id": "avatar_business_woman_1"
+}
+```
+
+## Voice Preview
+
+Each voice includes a `preview` URL with a short audio sample. Use this to:
+
+1. **Test voice quality** before generation
+2. **Compare different voices** for your content
+3. **Share with clients** for approval
+
+```javascript
+// Play voice preview
+const audio = new Audio(voice.preview);
+audio.play();
+```
+
+## Plan Limitations
+
+Voice availability depends on your subscription plan:
+
+| Plan | Available Voices | Languages | Custom Voices |
+|------|-----------------|-----------|---------------|
+| Free | 3 basic voices | English only | ❌ |
+| Start | 15+ voices | English, French | ❌ |
+| Pro | 50+ voices | 10+ languages | ✅ |
+| Enterprise | All voices | All languages | ✅ Unlimited |
+
+## Best Practices
+
+### 1. Voice Selection
+- **Match tone to content**: Professional for business, casual for social media
+- **Consider your audience**: Local accents for regional content
+- **Test with short clips**: Generate a short video to test voice quality
+
+### 2. Performance Optimization
+- **Cache voice lists**: Store voice data locally to reduce API calls
+- **Filter client-side**: Use query parameters to get only needed voices
+- **Preload previews**: Load voice previews for better user experience
+
+### 3. Error Handling
+```python
+def get_suitable_voice(language="en", gender="female"):
+    """Get a suitable voice with fallback options"""
+    try:
+        # Try with specific filters
+        response = requests.get(
+            f"{API_BASE}/resources/voices",
+            params={"language": language, "gender": gender},
+            headers=headers
+        )
+        voices = response.json()['voices']
+        
+        if voices:
+            return voices[0]['id']  # Return first match
+        
+        # Fallback to any voice in the language
+        response = requests.get(
+            f"{API_BASE}/resources/voices",
+            params={"language": language},
+            headers=headers
+        )
+        voices = response.json()['voices']
+        
+        if voices:
+            return voices[0]['id']
+            
+        # Ultimate fallback to first available voice
+        response = requests.get(f"{API_BASE}/resources/voices", headers=headers)
+        voices = response.json()['voices']
+        return voices[0]['id'] if voices else None
+        
+    except Exception as e:
+        print(f"Error getting voice: {e}")
+        return None
+```
+
+## Error Codes
+
+- `UNAUTHORIZED`: Invalid or missing API key
+- `RATE_LIMIT_EXCEEDED`: Too many requests
+- `INTERNAL_ERROR`: Server error retrieving voices
