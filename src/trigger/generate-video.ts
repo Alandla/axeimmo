@@ -61,7 +61,7 @@ export const generateVideoTask = task({
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
     let extractedMedias: IMedia[] = [];
 
-    const isDevelopment = ctx.environment.type === "PRODUCTION"
+    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;
