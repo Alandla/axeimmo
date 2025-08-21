@@ -2,7 +2,7 @@ import { Redis } from 'ioredis';
 import { ApiError, API_ERROR_CODES } from './api-auth';
 
 // Configuration Redis
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
+const redis = new Redis(process.env.REDIS_URL || 'redis://default:defaultpassword123@localhost:6379', {
   enableReadyCheck: false,
   maxRetriesPerRequest: null,
 });
