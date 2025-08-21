@@ -45,6 +45,7 @@ import { useVideoFramesStore } from '@/src/store/videoFramesStore'
 import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import { LogoPosition } from '@/src/types/space'
 import { useBrowserDetection } from '@/src/hooks/use-browser-detection'
+import { calculateGenerationCredits } from '@/src/lib/video-estimation'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -299,15 +300,7 @@ export default function VideoEditor() {
     }
   }
 
-  const calculateCredits = (videoDurationInSeconds: number) => {
-    // Round up to the nearest 15 seconds
-    const roundedDuration = Math.ceil(videoDurationInSeconds / 15) * 15;
-    
-    // Calculate the number of credits based on the rounded duration
-    const creditsNeeded = Math.max(0.5, Math.ceil((roundedDuration - 15) / 30) * 0.5);
-    
-    return creditsNeeded * 10;
-  }
+
 
   const handleSilentSave = async () => {
     if (isDirty && process.env.NODE_ENV !== 'development' && (session?.user?.email !== 'alan@hoox.video' && session?.user?.email !== 'maxime@hoox.video')) {
@@ -1237,7 +1230,7 @@ export default function VideoEditor() {
         onClose={handleCloseMobileDisclaimer}
     />
     <ModalConfirmExport
-      cost={calculateCredits(video?.video?.metadata.audio_duration || 30)}
+      cost={calculateGenerationCredits(video?.video?.metadata.audio_duration || 30)}
       isOpen={showModalExport}
       spaceId={video?.spaceId || ''}
       initialCredits={spaceCredits}

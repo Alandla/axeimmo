@@ -49,8 +49,15 @@ export const exportVideoTask = task({
         throw new Error('Video not found');
       }
 
+      const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
+      const wasCreatedViaAPI = !createEvent?.user;
+
       if (ctx.attempt.number === 1) {
-        await removeCreditsToSpace(exportData.spaceId, exportData.creditCost);
+
+        if (!wasCreatedViaAPI) {
+          await removeCreditsToSpace(exportData.spaceId, exportData.creditCost);
+        }
+        
         updateSpaceLastUsed(video.spaceId, undefined, undefined, video.video?.subtitle.name, video.settings, video.video?.format)
       }
 
@@ -130,7 +137,10 @@ export const exportVideoTask = task({
             status: 'failed',
             errorMessage: renderStatus.message || 'Render failed'
           });
-          await addCreditsToSpace(video.spaceId, exportData.creditCost);
+          
+          if (!wasCreatedViaAPI) {
+            await addCreditsToSpace(video.spaceId, exportData.creditCost);
+          }
           await metadata.replace({
             status: 'failed',
             errorMessage: renderStatus.message || 'Render failed'
@@ -148,7 +158,7 @@ export const exportVideoTask = task({
         await metadata.replace({
           status: 'completed',
           downloadUrl: renderStatus.url,
-          renderCost: renderStatus.costs + (ctx.run.baseCostInCents || 0) + renderAudioCost
+          creditCost: wasCreatedViaAPI ? 0 : exportData.creditCost
         })
 
         try {

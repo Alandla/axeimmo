@@ -29,6 +29,7 @@ import { useRealtimeRun } from '@trigger.dev/react-hooks'
 import { ToolDisplay, ToolCall } from './tool-display'
 import { ExtractedImagesDisplay } from './extracted-images-display'
 import { extractFromUrls } from '../lib/url-extraction-client'
+import { calculateScriptDurationInSeconds, formatDuration } from '../lib/video-estimation'
 
 enum MessageType {
   TEXT = 'text',
@@ -539,13 +540,6 @@ export function AiChat() {
     target.style.height = `${target.scrollHeight}px`;
   }
 
-  const calculateDuration = (script: string): string => {
-    const characters = script.length;
-    const minutes = Math.floor(characters / 936);
-    const seconds = Math.round((characters % 936) / 936 * 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  }
-
   const messageAnimation = {
     user: {
       initial: { opacity: 0, x: 20, y: 0 },
@@ -659,7 +653,7 @@ export function AiChat() {
                           <Check/> {t('next-step')}
                         </Button>
                         <div className="flex text-sm items-center text-gray-500">
-                          <span>{calculateDuration(message.script)}</span>
+                          <span>{formatDuration(calculateScriptDurationInSeconds(message.script))}</span>
                           <Clock className="h-4 w-4 ml-1" />
                         </div>
                       </div>

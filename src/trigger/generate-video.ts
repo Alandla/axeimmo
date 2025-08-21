@@ -34,6 +34,7 @@ import { generateKlingAnimation } from "../service/kling-animation.service";
 import { PlanName } from "../types/enums";
 import { checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode } from "../lib/fal";
 import { KLING_GENERATION_COSTS } from "../lib/cost";
+import { calculateGenerationCredits } from "../lib/video-estimation";
 
 interface GenerateVideoPayload {
   spaceId: string
@@ -46,9 +47,11 @@ interface GenerateVideoPayload {
   webSearch: boolean
   animateImages: boolean
   animationMode: KlingGenerationMode
+  format?: 'vertical' | 'square' | 'ads' // Format optionnel pour la vidéo
   webhookUrl?: string
   useSpaceMedia?: boolean // Par défaut true - utiliser les médias du space
   saveMediaToSpace?: boolean // Par défaut true - sauvegarder les médias dans le space
+  deductCredits?: boolean // Par défaut false - déduire les crédits du space (true pour API, false pour application)
 }
 
 export const generateVideoTask = task({
@@ -1680,7 +1683,8 @@ export const generateVideoTask = task({
     const updatedSpace : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
 
     let subtitle = subtitles[1]
-    let videoFormat: "vertical" | "ads" | "square" = "vertical"; // Format par défaut
+    let videoFormat: "vertical" | "ads" | "square" = payload.format || "vertical"; // Utiliser le format fourni ou par défaut
+    
     if (updatedSpace && updatedSpace.lastUsed?.subtitles) {
       const mostFrequent = getMostFrequentString(updatedSpace.lastUsed.subtitles)
       if (mostFrequent) {
@@ -1696,7 +1700,8 @@ export const generateVideoTask = task({
       }
     }
 
-    if (updatedSpace && updatedSpace.lastUsed?.formats && updatedSpace.lastUsed.formats.length > 0) {
+    // Si aucun format n'est fourni via l'API, utiliser les préférences du space
+    if (!payload.format && updatedSpace && updatedSpace.lastUsed?.formats && updatedSpace.lastUsed.formats.length > 0) {
       const mostFrequentFormat = getMostFrequentString(updatedSpace.lastUsed.formats);
       if (mostFrequentFormat && ['vertical', 'ads', 'square'].includes(mostFrequentFormat)) {
         videoFormat = mostFrequentFormat as "vertical" | "ads" | "square";
@@ -1769,9 +1774,43 @@ export const generateVideoTask = task({
 
     newVideo = await updateVideo(newVideo)
 
-    const user = await addVideoCountContact(payload.userId)
+    // Calculer les crédits de génération basés sur la durée réelle de la vidéo
+    let costCredit = 0;
+    if (newVideo.video?.metadata?.audio_duration) {
+      costCredit = calculateGenerationCredits(newVideo.video.metadata.audio_duration);
+      
+      // Retirer les crédits du space seulement si deductCredits est true (API publique)
+      if (payload.deductCredits) {
+        try {
+          await removeCreditsToSpace(payload.spaceId, costCredit);
+          logger.log(`[CREDITS] Deducted ${costCredit} credits for video generation (duration: ${newVideo.video.metadata.audio_duration}s)`, {
+            spaceId: payload.spaceId,
+            videoDuration: newVideo.video.metadata.audio_duration,
+            creditsDeducted: costCredit
+          });
+        } catch (error) {
+          logger.error(`[CREDITS] Error deducting generation credits:`, {
+            error: error instanceof Error ? error.message : String(error),
+            spaceId: payload.spaceId,
+            creditsToDeduct: costCredit
+          });
+        }
+      } else {
+        logger.log(`[CREDITS] Calculated ${costCredit} credits for video generation but not deducting (deductCredits=false)`, {
+          spaceId: payload.spaceId,
+          videoDuration: newVideo.video.metadata.audio_duration,
+          creditsCalculated: costCredit
+        });
+      }
+    }
 
-    if (user && user.videosCount === 0) {
+    let user;
+    logger.log('[VIDEO COUNT] Adding video count to contact', { userId: payload.userId });
+    if (payload.userId) {
+      user = await addVideoCountContact(payload.userId)
+    }
+
+    if (payload.userId && user && user.videosCount === 0) {
       await sendCreatedVideoEvent({ email: user.email, videoId: newVideo.id || "" })
       track(MixpanelEvent.FIRST_VIDEO_CREATED, {
         distinct_id: payload.userId,
@@ -1790,7 +1829,7 @@ export const generateVideoTask = task({
           result: {
             video_id: newVideo.id,
             thumbnail_url: newVideo.video?.thumbnail,
-            cost: cost,
+            cost: payload.deductCredits ? costCredit : cost, // Utilise costCredit pour l'API publique, cost pour l'application
             created_at: new Date().toISOString()
           }
         });
@@ -1801,7 +1840,8 @@ export const generateVideoTask = task({
 
     return {
       videoId: newVideo.id,
-      cost: cost
+      cost: cost, // Coût réel interne
+      costCredit: costCredit // Coût en crédits facturé au client
     }
   },
 });

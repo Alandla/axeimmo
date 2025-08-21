@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticateApiKey, ApiError, API_ERROR_CODES, isValidUrl } from '@/src/lib/api-auth'
 import { applyRateLimit, getRateLimitHeaders } from '@/src/lib/rate-limiting'
-import { generateVideoScriptWithExtraction } from '@/src/lib/script-generation'
+import { generateVideoScriptDirect } from '@/src/lib/script-generation'
 import { transformUrlsToMedia } from '@/src/lib/media-transformer'
 import { voicesConfig } from '@/src/config/voices.config'
 import { avatarsConfig } from '@/src/config/avatars.config'
@@ -11,6 +11,8 @@ import { calculateEstimatedCredits } from '@/src/lib/video-estimation'
 
 interface GenerateVideoRequest {
   prompt?: string;
+  duration?: number;
+  web_urls?: string[];
   script?: string;
   voice_id?: string;
   voice_url?: string;
@@ -18,7 +20,7 @@ interface GenerateVideoRequest {
   avatar_url?: string;
   format?: 'vertical' | 'square' | 'ads';
   media_urls?: string[];
-  webSearch?: {
+  web_search?: {
     script?: boolean;
     images?: boolean;
   };
@@ -62,25 +64,27 @@ export async function POST(req: NextRequest) {
 
     // 1. Initialisation des variables
     let finalScript = params.script || '';
-    let scriptCost = 0;
     let files: any[] = [];
 
     // 2. Gestion du script
     if (!finalScript && params.prompt && !params.voice_url && !params.avatar_url) {
       console.log("Generating script from prompt...");
       try {
-        const scriptResult = await generateVideoScriptWithExtraction({
+        // Génération du script avec extraction d'URLs et d'images (version directe sans streaming)
+        const result = await generateVideoScriptDirect({
           prompt: params.prompt,
-          webSearch: params.webSearch?.script || false,
+          duration: params.duration || 30,
+          urls: params.web_urls || [],
+          webSearch: params.web_search?.script || false,
           planName: space.planName
         });
-        finalScript = scriptResult.script;
-        scriptCost = scriptResult.cost || 0;
+
+        finalScript = result.script;
         
         // Traiter les images extraites si il y en a
-        if (scriptResult.extractedImages.length > 0) {
+        if (result.extractedImages.length > 0) {
           try {
-            const imageFiles = await transformUrlsToMedia(scriptResult.extractedImages, 'media');
+            const imageFiles = await transformUrlsToMedia(result.extractedImages, 'media');
             files.push(...imageFiles.map(file => ({ ...file, source: 'extracted' })));
           } catch (error) {
             console.error('Error processing extracted images:', error);
@@ -207,14 +211,15 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 5. Calcul du coût estimé (seul coût : animation d'images)
+    // 5. Calcul du coût estimé
     const extractedImagesCount = files.filter(f => f.source === 'extracted').length;
     const estimatedCredits = calculateEstimatedCredits({
       script: finalScript,
       hasAvatar: !!selectedAvatar,
       animateImages: params.animate_image || false,
       animationMode: (params.animate_mode as KlingGenerationMode) || KlingGenerationMode.STANDARD,
-      extractedImagesCount
+      extractedImagesCount,
+      duration: params.duration // Utiliser la durée fournie si disponible
     });
 
     // 6. Vérification des crédits
@@ -239,13 +244,14 @@ export async function POST(req: NextRequest) {
       avatar: selectedAvatar,
       userId: space.ownerId, // Utiliser l'owner du space
       spaceId: space.id,
-      webSearch: params.webSearch?.images || false,
+      webSearch: params.web_search?.images || false,
       animateImages: params.animate_image || false,
       animationMode: (params.animate_mode as KlingGenerationMode) || KlingGenerationMode.STANDARD,
       format: params.format || 'vertical',
       webhookUrl: params.webhook_url,
       useSpaceMedia: params.use_space_media !== false,
-      saveMediaToSpace: params.save_media_to_space !== false
+      saveMediaToSpace: params.save_media_to_space !== false,
+      deductCredits: true // API publique : déduire les crédits du space
     };
 
     // 8. Démarrage de la tâche Trigger
@@ -254,11 +260,9 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({
-      data: {
-        job_id: handle.id,
-        status: 'pending',
-        estimated_credits: estimatedCredits
-      }
+      job_id: handle.id,
+      status: 'pending',
+      estimated_credits: estimatedCredits
     }, { 
       status: 201,
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
@@ -292,6 +296,32 @@ function validateGenerationRequest(params: GenerateVideoRequest): ApiErrorDetail
     });
   }
 
+  // Si prompt est fourni, duration est obligatoire
+  if (params.prompt && !params.duration) {
+    errors.push({
+      code: API_ERROR_CODES.MISSING_FIELD,
+      message: "When providing a prompt, duration is required",
+      field: "duration"
+    });
+  }
+
+  // Validation de la durée
+  if (params.duration !== undefined) {
+    if (typeof params.duration !== 'number') {
+      errors.push({
+        code: API_ERROR_CODES.INVALID_TYPE,
+        message: 'Duration must be a number',
+        field: 'duration'
+      });
+    } else if (params.duration < 10 || params.duration > 600) {
+      errors.push({
+        code: API_ERROR_CODES.INVALID_VALUE,
+        message: 'Duration must be between 10 and 600 seconds',
+        field: 'duration'
+      });
+    }
+  }
+
   // Si script mais pas de voix, il faut au moins voice_id ou voice_url
   if (params.script && !params.voice_id && !params.voice_url && !params.avatar_url) {
     errors.push({
@@ -317,6 +347,39 @@ function validateGenerationRequest(params: GenerateVideoRequest): ApiErrorDetail
       message: "animate_mode must be either 'standard' or 'pro'",
       field: "animate_mode"
     });
+  }
+
+  // Validation des web_urls
+  if (params.web_urls) {
+    if (!Array.isArray(params.web_urls)) {
+      errors.push({
+        code: API_ERROR_CODES.INVALID_TYPE,
+        message: 'web_urls must be an array',
+        field: 'web_urls'
+      });
+    } else if (params.web_urls.length > 10) {
+      errors.push({
+        code: API_ERROR_CODES.INVALID_VALUE,
+        message: 'Maximum 10 URLs allowed in web_urls',
+        field: 'web_urls'
+      });
+    } else {
+      params.web_urls.forEach((url, index) => {
+        if (typeof url !== 'string') {
+          errors.push({
+            code: API_ERROR_CODES.INVALID_TYPE,
+            message: `URL at index ${index} in web_urls must be a string`,
+            field: `web_urls[${index}]`
+          });
+        } else if (!isValidUrl(url)) {
+          errors.push({
+            code: API_ERROR_CODES.INVALID_VALUE,
+            message: `URL at index ${index} in web_urls is not a valid URL`,
+            field: `web_urls[${index}]`
+          });
+        }
+      });
+    }
   }
 
   // Validation des URLs

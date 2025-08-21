@@ -1,6 +1,26 @@
 import { KLING_GENERATION_COSTS } from "./cost";
 import { KlingGenerationMode } from "./fal";
 
+/**
+ * Calcule la durée en secondes d'un script basé sur le nombre de caractères
+ * Utilise le ratio de 936 caractères par minute, avec le même calcul que l'ancienne méthode
+ */
+export const calculateScriptDurationInSeconds = (script: string): number => {
+  const characters = script.length;
+  const minutes = Math.floor(characters / 936);
+  const remainingSeconds = Math.round((characters % 936) / 936 * 60);
+  return minutes * 60 + remainingSeconds;
+};
+
+/**
+ * Formate une durée en secondes au format MM:SS
+ */
+export const formatDuration = (durationInSeconds: number): string => {
+  const minutes = Math.floor(durationInSeconds / 60);
+  const seconds = Math.round(durationInSeconds % 60);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+};
+
 // Estime le nombre de séquences vidéo selon la longueur du script, à partir des statistiques :
 // 15 s  → 6,23 séquences ≈ 271 caractères
 // 30 s  → 11,48 séquences ≈ 516 caractères
@@ -52,11 +72,24 @@ export const calculateEstimatedCredits = (options: {
   animateImages: boolean;
   animationMode: KlingGenerationMode;
   extractedImagesCount?: number;
+  duration?: number;
 }): number => {
-  // Seul coût pour la génération : l'animation d'images
   let credits = 0;
   
-  // Coût animation d'images (principal coût)
+  // Coût de génération basé sur la durée fournie ou estimée du script
+  let estimatedDurationSeconds: number;
+  
+  if (options.duration) {
+    // Utiliser la durée fournie directement
+    estimatedDurationSeconds = options.duration;
+  } else {
+    // Utiliser la méthode calculateScriptDurationInSeconds pour estimer la durée
+    estimatedDurationSeconds = calculateScriptDurationInSeconds(options.script);
+  }
+  
+  credits += calculateGenerationCredits(estimatedDurationSeconds);
+  
+  // Coût animation d'images
   if (options.animateImages && options.extractedImagesCount) {
     credits += calculateAnimationCost(
       options.extractedImagesCount,
@@ -69,9 +102,9 @@ export const calculateEstimatedCredits = (options: {
 };
 
 /**
- * Calcule le coût d'export d'une vidéo
+ * Calcule le coût de génération d'une vidéo basé sur la durée (migré depuis page.tsx)
  */
-export const calculateExportCost = (videoDurationInSeconds: number): number => {
+export const calculateGenerationCredits = (videoDurationInSeconds: number): number => {
   // Round up to the nearest 15 seconds
   const roundedDuration = Math.ceil(videoDurationInSeconds / 15) * 15;
   

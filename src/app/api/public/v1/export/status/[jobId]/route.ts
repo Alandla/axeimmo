@@ -79,7 +79,7 @@ export async function GET(req: NextRequest, { params }: { params: { jobId: strin
       response.result = {
         video_url: run.metadata.downloadUrl,
         thumbnail_url: run.output?.thumbnailUrl,
-        cost: run.metadata.renderCost || 0,
+        cost: run.metadata.creditCost || 0,
         created_at: new Date(run.updatedAt).toISOString()
       };
     }
@@ -92,9 +92,7 @@ export async function GET(req: NextRequest, { params }: { params: { jobId: strin
       };
     }
 
-    return NextResponse.json({ 
-      data: response 
-    }, {
+    return NextResponse.json(response, {
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
     });
 

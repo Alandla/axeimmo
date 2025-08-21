@@ -4,7 +4,8 @@ import { applyRateLimit, getRateLimitHeaders } from '@/src/lib/rate-limiting'
 import { getVideoById } from '@/src/dao/videoDao'
 import { createExport } from '@/src/dao/exportDao'
 import { tasks } from '@trigger.dev/sdk/v3'
-import { calculateExportCost } from '@/src/lib/video-estimation'
+import { calculateGenerationCredits } from '@/src/lib/video-estimation'
+import { objectIdToString } from '@/src/lib/utils'
 
 interface ExportVideoRequest {
   video_id: string;
@@ -58,7 +59,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Vérifier que la vidéo appartient au space
-    if (video.spaceId !== space.id) {
+    if (objectIdToString(video.spaceId) !== space.id) {
       return NextResponse.json({
         error: "Unauthorized",
         details: [{ code: "UNAUTHORIZED_VIDEO", message: "This video does not belong to your space" }]
@@ -79,12 +80,16 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Check if video was created via API (no userId in CREATE step)
+    const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
+    const wasCreatedViaAPI = !createEvent?.user;
+    
     // Calculer le coût de l'export
     const duration = video.video?.metadata?.audio_duration || 30;
-    const exportCost = calculateExportCost(duration);
+    const exportCost = wasCreatedViaAPI ? 0 : calculateGenerationCredits(duration);
 
-    // Vérifier les crédits
-    if (space.credits < exportCost) {
+    // Vérifier les crédits seulement si ce n'est pas une vidéo créée via API
+    if (!wasCreatedViaAPI && space.credits < exportCost) {
       return NextResponse.json({
         error: "Insufficient credits",
         details: [{ 
@@ -106,7 +111,6 @@ export async function POST(req: NextRequest) {
     const exportData = await createExport({
       videoId: params.video_id,
       spaceId: space.id,
-      userId: space.ownerId,
       creditCost: exportCost,
       status: 'pending',
       webhookUrl: params.webhook_url
@@ -121,11 +125,9 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({
-      data: {
-        job_id: handle.id,
-        status: 'pending',
-        estimated_credits: exportCost
-      }
+      job_id: handle.id,
+      status: 'pending',
+      estimated_credits: exportCost
     }, { 
       status: 201,
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)

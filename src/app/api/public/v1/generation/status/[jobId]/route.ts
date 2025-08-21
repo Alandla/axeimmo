@@ -88,7 +88,7 @@ export async function GET(req: NextRequest, { params }: { params: { jobId: strin
         video_id: run.output.videoId,
         thumbnail_url: run.output.thumbnailUrl,
         duration: run.output.duration,
-        cost: run.output.cost || 0,
+        cost: run.output.costCredit || 0, // Utilise costCredit en priorité
         created_at: new Date(run.updatedAt).toISOString()
       };
     }
@@ -101,9 +101,7 @@ export async function GET(req: NextRequest, { params }: { params: { jobId: strin
       };
     }
 
-    return NextResponse.json({ 
-      data: response 
-    }, {
+    return NextResponse.json(response, {
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
     });
 

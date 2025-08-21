@@ -1,7 +1,5 @@
-import { generateScript, improveScript } from './stream'
 import { generateScriptDirect } from './ai-script-generation'
 import { PlanName } from '../types/enums'
-import { extractFromUrls } from './url-extraction-client'
 import { extractFromUrlsServer } from './url-extraction-server'
 
 export interface ScriptGenerationOptions {
@@ -50,46 +48,6 @@ export function calculateScriptGenerationCost(options: CostCalculationOptions): 
   totalCost += urls.length * 0.1;
 
   return totalCost;
-}
-
-/**
- * Prépare l'extraction d'URLs et d'images (version client-side)
- */
-async function prepareUrlAndImageExtraction(
-  urls: string[], 
-  planName: PlanName, 
-  providedUrlContent?: any[]
-): Promise<{
-  urlContent: any[] | null;
-  extractedImages: string[];
-  cost: number;
-}> {
-  // Si pas d'URLs ou contenu déjà fourni, pas d'extraction
-  if (urls.length === 0 || providedUrlContent) {
-    return {
-      urlContent: providedUrlContent || null,
-      extractedImages: [],
-      cost: 0
-    };
-  }
-
-  // Lancer l'extraction d'URLs et d'images (version client-side)
-  const extractionResult = await extractFromUrls({
-    urls,
-    planName,
-    enableImageExtraction: true
-  });
-
-  // Attendre les images si elles sont en cours d'extraction
-  const extractedImages = extractionResult.imageExtractionPromise 
-    ? await extractionResult.imageExtractionPromise
-    : extractionResult.extractedImages;
-
-  return {
-    urlContent: extractionResult.content,
-    extractedImages,
-    cost: extractionResult.cost
-  };
 }
 
 /**
@@ -167,121 +125,4 @@ export async function generateVideoScriptDirect(options: ScriptGenerationOptions
     extractedImages,
     urlScrapingResults: urlContent || undefined
   };
-}
-
-/**
- * Generate video script with URL extraction and image processing (streaming version)
- * This is the main method that should be used by private API routes
- */
-export async function generateVideoScriptWithExtraction(options: ScriptGenerationOptions): Promise<ScriptGenerationResult & { extractedImages: string[] }> {
-  const { 
-    prompt, 
-    duration = 60, 
-    urls = [], 
-    webSearch = false, 
-    planName = PlanName.ENTREPRISE, 
-    improvementContext 
-  } = options;
-
-  // Préparer l'extraction d'URLs et d'images
-  const { urlContent, extractedImages, cost: extractionCost } = await prepareUrlAndImageExtraction(
-    urls, 
-    planName
-  );
-  
-  // Générer le script avec streaming
-  const result = await generateVideoScript({
-    prompt,
-    duration,
-    urls,
-    webSearch,
-    planName,
-    improvementContext,
-    urlContent: urlContent || undefined
-  });
-
-  return {
-    ...result,
-    cost: (result.cost || 0) + extractionCost,
-    extractedImages
-  };
-}
-
-/**
- * Generate video script (low-level method, use generateVideoScriptWithExtraction for API routes)
- */
-export async function generateVideoScript(options: ScriptGenerationOptions): Promise<ScriptGenerationResult> {
-  const { 
-    prompt, 
-    duration = 60, 
-    webSearch = false, 
-    improvementContext,
-    urlContent 
-  } = options;
-
-  // Génération du script
-  let stream;
-  if (improvementContext) {
-    // Convertir le contexte en format messagesList
-    const messagesList = [{ content: improvementContext, role: 'user' }];
-    stream = await improveScript(prompt, messagesList);
-  } else {
-    stream = await generateScript(
-      prompt, 
-      duration, 
-      webSearch, 
-      urlContent
-    );
-  }
-
-  if (!stream) {
-    throw new Error('Failed to generate script');
-  }
-
-  // Lecture du stream et extraction du script
-  let finalScript = '';
-  let streamCost = 0;
-
-  return new Promise((resolve, reject) => {
-    const reader = stream.getReader();
-    let buffer = '';
-    
-    const readChunk = async () => {
-      try {
-        const { done, value } = await reader.read();
-        
-        if (done) {
-          // Traitement final du buffer
-          const scriptStartIndex = buffer.indexOf('```');
-          if (scriptStartIndex !== -1) {
-            let script = buffer.slice(scriptStartIndex + 3);
-            const scriptEndIndex = script.lastIndexOf('```');
-            if (scriptEndIndex !== -1) {
-              script = script.slice(0, scriptEndIndex);
-            }
-            finalScript = script.trim();
-          } else {
-            finalScript = buffer.trim();
-          }
-
-          resolve({
-            script: finalScript,
-            cost: streamCost, // Seulement le coût réel du stream
-            extractedImages: [],
-            urlScrapingResults: urlContent || undefined
-          });
-          return;
-        }
-
-        const chunk = new TextDecoder().decode(value);
-        buffer += chunk;
-        
-        readChunk();
-      } catch (error) {
-        reject(error);
-      }
-    };
-
-    readChunk();
-  });
 }

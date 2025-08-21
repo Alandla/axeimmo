@@ -1,7 +1,7 @@
 export interface IExport {
   id?: string;
   videoId: string;
-  userId: string;
+  userId?: string;
   spaceId: string;
   renderId?: string;
   runId?: string;
