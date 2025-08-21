@@ -8,6 +8,8 @@ import ffmpeg from "fluent-ffmpeg";
 import fs from "fs/promises";
 import os from "os";
 import path from "path";
+import axios from "axios";
+import { logger } from "@trigger.dev/sdk";
 
 /**
  * Extrait des frames d'une vidéo à intervalle régulier (1 frame par seconde)
@@ -86,3 +88,78 @@ export async function extractFramesFromVideo(videoUrl: string): Promise<Extracte
     await fs.rm(outputDirectory, { recursive: true, force: true });
   }
 }
+
+/**
+ * Redimensionne une image à 1080p pour réduire sa taille
+ * @param imageUrl URL de l'image à redimensionner
+ * @param maxWidth Largeur maximale (défaut: 1920px pour 1080p)
+ * @param maxHeight Hauteur maximale (défaut: 1080px pour 1080p)
+ * @returns Buffer de l'image redimensionnée
+ */
+export async function resizeImageTo1080p(
+  imageUrl: string,
+  maxWidth: number = 1920,
+  maxHeight: number = 1080
+): Promise<Buffer> {
+  const tempDirectory = os.tmpdir();
+  const uniqueId = `resize_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+  const inputPath = path.join(tempDirectory, `input_${uniqueId}`);
+  const outputPath = path.join(tempDirectory, `output_${uniqueId}.webp`);
+  
+  try {
+    // Télécharger l'image
+    console.log("Downloading image for resizing...");
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+    await fs.writeFile(inputPath, Buffer.from(response.data));
+    
+    const stats = await fs.stat(inputPath);
+    console.log(`Original image size: ${stats.size} bytes (${(stats.size / 1024 / 1024).toFixed(2)} MB)`);
+    
+    // Redimensionner l'image avec ffmpeg
+    console.log(`Resizing image to max ${maxWidth}x${maxHeight}...`);
+    
+    await new Promise((resolve, reject) => {
+      ffmpeg(inputPath)
+        .outputOptions([
+          '-vf', `scale='min(${maxWidth},iw)':'min(${maxHeight},ih)':force_original_aspect_ratio=decrease`, // Garde les proportions
+          '-q:v', '100', // Qualité élevée pour préserver la qualité
+          '-f', 'webp', // Format WebP pour une meilleure compression
+        ])
+        .output(outputPath)
+        .on('end', resolve)
+        .on('error', reject)
+        .run();
+    });
+    
+    // Vérifier la taille du fichier redimensionné
+    const resizedStats = await fs.stat(outputPath);
+    const resizedBuffer = await fs.readFile(outputPath);
+    
+    console.log(`Resized image size: ${resizedStats.size} bytes (${(resizedStats.size / 1024 / 1024).toFixed(2)} MB)`);
+    console.log(`Size reduction: ${((stats.size - resizedStats.size) / stats.size * 100).toFixed(1)}%`);
+    
+    return resizedBuffer;
+    
+  } finally {
+    // Nettoyer les fichiers temporaires
+    await fs.unlink(inputPath).catch(() => {});
+    await fs.unlink(outputPath).catch(() => {});
+  }
+}
+
+/**
+ * Obtient la taille d'une image à partir de son URL sans la télécharger entièrement
+ * @param imageUrl URL de l'image
+ * @returns Taille du fichier en bytes
+ */
+export async function getImageFileSize(imageUrl: string): Promise<number> {
+  try {
+    const response = await axios.head(imageUrl);
+    const contentLength = response.headers['content-length'];
+    return contentLength ? parseInt(contentLength, 10) : 0;
+  } catch (error) {
+    console.error("Error getting image file size:", error);
+    return 0;
+  }
+}
+
