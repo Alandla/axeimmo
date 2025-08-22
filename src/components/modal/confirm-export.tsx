@@ -17,7 +17,7 @@ import { getSpaceById } from '@/src/service/space.service'
 import { useRouter } from 'next/navigation'
 
 const formatCredits = (credits: number): string => {
-  return credits.toFixed(1)
+  return credits % 1 === 0 ? credits.toFixed(0) : credits.toFixed(1)
 }
 
 interface ModalConfirmExportProps {
