@@ -138,7 +138,7 @@ if (data.status === 'completed') {
   "job_id": "export_abcd1234",
   "status": "pending",
   "progress": 0,
-  "current_step": "Initializing export"
+  "current_step": "render"
 }
 ```
 
@@ -147,7 +147,7 @@ if (data.status === 'completed') {
   "job_id": "export_abcd1234",
   "status": "processing",
   "progress": 65,
-  "current_step": "Encoding video"
+  "current_step": "render-audio"
 }
 ```
 
@@ -156,7 +156,7 @@ if (data.status === 'completed') {
   "job_id": "export_abcd1234",
   "status": "completed",
   "progress": 100,
-  "current_step": "Export complete",
+  "current_step": "render",
   "result": {
     "video_url": "https://storage.hoox.video/exports/export_abcd1234.mp4",
     "thumbnail_url": "https://storage.hoox.video/thumbnails/vid_xyz789.jpg",
@@ -171,11 +171,25 @@ if (data.status === 'completed') {
   "job_id": "export_abcd1234",
   "status": "failed",
   "progress": 30,
-  "current_step": "Export failed",
+  "current_step": "avatar",
   "error": {
     "code": "ENCODING_FAILED",
     "message": "Failed to encode video in the requested format"
   }
+}
+```
+
+```json Error 404 - Job Not Found
+{
+  "error": "Export job not found",
+  "code": "JOB_NOT_FOUND"
+}
+```
+
+```json Error 403 - Unauthorized Job
+{
+  "error": "Export job does not belong to your space",
+  "code": "UNAUTHORIZED_JOB"
 }
 ```
 
@@ -196,47 +210,18 @@ if (data.status === 'completed') {
 
 During processing, you'll see various `current_step` values:
 
-- **"Initializing export"**: Setting up the export job
-- **"Preparing video"**: Loading the source video
-- **"Converting format"**: Changing video format if requested
-- **"Encoding video"**: Creating the final MP4 file
-- **"Uploading to storage"**: Making the file available for download
-- **"Export complete"**: Export finished successfully
+- **"render-audio"**: Processing audio in for the avatar export step
+- **"avatar"**: Processing avatar generation
+- **"render"**: Rendering the final video file
 
 ## Download URL Details
 
 <Warning>
 **Important notes about download URLs:**
 
-- URLs are valid for 24 hours from completion
-- URLs are signed and tied to your API key
-- Direct sharing of URLs is not recommended for security
+- URLs are valid for 7  from completion
 - Download the file to your own storage for permanent access
 </Warning>
-
-### Example Download Implementation
-
-```python Python
-import requests
-from urllib.parse import urlparse
-import os
-
-def download_video(video_url, filename=None):
-    """Download video from Hoox export URL"""
-    response = requests.get(video_url, stream=True)
-    response.raise_for_status()
-    
-    if not filename:
-        # Extract filename from URL or use default
-        parsed = urlparse(video_url)
-        filename = os.path.basename(parsed.path) or 'video.mp4'
-    
-    with open(filename, 'wb') as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            f.write(chunk)
-    
-    return filename
-```
 
 ## Error Codes
 
@@ -248,59 +233,3 @@ Common error codes you might encounter:
 - `ENCODING_FAILED`: Video encoding failed
 - `FORMAT_CONVERSION_FAILED`: Failed to convert video format
 - `STORAGE_FAILED`: Failed to upload to storage
-
-## Integration Tips
-
-### 1. Webhook Integration
-```json
-{
-  "event": "export.completed",
-  "job_id": "export_abcd1234",
-  "video_url": "https://storage.hoox.video/exports/export_abcd1234.mp4",
-  "timestamp": "2024-01-15T10:35:00Z"
-}
-```
-
-### 2. Batch Download
-```python
-# Poll multiple exports simultaneously
-import asyncio
-import aiohttp
-
-async def check_export_status(session, job_id):
-    url = f"https://api.hoox.video/v1/export/status/{job_id}"
-    async with session.get(url, headers=headers) as response:
-        return await response.json()
-
-async def monitor_exports(job_ids):
-    async with aiohttp.ClientSession() as session:
-        tasks = [check_export_status(session, job_id) for job_id in job_ids]
-        results = await asyncio.gather(*tasks)
-        return results
-```
-
-### 3. Retry Logic
-```python
-import time
-import requests
-
-def wait_for_export(job_id, max_wait=300):
-    """Wait for export to complete with exponential backoff"""
-    wait_time = 3
-    elapsed = 0
-    
-    while elapsed < max_wait:
-        response = requests.get(f"https://api.hoox.video/v1/export/status/{job_id}")
-        data = response.json()
-        
-        if data['status'] == 'completed':
-            return data['result']['video_url']
-        elif data['status'] == 'failed':
-            raise Exception(f"Export failed: {data['error']['message']}")
-        
-        time.sleep(wait_time)
-        elapsed += wait_time
-        wait_time = min(wait_time * 1.5, 10)  # Exponential backoff, max 10s
-    
-    raise TimeoutError("Export did not complete within timeout")
-```

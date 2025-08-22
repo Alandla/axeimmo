@@ -34,21 +34,17 @@ This endpoint requires API key authentication and consumes credits from your acc
 
 ## Response
 
-<ResponseField name="data" type="object">
-  <Expandable title="properties">
-    <ResponseField name="script" type="string">
-      The generated video script.
-    </ResponseField>
-    <ResponseField name="cost" type="number">
-      Credits consumed for script generation.
-    </ResponseField>
-    <ResponseField name="extractedImages" type="array">
-      Array of image URLs extracted from web sources.
-    </ResponseField>
-  </Expandable>
+<ResponseField name="script" type="string">
+  The generated video script.
 </ResponseField>
 
-## Example
+<ResponseField name="cost" type="number">
+  Credits consumed for script generation.
+</ResponseField>
+
+<ResponseField name="extractedImages" type="array">
+  Array of image URLs extracted from web sources (strings).
+</ResponseField>
 
 <RequestExample>
 
@@ -109,15 +105,33 @@ console.log(data);
 
 ```json Response
 {
-  "data": {
-    "script": "In today's world, renewable energy has become more crucial than ever. Let's explore two of the most promising sources: solar and wind power.\n\nSolar energy harnesses the power of the sun through photovoltaic panels. These panels convert sunlight directly into electricity, providing a clean and abundant energy source. The technology has advanced significantly, making solar power more affordable and efficient than ever before.\n\nWind power, on the other hand, captures the kinetic energy of moving air through wind turbines. These towering structures can generate substantial amounts of electricity, especially in areas with consistent wind patterns.\n\nBoth technologies offer significant environmental benefits, reducing our dependence on fossil fuels and helping combat climate change. As we move forward, these renewable sources will play an increasingly important role in our energy future.",
-    "cost": 15,
-    "extractedImages": [
-      "https://example.com/solar-panels.jpg",
-      "https://example.com/wind-turbines.jpg",
-      "https://example.com/renewable-energy-chart.png"
-    ]
-  }
+  "script": "In today's world, renewable energy has become more crucial than ever. Let's explore two of the most promising sources: solar and wind power.\n\nSolar energy harnesses the power of the sun through photovoltaic panels. These panels convert sunlight directly into electricity, providing a clean and abundant energy source. The technology has advanced significantly, making solar power more affordable and efficient than ever before.\n\nWind power, on the other hand, captures the kinetic energy of moving air through wind turbines. These towering structures can generate substantial amounts of electricity, especially in areas with consistent wind patterns.\n\nBoth technologies offer significant environmental benefits, reducing our dependence on fossil fuels and helping combat climate change. As we move forward, these renewable sources will play an increasingly important role in our energy future.",
+  "cost": 15,
+  "extractedImages": [
+    "https://example.com/solar-panels.jpg",
+    "https://example.com/wind-turbines.jpg",
+    "https://example.com/renewable-energy-chart.png"
+  ]
+}
+```
+
+```json Error 400 - Validation Failed
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "code": "MISSING_FIELD",
+      "message": "Prompt is required",
+      "field": "prompt"
+    }
+  ]
+}
+```
+
+```json Error 402 - Insufficient Credits
+{
+  "error": "Insufficient credits. Required: 15, Available: 8",
+  "code": "INSUFFICIENT_CREDITS"
 }
 ```
 
@@ -127,43 +141,24 @@ console.log(data);
 
 Script generation costs are based on:
 
-- **Base cost**: 10 credits for standard script generation
-- **Web search**: +5 credits when enabled
-- **URL processing**: +1 credit per URL (included in web search if enabled)
+- **Base cost**: 0.1 credits every 30 seconds
+- **Web search**: +0.1 credits when enabled
+- **URL processing**: +0.1 credits per URL
 
 <Tip>
-Script generation costs are separate from video generation costs. Use this endpoint to estimate total costs before committing to full video generation.
+Script generation costs are separate from video generation costs.
 </Tip>
 
 ## Usage Tips
 
-### 1. Cost Estimation Workflow
-```bash
-# Step 1: Generate script and get cost estimate
-POST /script/generate
-{
-  "prompt": "Your video topic",
-  "duration": 60
-}
-
-# Step 2: Review the script and cost
-# Step 3: Use the script in video generation
-POST /generation/start
-{
-  "script": "Generated script from step 1",
-  "voice_id": "selected_voice",
-  "avatar_id": "selected_avatar"
-}
-```
-
-### 2. Content Enhancement
+### 1. Content Enhancement
 - Use `webSearch: true` to find relevant, up-to-date information
-- Provide specific URLs to extract content from trusted sources
+- Provide specific URLs to extract content from predefined pages (like product page or article)
 - Review extracted images to see what visual content was found
 
-### 3. Script Customization
+### 2. Script Customization
 - Edit the generated script before using it in video generation
-- Adjust pacing and tone to match your brand voice
+- Adjust prompt to match your brand voice and pacing
 - Add specific product mentions or calls-to-action
 
 ## Error Codes
@@ -181,4 +176,6 @@ After generating a script:
 1. **Review and Edit**: Modify the script to match your needs
 2. **Choose Resources**: Use `/resources/voices` and `/resources/avatars` to select voice and avatar
 3. **Generate Video**: Use the script in `/generation/start` endpoint
-4. **Monitor Progress**: Check status with `/generation/status/{jobId}`
+4. **Monitor Progress**: Check status with `/generation/status/{job_id}`
+5. **Export Video**: Use `/export/start` endpoint to export the video in the desired format
+6. **Monitor Export Progress**: Check status with `/export/status/{job_id}`

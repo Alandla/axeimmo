@@ -21,7 +21,7 @@ This endpoint requires API key authentication. Export costs may apply depending 
 </ParamField>
 
 <ParamField body="format" type="string">
-  Export format override: `vertical` (9:16), `square` (1:1), or `ads` (16:9).
+  Export format override: `vertical` (9:16), `ads` (4:5) or `square` (1:1).
   If not specified, uses the original video format.
 </ParamField>
 
@@ -42,8 +42,6 @@ This endpoint requires API key authentication. Export costs may apply depending 
 <ResponseField name="estimated_credits" type="number">
   Estimated credit cost for this export (0 for API-generated videos).
 </ResponseField>
-
-## Example
 
 <RequestExample>
 
@@ -107,24 +105,43 @@ console.log(data);
 }
 ```
 
+```json Error 400 - Missing Video ID
+{
+  "error": "video_id parameter is required",
+  "code": "MISSING_VIDEO_ID"
+}
+```
+
+```json Error 404 - Video Not Found
+{
+  "error": "Video with specified ID doesn't exist",
+  "code": "VIDEO_NOT_FOUND"
+}
+```
+
+```json Error 403 - Unauthorized Video
+{
+  "error": "Video doesn't belong to your space",
+  "code": "UNAUTHORIZED_VIDEO"
+}
+```
+
 </ResponseExample>
 
 ## Export Formats
-
-### Format Options
 
 <CardGroup cols={3}>
   <Card title="Vertical (9:16)" icon="mobile">
     **1080x1920**
     Perfect for TikTok, Instagram Stories, YouTube Shorts
   </Card>
+  <Card title="Ads (4:5)" icon="rectangle-vertical">
+    **1080x1350**
+    Best for Instagram ads, Facebook ads, LinkedIn ads
+  </Card>
   <Card title="Square (1:1)" icon="square">
     **1080x1080**
     Ideal for Instagram posts, Facebook, LinkedIn
-  </Card>
-  <Card title="Landscape (16:9)" icon="desktop">
-    **1920x1080**
-    Best for YouTube videos, presentations, ads
   </Card>
 </CardGroup>
 
@@ -133,7 +150,7 @@ console.log(data);
 Export costs depend on how the video was created:
 
 - **API-generated videos**: **0 credits** (export included in generation cost)
-- **Dashboard-created videos**: Standard export cost applies (varies by video duration)
+- **Dashboard-created videos**: Standard export cost applies (5 credits every 30 seconds)
 
 <Info>
 Videos created through the API have export costs included in the initial generation cost, making exports free.
@@ -147,30 +164,13 @@ Before exporting a video:
 2. **Valid video_id**: Use the `video_id` from generation result
 3. **Video ownership**: Video must belong to your space
 
-## Common Use Cases
+## Next Steps
 
-### 1. Standard Export
-```json
-{
-  "video_id": "vid_xyz789"
-}
-```
+After starting an export:
 
-### 2. Format Conversion
-```json
-{
-  "video_id": "vid_xyz789",
-  "format": "square"
-}
-```
-
-### 3. Export with Webhook
-```json
-{
-  "video_id": "vid_xyz789",
-  "webhook_url": "https://your-app.com/webhooks/export"
-}
-```
+1. **Monitor Progress**: Use `/export/status/{jobId}` to check export progress
+2. **Download Video**: Get the download URL when export completes
+3. **Webhook Integration**: Set up webhooks for automatic notifications
 
 ## Error Codes
 
@@ -180,11 +180,3 @@ Before exporting a video:
 - `VIDEO_NOT_READY`: Video generation must be completed first
 - `INVALID_FORMAT`: Invalid export format specified
 - `INSUFFICIENT_CREDITS`: Not enough credits for export (dashboard videos only)
-
-## Next Steps
-
-After starting an export:
-
-1. **Monitor Progress**: Use `/export/status/{jobId}` to check export progress
-2. **Download Video**: Get the download URL when export completes
-3. **Webhook Integration**: Set up webhooks for automatic notifications

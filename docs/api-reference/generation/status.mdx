@@ -48,9 +48,6 @@ This endpoint requires API key authentication. Include your API key in the `Auth
     <ResponseField name="video_id" type="string">
       Unique identifier for the generated video.
     </ResponseField>
-    <ResponseField name="thumbnail_url" type="string">
-      URL to the video thumbnail image.
-    </ResponseField>
     <ResponseField name="duration" type="number">
       Actual video duration in seconds.
     </ResponseField>
@@ -119,7 +116,7 @@ console.log(data);
   "job_id": "run_abcd1234",
   "status": "pending",
   "progress_step": 0,
-  "current_step": "Initializing generation"
+  "current_step": "QUEUE"
 }
 ```
 
@@ -128,7 +125,7 @@ console.log(data);
   "job_id": "run_abcd1234",
   "status": "processing",
   "progress_step": 45,
-  "current_step": "Generating voice audio"
+  "current_step": "VOICE_GENERATION"
 }
 ```
 
@@ -137,10 +134,9 @@ console.log(data);
   "job_id": "run_abcd1234",
   "status": "completed",
   "progress_step": 100,
-  "current_step": "Generation complete",
+  "current_step": "REDIRECTING",
   "result": {
     "video_id": "vid_xyz789",
-    "thumbnail_url": "https://storage.hoox.video/thumbnails/vid_xyz789.jpg",
     "duration": 62,
     "cost": 78,
     "created_at": "2024-01-15T10:30:00Z"
@@ -153,11 +149,25 @@ console.log(data);
   "job_id": "run_abcd1234",
   "status": "failed",
   "progress_step": 25,
-  "current_step": "Voice generation failed",
+  "current_step": "VOICE_GENERATION",
   "error": {
     "code": "VOICE_GENERATION_FAILED",
     "message": "Failed to generate voice audio from the provided script"
   }
+}
+```
+
+```json Error 404 - Job Not Found
+{
+  "error": "Job not found",
+  "code": "JOB_NOT_FOUND"
+}
+```
+
+```json Error 403 - Unauthorized Job
+{
+  "error": "Job does not belong to your space",
+  "code": "UNAUTHORIZED_JOB"
 }
 ```
 
@@ -174,18 +184,13 @@ console.log(data);
 4. Use webhooks for more efficient status updates
 </Tip>
 
-## Generation Steps
+## Next Steps
 
-During processing, you'll see various `current_step` values:
+Once your video generation is complete (`status: "completed"`):
 
-- **"Initializing generation"**: Setting up the job
-- **"Generating script"**: Creating script from prompt
-- **"Processing voice"**: Generating or processing voice audio
-- **"Processing avatar"**: Preparing avatar for video
-- **"Searching for media"**: Finding relevant images/videos
-- **"Animating images"**: Applying AI animation to static images
-- **"Assembling video"**: Combining all elements into final video
-- **"Post-processing"**: Final video optimization and thumbnail generation
+1. Note the `video_id` from the result
+2. Use the `/export/start` endpoint to export your video in the desired format
+3. Monitor the export progress with `/export/status/{job_id}`
 
 ## Error Codes
 
@@ -199,11 +204,3 @@ Common error codes you might encounter:
 - `AVATAR_PROCESSING_FAILED`: Avatar preparation failed
 - `MEDIA_PROCESSING_FAILED`: Media file processing failed
 - `ASSEMBLY_FAILED`: Final video assembly failed
-
-## Next Steps
-
-Once your video generation is complete (`status: "completed"`):
-
-1. Note the `video_id` from the result
-2. Use the `/export/start` endpoint to export your video in the desired format
-3. Monitor the export progress with `/export/status/{jobId}`

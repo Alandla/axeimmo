@@ -185,11 +185,31 @@ console.log(data);
 
 <ResponseExample>
 
-```json Response
+```json Success Response
 {
   "job_id": "run_abcd1234",
   "status": "pending",
   "estimated_credits": 85
+}
+```
+
+```json Error 400 - Validation Failed
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "code": "MISSING_FIELD",
+      "message": "Duration is required when using prompt",
+      "field": "duration"
+    }
+  ]
+}
+```
+
+```json Error 402 - Insufficient Credits
+{
+  "error": "Insufficient credits. Required: 85, Available: 45",
+  "code": "INSUFFICIENT_CREDITS"
 }
 ```
 
@@ -210,15 +230,14 @@ Provide `voice_url` and/or `avatar_url` with custom media files.
 
 Generation costs depend on several factors:
 
-- **Base cost**: 30 credits for a 30-second video
-- **Avatar usage**: +20 credits
-- **Image animation**: +10 credits per image (standard), +25 credits per image (pro mode)
-- **Web search**: +5 credits
-- **Script generation**: Included in base cost
+- **Base cost**: 5 credits every 30 seconds (with 15 seconds of buffer)
+- **Image animation**: +4 credits per image (standard) or +7 credits per image (pro mode)
 
-<Tip>
-Use the `/script/generate` endpoint first to get an accurate cost estimate before generating the full video.
-</Tip>
+## Next Steps
+
+1. **Monitor Progress**: Check status with `/generation/status/{job_id}`
+2. **Export Video**: Use `/export/start` endpoint to export the video in the desired format
+3. **Monitor Export Progress**: Check status with `/export/status/{job_id}`
 
 ## Error Codes
 

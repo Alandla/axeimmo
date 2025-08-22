@@ -83,9 +83,7 @@ export async function GET(req: NextRequest) {
       preview: voice.previewUrl,
     }));
 
-    return NextResponse.json({ 
-      voices: formattedVoices,
-    }, {
+    return NextResponse.json(formattedVoices, {
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
     });
 

@@ -2,23 +2,23 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Hoox API Documentation",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "https://assets.hoox.video/logo-blanc.png",
+    "light": "https://assets.hoox.video/logo-noir.png"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#FF3270",
+    "light": "#FB5688",
+    "dark": "#FF3270",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#FB5688",
+      "to": "#FB5688"
     }
   },
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:support@hoox.video"
+      "url": "mailto:contact@hoox.video"
     }
   ],
   "topbarCtaButton": {
@@ -33,19 +33,14 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://docs.hoox.video"
+      "name": "Application",
+      "icon": "house",
+      "url": "https://app.hoox.video"
     },
     {
       "name": "Community",
-      "icon": "slack",
-      "url": "https://discord.gg/hoox"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://hoox.video/blog"
+      "icon": "discord",
+      "url": "https://discord.com/invite/jGaPsGGDpC"
     }
   ],
   "navigation": [
@@ -97,21 +92,36 @@
       ]
     },
     {
-      "group": "API Reference",
+      "group": "Script",
+      "pages": [
+        "api-reference/script/generate"
+      ]
+    },
+    {
+      "group": "Generation",
       "pages": [
         "api-reference/generation/start",
-        "api-reference/generation/status",
-        "api-reference/script/generate",
+        "api-reference/generation/status"
+      ]
+    },
+    {
+      "group": "Export",
+      "pages": [
         "api-reference/export/start",
-        "api-reference/export/status",
+        "api-reference/export/status"
+      ]
+    },
+    {
+      "group": "Resources",
+      "pages": [
         "api-reference/resources/voices",
         "api-reference/resources/avatars"
       ]
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/hooxvideo",
-    "github": "https://github.com/hoox-video",
-    "linkedin": "https://www.linkedin.com/company/hoox-video"
+    "linkedin": "https://www.linkedin.com/company/hoox-video/",
+    "twitter": "https://x.com/hooxapp",
+    "instagram": "https://www.instagram.com/hoox.video/"
   }
 }

@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     const headers = new Headers(rateLimitHeaders);
     headers.set('Content-Type', 'application/json');
 
-    return NextResponse.json({ data: response }, { headers });
+    return NextResponse.json(response, { headers });
 
   } catch (error) {
     console.error('Error generating script:', error);

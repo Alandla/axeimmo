@@ -75,9 +75,7 @@ export async function GET(req: NextRequest) {
       preview: look.previewUrl,
     }));
 
-    return NextResponse.json({
-      avatars: formattedLooks,
-    }, {
+    return NextResponse.json(formattedLooks, {
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
     });
 
