@@ -42,6 +42,7 @@ const avatarSchema = new mongoose.Schema({
           heygenType: { type: String, enum: ['avatar', 'talking_photo'] },
           position: Number,
           verticalPosition: Number,
+          scale: Number,
         },
       },
     ],

@@ -234,13 +234,13 @@ export async function odisseiasImageExtraction(page: Page): Promise<ExtractedIma
   try {
     console.log('Starting odisseias image extraction');
     
-    // Try to click image expansion button
-    const xpath = '/html/body/div[4]/div[5]/div[2]/div[1]/section/div[2]/div[1]/div[1]/div';
+    // Try to click image expansion button using CSS selector
+    const selector = '.wp-image-gallery';
     
     try {
-      console.log("Clicking image expansion button for odisseias with predefined XPath...");
+      console.log("Clicking image expansion button for odisseias with CSS selector...");
       await page.waitForTimeout(2000);
-      await page.locator(`xpath=${xpath}`).click({ timeout: 5000 });
+      await page.locator(selector).click({ timeout: 5000 });
       console.log('Successfully clicked odisseias image expansion button');
     } catch (clickError) {
       console.log('Could not click odisseias image expansion button, continuing with basic extraction');

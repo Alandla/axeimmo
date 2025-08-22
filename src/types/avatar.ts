@@ -23,5 +23,6 @@ export type AvatarLook = {
         heygenType?: 'avatar' | 'talking_photo'
 		position?: number  // Position horizontale (en pourcentage)
 		verticalPosition?: number  // Position verticale (en pourcentage)
+		scale?: number  // Échelle de l'avatar (prend le dessus sur la valeur par défaut)
 	}
 }

@@ -61,12 +61,18 @@ export async function uploadToS3Audio(audio: any, bucket: string) {
   }
 }
 
-export async function uploadToS3Image(image: any, bucket: string, fileName: string) {
+export async function uploadToS3Image(
+  image: any, 
+  bucket: string, 
+  fileName: string, 
+  extension: string = 'jpg', 
+  contentType: string = 'image/jpeg'
+) {
   const params: PutObjectCommandInput = {
     Bucket: bucket,
-    Key: `${fileName}.jpg`,
+    Key: `${fileName}.${extension}`,
     Body: image,
-    ContentType: 'image/jpeg',
+    ContentType: contentType,
     ACL: 'public-read'
   };
 
