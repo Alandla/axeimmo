@@ -1230,7 +1230,13 @@ export default function VideoEditor() {
         onClose={handleCloseMobileDisclaimer}
     />
     <ModalConfirmExport
-      cost={calculateGenerationCredits(video?.video?.metadata.audio_duration || 30)}
+      cost={(() => {
+        // Check if video was created via API (no userId in CREATE step)
+        const createEvent = video?.history?.find((h: { step: string }) => h.step === 'CREATE');
+        const wasCreatedViaAPI = !createEvent?.user;
+        
+        return wasCreatedViaAPI ? 0 : calculateGenerationCredits(video?.video?.metadata.audio_duration || 30);
+      })()}
       isOpen={showModalExport}
       spaceId={video?.spaceId || ''}
       initialCredits={spaceCredits}
