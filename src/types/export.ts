@@ -1,7 +1,7 @@
 export interface IExport {
   id?: string;
   videoId: string;
-  userId: string;
+  userId?: string;
   spaceId: string;
   renderId?: string;
   runId?: string;
@@ -11,6 +11,7 @@ export interface IExport {
   creditCost: number;
   renderCost?: number;
   errorMessage?: string;
+  webhookUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

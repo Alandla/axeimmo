@@ -12,35 +12,8 @@ import { FileToUpload } from "../types/files";
 import { Badge } from "./ui/badge";
 import { useActiveSpaceStore } from "../store/activeSpaceStore";
 import { usePremiumToast } from "@/src/utils/premium-toast";
-import { KLING_GENERATION_COSTS } from "../lib/cost";
 import { Alert, AlertDescription } from "./ui/alert";
-
-// Estime le nombre de séquences vidéo selon la longueur du script, à partir des statistiques :
-// 15 s  → 6,23 séquences ≈ 271 caractères
-// 30 s  → 11,48 séquences ≈ 516 caractères
-// 60 s  → 21,81 séquences ≈ 979 caractères
-const estimateVideoSequences = (script: string): number => {
-  const length = script.length;
-
-  // Petits scripts (≤ 271 car.) – interpolation linéaire jusqu'à 6,23 séquences
-  if (length <= 271) {
-    return Math.max(1, Math.ceil((length / 271) * 6.23));
-  }
-
-  // Scripts moyens (272-516 car.) – interpolation linéaire jusqu'à 11,48 séquences
-  if (length <= 516) {
-    return Math.ceil(6.23 + ((length - 271) / (516 - 271)) * (11.48 - 6.23));
-  }
-
-  // Scripts longs (517-979 car.) – interpolation linéaire jusqu'à 21,81 séquences
-  if (length <= 979) {
-    return Math.ceil(11.48 + ((length - 516) / (979 - 516)) * (21.81 - 11.48));
-  }
-
-  // Au-delà de 979 caractères, on applique le ratio moyen ≈ 45 car./séquence
-  const avgCharsPerSequence = 45;
-  return Math.ceil(length / avgCharsPerSequence);
-};
+import { calculateAnimationCost } from "../lib/video-estimation";
 
 export function AiChatTab({ 
   creationStep, 
@@ -69,7 +42,7 @@ export function AiChatTab({
     const pricingT = useTranslations('pricing');
     const planT = useTranslations('plan');
     const durationT = useTranslations('select.duration');
-    const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>({ name: durationT('options.30-seconds'), value: 468, requiredPlan: PlanName.FREE });
+    const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>({ name: durationT('options.30-seconds'), value: 30, requiredPlan: PlanName.FREE });
 
     // Function to detect URLs in text
     const detectUrls = (text: string): boolean => {
@@ -244,7 +217,7 @@ export function AiChatTab({
                   onKeyDown={(e) => {
                     if (!isDisabled && e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
-                      handleSendMessage(inputMessage, videoDuration?.value || 468);
+                      handleSendMessage(inputMessage, videoDuration?.value || 30);
                     }
                   }}
                 />
@@ -309,7 +282,7 @@ export function AiChatTab({
                         <div>
                           <Button 
                             size="icon" 
-                            onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 468)} 
+                            onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 30)} 
                             disabled={
                               isDisabled ||
                               !files.some(file => file.usage === "voice" || file.usage === "avatar") && 
@@ -419,7 +392,7 @@ export function AiChatTab({
               >
                 <Check className="h-4 w-4" />
                 {t('animate-images')} ({
-                  Math.min(extractedImagesMedia.length, estimateVideoSequences(script)) * (KLING_GENERATION_COSTS[animationMode] ?? 0)
+                  calculateAnimationCost(extractedImagesMedia.length, script, animationMode)
                 } {t('credits')})
               </Button>
             </div>

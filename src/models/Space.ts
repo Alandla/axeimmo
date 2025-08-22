@@ -73,6 +73,44 @@ const companyDetailsSchema = new mongoose.Schema({
   toJSON: { virtuals: true },
 });
 
+// Schéma pour les clés API
+const apiKeySchema = new mongoose.Schema({
+  keyHash: String,
+  keyPrefix: String, // Pour affichage (premiers 12 caractères)
+  name: {
+    type: String,
+    default: 'Production'
+  },
+  lastUsedAt: Date,
+  permissions: [{
+    type: String,
+    enum: [
+      'video:generate',
+      'video:export', 
+      'resources:read',
+      'webhooks:manage'
+    ],
+    default: ['video:generate', 'video:export', 'resources:read']
+  }],
+  isActive: {
+    type: Boolean,
+    default: true
+  },
+  revokedAt: Date,
+  rateLimitPerMinute: {
+    type: Number,
+    default: 100
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+}, {
+  timestamps: false, // Nous gérons createdAt manuellement
+  toJSON: { virtuals: true }
+}
+);
+
 const mediaSpaceSchema = new mongoose.Schema(
   {
     media: mediaSchema,
@@ -169,6 +207,7 @@ const spaceSchema = new mongoose.Schema(
         default: 19,
       },
     },
+    apiKeys: [apiKeySchema]
   },
   {
     timestamps: true,
@@ -178,5 +217,15 @@ const spaceSchema = new mongoose.Schema(
 
 spaceSchema.plugin(toJSON);
 mediaSpaceSchema.plugin(toJSON);
+apiKeySchema.plugin(toJSON);
+
+// Index pour optimiser les requêtes de validation des clés API
+spaceSchema.index({ 
+  'apiKeys.keyPrefix': 1, 
+  'apiKeys.isActive': 1 
+}, { 
+  sparse: true,
+  name: 'apikeys_validation_index'
+});
 
 export default mongoose.models.Space || mongoose.model("Space", spaceSchema);

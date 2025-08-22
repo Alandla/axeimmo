@@ -1,0 +1,119 @@
+---
+title: "Script Generation Overview"
+description: "Generate high-quality video scripts with AI, enhanced by web content extraction"
+---
+
+## What is Script Generation?
+
+The Hoox Script Generation API allows you to create compelling video scripts using AI-powered text generation. This service can incorporate content from web sources, analyze multiple URLs, and generate scripts tailored to specific durations and requirements.
+
+## Key Features
+
+### 🧠 AI-Powered Script Generation
+Generate natural, engaging scripts from simple prompts using advanced language models.
+
+### 🌐 Web Content Integration
+Automatically extract and incorporate content from provided URLs to enrich your scripts with real-world information.
+
+### 🖼️ Image Extraction
+Extract relevant images from web content that can be used as visual elements in your videos.
+
+### ⏱️ Duration Control
+Specify exact script duration to match your video requirements (10-600 seconds).
+
+### 💰 Transparent Pricing
+Clear credit-based pricing with upfront cost calculation.
+
+## How It Works
+
+1. **Provide a Prompt**: Start with a clear description of what you want your script to be about
+2. **Add URLs (Optional)**: Include web sources to incorporate specific information
+3. **Set Duration**: Specify how long you want the final script to be
+4. **Generate**: The AI creates a comprehensive script incorporating all your requirements
+5. **Get Results**: Receive the script, extracted images, and cost breakdown
+
+## Use Cases
+
+### Educational Content
+Create informative scripts based on research articles, studies, or educational resources.
+
+```json
+{
+  "prompt": "Create an educational script about climate change",
+  "duration": 180,
+  "urls": [
+    "https://climate.nasa.gov/facts/",
+    "https://ipcc.ch/reports/"
+  ]
+}
+```
+
+### Marketing Content
+Generate promotional scripts that incorporate product information from company websites.
+
+```json
+{
+  "prompt": "Create a marketing script for our new eco-friendly product line",
+  "urls": ["https://company.com/sustainability"],
+  "webSearch": true
+}
+```
+
+### News and Current Events
+Create scripts based on current news articles and trending topics.
+
+```json
+{
+  "prompt": "Summarize today's tech news in an engaging format",
+  "duration": 120,
+  "urls": [
+    "https://techcrunch.com/latest-article",
+    "https://theverge.com/trending"
+  ]
+}
+```
+
+## Cost Structure
+
+The pricing is transparent and predictable:
+
+- **Base Cost**: 0.1 credit per 60 seconds of script duration
+- **Web Search**: +0.1 credit when enabled
+- **URL Processing**: +0.1 credit per URL provided
+- **Additional Services**: Image extraction and content analysis (included)
+
+### Example Cost Calculation
+
+For a 120-second script with 3 URLs and web search enabled:
+- Base cost: (120/60) × 0.1 = 0.2 credits
+- Web search: +0.1 credits  
+- URLs: 3 × 0.1 = 0.3 credits
+- **Total**: 0.6 credits
+
+## Best Practices
+
+### Prompt Writing
+- Be specific about your target audience
+- Include the desired tone and style
+- Mention key points you want covered
+- Specify any constraints or requirements
+
+### URL Selection
+- Choose authoritative and relevant sources
+- Limit to 10 URLs for optimal processing
+- Ensure URLs are publicly accessible
+- Select recent and updated content
+
+### Duration Planning
+- Consider your platform requirements
+- Account for natural speaking pace
+- Leave room for pauses and emphasis
+- Test with different durations for optimal engagement
+
+## Next Steps
+
+Ready to generate your first script? Check out the [Script Generation API](/api-reference/script/generate) documentation for detailed implementation guidance.
+
+<Card title="Generate Script" icon="code" href="/api-reference/script/generate">
+  Start generating scripts with our API
+</Card>

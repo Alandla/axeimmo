@@ -10,6 +10,7 @@ import { basicApiCall } from "../lib/api"
 import { useTranslations } from "next-intl"
 import { IUser } from "../types/user"
 import { getMediaUrlFromFileByPresignedUrl } from "../service/upload.service"
+import { ApiKeyManagement } from "./api-key-management"
 
 export function GeneralSettings({ user }: { user: User }) {
   const t = useTranslations('general-settings')

@@ -16,6 +16,10 @@ import { useTranslations } from 'next-intl'
 import { getSpaceById } from '@/src/service/space.service'
 import { useRouter } from 'next/navigation'
 
+const formatCredits = (credits: number): string => {
+  return credits.toFixed(1)
+}
+
 interface ModalConfirmExportProps {
   cost: number
   spaceId: string
@@ -89,8 +93,8 @@ export default function ModalConfirmExport({
               {t('description')}
             </DialogDescription>
             <div className="text-sm text-gray-500 mt-2">
-              <p><b>{t('cost')}:</b> {cost} credits</p>
-              <p><b>{t('balance')}:</b> {credits ?? '...'} credits</p>
+              <p><b>{t('cost')}:</b> {formatCredits(cost)} credits</p>
+              <p><b>{t('balance')}:</b> {credits !== undefined ? formatCredits(credits) : '...'} credits</p>
             </div>
             {showWatermark && (
               <Alert 

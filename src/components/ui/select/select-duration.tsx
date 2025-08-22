@@ -9,7 +9,7 @@ import ModalPricing from "../../modal/modal-pricing";
 
 export interface DurationOption {
   name: string;
-  value: number;
+  value: number; // Duration in seconds
   requiredPlan: PlanName;
 }
 
@@ -27,11 +27,11 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, disabled, onChan
   const [selectedRestrictedOption, setSelectedRestrictedOption] = useState<DurationOption | null>(null);
 
   const durationOptions: DurationOption[] = [
-    { name: t('options.15-seconds'), value: 234, requiredPlan: PlanName.FREE },
-    { name: t('options.30-seconds'), value: 468, requiredPlan: PlanName.FREE },
-    { name: t('options.1-minute'), value: 936, requiredPlan: PlanName.START },
-    { name: t('options.2-minutes'), value: 1872, requiredPlan: PlanName.ENTREPRISE },
-    { name: t('options.5-minutes'), value: 4680, requiredPlan: PlanName.ENTREPRISE },
+    { name: t('options.15-seconds'), value: 15, requiredPlan: PlanName.FREE },
+    { name: t('options.30-seconds'), value: 30, requiredPlan: PlanName.FREE },
+    { name: t('options.1-minute'), value: 60, requiredPlan: PlanName.START },
+    { name: t('options.2-minutes'), value: 120, requiredPlan: PlanName.ENTREPRISE },
+    { name: t('options.5-minutes'), value: 300, requiredPlan: PlanName.ENTREPRISE },
   ];
 
   const planHierarchy = {

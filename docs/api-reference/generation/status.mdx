@@ -1,0 +1,206 @@
+---
+title: "Check Generation Status"
+api: "GET https://api.hoox.video/v1/generation/status/{jobId}"
+description: "Check the status of a video generation job"
+---
+
+## Overview
+
+This endpoint allows you to check the current status of a video generation job. Use this to monitor progress and retrieve the final video when generation is complete.
+
+## Authentication
+
+<Info>
+This endpoint requires API key authentication. Include your API key in the `Authorization` header.
+</Info>
+
+## Path Parameters
+
+<ParamField path="jobId" type="string" required>
+  The job ID returned from the `/generation/start` endpoint.
+</ParamField>
+
+## Response
+
+<ResponseField name="job_id" type="string">
+  The unique identifier for the generation job.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Current job status:
+  - `pending`: Job is queued and waiting to start
+  - `processing`: Generation is in progress
+  - `completed`: Generation finished successfully
+  - `failed`: Generation failed
+</ResponseField>
+
+<ResponseField name="progress_step" type="number">
+  Progress percentage (0-100).
+</ResponseField>
+
+<ResponseField name="current_step" type="string">
+  Description of the current processing step.
+</ResponseField>
+
+<ResponseField name="result" type="object">
+  Available when status is `completed`:
+  <Expandable title="properties">
+    <ResponseField name="video_id" type="string">
+      Unique identifier for the generated video.
+    </ResponseField>
+    <ResponseField name="duration" type="number">
+      Actual video duration in seconds.
+    </ResponseField>
+    <ResponseField name="cost" type="number">
+      Actual credits consumed for generation.
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      ISO timestamp when generation completed.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="error" type="object">
+  Available when status is `failed`:
+  <Expandable title="properties">
+    <ResponseField name="code" type="string">
+      Error code describing the failure reason.
+    </ResponseField>
+    <ResponseField name="message" type="string">
+      Human-readable error message.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.hoox.video/v1/generation/status/run_abcd1234" \
+  -H "Authorization: Bearer your_api_key"
+```
+
+```python Python
+import requests
+
+job_id = "run_abcd1234"
+url = f"https://api.hoox.video/v1/generation/status/{job_id}"
+headers = {
+    "Authorization": "Bearer your_api_key"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const jobId = "run_abcd1234";
+const response = await fetch(`https://api.hoox.video/v1/generation/status/${jobId}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer your_api_key'
+  }
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Pending
+{
+  "job_id": "run_abcd1234",
+  "status": "pending",
+  "progress_step": 0,
+  "current_step": "QUEUE"
+}
+```
+
+```json Processing
+{
+  "job_id": "run_abcd1234",
+  "status": "processing",
+  "progress_step": 45,
+  "current_step": "VOICE_GENERATION"
+}
+```
+
+```json Completed
+{
+  "job_id": "run_abcd1234",
+  "status": "completed",
+  "progress_step": 100,
+  "current_step": "REDIRECTING",
+  "result": {
+    "video_id": "vid_xyz789",
+    "duration": 62,
+    "cost": 78,
+    "created_at": "2024-01-15T10:30:00Z"
+  }
+}
+```
+
+```json Failed
+{
+  "job_id": "run_abcd1234",
+  "status": "failed",
+  "progress_step": 25,
+  "current_step": "VOICE_GENERATION",
+  "error": {
+    "code": "VOICE_GENERATION_FAILED",
+    "message": "Failed to generate voice audio from the provided script"
+  }
+}
+```
+
+```json Error 404 - Job Not Found
+{
+  "error": "Job not found",
+  "code": "JOB_NOT_FOUND"
+}
+```
+
+```json Error 403 - Unauthorized Job
+{
+  "error": "Job does not belong to your space",
+  "code": "UNAUTHORIZED_JOB"
+}
+```
+
+</ResponseExample>
+
+## Polling Best Practices
+
+<Tip>
+**Recommended polling strategy:**
+
+1. Start with a 5-second interval for the first minute
+2. Increase to 10-second intervals after 1 minute
+3. Increase to 30-second intervals after 5 minutes
+4. Use webhooks for more efficient status updates
+</Tip>
+
+## Next Steps
+
+Once your video generation is complete (`status: "completed"`):
+
+1. Note the `video_id` from the result
+2. Use the `/export/start` endpoint to export your video in the desired format
+3. Monitor the export progress with `/export/status/{job_id}`
+
+## Error Codes
+
+Common error codes you might encounter:
+
+- `JOB_NOT_FOUND`: Job ID doesn't exist
+- `UNAUTHORIZED_JOB`: Job doesn't belong to your space
+- `GENERATION_FAILED`: General generation failure
+- `SCRIPT_GENERATION_FAILED`: Failed to generate script from prompt
+- `VOICE_GENERATION_FAILED`: Voice processing failed
+- `AVATAR_PROCESSING_FAILED`: Avatar preparation failed
+- `MEDIA_PROCESSING_FAILED`: Media file processing failed
+- `ASSEMBLY_FAILED`: Final video assembly failed

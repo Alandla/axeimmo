@@ -3,8 +3,9 @@ import { Sheet, SheetContent } from "@/src/components/ui/sheet"
 import { ScrollArea } from "@/src/components/ui/scroll-area"
 import { SpaceSettingsForm } from "./space-settings-form"
 import { BrandKitSettings } from "./brand-kit-settings"
+import { ApiKeyManagement } from "./api-key-management"
 import { useTranslations } from "next-intl"
-import { Settings, Building2, Palette } from "lucide-react"
+import { Settings, Building2, Palette, Key } from "lucide-react"
 import { cn } from "@/src/lib/utils"
 import { Separator } from "@/src/components/ui/separator"
 
@@ -13,7 +14,7 @@ interface SpaceSettingsDrawerProps {
   onClose: () => void
 }
 
-type SettingsTab = "general" | "brand-kit"
+type SettingsTab = "general" | "brand-kit" | "api"
 
 export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps) {
   const contentRef = useRef<HTMLDivElement>(null)
@@ -39,6 +40,12 @@ export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps)
       description: t('brand-kit.description'),
       icon: Palette,
     },
+    {
+      id: "api" as SettingsTab,
+      label: t('api.title'),
+      description: t('api.description'),
+      icon: Key,
+    },
   ]
 
   const renderTabContent = () => {
@@ -47,6 +54,8 @@ export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps)
         return <SpaceSettingsForm />
       case "brand-kit":
         return <BrandKitSettings onClose={onClose} />
+      case "api":
+        return <ApiKeyManagement />
       default:
         return null
     }

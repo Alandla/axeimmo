@@ -1,5 +1,17 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+### Docker Services
+
+Start the required services using Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+This will start:
+- MongoDB on port 27017
+- Redis on port 6379 (with password authentication)
+
 ## Getting Started
 
 First, run the development server:

@@ -21,6 +21,16 @@ export const basicApiGetCall = async <T>(url: string): Promise<T> => {
   }
 }
 
+export const basicApiDeleteCall = async <T>(url: string): Promise<T> => {
+  try {
+    const response = await apiClient.delete<T>(url);
+    return response.data;
+  } catch (e: any) {
+    console.error(e?.message);
+    throw e;
+  }
+}
+
 // Client API séparé pour les appels avec toast (contexte React)
 export const apiClient = axios.create({
   baseURL: "/api",

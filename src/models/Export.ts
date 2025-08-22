@@ -11,7 +11,7 @@ const exportSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
     },
     spaceId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -49,6 +49,10 @@ const exportSchema = new mongoose.Schema(
       required: false,
     },
     errorMessage: {
+      type: String,
+      required: false,
+    },
+    webhookUrl: {
       type: String,
       required: false,
     },

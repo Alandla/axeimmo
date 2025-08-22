@@ -1,0 +1,172 @@
+---
+title: "List Available Voices"
+api: "GET https://api.hoox.video/v1/resources/voices"
+description: "Get list of available voices for video generation"
+---
+
+## Overview
+
+This endpoint returns all available voices that you can use in video generation. The voices are filtered based on your plan level, and include both system voices and any custom voices you've uploaded.
+
+## Authentication
+
+<Info>
+This endpoint requires API key authentication. Include your API key in the `Authorization` header.
+</Info>
+
+## Query Parameters
+
+<ParamField query="language" type="string">
+  Filter voices by language code (e.g., "en", "fr", "es", "de").
+</ParamField>
+
+<ParamField query="gender" type="string">
+  Filter voices by gender: `male` or `female`.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  Comma-separated list of tags to filter by (e.g., "professional,friendly").
+</ParamField>
+
+## Response
+
+Array of available voice objects:
+
+<ResponseField name="id" type="string">
+  Unique identifier for the voice (use this in generation requests).
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Human-readable name of the voice.
+</ResponseField>
+
+<ResponseField name="language" type="string">
+  Language code (e.g., "en", "fr", "es").
+</ResponseField>
+
+<ResponseField name="accent" type="string">
+  Specific accent or region (e.g., "US", "UK", "CA").
+</ResponseField>
+
+<ResponseField name="gender" type="string">
+  Voice gender: `male` or `female`.
+</ResponseField>
+
+<ResponseField name="tags" type="array">
+  Array of descriptive tags (e.g., ["professional", "warm", "energetic"]).
+</ResponseField>
+
+<ResponseField name="preview" type="string">
+  URL to a short audio preview of the voice.
+</ResponseField>
+
+## Example
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.hoox.video/v1/resources/voices" \
+  -H "Authorization: Bearer your_api_key"
+
+# With filters
+curl -X GET "https://api.hoox.video/v1/resources/voices?language=en&gender=female&tags=professional" \
+  -H "Authorization: Bearer your_api_key"
+```
+
+```python Python
+import requests
+
+url = "https://api.hoox.video/v1/resources/voices"
+headers = {
+    "Authorization": "Bearer your_api_key"
+}
+
+# Get all voices
+response = requests.get(url, headers=headers)
+voices = response.json()
+
+# Filter for English female voices
+params = {
+    "language": "en",
+    "gender": "female",
+    "tags": "professional,friendly"
+}
+response = requests.get(url, headers=headers, params=params)
+filtered_voices = response.json()
+
+print(f"Found {len(filtered_voices)} matching voices")
+for voice in filtered_voices:
+    print(f"- {voice['name']} ({voice['id']})")
+```
+
+```javascript JavaScript
+// Get all voices
+const response = await fetch('https://api.hoox.video/v1/resources/voices', {
+  headers: {
+    'Authorization': 'Bearer your_api_key'
+  }
+});
+
+const data = await response.json();
+console.log(`Found ${data.length} voices`);
+
+// Filter for specific criteria
+const filteredResponse = await fetch(
+  'https://api.hoox.video/v1/resources/voices?language=en&gender=female&tags=professional',
+  {
+    headers: {
+      'Authorization': 'Bearer your_api_key'
+    }
+  }
+);
+
+const filteredData = await filteredResponse.json();
+console.log('Filtered voices:', filteredData);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success Response
+[
+  {
+    "id": "voice_en_us_female_sarah",
+    "name": "Sarah",
+    "language": "en",
+    "accent": "US",
+    "gender": "female",
+    "tags": ["professional", "warm", "news"],
+    "preview": "https://storage.hoox.video/voices/previews/voice_en_us_female_sarah.mp3"
+  },
+  {
+    "id": "voice_en_uk_male_james",
+    "name": "James",
+    "language": "en",
+    "accent": "UK",
+    "gender": "male",
+    "tags": ["authoritative", "documentary", "deep"],
+    "preview": "https://storage.hoox.video/voices/previews/voice_en_uk_male_james.mp3"
+  },
+  {
+    "id": "voice_fr_fr_female_marie",
+    "name": "Marie",
+    "language": "fr",
+    "accent": "FR",
+    "gender": "female",
+    "tags": ["elegant", "professional", "clear"],
+    "preview": "https://storage.hoox.video/voices/previews/voice_fr_fr_female_marie.mp3"
+  },
+  {
+    "id": "custom_voice_user_123",
+    "name": "My Custom Voice",
+    "language": "en",
+    "accent": "US",
+    "gender": "female",
+    "tags": ["custom", "brand"],
+    "preview": "https://storage.hoox.video/voices/previews/custom_voice_user_123.mp3"
+  }
+]
+```
+
+</ResponseExample>

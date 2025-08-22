@@ -1,0 +1,273 @@
+---
+title: 'Video Generation Overview'
+description: 'Learn how to generate videos with the Hoox API'
+---
+
+## How Video Generation Works
+
+The Hoox API uses advanced AI to generate videos from various inputs:
+
+1. **Content Creation**: From prompts, scripts, or existing media
+2. **Voice Synthesis**: Convert text to natural-sounding speech
+3. **Visual Assembly**: Combine media, animations, and transitions
+4. **Final Rendering**: Export in your desired format
+
+<img
+  className="block dark:hidden"
+  src="/images/generation-flow-light.svg"
+  alt="Video Generation Flow"
+/>
+
+## Generation Methods
+
+<CardGroup cols={2}>
+  <Card
+    title="Prompt-based"
+    icon="magic-wand-sparkles"
+  >
+    Generate videos from simple text prompts. The AI creates the script, finds media, and assembles everything.
+  </Card>
+  <Card
+    title="Script-based"
+    icon="file-text"
+  >
+    Provide your own script and let the AI handle voice synthesis and media selection.
+  </Card>
+  <Card
+    title="Media-based"
+    icon="images"
+  >
+    Use your own voice recordings or avatar videos as the foundation.
+  </Card>
+  <Card
+    title="Hybrid"
+    icon="puzzle-piece"
+  >
+    Combine multiple approaches for maximum control and customization.
+  </Card>
+</CardGroup>
+
+## Key Features
+
+### 🎭 Avatars and Voices
+
+- **100+ AI voices** in 20+ languages
+- **Realistic avatars** with lip synchronization
+- **Custom voices** and avatars for Enterprise plans
+- **Emotion and tone** control
+
+### 🎬 Media Integration
+
+- **Automatic B-roll** selection from stock libraries
+- **Web search** for relevant images and videos
+- **Custom media** upload and integration
+- **Image animation** with Kling AI
+
+### 🎨 Customization Options
+
+- **Multiple formats**: Vertical (9:16), Square (1:1), Ads (4:5)
+- **Smart transitions** and effects
+- **Automatic subtitles** with styling options
+- **Background music** selection
+
+## Generation Process
+
+<Steps>
+  <Step title="Content Analysis">
+    The AI analyzes your input (prompt, script, or media) to understand the content and requirements.
+  </Step>
+  <Step title="Script Generation">
+    If you provided a prompt, the AI generates a complete script with proper pacing and structure.
+  </Step>
+  <Step title="Voice Synthesis">
+    Text is converted to natural speech using your selected voice, with proper emphasis and timing.
+  </Step>
+  <Step title="Media Selection">
+    Relevant images and videos are found through web search or stock libraries to illustrate your content.
+  </Step>
+  <Step title="Visual Assembly">
+    All elements are combined with transitions, effects, and synchronization to create the final video.
+  </Step>
+</Steps>
+
+## Input Options
+
+### Text Content
+
+<CodeGroup>
+
+```json Prompt
+{
+  "prompt": "Create an educational video about renewable energy sources, focusing on solar and wind power",
+  "voice_id": "en-US-JennyNeural",
+  "webSearch": {
+    "script": true,
+    "images": true
+  }
+}
+```
+
+```json Script
+{
+  "script": "Solar energy is one of the most promising renewable energy sources. It harnesses the power of the sun through photovoltaic cells...",
+  "voice_id": "en-US-AriaNeural",
+  "format": "vertical"
+}
+```
+
+</CodeGroup>
+
+### Media Content
+
+<CodeGroup>
+
+```json Voice Recording
+{
+  "voice_url": "https://your-domain.com/voiceover.mp3",
+  "webSearch": {
+    "images": true
+  },
+  "format": "square"
+}
+```
+
+```json Avatar Video
+{
+  "avatar_url": "https://your-domain.com/avatar-speaking.mp4",
+  "format": "vertical"
+}
+```
+
+```json Custom Media
+{
+  "script": "Welcome to our product demonstration...",
+  "voice_id": "en-US-DavisNeural",
+  "media_urls": [
+    "https://your-domain.com/product-shot.jpg",
+    "https://your-domain.com/demo-video.mp4"
+  ]
+}
+```
+
+</CodeGroup>
+
+## Advanced Features
+
+### Web Search Integration
+
+Enable automatic content enhancement:
+
+```json
+{
+  "prompt": "Explain cryptocurrency basics",
+  "voice_id": "en-US-JennyNeural",
+  "webSearch": {
+    "script": true,    // Enhance script with web research
+    "images": true     // Find relevant images automatically
+  }
+}
+```
+
+### Image Animation
+
+Bring static images to life:
+
+```json
+{
+  "script": "The landscape shows beautiful mountains...",
+  "voice_id": "en-US-AriaNeural",
+  "animate_image": true,
+  "animate_mode": "pro",        // Higher quality animation
+  "animate_image_max": 3        // Limit for cost control
+}
+```
+
+### Workspace Media Control
+
+Control how workspace media is used:
+
+```json
+{
+  "prompt": "Create a company overview video",
+  "voice_id": "en-US-DavisNeural",
+  "use_space_media": false,      // Don't use workspace media
+  "save_media_to_space": false   // Don't save generated media
+}
+```
+
+## Cost Factors
+
+Video generation costs depend on several factors:
+
+| Factor | Base Cost | Additional Cost |
+|--------|-----------|-----------------|
+| Basic generation | 1 credit | - |
+| Script length | +1 credit | Per 1000 characters |
+| Avatar usage | +2 credits | - |
+| Image animation (standard) | +2 credits | Per image |
+| Image animation (pro) | +5 credits | Per image |
+| Web search | +1 credit | Per search query |
+
+<Tip>
+  Use the `animate_image_max` parameter to control animation costs when using many images.
+</Tip>
+
+## Quality Guidelines
+
+### For Best Results
+
+<AccordionGroup>
+  <Accordion title="Script Quality">
+    - Keep sentences clear and concise
+    - Use natural language patterns
+    - Include pauses with punctuation
+    - Avoid complex technical jargon without explanation
+  </Accordion>
+
+  <Accordion title="Media Selection">
+    - Use high-resolution images (1920x1080 or higher)
+    - Ensure media is relevant to your content
+    - Consider aspect ratios for your target format
+    - Use consistent visual style across media
+  </Accordion>
+
+  <Accordion title="Voice Selection">
+    - Choose voices that match your content tone
+    - Consider your target audience's language preferences
+    - Test different voices for your use case
+    - Use consistent voice throughout a series
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Start Generation"
+    icon="play"
+    href="/api-reference/generation/start"
+  >
+    Learn the complete API for starting video generation
+  </Card>
+  <Card
+    title="Check Status"
+    icon="clock"
+    href="/video-generation/check-status"
+  >
+    Monitor your generation progress
+  </Card>
+  <Card
+    title="Available Voices"
+    icon="microphone"
+    href="/resources/voices"
+  >
+    Browse all available voices and languages
+  </Card>
+  <Card
+    title="Available Avatars"
+    icon="user"
+    href="/resources/avatars"
+  >
+    Explore avatar options for your videos
+  </Card>
+</CardGroup>

@@ -1,0 +1,127 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Hoox API Documentation",
+  "logo": {
+    "dark": "https://assets.hoox.video/logo-blanc.png",
+    "light": "https://assets.hoox.video/logo-noir.png"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#FF3270",
+    "light": "#FB5688",
+    "dark": "#FF3270",
+    "anchors": {
+      "from": "#FB5688",
+      "to": "#FB5688"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:contact@hoox.video"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://app.hoox.video"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Application",
+      "icon": "house",
+      "url": "https://app.hoox.video"
+    },
+    {
+      "name": "Community",
+      "icon": "discord",
+      "url": "https://discord.com/invite/jGaPsGGDpC"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "authentication",
+        "costs",
+        "errors"
+      ]
+    },
+    {
+      "group": "Video Generation",
+      "pages": [
+        "video-generation/overview",
+        "video-generation/start-generation",
+        "video-generation/check-status"
+      ]
+    },
+    {
+      "group": "Script Generation",
+      "pages": [
+        "script-generation/overview",
+        "script-generation/generate"
+      ]
+    },
+    {
+      "group": "Video Export",
+      "pages": [
+        "video-export/overview",
+        "video-export/start-export", 
+        "video-export/check-status"
+      ]
+    },
+    {
+      "group": "Resources",
+      "pages": [
+        "resources/voices",
+        "resources/avatars"
+      ]
+    },
+    {
+      "group": "Webhooks",
+      "pages": [
+        "webhooks/overview",
+        "webhooks/events"
+      ]
+    },
+    {
+      "group": "Script",
+      "pages": [
+        "api-reference/script/generate"
+      ]
+    },
+    {
+      "group": "Generation",
+      "pages": [
+        "api-reference/generation/start",
+        "api-reference/generation/status"
+      ]
+    },
+    {
+      "group": "Export",
+      "pages": [
+        "api-reference/export/start",
+        "api-reference/export/status"
+      ]
+    },
+    {
+      "group": "Resources",
+      "pages": [
+        "api-reference/resources/voices",
+        "api-reference/resources/avatars"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "linkedin": "https://www.linkedin.com/company/hoox-video/",
+    "twitter": "https://x.com/hooxapp",
+    "instagram": "https://www.instagram.com/hoox.video/"
+  }
+}

@@ -1,0 +1,175 @@
+---
+title: "List Available Avatars"
+api: "GET https://api.hoox.video/v1/resources/avatars"
+description: "Get list of available avatar looks for video generation"
+---
+
+## Overview
+
+This endpoint returns all available avatar looks that you can use in video generation. Avatar looks are specific appearances/styles of digital presenters that can deliver your video content.
+
+## Authentication
+
+<Info>
+This endpoint requires API key authentication. Include your API key in the `Authorization` header.
+</Info>
+
+## Query Parameters
+
+<ParamField query="gender" type="string">
+  Filter avatars by gender: `male` or `female`.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  Comma-separated list of tags to filter by (e.g., "business,professional").
+</ParamField>
+
+## Response
+
+Array of available avatar look objects:
+
+<ResponseField name="id" type="string">
+  Unique identifier for the avatar look (use this in generation requests).
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Human-readable name of the avatar look.
+</ResponseField>
+
+<ResponseField name="gender" type="string">
+  Avatar gender: `male` or `female`.
+</ResponseField>
+
+<ResponseField name="place" type="string">
+  Setting/background of the avatar (e.g., "office", "studio", "outdoor").
+</ResponseField>
+
+<ResponseField name="format" type="string">
+  Optimal video format for this avatar (e.g., "vertical", "square").
+</ResponseField>
+
+<ResponseField name="tags" type="array">
+  Array of descriptive tags (e.g., ["business", "professional", "modern"]).
+</ResponseField>
+
+<ResponseField name="thumbnail" type="string">
+  URL to a static thumbnail image of the avatar.
+</ResponseField>
+
+<ResponseField name="preview" type="string">
+  URL to a short video preview of the avatar in action.
+</ResponseField>
+
+## Example
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.hoox.video/v1/resources/avatars" \
+  -H "Authorization: Bearer your_api_key"
+
+# With filters
+curl -X GET "https://api.hoox.video/v1/resources/avatars?gender=female&tags=business" \
+  -H "Authorization: Bearer your_api_key"
+```
+
+```python Python
+import requests
+
+url = "https://api.hoox.video/v1/resources/avatars"
+headers = {
+    "Authorization": "Bearer your_api_key"
+}
+
+# Get all avatars
+response = requests.get(url, headers=headers)
+avatars = response.json()
+
+# Filter for business avatars
+params = {
+    "gender": "female",
+    "tags": "business,professional"
+}
+response = requests.get(url, headers=headers, params=params)
+business_avatars = response.json()
+
+print(f"Found {len(business_avatars)} business avatars")
+for avatar in business_avatars:
+    print(f"- {avatar['name']} ({avatar['id']}) - {avatar['place']}")
+```
+
+```javascript JavaScript
+// Get all avatars
+const response = await fetch('https://api.hoox.video/v1/resources/avatars', {
+  headers: {
+    'Authorization': 'Bearer your_api_key'
+  }
+});
+
+const data = await response.json();
+console.log(`Found ${data.length} avatars`);
+
+// Filter for specific criteria
+const filteredResponse = await fetch(
+  'https://api.hoox.video/v1/resources/avatars?gender=female&tags=business',
+  {
+    headers: {
+      'Authorization': 'Bearer your_api_key'
+    }
+  }
+);
+
+const filteredData = await filteredResponse.json();
+console.log('Business avatars:', filteredData);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success Response
+[
+  {
+    "id": "avatar_business_woman_office_1",
+    "name": "Professional Sarah - Office",
+    "gender": "female",
+    "place": "office",
+    "format": "vertical",
+    "tags": ["business", "professional", "modern", "office"],
+    "thumbnail": "https://storage.hoox.video/avatars/thumbnails/avatar_business_woman_office_1.jpg",
+    "preview": "https://storage.hoox.video/avatars/previews/avatar_business_woman_office_1.mp4"
+  },
+  {
+    "id": "avatar_business_man_studio_1",
+    "name": "Executive James - Studio",
+    "gender": "male",
+    "place": "studio",
+    "format": "square",
+    "tags": ["business", "executive", "authoritative", "studio"],
+    "thumbnail": "https://storage.hoox.video/avatars/thumbnails/avatar_business_man_studio_1.jpg",
+    "preview": "https://storage.hoox.video/avatars/previews/avatar_business_man_studio_1.mp4"
+  },
+  {
+    "id": "avatar_casual_woman_home_1",
+    "name": "Friendly Emma - Home",
+    "gender": "female",
+    "place": "home",
+    "format": "vertical",
+    "tags": ["casual", "friendly", "relatable", "home"],
+    "thumbnail": "https://storage.hoox.video/avatars/thumbnails/avatar_casual_woman_home_1.jpg",
+    "preview": "https://storage.hoox.video/avatars/previews/avatar_casual_woman_home_1.mp4"
+  },
+  {
+    "id": "custom_avatar_user_456",
+    "name": "My Brand Ambassador",
+    "gender": "female",
+    "place": "branded_office",
+    "format": "vertical",
+    "tags": ["custom", "brand", "professional"],
+    "thumbnail": "https://storage.hoox.video/avatars/thumbnails/custom_avatar_user_456.jpg",
+    "preview": "https://storage.hoox.video/avatars/previews/custom_avatar_user_456.mp4"
+  }
+]
+```
+
+</ResponseExample>
