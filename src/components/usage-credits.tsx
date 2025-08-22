@@ -9,6 +9,10 @@ import Link from "next/link"
 import { Badge } from "./ui/badge"
 import { discount } from "../config/plan.config"
 
+const formatCredits = (credits: number): string => {
+  return credits.toFixed(1)
+}
+
 export function UsageCredits() {
   const t = useTranslations('sidebar')
   const tPricing = useTranslations('pricing')
@@ -74,7 +78,7 @@ export function UsageCredits() {
           <div className="p-2 bg-sidebar-accent rounded-lg">
             <div className="flex flex-col items-center gap-2">
               <div className="flex flex-col items-center">
-                <span className="text-xs font-medium">{activeSpace?.credits}</span>
+                <span className="text-xs font-medium">{formatCredits(activeSpace?.credits || 0)}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Link href="/dashboard/pricing">
@@ -88,7 +92,7 @@ export function UsageCredits() {
         </TooltipTrigger>
         <TooltipContent side="right">
           <div className="text-sm">
-            {activeSpace?.credits} / {activeSpace?.creditsPerMonth} {t('credits-used')}
+            {formatCredits(activeSpace?.credits || 0)} / {formatCredits(activeSpace?.creditsPerMonth || 0)} {t('credits-used')}
           </div>
         </TooltipContent>
       </Tooltip>
@@ -100,7 +104,7 @@ export function UsageCredits() {
       <div className="space-y-2">
         <div className="flex items-center gap-1 text-xs text-sidebar-foreground/70">
           <Sparkles className="w-3 h-3" />
-          <span>{activeSpace?.credits} / {activeSpace?.creditsPerMonth} {t('credits-used')}</span>
+          <span>{formatCredits(activeSpace?.credits || 0)} / {formatCredits(activeSpace?.creditsPerMonth || 0)} {t('credits-used')}</span>
         </div>
         <Progress value={percentage > 100 ? 100 : percentage} className="h-2" />
       </div>

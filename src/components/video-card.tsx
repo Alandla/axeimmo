@@ -203,14 +203,10 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   {creator.image && <AvatarImage src={creator.image} alt={creator.name ?? ''} />}
-                  <AvatarFallback className="rounded-lg">{creator.name?.charAt(0) ?? ''}</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">{creator.name?.charAt(0) ?? 'A'}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  {!creator.name ? (
-                    <div className="h-5 w-24 bg-muted animate-pulse rounded" />
-                  ) : (
-                    <span className="truncate font-semibold">{creator.name}</span>
-                  )}
+                  <span className="truncate font-semibold">{creator.name || 'API'}</span>
                   <span className="truncate text-xs">
                     {video.createdAt ? new Date(video.createdAt).toLocaleDateString() : ''}
                   </span>
