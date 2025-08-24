@@ -8,7 +8,7 @@ The Script Generation endpoint allows you to create compelling video scripts usi
 ## Quick Start
 
 ```bash
-curl -X POST "https://api.hoox.video/v1/script/generate" \
+curl -X POST "https://app.hoox.video/api/public/v1/script/generate" \
   -H "Authorization: Bearer hx_live_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -56,7 +56,7 @@ curl -X POST "https://api.hoox.video/v1/script/generate" \
 Incorporate multiple authoritative sources:
 
 ```bash
-curl -X POST "https://api.hoox.video/v1/script/generate" \
+curl -X POST "https://app.hoox.video/api/public/v1/script/generate" \
   -H "Authorization: Bearer hx_live_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -75,7 +75,7 @@ curl -X POST "https://api.hoox.video/v1/script/generate" \
 Generate promotional content with product information:
 
 ```bash
-curl -X POST "https://api.hoox.video/v1/script/generate" \
+curl -X POST "https://app.hoox.video/api/public/v1/script/generate" \
   -H "Authorization: Bearer hx_live_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -89,7 +89,7 @@ curl -X POST "https://api.hoox.video/v1/script/generate" \
 Create scripts from current events:
 
 ```bash
-curl -X POST "https://api.hoox.video/v1/script/generate" \
+curl -X POST "https://app.hoox.video/api/public/v1/script/generate" \
   -H "Authorization: Bearer hx_live_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -145,7 +145,7 @@ curl -X POST "https://api.hoox.video/v1/script/generate" \
 ### Technical Implementation
 ```javascript
 async function generateScript(prompt, options = {}) {
-  const response = await fetch('https://api.hoox.video/v1/script/generate', {
+  const response = await fetch('https://app.hoox.video/api/public/v1/script/generate', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${process.env.HOOX_API_KEY}`,

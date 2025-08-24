@@ -17,7 +17,7 @@ import requests
 def check_export_status(job_id):
     """Check the status of an export job"""
     response = requests.get(
-        f'https://api.hoox.video/v1/export/status/{job_id}',
+        f'https://app.hoox.video/api/public/v1/export/status/{job_id}',
         headers={'Authorization': 'Bearer your_api_key'}
     )
     
@@ -166,7 +166,7 @@ import aiohttp
 
 async def check_export_status_async(session, job_id):
     """Async version of status check"""
-    url = f'https://api.hoox.video/v1/export/status/{job_id}'
+    url = f'https://app.hoox.video/api/public/v1/export/status/{job_id}'
     headers = {'Authorization': 'Bearer your_api_key'}
     
     async with session.get(url, headers=headers) as response:
@@ -411,7 +411,7 @@ Here's a complete example that combines all best practices:
 class ExportManager:
     def __init__(self, api_key):
         self.api_key = api_key
-        self.base_url = 'https://api.hoox.video/v1'
+        self.base_url = 'https://app.hoox.video/api/public/v1'
         
     def start_export(self, video_id, format='vertical', webhook_url=None):
         """Start video export"""

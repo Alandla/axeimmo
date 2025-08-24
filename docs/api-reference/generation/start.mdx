@@ -1,6 +1,6 @@
 ---
 title: "Start Video Generation"
-api: "POST https://api.hoox.video/v1/generation/start"
+api: "POST https://app.hoox.video/api/public/v1/generation/start"
 description: "Start generating a video from a prompt, script, or media files"
 ---
 
@@ -110,7 +110,7 @@ This endpoint requires API key authentication. Include your API key in the `Auth
 <RequestExample>
 
 ```bash cURL
-curl -X POST "https://api.hoox.video/v1/generation/start" \
+curl -X POST "https://app.hoox.video/api/public/v1/generation/start" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -131,7 +131,7 @@ curl -X POST "https://api.hoox.video/v1/generation/start" \
 ```python Python
 import requests
 
-url = "https://api.hoox.video/v1/generation/start"
+url = "https://app.hoox.video/api/public/v1/generation/start"
 headers = {
     "Authorization": "Bearer your_api_key",
     "Content-Type": "application/json"
@@ -156,7 +156,7 @@ print(response.json())
 ```
 
 ```javascript JavaScript
-const response = await fetch('https://api.hoox.video/v1/generation/start', {
+const response = await fetch('https://app.hoox.video/api/public/v1/generation/start', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer your_api_key',

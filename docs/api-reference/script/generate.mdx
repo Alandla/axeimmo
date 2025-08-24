@@ -1,6 +1,6 @@
 ---
 title: "Generate Script"
-api: "POST https://api.hoox.video/v1/script/generate"
+api: "POST https://app.hoox.video/api/public/v1/script/generate"
 description: "Generate a video script from a prompt with cost estimation"
 ---
 
@@ -49,7 +49,7 @@ This endpoint requires API key authentication and consumes credits from your acc
 <RequestExample>
 
 ```bash cURL
-curl -X POST "https://api.hoox.video/v1/script/generate" \
+curl -X POST "https://app.hoox.video/api/public/v1/script/generate" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -63,7 +63,7 @@ curl -X POST "https://api.hoox.video/v1/script/generate" \
 ```python Python
 import requests
 
-url = "https://api.hoox.video/v1/script/generate"
+url = "https://app.hoox.video/api/public/v1/script/generate"
 headers = {
     "Authorization": "Bearer your_api_key",
     "Content-Type": "application/json"
@@ -81,7 +81,7 @@ print(response.json())
 ```
 
 ```javascript JavaScript
-const response = await fetch('https://api.hoox.video/v1/script/generate', {
+const response = await fetch('https://app.hoox.video/api/public/v1/script/generate', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer your_api_key',

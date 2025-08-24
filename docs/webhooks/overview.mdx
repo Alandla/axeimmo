@@ -230,7 +230,7 @@ Include your webhook URL when starting jobs:
 <CodeGroup>
 
 ```javascript Generation
-const response = await fetch('https://api.hoox.video/v1/generation/start', {
+const response = await fetch('https://app.hoox.video/api/public/v1/generation/start', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer hx_live_your_api_key_here',
@@ -245,7 +245,7 @@ const response = await fetch('https://api.hoox.video/v1/generation/start', {
 ```
 
 ```javascript Export
-const response = await fetch('https://api.hoox.video/v1/export/start', {
+const response = await fetch('https://app.hoox.video/api/public/v1/export/start', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer hx_live_your_api_key_here',

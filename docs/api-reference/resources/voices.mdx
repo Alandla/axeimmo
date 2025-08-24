@@ -1,6 +1,6 @@
 ---
 title: "List Available Voices"
-api: "GET https://api.hoox.video/v1/resources/voices"
+api: "GET https://app.hoox.video/api/public/v1/resources/voices"
 description: "Get list of available voices for video generation"
 ---
 
@@ -65,18 +65,18 @@ Array of available voice objects:
 <RequestExample>
 
 ```bash cURL
-curl -X GET "https://api.hoox.video/v1/resources/voices" \
+curl -X GET "https://app.hoox.video/api/public/v1/resources/voices" \
   -H "Authorization: Bearer your_api_key"
 
 # With filters
-curl -X GET "https://api.hoox.video/v1/resources/voices?language=en&gender=female&tags=professional" \
+curl -X GET "https://app.hoox.video/api/public/v1/resources/voices?language=en&gender=female&tags=professional" \
   -H "Authorization: Bearer your_api_key"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.hoox.video/v1/resources/voices"
+url = "https://app.hoox.video/api/public/v1/resources/voices"
 headers = {
     "Authorization": "Bearer your_api_key"
 }
@@ -101,7 +101,7 @@ for voice in filtered_voices:
 
 ```javascript JavaScript
 // Get all voices
-const response = await fetch('https://api.hoox.video/v1/resources/voices', {
+const response = await fetch('https://app.hoox.video/api/public/v1/resources/voices', {
   headers: {
     'Authorization': 'Bearer your_api_key'
   }
@@ -112,7 +112,7 @@ console.log(`Found ${data.length} voices`);
 
 // Filter for specific criteria
 const filteredResponse = await fetch(
-  'https://api.hoox.video/v1/resources/voices?language=en&gender=female&tags=professional',
+  'https://app.hoox.video/api/public/v1/resources/voices?language=en&gender=female&tags=professional',
   {
     headers: {
       'Authorization': 'Bearer your_api_key'

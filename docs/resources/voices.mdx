@@ -47,7 +47,7 @@ import requests
 
 def get_available_voices(language=None, gender=None, tags=None):
     """Get available voices with optional filters"""
-    url = "https://api.hoox.video/v1/resources/voices"
+    url = "https://app.hoox.video/api/public/v1/resources/voices"
     headers = {"Authorization": "Bearer your_api_key"}
     
     params = {}
@@ -365,7 +365,7 @@ def create_video_with_voice(script, voice_id, avatar_id=None):
         payload["avatar_id"] = avatar_id
     
     response = requests.post(
-        "https://api.hoox.video/v1/generation/start",
+        "https://app.hoox.video/api/public/v1/generation/start",
         headers={"Authorization": "Bearer your_api_key"},
         json=payload
     )
@@ -393,7 +393,7 @@ def create_video_with_custom_audio(avatar_id, voice_url):
     }
     
     response = requests.post(
-        "https://api.hoox.video/v1/generation/start",
+        "https://app.hoox.video/api/public/v1/generation/start",
         headers={"Authorization": "Bearer your_api_key"},
         json=payload
     )

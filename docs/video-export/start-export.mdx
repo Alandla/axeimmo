@@ -23,7 +23,7 @@ The simplest export request only requires the video ID:
 import requests
 
 # Start export with default settings
-response = requests.post('https://api.hoox.video/v1/export/start', 
+response = requests.post('https://app.hoox.video/api/public/v1/export/start', 
   headers={'Authorization': 'Bearer your_api_key'},
   json={'video_id': 'vid_xyz789'}
 )
@@ -40,7 +40,7 @@ You can convert the video to a different format during export:
 
 ```python
 # Export as vertical video (9:16)
-response = requests.post('https://api.hoox.video/v1/export/start', 
+response = requests.post('https://app.hoox.video/api/public/v1/export/start', 
   headers={'Authorization': 'Bearer your_api_key'},
   json={
     'video_id': 'vid_xyz789',
@@ -81,7 +81,7 @@ Add a webhook URL to receive automatic notifications when the export completes:
 
 ```python
 # Export with webhook notification
-response = requests.post('https://api.hoox.video/v1/export/start', 
+response = requests.post('https://app.hoox.video/api/public/v1/export/start', 
   headers={'Authorization': 'Bearer your_api_key'},
   json={
     'video_id': 'vid_xyz789',
@@ -109,7 +109,7 @@ Your webhook endpoint will receive a POST request when the export finishes:
 The export start endpoint returns a job identifier that you'll use to track progress:
 
 ```python
-response = requests.post('https://api.hoox.video/v1/export/start', 
+response = requests.post('https://app.hoox.video/api/public/v1/export/start', 
   headers={'Authorization': 'Bearer your_api_key'},
   json={'video_id': 'vid_xyz789'}
 )
@@ -139,7 +139,7 @@ def export_for_all_platforms(video_id):
     jobs = {}
     
     for format_name in formats:
-        response = requests.post('https://api.hoox.video/v1/export/start', 
+        response = requests.post('https://app.hoox.video/api/public/v1/export/start', 
           headers={'Authorization': 'Bearer your_api_key'},
           json={
             'video_id': video_id,
@@ -170,7 +170,7 @@ import aiohttp
 
 async def start_export(session, video_id, format='vertical'):
     """Start export for a single video"""
-    async with session.post('https://api.hoox.video/v1/export/start',
+    async with session.post('https://app.hoox.video/api/public/v1/export/start',
                            headers={'Authorization': 'Bearer your_api_key'},
                            json={'video_id': video_id, 'format': format}) as response:
         return await response.json()
@@ -221,7 +221,7 @@ def safe_export_start(video_id, format='vertical', max_retries=3):
     for attempt in range(max_retries):
         try:
             response = session.post(
-                'https://api.hoox.video/v1/export/start',
+                'https://app.hoox.video/api/public/v1/export/start',
                 headers={'Authorization': 'Bearer your_api_key'},
                 json={'video_id': video_id, 'format': format},
                 timeout=30

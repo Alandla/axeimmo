@@ -1,6 +1,6 @@
 ---
 title: "List Available Avatars"
-api: "GET https://api.hoox.video/v1/resources/avatars"
+api: "GET https://app.hoox.video/api/public/v1/resources/avatars"
 description: "Get list of available avatar looks for video generation"
 ---
 
@@ -65,18 +65,18 @@ Array of available avatar look objects:
 <RequestExample>
 
 ```bash cURL
-curl -X GET "https://api.hoox.video/v1/resources/avatars" \
+curl -X GET "https://app.hoox.video/api/public/v1/resources/avatars" \
   -H "Authorization: Bearer your_api_key"
 
 # With filters
-curl -X GET "https://api.hoox.video/v1/resources/avatars?gender=female&tags=business" \
+curl -X GET "https://app.hoox.video/api/public/v1/resources/avatars?gender=female&tags=business" \
   -H "Authorization: Bearer your_api_key"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.hoox.video/v1/resources/avatars"
+url = "https://app.hoox.video/api/public/v1/resources/avatars"
 headers = {
     "Authorization": "Bearer your_api_key"
 }
@@ -100,7 +100,7 @@ for avatar in business_avatars:
 
 ```javascript JavaScript
 // Get all avatars
-const response = await fetch('https://api.hoox.video/v1/resources/avatars', {
+const response = await fetch('https://app.hoox.video/api/public/v1/resources/avatars', {
   headers: {
     'Authorization': 'Bearer your_api_key'
   }
@@ -111,7 +111,7 @@ console.log(`Found ${data.length} avatars`);
 
 // Filter for specific criteria
 const filteredResponse = await fetch(
-  'https://api.hoox.video/v1/resources/avatars?gender=female&tags=business',
+  'https://app.hoox.video/api/public/v1/resources/avatars?gender=female&tags=business',
   {
     headers: {
       'Authorization': 'Bearer your_api_key'
