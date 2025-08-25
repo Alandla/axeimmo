@@ -1772,6 +1772,33 @@ export const generateVideoTask = task({
       }
     }
 
+    /*
+    /
+    /   Apply automatic zoom to image sequences
+    /
+    */
+    if (newVideo.video && newVideo.video.sequences) {
+      logger.log(`[ZOOM] Applying automatic zoom to image sequences...`);
+      
+      let isZoomIn = true; // Alternance entre zoom-in et zoom-out
+      
+      newVideo.video.sequences.forEach((sequence, sequenceIndex) => {
+        // Vérifier si la séquence a une image comme média
+        if (sequence.media && sequence.media.type === 'image' && sequence.words && sequence.words.length > 0) {
+          // Appliquer le zoom au premier mot de la séquence
+          const zoomType = isZoomIn ? 'zoom-in-continuous' : 'zoom-out-continuous';
+          sequence.words[0].zoom = zoomType;
+          
+          logger.log(`[ZOOM] Applied ${zoomType} to first word of sequence ${sequenceIndex} with image media`);
+          
+          // Alterner pour la prochaine séquence
+          isZoomIn = !isZoomIn;
+        }
+      });
+      
+      logger.log(`[ZOOM] Automatic zoom application completed`);
+    }
+
     newVideo = await updateVideo(newVideo)
 
     // Calculer les crédits de génération basés sur la durée réelle de la vidéo

@@ -165,43 +165,51 @@ export default function VideoPreview({
             
 
             <div className="relative w-full h-full transition-all duration-300 ease-in-out">
-                <Player
-                    acknowledgeRemotionLicense={true}
-                    ref={playerRef}
-                    component={VideoGenerate}
-                    durationInFrames={video?.video?.metadata.audio_duration ? Math.ceil(video?.video?.metadata.audio_duration * 60) : 1}
-                    fps={60}
-                    compositionWidth={dimensions.width}
-                    compositionHeight={dimensions.height}
-                    overflowVisible
-                    inputProps={{
-                        data: video,
-                        showWatermark,
-                        logo: logoData,
-                        muteBackgroundMusic,
-                        onSubtitleStyleChange,
-                        onAvatarHeightRatioChange,
-                        onAvatarPositionChange,
-                        onMediaPositionChange,
-                        onLogoPositionChange,
-                        onLogoSizeChange,
-                    }}
-                    numberOfSharedAudioTags={12}
-                    controls
-                    className="rounded-lg"
+                <div 
+                    className="rounded-lg overflow-hidden"
                     style={{
+                        aspectRatio: `${dimensions.width} / ${dimensions.height}`,
                         width: '100%',
                         position: 'absolute',
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        objectFit: 'contain',
                         maxHeight: '100%',
-                        transition: 'all 0.3s ease-in-out',
+                        maxWidth: '100%',
                     }}
-                    autoPlay={false}
-                    renderLoading={() => null}
-                />
+                >
+                    <Player
+                        acknowledgeRemotionLicense={true}
+                        ref={playerRef}
+                        component={VideoGenerate}
+                        durationInFrames={video?.video?.metadata.audio_duration ? Math.ceil(video?.video?.metadata.audio_duration * 60) : 1}
+                        fps={60}
+                        compositionWidth={dimensions.width}
+                        compositionHeight={dimensions.height}
+                        overflowVisible
+                        inputProps={{
+                            data: video,
+                            showWatermark,
+                            logo: logoData,
+                            muteBackgroundMusic,
+                            onSubtitleStyleChange,
+                            onAvatarHeightRatioChange,
+                            onAvatarPositionChange,
+                            onMediaPositionChange,
+                            onLogoPositionChange,
+                            onLogoSizeChange,
+                        }}
+                        numberOfSharedAudioTags={12}
+                        controls
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            transition: 'all 0.3s ease-in-out',
+                        }}
+                        autoPlay={false}
+                        renderLoading={() => null}
+                    />
+                </div>
             </div>
             {showReview && video?.id && !hasExistingReview && (
                 <ReviewFloating

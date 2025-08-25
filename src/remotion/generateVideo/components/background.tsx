@@ -104,7 +104,7 @@ export const MediaBackground = ({
 
                     element = (
                         <Sequence key={index} premountFor={120} from={currentFrame} durationInFrames={duration}>
-                            <AbsoluteFill>
+                            <AbsoluteFill style={{ overflow: 'hidden' }}>
                                 <Img
                                     src={file}
                                     style={{
@@ -137,7 +137,7 @@ export const MediaBackground = ({
                     const file = media.video.link;
                     element = (
                         <Sequence key={index} premountFor={120} from={currentFrame} durationInFrames={duration}>
-                            <AbsoluteFill>
+                            <AbsoluteFill style={{ overflow: 'hidden' }}>
                                 <OffthreadVideo
                                     src={file}
                                     startFrom={media.startAt*60 || 0}
