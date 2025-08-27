@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     
     const params: ExportVideoRequest = await req.json();
     
-    console.log(`POST /api/public/v1/export/start by space: ${space.id}`);
+    console.trace(`POST /api/public/v1/export/start by space: ${space.id}`);
 
     // Validation des paramètres
     if (!params.video_id) {

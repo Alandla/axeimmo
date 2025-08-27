@@ -60,8 +60,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    console.log(`POST /api/public/v1/generation/start by space: ${space.id}`);
-    console.log('params', params);
+    console.trace(`POST /api/public/v1/generation/start by space: ${space.id}`);
+    console.trace('params', params);
 
     // 1. Initialisation des variables
     let finalScript = params.script || '';
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
 
     // 2. Gestion du script
     if (!finalScript && params.prompt && !params.voice_url && !params.avatar_url) {
-      console.log("Generating script from prompt...");
+      console.trace("Generating script from prompt...");
       try {
         // Génération du script avec extraction d'URLs et d'images (version directe sans streaming)
         const result = await generateVideoScriptDirect({
@@ -255,7 +255,7 @@ export async function POST(req: NextRequest) {
       deductCredits: true // API publique : déduire les crédits du space
     };
 
-    console.log('options', options);
+    console.trace('options', options);
 
     // 8. Démarrage de la tâche Trigger
     const handle = await tasks.trigger("generate-video", options, {
