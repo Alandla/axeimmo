@@ -257,13 +257,6 @@ export async function POST(req: NextRequest) {
 
     console.log('options', options);
 
-    return NextResponse.json({
-      options: options
-    }, { 
-      status: 200,
-      headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
-    });
-
     // 8. Démarrage de la tâche Trigger
     const handle = await tasks.trigger("generate-video", options, {
       tags: [`space:${space.id}`, `api-request`]
