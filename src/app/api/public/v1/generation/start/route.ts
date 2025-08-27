@@ -61,6 +61,7 @@ export async function POST(req: NextRequest) {
     }
 
     console.log(`POST /api/public/v1/generation/start by space: ${space.id}`);
+    console.log('params', params);
 
     // 1. Initialisation des variables
     let finalScript = params.script || '';
@@ -253,6 +254,15 @@ export async function POST(req: NextRequest) {
       saveMediaToSpace: params.save_media_to_space !== false,
       deductCredits: true // API publique : déduire les crédits du space
     };
+
+    console.log('options', options);
+
+    return NextResponse.json({
+      options: options
+    }, { 
+      status: 200,
+      headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
+    });
 
     // 8. Démarrage de la tâche Trigger
     const handle = await tasks.trigger("generate-video", options, {

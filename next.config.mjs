@@ -12,12 +12,18 @@ const nextConfig = {
       'media.hoox.video'
     ],
   },
-  // Configuration pour supprimer les console.log en production
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
-  }
+
+  webpack: (config, { isServer }) => {
+    if (!isServer && process.env.NODE_ENV === 'production') {
+      // Supprime les console.log uniquement côté client en production
+      config.optimization.minimizer.forEach((minimizer) => {
+        if (minimizer.constructor.name === 'TerserPlugin') {
+          minimizer.options.terserOptions.compress.drop_console = true;
+        }
+      });
+    }
+    return config;
+  },
 };
  
 export default withNextIntl(nextConfig);
