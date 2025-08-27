@@ -3,6 +3,9 @@ import { calculateElevenLabsCost } from './cost';
 
 const MODEL = "eleven_multilingual_v2"
 const MODEL_TURBO = "eleven_flash_v2_5"
+const MODEL_V3 = "eleven_v3"
+
+
 
 // Check if text contains numbers or m²
 const shouldUseClassicModel = (text: string): boolean => {
@@ -14,13 +17,17 @@ const shouldUseClassicModel = (text: string): boolean => {
     return hasNumbers || hasSquareMeters;
 };
 
-export const createAudioTTS = async (voiceId: string, text: string, voiceSettings?: { stability: number, similarity_boost: number }, turbo: boolean = true, previousText?: string, nextText?: string ): Promise<{ data: any, cost: number }> => {
+export const createAudioTTS = async (voiceId: string, text: string, voiceSettings?: { stability: number, similarity_boost: number }, turbo: boolean = true, previousText?: string, nextText?: string, useElevenLabsV3: boolean = false ): Promise<{ data: any, cost: number }> => {
     try {
         // Determine which model to use
-        let selectedModel = MODEL; // Default to classic model
+        let selectedModel: string = MODEL; // Default to classic model
         let isUsingTurbo = false;
         
-        if (turbo) {
+        if (useElevenLabsV3) {
+            // Use v3 model exclusively when enabled
+            selectedModel = MODEL_V3;
+            isUsingTurbo = false; // v3 has its own pricing
+        } else if (turbo) {
             // Only check for numbers/m² if turbo is requested (use original text for model selection)
             const useClassicModel = shouldUseClassicModel(text);
             selectedModel = useClassicModel ? MODEL : MODEL_TURBO;

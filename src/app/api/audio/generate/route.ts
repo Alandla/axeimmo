@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Voice not found" }, { status: 404 });
         }
 
-        const audioResult = await createTextToSpeech(voice, text);
+        const audioResult = await createTextToSpeech(voice, text, true);
 
         const data = {
             audioUrl: audioResult.audioUrl,

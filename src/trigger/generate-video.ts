@@ -67,7 +67,7 @@ export const generateVideoTask = task({
     const avatarFile = payload.files.find(f => f.usage === 'avatar')
     let extractedMedias: IMedia[] = [];
 
-    const isDevelopment = ctx.environment.type === "DEVELOPMENT"
+    const isDevelopment = ctx.environment.type === "PRODUCTION"
 
     let videoStyle: string | undefined;
     let spacePlan: string = PlanName.FREE;
@@ -516,25 +516,52 @@ export const generateVideoTask = task({
       
       const rawSentences = [];
       
-      for (let i = 0; i < processedSentencesCut.length; i++) {
-        const currentSentence = processedSentencesCut[i].trim();
+      // Temporary variables for testing ElevenLabs v3
+      const useElevenLabsV3 = true;
+      const MIN_CHARS_V3 = 250;
+      
+      // Check if we should use v3 logic (250 characters minimum)
+      if (useElevenLabsV3) {
+        // v3 logic: combine sentences until we reach at least 250 characters
+        let currentCombined = '';
         
-        // Check if it's the last sentence
-        if (i === processedSentencesCut.length - 1) {
-          rawSentences.push(currentSentence);
-          continue;
+        for (let i = 0; i < processedSentencesCut.length; i++) {
+          const currentSentence = processedSentencesCut[i].trim();
+          
+          if (currentCombined.length === 0) {
+            currentCombined = currentSentence;
+          } else {
+            currentCombined += ' ' + currentSentence;
+          }
+          
+          // Check if we have enough characters or if it's the last sentence
+          if (currentCombined.length >= MIN_CHARS_V3 || i === processedSentencesCut.length - 1) {
+            rawSentences.push(currentCombined);
+            currentCombined = '';
+          }
         }
-        
-        // Count the words of the next sentence
-        const nextSentence = processedSentencesCut[i + 1].trim();
-        const nextSentenceWordCount = nextSentence.split(/\s+/).length;
-        
-        if (nextSentenceWordCount < 4) {
-          // Combine with the next sentence
-          rawSentences.push(currentSentence + ' ' + nextSentence);
-          i++; // Skip the next sentence
-        } else {
-          rawSentences.push(currentSentence);
+      } else {
+        // Original logic for backwards compatibility
+        for (let i = 0; i < processedSentencesCut.length; i++) {
+          const currentSentence = processedSentencesCut[i].trim();
+          
+          // Check if it's the last sentence
+          if (i === processedSentencesCut.length - 1) {
+            rawSentences.push(currentSentence);
+            continue;
+          }
+          
+          // Count the words of the next sentence
+          const nextSentence = processedSentencesCut[i + 1].trim();
+          const nextSentenceWordCount = nextSentence.split(/\s+/).length;
+          
+          if (nextSentenceWordCount < 4) {
+            // Combine with the next sentence
+            rawSentences.push(currentSentence + ' ' + nextSentence);
+            i++; // Skip the next sentence
+          } else {
+            rawSentences.push(currentSentence);
+          }
         }
       }
 
@@ -552,7 +579,10 @@ export const generateVideoTask = task({
             const audioResult = await createTextToSpeech(
               payload.voice,
               text.trim(),
-              true
+              true,
+              undefined,
+              undefined,
+              useElevenLabsV3
             );
             
             // Add cost to total
@@ -576,7 +606,10 @@ export const generateVideoTask = task({
               const retryResult = await createTextToSpeech(
                 payload.voice,
                 text.trim(),
-                true
+                true,
+                undefined,
+                undefined,
+                useElevenLabsV3
               );
               
               // Add cost to total
