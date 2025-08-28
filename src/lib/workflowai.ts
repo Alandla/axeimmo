@@ -187,6 +187,19 @@ export interface VideoZoomInsertionOutput {
   }[]
 }
 
+export interface TextVoiceEnhancementInput {
+  text?: string
+}
+
+export interface TextVoiceEnhancementOutput {
+  enhancements?: {
+    type?: ("tag" | "caps" | "ellipsis")
+    value?: string
+    word?: string
+    occurrence?: number
+  }[]
+}
+
 const videoScriptKeywordExtraction = workflowAI.agent<VideoScriptKeywordExtractionInput, VideoScriptKeywordExtractionOutput>({
   id: "video-script-keyword-extraction",
   schemaId: 2,
@@ -268,6 +281,13 @@ const videoZoomInsertion = workflowAI.agent<VideoZoomInsertionInput, VideoZoomIn
   id: "video-zoom-insertion",
   schemaId: 2,
   version: "dev",
+  useCache: "auto"
+})
+
+const textVoiceEnhancement = workflowAI.agent<TextVoiceEnhancementInput, TextVoiceEnhancementOutput>({
+  id: "text-voice-enhancement",
+  schemaId: 1,
+  version: "production",
   useCache: "auto"
 })
 
@@ -672,6 +692,34 @@ export async function videoZoomInsertionRun(
     }
   } catch (error) {
     console.error('Failed to run video zoom insertion:', error);
+    throw error;
+  }
+}
+
+/**
+ * Améliore un texte pour l'optimiser pour la génération vocale
+ * @param text Le texte à améliorer
+ * @returns Les améliorations suggérées et le coût de l'opération
+ */
+export async function textVoiceEnhancementRun(
+  text: string
+): Promise<{
+  cost: number,
+  enhancements: { type?: string, value?: string, word?: string, occurrence?: number }[]
+}> {
+  const input: TextVoiceEnhancementInput = {
+    text
+  }
+
+  try {
+    const response = await textVoiceEnhancement(input) as WorkflowAIResponse<TextVoiceEnhancementOutput>;
+    
+    return {
+      cost: response.data.cost_usd,
+      enhancements: response.output.enhancements || []
+    }
+  } catch (error) {
+    console.error('Failed to run text voice enhancement:', error);
     throw error;
   }
 }

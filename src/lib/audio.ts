@@ -27,7 +27,8 @@ export async function regenerateAudioForSequence(
   const res = await basicApiCall('/audio/generate', {
     text: completeText,
     voiceId: audio?.voiceId,
-    spaceId: video?.spaceId
+    spaceId: video?.spaceId,
+    emotionEnhancement: audio?.emotionEnhancement || false
   });
 
   return res as RegenerateAudioResult;

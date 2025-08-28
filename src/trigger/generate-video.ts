@@ -29,7 +29,7 @@ import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
 import { getMostFrequentString } from "../lib/utils";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
-import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, imageAnalysisRun, videoZoomInsertionRun } from "../lib/workflowai";
+import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, imageAnalysisRun, videoZoomInsertionRun, textVoiceEnhancementRun } from "../lib/workflowai";
 import { generateKlingAnimation } from "../service/kling-animation.service";
 import { PlanName } from "../types/enums";
 import { checkKlingRequestStatus, getKlingRequestResult, KlingGenerationMode } from "../lib/fal";
@@ -47,6 +47,7 @@ interface GenerateVideoPayload {
   webSearch: boolean
   animateImages: boolean
   animationMode: KlingGenerationMode
+  emotionEnhancement: boolean
   format?: 'vertical' | 'square' | 'ads' // Format optionnel pour la vidéo
   webhookUrl?: string
   useSpaceMedia?: boolean // Par défaut true - utiliser les médias du space
@@ -503,40 +504,104 @@ export const generateVideoTask = task({
           .replace(/💬/g, ''); // Speech balloon
       };
 
-      const sentencesCut = removeEmojis(payload.script)
-        .replace(/\.\.\./g, '___ELLIPSIS___') // Remplace temporary points of ellipsis
-        .split(/(?<=[.!?])\s+(?=[A-Z])/g)
-        .map(sentence => sentence.trim())
-        .filter(sentence => sentence.length > 0);
+      let processedScript = removeEmojis(payload.script);
+      let enhancedScript = processedScript; // Keep a copy for TTS generation
 
-      // Restore ellipsis
-      const processedSentencesCut = sentencesCut.map(sentence => 
-        sentence.replace(/___ELLIPSIS___/g, '...')
-      );
-      
-      const rawSentences = [];
-      
-      for (let i = 0; i < processedSentencesCut.length; i++) {
-        const currentSentence = processedSentencesCut[i].trim();
+      // Apply emotion enhancement if enabled and voice is ElevenLabs
+      if (payload.emotionEnhancement && payload.voice.mode !== 'minimax') {
+        logger.log(`[EMOTION] Starting emotion enhancement for script...`);
         
-        // Check if it's the last sentence
-        if (i === processedSentencesCut.length - 1) {
-          rawSentences.push(currentSentence);
-          continue;
-        }
-        
-        // Count the words of the next sentence
-        const nextSentence = processedSentencesCut[i + 1].trim();
-        const nextSentenceWordCount = nextSentence.split(/\s+/).length;
-        
-        if (nextSentenceWordCount < 4) {
-          // Combine with the next sentence
-          rawSentences.push(currentSentence + ' ' + nextSentence);
-          i++; // Skip the next sentence
-        } else {
-          rawSentences.push(currentSentence);
+        try {
+          const { enhancements, cost: enhancementCost } = await textVoiceEnhancementRun(processedScript);
+          cost += enhancementCost;
+          
+          logger.log(`[EMOTION] Enhancement completed with ${enhancements.length} modifications`, { 
+            cost: enhancementCost,
+            enhancements: enhancements.slice(0, 5) // Log first 5 for debug
+          });
+
+          // Apply enhancements to the enhanced script copy
+          if (enhancements.length > 0) {
+            enhancedScript = applyVoiceEnhancements(processedScript, enhancements);
+            logger.log(`[EMOTION] Script enhanced successfully`, { enhancedScript });
+          }
+        } catch (error) {
+          logger.error(`[EMOTION] Error enhancing script:`, {
+            error: error instanceof Error ? error.message : String(error)
+          });
+          // Continue with original script if enhancement fails
         }
       }
+
+      // Helper function to split and process script into sentences
+      const splitScriptIntoSentences = (script: string): string[] => {
+        return script
+          .replace(/\.\.\./g, '___ELLIPSIS___') // Temporarily replace ellipsis
+          .split(/(?<=[.!?])\s+(?=[A-Z])/g)
+          .map(sentence => sentence.trim())
+          .filter(sentence => sentence.length > 0)
+          .map(sentence => sentence.replace(/___ELLIPSIS___/g, '...')); // Restore ellipsis
+      };
+
+      // Split both scripts using the same logic
+      const processedSentencesCut = splitScriptIntoSentences(processedScript);
+      const enhancedSentencesCut = splitScriptIntoSentences(enhancedScript);
+      
+      // Helper function to create sentence chunks with both original and enhanced versions
+      const createSentenceChunks = (
+        originalSentences: string[], 
+        enhancedSentences: string[], 
+        useEnhancement: boolean
+      ): { text: string, textEnhanced?: string }[] => {
+        const chunks: { text: string, textEnhanced?: string }[] = [];
+        const MIN_CHARS_ENHANCEMENT = 250;
+        
+        if (useEnhancement) {
+          // Enhanced chunking: combine until we reach 250+ characters
+          let currentOriginal = '';
+          let currentEnhanced = '';
+          
+          for (let i = 0; i < originalSentences.length; i++) {
+            const originalSentence = originalSentences[i].trim();
+            const enhancedSentence = enhancedSentences[i]?.trim() || originalSentence;
+            
+            currentOriginal = currentOriginal ? `${currentOriginal} ${originalSentence}` : originalSentence;
+            currentEnhanced = currentEnhanced ? `${currentEnhanced} ${enhancedSentence}` : enhancedSentence;
+            
+            if (currentOriginal.length >= MIN_CHARS_ENHANCEMENT || i === originalSentences.length - 1) {
+              chunks.push({ text: currentOriginal, textEnhanced: currentEnhanced });
+              currentOriginal = '';
+              currentEnhanced = '';
+            }
+          }
+        } else {
+          // Original logic: combine short sentences
+          for (let i = 0; i < originalSentences.length; i++) {
+            const currentSentence = originalSentences[i].trim();
+            
+            if (i === originalSentences.length - 1) {
+              chunks.push({ text: currentSentence });
+              continue;
+            }
+            
+            const nextSentence = originalSentences[i + 1].trim();
+            const nextSentenceWordCount = nextSentence.split(/\s+/).length;
+            
+            if (nextSentenceWordCount < 4) {
+              chunks.push({ text: `${currentSentence} ${nextSentence}` });
+              i++; // Skip next sentence
+            } else {
+              chunks.push({ text: currentSentence });
+            }
+          }
+        }
+        
+        return chunks;
+      };
+
+      // Use emotion enhancement chunking logic if emotion enhancement is enabled for ElevenLabs voices
+      const useVoiceEnhancement = payload.emotionEnhancement && payload.voice.mode !== 'minimax';
+      const rawSentences = createSentenceChunks(processedSentencesCut, enhancedSentencesCut, useVoiceEnhancement);
 
       logger.log('Raw sentences', { rawSentences })
 
@@ -546,13 +611,19 @@ export const generateVideoTask = task({
       for (let i = 0; i < rawSentences.length; i += 15) {
         const batch = rawSentences.slice(i, Math.min(i + 15, rawSentences.length));
         
-        const batchPromises = batch.map(async (text, batchIndex) => {
+        const batchPromises = batch.map(async (sentenceObj, batchIndex) => {
           const globalIndex = i + batchIndex; // Global index to maintain order
           try {
+            // Use enhanced text for TTS if available, otherwise use original
+            const textForTTS = useVoiceEnhancement && sentenceObj.textEnhanced ? sentenceObj.textEnhanced : sentenceObj.text;
+            
             const audioResult = await createTextToSpeech(
               payload.voice,
-              text.trim(),
-              true
+              textForTTS.trim(),
+              true,
+              undefined,
+              undefined,
+              useVoiceEnhancement
             );
             
             // Add cost to total
@@ -566,17 +637,21 @@ export const generateVideoTask = task({
             
             return {
               index: globalIndex,
-              text: text.trim(),
+              text: sentenceObj.text.trim(), // Original text for transcription
               audioUrl: audioResult.audioUrl
             };
           } catch (error: any) {
             if (error.response?.status === 422) {
               await wait.for({ seconds: 2 });
+              const textForTTS = useVoiceEnhancement && sentenceObj.textEnhanced ? sentenceObj.textEnhanced : sentenceObj.text;
 
               const retryResult = await createTextToSpeech(
                 payload.voice,
-                text.trim(),
-                true
+                textForTTS.trim(),
+                true,
+                undefined,
+                undefined,
+                useVoiceEnhancement
               );
               
               // Add cost to total
@@ -590,7 +665,7 @@ export const generateVideoTask = task({
 
               return {
                 index: globalIndex,
-                text: text.trim(),
+                text: sentenceObj.text.trim(), // Original text for transcription
                 audioUrl: retryResult.audioUrl
               };
             }
@@ -703,7 +778,7 @@ export const generateVideoTask = task({
 
     let { sequences, rawSequences, videoMetadata } = splitSentences(sentences);
     const lightTranscription = createLightTranscription(sequences);
-    const voices = extractVoiceSegments(sequences, sentences, payload.voice ? payload.voice.id : undefined);
+    const voices = extractVoiceSegments(sequences, sentences, payload.voice ? payload.voice.id : undefined, payload.emotionEnhancement);
 
     logger.info('Sequences', { sequences })
     logger.info('Light transcription', { lightTranscription })
@@ -1873,13 +1948,14 @@ export const generateVideoTask = task({
   },
 });
 
-function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], voiceId?: string): {
+function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], voiceId?: string, emotionEnhancement?: boolean): {
   index: number;
   url: string;
   start: number;
   end: number;
   durationInFrames: number;
   voiceId?: string;
+  emotionEnhancement?: boolean;
 }[] {
   const voiceSegments = new Map<number, {
     start: number;
@@ -1887,6 +1963,7 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
     durationInFrames: number;
     sequences: ISequence[];
     voiceId?: string;
+    emotionEnhancement?: boolean;
   }>();
 
   // Grouper les séquences par audioIndex
@@ -1897,14 +1974,16 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
         end: sequence.end,
         durationInFrames: sequence.durationInFrames || 0,
         sequences: [sequence],
-        voiceId: voiceId || undefined
+        voiceId: voiceId || undefined,
+        emotionEnhancement: emotionEnhancement || false
       });
     } else {
       const current = voiceSegments.get(sequence.audioIndex)!;
       current.end = sequence.end;
       current.durationInFrames += sequence.durationInFrames || 0;
       current.sequences.push(sequence);
-      current.voiceId = voiceId || undefined
+      current.voiceId = voiceId || undefined;
+      current.emotionEnhancement = emotionEnhancement || false
     }
   });
 
@@ -1915,7 +1994,8 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
     start: data.start,
     end: data.end,
     durationInFrames: data.durationInFrames,
-    voiceId
+    voiceId,
+    emotionEnhancement: data.emotionEnhancement
   }));
 
   // Si aucun résultat, retourner au moins un segment par défaut
@@ -1925,7 +2005,8 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
     start: 0,
     end: 0,
     durationInFrames: 0,
-    voiceId
+    voiceId,
+    emotionEnhancement: emotionEnhancement || false
   }];
 }
 
@@ -1954,4 +2035,76 @@ async function processBatches<T, R>(
   }
   
   return results;
+}
+
+/**
+ * Apply voice enhancements to the script
+ * @param script Original script
+ * @param enhancements Array of enhancements to apply
+ * @returns Enhanced script
+ */
+function applyVoiceEnhancements(
+  script: string,
+  enhancements: { type?: string, value?: string, word?: string, occurrence?: number }[]
+): string {
+  let enhancedScript = script;
+
+  // Sort enhancements by occurrence to apply them in order
+  const sortedEnhancements = enhancements.sort((a, b) => (a.occurrence || 0) - (b.occurrence || 0));
+
+  for (const enhancement of sortedEnhancements) {
+    if (!enhancement.word || !enhancement.type) continue;
+    
+    // For 'caps' and 'ellipsis' types, value is not required
+    if (enhancement.type === 'tag' && !enhancement.value) continue;
+
+    const wordToReplace = enhancement.word;
+    const enhancementType = enhancement.type;
+    const enhancementValue = enhancement.value;
+
+    // Find the word in the script (case insensitive)
+    const regex = new RegExp(`\\b${wordToReplace.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
+    const matches = Array.from(enhancedScript.matchAll(regex));
+
+    if (matches.length > 0) {
+      // Apply enhancement based on occurrence (1-indexed)
+      const targetOccurrence = enhancement.occurrence || 1;
+      const targetIndex = targetOccurrence - 1;
+
+      if (targetIndex < matches.length && matches[targetIndex]) {
+        const match = matches[targetIndex];
+        const matchIndex = match.index!;
+        const originalWord = match[0];
+
+        let enhancedWord = originalWord;
+        
+        switch (enhancementType) {
+          case 'tag':
+            // Add tag before the word (no space)
+            // Ensure the tag value is wrapped in brackets if not already
+            if (enhancementValue) {
+              const tagValue = enhancementValue.startsWith('[') ? enhancementValue : `[${enhancementValue}]`;
+              enhancedWord = `${tagValue}${originalWord}`;
+            }
+            break;
+          case 'caps':
+            // Convert word to uppercase
+            enhancedWord = originalWord.toUpperCase();
+            break;
+          case 'ellipsis':
+            // Add ellipsis after the word
+            enhancedWord = `${originalWord}...`;
+            break;
+        }
+
+        // Replace the specific occurrence
+        enhancedScript = 
+          enhancedScript.substring(0, matchIndex) + 
+          enhancedWord + 
+          enhancedScript.substring(matchIndex + originalWord.length);
+      }
+    }
+  }
+
+  return enhancedScript;
 }

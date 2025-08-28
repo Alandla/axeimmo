@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const params = await req.json();
 
-    const { text, voiceId, spaceId } = params;
+    const { text, voiceId, spaceId, emotionEnhancement } = params;
 
     console.log("text: ", text);
     console.log("voiceId: ", voiceId);
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Voice not found" }, { status: 404 });
         }
 
-        const audioResult = await createTextToSpeech(voice, text);
+        const audioResult = await createTextToSpeech(voice, text, true, undefined, undefined, emotionEnhancement || false);
 
         const data = {
             audioUrl: audioResult.audioUrl,

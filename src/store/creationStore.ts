@@ -21,6 +21,7 @@ type CreationStore = {
   extractedImagesMedia: IMedia[]
   animateImages: boolean
   animationMode: KlingGenerationMode
+  emotionEnhancement: boolean
   setScript: (script: string) => void
   setFiles: (files: FileToUpload[]) => void,
   setTotalCost: (cost: number) => void
@@ -38,6 +39,7 @@ type CreationStore = {
   addExtractedImagesMedia: (media: IMedia[]) => void
   setAnimateImages: (animate: boolean) => void
   setAnimationMode: (mode: KlingGenerationMode) => void
+  setEmotionEnhancement: (enabled: boolean) => void
 }
 
 export const useCreationStore = create<CreationStore>((set) => ({
@@ -54,6 +56,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   extractedImagesMedia: [],
   animateImages: false,
   animationMode: KlingGenerationMode.STANDARD,
+  emotionEnhancement: false,
   setScript: (script) => set({ script }),
   setFiles: (files) => set({ files }),
   setTotalCost: (cost) => set({ totalCost: cost }),
@@ -71,5 +74,6 @@ export const useCreationStore = create<CreationStore>((set) => ({
   addExtractedImagesMedia: (media) => set((state) => ({ extractedImagesMedia: [...state.extractedImagesMedia, ...media] })),
   setAnimateImages: (animate) => set({ animateImages: animate }),
   setAnimationMode: (mode) => set({ animationMode: mode }),
+  setEmotionEnhancement: (enabled) => set({ emotionEnhancement: enabled }),
 }))
 

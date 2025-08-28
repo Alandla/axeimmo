@@ -668,6 +668,7 @@
       "search": "Search a voice..",
       "listen": "Listen",
       "pause": "Pause",
+      "emotion-enhancement-description": "Enable emotion enhancement",
       "toast": {
         "title-error": "Paid plan required",
         "description-premium-error": "This voice is only available in paid plans. You need the {plan} plan to access it."
