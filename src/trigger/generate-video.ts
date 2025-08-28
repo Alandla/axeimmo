@@ -48,7 +48,7 @@ interface GenerateVideoPayload {
   animateImages: boolean
   animationMode: KlingGenerationMode
   emotionEnhancement: boolean
-  format?: 'vertical' | 'square' | 'ads' // Format optionnel pour la vidéo
+  format?: 'vertical' | 'square' | 'ads' | 'horizontal' // Format optionnel pour la vidéo
   webhookUrl?: string
   useSpaceMedia?: boolean // Par défaut true - utiliser les médias du space
   saveMediaToSpace?: boolean // Par défaut true - sauvegarder les médias dans le space
@@ -903,7 +903,9 @@ export const generateVideoTask = task({
         mediaCount += 4;
       }
 
-      mediaResults = await searchMediaForKeywords(keywords, mediaSource, mediaCount);
+      // Déterminer l'orientation préférée basée sur le format vidéo
+      const preferVertical = payload.format !== 'horizontal';
+      mediaResults = await searchMediaForKeywords(keywords, mediaSource, mediaCount, preferVertical);
 
       logger.log(`[MEDIA] Media search completed with ${mediaResults.length} medias for ${Array.from(new Set(mediaResults.map(r => r.keyword))).length} unique keywords`);
       
@@ -1758,7 +1760,7 @@ export const generateVideoTask = task({
     const updatedSpace : ISpace | undefined = await updateSpaceLastUsed(payload.spaceId, payload.voice ? payload.voice.id : undefined, payload.avatar ? payload.avatar.id : "999")
 
     let subtitle = subtitles[1]
-    let videoFormat: "vertical" | "ads" | "square" = payload.format || "vertical"; // Utiliser le format fourni ou par défaut
+    let videoFormat: "vertical" | "ads" | "square" | "horizontal" = payload.format || "vertical"; // Utiliser le format fourni ou par défaut
     
     if (updatedSpace && updatedSpace.lastUsed?.subtitles) {
       const mostFrequent = getMostFrequentString(updatedSpace.lastUsed.subtitles)
@@ -1778,8 +1780,8 @@ export const generateVideoTask = task({
     // Si aucun format n'est fourni via l'API, utiliser les préférences du space
     if (!payload.format && updatedSpace && updatedSpace.lastUsed?.formats && updatedSpace.lastUsed.formats.length > 0) {
       const mostFrequentFormat = getMostFrequentString(updatedSpace.lastUsed.formats);
-      if (mostFrequentFormat && ['vertical', 'ads', 'square'].includes(mostFrequentFormat)) {
-        videoFormat = mostFrequentFormat as "vertical" | "ads" | "square";
+      if (mostFrequentFormat && ['vertical', 'ads', 'square', 'horizontal'].includes(mostFrequentFormat)) {
+        videoFormat = mostFrequentFormat as "vertical" | "ads" | "square" | "horizontal";
       }
     }
 

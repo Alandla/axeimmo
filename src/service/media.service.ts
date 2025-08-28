@@ -9,9 +9,10 @@ import { IMedia } from "../types/video";
  * @param keywords Objet avec un tableau de mots clés { keywords: [string, string, ...] }
  * @param mediaSource Source des médias (PEXELS ou STORYBLOCKS)
  * @param mediaCount Nombre de médias à récupérer
+ * @param preferVertical Préfère les vidéos verticales (true par défaut)
  * @returns Liste de médias avec leurs mots clés associés
  */
-export const searchMediaForKeywords = async (keywords: any, mediaSource: string, mediaCount: number) => {
+export const searchMediaForKeywords = async (keywords: any, mediaSource: string, mediaCount: number, preferVertical: boolean = true) => {
 
   const searchPromises = keywords.map(async (keyword: string) => {
     if (!keyword) return [];
@@ -21,7 +22,7 @@ export const searchMediaForKeywords = async (keywords: any, mediaSource: string,
       // Récupérer 6 vidéos pour ce mot clé
       let mediasResult: any[] = [];
       if (mediaSource === "PEXELS") {
-        mediasResult = await getPexelsVideosMedia(keyword, mediaCount, 1);
+        mediasResult = await getPexelsVideosMedia(keyword, mediaCount, 1, preferVertical);
       } else if (mediaSource === "STORYBLOCKS") {
         mediasResult = await getStoryblocksVideosMedia(keyword, mediaCount, 1);
       }

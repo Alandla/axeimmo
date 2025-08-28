@@ -292,7 +292,8 @@
       "video-format": {
         "vertical": "Vertical",
         "ads": "Publicité",
-        "square": "Carré"
+        "square": "Carré",
+        "horizontal": "Horizontal"
       },
       "select-avatar": "Sélectionner un avatar",
       "no-avatar": "Aucun avatar",

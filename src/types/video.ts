@@ -117,7 +117,7 @@ export interface IVideo {
     thumbnail: string;
     subtitle: any;
     keywords?: string[];
-    format?: 'vertical' | 'ads' | 'square';
+    format?: VideoFormat;
     audio?: {
       voices: {
         url: string;
@@ -154,7 +154,7 @@ export interface IVideo {
   updatedAt?: Date;
 }
 
-export type VideoFormat = 'vertical' | 'ads' | 'square';
+export type VideoFormat = 'vertical' | 'ads' | 'square' | 'horizontal';
 
 export interface VideoFormatOption {
   value: VideoFormat;
@@ -166,7 +166,8 @@ export interface VideoFormatOption {
 export const VIDEO_FORMATS: VideoFormatOption[] = [
   { value: 'vertical', ratio: '9:16', width: 1080, height: 1920 },
   { value: 'ads', ratio: '4:5', width: 1080, height: 1350 },
-  { value: 'square', ratio: '1:1', width: 1080, height: 1080 }
+  { value: 'square', ratio: '1:1', width: 1080, height: 1080 },
+  { value: 'horizontal', ratio: '16:9', width: 1920, height: 1080 }
 ];
 
 export const getVideoDimensions = (format: VideoFormat = 'vertical'): { width: number; height: number } => {

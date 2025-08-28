@@ -380,7 +380,8 @@
       "video-format": {
         "vertical": "Vertical",
         "ads": "Ads",
-        "square": "Square"
+        "square": "Square",
+        "horizontal": "Horizontal"
       },
       "select-avatar": "Select avatar",
       "no-avatar": "No avatar",

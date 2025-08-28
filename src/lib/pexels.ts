@@ -1,15 +1,20 @@
 import { logger } from '@trigger.dev/sdk/v3';
 import { createClient, Photo, Video } from 'pexels';
 
-export const getVideoPexels = async (keyword: string, nb: number, page: number) => {
+export const getVideoPexels = async (keyword: string, nb: number, page: number, preferVertical: boolean = true) => {
     const client = createClient(process.env.PEXELS_API_KEY!);
-    const videoResult = client.videos.search(
-        { 
-            query: keyword,
-            per_page: nb,
-            page: page
-        }
-    );
+    const searchParams: any = { 
+        query: keyword,
+        per_page: nb,
+        page: page
+    };
+    
+    // Ajouter l'orientation si on ne préfère pas les vidéos verticales (donc on veut horizontales)
+    if (!preferVertical) {
+        searchParams.orientation = 'landscape';
+    }
+    
+    const videoResult = client.videos.search(searchParams);
     return videoResult;
 }
 
@@ -25,8 +30,8 @@ export const getImagePexels = async (keyword: string, nb: number, page: number) 
     return imageResult;
 }
 
-export const getPexelsVideosMedia = async (keyword: string, number: number, page: number) => {
-    const videos = await getVideoPexels(keyword, number, page);
+export const getPexelsVideosMedia = async (keyword: string, number: number, page: number, preferVertical: boolean = true) => {
+    const videos = await getVideoPexels(keyword, number, page, preferVertical);
     if ('videos' in videos) {
         const videoBestQuality = getVideosBestQuality(videos.videos);
         return pexelVideoToMedia(videoBestQuality);

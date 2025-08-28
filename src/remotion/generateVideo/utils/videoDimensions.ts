@@ -1,5 +1,5 @@
 // Types de format vidéo
-export type VideoFormat = 'vertical' | 'ads' | 'square';
+export type VideoFormat = 'vertical' | 'ads' | 'square' | 'horizontal';
 
 // Structure pour les options de format vidéo
 interface VideoFormatOption {
@@ -14,7 +14,8 @@ interface VideoFormatOption {
 const VIDEO_FORMATS: VideoFormatOption[] = [
   { value: 'vertical', ratio: '9:16', width: 1080, height: 1920, effectiveHeight: 1750 },
   { value: 'ads', ratio: '4:5', width: 1080, height: 1350, effectiveHeight: 1230 }, // 1350 * (1750/1920)
-  { value: 'square', ratio: '1:1', width: 1080, height: 1080, effectiveHeight: 985 } // 1080 * (1750/1920)
+  { value: 'square', ratio: '1:1', width: 1080, height: 1080, effectiveHeight: 985 }, // 1080 * (1750/1920)
+  { value: 'horizontal', ratio: '16:9', width: 1920, height: 1080, effectiveHeight: 985 } // 1080 * (1750/1920)
 ];
 
 /**

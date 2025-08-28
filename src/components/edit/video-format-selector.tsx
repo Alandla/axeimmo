@@ -30,6 +30,10 @@ const getFormatIcon = (format: VideoFormat) => {
       return (
         <div className="h-3.5 w-3.5 border border-current rounded-sm flex-shrink-0" />
       );
+    case 'horizontal':
+      return (
+        <div className="h-2.5 w-4 border border-current rounded-sm flex-shrink-0" />
+      );
     default:
       return null;
   }
