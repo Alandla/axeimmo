@@ -76,6 +76,10 @@ const videoSchema = new mongoose.Schema({
           startOffset: {
             type: Number,
             default: 0
+          },
+          emotionEnhancement: {
+            type: Boolean,
+            default: false
           }
         }],
         volume: Number,

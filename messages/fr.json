@@ -580,6 +580,7 @@
       "search": "Rechercher une voix..",
       "listen": "Écouter",
       "pause": "Pause",
+      "emotion-enhancement-description": "Activer l'amélioration des émotions",
       "toast": {
         "title-error": "Plan payant requis",
         "description-premium-error": "Cette voix n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder."

@@ -127,6 +127,7 @@ export interface IVideo {
         start: number;
         end: number;
         durationInFrames: number;
+        emotionEnhancement?: boolean;
       }[];
       volume: number;
       music?: {

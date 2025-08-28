@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } from './voice-card'
 import { Badge } from "@/src/components/ui/badge"
 import { Check } from "lucide-react"
+import { Switch } from "@/src/components/ui/switch"
 import { useTranslations } from 'next-intl'
 import { Voice } from '../types/voice'
 import { accentFlags, voicesConfig } from '../config/voices.config'
@@ -38,7 +39,7 @@ export function VoicesGridComponent() {
   const [voices, setVoices] = useState<Voice[]>(voicesConfig)
 
   const { activeSpace, lastUsedParameters } = useActiveSpaceStore()
-  const { setSelectedVoice } = useCreationStore()
+  const { setSelectedVoice, emotionEnhancement, setEmotionEnhancement } = useCreationStore()
 
   // Obtenir tous les tags uniques
   const allTags = Array.from(new Set(voices.flatMap(voice => voice.tags)))
@@ -290,6 +291,24 @@ export function VoicesGridComponent() {
           </Badge>
         ))}
       </HorizontalScrollList>
+
+      <div className="flex items-center justify-between mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+        <div className="flex items-center gap-3">
+          <Badge variant="plan" className="bg-pink-50 text-[#FB5688]">
+            Bêta
+          </Badge>
+          <span className="text-sm font-medium">
+            {t('emotion-enhancement-description')}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Switch
+            id="voice-emotion-toggle"
+            checked={emotionEnhancement}
+            onCheckedChange={setEmotionEnhancement}
+          />
+        </div>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
         {currentVoices.map((voice) => (

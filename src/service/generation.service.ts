@@ -9,7 +9,7 @@ const EXCLUDED_SOURCE = "EXCLUDED"
 // Create hooks for components to use
 export const useGenerationProcess = () => {
   const startGeneration = async (userId: string, spaceId: string) => {
-    const { files, script, selectedVoice, selectedLook, setSteps, setLastStep, isWebMode, extractedImagesMedia, animateImages, animationMode } = useCreationStore.getState()
+    const { files, script, selectedVoice, selectedLook, setSteps, setLastStep, isWebMode, extractedImagesMedia, animateImages, animationMode, emotionEnhancement } = useCreationStore.getState()
     
     const updateStepProgress = (stepName: string, progress: number) => {
       const currentSteps = useCreationStore.getState().steps
@@ -46,7 +46,8 @@ export const useGenerationProcess = () => {
       spaceId: spaceId,
       webSearch: isWebMode,
       animateImages: animateImages,
-      animationMode: animationMode
+      animationMode: animationMode,
+      emotionEnhancement: emotionEnhancement
     }
 
     // Start generation task

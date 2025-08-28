@@ -56,7 +56,7 @@ export const createTextToSpeech = async (
   turbo: boolean = true,
   previousText?: string,
   nextText?: string,
-  useElevenLabsV3: boolean = false
+  voiceEnhancement: boolean = false
 ): Promise<{ audioUrl: string, cost: number }> => {
   try {
     // Clean French text for better pronunciation (applies to both services)
@@ -80,7 +80,7 @@ export const createTextToSpeech = async (
         turbo,
         previousText,
         nextText,
-        useElevenLabsV3
+        voiceEnhancement
       );
     }
     

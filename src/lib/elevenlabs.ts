@@ -17,16 +17,14 @@ const shouldUseClassicModel = (text: string): boolean => {
     return hasNumbers || hasSquareMeters;
 };
 
-export const createAudioTTS = async (voiceId: string, text: string, voiceSettings?: { stability: number, similarity_boost: number }, turbo: boolean = true, previousText?: string, nextText?: string, useElevenLabsV3: boolean = false ): Promise<{ data: any, cost: number }> => {
+export const createAudioTTS = async (voiceId: string, text: string, voiceSettings?: { stability: number, similarity_boost: number }, turbo: boolean = true, previousText?: string, nextText?: string, voiceEnhancement: boolean = false ): Promise<{ data: any, cost: number }> => {
     try {
         // Determine which model to use
         let selectedModel: string = MODEL; // Default to classic model
         let isUsingTurbo = false;
         
-        if (useElevenLabsV3) {
-            // Use v3 model exclusively when enabled
+        if (voiceEnhancement) {
             selectedModel = MODEL_V3;
-            isUsingTurbo = false; // v3 has its own pricing
         } else if (turbo) {
             // Only check for numbers/m² if turbo is requested (use original text for model selection)
             const useClassicModel = shouldUseClassicModel(text);
@@ -47,7 +45,7 @@ export const createAudioTTS = async (voiceId: string, text: string, voiceSetting
             text: text,
             model_id: selectedModel,
             voice_settings: {
-                stability: voiceSettings?.stability || 0.5,
+                stability: voiceEnhancement ? 1 : (voiceSettings?.stability || 0.5),
                 similarity_boost: voiceSettings?.similarity_boost || 0.75,
                 use_speaker_boost: true
             },
