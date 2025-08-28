@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, { params }: { params: { jobId: strin
     // Rate limiting
     const { remaining, resetTime } = await applyRateLimit(space.id, apiKey.rateLimitPerMinute);
     
-    console.log(`GET /api/public/v1/export/status/${params.jobId} by space: ${space.id}`);
+    console.info(`GET /api/public/v1/export/status/${params.jobId} by space: ${space.id}`);
 
     // Récupération du run
     const run = await runs.retrieve(params.jobId);

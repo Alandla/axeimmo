@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, { params }: { params: { jobId: strin
     // Rate limiting
     const { remaining, resetTime } = await applyRateLimit(space.id, apiKey.rateLimitPerMinute);
     
-    console.log(`GET /api/public/v1/generation/status/${params.jobId} by space: ${space.id}`);
+    console.info(`GET /api/public/v1/generation/status/${params.jobId} by space: ${space.id}`);
 
     // Récupération du run
     let run;
@@ -30,8 +30,6 @@ export async function GET(req: NextRequest, { params }: { params: { jobId: strin
       // Si c'est une autre erreur, on la relance
       throw retrieveError;
     }
-
-    console.log('run', run);
 
     // Vérification que le job appartient bien au space (via les tags)
     const spaceTags = run.tags?.filter(tag => tag.startsWith('space:')) || [];

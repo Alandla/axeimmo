@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     // Rate limiting
     const { remaining, resetTime } = await applyRateLimit(space.id, apiKey.rateLimitPerMinute);
     
-    console.log(`GET /api/public/v1/resources/avatars by space: ${space.id}`);
+    console.info(`GET /api/public/v1/resources/avatars by space: ${space.id}`);
 
     // Récupérer les paramètres de requête
     const { searchParams } = new URL(req.url);

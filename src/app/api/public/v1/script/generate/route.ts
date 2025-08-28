@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log(`POST /api/public/v1/script/generate by space: ${space.id}, API key: ${apiKey.id}`);
+    console.info(`POST /api/public/v1/script/generate by space: ${space.id}, API key: ${apiKey.id}`);
 
     const { prompt, duration = 60, urls = [], webSearch = false } = params;
 
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       webSearch
     });
 
-    console.log(`Estimated cost: ${estimatedCost} credits for space ${space.id}`);
+    console.info(`Estimated cost: ${estimatedCost} credits for space ${space.id}`);
 
     // Vérifier si l'espace a suffisamment de crédits
     if (space.credits < estimatedCost) {
@@ -73,13 +73,13 @@ export async function POST(req: NextRequest) {
     const realCost = result.cost || 0;
     const finalExtractedImages = result.extractedImages;
 
-    console.log(`Costs - Charged to client: ${estimatedCost} credits, Real cost for us: ${realCost} credits`);
-    console.log(`Extracted ${finalExtractedImages.length} images from URLs`);
+    console.info(`Costs - Charged to client: ${estimatedCost} credits, Real cost for us: ${realCost} credits`);
+    console.info(`Extracted ${finalExtractedImages.length} images from URLs`);
 
     // Débiter seulement le coût facturé (estimatedCost) au space
     await removeCreditsToSpace(space.id, estimatedCost);
 
-    console.log(`Successfully debited ${estimatedCost} credits from space ${space.id} (real cost: ${realCost})`);
+    console.info(`Successfully debited ${estimatedCost} credits from space ${space.id} (real cost: ${realCost})`);
 
     // Préparer la réponse
     const response = {
