@@ -93,7 +93,7 @@ export const exportVideoTask = task({
         renderAudioCost = audioRenderStatus.costs || 0;
 
         logger.log("Génération de la vidéo avatar...");
-        const avatarResponse = await generateAvatarVideo(video.video.avatar, audioRenderStatus.url || '');
+        const avatarResponse = await generateAvatarVideo(video.video.avatar, audioRenderStatus.url || '', video.video.format);
 
         logger.log("Avatar response", { avatarResponse });
         const avatarVideoUrl = await pollAvatarVideoStatus(avatarResponse.data.video_id);

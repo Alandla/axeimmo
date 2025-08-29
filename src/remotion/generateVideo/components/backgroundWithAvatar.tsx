@@ -3,12 +3,14 @@ import { AbsoluteFill, Sequence, OffthreadVideo, Img, interpolate, useCurrentFra
 import { AvatarLook } from "../type/avatar";
 import { MediaSource } from "./MediaSource";
 import { calculateZoomScale } from "../utils/zoomUtils";
+import { VideoFormat } from "../utils/videoDimensions";
 
 export const BackgroundWithAvatar = ({
     sequences, 
     avatar, 
     duration,
     avatarHeightRatio = 50,
+    videoFormat = 'vertical',
     onAvatarHeightRatioChange,
     onAvatarPositionChange,
     onMediaPositionChange
@@ -17,6 +19,7 @@ export const BackgroundWithAvatar = ({
     avatar: AvatarLook, 
     duration: number,
     avatarHeightRatio?: number,
+    videoFormat?: VideoFormat,
     onAvatarHeightRatioChange?: (ratio: number) => void,
     onAvatarPositionChange?: (position: { x: number, y: number }) => void,
     onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void
@@ -27,6 +30,9 @@ export const BackgroundWithAvatar = ({
     
     const avatarRef = useRef<HTMLDivElement>(null);
     const mediaRefs = useRef<{[key: number]: HTMLDivElement}>({});
+
+    // Determine if we're in horizontal mode
+    const isHorizontal = videoFormat === 'horizontal';
 
     // Get current values from props
     const currentRatio = avatarHeightRatio;
@@ -44,9 +50,20 @@ export const BackgroundWithAvatar = ({
         if (isDraggingResizeBar) {
             const container = e.currentTarget;
             const containerRect = container.getBoundingClientRect();
-            const mouseY = e.clientY - containerRect.top;
-            const containerHeight = containerRect.height;
-            let newRatio = ((containerHeight - mouseY) / containerHeight) * 100;
+            let newRatio;
+            
+            if (isHorizontal) {
+                // For horizontal layout: drag left/right to resize
+                const mouseX = e.clientX - containerRect.left;
+                const containerWidth = containerRect.width;
+                newRatio = (mouseX / containerWidth) * 100;
+            } else {
+                // For vertical layout: drag up/down to resize
+                const mouseY = e.clientY - containerRect.top;
+                const containerHeight = containerRect.height;
+                newRatio = ((containerHeight - mouseY) / containerHeight) * 100;
+            }
+            
             newRatio = Math.max(10, Math.min(95, newRatio));
             if (onAvatarHeightRatioChange) {
                 onAvatarHeightRatioChange(newRatio);
@@ -131,14 +148,27 @@ export const BackgroundWithAvatar = ({
             }
 
             if (media?.show === "half") {
-                const mediaHeightPercentage = 100 - currentRatio;
-                mediaSequenceStyle = {
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: `${mediaHeightPercentage}%`
-                };
+                if (isHorizontal) {
+                    // Horizontal layout: media takes left side
+                    const mediaWidthPercentage = currentRatio;
+                    mediaSequenceStyle = {
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: `${mediaWidthPercentage}%`,
+                        height: '100%'
+                    };
+                } else {
+                    // Vertical layout: media takes top side
+                    const mediaHeightPercentage = 100 - currentRatio;
+                    mediaSequenceStyle = {
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: `${mediaHeightPercentage}%`
+                    };
+                }
                 zIndex = 1;
                 if (frame >= currentFrame && frame < currentFrame + sequenceDuration) {
                     shouldShowResizeBar = true;
@@ -250,10 +280,22 @@ export const BackgroundWithAvatar = ({
 
     const avatarSequenceStyle: React.CSSProperties = {
         position: 'absolute',
-        top: isCurrentMediaHidden ? 0 : `${100 - currentRatio}%`,
-        left: 0,
-        width: '100%',
-        height: isCurrentMediaHidden ? '100%' : `${currentRatio}%`
+        ...(isHorizontal 
+            ? {
+                // Horizontal layout: avatar takes right side
+                top: 0,
+                left: isCurrentMediaHidden ? 0 : `${currentRatio}%`,
+                width: isCurrentMediaHidden ? '100%' : `${100 - currentRatio}%`,
+                height: '100%'
+            }
+            : {
+                // Vertical layout: avatar takes bottom side
+                top: isCurrentMediaHidden ? 0 : `${100 - currentRatio}%`,
+                left: 0,
+                width: '100%',
+                height: isCurrentMediaHidden ? '100%' : `${currentRatio}%`
+            }
+        )
     };
     const avatarAbsoluteFillStyle: React.CSSProperties = { zIndex: 1 };
 
@@ -334,17 +376,33 @@ export const BackgroundWithAvatar = ({
                 <div
                     style={{
                         position: 'absolute',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        top: `${100 - currentRatio}%`,
-                        width: '160px',
-                        height: '50px',
-                        cursor: 'row-resize',
+                        ...(isHorizontal 
+                            ? {
+                                // Horizontal layout: vertical bar between left and right
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                left: `${currentRatio}%`,
+                                width: '50px',
+                                height: '160px',
+                                cursor: 'col-resize',
+                                flexDirection: 'row',
+                                marginLeft: '-25px',
+                            }
+                            : {
+                                // Vertical layout: horizontal bar between top and bottom
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                top: `${100 - currentRatio}%`,
+                                width: '160px',
+                                height: '50px',
+                                cursor: 'row-resize',
+                                flexDirection: 'column',
+                                marginTop: '-25px',
+                            }
+                        ),
                         zIndex: 1000,
                         display: 'flex',
-                        flexDirection: 'column',
                         alignItems: 'center',
-                        marginTop: '-25px',
                         filter: 'drop-shadow(0 0 12px rgba(0, 0, 0, 0.6))',
                     }}
                     onMouseDown={(e) => {
@@ -353,9 +411,21 @@ export const BackgroundWithAvatar = ({
                         setIsDraggingResizeBar(true);
                     }}
                 >
-                    <div style={{ width: '0', height: '0', borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderBottom: '14px solid rgba(255, 255, 255, 1)', marginBottom: '6px' }} />
-                    <div style={{ width: '100%', height: '10px', backgroundColor: isDraggingResizeBar ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.95)', borderRadius: '5px', boxShadow: '0 0 20px rgba(0, 0, 0, 0.5), 0 0 4px rgba(255, 255, 255, 0.5)', transition: isDraggingResizeBar ? 'none' : 'all 0.2s ease' }} />
-                    <div style={{ width: '0', height: '0', borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '14px solid rgba(255, 255, 255, 1)', marginTop: '6px' }} />
+                    {isHorizontal ? (
+                        // Horizontal layout arrows (left and right)
+                        <>
+                            <div style={{ width: '0', height: '0', borderTop: '14px solid transparent', borderBottom: '14px solid transparent', borderRight: '14px solid rgba(255, 255, 255, 1)', marginRight: '6px' }} />
+                            <div style={{ width: '10px', height: '100%', backgroundColor: isDraggingResizeBar ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.95)', borderRadius: '5px', boxShadow: '0 0 20px rgba(0, 0, 0, 0.5), 0 0 4px rgba(255, 255, 255, 0.5)', transition: isDraggingResizeBar ? 'none' : 'all 0.2s ease' }} />
+                            <div style={{ width: '0', height: '0', borderTop: '14px solid transparent', borderBottom: '14px solid transparent', borderLeft: '14px solid rgba(255, 255, 255, 1)', marginLeft: '6px' }} />
+                        </>
+                    ) : (
+                        // Vertical layout arrows (up and down)
+                        <>
+                            <div style={{ width: '0', height: '0', borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderBottom: '14px solid rgba(255, 255, 255, 1)', marginBottom: '6px' }} />
+                            <div style={{ width: '100%', height: '10px', backgroundColor: isDraggingResizeBar ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.95)', borderRadius: '5px', boxShadow: '0 0 20px rgba(0, 0, 0, 0.5), 0 0 4px rgba(255, 255, 255, 0.5)', transition: isDraggingResizeBar ? 'none' : 'all 0.2s ease' }} />
+                            <div style={{ width: '0', height: '0', borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '14px solid rgba(255, 255, 255, 1)', marginTop: '6px' }} />
+                        </>
+                    )}
                 </div>
             )}
 
@@ -364,15 +434,30 @@ export const BackgroundWithAvatar = ({
                 <div
                     style={{
                         position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        top: `${100 - currentRatio}%`,
-                        height: '20px',
-                        cursor: 'row-resize',
+                        ...(isHorizontal 
+                            ? {
+                                // Horizontal layout: vertical separator line
+                                top: 0,
+                                bottom: 0,
+                                left: `${currentRatio}%`,
+                                width: '20px',
+                                cursor: 'col-resize',
+                                transform: 'translateX(-50%)',
+                                justifyContent: 'center',
+                            }
+                            : {
+                                // Vertical layout: horizontal separator line
+                                left: 0,
+                                right: 0,
+                                top: `${100 - currentRatio}%`,
+                                height: '20px',
+                                cursor: 'row-resize',
+                                transform: 'translateY(-50%)',
+                                alignItems: 'center',
+                            }
+                        ),
                         zIndex: 998,
                         display: 'flex',
-                        alignItems: 'center',
-                        transform: 'translateY(-50%)',
                     }}
                     onMouseDown={(e) => {
                         e.preventDefault();
@@ -380,7 +465,13 @@ export const BackgroundWithAvatar = ({
                         setIsDraggingResizeBar(true);
                     }}
                 >
-                    <div style={{ width: '100%', height: '3px', background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 20%, rgba(255, 255, 255, 0.5) 80%, transparent 100%)', boxShadow: '0 0 15px rgba(0, 0, 0, 0.3)' }} />
+                    {isHorizontal ? (
+                        // Vertical separator line for horizontal layout
+                        <div style={{ width: '3px', height: '100%', background: 'linear-gradient(0deg, transparent 0%, rgba(255, 255, 255, 0.5) 20%, rgba(255, 255, 255, 0.5) 80%, transparent 100%)', boxShadow: '0 0 15px rgba(0, 0, 0, 0.3)' }} />
+                    ) : (
+                        // Horizontal separator line for vertical layout
+                        <div style={{ width: '100%', height: '3px', background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 20%, rgba(255, 255, 255, 0.5) 80%, transparent 100%)', boxShadow: '0 0 15px rgba(0, 0, 0, 0.3)' }} />
+                    )}
                 </div>
             )}
         </div>

@@ -59,6 +59,7 @@ export const VideoGenerate = ({
 				avatar={data.video.avatar} 
 				duration={data.video.metadata.audio_duration} 
 				avatarHeightRatio={data.settings?.avatarHeightRatio}
+				videoFormat={data.video.format}
 				onAvatarHeightRatioChange={onAvatarHeightRatioChange} 
 				onAvatarPositionChange={onAvatarPositionChange}
 				onMediaPositionChange={onMediaPositionChange}
