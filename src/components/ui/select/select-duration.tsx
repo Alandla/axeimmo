@@ -4,7 +4,7 @@ import { Badge } from "../badge";
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
 import { PlanName } from "@/src/types/enums";
 import { useTranslations } from 'next-intl';
-import { Lock } from 'lucide-react';
+import { Lock, Clock } from 'lucide-react';
 import ModalPricing from "../../modal/modal-pricing";
 
 export interface DurationOption {
@@ -68,15 +68,32 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, disabled, onChan
     return requiredPlan;
   };
 
+  const getShortDuration = (value: number): string => {
+    if (value < 60) {
+      return `${value}s`;
+    } else if (value < 3600) {
+      const minutes = value / 60;
+      return `${minutes}min`;
+    } else {
+      const hours = value / 3600;
+      return `${hours}h`;
+    }
+  };
+
   return (
-    <div>
+    <>
       <Select
         value={value ? JSON.stringify(value) : undefined}
         onValueChange={handleValueChange}
         disabled={disabled}
       >
-        <SelectTrigger className="mr-2">
-          <SelectValue placeholder={t('placeholder')} />
+        <SelectTrigger variant="ghost">
+          <SelectValue placeholder={t('placeholder')}>
+            <div className="flex items-center gap-1">
+              <Clock className="h-4 w-4" />
+              <span>{value ? getShortDuration(value.value) : ''}</span>
+            </div>
+          </SelectValue>
         </SelectTrigger>
         <SelectContent className="w-48">
           {durationOptions.map((option) => {
@@ -119,7 +136,7 @@ const SelectDuration: React.FC<SelectDurationProps> = ({ value, disabled, onChan
         }}
         recommendedPlan={selectedRestrictedOption ? getRecommendedPlan(selectedRestrictedOption.requiredPlan) : PlanName.PRO}
       />
-    </div>
+    </>
   );
 };
 

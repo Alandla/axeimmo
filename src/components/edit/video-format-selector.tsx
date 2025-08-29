@@ -13,6 +13,7 @@ interface VideoFormatSelectorProps {
   value: VideoFormat;
   onValueChange: (format: VideoFormat) => void;
   disabled?: boolean;
+  light?: boolean;
 }
 
 // Fonction pour obtenir l'icône correspondant au format
@@ -43,19 +44,28 @@ export default function VideoFormatSelector({
   value,
   onValueChange,
   disabled = false,
+  light = false,
 }: VideoFormatSelectorProps) {
   const t = useTranslations("edit.video-format");
 
   return (
     <Select value={value} onValueChange={onValueChange} disabled={disabled}>
-      <SelectTrigger className="w-full">
+      <SelectTrigger variant={light ? "ghost" : "default"}>
         <SelectValue placeholder="Sélectionner format...">
           <div className="flex items-center gap-2">
             {getFormatIcon(value)}
-            <span>{t(value)}</span>
-            <span className="text-muted-foreground text-xs">
-              {VIDEO_FORMATS.find(f => f.value === value)?.ratio}
-            </span>
+            {light ? (
+              <span className="text-sm">
+                {VIDEO_FORMATS.find(f => f.value === value)?.ratio}
+              </span>
+            ) : (
+              <>
+                <span>{t(value)}</span>
+                <span className="text-muted-foreground text-xs">
+                  {VIDEO_FORMATS.find(f => f.value === value)?.ratio}
+                </span>
+              </>
+            )}
           </div>
         </SelectValue>
       </SelectTrigger>

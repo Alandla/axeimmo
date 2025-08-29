@@ -14,6 +14,7 @@ import { useActiveSpaceStore } from "../store/activeSpaceStore";
 import { usePremiumToast } from "@/src/utils/premium-toast";
 import { Alert, AlertDescription } from "./ui/alert";
 import { calculateAnimationCost } from "../lib/video-estimation";
+import VideoFormatSelector from "./edit/video-format-selector";
 
 export function AiChatTab({ 
   creationStep, 
@@ -34,7 +35,7 @@ export function AiChatTab({
   inputMessage: string,
   setInputMessage: (message: string) => void
 }) {
-    const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode, extractedImagesMedia, animationMode, setAnimateImages, script } = useCreationStore()
+    const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode, extractedImagesMedia, animationMode, setAnimateImages, script, videoFormat, setVideoFormat } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
     const { showPremiumToast } = usePremiumToast()
     const [isDragging, setIsDragging] = useState(false);
@@ -221,20 +222,33 @@ export function AiChatTab({
                     }
                   }}
                 />
-                <div className={`flex items-center justify-between ${isDragging ? 'opacity-50' : ''}`}>
-                  <div className="flex items-center space-x-2">
+                <div className={`flex justify-between ${isDragging ? 'opacity-50' : ''}`}>
+                  <div className="flex items-end">
                     <Button 
-                      variant="outline" 
+                      variant="ghost" 
                       size="icon" 
                       onClick={() => !isDisabled && document.getElementById('file-input')?.click()}
                       disabled={isDisabled}
+                      className="h-7 w-7"
                     >
                       <Paperclip className="h-4 w-4" />
                     </Button>
+                    <div className="flex h-7 items-center">
+                      <div className="w-px h-4 bg-border mx-1"></div>
+                    </div>
                     <SelectDuration 
                       value={videoDuration} 
                       onChange={setVideoDuration} 
                       disabled={isDisabled || files.some(file => file.usage === "voice" || file.usage === "avatar")}
+                    />
+                    <div className="flex h-7 items-center">
+                      <div className="w-px h-4 bg-border mx-1"></div>
+                    </div>
+                    <VideoFormatSelector
+                      value={videoFormat}
+                      onValueChange={setVideoFormat}
+                      disabled={isDisabled || files.some(file => file.usage === "voice" || file.usage === "avatar")}
+                      light={true}
                     />
                     <input
                       id="file-input"

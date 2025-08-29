@@ -30,6 +30,7 @@ import { ToolDisplay, ToolCall } from './tool-display'
 import { ExtractedImagesDisplay } from './extracted-images-display'
 import { extractFromUrls } from '../lib/url-extraction-client'
 import { calculateScriptDurationInSeconds, formatDuration } from '../lib/video-estimation'
+import { getMostFrequentString } from '../lib/utils'
 
 enum MessageType {
   TEXT = 'text',
@@ -53,7 +54,7 @@ interface Message {
 
 
 export function AiChat() {
-  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, isWebMode, setExtractedImagesMedia, extractedImagesMedia } = useCreationStore()
+  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, isWebMode, setExtractedImagesMedia, extractedImagesMedia, setVideoFormat, reset } = useCreationStore()
   const { activeSpace, setLastUsedParameters } = useActiveSpaceStore()
   const { fetchTotalVideoCount } = useVideosStore()
   const router = useRouter()
@@ -85,6 +86,7 @@ export function AiChat() {
         const videoId = handleRunUpdate(run, generationSpaceId);
         
         if (videoId && run.status === "COMPLETED") {
+          reset()
           router.push(`/edit/${videoId}`);
         }
       } catch (error) {
@@ -130,6 +132,14 @@ export function AiChat() {
           const lastUsed: ILastUsed | null = await getSpaceLastUsed(activeSpace.id);
           if (lastUsed) {
             setLastUsedParameters(lastUsed);
+            
+            // Set video format automatically based on most frequent format
+            if (lastUsed.formats && lastUsed.formats.length > 0) {
+              const mostFrequentFormat = getMostFrequentString(lastUsed.formats);
+              if (mostFrequentFormat && ['vertical', 'ads', 'square', 'horizontal'].includes(mostFrequentFormat)) {
+                setVideoFormat(mostFrequentFormat as 'vertical' | 'ads' | 'square' | 'horizontal');
+              }
+            }
           }
         } catch (error) {
           console.error("Erreur lors de la récupération des derniers paramètres:", error);

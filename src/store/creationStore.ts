@@ -5,7 +5,7 @@ import { AvatarLook } from '../types/avatar'
 import { FileToUpload } from '../types/files'
 import { Step, Steps } from '../types/step'
 import { KlingGenerationMode } from '../lib/fal'
-import { IMedia } from '../types/video'
+import { IMedia, VideoFormat } from '../types/video'
 
 type CreationStore = {
   script: string
@@ -22,6 +22,7 @@ type CreationStore = {
   animateImages: boolean
   animationMode: KlingGenerationMode
   emotionEnhancement: boolean
+  videoFormat: VideoFormat
   setScript: (script: string) => void
   setFiles: (files: FileToUpload[]) => void,
   setTotalCost: (cost: number) => void
@@ -40,6 +41,8 @@ type CreationStore = {
   setAnimateImages: (animate: boolean) => void
   setAnimationMode: (mode: KlingGenerationMode) => void
   setEmotionEnhancement: (enabled: boolean) => void
+  setVideoFormat: (format: VideoFormat) => void
+  reset: () => void
 }
 
 export const useCreationStore = create<CreationStore>((set) => ({
@@ -57,6 +60,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   animateImages: false,
   animationMode: KlingGenerationMode.STANDARD,
   emotionEnhancement: false,
+  videoFormat: 'vertical',
   setScript: (script) => set({ script }),
   setFiles: (files) => set({ files }),
   setTotalCost: (cost) => set({ totalCost: cost }),
@@ -75,5 +79,21 @@ export const useCreationStore = create<CreationStore>((set) => ({
   setAnimateImages: (animate) => set({ animateImages: animate }),
   setAnimationMode: (mode) => set({ animationMode: mode }),
   setEmotionEnhancement: (enabled) => set({ emotionEnhancement: enabled }),
+  setVideoFormat: (format) => set({ videoFormat: format }),
+  reset: () => set({
+    script: '',
+    files: [],
+    totalCost: 0,
+    creationStep: CreationStep.START,
+    selectedVoice: null,
+    selectedLook: null,
+    selectedAvatarName: null,
+    steps: [],
+    lastStep: null,
+    isWebMode: false,
+    extractedImagesMedia: [],
+    animateImages: false,
+    animationMode: KlingGenerationMode.STANDARD,
+  }),
 }))
 
