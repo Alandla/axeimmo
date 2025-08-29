@@ -159,6 +159,25 @@ function createSequence(words: IWord[], sentenceIndex: number): ISequence {
     word: word.word.trimStart()
   }));
 
+  // Log warning if sequence contains words with suspicious timing
+  const suspiciousWords = sequenceWords.filter(word => {
+    const duration = word.end - word.start;
+    return duration < 0.1 && duration > 0;
+  });
+
+  if (suspiciousWords.length > 0) {
+    logger.log(`[TIMING_WARNING] Sequence ${sentenceIndex} contains ${suspiciousWords.length} words with suspicious timing`, {
+      sentenceIndex,
+      suspiciousWords: suspiciousWords.map(w => ({
+        word: w.word,
+        duration: w.end - w.start,
+        start: w.start,
+        end: w.end
+      })),
+      totalWords: sequenceWords.length
+    });
+  }
+
   return {
     text: sequenceWords.map(w => w.word).join(' '),
     words: sequenceWords,
@@ -173,28 +192,58 @@ export function adjustSequenceTimings(sequences: ISequence[]): ISequence[] {
     let durationTotal = 0;
     const words = [...sequence.words];
 
+    // Detect and filter out words with suspicious timing (likely transcription errors)
+    const filteredWords = words.filter((word, wordIndex) => {
+      const duration = word.end - word.start;
+      
+      // If word duration is less than 0.1 seconds, it's likely a transcription error
+      if (duration < 0.1) {
+        logger.log(`[TIMING_FIX] Removing word with suspicious timing: "${word.word}" (${duration}s)`, {
+          sequenceIndex: index,
+          wordIndex,
+          duration,
+          start: word.start,
+          end: word.end
+        });
+        return false;
+      }
+      
+      return true;
+    });
+
+    // If all words were filtered, keep original to avoid empty sequences
+    const wordsToUse = filteredWords.length === 0 ? words : filteredWords;
+    
+    if (filteredWords.length < words.length) {
+      logger.log(`[TIMING_FIX] Filtered ${words.length - filteredWords.length} words with suspicious timing from sequence ${index}`);
+    }
+
     // Ajuster les timings des mots dans la séquence
-    for (let i = 0; i < words.length - 1; i++) {
-      words[i].end = words[i + 1].start;
-      words[i].durationInFrames = timeToFrames(words[i].end - words[i].start);
-      durationTotal += words[i].durationInFrames ?? 0;
+    for (let i = 0; i < wordsToUse.length - 1; i++) {
+      wordsToUse[i].end = wordsToUse[i + 1].start;
+      const duration = wordsToUse[i].end - wordsToUse[i].start;
+      wordsToUse[i].durationInFrames = timeToFrames(duration);
+      durationTotal += wordsToUse[i].durationInFrames ?? 0;
     }
 
     // Ajuster le dernier mot de la séquence
-    const lastWord = words[words.length - 1];
-    if (index < allSequences.length - 1) {
-      // Si ce n'est pas la dernière séquence, utiliser le début de la prochaine
-      const nextSequenceStart = allSequences[index + 1].start;
-      lastWord.end = nextSequenceStart;
-      sequence.end = nextSequenceStart;
+    if (wordsToUse.length > 0) {
+      const lastWord = wordsToUse[wordsToUse.length - 1];
+      if (index < allSequences.length - 1) {
+        // Si ce n'est pas la dernière séquence, utiliser le début de la prochaine
+        const nextSequenceStart = allSequences[index + 1].start;
+        lastWord.end = nextSequenceStart;
+        sequence.end = nextSequenceStart;
+      }
+      
+      const lastWordDuration = lastWord.end - lastWord.start;
+      lastWord.durationInFrames = timeToFrames(lastWordDuration);
+      durationTotal += lastWord.durationInFrames;
     }
-    
-    lastWord.durationInFrames = timeToFrames(lastWord.end - lastWord.start);
-    durationTotal += lastWord.durationInFrames;
 
     return {
       ...sequence,
-      words,
+      words: wordsToUse,
       durationInFrames: durationTotal
     };
   });
