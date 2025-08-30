@@ -39,6 +39,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "video-not-in-space" }, { status: 400 });
     }
 
+    // Check if video uses avatar and user is on FREE plan
+    if (video.video?.avatar && space.plan.name === PlanName.FREE) {
+      return NextResponse.json({ error: "avatar-export-not-allowed-free-plan" }, { status: 403 });
+    }
+
     // Check if video was created via API (no userId in CREATE step)
     const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
     const wasCreatedViaAPI = !createEvent?.user;

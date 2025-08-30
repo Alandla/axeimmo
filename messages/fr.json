@@ -305,6 +305,8 @@
       "modal-pricing-description-not-enough-credits": "Tu n'as pas assez de crédits pour exporter ta vidéo, passe à un plan supérieur pour exporter ta vidéo.",
       "modal-pricing-export-on-free-title": "Export non disponible sur le plan gratuit",
       "modal-pricing-export-on-free-description": "Passez à un plan payant pour pouvoir exporter vos vidéos.",
+      "modal-pricing-avatar-restriction-title": "Avatar non disponible pour le plan gratuit",
+      "modal-pricing-avatar-restriction-description": "L'export de vidéos avec avatar nécessite un plan payant. Mettez à niveau pour accéder à cette fonctionnalité.",
       "mobile-disclaimer": {
         "title": "Version ordinateur recommandée",
         "description": "Pour de meilleures performances et une expérience optimale, nous recommandons d'utiliser un ordinateur.",
@@ -337,7 +339,8 @@
         "description-regeneration-error": "Une erreur est survenue lors de la regénération de l'audio.",
         "description-premium-voice-error": "Cette voix n'est disponible que dans les plans payants. Mettez à niveau votre abonnement pour y accéder.",
         "description-premium-avatar-error": "Cet avatar n'est disponible que dans les plans payants. Mettez à niveau votre abonnement pour y accéder.",
-        "description-export-not-available-on-free-plan": "L'export de vidéos nécessite un plan payant."
+        "description-export-not-available-on-free-plan": "L'export de vidéos nécessite un plan payant.",
+        "description-avatar-export-not-allowed-free-plan": "L'export de vidéos avec avatar n'est pas disponible sur le plan gratuit. Mettez à niveau pour accéder à cette fonctionnalité."
       },
       "sequence": {
         "edit-word": "Editer le mot",
