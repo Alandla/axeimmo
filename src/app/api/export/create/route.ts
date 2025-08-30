@@ -39,14 +39,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "video-not-in-space" }, { status: 400 });
     }
 
-    const cost = calculateCredits(video.video?.metadata.audio_duration || 30)
+    // Check if video was created via API (no userId in CREATE step)
+    const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
+    const wasCreatedViaAPI = !createEvent?.user;
+    
+    // Only API users don't pay for exports, all other users (including free plan) pay
+    const cost = wasCreatedViaAPI ? 0 : calculateCredits(video.video?.metadata.audio_duration || 30);
 
     if (space.credits < cost) {
       return NextResponse.json({ error: "not-enough-credits" }, { status: 400 });
-    }
-
-    if (space.plan.name === PlanName.FREE) {
-      return NextResponse.json({ error: "export-not-available-on-free-plan" }, { status: 400 });
     }
 
     const exportData: IExport = {

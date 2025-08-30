@@ -54,6 +54,7 @@ export default function VideoEditor() {
   const t = useTranslations('edit')
   const pricingT = useTranslations('pricing')
   const planT = useTranslations('plan')
+  const exportModalT = useTranslations('export-modal')
   const { showPremiumToast } = usePremiumToast()
   const { isIOS, isMobile, isClient } = useBrowserDetection()
 
@@ -275,13 +276,6 @@ export default function VideoEditor() {
 
   const onExportVideo = async () => {
     try {
-      if (planName === PlanName.FREE) {
-        setModalPricingTitle(t('modal-pricing-export-on-free-title'))
-        setModalPricingDescription(t('modal-pricing-export-on-free-description'))
-        setShowModalPricing(true)
-        return undefined
-      }
-
       await basicApiCall('/video/save', { video })
 
       const exportResult : IExport = await basicApiCall('/export/create', { videoId: video?.id, spaceId: video?.spaceId })
@@ -1234,7 +1228,7 @@ export default function VideoEditor() {
         // Check if video was created via API (no userId in CREATE step)
         const createEvent = video?.history?.find((h: { step: string }) => h.step === 'CREATE');
         const wasCreatedViaAPI = !createEvent?.user;
-        
+ 
         return wasCreatedViaAPI ? 0 : calculateGenerationCredits(video?.video?.metadata.audio_duration || 30);
       })()}
       isOpen={showModalExport}
@@ -1243,6 +1237,11 @@ export default function VideoEditor() {
       setIsOpen={setShowModalExport}
       onExportVideo={onExportVideo}
       showWatermark={showWatermark}
+      onOpenPricing={() => {
+        setModalPricingTitle(exportModalT('modal-pricing-watermark-title'))
+        setModalPricingDescription(exportModalT('modal-pricing-watermark-description'))
+        setShowModalPricing(true)
+      }}
     />
     <div className="min-h-screen bg-muted overflow-hidden">
       {/* Header */}

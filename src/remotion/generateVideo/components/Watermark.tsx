@@ -10,8 +10,8 @@ export const Watermark = () => {
 				transparent={true}
 				style={{
                     position: 'absolute', // Positions the image absolutely
-                    top: '40px', // Adds a 10px margin from the top
-                    left: '20px', // Adds a 10px margin from the left
+                    top: '50px', // Adds a 10px margin from the top
+                    left: '50px', // Adds a 10px margin from the left
                     width: '19%', // Reduces the size to 50% of the original
                     height: 'auto', // Keeps the aspect ratio
                     opacity: 0.85, // Adds transparency

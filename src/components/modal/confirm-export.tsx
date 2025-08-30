@@ -28,6 +28,7 @@ interface ModalConfirmExportProps {
   setIsOpen: (isOpen: boolean) => void
   onExportVideo: () => Promise<string | undefined>
   showWatermark: boolean
+  onOpenPricing?: () => void
 }
 
 export default function ModalConfirmExport({
@@ -37,7 +38,8 @@ export default function ModalConfirmExport({
   isOpen,
   setIsOpen,
   onExportVideo,
-  showWatermark
+  showWatermark,
+  onOpenPricing
 }: ModalConfirmExportProps) {
   const [isPending, setIsPending] = useState(false)
   const [credits, setCredits] = useState<number | undefined>(initialCredits)
@@ -98,9 +100,12 @@ export default function ModalConfirmExport({
             </div>
             {showWatermark && (
               <Alert 
-                variant="destructive" 
+                variant="warning" 
                 className="cursor-pointer mt-2"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setIsOpen(false)
+                  onOpenPricing?.()
+                }}
               >
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>

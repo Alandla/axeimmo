@@ -275,7 +275,9 @@
       "saving": "Sauvegarde...",
       "watermark-warning": "Attention : Pour supprimer le filigrane de votre vidéo, vous devez passer à un plan payant.",
       "modal-pricing-title": "Retirez le filigrane",
-      "modal-pricing-description": "Passez à un plan payant pour retirer le filigrane Hoox de vos vidéos."
+      "modal-pricing-description": "Passez à un plan payant pour retirer le filigrane Hoox de vos vidéos.",
+      "modal-pricing-watermark-title": "Supprimez le watermark de vos vidéos",
+      "modal-pricing-watermark-description": "Passez à un plan payant pour exporter vos vidéos sans watermark et débloquer toutes les fonctionnalités premium."
     },
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",
