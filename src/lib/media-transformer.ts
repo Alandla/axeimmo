@@ -1,6 +1,6 @@
 import { IMedia } from '../types/video'
 
-export async function transformUrlsToMedia(urls: string[], usage: 'media' | 'voice' | 'avatar'): Promise<IMedia[]> {
+export async function transformUrlsToMedia(urls: string[], usage: 'media' | 'voice' | 'avatar', source?: string): Promise<IMedia[]> {
   const mediaPromises = urls.map(async (url, index) => {
     // Déterminer le type de média basé sur l'extension
     const extension = url.split('.').pop()?.toLowerCase();
@@ -17,7 +17,6 @@ export async function transformUrlsToMedia(urls: string[], usage: 'media' | 'voi
       type,
       usage,
       name: `${usage}-${index + 1}`,
-      source: 'api',
       createdAt: new Date()
     };
 
