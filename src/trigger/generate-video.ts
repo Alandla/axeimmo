@@ -1861,7 +1861,7 @@ export const generateVideoTask = task({
       
       newVideo.video.sequences.forEach((sequence, sequenceIndex) => {
         // Vérifier si la séquence a une image comme média
-        if (sequence.media && sequence.media.type === 'image' && sequence.words && sequence.words.length > 0) {
+        if (sequence.media && sequence.media.type === 'image' && sequence.words && sequence.words.length > 0 && sequence.media.show === 'full') {
           // Appliquer le zoom au premier mot de la séquence
           const zoomType = isZoomIn ? 'zoom-in-continuous' : 'zoom-out-continuous';
           sequence.words[0].zoom = zoomType;
