@@ -161,12 +161,10 @@ export default function VideoPreview({
                 </div>
             )}
             
-            {/* Logo Position Selector moved into the canvas overlay above the logo */}
-            
 
-            <div className="relative w-full h-full transition-all duration-300 ease-in-out">
+            <div className="relative w-full h-full">
                 <div 
-                    className="rounded-lg overflow-hidden"
+                    className="rounded-lg overflow-hidden transition-all duration-300 ease-in-out"
                     style={{
                         aspectRatio: `${dimensions.width} / ${dimensions.height}`,
                         width: '100%',
