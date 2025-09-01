@@ -48,6 +48,14 @@ const exportSchema = new mongoose.Schema(
       type: Number,
       required: false,
     },
+    costAvatar: {
+      type: Number,
+      required: false,
+    },
+    costTotal: {
+      type: Number,
+      required: false,
+    },
     errorMessage: {
       type: String,
       required: false,

@@ -38,6 +38,7 @@ export const exportVideoTask = task({
       const videoId = payload.videoId;
       const exportId = payload.exportId;
       let renderAudioCost = 0;
+      let avatarCost = 0;
 
       logger.log("Exporting video...");
       const exportData : IExport = await updateExport(exportId, { runId: ctx.run.id, status: 'processing' });
@@ -101,8 +102,7 @@ export const exportVideoTask = task({
         logger.log("Avatar video response", { avatarVideoUrl });
 
         if (avatarVideoUrl) {
-          const cost = calculateHeygenCost(video.video.metadata.audio_duration);
-          video.costToGenerate = (video.costToGenerate || 0) + cost;
+          avatarCost = calculateHeygenCost(video.video.metadata.audio_duration);
           
           // Upload the avatar video to R2 instead of using Heygen's temporary URL
           logger.log("Uploading avatar video to R2...");
@@ -116,7 +116,7 @@ export const exportVideoTask = task({
       }
 
       const render = await renderVideo(video, showWatermark, ctx.attempt.number === 2 ? 4096 : 2048, logoData);
-      await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing' });
+      await updateExport(exportId, { renderId: render.renderId, bucketName: render.bucketName, status: 'processing', costAvatar: avatarCost });
 
       const renderStatus : RenderStatus = await pollRenderStatus(
         render.renderId, 
@@ -150,9 +150,14 @@ export const exportVideoTask = task({
       }
 
       if (renderStatus.status === 'completed' && renderStatus.url && renderStatus.costs) {
+        const exportRenderCost = renderStatus.costs + (ctx.run.baseCostInCents || 0) + renderAudioCost;
+        const videoCostToGenerate = video.costToGenerate || 0;
+        const totalCost = avatarCost + exportRenderCost + videoCostToGenerate;
+        
         await updateExport(exportId, { 
           downloadUrl: renderStatus.url, 
-          renderCost: renderStatus.costs + (ctx.run.baseCostInCents || 0) + renderAudioCost, 
+          renderCost: exportRenderCost,
+          costTotal: totalCost,
           status: 'completed' 
         });
         await metadata.replace({

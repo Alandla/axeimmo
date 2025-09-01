@@ -47,7 +47,7 @@ export function calculateMinimaxCost(text: string): number {
 }
 
 export function calculateHeygenCost(durationInSeconds: number): number {
-  const COST_PER_30_SECONDS = 0.2475;
+  const COST_PER_30_SECONDS = 0.25;
   
   // Arrondir au multiple de 30 secondes supérieur
   const segments = Math.ceil(durationInSeconds / 30);
