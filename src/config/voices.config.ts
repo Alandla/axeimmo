@@ -195,6 +195,42 @@ export const voicesConfig: Voice[] = [
     mode: 'elevenlabs'
   },
   {
+    id: 'BZgkqPqms7Kj9ulSkVzn',
+    name: 'Eve',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['conversational'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/ki3w9UXZstZj2voQGEbCUW5u6F12/voices/BZgkqPqms7Kj9ulSkVzn/c866766b-bce8-4440-b0a0-3ecc571957dd.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'Z3R5wn05IrDiVCyEkUrK',
+    name: 'Arabella',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/vkjueGLSA9PX5LQZ86Iuq5jIWpr1/voices/Z3R5wn05IrDiVCyEkUrK/CBYKafo5onIe5234rAGS.mp3',
+    mode: 'elevenlabs'
+  },
+  {
+    id: 'lxYfHSkYm1EzQzGhdbfc',
+    name: 'Jessica',
+    language: 'english',
+    accent: 'american',
+    gender: 'female',
+    age: 'young',
+    tags: ['narration'],
+    plan: PlanName.PRO,
+    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/database/user/yA8yDNUx4dZ4gwL9ztbTpUEIyR12/voices/lxYfHSkYm1EzQzGhdbfc/OUNN5Eqm1aibegMusfjN.mp3',
+    mode: 'elevenlabs'
+  },
+  {
     id: 'French_Male_Speech_New',
     name: 'Pierre',
     language: 'french',
