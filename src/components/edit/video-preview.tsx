@@ -164,7 +164,7 @@ export default function VideoPreview({
 
             <div className="relative w-full h-full">
                 <div 
-                    className="rounded-lg overflow-hidden transition-all duration-300 ease-in-out"
+                    className="rounded-lg transition-all duration-300 ease-in-out"
                     style={{
                         aspectRatio: `${dimensions.width} / ${dimensions.height}`,
                         width: '100%',
