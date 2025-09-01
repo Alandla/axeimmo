@@ -373,6 +373,23 @@
       "export-button": "Export",
       "lip-sync-export-message": "The lip-sync will only be displayed after export.",
       "unsaved": "Unsaved",
+      "add-elements": "Add elements",
+      "elements": {
+        "modal-title": "Select an element",
+        "toast": {
+          "uploading-file": "Uploading element",
+          "uploading-file-description": "Please wait while the element is being uploaded",
+          "file-uploaded": "Element uploaded",
+          "file-uploaded-description": "The element has been successfully uploaded",
+          "title-error": "Error",
+          "deleting-file-error": "An error occurred while uploading the element",
+          "deleting-file": "Deleting element",
+          "deleting-file-description": "Please wait while the element is being deleted",
+          "file-deleted": "Element deleted",
+          "file-deleted-description": "The element has been successfully deleted"
+        },
+        "upload-file-button": "Upload element"
+      },
       "saved": "Saved",
       "save": "Save",
       "sequences-tabs-title": "Sequences",

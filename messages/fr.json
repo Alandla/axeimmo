@@ -283,6 +283,23 @@
       "loading-video-data": "Chargement des données de la vidéo...",
       "loading-regenerating-audio": "Regénération de l'audio...",
       "export-button": "Exporter",
+      "add-elements": "Ajouter des éléments",
+      "elements": {
+        "modal-title": "Sélectionner un élément",
+        "toast": {
+          "uploading-file": "Téléchargement de l'élément",
+          "uploading-file-description": "Veuillez patienter pendant le téléchargement de l'élément",
+          "file-uploaded": "Élément téléchargé",
+          "file-uploaded-description": "L'élément a été téléchargé avec succès",
+          "title-error": "Erreur",
+          "deleting-file-error": "Une erreur s'est produite lors du téléchargement de l'élément",
+          "deleting-file": "Suppression de l'élément",
+          "deleting-file-description": "Veuillez patienter pendant la suppression de l'élément",
+          "file-deleted": "Élément supprimé",
+          "file-deleted-description": "L'élément a été supprimé avec succès"
+        },
+        "upload-file-button": "Télécharger un élément"
+      },
       "lip-sync-export-message": "La synchronisation labiale ne s'affichera que après l'export.",
       "unsaved": "Non sauvegardé",
       "saved": "Sauvegardé",

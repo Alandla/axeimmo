@@ -4,17 +4,20 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import googleFonts from "../../config/googleFonts.config";
 import { VideoFormat, calculateSubtitlePosition } from "../../utils/videoDimensions";
 
-export const SubtitleClean = ({ subtitleSequence, start, style, videoFormat, onPositionChange }: { 
+export const SubtitleClean = ({ subtitleSequence, start, style, videoFormat, onPositionChange, onPlayPause }: { 
     subtitleSequence: any, 
     start: number, 
     style: any, 
     videoFormat?: VideoFormat,
-    onPositionChange?: (position: number) => void 
+    onPositionChange?: (position: number) => void,
+    onPlayPause?: () => void 
 }) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
     const [isDragging, setIsDragging] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [mouseDownTime, setMouseDownTime] = useState(0);
+    const [hasMoved, setHasMoved] = useState(false);
     const subtitleRef = useRef<HTMLDivElement>(null);
     const playerElementRef = useRef<HTMLElement | null>(null);
 
@@ -39,6 +42,17 @@ export const SubtitleClean = ({ subtitleSequence, start, style, videoFormat, onP
         return parent;
     }, []);
 
+    const handleSubtitleClick = (e: React.MouseEvent) => {
+        if (hasMoved || isDragging) return;
+        
+        const clickDuration = Date.now() - mouseDownTime;
+        if (clickDuration > 200) return; // Plus de 200ms = probablement un drag
+        
+        if (onPlayPause) {
+            onPlayPause();
+        }
+    };
+
     // Fonction pour démarrer le glissement
     const startDragging = useCallback((e: React.MouseEvent) => {
         if (!onPositionChange) return;
@@ -46,6 +60,9 @@ export const SubtitleClean = ({ subtitleSequence, start, style, videoFormat, onP
         // Empêcher le comportement par défaut et la propagation
         e.preventDefault();
         e.stopPropagation();
+        
+        setMouseDownTime(Date.now());
+        setHasMoved(false);
         
         // Trouver et mémoriser le player dès le début du glissement
         const playerElement = findPlayerElement();
@@ -62,6 +79,8 @@ export const SubtitleClean = ({ subtitleSequence, start, style, videoFormat, onP
         const onMouseMove = (moveEvent: PointerEvent) => {
             // Empêcher le comportement par défaut pour éviter de sélectionner du texte
             moveEvent.preventDefault();
+            
+            setHasMoved(true);
             
             if (playerElement && playerRect) {
                 // Mettre à jour le rectangle du player si nécessaire (en cas de redimensionnement)
@@ -236,7 +255,12 @@ export const SubtitleClean = ({ subtitleSequence, start, style, videoFormat, onP
                     userSelect: 'none',
                     touchAction: 'none',
                 }}
-                onMouseDown={startDragging}
+                onMouseDown={(e) => {
+                    setMouseDownTime(Date.now());
+                    setHasMoved(false);
+                    startDragging(e);
+                }}
+                onClick={handleSubtitleClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >

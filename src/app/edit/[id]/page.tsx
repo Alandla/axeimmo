@@ -13,7 +13,7 @@ import SequenceSettings from '@/src/components/edit/sequence-settings'
 import VideoPreview from '@/src/components/edit/video-preview'
 import { useParams } from 'next/navigation'
 import { basicApiCall, basicApiGetCall } from '@/src/lib/api'
-import { ISequence, IVideo, IWord, ITransition, VideoFormat, ZoomType } from '@/src/types/video'
+import { ISequence, IVideo, IWord, ITransition, VideoFormat, ZoomType, IElement } from '@/src/types/video'
 import { AvatarLook } from '@/src/types/avatar'
 import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/src/components/ui/scroll-area'
@@ -1206,6 +1206,143 @@ export default function VideoEditor() {
     }
   };
 
+  const handleElementsChange = (elements: IElement[]) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video) return prevVideo;
+      
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          elements
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
+  const handleElementSelect = (media: IMedia) => {
+    console.log('handleElementSelect', media)
+    if (!video || !video.video || !playerRef.current) return;
+    
+    const currentFrame = playerRef.current.getCurrentFrame();
+    const currentTime = currentFrame / 60;
+    
+    // Trouver le mot le plus récent qui a déjà commencé (start <= currentTime)
+    let closestWord: any = null;
+    let closestSequence: any = null;
+    let maxStart = -1;
+    
+    video.video?.sequences.forEach((sequence) => {
+        sequence.words.forEach((word) => {
+            // Seulement considérer les mots qui ont déjà commencé
+            if (word.start <= currentTime && word.start > maxStart) {
+                maxStart = word.start;
+                closestWord = word;
+                closestSequence = sequence;
+            }
+        });
+    });
+    
+    if (!closestWord || !closestSequence) return;
+    
+    // Créer le nouvel élément
+    const newElement: IElement = {
+        media,
+        position: { x: 50, y: 50 }, // Position centrale
+        start: closestWord.start,
+        end: closestSequence!.words[closestSequence!.words.length - 1].end,
+        durationInFrames: Math.round((closestSequence!.words[closestSequence!.words.length - 1].end - closestWord.start) * 60),
+        size: 25
+    };
+
+    console.log('newElement', newElement)
+    
+    // Ajouter un nouvel élément
+    const updatedElements = [...(video.video?.elements || []), newElement];
+
+    console.log('updatedElements', updatedElements)
+    handleElementsChange(updatedElements);
+  };
+
+  const handleElementPositionChange = (index: number, position: { x: number, y: number }) => {
+    if (!video?.video?.elements) return;
+    const updatedElements = [...video.video.elements];
+    updatedElements[index].position = position;
+    console.log('updatedElements', updatedElements)
+    handleElementsChange(updatedElements);
+  };
+
+  const handleElementSizeChange = (index: number, size: number) => {
+    if (!video?.video?.elements) return;
+    const updatedElements = [...video.video.elements];
+    updatedElements[index].size = size;
+    handleElementsChange(updatedElements);
+  };
+
+  const handleElementStartChange = (index: number, start: number) => {
+    if (!video?.video?.elements) return;
+    
+    // Obtenir le timing actuel de la vidéo
+    if (playerRef.current) {
+      const currentFrame = playerRef.current.getCurrentFrame();
+      const currentTime = currentFrame / 60;
+      
+      // Si le nouveau start est supérieur au timing actuel, avancer la vidéo
+      if (start > currentTime) {
+        playerRef.current.seekTo(start * 60);
+      }
+    }
+    
+    const updatedElements = [...video.video.elements];
+    updatedElements[index].start = start;
+    updatedElements[index].durationInFrames = Math.round((updatedElements[index].end - start) * 60);
+    handleElementsChange(updatedElements);
+  };
+
+  const handleElementEndChange = (index: number, end: number) => {
+    if (!video?.video?.elements) return;
+    
+    // Obtenir le timing actuel de la vidéo
+    if (playerRef.current) {
+      const currentFrame = playerRef.current.getCurrentFrame();
+      const currentTime = currentFrame / 60;
+      
+      // Si le nouveau end est plus petit que le timing actuel, reculer la vidéo vers end - 1
+      if (end < currentTime) {
+        const newTime = Math.max(0, end - 1); // S'assurer que le temps ne devient pas négatif
+        playerRef.current.seekTo(newTime * 60);
+      }
+    }
+    
+    const updatedElements = [...video.video.elements];
+    updatedElements[index].end = end;
+    updatedElements[index].durationInFrames = Math.round((end - updatedElements[index].start) * 60);
+    handleElementsChange(updatedElements);
+  };
+
+  const [elementToReplaceIndex, setElementToReplaceIndex] = useState<number | null>(null);
+
+  const handleElementMediaChange = (index: number) => {
+    setElementToReplaceIndex(index);
+    // Le modal sera ouvert depuis VideoPreview
+  };
+
+  const handleElementReplaceSelect = (media: IMedia) => {
+    if (!video?.video?.elements || elementToReplaceIndex === null) return;
+    const updatedElements = [...video.video.elements];
+    updatedElements[elementToReplaceIndex].media = media;
+    handleElementsChange(updatedElements);
+    setElementToReplaceIndex(null);
+  };
+
+  const handleElementDelete = (index: number) => {
+    if (!video?.video?.elements) return;
+    const updatedElements = video.video.elements.filter((_: any, i: number) => i !== index);
+    handleElementsChange(updatedElements);
+  };
+
   const handleMuteBackgroundMusicChange = (mute: boolean) => {
     setMuteBackgroundMusic(mute);
   };
@@ -1422,7 +1559,7 @@ export default function VideoEditor() {
             </Card>
           </ResizablePanel>
           <ResizableHandle className="w-[1px] bg-transparent" />
-          <ResizablePanel defaultSize={20} minSize={10}>
+          <ResizablePanel defaultSize={20} minSize={10} className="!overflow-visible">
             <Card className="h-full">
                 {isClient && !isMobile && (
                     <VideoPreview 
@@ -1441,6 +1578,16 @@ export default function VideoEditor() {
                         onLogoPositionChange={handleLogoPositionChange}
                         onLogoSizeChange={handleLogoSizeChange}
                         logoData={logoData}
+                        spaceId={video?.spaceId}
+                        onElementSelect={handleElementSelect}
+                        onElementPositionChange={handleElementPositionChange}
+                        onElementSizeChange={handleElementSizeChange}
+                        onElementStartChange={handleElementStartChange}
+                        onElementEndChange={handleElementEndChange}
+                        onElementMediaChange={handleElementMediaChange}
+                        onElementDelete={handleElementDelete}
+                        elementToReplaceIndex={elementToReplaceIndex}
+                        onElementReplaceSelect={handleElementReplaceSelect}
                     />
                 )}
             </Card>
@@ -1471,6 +1618,16 @@ export default function VideoEditor() {
                 onLogoPositionChange={handleLogoPositionChange}
                 onLogoSizeChange={handleLogoSizeChange}
                 logoData={logoData}
+                spaceId={video?.spaceId}
+                onElementSelect={handleElementSelect}
+                onElementPositionChange={handleElementPositionChange}
+                onElementSizeChange={handleElementSizeChange}
+                onElementStartChange={handleElementStartChange}
+                onElementEndChange={handleElementEndChange}
+                onElementMediaChange={handleElementMediaChange}
+                onElementDelete={handleElementDelete}
+                elementToReplaceIndex={elementToReplaceIndex}
+                onElementReplaceSelect={handleElementReplaceSelect}
             />
           )}
         </div>

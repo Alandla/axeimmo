@@ -13,7 +13,8 @@ export const BackgroundWithAvatar = ({
     videoFormat = 'vertical',
     onAvatarHeightRatioChange,
     onAvatarPositionChange,
-    onMediaPositionChange
+    onMediaPositionChange,
+    onPlayPause
 }: {
     sequences: any, 
     avatar: AvatarLook, 
@@ -22,11 +23,14 @@ export const BackgroundWithAvatar = ({
     videoFormat?: VideoFormat,
     onAvatarHeightRatioChange?: (ratio: number) => void,
     onAvatarPositionChange?: (position: { x: number, y: number }) => void,
-    onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void
+    onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
+    onPlayPause?: () => void
 }) => {
     const frame = useCurrentFrame();
     const [isHovering, setIsHovering] = useState(false);
     const [isDraggingResizeBar, setIsDraggingResizeBar] = useState(false);
+    const [mouseDownTime, setMouseDownTime] = useState(0);
+    const [hasMoved, setHasMoved] = useState(false);
     
     const avatarRef = useRef<HTMLDivElement>(null);
     const mediaRefs = useRef<{[key: number]: HTMLDivElement}>({});
@@ -44,6 +48,17 @@ export const BackgroundWithAvatar = ({
     // Get media positions from sequences
     const getMediaPosition = (sequenceIndex: number) => {
         return sequences[sequenceIndex]?.media?.position || { x: 50, y: 50 };
+    };
+
+    const handleBackgroundClick = (e: React.MouseEvent) => {
+        if (hasMoved || isDraggingResizeBar) return;
+        
+        const clickDuration = Date.now() - mouseDownTime;
+        if (clickDuration > 200) return; // Plus de 200ms = probablement un drag
+        
+        if (onPlayPause) {
+            onPlayPause();
+        }
     };
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -75,12 +90,16 @@ export const BackgroundWithAvatar = ({
         e.preventDefault();
         e.stopPropagation();
         
+        setMouseDownTime(Date.now());
+        setHasMoved(false);
+        
         const mediaElement = mediaRefs.current[sequenceId];
         if (!mediaElement) return;
         
         const mediaRect = mediaElement.getBoundingClientRect();
         
         const onPointerMove = (pointerMoveEvent: PointerEvent) => {
+            setHasMoved(true);
             const newX = 100 - ((pointerMoveEvent.clientX - mediaRect.left) / mediaRect.width) * 100;
             const newY = 100 - ((pointerMoveEvent.clientY - mediaRect.top) / mediaRect.height) * 100;
             const clampedX = Math.max(0, Math.min(100, newX));
@@ -105,11 +124,15 @@ export const BackgroundWithAvatar = ({
         e.preventDefault();
         e.stopPropagation();
         
+        setMouseDownTime(Date.now());
+        setHasMoved(false);
+        
         if (!avatarRef.current) return;
         
         const containerRect = avatarRef.current.getBoundingClientRect();
         
         const onPointerMove = (pointerMoveEvent: PointerEvent) => {
+            setHasMoved(true);
             const newX = 100 - ((pointerMoveEvent.clientX - containerRect.left) / containerRect.width) * 100;
             const newY = 100 - ((pointerMoveEvent.clientY - containerRect.top) / containerRect.height) * 100;
             const clampedX = Math.max(0, Math.min(100, newX));
@@ -311,6 +334,13 @@ export const BackgroundWithAvatar = ({
             onMouseUp={() => {
                 setIsDraggingResizeBar(false);
             }}
+            onMouseDown={(e) => {
+                if (getRemotionEnvironment().isPlayer) {
+                    setMouseDownTime(Date.now());
+                    setHasMoved(false);
+                }
+            }}
+            onClick={handleBackgroundClick}
         >
             {/* Media Elements - Rendered first in JSX order */} 
             {mediaElements}

@@ -7,18 +7,33 @@ import { calculateZoomScale } from "../utils/zoomUtils";
 
 export const MediaBackground = ({ 
     sequences, 
-    onMediaPositionChange 
+    onMediaPositionChange,
+    onPlayPause 
 }: { 
     sequences: any,
-    onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void
+    onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
+    onPlayPause?: () => void
 }) => {
     let currentFrame = 0;
     const frame = useCurrentFrame();
     const [isDragging, setIsDragging] = useState(false);
+    const [mouseDownTime, setMouseDownTime] = useState(0);
+    const [hasMoved, setHasMoved] = useState(false);
 
     // Get media position from sequence data
     const getMediaPosition = (sequenceIndex: number) => {
         return sequences[sequenceIndex]?.media?.position || { x: 50, y: 50 };
+    };
+
+    const handleBackgroundClick = (e: React.MouseEvent) => {
+        if (hasMoved || isDragging) return;
+        
+        const clickDuration = Date.now() - mouseDownTime;
+        if (clickDuration > 200) return; // Plus de 200ms = probablement un drag
+        
+        if (onPlayPause) {
+            onPlayPause();
+        }
     };
 
     const startMediaDrag = useCallback((e: React.MouseEvent, sequenceIndex: number) => {
@@ -26,6 +41,8 @@ export const MediaBackground = ({
         
         e.preventDefault();
         e.stopPropagation();
+        setMouseDownTime(Date.now());
+        setHasMoved(false);
         setIsDragging(true);
         
         const startX = e.clientX;
@@ -33,6 +50,7 @@ export const MediaBackground = ({
         const currentPosition = getMediaPosition(sequenceIndex);
         
         const onPointerMove = (pointerMoveEvent: PointerEvent) => {
+            setHasMoved(true);
             const deltaX = (pointerMoveEvent.clientX - startX) / 8; // Sensibilité réduite
             const deltaY = (pointerMoveEvent.clientY - startY) / 8;
             
@@ -127,7 +145,12 @@ export const MediaBackground = ({
                                             zIndex: 10,
                                             pointerEvents: 'auto'
                                         }}
-                                        onMouseDown={(e) => startMediaDrag(e, index)}
+                                        onMouseDown={(e) => {
+                                            setMouseDownTime(Date.now());
+                                            setHasMoved(false);
+                                            startMediaDrag(e, index);
+                                        }}
+                                        onClick={handleBackgroundClick}
                                     />
                                 )}
                             </AbsoluteFill>
@@ -162,7 +185,12 @@ export const MediaBackground = ({
                                             zIndex: 10,
                                             pointerEvents: 'auto'
                                         }}
-                                        onMouseDown={(e) => startMediaDrag(e, index)}
+                                        onMouseDown={(e) => {
+                                            setMouseDownTime(Date.now());
+                                            setHasMoved(false);
+                                            startMediaDrag(e, index);
+                                        }}
+                                        onClick={handleBackgroundClick}
                                     />
                                 )}
                             </AbsoluteFill>

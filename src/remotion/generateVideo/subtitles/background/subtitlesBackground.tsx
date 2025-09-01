@@ -118,11 +118,12 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesBackground = ({ subtitleSequences, style, videoFormat, onStyleChange }: { 
+export const SubtitlesBackground = ({ subtitleSequences, style, videoFormat, onStyleChange, onPlayPause }: { 
 	subtitleSequences: any, 
 	style: any, 
 	videoFormat?: VideoFormat,
-	onStyleChange?: (newStyle: any) => void 
+	onStyleChange?: (newStyle: any) => void,
+	onPlayPause?: () => void 
 }) => {
 	const { width } = useVideoConfig();
 	
@@ -151,12 +152,13 @@ export const SubtitlesBackground = ({ subtitleSequences, style, videoFormat, onS
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleBackground 
+												<SubtitleBackground 
 							subtitleSequence={subtitle} 
 							start={currentFrame} 
 							style={style} 
 							videoFormat={videoFormat}
-							onPositionChange={handlePositionChange} 
+							onPositionChange={handlePositionChange}
+							onPlayPause={onPlayPause}
 						/>
 					</Sequence>
 				);

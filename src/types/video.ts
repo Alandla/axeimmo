@@ -25,7 +25,7 @@ export interface IWord {
 export interface IMedia {
   id?: string;
   type: 'image' | 'video' | 'audio';
-  usage: 'voice' | 'avatar' | 'media';
+  usage: 'voice' | 'avatar' | 'media' | 'element';
   show?: 'full' | 'half' | 'hide';
   startAt?: number;
   name: string;
@@ -96,6 +96,15 @@ export interface ITransition {
   mode?: string;
 }
 
+export interface IElement {
+  media: IMedia;
+  position: { x: number; y: number };
+  start: number;
+  end: number;
+  durationInFrames: number;
+  size: number;
+}
+
 export interface IVideo {
   id?: string;
   spaceId: string; // MongoDB ObjectId as string
@@ -143,6 +152,7 @@ export interface IVideo {
     };
     sequences: ISequence[];
     transitions?: ITransition[];
+    elements?: IElement[];
     avatar?: AvatarLook
   };
   history?: {

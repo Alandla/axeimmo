@@ -4,7 +4,7 @@ import { getVideoDimensions } from "@/src/types/video";
 import { Player, PlayerRef } from "@remotion/player";
 import { useEffect, useState } from "react";
 import { preloadAudio, preloadImage, preloadVideo } from "@remotion/preload";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ImagePlay, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ReviewFloating } from "@/src/components/ReviewFloating";
 import VideoFormatSelector from "@/src/components/edit/video-format-selector";
@@ -12,6 +12,9 @@ import AvatarSelector from "@/src/components/edit/avatar-selector";
 import { AvatarSelectionModal } from "@/src/components/modal/avatar-selection-modal";
 import { AvatarLook } from "@/src/types/avatar";
 import { LogoPosition } from "@/src/types/space";
+import { Button } from "@/src/components/ui/button";
+import { ElementsSelectionModal } from "@/src/components/modal/elements-selection-modal";
+import { IMedia, IElement } from "@/src/types/video";
 
 export default function VideoPreview({ 
     playerRef, 
@@ -28,7 +31,17 @@ export default function VideoPreview({
     onAvatarChange,
     onLogoPositionChange,
     onLogoSizeChange,
-    logoData
+    logoData,
+    spaceId,
+    onElementSelect,
+    onElementPositionChange,
+    onElementSizeChange,
+    onElementStartChange,
+    onElementEndChange,
+    onElementMediaChange,
+    onElementDelete,
+    elementToReplaceIndex,
+    onElementReplaceSelect
 }: { 
     playerRef: React.RefObject<PlayerRef>, 
     video: IVideo | null, 
@@ -49,13 +62,24 @@ export default function VideoPreview({
         position: LogoPosition;
         show: boolean;
         size: number;
-    }
+    },
+    spaceId?: string,
+    onElementSelect?: (media: IMedia) => void,
+    onElementPositionChange?: (index: number, position: { x: number, y: number }) => void,
+    onElementSizeChange?: (index: number, size: number) => void,
+    onElementStartChange?: (index: number, start: number) => void,
+    onElementEndChange?: (index: number, end: number) => void,
+    onElementMediaChange?: (index: number) => void,
+    onElementDelete?: (index: number) => void,
+    elementToReplaceIndex?: number | null,
+    onElementReplaceSelect?: (media: IMedia) => void
 }) {
     const t = useTranslations('edit');
     const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
     const [showReview, setShowReview] = useState(false);
     const [hasInteractedWithReview, setHasInteractedWithReview] = useState(false);
     const [showAvatarModal, setShowAvatarModal] = useState(false);
+    const [showElementsModal, setShowElementsModal] = useState(false);
     // Removed floating LogoPositionSelector here; it is now shown above the logo inside the canvas
 
     // Get video dimensions based on format
@@ -136,6 +160,23 @@ export default function VideoPreview({
         }
     };
 
+    const handleElementMediaChangeLocal = (index: number) => {
+        // Pour le changement de média, on appelle le handler parent puis on ouvre le modal
+        onElementMediaChange?.(index);
+        setShowElementsModal(true);
+    };
+
+    const handlePlayPause = () => {
+        const player = playerRef.current;
+        if (!player) return;
+        
+        if (player.isPlaying()) {
+            player.pause();
+        } else {
+            player.play();
+        }
+    };
+
     return (
         <div className={`h-full flex flex-col items-center justify-center ${!isMobile ? 'p-4' : ''}`}>
             {video?.video?.avatar && (
@@ -144,13 +185,25 @@ export default function VideoPreview({
                     {t('lip-sync-export-message')}
                 </div>
             )}
-            {video?.video && onVideoFormatChange && (
+            {video?.video && (onVideoFormatChange || spaceId) && (
                 <div className="w-full mb-4">
-                    <div className={`grid gap-2 ${onAvatarChange ? 'grid-cols-2' : 'grid-cols-1'}`}>
-                        <VideoFormatSelector
-                            value={video.video.format || 'vertical'}
-                            onValueChange={onVideoFormatChange}
-                        />
+                    <div className={`grid gap-2 ${spaceId ? (onAvatarChange ? 'grid-cols-3' : 'grid-cols-2') : (onAvatarChange ? 'grid-cols-2' : 'grid-cols-1')}`}>
+                        {spaceId && (
+                            <Button
+                                variant="outline"
+                                onClick={() => setShowElementsModal(true)}
+                                className="w-full"
+                            >
+                                <ImagePlay className="h-4 w-4" />
+                                {t('add-elements')}
+                            </Button>
+                        )}
+                        {onVideoFormatChange && (
+                            <VideoFormatSelector
+                                value={video.video.format || 'vertical'}
+                                onValueChange={onVideoFormatChange}
+                            />
+                        )}
                         {onAvatarChange && (
                             <AvatarSelector
                                 selectedAvatar={video.video.avatar || null}
@@ -196,9 +249,17 @@ export default function VideoPreview({
                             onMediaPositionChange,
                             onLogoPositionChange,
                             onLogoSizeChange,
+                            onElementPositionChange: onElementPositionChange,
+                            onElementSizeChange: onElementSizeChange,
+                            onElementStartChange: onElementStartChange,
+                            onElementEndChange: onElementEndChange,
+                            onElementMediaChange: handleElementMediaChangeLocal,
+                            onElementDelete: onElementDelete,
+                            onPlayPause: handlePlayPause,
                         }}
                         numberOfSharedAudioTags={12}
                         controls
+                        clickToPlay={false}
                         style={{
                             width: '100%',
                             height: '100%',
@@ -222,6 +283,15 @@ export default function VideoPreview({
                     onClose={() => setShowAvatarModal(false)}
                     currentAvatar={video?.video?.avatar || null}
                     onAvatarChange={onAvatarChange}
+                />
+            )}
+            
+            {spaceId && (
+                <ElementsSelectionModal
+                    isOpen={showElementsModal}
+                    onClose={() => setShowElementsModal(false)}
+                    spaceId={spaceId}
+                    onElementSelect={elementToReplaceIndex !== null ? (onElementReplaceSelect || (() => {})) : (onElementSelect || (() => {}))}
                 />
             )}
         </div>

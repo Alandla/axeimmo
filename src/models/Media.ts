@@ -11,7 +11,7 @@ const mediaSchema = new mongoose.Schema({
     usage: {
       type: String,
       validate(value: string) {
-        return ["voice", "avatar", "media"].includes(value);
+        return ["voice", "avatar", "media", "element"].includes(value);
       },
     },
     show: {
