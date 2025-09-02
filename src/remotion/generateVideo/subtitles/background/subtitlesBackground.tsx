@@ -152,7 +152,7 @@ export const SubtitlesBackground = ({ subtitleSequences, style, videoFormat, onS
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-												<SubtitleBackground 
+						<SubtitleBackground 
 							subtitleSequence={subtitle} 
 							start={currentFrame} 
 							style={style} 

@@ -154,7 +154,7 @@ export const SubtitlesDaniel = ({ subtitleSequences, style, videoFormat, onStyle
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-												<SubtitleDaniel 
+						<SubtitleDaniel 
 							subtitleSequence={subtitle} 
 							start={currentFrame} 
 							style={style} 
