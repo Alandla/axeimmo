@@ -10,6 +10,8 @@ export interface IExport {
   downloadUrl?: string;
   creditCost: number;
   renderCost?: number;
+  costAvatar?: number;
+  costTotal?: number;
   errorMessage?: string;
   webhookUrl?: string;
   createdAt?: Date;
