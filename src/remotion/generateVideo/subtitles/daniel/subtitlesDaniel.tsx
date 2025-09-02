@@ -118,11 +118,12 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesDaniel = ({ subtitleSequences, style, videoFormat, onStyleChange }: { 
+export const SubtitlesDaniel = ({ subtitleSequences, style, videoFormat, onStyleChange, onPlayPause }: { 
 	subtitleSequences: any, 
 	style: any, 
 	videoFormat?: VideoFormat,
-	onStyleChange?: (newStyle: any) => void 
+	onStyleChange?: (newStyle: any) => void,
+	onPlayPause?: () => void 
 }) => {
 	const { width } = useVideoConfig();
 	
@@ -158,7 +159,8 @@ export const SubtitlesDaniel = ({ subtitleSequences, style, videoFormat, onStyle
 							start={currentFrame} 
 							style={style} 
 							videoFormat={videoFormat}
-							onPositionChange={handlePositionChange} 
+							onPositionChange={handlePositionChange}
+							onPlayPause={onPlayPause}
 						/>
 					</Sequence>
 				);

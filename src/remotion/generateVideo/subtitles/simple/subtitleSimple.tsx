@@ -3,10 +3,12 @@ import { Line, Word } from "../../type/subtitle";
 import { useState, useCallback, useRef, useEffect } from "react";
 import googleFonts from "../../config/googleFonts.config";
 
-export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChange }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void }) => {
+export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChange, onPlayPause }: { subtitleSequence: any, start: number, style: any, onPositionChange?: (position: number) => void, onPlayPause?: () => void }) => {
     const frame = useCurrentFrame();
     const [isDragging, setIsDragging] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [mouseDownTime, setMouseDownTime] = useState(0);
+    const [hasMoved, setHasMoved] = useState(false);
     const subtitleRef = useRef<SVGSVGElement>(null);
     const playerElementRef = useRef<HTMLElement | null>(null);
 
@@ -31,6 +33,17 @@ export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChang
         return parent;
     }, []);
 
+    const handleSubtitleClick = (e: React.MouseEvent) => {
+        if (hasMoved || isDragging) return;
+        
+        const clickDuration = Date.now() - mouseDownTime;
+        if (clickDuration > 200) return; // Plus de 200ms = probablement un drag
+        
+        if (onPlayPause) {
+            onPlayPause();
+        }
+    };
+
     // Function to start dragging
     const startDragging = useCallback((e: React.MouseEvent) => {
         if (!onPositionChange) return;
@@ -38,6 +51,9 @@ export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChang
         // Prevent default behavior and propagation
         e.preventDefault();
         e.stopPropagation();
+        
+        setMouseDownTime(Date.now());
+        setHasMoved(false);
         
         // Find and store the player element at the beginning of the drag
         const playerElement = findPlayerElement();
@@ -54,6 +70,8 @@ export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChang
         const onMouseMove = (moveEvent: PointerEvent) => {
             // Prevent default to avoid selecting text
             moveEvent.preventDefault();
+            
+            setHasMoved(true);
             
             if (playerElement && playerRect) {
                 // Update the player rect if necessary (in case of resize)
@@ -141,7 +159,12 @@ export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChang
                     cursor: onPositionChange ? (isDragging ? 'grabbing' : (isHovered ? 'grab' : 'default')) : 'default',
                 }}
                 ref={subtitleRef}
-                onMouseDown={startDragging}
+                onMouseDown={(e) => {
+                    setMouseDownTime(Date.now());
+                    setHasMoved(false);
+                    startDragging(e);
+                }}
+                onClick={handleSubtitleClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >

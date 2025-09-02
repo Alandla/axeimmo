@@ -33,9 +33,10 @@ interface AssetCardProps {
   setMedia: (media: IMediaSpace) => void
   onClick: () => void
   onDelete?: (media: IMedia) => void
+  isSelected?: boolean
 }
 
-export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDelete }: AssetCardProps) {
+export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDelete, isSelected = false }: AssetCardProps) {
   const t = useTranslations('assets')
   const { data: session } = useSession()
   const { toast } = useToast()
@@ -154,7 +155,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
     <>
       <div className="relative">
         <div 
-          className="relative bg-muted aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group" 
+          className={`relative bg-muted aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group ${isSelected ? 'ring-2 ring-primary' : ''}`}
           onClick={onClick}
         >
           {media.image?.link && !imageError ? (

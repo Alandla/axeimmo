@@ -11,6 +11,7 @@ import { SubtitlesModern } from './subtitles/modern/subtitlesModern';
 import { Voices } from './components/Audios';
 import { Transitions } from './components/Transitions';
 import { SpaceLogo } from './components/SpaceLogo';
+import { VideoElements } from './components/VideoElements';
 import { Logo, LogoPosition } from './type/space';
 
 export const VideoGenerate = ({ 
@@ -24,6 +25,13 @@ export const VideoGenerate = ({
 	onMediaPositionChange,
 	onLogoPositionChange,
 	onLogoSizeChange,
+	onElementPositionChange,
+	onElementSizeChange,
+	onElementStartChange,
+	onElementEndChange,
+	onElementMediaChange,
+	onElementDelete,
+	onPlayPause,
 }: { 
 	data: any, 
 	showWatermark?: boolean,
@@ -35,6 +43,13 @@ export const VideoGenerate = ({
 	onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
 	onLogoPositionChange?: (position: LogoPosition) => void;
 	onLogoSizeChange?: (size: number) => void;
+	onElementPositionChange?: (index: number, position: { x: number, y: number }) => void;
+	onElementSizeChange?: (index: number, size: number) => void;
+	onElementStartChange?: (index: number, start: number) => void;
+	onElementEndChange?: (index: number, end: number) => void;
+	onElementMediaChange?: (index: number) => void;
+	onElementDelete?: (index: number) => void;
+	onPlayPause?: () => void;
 }) => {
 	// Vérification de sécurité pour éviter l'erreur quand data.video est null
 	if (!data?.video) {
@@ -63,14 +78,25 @@ export const VideoGenerate = ({
 				onAvatarHeightRatioChange={onAvatarHeightRatioChange} 
 				onAvatarPositionChange={onAvatarPositionChange}
 				onMediaPositionChange={onMediaPositionChange}
-			/> : <MediaBackground sequences={data.video.sequences} onMediaPositionChange={onMediaPositionChange} /> }
+				onPlayPause={onPlayPause}
+			/> : <MediaBackground sequences={data.video.sequences} onMediaPositionChange={onMediaPositionChange} onPlayPause={onPlayPause} /> }
 			{ data.video.transitions && <Transitions sequences={data.video.sequences} transitions={data.video.transitions} /> }
-			{ data.video.subtitle?.style?.template === 'bold' && <SubtitlesBold subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} /> }
-			{ data.video.subtitle?.style?.template === 'simple' && <SubtitlesSimple subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={onSubtitleStyleChange} /> }
-			{ data.video.subtitle?.style?.template === 'background' && <SubtitlesBackground subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} /> }
-			{ data.video.subtitle?.style?.template === 'clean' && <SubtitlesClean subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} /> }
-			{ data.video.subtitle?.style?.template === 'daniel' && <SubtitlesDaniel subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} /> }
-			{ data.video.subtitle?.style?.template === 'modern' && <SubtitlesModern subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} /> }
+			{ data.video.elements && data.video.elements.length > 0 && <VideoElements 
+				elements={data.video.elements} 
+				sequences={data.video.sequences}
+				onElementPositionChange={onElementPositionChange}
+				onElementSizeChange={onElementSizeChange}
+				onElementStartChange={onElementStartChange}
+				onElementEndChange={onElementEndChange}
+				onElementMediaChange={onElementMediaChange}
+				onElementDelete={onElementDelete}
+			/> }
+			{ data.video.subtitle?.style?.template === 'bold' && <SubtitlesBold subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} onPlayPause={onPlayPause} /> }
+			{ data.video.subtitle?.style?.template === 'simple' && <SubtitlesSimple subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={onSubtitleStyleChange} onPlayPause={onPlayPause} /> }
+			{ data.video.subtitle?.style?.template === 'background' && <SubtitlesBackground subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} onPlayPause={onPlayPause} /> }
+			{ data.video.subtitle?.style?.template === 'clean' && <SubtitlesClean subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} onPlayPause={onPlayPause} /> }
+			{ data.video.subtitle?.style?.template === 'daniel' && <SubtitlesDaniel subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} onPlayPause={onPlayPause} /> }
+			{ data.video.subtitle?.style?.template === 'modern' && <SubtitlesModern subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} onPlayPause={onPlayPause} /> }
 		</>
 	);
 };

@@ -99,6 +99,32 @@ const videoSchema = new mongoose.Schema({
         language: String,
       },
       sequences: [sequenceSchema],
+      elements: [{
+        media: mediaSchema,
+        position: {
+          x: {
+            type: Number,
+            min: 0,
+            max: 100,
+            default: 50
+          },
+          y: {
+            type: Number,
+            min: 0,
+            max: 100,
+            default: 50
+          }
+        },
+        start: Number,
+        end: Number,
+        durationInFrames: Number,
+        size: {
+          type: Number,
+          min: 0,
+          max: 100,
+          default: 25
+        }
+      }],
       avatar: {
         id: String,
         name: String,

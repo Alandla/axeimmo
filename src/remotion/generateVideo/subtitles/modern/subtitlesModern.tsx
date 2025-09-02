@@ -167,7 +167,7 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesModern = ({ subtitleSequences, style, videoFormat, onStyleChange }: { subtitleSequences: any, style: any, videoFormat?: VideoFormat, onStyleChange?: (newStyle: any) => void }) => {
+export const SubtitlesModern = ({ subtitleSequences, style, videoFormat, onStyleChange, onPlayPause }: { subtitleSequences: any, style: any, videoFormat?: VideoFormat, onStyleChange?: (newStyle: any) => void, onPlayPause?: () => void }) => {
 	const { width } = useVideoConfig();
 	
 	const subtitles = useMemo(() => {
@@ -197,7 +197,7 @@ export const SubtitlesModern = ({ subtitleSequences, style, videoFormat, onStyle
 				}
 				const element = (
 					<Sequence key={index} from={currentFrame} durationInFrames={subtitle.durationInFrames}>
-						<SubtitleModern subtitleSequence={subtitle} start={currentFrame} style={style} videoFormat={videoFormat} onPositionChange={handlePositionChange} />
+						<SubtitleModern subtitleSequence={subtitle} start={currentFrame} style={style} videoFormat={videoFormat} onPositionChange={handlePositionChange} onPlayPause={onPlayPause} />
 					</Sequence>
 				);
 				currentFrame += subtitle.durationInFrames;

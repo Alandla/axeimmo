@@ -4,17 +4,20 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import googleFonts from "../../config/googleFonts.config";
 import { VideoFormat, calculateSubtitlePosition } from "../../utils/videoDimensions";
 
-export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat, onPositionChange }: { 
+export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat, onPositionChange, onPlayPause }: { 
     subtitleSequence: any, 
     start: number, 
     style: any, 
     videoFormat?: VideoFormat,
-    onPositionChange?: (position: number) => void 
+    onPositionChange?: (position: number) => void,
+    onPlayPause?: () => void 
 }) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
     const [isDragging, setIsDragging] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [mouseDownTime, setMouseDownTime] = useState(0);
+    const [hasMoved, setHasMoved] = useState(false);
     const subtitleRef = useRef<HTMLDivElement>(null);
     const playerElementRef = useRef<HTMLElement | null>(null);
 
@@ -34,11 +37,25 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat
         return parent;
     }, []);
 
+    const handleSubtitleClick = (e: React.MouseEvent) => {
+        if (hasMoved || isDragging) return;
+        
+        const clickDuration = Date.now() - mouseDownTime;
+        if (clickDuration > 200) return; // Plus de 200ms = probablement un drag
+        
+        if (onPlayPause) {
+            onPlayPause();
+        }
+    };
+
     const startDragging = useCallback((e: React.MouseEvent) => {
         if (!onPositionChange) return;
         
         e.preventDefault();
         e.stopPropagation();
+        
+        setMouseDownTime(Date.now());
+        setHasMoved(false);
         
         const playerElement = findPlayerElement();
         let playerRect = playerElement ? playerElement.getBoundingClientRect() : null;
@@ -50,6 +67,8 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat
         
         const onMouseMove = (moveEvent: PointerEvent) => {
             moveEvent.preventDefault();
+            
+            setHasMoved(true);
             
             if (playerElement && playerRect) {
                 playerRect = playerElement.getBoundingClientRect();
@@ -226,7 +245,12 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat
                     userSelect: 'none',
                     touchAction: 'none',
                 }}
-                onMouseDown={startDragging}
+                onMouseDown={(e) => {
+                    setMouseDownTime(Date.now());
+                    setHasMoved(false);
+                    startDragging(e);
+                }}
+                onClick={handleSubtitleClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >

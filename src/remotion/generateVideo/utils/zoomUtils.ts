@@ -56,7 +56,6 @@ export const analyzeSequenceZooms = (sequence: any) => {
             // We want to end up at least at 1.0 after the negative zoom
             const targetAfterNegativeZoom = 1.0;
             initialZoom = targetAfterNegativeZoom - firstZoom.config.intensity; // intensity is negative, so this adds
-            console.log(`First zoom has negative intensity (${firstZoom.config.intensity}), starting at ${initialZoom} to reach ${targetAfterNegativeZoom}`);
         }
         
         // Additional check: ensure we never go below 0.5 throughout the sequence
@@ -85,15 +84,6 @@ export const analyzeSequenceZooms = (sequence: any) => {
             point.targetLevel = currentLevel;
         }
     });
-    
-    // Debug log
-    if (zoomPoints.length > 0) {
-        console.log('Sequence zoom analysis:', {
-            initialZoom,
-            zoomCount: zoomPoints.length,
-            zooms: zoomPoints.map(p => ({ frame: p.frame, type: p.type, target: p.targetLevel }))
-        });
-    }
     
     return { initialZoom, zoomPoints };
 };
