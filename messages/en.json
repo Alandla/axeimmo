@@ -373,9 +373,12 @@
       "export-button": "Export",
       "lip-sync-export-message": "The lip-sync will only be displayed after export.",
       "unsaved": "Unsaved",
-      "add-elements": "Add elements",
+      "add-elements": "Add",
       "elements": {
         "modal-title": "Select an element",
+        "no-assets": "No elements",
+        "no-assets-description": "Start by adding your elements to see them here.",
+        "loading": "Loading elements...",
         "toast": {
           "uploading-file": "Uploading element",
           "uploading-file-description": "Please wait while the element is being uploaded",
@@ -569,6 +572,9 @@
       },
       "sequence-edit-assets": {
         "upload-file-button": "Upload a file",
+        "no-assets": "No media",
+        "no-assets-description": "Start by adding your media to see them here.",
+        "loading": "Loading media...",
         "toast": {
           "title-error": "Error",
           "uploading-file": "Uploading file...",

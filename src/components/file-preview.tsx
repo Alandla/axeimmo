@@ -6,8 +6,8 @@ import { useState, useEffect } from "react";
 
 interface FilePreviewProps {
   file: File;
-  usage: "voice" | "avatar" | "media";
-  onUsageChange: (newUsage: "voice" | "avatar" | "media") => void;
+  usage: "voice" | "avatar" | "media" | "element";
+  onUsageChange: (newUsage: "voice" | "avatar" | "media" | "element") => void;
   onRemove: () => void;
 }
 

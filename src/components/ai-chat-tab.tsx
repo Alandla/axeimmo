@@ -93,7 +93,7 @@ export function AiChatTab({
       setFiles([...files, ...updatedFiles]);
     };
 
-    const handleFileUsageChange = (fileIndex: number, newUsage: "voice" | "avatar" | "media") => {
+    const handleFileUsageChange = (fileIndex: number, newUsage: "voice" | "avatar" | "media" | "element") => {
       setFiles(files.map((file, index) => 
         index === fileIndex ? { ...file, usage: newUsage } : file
       ));

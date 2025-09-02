@@ -1,24 +1,7 @@
-import { AbsoluteFill, Img, Video, useCurrentFrame, useVideoConfig, useCurrentScale, OffthreadVideo } from "remotion";
+import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, useCurrentScale, OffthreadVideo, Sequence, getRemotionEnvironment } from "remotion";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { IElement, ISequence, IWord } from "@/src/types/video";
-import { Button } from "@/src/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Clock, X, Clock9, Clock8 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectLabel,
-} from "@/src/components/ui/select";
-import { cn } from "@/src/lib/utils";
+import { IElement, ISequence } from "../type/video";
+import { VideoElementMenu } from "../../../components/ui/video-element-menu";
 
 interface VideoElementsProps {
   elements: IElement[];
@@ -32,7 +15,7 @@ interface VideoElementsProps {
 }
 
 const MIN_SIZE = 5; // Taille minimale en pourcentage
-const MAX_SIZE = 50; // Taille maximale en pourcentage
+const MAX_SIZE = 100; // Taille maximale en pourcentage
 
 export const VideoElements = ({
   elements,
@@ -44,9 +27,8 @@ export const VideoElements = ({
   onElementMediaChange,
   onElementDelete,
 }: VideoElementsProps) => {
-  const { width: compositionWidth, height: compositionHeight } = useVideoConfig();
+  const { width: compositionWidth, height: compositionHeight, fps } = useVideoConfig();
   const frame = useCurrentFrame();
-  const currentTime = frame / 60; // Assuming 60 fps
   const scale = useCurrentScale();
 
   const [selectedElementIndex, setSelectedElementIndex] = useState<number | null>(null);
@@ -292,377 +274,231 @@ export const VideoElements = ({
     [findPlayerElement, compositionWidth, compositionHeight, elements, onElementSizeChange]
   );
 
-  // Obtenir tous les mots avec leurs timings pour les menus Start/End
-  const getWordsForStartMenu = (element: IElement) => {
-    const items: ({ type: 'separator'; sequenceIndex: number } | { type: 'word'; word: IWord; sequenceIndex: number })[] = [];
+
+
+
+
+  // Helper function to render element media
+  const renderElementMedia = (element: IElement, index: number) => {
+    // Calculer le ratio à la volée avec les dimensions du média ou ratio par défaut
+    let naturalRatio = 1; // Ratio par défaut (carré)
+    if (naturalRatios[index]) {
+      naturalRatio = naturalRatios[index];
+    } else if (element.media.type === 'image' && element.media.image?.width && element.media.image?.height) {
+      naturalRatio = element.media.image.height / element.media.image.width;
+    } else if (element.media.type === 'video' && element.media.video?.width && element.media.video?.height) {
+      naturalRatio = element.media.video.height / element.media.video.width;
+    }
     
-    sequences.forEach((sequence, sequenceIndex) => {
-      const validWords = sequence.words.filter(word => word.start < element.end);
-      if (validWords.length > 0) {
-        items.push({ type: 'separator', sequenceIndex });
-        validWords.forEach((word) => {
-          items.push({ type: 'word', word, sequenceIndex });
-        });
-      }
-    });
-    return items;
-  };
+    const elementWidth = compositionWidth * (element.size / 100);
+    const elementHeight = elementWidth * naturalRatio;
 
-  const getWordsForEndMenu = (element: IElement) => {
-    const items: ({ type: 'separator'; sequenceIndex: number } | { type: 'word'; word: IWord; sequenceIndex: number })[] = [];
-    
-    sequences.forEach((sequence, sequenceIndex) => {
-      const validWords = sequence.words.filter(word => word.end > element.start);
-      if (validWords.length > 0) {
-        items.push({ type: 'separator', sequenceIndex });
-        validWords.forEach((word) => {
-          items.push({ type: 'word', word, sequenceIndex });
-        });
-      }
-    });
-    return items;
-  };
-
-  // Créer les valeurs pour les selects
-  const createSelectValue = (word: IWord, sequenceIndex: number) => {
-    return `${sequenceIndex}-${word.start}-${word.end}`;
-  };
-
-  const parseSelectValue = (value: string) => {
-    const [sequenceIndex, start, end] = value.split('-');
-    return {
-      sequenceIndex: parseInt(sequenceIndex),
-      start: parseFloat(start),
-      end: parseFloat(end)
+    const mediaStyle: React.CSSProperties = {
+      position: "absolute",
+      width: `${elementWidth}px`,
+      height: `${elementHeight}px`,
+      left: `${(element.position.x / 100) * compositionWidth - elementWidth / 2}px`,
+      top: `${(element.position.y / 100) * compositionHeight - elementHeight / 2}px`,
+      pointerEvents: "none",
+      zIndex: 100 + index,
+      objectFit: "cover",
     };
+
+    if (element.media.type === 'image' && element.media.image) {
+      return (
+        <Img
+          src={element.media.image.link}
+          style={mediaStyle}
+          onLoad={(e) => {
+            const img = e.currentTarget as HTMLImageElement;
+            if (img && img.naturalWidth) {
+              setNaturalRatios(prev => ({
+                ...prev,
+                [index]: img.naturalHeight / img.naturalWidth
+              }));
+            }
+          }}
+        />
+      );
+    } else if (element.media.type === 'video' && element.media.video) {
+      return (
+        <OffthreadVideo
+          src={element.media.video.link}
+          style={mediaStyle}
+          muted
+          startFrom={(element.media.startAt || 0) * fps}
+        />
+      );
+    }
+    return null;
   };
 
+  // Helper function to render element overlay
+  const renderElementOverlay = (element: IElement, index: number) => {
+    const isSelected = selectedElementIndex === index;
+    const isHovered = hoveredElementIndex === index;
+    
+    // Calculer le ratio à la volée avec les dimensions du média ou ratio par défaut
+    let naturalRatio = 1; // Ratio par défaut (carré)
+    if (naturalRatios[index]) {
+      naturalRatio = naturalRatios[index];
+    } else if (element.media.type === 'image' && element.media.image?.width && element.media.image?.height) {
+      naturalRatio = element.media.image.height / element.media.image.width;
+    } else if (element.media.type === 'video' && element.media.video?.width && element.media.video?.height) {
+      naturalRatio = element.media.video.height / element.media.video.width;
+    }
+    
+    const elementWidth = compositionWidth * (element.size / 100);
+    const elementHeight = elementWidth * naturalRatio;
+    const outlineBorder = Math.ceil(2 / Math.max(0.0001, scale));
 
+    const elementStyle: React.CSSProperties = {
+      position: "absolute",
+      left: `${(element.position.x / 100) * compositionWidth - elementWidth / 2}px`,
+      top: `${(element.position.y / 100) * compositionHeight - elementHeight / 2}px`,
+      width: `${elementWidth}px`,
+      height: `${elementHeight}px`,
+      outline: ((isHovered && !isResizing) || isSelected) ? `${outlineBorder}px solid #0B84F3` : undefined,
+      userSelect: "none",
+      touchAction: "none",
+      cursor: isDragging ? "grabbing" : isHovered ? "grab" : "pointer",
+      zIndex: 100 + index,
+    };
+
+    const handleSize = Math.max(6, Math.round(8 / Math.max(0.0001, scale)));
+    const handleBorder = 1 / Math.max(0.0001, scale);
+
+    const sharedHandleStyle: React.CSSProperties = {
+      position: "absolute",
+      width: handleSize,
+      height: handleSize,
+      backgroundColor: "white",
+      border: `${handleBorder}px solid #0B84F3`,
+      borderRadius: 2,
+    };
+
+    return (
+      <div
+        ref={(el) => {
+          elementRefs.current[index] = el;
+        }}
+        style={elementStyle}
+        onMouseDown={(e) => startDragging(e, index)}
+        onClick={(e) => handleElementClick(e, index)}
+        onMouseEnter={() => handleElementMouseEnter(index)}
+        onMouseLeave={handleElementMouseLeave}
+      >
+        {/* Poignées de redimensionnement */}
+        {((isHovered && !isResizing) || isSelected) && (
+          <>
+            <div
+              style={{
+                ...sharedHandleStyle,
+                left: 0,
+                top: 0,
+                transform: "translate(-50%, -50%)",
+                cursor: "nwse-resize",
+              }}
+              onMouseDown={(ev) => startResizing(ev, index, "top-left")}
+            />
+            <div
+              style={{
+                ...sharedHandleStyle,
+                left: "100%",
+                top: 0,
+                transform: "translate(-50%, -50%)",
+                cursor: "nesw-resize",
+              }}
+              onMouseDown={(ev) => startResizing(ev, index, "top-right")}
+            />
+            <div
+              style={{
+                ...sharedHandleStyle,
+                left: 0,
+                top: "100%",
+                transform: "translate(-50%, -50%)",
+                cursor: "nesw-resize",
+              }}
+              onMouseDown={(ev) => startResizing(ev, index, "bottom-left")}
+            />
+            <div
+              style={{
+                ...sharedHandleStyle,
+                left: "100%",
+                top: "100%",
+                transform: "translate(-50%, -50%)",
+                cursor: "nwse-resize",
+              }}
+              onMouseDown={(ev) => startResizing(ev, index, "bottom-right")}
+            />
+          </>
+        )}
+
+        {/* Menu flottant */}
+        {getRemotionEnvironment().isPlayer && showMenu && isSelected && (
+          <div ref={menuRef}>
+            <VideoElementMenu
+              element={element}
+              sequences={sequences}
+              index={index}
+              scale={scale}
+              onElementMediaChange={onElementMediaChange}
+              onElementStartChange={onElementStartChange}
+              onElementEndChange={onElementEndChange}
+              onElementDelete={onElementDelete}
+              onMouseDown={(ev) => ev.stopPropagation()}
+              onClick={(ev) => ev.stopPropagation()}
+            />
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <AbsoluteFill>
       {/* Conteneur avec overflow hidden pour les médias seulement */}
       <AbsoluteFill style={{ overflow: 'hidden' }}>
         {elements.map((element, index) => {
-          // Vérifier si l'élément doit être visible à ce moment
-          if (currentTime < element.start || currentTime > element.end) {
-            return null;
-          }
-
-          // Calculer le ratio à la volée avec les dimensions du média ou ratio par défaut
-          let naturalRatio = 1; // Ratio par défaut (carré)
-          if (naturalRatios[index]) {
-            naturalRatio = naturalRatios[index];
-          } else if (element.media.type === 'image' && element.media.image?.width && element.media.image?.height) {
-            naturalRatio = element.media.image.height / element.media.image.width;
-          } else if (element.media.type === 'video' && element.media.video?.width && element.media.video?.height) {
-            naturalRatio = element.media.video.height / element.media.video.width;
-          }
-          
-          const elementWidth = compositionWidth * (element.size / 100);
-          const elementHeight = elementWidth * naturalRatio;
+          const startFrame = Math.round(element.start * fps);
+          const endFrame = Math.round(element.end * fps);
+          const durationInFrames = (endFrame - startFrame) - 1;
 
           return (
-            <div key={`media-${index}`}>
-              {/* L'élément média */}
-              {element.media.type === 'image' && element.media.image ? (
-                <Img
-                  src={element.media.image.link}
-                  style={{
-                    position: "absolute",
-                    width: `${elementWidth}px`,
-                    height: `${elementHeight}px`,
-                    left: `${(element.position.x / 100) * compositionWidth - elementWidth / 2}px`,
-                    top: `${(element.position.y / 100) * compositionHeight - elementHeight / 2}px`,
-                    pointerEvents: "none",
-                    zIndex: 100 + index,
-                    objectFit: "cover",
-                  }}
-                  onLoad={(e) => {
-                    const img = e.currentTarget as HTMLImageElement;
-                    if (img && img.naturalWidth) {
-                      setNaturalRatios(prev => ({
-                        ...prev,
-                        [index]: img.naturalHeight / img.naturalWidth
-                      }));
-                    }
-                  }}
-                />
-              ) : element.media.type === 'video' && element.media.video ? (
-                <OffthreadVideo
-                  src={element.media.video.link}
-                  style={{
-                    position: "absolute",
-                    width: `${elementWidth}px`,
-                    height: `${elementHeight}px`,
-                    left: `${(element.position.x / 100) * compositionWidth - elementWidth / 2}px`,
-                    top: `${(element.position.y / 100) * compositionHeight - elementHeight / 2}px`,
-                    pointerEvents: "none",
-                    zIndex: 100 + index,
-                    objectFit: "cover",
-                  }}
-                  muted
-                  startFrom={(element.media.startAt || 0) * 60}
-                  endAt={(element.media.startAt || 0) * 60 + element.durationInFrames}
-                />
-              ) : null}
-            </div>
+            <Sequence
+              key={`media-${index}`}
+              from={startFrame}
+              durationInFrames={durationInFrames}
+              layout="none"
+            >
+              {/* Média uniquement */}
+              {renderElementMedia(element, index)}
+            </Sequence>
           );
         })}
       </AbsoluteFill>
 
-      {/* Conteneur pour les overlays et menus sans overflow hidden */}
-      {elements.map((element, index) => {
-        // Vérifier si l'élément doit être visible à ce moment
-        if (currentTime < element.start || currentTime > element.end) {
-          return null;
-        }
+      {getRemotionEnvironment().isPlayer && (
+        <AbsoluteFill style={{ overflow: 'visible' }}>
+          {elements.map((element, index) => {
+            const startFrame = Math.round(element.start * fps);
+            const endFrame = Math.round(element.end * fps);
+            const durationInFrames = (endFrame - startFrame) - 1;
 
-        const isSelected = selectedElementIndex === index;
-        const isHovered = hoveredElementIndex === index;
-        
-        // Calculer le ratio à la volée avec les dimensions du média ou ratio par défaut
-        let naturalRatio = 1; // Ratio par défaut (carré)
-        if (naturalRatios[index]) {
-          naturalRatio = naturalRatios[index];
-        } else if (element.media.type === 'image' && element.media.image?.width && element.media.image?.height) {
-          naturalRatio = element.media.image.height / element.media.image.width;
-        } else if (element.media.type === 'video' && element.media.video?.width && element.media.video?.height) {
-          naturalRatio = element.media.video.height / element.media.video.width;
-        }
-        
-        const elementWidth = compositionWidth * (element.size / 100);
-        const elementHeight = elementWidth * naturalRatio;
-        const outlineBorder = Math.ceil(2 / Math.max(0.0001, scale));
-
-        const elementStyle: React.CSSProperties = {
-          position: "absolute",
-          left: `${(element.position.x / 100) * compositionWidth - elementWidth / 2}px`,
-          top: `${(element.position.y / 100) * compositionHeight - elementHeight / 2}px`,
-          width: `${elementWidth}px`,
-          height: `${elementHeight}px`,
-          outline: ((isHovered && !isResizing) || isSelected) ? `${outlineBorder}px solid #0B84F3` : undefined,
-          userSelect: "none",
-          touchAction: "none",
-          cursor: isDragging ? "grabbing" : isHovered ? "grab" : "pointer",
-          zIndex: 100 + index,
-        };
-
-        const handleSize = Math.max(6, Math.round(8 / Math.max(0.0001, scale)));
-        const handleBorder = 1 / Math.max(0.0001, scale);
-
-        const sharedHandleStyle: React.CSSProperties = {
-          position: "absolute",
-          width: handleSize,
-          height: handleSize,
-          backgroundColor: "white",
-          border: `${handleBorder}px solid #0B84F3`,
-          borderRadius: 2,
-        };
-
-        return (
-          <div key={`overlay-${index}`}>
-
-            {/* Overlay de sélection */}
-            <div
-              ref={(el) => {
-                elementRefs.current[index] = el;
-              }}
-              style={elementStyle}
-              onMouseDown={(e) => startDragging(e, index)}
-              onClick={(e) => handleElementClick(e, index)}
-              onMouseEnter={() => handleElementMouseEnter(index)}
-              onMouseLeave={handleElementMouseLeave}
-            >
-              {/* Poignées de redimensionnement */}
-              {((isHovered && !isResizing) || isSelected) && (
-                <>
-                  <div
-                    style={{
-                      ...sharedHandleStyle,
-                      left: 0,
-                      top: 0,
-                      transform: "translate(-50%, -50%)",
-                      cursor: "nwse-resize",
-                    }}
-                    onMouseDown={(ev) => startResizing(ev, index, "top-left")}
-                  />
-                  <div
-                    style={{
-                      ...sharedHandleStyle,
-                      left: "100%",
-                      top: 0,
-                      transform: "translate(-50%, -50%)",
-                      cursor: "nesw-resize",
-                    }}
-                    onMouseDown={(ev) => startResizing(ev, index, "top-right")}
-                  />
-                  <div
-                    style={{
-                      ...sharedHandleStyle,
-                      left: 0,
-                      top: "100%",
-                      transform: "translate(-50%, -50%)",
-                      cursor: "nesw-resize",
-                    }}
-                    onMouseDown={(ev) => startResizing(ev, index, "bottom-left")}
-                  />
-                  <div
-                    style={{
-                      ...sharedHandleStyle,
-                      left: "100%",
-                      top: "100%",
-                      transform: "translate(-50%, -50%)",
-                      cursor: "nwse-resize",
-                    }}
-                    onMouseDown={(ev) => startResizing(ev, index, "bottom-right")}
-                  />
-                </>
-              )}
-
-              {/* Menu flottant */}
-              {showMenu && isSelected && (
-                <div
-                  ref={menuRef}
-                  onMouseDown={(ev) => ev.stopPropagation()}
-                  onClick={(ev) => ev.stopPropagation()}
-                  style={{
-                    position: "absolute",
-                    left: "50%",
-                    top: 0,
-                    transform: `translate(-50%, -100%) translateY(-${15 / Math.max(0.0001, scale)}px)`,
-                    zIndex: 1002,
-                  }}
-                >
-                  <div
-                    style={{
-                      transform: `scale(${1 / Math.max(0.0001, scale)})`,
-                      transformOrigin: "bottom center",
-                    }}
-                  >
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="bg-white border shadow-lg rounded-md p-1"
-                    >
-                    <div className="flex items-center gap-1">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6"
-                        onClick={() => onElementMediaChange?.(index)}
-                      >
-                        <RefreshCw className="h-4 w-4" />
-                      </Button>
-
-                      <div className="w-px h-4 bg-border mx-1"></div>
-
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-6 text-xs px-1 mr-1">
-                            {element.start.toFixed(2)}s
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent 
-                          className="overflow-y-auto overflow-x-hidden"
-                          style={{ maxHeight: '240px' }}
-                        >
-                          {getWordsForStartMenu(element).map((item, itemIndex) => {
-                            if (item.type === 'separator') {
-                              return (
-                                <div
-                                  key={`separator-${item.sequenceIndex}`}
-                                  className="px-2 py-1 text-xs text-muted-foreground font-medium"
-                                >
-                                  Sequence {item.sequenceIndex + 1}
-                                </div>
-                              );
-                            } else {
-                              const isSelected = Math.abs(item.word.start - element.start) < 0.01;
-                              return (
-                                <DropdownMenuItem
-                                  key={`word-${item.sequenceIndex}-${itemIndex}`}
-                                  className={cn(
-                                    "cursor-pointer text-xs flex justify-between",
-                                    isSelected && "bg-accent text-accent-foreground"
-                                  )}
-                                  onClick={() => onElementStartChange?.(index, item.word.start)}
-                                >
-                                  <span>{item.word.word}</span>
-                                  <span className="text-muted-foreground ml-2">
-                                    {item.word.start.toFixed(2)}s
-                                  </span>
-                                </DropdownMenuItem>
-                              );
-                            }
-                          })}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-
-                      <span>-</span>
-
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-6 text-xs px-1 ml-1">
-                            {element.end.toFixed(2)}s
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent 
-                          className="overflow-y-auto overflow-x-hidden"
-                          style={{ maxHeight: '240px' }}
-                        >
-                          {getWordsForEndMenu(element).map((item, itemIndex) => {
-                            if (item.type === 'separator') {
-                              return (
-                                <div
-                                  key={`separator-${item.sequenceIndex}`}
-                                  className="px-2 py-1 text-xs text-muted-foreground font-medium"
-                                >
-                                  Sequence {item.sequenceIndex + 1}
-                                </div>
-                              );
-                            } else {
-                              const isSelected = Math.abs(item.word.end - element.end) < 0.01;
-                              return (
-                                <DropdownMenuItem
-                                  key={`word-${item.sequenceIndex}-${itemIndex}`}
-                                  className={cn(
-                                    "cursor-pointer text-xs flex justify-between",
-                                    isSelected && "bg-accent text-accent-foreground"
-                                  )}
-                                  onClick={() => onElementEndChange?.(index, item.word.end)}
-                                >
-                                  <span>{item.word.word}</span>
-                                  <span className="text-muted-foreground ml-2">
-                                    {item.word.end.toFixed(2)}s
-                                  </span>
-                                </DropdownMenuItem>
-                              );
-                            }
-                          })}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-
-                      <div className="w-px h-4 bg-border mx-1"></div>
-
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 text-destructive hover:bg-red-200 hover:text-destructive"
-                        onClick={() => onElementDelete?.(index)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    </motion.div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      })}
+            return (
+              <Sequence
+                key={`overlay-${index}`}
+                from={startFrame}
+                durationInFrames={durationInFrames}
+                layout="none"
+              >
+                {/* Overlay de sélection uniquement */}
+                {renderElementOverlay(element, index)}
+              </Sequence>
+            );
+          })}
+        </AbsoluteFill>
+      )}
     </AbsoluteFill>
   );
 };

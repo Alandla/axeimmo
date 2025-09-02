@@ -349,6 +349,7 @@ export const generateVideoTask = task({
           if (videoScript && spaceData.medias && spaceData.medias.length > 0) {
             const availableMedias = spaceData.medias
               .filter((mediaSpace: IMediaSpace) => 
+                mediaSpace.media.usage !== 'element' && // Exclure les éléments
                 mediaSpace.autoPlacement !== false && 
                 mediaSpace.media.description && 
                 mediaSpace.media.description.length > 0 &&
@@ -372,6 +373,7 @@ export const generateVideoTask = task({
 
               if (recommendedMedia.length > 0) {
                 const filteredMedias = spaceData.medias.filter((mediaSpace: IMediaSpace) => 
+                  mediaSpace.media.usage !== 'element' && // Exclure les éléments
                   recommendedMedia.includes(mediaSpace.media.id || "")
                 );
                 

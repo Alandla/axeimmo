@@ -283,9 +283,12 @@
       "loading-video-data": "Chargement des données de la vidéo...",
       "loading-regenerating-audio": "Regénération de l'audio...",
       "export-button": "Exporter",
-      "add-elements": "Ajouter des éléments",
+      "add-elements": "Ajouter",
       "elements": {
         "modal-title": "Sélectionner un élément",
+        "no-assets": "Aucun élément",
+        "no-assets-description": "Commencez par ajouter vos éléments pour les voir ici.",
+        "loading": "Chargement des éléments...",
         "toast": {
           "uploading-file": "Téléchargement de l'élément",
           "uploading-file-description": "Veuillez patienter pendant le téléchargement de l'élément",
@@ -487,6 +490,9 @@
       },
       "sequence-edit-assets": {
         "upload-file-button": "Ajouter un fichier",
+        "no-assets": "Aucun média",
+        "no-assets-description": "Commencez par ajouter vos médias pour les voir ici.",
+        "loading": "Chargement des médias...",
         "toast": {
           "title-error": "Erreur",
           "uploading-file": "Téléchargement du fichier...",

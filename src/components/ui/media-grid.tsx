@@ -1,5 +1,5 @@
 import { IMedia, ISequence } from "@/src/types/video";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2, Upload, FileImage } from "lucide-react";
 import { Button } from "./button";
 import { useEffect, useState, useRef } from "react";
 import { basicApiCall } from "@/src/lib/api";
@@ -50,6 +50,7 @@ export default function MediaGrid({
 
   const [assets, setAssets] = useState<IMediaSpace[]>([])
   const [isUploadingFiles, setIsUploadingFiles] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { setSpaceId } = useMediaToDeleteStore()
   const { toast } = useToast()
   const { activeSpace, setActiveSpace } = useActiveSpaceStore()
@@ -72,7 +73,10 @@ export default function MediaGrid({
   useEffect(() => {
     // Vérifier si les assets sont déjà dans le store pour ce spaceId
     const allAssets = assetsBySpace.get(spaceId) || [];
-    const filteredAssets = allAssets.filter(asset => asset.media.usage === mediaUsage);
+    const filteredAssets = allAssets.filter(asset => 
+      asset.media.usage === mediaUsage && 
+      (mediaUsage === 'element' || asset.media.usage !== 'element') // Exclure les éléments sauf si on les demande explicitement
+    );
     
     if (filteredAssets.length > 0) {
       setAssets(filteredAssets);
@@ -82,11 +86,17 @@ export default function MediaGrid({
     // Seulement charger si on n'a pas encore d'assets pour cet usage
     const loadAssets = async () => {
       try {
+        setIsLoading(true);
         const assetsFromApi = await fetchAssetsFromStore(spaceId, false);
-        const filteredAssets = assetsFromApi.filter(asset => asset.media.usage === mediaUsage);
+        const filteredAssets = assetsFromApi.filter(asset => 
+          asset.media.usage === mediaUsage && 
+          (mediaUsage === 'element' || asset.media.usage !== 'element') // Exclure les éléments sauf si on les demande explicitement
+        );
         setAssets(filteredAssets);
+        setIsLoading(false);
       } catch (error) {
         console.error('Erreur lors du chargement des assets:', error);
+        setIsLoading(false);
       }
     };
 
@@ -99,7 +109,10 @@ export default function MediaGrid({
   // Écouter les changements dans le store pour mettre à jour les assets filtrés
   useEffect(() => {
     const allAssets = assetsBySpace.get(spaceId) || [];
-    const filteredAssets = allAssets.filter(asset => asset.media.usage === mediaUsage);
+    const filteredAssets = allAssets.filter(asset => 
+      asset.media.usage === mediaUsage && 
+      (mediaUsage === 'element' || asset.media.usage !== 'element') // Exclure les éléments sauf si on les demande explicitement
+    );
     setAssets(filteredAssets);
   }, [assetsBySpace, spaceId, mediaUsage]);
 
@@ -205,7 +218,8 @@ export default function MediaGrid({
         return {
           media: file,
           uploadedBy: session?.user?.id || '',
-          uploadedAt: new Date()
+          uploadedAt: new Date(),
+          autoPlacement: mediaUsage === 'element' ? false : true
         }
       })
 
@@ -264,20 +278,77 @@ export default function MediaGrid({
 
   const isSequenceMode = sequence && sequenceIndex !== undefined && setSequenceMedia;
 
+  // Composant Skeleton pour le chargement
+  const MediaSkeleton = () => {
+    const skeletonItems = [
+      { height: 'h-32' },
+      { height: 'h-24' },
+      { height: 'h-40' },
+      { height: 'h-28' },
+      { height: 'h-36' },
+      { height: 'h-20' },
+      { height: 'h-44' },
+      { height: 'h-32' },
+      { height: 'h-28' },
+    ];
+
+    return (
+      <div className="mt-4 flex gap-2">
+        {Array.from({ length: 3 }, (_, columnIndex) => (
+          <div key={columnIndex} className="flex-1 flex flex-col gap-2">
+            {skeletonItems
+              .filter((_, index) => index % 3 === columnIndex)
+              .map((item, index) => (
+                <div
+                  key={`skeleton-${columnIndex}-${index}`}
+                  className={`${item.height} w-full bg-gray-200 rounded-lg animate-pulse`}
+                />
+              ))}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Composant Empty State
+  const EmptyState = () => (
+    <div className="mt-8 flex flex-col items-center justify-center py-12 text-center">
+      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+        <FileImage className="w-8 h-8 text-gray-400" />
+      </div>
+      <h3 className="text-lg font-medium text-gray-900">
+        {t('no-assets')}
+      </h3>
+      <p className="text-sm text-gray-500 mb-4 max-w-sm">
+        {t('no-assets-description')}
+      </p>
+      {showUpload && (
+        <Button 
+          onClick={() => document.getElementById(`file-input-${mediaUsage}`)?.click()}
+          disabled={isUploadDisabled}
+        >
+          {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+          {t('upload-file-button')}
+        </Button>
+      )}
+    </div>
+  );
+
   return (
     <>
       <input
-          id={`file-input-${mediaUsage}`}
-          type="file"
-          multiple
-          className="hidden"
-          accept="image/*,video/*"
-          onChange={(e) => {
+        id={`file-input-${mediaUsage}`}
+        type="file"
+        multiple
+        className="hidden"
+        accept="image/*,video/*"
+        onChange={(e) => {
           if (e.target.files) {
-              handleFileUpload(Array.from(e.target.files));
+            handleFileUpload(Array.from(e.target.files));
           }
-          }}
+        }}
       />
+      
       {showStorage && (
         <div className="mb-2">
           <UsageStorage 
@@ -287,85 +358,93 @@ export default function MediaGrid({
           />
         </div>
       )}
-      {showUpload && (
+      
+      {showUpload && !isLoading && assets.length > 0 && (
         <Button className="w-full" disabled={isUploadDisabled} onClick={() => document.getElementById(`file-input-${mediaUsage}`)?.click()}>
           {isUploadingFiles ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
           {t('upload-file-button')}
         </Button>
       )}
-      <div className="mt-4 flex gap-2">
-        {(() => {
-          // Créer 3 colonnes vides
-          const columns = 3;
-          const columnWrappers: IMediaSpace[][] = Array.from({ length: columns }, () => []);
-          
-          // Répartir les assets en round-robin (tour par tour)
-          assets.forEach((asset, index) => {
-            const columnIndex = index % columns;
-            columnWrappers[columnIndex].push(asset);
-          });
-          
-          // Rendre chaque colonne
-          return columnWrappers.map((column, columnIndex) => (
-            <div key={columnIndex} className="flex-1 flex flex-col gap-2">
-              {column.map((asset, index) => {
-                if (asset.media.generationStatus === 'generating-video' || asset.media.generationStatus === 'generating-image') {
-                  return (
-                    <GeneratingMediaItem key={`${asset.id || asset.media.id}-${columnIndex}-${index}`} mediaSpace={asset} />
-                  )
-                }
-                
-                // Mode sequence : utiliser MediaItem
-                if (isSequenceMode) {
+
+      {isLoading ? (
+        <MediaSkeleton />
+      ) : assets.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <div className="mt-4 flex gap-2">
+          {(() => {
+            // Créer 3 colonnes vides
+            const columns = 3;
+            const columnWrappers: IMediaSpace[][] = Array.from({ length: columns }, () => []);
+            
+            // Répartir les assets en round-robin (tour par tour)
+            assets.forEach((asset, index) => {
+              const columnIndex = index % columns;
+              columnWrappers[columnIndex].push(asset);
+            });
+            
+            // Rendre chaque colonne
+            return columnWrappers.map((column, columnIndex) => (
+              <div key={columnIndex} className="flex-1 flex flex-col gap-2">
+                {column.map((asset, index) => {
+                  if (asset.media.generationStatus === 'generating-video' || asset.media.generationStatus === 'generating-image') {
+                    return (
+                      <GeneratingMediaItem key={`${asset.id || asset.media.id}-${columnIndex}-${index}`} mediaSpace={asset} />
+                    )
+                  }
+                  
+                  // Mode sequence : utiliser MediaItem
+                  if (isSequenceMode) {
+                    return (
+                      <MediaItem 
+                        key={`${asset.media.id}-${columnIndex}-${index}`} 
+                        sequence={sequence} 
+                        sequenceIndex={sequenceIndex} 
+                        spaceId={spaceId} 
+                        media={asset.media} 
+                        source='aws' 
+                        canRemove={true} 
+                        withMargin={false} 
+                        setSequenceMedia={setSequenceMedia} 
+                        onDeleteMedia={onDeleteMedia} 
+                      />
+                    )
+                  }
+                  
+                  // Mode sélection : utiliser MediaItem avec séquence factice
+                  const fakeSequence: ISequence = {
+                    text: '',
+                    start: 0,
+                    end: 0,
+                    durationInFrames: 0,
+                    words: [],
+                    audioIndex: 0
+                  };
+                  
                   return (
                     <MediaItem 
                       key={`${asset.media.id}-${columnIndex}-${index}`} 
-                      sequence={sequence} 
-                      sequenceIndex={sequenceIndex} 
+                      sequence={fakeSequence} 
+                      sequenceIndex={0} 
                       spaceId={spaceId} 
                       media={asset.media} 
                       source='aws' 
                       canRemove={true} 
                       withMargin={false} 
-                      setSequenceMedia={setSequenceMedia} 
-                      onDeleteMedia={onDeleteMedia} 
+                      setSequenceMedia={(_, media) => {
+                        if (onMediaSelect) {
+                          onMediaSelect(media);
+                        }
+                      }} 
+                      onDeleteMedia={onDeleteMedia}
                     />
                   )
-                }
-                
-                // Mode sélection : utiliser MediaItem avec séquence factice
-                const fakeSequence: ISequence = {
-                  text: '',
-                  start: 0,
-                  end: 0,
-                  durationInFrames: 0,
-                  words: [],
-                  audioIndex: 0
-                };
-                
-                return (
-                  <MediaItem 
-                    key={`${asset.media.id}-${columnIndex}-${index}`} 
-                    sequence={fakeSequence} 
-                    sequenceIndex={0} 
-                    spaceId={spaceId} 
-                    media={asset.media} 
-                    source='aws' 
-                    canRemove={true} 
-                    withMargin={false} 
-                    setSequenceMedia={(_, media) => {
-                      if (onMediaSelect) {
-                        onMediaSelect(media);
-                      }
-                    }} 
-                    onDeleteMedia={onDeleteMedia}
-                  />
-                )
-              })}
-            </div>
-          ));
-        })()}
-      </div>
+                })}
+              </div>
+            ));
+          })()}
+        </div>
+      )}
     </>
   )
 }

@@ -13,7 +13,6 @@ import { Transitions } from './components/Transitions';
 import { SpaceLogo } from './components/SpaceLogo';
 import { VideoElements } from './components/VideoElements';
 import { Logo, LogoPosition } from './type/space';
-import { IElement } from '@/src/types/video';
 
 export const VideoGenerate = ({ 
 	data, 
