@@ -434,23 +434,7 @@ export const VideoElements = ({
           </>
         )}
 
-        {/* Menu flottant */}
-        {getRemotionEnvironment().isPlayer && showMenu && isSelected && (
-          <div ref={menuRef}>
-            <VideoElementMenu
-              element={element}
-              sequences={sequences}
-              index={index}
-              scale={scale}
-              onElementMediaChange={onElementMediaChange}
-              onElementStartChange={onElementStartChange}
-              onElementEndChange={onElementEndChange}
-              onElementDelete={onElementDelete}
-              onMouseDown={(ev) => ev.stopPropagation()}
-              onClick={(ev) => ev.stopPropagation()}
-            />
-          </div>
-        )}
+
       </div>
     );
   };
@@ -497,6 +481,36 @@ export const VideoElements = ({
               </Sequence>
             );
           })}
+        </AbsoluteFill>
+      )}
+
+      {/* Menu flottant rendu au niveau supérieur */}
+      {getRemotionEnvironment().isPlayer && showMenu && selectedElementIndex !== null && (
+        <AbsoluteFill style={{ overflow: 'visible', pointerEvents: 'none' }}>
+          <div 
+            ref={menuRef}
+            style={{
+              position: "absolute",
+              left: `${(elements[selectedElementIndex].position.x / 100) * compositionWidth}px`,
+              top: `${(elements[selectedElementIndex].position.y / 100) * compositionHeight - (compositionWidth * (elements[selectedElementIndex].size / 100) * (naturalRatios[selectedElementIndex] || 1)) / 2}px`,
+              transform: `translate(-50%, -100%) translateY(-${15 / Math.max(0.0001, scale)}px)`,
+              zIndex: 10000,
+              pointerEvents: 'auto',
+            }}
+          >
+            <VideoElementMenu
+              element={elements[selectedElementIndex]}
+              sequences={sequences}
+              index={selectedElementIndex}
+              scale={scale}
+              onElementMediaChange={onElementMediaChange}
+              onElementStartChange={onElementStartChange}
+              onElementEndChange={onElementEndChange}
+              onElementDelete={onElementDelete}
+              onMouseDown={(ev) => ev.stopPropagation()}
+              onClick={(ev) => ev.stopPropagation()}
+            />
+          </div>
         </AbsoluteFill>
       )}
     </AbsoluteFill>

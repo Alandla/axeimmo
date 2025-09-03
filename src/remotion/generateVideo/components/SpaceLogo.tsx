@@ -484,7 +484,7 @@ export const SpaceLogo = ({
               top: 0,
               // Place the anchor above the logo by a visual 8px regardless of player scale
               transform: `translate(-50%, -100%) translateY(-${15 / Math.max(0.0001, scale)}px)`,
-              zIndex: 1002,
+              zIndex: 1005,
             }}
           >
             <div

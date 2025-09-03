@@ -70,11 +70,8 @@ export const VideoElementMenu = ({
       onMouseDown={onMouseDown}
       onClick={onClick}
       style={{
-        position: "absolute",
-        left: "50%",
-        top: 0,
-        transform: `translate(-50%, -100%) translateY(-${15 / Math.max(0.0001, scale)}px)`,
-        zIndex: 1002,
+        position: "relative",
+        zIndex: 1,
       }}
     >
       <div
