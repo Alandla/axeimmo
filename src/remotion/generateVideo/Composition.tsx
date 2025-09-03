@@ -27,6 +27,7 @@ export const VideoGenerate = ({
 	onLogoSizeChange,
 	onElementPositionChange,
 	onElementSizeChange,
+	onElementRotationChange,
 	onElementStartChange,
 	onElementEndChange,
 	onElementMediaChange,
@@ -45,6 +46,7 @@ export const VideoGenerate = ({
 	onLogoSizeChange?: (size: number) => void;
 	onElementPositionChange?: (index: number, position: { x: number, y: number }) => void;
 	onElementSizeChange?: (index: number, size: number) => void;
+	onElementRotationChange?: (index: number, rotation: number) => void;
 	onElementStartChange?: (index: number, start: number) => void;
 	onElementEndChange?: (index: number, end: number) => void;
 	onElementMediaChange?: (index: number) => void;
@@ -86,6 +88,7 @@ export const VideoGenerate = ({
 				sequences={data.video.sequences}
 				onElementPositionChange={onElementPositionChange}
 				onElementSizeChange={onElementSizeChange}
+				onElementRotationChange={onElementRotationChange}
 				onElementStartChange={onElementStartChange}
 				onElementEndChange={onElementEndChange}
 				onElementMediaChange={onElementMediaChange}

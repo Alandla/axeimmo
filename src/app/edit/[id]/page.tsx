@@ -1281,6 +1281,13 @@ export default function VideoEditor() {
     handleElementsChange(updatedElements);
   };
 
+  const handleElementRotationChange = (index: number, rotation: number) => {
+    if (!video?.video?.elements) return;
+    const updatedElements = [...video.video.elements];
+    updatedElements[index].rotation = rotation;
+    handleElementsChange(updatedElements);
+  };
+
   const handleElementStartChange = (index: number, start: number) => {
     if (!video?.video?.elements) return;
     
@@ -1582,6 +1589,7 @@ export default function VideoEditor() {
                         onElementSelect={handleElementSelect}
                         onElementPositionChange={handleElementPositionChange}
                         onElementSizeChange={handleElementSizeChange}
+                        onElementRotationChange={handleElementRotationChange}
                         onElementStartChange={handleElementStartChange}
                         onElementEndChange={handleElementEndChange}
                         onElementMediaChange={handleElementMediaChange}
@@ -1622,6 +1630,7 @@ export default function VideoEditor() {
                 onElementSelect={handleElementSelect}
                 onElementPositionChange={handleElementPositionChange}
                 onElementSizeChange={handleElementSizeChange}
+                onElementRotationChange={handleElementRotationChange}
                 onElementStartChange={handleElementStartChange}
                 onElementEndChange={handleElementEndChange}
                 onElementMediaChange={handleElementMediaChange}

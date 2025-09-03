@@ -103,6 +103,7 @@ export interface IElement {
   end: number;
   durationInFrames: number;
   size: number;
+  rotation?: number;
 }
 
 export interface IVideo {

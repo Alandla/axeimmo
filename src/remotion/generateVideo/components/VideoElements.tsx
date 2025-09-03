@@ -2,12 +2,14 @@ import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, useCurrentScale, Of
 import { useState, useRef, useCallback, useEffect } from "react";
 import { IElement, ISequence } from "../type/video";
 import { VideoElementMenu } from "../../../components/ui/video-element-menu";
+import { useRotateCursor } from "../../../hooks/use-rotate-cursor";
 
 interface VideoElementsProps {
   elements: IElement[];
   sequences: ISequence[];
   onElementPositionChange?: (index: number, position: { x: number, y: number }) => void;
   onElementSizeChange?: (index: number, size: number) => void;
+  onElementRotationChange?: (index: number, rotation: number) => void;
   onElementStartChange?: (index: number, start: number) => void;
   onElementEndChange?: (index: number, end: number) => void;
   onElementMediaChange?: (index: number) => void;
@@ -22,6 +24,7 @@ export const VideoElements = ({
   sequences,
   onElementPositionChange,
   onElementSizeChange,
+  onElementRotationChange,
   onElementStartChange,
   onElementEndChange,
   onElementMediaChange,
@@ -34,10 +37,34 @@ export const VideoElements = ({
   const [selectedElementIndex, setSelectedElementIndex] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
+  const [isRotating, setIsRotating] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [mouseDownTime, setMouseDownTime] = useState(0);
   const [hasMoved, setHasMoved] = useState(false);
   const [hoveredElementIndex, setHoveredElementIndex] = useState<number | null>(null);
+  const [hoveredRotationZone, setHoveredRotationZone] = useState<number | null>(null);
+  const [hoveredRotationCorner, setHoveredRotationCorner] = useState<string | null>(null);
+  const [hoveredHandle, setHoveredHandle] = useState<number | null>(null);
+
+  // Calculer l'angle de rotation du curseur selon la zone survolée ET la rotation de l'élément
+  const getCursorRotation = () => {
+    if (!hoveredRotationCorner || hoveredRotationZone === null) return 0;
+    
+    const element = elements[hoveredRotationZone];
+    const elementRotation = element?.rotation || 0;
+    
+    // Angle de base du coin par rapport à l'élément non tourné
+    let baseAngle = 0;
+    if (hoveredRotationCorner === 'top-right') baseAngle = -45;
+    if (hoveredRotationCorner === 'bottom-right') baseAngle = 45;
+    if (hoveredRotationCorner === 'top-left') baseAngle = -135;
+    if (hoveredRotationCorner === 'bottom-left') baseAngle = 135;
+    
+    // Ajouter la rotation de l'élément pour que le curseur suive l'orientation
+    return baseAngle + elementRotation;
+  };
+  
+  const rotateCursor = useRotateCursor(getCursorRotation());
   const [naturalRatios, setNaturalRatios] = useState<{ [key: number]: number }>({});
   const elementRefs = useRef<(HTMLDivElement | null)[]>([]);
   const playerElementRef = useRef<HTMLElement | null>(null);
@@ -193,6 +220,99 @@ export const VideoElements = ({
     [findPlayerElement, compositionWidth, compositionHeight, elements, onElementPositionChange]
   );
 
+  const startRotating = useCallback(
+    (e: React.MouseEvent, index: number) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      setMouseDownTime(Date.now());
+      setHasMoved(false);
+      
+      const playerElement = findPlayerElement();
+      if (!playerElement) return;
+      const playerRect = playerElement.getBoundingClientRect();
+      const element = elements[index];
+      
+      const centerXComp = (element.position.x / 100) * compositionWidth;
+      const centerYComp = (element.position.y / 100) * compositionHeight;
+      
+      const initialRotation = element.rotation || 0;
+      
+      // Calculer l'angle initial par rapport au centre
+      const toCompX = (e.clientX - playerRect.left) * (compositionWidth / playerRect.width);
+      const toCompY = (e.clientY - playerRect.top) * (compositionHeight / playerRect.height);
+      const initialAngle = Math.atan2(toCompY - centerYComp, toCompX - centerXComp) * (180 / Math.PI);
+
+      let animationFrameId: number;
+      let lastUpdateTime = 0;
+      const THROTTLE_MS = 16;
+
+      const onMouseMove = (moveEvent: PointerEvent) => {
+        moveEvent.preventDefault();
+        setHasMoved(true);
+
+        const now = performance.now();
+        if (now - lastUpdateTime < THROTTLE_MS) {
+          return;
+        }
+        lastUpdateTime = now;
+
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+
+        animationFrameId = requestAnimationFrame(() => {
+          const pointerXComp = (moveEvent.clientX - playerRect.left) * (compositionWidth / playerRect.width);
+          const pointerYComp = (moveEvent.clientY - playerRect.top) * (compositionHeight / playerRect.height);
+          
+          const currentAngle = Math.atan2(pointerYComp - centerYComp, pointerXComp - centerXComp) * (180 / Math.PI);
+          const angleDiff = currentAngle - initialAngle;
+          
+          let newRotation = initialRotation + angleDiff;
+          
+          // Normaliser l'angle entre -180 et 180
+          while (newRotation > 180) newRotation -= 360;
+          while (newRotation < -180) newRotation += 360;
+
+          if (onElementRotationChange) {
+            onElementRotationChange(index, newRotation);
+          }
+        });
+      };
+
+      const onMouseUp = (upEvent: MouseEvent) => {
+        upEvent.preventDefault();
+        upEvent.stopPropagation();
+        setIsRotating(false);
+        
+        // Réafficher le menu après la rotation
+        setSelectedElementIndex(index);
+        setShowMenu(true);
+        
+        // Vérifier si on est encore sur une zone de rotation après le relâchement
+        const elementUnderMouse = document.elementFromPoint(upEvent.clientX, upEvent.clientY);
+        const isStillOverRotationZone = elementUnderMouse?.closest('[data-rotation-zone]');
+        
+        if (!isStillOverRotationZone) {
+          setHoveredRotationZone(null);
+          setHoveredRotationCorner(null);
+        }
+        
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+        window.removeEventListener("pointermove", onMouseMove);
+        window.removeEventListener("mouseup", onMouseUp);
+      };
+
+      setShowMenu(false);
+      setIsRotating(true);
+      window.addEventListener("pointermove", onMouseMove, { passive: false });
+      window.addEventListener("mouseup", onMouseUp, { passive: false });
+    },
+    [findPlayerElement, compositionWidth, compositionHeight, elements, onElementRotationChange]
+  );
+
   type HandleType = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
   const startResizing = useCallback(
@@ -302,6 +422,8 @@ export const VideoElements = ({
       pointerEvents: "none",
       zIndex: 100 + index,
       objectFit: "cover",
+      transform: `rotate(${element.rotation || 0}deg)`,
+      transformOrigin: "center center",
     };
 
     if (element.media.type === 'image' && element.media.image) {
@@ -361,8 +483,14 @@ export const VideoElements = ({
       outline: ((isHovered && !isResizing) || isSelected) ? `${outlineBorder}px solid #0B84F3` : undefined,
       userSelect: "none",
       touchAction: "none",
-      cursor: isDragging ? "grabbing" : isHovered ? "grab" : "pointer",
+      cursor: isDragging ? "grabbing" : 
+              isRotating ? "grabbing" :
+              hoveredHandle === index ? "pointer" : // Les poignées ont priorité
+              hoveredRotationZone === index ? rotateCursor :
+              isHovered ? "grab" : "pointer",
       zIndex: 100 + index,
+      transform: `rotate(${element.rotation || 0}deg)`,
+      transformOrigin: "center center",
     };
 
     const handleSize = Math.max(6, Math.round(8 / Math.max(0.0001, scale)));
@@ -398,7 +526,10 @@ export const VideoElements = ({
                 top: 0,
                 transform: "translate(-50%, -50%)",
                 cursor: "nwse-resize",
+                zIndex: 1001, // Plus haut que les zones de rotation
               }}
+              onMouseEnter={() => setHoveredHandle(index)}
+              onMouseLeave={() => setHoveredHandle(null)}
               onMouseDown={(ev) => startResizing(ev, index, "top-left")}
             />
             <div
@@ -408,7 +539,10 @@ export const VideoElements = ({
                 top: 0,
                 transform: "translate(-50%, -50%)",
                 cursor: "nesw-resize",
+                zIndex: 1001, // Plus haut que les zones de rotation
               }}
+              onMouseEnter={() => setHoveredHandle(index)}
+              onMouseLeave={() => setHoveredHandle(null)}
               onMouseDown={(ev) => startResizing(ev, index, "top-right")}
             />
             <div
@@ -418,7 +552,10 @@ export const VideoElements = ({
                 top: "100%",
                 transform: "translate(-50%, -50%)",
                 cursor: "nesw-resize",
+                zIndex: 1001, // Plus haut que les zones de rotation
               }}
+              onMouseEnter={() => setHoveredHandle(index)}
+              onMouseLeave={() => setHoveredHandle(null)}
               onMouseDown={(ev) => startResizing(ev, index, "bottom-left")}
             />
             <div
@@ -428,12 +565,112 @@ export const VideoElements = ({
                 top: "100%",
                 transform: "translate(-50%, -50%)",
                 cursor: "nwse-resize",
+                zIndex: 1001, // Plus haut que les zones de rotation
               }}
+              onMouseEnter={() => setHoveredHandle(index)}
+              onMouseLeave={() => setHoveredHandle(null)}
               onMouseDown={(ev) => startResizing(ev, index, "bottom-right")}
             />
           </>
         )}
 
+        {/* Zones de rotation autour des poignées */}
+        {((isHovered && !isResizing && !isRotating) || isSelected) && (
+          <>
+            {/* Zone de rotation coin supérieur gauche - zone étendue vers l'extérieur */}
+            <div
+              data-rotation-zone="top-left"
+              style={{
+                position: "absolute",
+                left: (-handleSize * 2.3) + (handleSize / 2), // Aligné avec le centre de la poignée
+                top: (-handleSize * 2.3) + (handleSize / 2),
+                width: handleSize * 2.3,
+                height: handleSize * 2.3,
+                cursor: rotateCursor,
+                zIndex: 1000, // Sous les poignées
+              }}
+              onMouseEnter={() => {
+                setHoveredRotationZone(index);
+                setHoveredRotationCorner('top-left');
+              }}
+              onMouseLeave={() => {
+                setHoveredRotationZone(null);
+                setHoveredRotationCorner(null);
+              }}
+              onMouseDown={(ev) => startRotating(ev, index)}
+            />
+            
+            {/* Zone de rotation coin supérieur droit */}
+            <div
+              data-rotation-zone="top-right"
+              style={{
+                position: "absolute",
+                left: elementWidth - (handleSize / 2), // Position basée sur la largeur réelle de l'élément
+                top: (-handleSize * 2.3) + (handleSize / 2),
+                width: handleSize * 2.3,
+                height: handleSize * 2.3,
+                cursor: rotateCursor,
+                zIndex: 1000,
+              }}
+              onMouseEnter={() => {
+                setHoveredRotationZone(index);
+                setHoveredRotationCorner('top-right');
+              }}
+              onMouseLeave={() => {
+                setHoveredRotationZone(null);
+                setHoveredRotationCorner(null);
+              }}
+              onMouseDown={(ev) => startRotating(ev, index)}
+            />
+            
+            {/* Zone de rotation coin inférieur gauche */}
+            <div
+              data-rotation-zone="bottom-left"
+              style={{
+                position: "absolute",
+                left: (-handleSize * 2.3) + (handleSize / 2),
+                top: elementHeight - (handleSize / 2), // Position basée sur la hauteur réelle de l'élément
+                width: handleSize * 2.3,
+                height: handleSize * 2.3,
+                cursor: rotateCursor,
+                zIndex: 1000,
+              }}
+              onMouseEnter={() => {
+                setHoveredRotationZone(index);
+                setHoveredRotationCorner('bottom-left');
+              }}
+              onMouseLeave={() => {
+                setHoveredRotationZone(null);
+                setHoveredRotationCorner(null);
+              }}
+              onMouseDown={(ev) => startRotating(ev, index)}
+            />
+            
+            {/* Zone de rotation coin inférieur droit */}
+            <div
+              data-rotation-zone="bottom-right"
+              style={{
+                position: "absolute",
+                left: elementWidth - (handleSize / 2),
+                top: elementHeight - (handleSize / 2),
+                width: handleSize * 2.3,
+                height: handleSize * 2.3,
+                cursor: rotateCursor,
+                zIndex: 1000,
+              }}
+              onMouseEnter={() => {
+                setHoveredRotationZone(index);
+                setHoveredRotationCorner('bottom-right');
+              }}
+              onMouseLeave={() => {
+                setHoveredRotationZone(null);
+                setHoveredRotationCorner(null);
+              }}
+              onMouseDown={(ev) => startRotating(ev, index)}
+            />
+            
+          </>
+        )}
 
       </div>
     );
