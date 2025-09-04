@@ -368,7 +368,7 @@ export const SpaceLogo = ({
     width: `${size}%`,
     height: "auto",
     opacity: 1,
-    zIndex: 1000,
+    zIndex: 8,
     left: `${(percent.x / 100) * compositionWidth - logoWidth / 2}px`,
     top: `${(percent.y / 100) * compositionHeight - logoHeight / 2}px`,
     pointerEvents: "none",
@@ -387,7 +387,7 @@ export const SpaceLogo = ({
     userSelect: "none",
     touchAction: "none",
     cursor: isDragging ? "grabbing" : isHovered ? "grab" : "pointer",
-    zIndex: 1001,
+    zIndex: 9,
   };
 
   const handleSize = Math.max(6, Math.round(8 / Math.max(0.0001, scale)));
@@ -482,9 +482,8 @@ export const SpaceLogo = ({
               position: "absolute",
               left: "50%",
               top: 0,
-              // Place the anchor above the logo by a visual 8px regardless of player scale
               transform: `translate(-50%, -100%) translateY(-${15 / Math.max(0.0001, scale)}px)`,
-              zIndex: 1005,
+              zIndex: 9,
             }}
           >
             <div

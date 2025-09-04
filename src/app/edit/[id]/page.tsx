@@ -1350,6 +1350,18 @@ export default function VideoEditor() {
     handleElementsChange(updatedElements);
   };
 
+  const handleElementReorder = (fromIndex: number, toIndex: number) => {
+    if (!video?.video?.elements) return;
+    
+    const updatedElements = [...video.video.elements];
+    
+    // Déplacer l'élément de fromIndex vers toIndex
+    const [movedElement] = updatedElements.splice(fromIndex, 1);
+    updatedElements.splice(toIndex, 0, movedElement);
+    
+    handleElementsChange(updatedElements);
+  };
+
   const handleMuteBackgroundMusicChange = (mute: boolean) => {
     setMuteBackgroundMusic(mute);
   };
@@ -1594,6 +1606,7 @@ export default function VideoEditor() {
                         onElementEndChange={handleElementEndChange}
                         onElementMediaChange={handleElementMediaChange}
                         onElementDelete={handleElementDelete}
+                        onElementReorder={handleElementReorder}
                         elementToReplaceIndex={elementToReplaceIndex}
                         onElementReplaceSelect={handleElementReplaceSelect}
                     />
@@ -1635,6 +1648,7 @@ export default function VideoEditor() {
                 onElementEndChange={handleElementEndChange}
                 onElementMediaChange={handleElementMediaChange}
                 onElementDelete={handleElementDelete}
+                onElementReorder={handleElementReorder}
                 elementToReplaceIndex={elementToReplaceIndex}
                 onElementReplaceSelect={handleElementReplaceSelect}
             />

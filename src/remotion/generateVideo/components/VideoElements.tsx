@@ -1,5 +1,5 @@
 import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, useCurrentScale, OffthreadVideo, Sequence, getRemotionEnvironment } from "remotion";
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { IElement, ISequence } from "../type/video";
 import { VideoElementMenu } from "../../../components/ui/video-element-menu";
 import { useRotateCursor } from "../../../hooks/use-rotate-cursor";
@@ -14,6 +14,7 @@ interface VideoElementsProps {
   onElementEndChange?: (index: number, end: number) => void;
   onElementMediaChange?: (index: number) => void;
   onElementDelete?: (index: number) => void;
+  onElementReorder?: (fromIndex: number, toIndex: number) => void;
 }
 
 const MIN_SIZE = 5; // Taille minimale en pourcentage
@@ -29,12 +30,14 @@ export const VideoElements = ({
   onElementEndChange,
   onElementMediaChange,
   onElementDelete,
+  onElementReorder,
 }: VideoElementsProps) => {
   const { width: compositionWidth, height: compositionHeight, fps } = useVideoConfig();
   const frame = useCurrentFrame();
   const scale = useCurrentScale();
 
   const [selectedElementIndex, setSelectedElementIndex] = useState<number | null>(null);
+  const [selectedElementRef, setSelectedElementRef] = useState<IElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
@@ -65,7 +68,78 @@ export const VideoElements = ({
   };
   
   const rotateCursor = useRotateCursor(getCursorRotation());
+  
+  // Fonction utilitaire pour calculer le curseur de resize
+  const getResizeCursorForDirection = (direction: 'nw' | 'ne' | 'sw' | 'se', rotation: number) => {
+    // Normaliser l'angle de rotation entre 0 et 360
+    let normalizedAngle = ((rotation % 360) + 360) % 360;
+    
+    // Calculer l'angle total en ajoutant l'angle de base de la direction
+    let baseAngle = 0;
+    switch (direction) {
+      case 'nw': baseAngle = 315; break; // Nord-Ouest (315°)
+      case 'ne': baseAngle = 45; break;  // Nord-Est (45°)
+      case 'sw': baseAngle = 225; break; // Sud-Ouest (225°)
+      case 'se': baseAngle = 135; break; // Sud-Est (135°)
+    }
+    
+    // Ajouter la rotation de l'élément
+    let totalAngle = (baseAngle + normalizedAngle) % 360;
+    
+    // Déterminer le curseur approprié selon l'angle total
+    // Utiliser les curseurs bidirectionnels avec double flèche
+    if (totalAngle >= 337.5 || totalAngle < 22.5) {
+      return 'ns-resize'; // Nord-Sud
+    } else if (totalAngle >= 22.5 && totalAngle < 67.5) {
+      return 'nesw-resize'; // Nord-Est/Sud-Ouest
+    } else if (totalAngle >= 67.5 && totalAngle < 112.5) {
+      return 'ew-resize'; // Est-Ouest
+    } else if (totalAngle >= 112.5 && totalAngle < 157.5) {
+      return 'nwse-resize'; // Nord-Ouest/Sud-Est
+    } else if (totalAngle >= 157.5 && totalAngle < 202.5) {
+      return 'ns-resize'; // Sud-Nord
+    } else if (totalAngle >= 202.5 && totalAngle < 247.5) {
+      return 'nesw-resize'; // Sud-Ouest/Nord-Est
+    } else if (totalAngle >= 247.5 && totalAngle < 292.5) {
+      return 'ew-resize'; // Ouest-Est
+    } else {
+      return 'nwse-resize'; // Nord-Ouest/Sud-Est
+    }
+  };
   const [naturalRatios, setNaturalRatios] = useState<{ [key: number]: number }>({});
+
+  // Calculer les éléments qui se chevauchent dans le temps (memoized pour optimisation)
+  const overlappingElements = useMemo(() => {
+    const overlaps: { [key: number]: IElement[] } = {};
+    
+    elements.forEach((element, index) => {
+      const overlapping = elements.filter((otherElement, otherIndex) => {
+        if (index === otherIndex) return false;
+        
+        // Vérifier si les intervalles se chevauchent
+        return !(element.end <= otherElement.start || element.start >= otherElement.end);
+      });
+      
+      overlaps[index] = overlapping;
+    });
+    
+    return overlaps;
+  }, [elements]);
+
+  // Maintenir la sélection sur le même élément après réorganisation
+  useEffect(() => {
+    if (selectedElementRef) {
+      const newIndex = elements.findIndex(el => el === selectedElementRef);
+      if (newIndex !== -1 && newIndex !== selectedElementIndex) {
+        setSelectedElementIndex(newIndex);
+      } else if (newIndex === -1) {
+        // L'élément a été supprimé
+        setSelectedElementIndex(null);
+        setSelectedElementRef(null);
+        setShowMenu(false);
+      }
+    }
+  }, [elements, selectedElementRef, selectedElementIndex]);
   const elementRefs = useRef<(HTMLDivElement | null)[]>([]);
   const playerElementRef = useRef<HTMLElement | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -89,12 +163,23 @@ export const VideoElements = ({
       if (
         showMenu &&
         selectedElementIndex !== null &&
+        selectedElementIndex < elements.length &&
         elementRefs.current[selectedElementIndex] &&
         !elementRefs.current[selectedElementIndex]?.contains(event.target as Node) &&
         (!menuRef.current || !menuRef.current.contains(event.target as Node))
       ) {
         setShowMenu(false);
         setSelectedElementIndex(null);
+        setSelectedElementRef(null);
+        // Reset all interaction states to prevent stuck cursors and behaviors
+        setIsDragging(false);
+        setIsResizing(false);
+        setIsRotating(false);
+        setHasMoved(false);
+        setHoveredElementIndex(null);
+        setHoveredRotationZone(null);
+        setHoveredRotationCorner(null);
+        setHoveredHandle(null);
       }
     };
 
@@ -119,6 +204,7 @@ export const VideoElements = ({
     if (clickDuration > 200) return; // Plus de 200ms = probablement un drag
     
     setSelectedElementIndex(index);
+    setSelectedElementRef(elements[index]);
     setShowMenu(true);
   }, [hasMoved, isDragging, mouseDownTime]);
 
@@ -203,6 +289,7 @@ export const VideoElements = ({
         // Afficher le menu à la fin si pas déjà affiché
         if (!showMenu) {
           setSelectedElementIndex(index);
+          setSelectedElementRef(elements[index]);
           setShowMenu(true);
         }
         if (animationFrameId) {
@@ -236,7 +323,23 @@ export const VideoElements = ({
       const centerXComp = (element.position.x / 100) * compositionWidth;
       const centerYComp = (element.position.y / 100) * compositionHeight;
       
-      const initialRotation = element.rotation || 0;
+      let initialRotation = element.rotation || 0;
+      
+      // Helper function to snap angle to nearest 15° increment
+      const snapToFifteen = (angle: number) => {
+        return Math.round(angle / 15) * 15;
+      };
+      
+      // If Shift key is pressed at the start, snap to nearest 15° immediately
+      if (e.shiftKey) {
+        const snappedRotation = snapToFifteen(initialRotation);
+        if (snappedRotation !== initialRotation) {
+          if (onElementRotationChange) {
+            onElementRotationChange(index, snappedRotation);
+          }
+          initialRotation = snappedRotation;
+        }
+      }
       
       // Calculer l'angle initial par rapport au centre
       const toCompX = (e.clientX - playerRect.left) * (compositionWidth / playerRect.width);
@@ -270,6 +373,11 @@ export const VideoElements = ({
           
           let newRotation = initialRotation + angleDiff;
           
+          // Check if Shift key is pressed for snapping to 15° increments
+          if (moveEvent.shiftKey) {
+            newRotation = snapToFifteen(newRotation);
+          }
+          
           // Normaliser l'angle entre -180 et 180
           while (newRotation > 180) newRotation -= 360;
           while (newRotation < -180) newRotation += 360;
@@ -287,6 +395,7 @@ export const VideoElements = ({
         
         // Réafficher le menu après la rotation
         setSelectedElementIndex(index);
+        setSelectedElementRef(elements[index]);
         setShowMenu(true);
         
         // Vérifier si on est encore sur une zone de rotation après le relâchement
@@ -377,6 +486,7 @@ export const VideoElements = ({
         // Afficher le menu à la fin si pas déjà affiché
         if (!showMenu) {
           setSelectedElementIndex(index);
+          setSelectedElementRef(elements[index]);
           setShowMenu(true);
         }
         if (animationFrameId) {
@@ -420,7 +530,7 @@ export const VideoElements = ({
       left: `${(element.position.x / 100) * compositionWidth - elementWidth / 2}px`,
       top: `${(element.position.y / 100) * compositionHeight - elementHeight / 2}px`,
       pointerEvents: "none",
-      zIndex: 100 + index,
+      zIndex: 5 + index, // Z-index basé sur l'ordre dans le tableau (éléments plus tard = plus haut)
       objectFit: "cover",
       transform: `rotate(${element.rotation || 0}deg)`,
       transformOrigin: "center center",
@@ -488,7 +598,7 @@ export const VideoElements = ({
               hoveredHandle === index ? "pointer" : // Les poignées ont priorité
               hoveredRotationZone === index ? rotateCursor :
               isHovered ? "grab" : "pointer",
-      zIndex: 100 + index,
+      zIndex: 5 + index, // Z-index basé sur l'ordre dans le tableau (éléments plus tard = plus haut)
       transform: `rotate(${element.rotation || 0}deg)`,
       transformOrigin: "center center",
     };
@@ -525,11 +635,15 @@ export const VideoElements = ({
                 left: 0,
                 top: 0,
                 transform: "translate(-50%, -50%)",
-                cursor: "nwse-resize",
-                zIndex: 1001, // Plus haut que les zones de rotation
+                cursor: getResizeCursorForDirection('nw', element.rotation || 0),
+                zIndex: 8, // Plus haut que les zones de rotation mais sous les sous-titres
               }}
-              onMouseEnter={() => setHoveredHandle(index)}
-              onMouseLeave={() => setHoveredHandle(null)}
+              onMouseEnter={() => {
+                setHoveredHandle(index);
+              }}
+              onMouseLeave={() => {
+                setHoveredHandle(null);
+              }}
               onMouseDown={(ev) => startResizing(ev, index, "top-left")}
             />
             <div
@@ -538,11 +652,15 @@ export const VideoElements = ({
                 left: "100%",
                 top: 0,
                 transform: "translate(-50%, -50%)",
-                cursor: "nesw-resize",
-                zIndex: 1001, // Plus haut que les zones de rotation
+                cursor: getResizeCursorForDirection('ne', element.rotation || 0),
+                zIndex: 8, // Plus haut que les zones de rotation mais sous les sous-titres
               }}
-              onMouseEnter={() => setHoveredHandle(index)}
-              onMouseLeave={() => setHoveredHandle(null)}
+              onMouseEnter={() => {
+                setHoveredHandle(index);
+              }}
+              onMouseLeave={() => {
+                setHoveredHandle(null);
+              }}
               onMouseDown={(ev) => startResizing(ev, index, "top-right")}
             />
             <div
@@ -551,11 +669,15 @@ export const VideoElements = ({
                 left: 0,
                 top: "100%",
                 transform: "translate(-50%, -50%)",
-                cursor: "nesw-resize",
-                zIndex: 1001, // Plus haut que les zones de rotation
+                cursor: getResizeCursorForDirection('sw', element.rotation || 0),
+                zIndex: 8, // Plus haut que les zones de rotation mais sous les sous-titres
               }}
-              onMouseEnter={() => setHoveredHandle(index)}
-              onMouseLeave={() => setHoveredHandle(null)}
+              onMouseEnter={() => {
+                setHoveredHandle(index);
+              }}
+              onMouseLeave={() => {
+                setHoveredHandle(null);
+              }}
               onMouseDown={(ev) => startResizing(ev, index, "bottom-left")}
             />
             <div
@@ -564,11 +686,15 @@ export const VideoElements = ({
                 left: "100%",
                 top: "100%",
                 transform: "translate(-50%, -50%)",
-                cursor: "nwse-resize",
-                zIndex: 1001, // Plus haut que les zones de rotation
+                cursor: getResizeCursorForDirection('se', element.rotation || 0),
+                zIndex: 8, // Plus haut que les zones de rotation mais sous les sous-titres
               }}
-              onMouseEnter={() => setHoveredHandle(index)}
-              onMouseLeave={() => setHoveredHandle(null)}
+              onMouseEnter={() => {
+                setHoveredHandle(index);
+              }}
+              onMouseLeave={() => {
+                setHoveredHandle(null);
+              }}
               onMouseDown={(ev) => startResizing(ev, index, "bottom-right")}
             />
           </>
@@ -587,7 +713,7 @@ export const VideoElements = ({
                 width: handleSize * 2.3,
                 height: handleSize * 2.3,
                 cursor: rotateCursor,
-                zIndex: 1000, // Sous les poignées
+                zIndex: 7, // Sous les poignées mais sous les sous-titres
               }}
               onMouseEnter={() => {
                 setHoveredRotationZone(index);
@@ -610,7 +736,7 @@ export const VideoElements = ({
                 width: handleSize * 2.3,
                 height: handleSize * 2.3,
                 cursor: rotateCursor,
-                zIndex: 1000,
+                zIndex: 7, // Sous les sous-titres
               }}
               onMouseEnter={() => {
                 setHoveredRotationZone(index);
@@ -633,7 +759,7 @@ export const VideoElements = ({
                 width: handleSize * 2.3,
                 height: handleSize * 2.3,
                 cursor: rotateCursor,
-                zIndex: 1000,
+                zIndex: 7, // Sous les sous-titres
               }}
               onMouseEnter={() => {
                 setHoveredRotationZone(index);
@@ -656,7 +782,7 @@ export const VideoElements = ({
                 width: handleSize * 2.3,
                 height: handleSize * 2.3,
                 cursor: rotateCursor,
-                zIndex: 1000,
+                zIndex: 7, // Sous les sous-titres
               }}
               onMouseEnter={() => {
                 setHoveredRotationZone(index);
@@ -722,7 +848,7 @@ export const VideoElements = ({
       )}
 
       {/* Menu flottant rendu au niveau supérieur */}
-      {getRemotionEnvironment().isPlayer && showMenu && selectedElementIndex !== null && (
+      {getRemotionEnvironment().isPlayer && showMenu && selectedElementIndex !== null && elements[selectedElementIndex] && (
         <AbsoluteFill style={{ overflow: 'visible', pointerEvents: 'none' }}>
           <div 
             ref={menuRef}
@@ -731,7 +857,7 @@ export const VideoElements = ({
               left: `${(elements[selectedElementIndex].position.x / 100) * compositionWidth}px`,
               top: `${(elements[selectedElementIndex].position.y / 100) * compositionHeight - (compositionWidth * (elements[selectedElementIndex].size / 100) * (naturalRatios[selectedElementIndex] || 1)) / 2}px`,
               transform: `translate(-50%, -100%) translateY(-${15 / Math.max(0.0001, scale)}px)`,
-              zIndex: 10000,
+              zIndex: 9, // Menu des éléments sous les sous-titres
               pointerEvents: 'auto',
             }}
           >
@@ -746,6 +872,9 @@ export const VideoElements = ({
               onElementDelete={onElementDelete}
               onMouseDown={(ev) => ev.stopPropagation()}
               onClick={(ev) => ev.stopPropagation()}
+              overlappingElements={overlappingElements[selectedElementIndex] || []}
+              allElements={elements}
+              onElementReorder={onElementReorder}
             />
           </div>
         </AbsoluteFill>

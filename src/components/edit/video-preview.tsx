@@ -41,6 +41,7 @@ export default function VideoPreview({
     onElementEndChange,
     onElementMediaChange,
     onElementDelete,
+    onElementReorder,
     elementToReplaceIndex,
     onElementReplaceSelect
 }: { 
@@ -73,6 +74,7 @@ export default function VideoPreview({
     onElementEndChange?: (index: number, end: number) => void,
     onElementMediaChange?: (index: number) => void,
     onElementDelete?: (index: number) => void,
+    onElementReorder?: (fromIndex: number, toIndex: number) => void,
     elementToReplaceIndex?: number | null,
     onElementReplaceSelect?: (media: IMedia) => void
 }) {
@@ -258,6 +260,7 @@ export default function VideoPreview({
                             onElementEndChange: onElementEndChange,
                             onElementMediaChange: handleElementMediaChangeLocal,
                             onElementDelete: onElementDelete,
+                            onElementReorder: onElementReorder,
                             onPlayPause: handlePlayPause,
                         }}
                         numberOfSharedAudioTags={12}

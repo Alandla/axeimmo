@@ -142,7 +142,7 @@ export const MediaBackground = ({
                                             cursor: isDragging ? 'grabbing' : 'grab',
                                             userSelect: 'none',
                                             touchAction: 'none',
-                                            zIndex: 10,
+                                            zIndex: 2, // Au-dessus des médias mais sous les éléments et sous-titres
                                             pointerEvents: 'auto'
                                         }}
                                         onMouseDown={(e) => {
@@ -182,7 +182,7 @@ export const MediaBackground = ({
                                             cursor: isDragging ? 'grabbing' : 'grab',
                                             userSelect: 'none',
                                             touchAction: 'none',
-                                            zIndex: 10,
+                                            zIndex: 2, // Au-dessus des médias mais sous les éléments et sous-titres
                                             pointerEvents: 'auto'
                                         }}
                                         onMouseDown={(e) => {

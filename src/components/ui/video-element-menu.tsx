@@ -1,6 +1,6 @@
 import { Button } from "./button";
 import { motion } from "framer-motion";
-import { RefreshCw, X } from "lucide-react";
+import { RefreshCw, X, Layers } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import { IElement, ISequence, IWord } from "../../types/video";
+import { LayersManager } from "./layers-manager";
 
 interface VideoElementMenuProps {
   element: IElement;
@@ -20,6 +21,9 @@ interface VideoElementMenuProps {
   onElementDelete?: (index: number) => void;
   onMouseDown?: (ev: React.MouseEvent) => void;
   onClick?: (ev: React.MouseEvent) => void;
+  overlappingElements?: IElement[];
+  allElements?: IElement[];
+  onElementReorder?: (fromIndex: number, toIndex: number) => void;
 }
 
 export const VideoElementMenu = ({
@@ -33,6 +37,9 @@ export const VideoElementMenu = ({
   onElementDelete,
   onMouseDown,
   onClick,
+  overlappingElements = [],
+  allElements = [],
+  onElementReorder,
 }: VideoElementMenuProps) => {
   // Obtenir tous les mots avec leurs timings pour les menus Start/End
   const getWordsForStartMenu = (element: IElement) => {
@@ -65,6 +72,9 @@ export const VideoElementMenu = ({
     return items;
   };
 
+  // Afficher le bouton layers s'il y a des éléments qui se chevauchent
+  const showLayersButton = overlappingElements.length >= 1;
+
   return (
     <div
       onMouseDown={onMouseDown}
@@ -95,6 +105,33 @@ export const VideoElementMenu = ({
             >
               <RefreshCw className="h-4 w-4" />
             </Button>
+
+            {showLayersButton && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-6 w-6"
+                  >
+                    <Layers className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent 
+                  className="w-64 p-3"
+                >
+                  <LayersManager
+                    elements={[element, ...overlappingElements].sort((a, b) => {
+                      const indexA = allElements.findIndex(el => el === a);
+                      const indexB = allElements.findIndex(el => el === b);
+                      return indexB - indexA; // Du plus haut z-index au plus bas
+                    })}
+                    allElements={allElements}
+                    onReorder={onElementReorder}
+                  />
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
 
             <div className="w-px h-4 bg-border mx-1"></div>
 

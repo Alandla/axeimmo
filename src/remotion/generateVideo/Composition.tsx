@@ -32,6 +32,7 @@ export const VideoGenerate = ({
 	onElementEndChange,
 	onElementMediaChange,
 	onElementDelete,
+	onElementReorder,
 	onPlayPause,
 }: { 
 	data: any, 
@@ -51,6 +52,7 @@ export const VideoGenerate = ({
 	onElementEndChange?: (index: number, end: number) => void;
 	onElementMediaChange?: (index: number) => void;
 	onElementDelete?: (index: number) => void;
+	onElementReorder?: (fromIndex: number, toIndex: number) => void;
 	onPlayPause?: () => void;
 }) => {
 	// Vérification de sécurité pour éviter l'erreur quand data.video est null
@@ -93,6 +95,7 @@ export const VideoGenerate = ({
 				onElementEndChange={onElementEndChange}
 				onElementMediaChange={onElementMediaChange}
 				onElementDelete={onElementDelete}
+				onElementReorder={onElementReorder}
 			/> }
 			{ data.video.subtitle?.style?.template === 'bold' && <SubtitlesBold subtitleSequences={data.video.sequences} style={data.video.subtitle.style} videoFormat={data.video.format} onStyleChange={onSubtitleStyleChange} onPlayPause={onPlayPause} /> }
 			{ data.video.subtitle?.style?.template === 'simple' && <SubtitlesSimple subtitleSequences={data.video.sequences} style={data.video.subtitle.style} onStyleChange={onSubtitleStyleChange} onPlayPause={onPlayPause} /> }

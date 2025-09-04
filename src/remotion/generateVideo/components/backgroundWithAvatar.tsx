@@ -430,7 +430,7 @@ export const BackgroundWithAvatar = ({
                                 marginTop: '-25px',
                             }
                         ),
-                        zIndex: 1000,
+                        zIndex: 3, // Barre de redimensionnement sous les sous-titres
                         display: 'flex',
                         alignItems: 'center',
                         filter: 'drop-shadow(0 0 12px rgba(0, 0, 0, 0.6))',
@@ -486,7 +486,7 @@ export const BackgroundWithAvatar = ({
                                 alignItems: 'center',
                             }
                         ),
-                        zIndex: 998,
+                        zIndex: 2, // Ligne de séparation sous les sous-titres
                         display: 'flex',
                     }}
                     onMouseDown={(e) => {
