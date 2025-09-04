@@ -374,6 +374,7 @@
       "lip-sync-export-message": "The lip-sync will only be displayed after export.",
       "unsaved": "Unsaved",
       "add-elements": "Add",
+      "elements-order": "Elements Order",
       "elements": {
         "modal-title": "Select an element",
         "no-assets": "No elements",

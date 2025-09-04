@@ -1281,6 +1281,13 @@ export default function VideoEditor() {
     handleElementsChange(updatedElements);
   };
 
+  const handleElementRotationChange = (index: number, rotation: number) => {
+    if (!video?.video?.elements) return;
+    const updatedElements = [...video.video.elements];
+    updatedElements[index].rotation = rotation;
+    handleElementsChange(updatedElements);
+  };
+
   const handleElementStartChange = (index: number, start: number) => {
     if (!video?.video?.elements) return;
     
@@ -1340,6 +1347,18 @@ export default function VideoEditor() {
   const handleElementDelete = (index: number) => {
     if (!video?.video?.elements) return;
     const updatedElements = video.video.elements.filter((_: any, i: number) => i !== index);
+    handleElementsChange(updatedElements);
+  };
+
+  const handleElementReorder = (fromIndex: number, toIndex: number) => {
+    if (!video?.video?.elements) return;
+    
+    const updatedElements = [...video.video.elements];
+    
+    // Déplacer l'élément de fromIndex vers toIndex
+    const [movedElement] = updatedElements.splice(fromIndex, 1);
+    updatedElements.splice(toIndex, 0, movedElement);
+    
     handleElementsChange(updatedElements);
   };
 
@@ -1582,10 +1601,12 @@ export default function VideoEditor() {
                         onElementSelect={handleElementSelect}
                         onElementPositionChange={handleElementPositionChange}
                         onElementSizeChange={handleElementSizeChange}
+                        onElementRotationChange={handleElementRotationChange}
                         onElementStartChange={handleElementStartChange}
                         onElementEndChange={handleElementEndChange}
                         onElementMediaChange={handleElementMediaChange}
                         onElementDelete={handleElementDelete}
+                        onElementReorder={handleElementReorder}
                         elementToReplaceIndex={elementToReplaceIndex}
                         onElementReplaceSelect={handleElementReplaceSelect}
                     />
@@ -1622,10 +1643,12 @@ export default function VideoEditor() {
                 onElementSelect={handleElementSelect}
                 onElementPositionChange={handleElementPositionChange}
                 onElementSizeChange={handleElementSizeChange}
+                onElementRotationChange={handleElementRotationChange}
                 onElementStartChange={handleElementStartChange}
                 onElementEndChange={handleElementEndChange}
                 onElementMediaChange={handleElementMediaChange}
                 onElementDelete={handleElementDelete}
+                onElementReorder={handleElementReorder}
                 elementToReplaceIndex={elementToReplaceIndex}
                 onElementReplaceSelect={handleElementReplaceSelect}
             />

@@ -284,6 +284,7 @@
       "loading-regenerating-audio": "Regénération de l'audio...",
       "export-button": "Exporter",
       "add-elements": "Ajouter",
+      "elements-order": "Ordre des éléments",
       "elements": {
         "modal-title": "Sélectionner un élément",
         "no-assets": "Aucun élément",

@@ -36,10 +36,12 @@ export default function VideoPreview({
     onElementSelect,
     onElementPositionChange,
     onElementSizeChange,
+    onElementRotationChange,
     onElementStartChange,
     onElementEndChange,
     onElementMediaChange,
     onElementDelete,
+    onElementReorder,
     elementToReplaceIndex,
     onElementReplaceSelect
 }: { 
@@ -67,10 +69,12 @@ export default function VideoPreview({
     onElementSelect?: (media: IMedia) => void,
     onElementPositionChange?: (index: number, position: { x: number, y: number }) => void,
     onElementSizeChange?: (index: number, size: number) => void,
+    onElementRotationChange?: (index: number, rotation: number) => void,
     onElementStartChange?: (index: number, start: number) => void,
     onElementEndChange?: (index: number, end: number) => void,
     onElementMediaChange?: (index: number) => void,
     onElementDelete?: (index: number) => void,
+    onElementReorder?: (fromIndex: number, toIndex: number) => void,
     elementToReplaceIndex?: number | null,
     onElementReplaceSelect?: (media: IMedia) => void
 }) {
@@ -251,10 +255,12 @@ export default function VideoPreview({
                             onLogoSizeChange,
                             onElementPositionChange: onElementPositionChange,
                             onElementSizeChange: onElementSizeChange,
+                            onElementRotationChange: onElementRotationChange,
                             onElementStartChange: onElementStartChange,
                             onElementEndChange: onElementEndChange,
                             onElementMediaChange: handleElementMediaChangeLocal,
                             onElementDelete: onElementDelete,
+                            onElementReorder: onElementReorder,
                             onPlayPause: handlePlayPause,
                         }}
                         numberOfSharedAudioTags={12}

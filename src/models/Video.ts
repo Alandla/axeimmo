@@ -123,6 +123,12 @@ const videoSchema = new mongoose.Schema({
           min: 0,
           max: 100,
           default: 25
+        },
+        rotation: {
+          type: Number,
+          min: -180,
+          max: 180,
+          default: 0
         }
       }],
       avatar: {
