@@ -56,7 +56,7 @@ export const subtitles : ISpaceSubtitleStyle[] = [
         style: {
             template: 'simple',
             fontFamily: 'Arial',
-            fontWeight: "500",
+            fontWeight: "400",
             fontSize: 60,
             color: "#ffffff",
             isBold: false,
@@ -68,7 +68,7 @@ export const subtitles : ISpaceSubtitleStyle[] = [
             activeWord: {
                 isActive: false,
                 fontFamily: 'Arial',
-                fontWeight: "500",
+                fontWeight: "400",
                 fontSize: 60,
                 color: "#ffffff",
                 isBold: false,
@@ -202,7 +202,7 @@ export const subtitles : ISpaceSubtitleStyle[] = [
         style: {
             template: 'daniel',
             fontFamily: 'Arial',
-            fontWeight: "800",
+            fontWeight: "700",
             fontSize: 80,
             color: "#ffffff",
             isItalic: false,
@@ -223,7 +223,7 @@ export const subtitles : ISpaceSubtitleStyle[] = [
         style: {
             template: 'modern',
             fontFamily: 'Arial',
-            fontWeight: "800",
+            fontWeight: "700",
             fontSize: 80,
             color: "#ffffff",
             isItalic: false,
