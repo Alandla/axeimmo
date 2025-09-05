@@ -43,9 +43,7 @@ export async function resizeImageFromUrl(
   } = options;
 
   // Use proxy for media.hoox.video URLs to avoid CORS issues in development
-  const finalImageUrl = imageUrl.startsWith('https://media.hoox.video/') && 
-                        window.location.hostname === 'localhost'
-    ? `/api/media/proxy-image?url=${encodeURIComponent(imageUrl)}`
+  const finalImageUrl = imageUrl.startsWith('https://media.hoox.video/') ? `/api/media/proxy-image?url=${encodeURIComponent(imageUrl)}`
     : imageUrl;
 
   return new Promise((resolve, reject) => {
