@@ -156,17 +156,9 @@ export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChang
                 height="100%" 
                 style={{ 
                     zIndex: 10,
-                    cursor: onPositionChange ? (isDragging ? 'grabbing' : (isHovered ? 'grab' : 'default')) : 'default',
+                    pointerEvents: 'none', // Le SVG ne capture pas les événements
                 }}
                 ref={subtitleRef}
-                onMouseDown={(e) => {
-                    setMouseDownTime(Date.now());
-                    setHasMoved(false);
-                    startDragging(e);
-                }}
-                onClick={handleSubtitleClick}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
             >
                 {subtitleSequence.lines.map((line: Line, lineIndex: number) => (
                     <text 
@@ -175,6 +167,18 @@ export const SubtitleSimple = ({ subtitleSequence, start, style, onPositionChang
                         y={`${style.position + (lineIndex * 4)}%`}
                         textAnchor="middle" 
                         dominantBaseline="middle"
+                        style={{
+                            pointerEvents: 'auto', // Le texte capture les événements
+                            cursor: onPositionChange ? (isDragging ? 'grabbing' : (isHovered ? 'grab' : 'default')) : 'default',
+                        }}
+                        onMouseDown={(e) => {
+                            setMouseDownTime(Date.now());
+                            setHasMoved(false);
+                            startDragging(e);
+                        }}
+                        onClick={handleSubtitleClick}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                     >
                         <tspan>
                             {line.words.map((word: Word, index: number) => {
