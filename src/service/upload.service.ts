@@ -124,3 +124,23 @@ export const getVideoDimensions = async (url: string): Promise<{width: number, h
         return null;
     }
 };
+
+/**
+ * Upload file using presigned URL
+ */
+export async function uploadFileWithPresignedUrl(
+  file: File,
+  presignedUrl: string
+): Promise<void> {
+  const response = await fetch(presignedUrl, {
+    method: 'PUT',
+    body: file,
+    headers: {
+      'Content-Type': file.type,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Upload failed: ${response.statusText}`);
+  }
+}

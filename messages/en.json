@@ -1483,6 +1483,8 @@
         "generating-description": "AI is generating a description for this media",
         "generating-video-description": "AI is generating a video from your image",
         "generating-image-description": "AI is enhancing your image",
+        "optimizing-image": "Optimizing image",
+        "optimizing-image-description": "Reducing image size for optimal processing",
         "description-generated": "Description generated",
         "description-generated-description": "The description has been successfully generated",
         "generation-error-description": "An error occurred while generating the description",

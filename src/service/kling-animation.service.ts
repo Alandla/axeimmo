@@ -16,6 +16,7 @@ interface GenerateKlingAnimationOptions {
   duration?: "5" | "10";
   mode: KlingGenerationMode;
   upscale?: boolean;
+  skipFFmpegResize?: boolean; // Flag to skip FFmpeg resize (when called from API)
 }
 
 /**
@@ -84,7 +85,7 @@ async function handleImageResizeAndUpload(imageUrl: string): Promise<string> {
 export async function generateKlingAnimation(
   options: GenerateKlingAnimationOptions
 ): Promise<KlingAnimationResult> {
-  const { imageUrl, context, imageWidth = 1920, imageHeight = 1080, duration = "5", mode, upscale = false } = options;
+  const { imageUrl, context, imageWidth = 1920, imageHeight = 1080, duration = "5", mode, upscale = false, skipFFmpegResize = false } = options;
   
   let finalImageUrl = imageUrl;
   let usedR2Url: string | undefined;
@@ -130,14 +131,19 @@ export async function generateKlingAnimation(
   const aspectRatio = imageWidth >= imageHeight ? "16:9" : "9:16";
   
   // Étape 2: Vérification proactive de la taille de l'image avant génération Kling
-  console.log("Checking image size before Kling generation...");
-  const checkedImageUrl = await checkAndResizeImageIfNeeded(finalImageUrl, finalImageFileSize);
-  
-  // Si l'image a été compressée, mettre à jour l'URL et marquer l'usage R2
-  if (checkedImageUrl !== finalImageUrl) {
-    finalImageUrl = checkedImageUrl;
-    usedR2Url = checkedImageUrl;
-    console.log("Image was resized before Kling generation");
+  // Skip FFmpeg resize if client already optimized the image
+  if (!skipFFmpegResize) {
+    console.log("Checking image size before Kling generation...");
+    const checkedImageUrl = await checkAndResizeImageIfNeeded(finalImageUrl, finalImageFileSize);
+    
+    // Si l'image a été compressée, mettre à jour l'URL et marquer l'usage R2
+    if (checkedImageUrl !== finalImageUrl) {
+      finalImageUrl = checkedImageUrl;
+      usedR2Url = checkedImageUrl;
+      console.log("Image was resized before Kling generation");
+    }
+  } else {
+    console.log("Skipping FFmpeg resize - image was optimized by client");
   }
 
   // Étape 3: Générer le prompt d'animation avec retry

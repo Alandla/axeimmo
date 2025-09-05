@@ -1396,6 +1396,8 @@
         "generating-description": "L'IA génère une description pour ce média",
         "generating-video-description": "L'IA génère une vidéo à partir de votre image",
         "generating-image-description": "L'IA améliore votre image",
+        "optimizing-image": "Optimisation d'image",
+        "optimizing-image-description": "Réduction de la taille de l'image pour un traitement optimal",
         "description-generated": "Description générée",
         "description-generated-description": "La description a été générée avec succès",
         "generation-error-description": "Une erreur est survenue lors de la génération de la description",
