@@ -226,6 +226,8 @@ export default function ImageToVideoEnhancer({
         variant: 'loading'
       })
 
+      console.log('Final MediaSpace:', finalMediaSpace)
+
       const result: any = await basicApiCall('/media/enhance', {
         mediaSpace: finalMediaSpace,
         spaceId: activeSpace.id,

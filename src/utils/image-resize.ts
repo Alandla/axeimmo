@@ -42,9 +42,20 @@ export async function resizeImageFromUrl(
     maxHeight = 1080
   } = options;
 
+  // Use proxy for media.hoox.video URLs to avoid CORS issues in development
+  const finalImageUrl = imageUrl.startsWith('https://media.hoox.video/') && 
+                        window.location.hostname === 'localhost'
+    ? `/api/media/proxy-image?url=${encodeURIComponent(imageUrl)}`
+    : imageUrl;
+
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    // Only set crossOrigin for external URLs that are not proxied
+    if (imageUrl.startsWith('http') && 
+        !imageUrl.includes(window.location.hostname) && 
+        !finalImageUrl.startsWith('/api/')) {
+      img.crossOrigin = 'anonymous';
+    }
     
     img.onload = () => {
       try {
@@ -133,7 +144,7 @@ export async function resizeImageFromUrl(
       reject(new Error('Failed to load image'));
     };
 
-    img.src = imageUrl;
+    img.src = finalImageUrl;
   });
 }
 
