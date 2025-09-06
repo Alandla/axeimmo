@@ -2,14 +2,14 @@ import { create } from 'zustand'
 import { CreationStep } from '../types/enums'
 import { Voice } from '../types/voice'
 import { AvatarLook } from '../types/avatar'
-import { FileToUpload } from '../types/files'
+import { FileOrAssetToUpload } from '../types/files'
 import { Step, Steps } from '../types/step'
 import { KlingGenerationMode } from '../lib/fal'
 import { IMedia, VideoFormat } from '../types/video'
 
 type CreationStore = {
   script: string
-  files: FileToUpload[]
+  files: FileOrAssetToUpload[]
   totalCost: number
   creationStep: CreationStep
   selectedLook: AvatarLook | null
@@ -24,7 +24,7 @@ type CreationStore = {
   emotionEnhancement: boolean
   videoFormat: VideoFormat
   setScript: (script: string) => void
-  setFiles: (files: FileToUpload[]) => void,
+  setFiles: (files: FileOrAssetToUpload[]) => void,
   setTotalCost: (cost: number) => void
   addToTotalCost: (cost: number) => void
   setCreationStep: (step: CreationStep) => void

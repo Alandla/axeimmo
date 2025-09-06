@@ -3,8 +3,34 @@ import { useCreationStore } from '../store/creationStore'
 import { Steps, StepState } from '../types/step'
 import { uploadFiles } from './upload.service'
 import { IMedia } from '../types/video'
+import { FileToUpload, AssetToUpload, FileOrAssetToUpload } from '../types/files'
 
 const EXCLUDED_SOURCE = "EXCLUDED"
+
+// Type guards pour séparer les fichiers des assets
+const isFileToUpload = (item: FileOrAssetToUpload): item is FileToUpload => {
+  return 'file' in item;
+};
+
+const isAssetToUpload = (item: FileOrAssetToUpload): item is AssetToUpload => {
+  return 'media' in item;
+};
+
+// Fonction pour séparer les fichiers des assets
+const separateFilesAndAssets = (items: FileOrAssetToUpload[]) => {
+  const filesToUpload: FileToUpload[] = [];
+  const existingAssets: IMedia[] = [];
+  
+  items.forEach(item => {
+    if (isFileToUpload(item)) {
+      filesToUpload.push(item);
+    } else if (isAssetToUpload(item)) {
+      existingAssets.push(item.media);
+    }
+  });
+  
+  return { filesToUpload, existingAssets };
+};
 
 // Create hooks for components to use
 export const useGenerationProcess = () => {
@@ -21,11 +47,19 @@ export const useGenerationProcess = () => {
       setSteps(updatedSteps)
     }
 
-    let uploadedFiles: IMedia[] = []
-    if (files.length > 0) {
+    // Séparer les fichiers à uploader des assets existants
+    const { filesToUpload, existingAssets } = separateFilesAndAssets(files);
+    
+    let uploadedFiles: IMedia[] = [...existingAssets]; // Commencer avec les assets déjà existants
+    
+    // Uploader seulement les nouveaux fichiers
+    if (filesToUpload.length > 0) {
       updateStepProgress("MEDIA_UPLOAD", 0)
-      uploadedFiles = await uploadFiles(files, updateStepProgress)
+      const newlyUploadedFiles = await uploadFiles(filesToUpload, updateStepProgress)
+      uploadedFiles = [...uploadedFiles, ...newlyUploadedFiles]
     }
+
+    console.log('uploadedFiles', uploadedFiles)
 
     // Add extracted images media to uploaded files if they exist, excluding those marked as excluded
     if (extractedImagesMedia.length > 0) {

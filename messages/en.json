@@ -642,6 +642,17 @@
         "total-duration": "Total duration"
       }
     },
+    "upload-dropdown": {
+        "upload-files": "Upload from device",
+        "select-assets": "Choose from library"
+    },
+    "asset-selection": {
+        "title": "Select assets",
+        "no-assets": "No assets available",
+        "no-assets-description": "You have no completed assets available for selection.",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    },
     "ai": {
       "hello": "Hello, ",
       "title-1": "How do you want to create your video?",

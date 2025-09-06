@@ -554,6 +554,17 @@
         "pause": "Pause"
       }
     },
+    "upload-dropdown": {
+        "upload-files": "Depuis l'appareil",
+        "select-assets": "Depuis la bibliothèque"
+    },
+    "asset-selection": {
+        "title": "Sélectionner des médias",
+        "no-assets": "Aucun média disponible",
+        "no-assets-description": "Vous n'avez aucun média terminé disponible pour la sélection.",
+        "cancel": "Annuler",
+        "confirm": "Confirmer"
+    },
     "ai": {
       "hello": "Salut, ",
       "title-1": "Comment veux-tu créer ta vidéo ?",

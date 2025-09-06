@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { MoreVertical, Pen, Eye, Trash2, Video as VideoIcon, Image as ImageIcon, ImagePlay } from 'lucide-react'
+import { MoreVertical, Pen, Eye, Trash2, Video as VideoIcon, Image as ImageIcon, ImagePlay, Check } from 'lucide-react'
 import SkeletonVideoFrame from './ui/skeleton-video-frame'
 import { formatDistanceToNow } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
@@ -34,9 +34,10 @@ interface AssetCardProps {
   onClick: () => void
   onDelete?: (media: IMedia) => void
   isSelected?: boolean
+  selectionMode?: boolean
 }
 
-export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDelete, isSelected = false }: AssetCardProps) {
+export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDelete, isSelected = false, selectionMode = false }: AssetCardProps) {
   const t = useTranslations('assets')
   const { data: session } = useSession()
   const { toast } = useToast()
@@ -155,7 +156,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
     <>
       <div className="relative">
         <div 
-          className={`relative bg-muted aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group ${isSelected ? 'ring-2 ring-primary' : ''}`}
+          className={`relative bg-muted aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group`}
           onClick={onClick}
         >
           {media.usage === 'element' && (
@@ -164,6 +165,19 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
               <span>{t('element-badge')}</span>
             </div>
           )}
+          
+          {selectionMode && (
+            <div className="absolute top-2 right-2 z-30">
+              <div className={`w-4 h-4 shrink-0 transition-all duration-300 rounded-sm border shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring flex items-center justify-center ${
+                isSelected 
+                  ? 'bg-primary border-primary text-primary-foreground' 
+                  : 'bg-white border'
+              }`}>
+                {isSelected && <Check className="h-4 w-4 text-current" />}
+              </div>
+            </div>
+          )}
+          
           {media.image?.link && !imageError ? (
             <div className="relative w-full h-full">
               <div className="absolute inset-0 bg-black/90">
@@ -186,9 +200,11 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
                 className="relative z-10"
                 onError={() => setImageError(true)}
               />
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
-                <Eye className="text-white w-8 h-8" />
-              </div>
+              {!selectionMode && (
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+                  <Eye className="text-white w-8 h-8" />
+                </div>
+              )}
             </div>
           ) : media.video?.frames && media.video.frames.length > 0 ? (
             <div className="relative w-full h-full">
@@ -210,9 +226,11 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
                 priority
                 className="relative z-10"
               />
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
-                <Eye className="text-white w-8 h-8" />
-              </div>
+              {!selectionMode && (
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+                  <Eye className="text-white w-8 h-8" />
+                </div>
+              )}
             </div>
           ) : media.type === 'video' && media.video?.link ? (
             <div className="relative w-full h-full">
@@ -222,9 +240,11 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
                 startAt={0}
                 alt={media.name || ''}
               />
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
-                <Eye className="text-white w-8 h-8" />
-              </div>
+              {!selectionMode && (
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+                  <Eye className="text-white w-8 h-8" />
+                </div>
+              )}
             </div>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
@@ -239,7 +259,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
 
         <div className="mt-2 flex justify-between items-start space-x-2">
           <div className="flex-1 min-w-0">
-            {isEditing ? (
+            {!selectionMode && isEditing ? (
               <input
                 ref={inputRef}
                 type="text"
@@ -254,7 +274,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
             ) : (
               <h3 
                 className="text-lg font-semibold truncate cursor-text" 
-                onClick={() => setIsEditing(true)}
+                onClick={() => !selectionMode && setIsEditing(true)}
               >
                 {media.name}
               </h3>
@@ -267,65 +287,67 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
             </p>
           </div>
 
-          <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreVertical className="h-4 w-4" />
-                <span className="sr-only">{t('more-options')}</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-              side="bottom"
-              align="end"
-              sideOffset={4}
-            >
-              <DropdownMenuLabel className="p-0 font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    {creator?.image && <AvatarImage src={creator.image} alt={creator.name ?? ''} />}
-                    <AvatarFallback className="rounded-lg">{creator?.name?.charAt(0) ?? ''}</AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    {!creator?.name ? (
-                      <div className="h-5 w-24 bg-muted animate-pulse rounded" />
-                    ) : (
-                      <span className="truncate font-semibold">{creator?.name}</span>
-                    )}
-                    <span className="truncate text-xs">
-                      {mediaSpace.uploadedAt ? new Date(mediaSpace.uploadedAt).toLocaleDateString() : ''}
-                    </span>
-                  </div>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem onClick={handleDetailsClick}>
-                  <Eye className="h-4 w-4" />
-                  {t('dropdown-menu.details')}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={(e) => {
-                  e.stopPropagation()
-                  startEditing()
-                }}>
-                  <Pen className="h-4 w-4" />
-                  {t('dropdown-menu.rename')}
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setIsDeleteModalOpen(true)
-                  setIsDropdownOpen(false)
-                }}
-                className="text-destructive focus:text-destructive hover:bg-red-200 focus:bg-red-200"
+          {!selectionMode && (
+            <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreVertical className="h-4 w-4" />
+                  <span className="sr-only">{t('more-options')}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                side="bottom"
+                align="end"
+                sideOffset={4}
               >
-                <Trash2 className="h-4 w-4" />
-                {t('dropdown-menu.delete')}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuLabel className="p-0 font-normal">
+                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      {creator?.image && <AvatarImage src={creator.image} alt={creator.name ?? ''} />}
+                      <AvatarFallback className="rounded-lg">{creator?.name?.charAt(0) ?? ''}</AvatarFallback>
+                    </Avatar>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      {!creator?.name ? (
+                        <div className="h-5 w-24 bg-muted animate-pulse rounded" />
+                      ) : (
+                        <span className="truncate font-semibold">{creator?.name}</span>
+                      )}
+                      <span className="truncate text-xs">
+                        {mediaSpace.uploadedAt ? new Date(mediaSpace.uploadedAt).toLocaleDateString() : ''}
+                      </span>
+                    </div>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={handleDetailsClick}>
+                    <Eye className="h-4 w-4" />
+                    {t('dropdown-menu.details')}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={(e) => {
+                    e.stopPropagation()
+                    startEditing()
+                  }}>
+                    <Pen className="h-4 w-4" />
+                    {t('dropdown-menu.rename')}
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setIsDeleteModalOpen(true)
+                    setIsDropdownOpen(false)
+                  }}
+                  className="text-destructive focus:text-destructive hover:bg-red-200 focus:bg-red-200"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  {t('dropdown-menu.delete')}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
 

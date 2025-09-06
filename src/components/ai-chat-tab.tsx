@@ -7,8 +7,10 @@ import { CreationStep, PlanName } from "../types/enums";
 import { useTranslations } from "next-intl";
 import { useCreationStore } from "../store/creationStore";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "./ui/tooltip";
-import { FilePreview } from "./file-preview";
-import { FileToUpload } from "../types/files";
+import { FileOrAssetPreview } from "./file-or-asset-preview";
+import { FileToUpload, AssetToUpload, FileOrAssetToUpload } from "../types/files";
+import { UploadDropdown } from "./upload-dropdown";
+import { AssetSelectionModal } from "./modal/asset-selection-modal";
 import { Badge } from "./ui/badge";
 import { useActiveSpaceStore } from "../store/activeSpaceStore";
 import { usePremiumToast } from "@/src/utils/premium-toast";
@@ -44,6 +46,7 @@ export function AiChatTab({
     const planT = useTranslations('plan');
     const durationT = useTranslations('select.duration');
     const [videoDuration, setVideoDuration] = useState<DurationOption | undefined>({ name: durationT('options.30-seconds'), value: 30, requiredPlan: PlanName.FREE });
+    const [showAssetModal, setShowAssetModal] = useState(false);
 
     // Function to detect URLs in text
     const detectUrls = (text: string): boolean => {
@@ -91,6 +94,10 @@ export function AiChatTab({
       });
       console.log('updatedFiles', updatedFiles)
       setFiles([...files, ...updatedFiles]);
+    };
+
+    const hasUsage = (usage: "voice" | "avatar" | "media" | "element") => {
+      return files.some(file => file.usage === usage);
     };
 
     const handleFileUsageChange = (fileIndex: number, newUsage: "voice" | "avatar" | "media" | "element") => {
@@ -190,9 +197,9 @@ export function AiChatTab({
                   <div className="overflow-x-auto mb-2">
                     <div className="flex gap-4">
                       {files.map((file, index) => (
-                        <FilePreview
+                        <FileOrAssetPreview
                           key={index}
-                          file={file.file}
+                          item={file}
                           usage={file.usage}
                           onUsageChange={(newUsage) => !isDisabled && handleFileUsageChange(index, newUsage)}
                           onRemove={() => !isDisabled && handleFileRemove(index)}
@@ -224,22 +231,18 @@ export function AiChatTab({
                 />
                 <div className={`flex justify-between ${isDragging ? 'opacity-50' : ''}`}>
                   <div className="flex items-end">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={() => !isDisabled && document.getElementById('file-input')?.click()}
+                    <UploadDropdown
+                      onFileUpload={() => document.getElementById('file-input')?.click()}
+                      onAssetSelect={() => setShowAssetModal(true)}
                       disabled={isDisabled}
-                      className="h-7 w-7"
-                    >
-                      <Paperclip className="h-4 w-4" />
-                    </Button>
+                    />
                     <div className="flex h-7 items-center">
                       <div className="w-px h-4 bg-border mx-1"></div>
                     </div>
                     <SelectDuration 
                       value={videoDuration} 
                       onChange={setVideoDuration} 
-                      disabled={isDisabled || files.some(file => file.usage === "voice" || file.usage === "avatar")}
+                      disabled={isDisabled || hasUsage("voice") || hasUsage("avatar")}
                     />
                     <div className="flex h-7 items-center">
                       <div className="w-px h-4 bg-border mx-1"></div>
@@ -247,7 +250,7 @@ export function AiChatTab({
                     <VideoFormatSelector
                       value={videoFormat}
                       onValueChange={setVideoFormat}
-                      disabled={isDisabled || files.some(file => file.usage === "voice" || file.usage === "avatar")}
+                      disabled={isDisabled || hasUsage("voice") || hasUsage("avatar")}
                       light={true}
                     />
                     <input
@@ -255,7 +258,7 @@ export function AiChatTab({
                       type="file"
                       multiple
                       className="hidden"
-                      accept={files.some(file => file.usage === "voice") ? 
+                      accept={hasUsage("voice") ? 
                         'image/jpeg,image/png,image/gif,video/*' : 
                         'image/jpeg,image/png,image/gif,video/*,audio/*'}
                       onChange={(e) => {
@@ -299,7 +302,7 @@ export function AiChatTab({
                             onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 30)} 
                             disabled={
                               isDisabled ||
-                              !files.some(file => file.usage === "voice" || file.usage === "avatar") && 
+                              !(hasUsage("voice") || hasUsage("avatar")) && 
                               (!inputMessage.trim() || !videoDuration)
                             }
                           >
@@ -307,7 +310,7 @@ export function AiChatTab({
                           </Button>
                         </div>
                       </TooltipTrigger>
-                      {(!files.some(file => file.usage === "voice" || file.usage === "avatar") && (!inputMessage.trim() || !videoDuration)) && 
+                      {(!(hasUsage("voice") || hasUsage("avatar")) && (!inputMessage.trim() || !videoDuration)) && 
                         <TooltipContent>
                           {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
                         </TooltipContent>
@@ -419,6 +422,12 @@ export function AiChatTab({
               Default
             </>
           )}
+          
+          <AssetSelectionModal
+            isOpen={showAssetModal}
+            onClose={() => setShowAssetModal(false)}
+            onConfirm={(selectedAssets) => setFiles([...files, ...selectedAssets])}
+          />
       </div>
     )
 }
