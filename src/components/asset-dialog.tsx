@@ -358,22 +358,24 @@ export default function AssetDialog({ mediaSpace, setMedia, open, onClose }: Ass
                 />
               </div>
 
-              <div className="flex items-center justify-between space-x-2">
-                <div className="space-y-0.5">
-                  <Label htmlFor="auto-placement" className="text-sm font-medium flex items-center gap-1">
-                    <Sparkles className="h-3 w-3" />
-                    {t('dialog.automatic-placement')}
-                  </Label>
-                  <p className="text-sm text-muted-foreground">
-                    {t('dialog.automatic-placement-description')}
-                  </p>
+              {mediaSpace.media.usage !== 'element' && (
+                <div className="flex items-center justify-between space-x-2">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="auto-placement" className="text-sm font-medium flex items-center gap-1">
+                      <Sparkles className="h-3 w-3" />
+                      {t('dialog.automatic-placement')}
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      {t('dialog.automatic-placement-description')}
+                    </p>
+                  </div>
+                  <Switch
+                    id="auto-placement"
+                    checked={autoPlacement}
+                    onCheckedChange={setAutoPlacement}
+                  />
                 </div>
-                <Switch
-                  id="auto-placement"
-                  checked={autoPlacement}
-                  onCheckedChange={setAutoPlacement}
-                />
-              </div>
+              )}
             </div>
 
             <div className="mt-4">

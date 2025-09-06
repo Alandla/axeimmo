@@ -42,6 +42,7 @@ export enum AssetFilterType {
 export enum AssetType {
   IMAGE = "image",
   VIDEO = "video",
+  ELEMENT = "element",
 }
 
 export enum AIGenerated {

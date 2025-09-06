@@ -258,9 +258,7 @@ export default function AssetsPage() {
     const cachedAssets = assetsBySpace.get(activeSpace.id);
     
     if (cachedAssets) {
-      // Filtrer les éléments (usage: "element") au niveau de la page aussi
-      const filteredCachedAssets = cachedAssets.filter(asset => asset.media.usage !== 'element');
-      setAssets(filteredCachedAssets);
+      setAssets(cachedAssets);
       setIsLoading(false);
     }
 
@@ -271,9 +269,7 @@ export default function AssetsPage() {
         }
 
         const assetsFromApi = await fetchAssets(activeSpace.id, true);
-        // Filtrer les éléments (usage: "element") au niveau de la page aussi
-        const filteredAssets = assetsFromApi.filter(asset => asset.media.usage !== 'element');
-        setAssets(filteredAssets);
+        setAssets(assetsFromApi);
         setIsLoading(false);
 
         // Initialiser les pollings en fonction des assets récupérés

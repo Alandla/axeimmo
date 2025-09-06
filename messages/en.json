@@ -1390,6 +1390,7 @@
     "assets": {
       "title": "Media Library",
       "more-options": "More options",
+      "element-badge": "Element",
       "no-assets": "No assets",
       "no-filtered-assets": "No assets found",
       "no-filtered-assets-description": "No assets match the selected filters. Try adjusting your search criteria.",
@@ -1527,7 +1528,8 @@
       },
       "asset-types-values": {
         "image": "Image",
-        "video": "Video"
+        "video": "Video",
+        "element": "Element"
       },
       "boolean": {
         "yes": "Yes",

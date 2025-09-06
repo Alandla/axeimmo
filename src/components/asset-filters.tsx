@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/src/components/ui/popover";
 import { cn } from "@/src/lib/utils";
-import { ListFilter, Image, Video, User, Bot, Calendar, UserCircle, Filter, FilterX } from "lucide-react";
+import { ListFilter, Image, Video, User, Bot, Calendar, UserCircle, Filter, FilterX, ImagePlay } from "lucide-react";
 import { nanoid } from "nanoid";
 import * as React from "react";
 import { useTranslations } from "next-intl";
@@ -70,6 +70,8 @@ const AssetFilterIcon = ({
       return <Image className="size-3.5 text-blue-500" />;
     case AssetType.VIDEO:
       return <Video className="size-3.5 text-green-500" />;
+    case AssetType.ELEMENT:
+      return <ImagePlay className="size-3.5 text-purple-500" />;
     case AIGenerated.YES:
     case AIGenerated.NO:
       return null;
@@ -194,7 +196,13 @@ export const useAssetFilters = (assets: IMediaSpace[]) => {
         
         switch (type) {
           case AssetFilterType.TYPE:
-            const assetType = asset.media.type === 'image' ? AssetType.IMAGE : AssetType.VIDEO;
+            let assetType: AssetType;
+            if (asset.media.usage === 'element') {
+              assetType = AssetType.ELEMENT;
+            } else {
+              assetType = asset.media.type === 'image' ? AssetType.IMAGE : AssetType.VIDEO;
+            }
+            
             if (operator === FilterOperator.IS) {
               return value.includes(assetType);
             } else if (operator === FilterOperator.IS_NOT) {

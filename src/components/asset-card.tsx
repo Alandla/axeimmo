@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { MoreVertical, Pen, Eye, Trash2, Video as VideoIcon, Image as ImageIcon } from 'lucide-react'
+import { MoreVertical, Pen, Eye, Trash2, Video as VideoIcon, Image as ImageIcon, ImagePlay } from 'lucide-react'
 import SkeletonVideoFrame from './ui/skeleton-video-frame'
 import { formatDistanceToNow } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
@@ -158,6 +158,12 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
           className={`relative bg-muted aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group ${isSelected ? 'ring-2 ring-primary' : ''}`}
           onClick={onClick}
         >
+          {media.usage === 'element' && (
+            <div className="absolute top-2 left-2 z-30 bg-white/50 backdrop-blur-sm text-black text-xs px-2 py-1 rounded-md flex items-center gap-1">
+              <ImagePlay className="h-3 w-3" />
+              <span>{t('element-badge')}</span>
+            </div>
+          )}
           {media.image?.link && !imageError ? (
             <div className="relative w-full h-full">
               <div className="absolute inset-0 bg-black/90">

@@ -1303,6 +1303,7 @@
     "assets": {
       "title": "Médiathèque",
       "more-options": "Plus d'options",
+      "element-badge": "Élément",
       "no-assets": "Aucun média",
       "no-filtered-assets": "Aucun média trouvé",
       "no-filtered-assets-description": "Aucun média ne correspond aux filtres sélectionnés. Essayez d'ajuster vos critères de recherche.",
@@ -1431,7 +1432,8 @@
       },
       "asset-types-values": {
         "image": "Image",
-        "video": "Vidéo"
+        "video": "Vidéo",
+        "element": "Élément"
       },
       "boolean": {
         "yes": "Oui",
