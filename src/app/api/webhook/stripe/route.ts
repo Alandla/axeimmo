@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import Stripe from "stripe";
 import { findCheckoutSession } from "@/src/lib/stripe";
 import { createUser, getUserByEmail, getUserById } from "@/src/dao/userDao";
-import { addUserIdToContact } from "@/src/lib/loops";
+import { addUserIdToContact, updateCancelReason, sendUnsubscribeEvent } from "@/src/lib/loops";
 import { createPrivateSpaceForUser, getSpaceById, removeCreditsToSpace, setCreditsToSpace, updateSpacePlan } from "@/src/dao/spaceDao";
 import { plans, storageLimit } from "@/src/config/plan.config";
 import { IPlan, ISpace } from "@/src/types/space";
@@ -158,6 +158,8 @@ export async function POST(req: Request) {
         // You can update the user data to show a "Cancel soon" badge for instance
         console.log("STRIPE EVENT: customer.subscription.updated")
 
+        await connectMongo();
+
         const subscription = await stripe.subscriptions.retrieve(event.data.object.id);
         
         const product = event.data.object.items.data[0].price.product;
@@ -166,34 +168,49 @@ export async function POST(req: Request) {
         const priceId = event.data.object.items.data[0].price.id;
         const billingInterval = event.data.object.items.data[0].price.recurring?.interval;
 
-        const productData = await stripe.products.retrieve(product as string);
+        if (event.data.object.cancel_at_period_end === true) {
 
-        let nextPhase;
+          const customer = await stripe.customers.retrieve(customerId as string);
 
-        if (billingInterval !== "month") {
-          nextPhase = new Date(); // Créez un nouvel objet Date
-          nextPhase.setHours(0, 0, 0, 0);
-          nextPhase.setMonth(nextPhase.getMonth() + 1);
+          const cancelReason = event.data.object.cancellation_details?.reason || "unknown";
+
+          if (customer && !customer.deleted && customer.email) {
+            if (cancelReason) {
+              await updateCancelReason(customer.email, cancelReason);
+            }
+            await sendUnsubscribeEvent(customer.email);
+          }
+        } else {
+          // Logique existante pour les autres mises à jour d'abonnement
+          const productData = await stripe.products.retrieve(product as string);
+
+          let nextPhase;
+
+          if (billingInterval !== "month") {
+            nextPhase = new Date(); // Créez un nouvel objet Date
+            nextPhase.setHours(0, 0, 0, 0);
+            nextPhase.setMonth(nextPhase.getMonth() + 1);
+          }
+
+          const planName = productData.metadata.name === "CREATOR" ? "START" : productData.metadata.name;
+          const plan = plans.find(p => p.name === planName);
+          if (!plan) {
+            throw new Error(`Plan ${planName} not found`);
+          }
+
+          const planSpace : IPlan = {
+            name: plan.name,
+            customerId: customerId as string,
+            priceId: priceId as string,
+            subscriptionType: billingInterval === "month" ? SubscriptionType.MONTHLY : SubscriptionType.ANNUAL,
+            creditsMonth: plan.credits,
+            storageLimit: storageLimit[plan.name],
+            imageToVideoLimit: plan.imageToVideoLimit,
+            nextPhase: nextPhase
+          }
+
+          await updateSpacePlan(spaceId, planSpace);
         }
-
-        const planName = productData.metadata.name === "CREATOR" ? "START" : productData.metadata.name;
-        const plan = plans.find(p => p.name === planName);
-        if (!plan) {
-          throw new Error(`Plan ${planName} not found`);
-        }
-
-        const planSpace : IPlan = {
-          name: plan.name,
-          customerId: customerId as string,
-          priceId: priceId as string,
-          subscriptionType: billingInterval === "month" ? SubscriptionType.MONTHLY : SubscriptionType.ANNUAL,
-          creditsMonth: plan.credits,
-          storageLimit: storageLimit[plan.name],
-          imageToVideoLimit: plan.imageToVideoLimit,
-          nextPhase: nextPhase
-        }
-
-        await updateSpacePlan(spaceId, planSpace);
 
         break;
       }
@@ -202,6 +219,10 @@ export async function POST(req: Request) {
         // The customer subscription stopped
         // ❌ Revoke access to the product
         // The customer might have changed the plan (higher or lower plan, cancel soon etc...)
+        console.log("STRIPE EVENT: customer.subscription.deleted")
+        
+        await connectMongo();
+        
         const subscription = await stripe.subscriptions.retrieve(event.data.object.id);
         const spaceId = subscription.metadata.spaceId;
 

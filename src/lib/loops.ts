@@ -159,3 +159,30 @@ export async function sendProLeadEmail({
     return null;
   }
 }
+
+export async function updateCancelReason(email: string, cancelReason: string) {
+  try {
+    const result = await loops.updateContact(email, {
+      cancelReason: cancelReason
+    });
+    return result;
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error('[LOOPS] Error updating cancel reason', { error: errorMessage, email, cancelReason });
+    return null;
+  }
+}
+
+export async function sendUnsubscribeEvent(email: string) {
+  try {
+    const result = await loops.sendEvent({
+      eventName: "Unsubscribe",
+      email
+    });
+    return result;
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error('[LOOPS] Error sending unsubscribe event', { error: errorMessage, email });
+    return null;
+  }
+}
