@@ -4,7 +4,7 @@ import Stripe from "stripe";
 import { findCheckoutSession } from "@/src/lib/stripe";
 import { createUser, getUserByEmail, getUserById } from "@/src/dao/userDao";
 import { addUserIdToContact, updateCancelReason, sendUnsubscribeEvent } from "@/src/lib/loops";
-import { createPrivateSpaceForUser, getSpaceById, removeCreditsToSpace, setCreditsToSpace, updateSpacePlan } from "@/src/dao/spaceDao";
+import { createPrivateSpaceForUser, getSpaceById, removeCreditsToSpace, setCreditsToSpace, updateSpacePlan, setupNewSubscription } from "@/src/dao/spaceDao";
 import { plans, storageLimit } from "@/src/config/plan.config";
 import { IPlan, ISpace } from "@/src/types/space";
 import { SubscriptionType } from "@/src/types/enums";
@@ -116,10 +116,8 @@ export async function POST(req: Request) {
           nextPhase: nextPhase
         }
 
-        await updateSpacePlan(spaceId as string, planSpace);
-        
-        // Attribution des crédits initiaux pour le premier abonnement
-        await setCreditsToSpace(spaceId as string, plan.credits);
+        // Configuration complète du nouvel abonnement en une seule opération
+        await setupNewSubscription(spaceId as string, planSpace, plan.credits);
         
         if (fbc || fbp) {
           trackOrderFacebook(user?.email, session?.invoice as string, session?.subscription as string, user?.id?.toString(), priceAmount, priceData.currency.toUpperCase(), fbc, fbp);
@@ -172,7 +170,7 @@ export async function POST(req: Request) {
 
           const customer = await stripe.customers.retrieve(customerId as string);
 
-          const cancelReason = event.data.object.cancellation_details?.reason || "unknown";
+          const cancelReason = event.data.object.cancellation_details?.feedback || "unknown";
 
           if (customer && !customer.deleted && customer.email) {
             if (cancelReason) {
@@ -288,7 +286,8 @@ export async function POST(req: Request) {
           finalCredit = Math.min(newTotal, maxPossibleCredits);
         }
 
-        await setCreditsToSpace(spaceId, finalCredit);
+        // Attribution des crédits et remise à zéro du compteur imageToVideoUsed en une seule opération
+        await setCreditsToSpace(spaceId, finalCredit, true);
 
         break;
       }

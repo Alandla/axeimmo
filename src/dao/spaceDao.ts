@@ -150,12 +150,16 @@ export const addCreditsToSpace = async (spaceId: string, credits: number) => {
   }
 }
 
-export const setCreditsToSpace = async (spaceId: string, credits: number) => {
+export const setCreditsToSpace = async (spaceId: string, credits: number, resetImageToVideo: boolean = false) => {
   try {
     return await executeWithRetry(async () => {
-      const space = await getSpaceById(spaceId);
-      space.credits = credits;
-      await space.save();
+      const updateData: any = { credits };
+      if (resetImageToVideo) {
+        updateData.imageToVideoUsed = 0;
+      }
+      
+      const space = await SpaceModel.findByIdAndUpdate(spaceId, { $set: updateData }, { new: true });
+      if (!space) throw new Error("Space not found");
       return space.credits;
     });
   } catch (error) {
@@ -426,6 +430,30 @@ export const incrementImageToVideoUsage = async (spaceId: string) => {
     });
   } catch (error) {
     console.error("Error while incrementing image to video usage: ", error);
+    throw error;
+  }
+};
+
+export const setupNewSubscription = async (spaceId: string, plan: IPlan, credits: number) => {
+  try {
+    return await executeWithRetry(async () => {
+      const space = await SpaceModel.findByIdAndUpdate(
+        spaceId,
+        { 
+          $set: { 
+            plan,
+            credits,
+            imageToVideoUsed: 0
+          }
+        },
+        { new: true }
+      );
+      
+      if (!space) throw new Error("Space not found");
+      return space;
+    });
+  } catch (error) {
+    console.error("Error while setting up new subscription: ", error);
     throw error;
   }
 };
