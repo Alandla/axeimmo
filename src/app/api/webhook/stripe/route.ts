@@ -12,6 +12,7 @@ import { track } from "@/src/utils/mixpanel-server";
 import { MixpanelEvent } from "@/src/types/events";
 import { trackOrderFacebook } from "@/src/lib/facebook";
 import connectMongo from "@/src/lib/mongoose";
+import { objectIdToString } from "@/src/lib/utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -71,9 +72,14 @@ export async function POST(req: Request) {
         // Get or create the user. userId is normally pass in the checkout session (clientReferenceID) to identify the user when we get the webhook event
         if (userId) {
           user = await getUserById(userId);
+          if (!spaceId && user.spaces && user.spaces.length !== 0) {
+            spaceId = user.spaces[0];
+          }
         } else if (customerEmail) {
           user = await getUserByEmail(customerEmail);
-
+          if (user && !spaceId && user.spaces && user.spaces.length !== 0) {
+            spaceId = user.spaces[0];
+          }
           if (!user) {
             const u = {
               email: customerEmail,
@@ -82,7 +88,7 @@ export async function POST(req: Request) {
             user = await createUser(u);
             await addUserIdToContact(user.id, user.email);
             const newSpace = await createPrivateSpaceForUser(user.id, user.firstName || user.name);
-            spaceId = newSpace.id;
+            spaceId = objectIdToString(newSpace._id);
           }
         } else {
           console.error("No user found");
@@ -99,7 +105,7 @@ export async function POST(req: Request) {
         }
 
         // Si le nom du plan est "createur", on utilise "start" à la place
-        const planName = productData.metadata.name === "createur" ? "start" : productData.metadata.name;
+        const planName = productData.metadata.name === "createur" ? "START" : productData.metadata.name;
         const plan = plans.find(p => p.name === planName);
         if (!plan) {
           throw new Error(`Plan ${planName} not found`);
