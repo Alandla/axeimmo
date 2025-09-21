@@ -1,6 +1,6 @@
 'use client'
 
-import { Star, Heart, Diamond, Gem, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Grid, Save, BookOpen, Film, Layers, ArrowRight, Database, Globe, Sparkles, Link2 } from 'lucide-react'
+import { Star, Heart, Diamond, Gem, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Save, BookOpen, Film, Layers, ArrowRight, Database, Globe, Sparkles, Link2, Plug } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card'
 import { Button } from '@/src/components/ui/button'
 import { useTranslations } from 'next-intl'
@@ -113,6 +113,15 @@ export const features = [
         icon: <Gem className="h-4 w-4 mt-0.5 flex-shrink-0" />,
       },
       {
+        name: "api-access",
+        start: false,
+        pro: false,
+        enterprise: true,
+        soon: false,
+        tooltip: "Access to our API for superior video generation quality and enhanced performance.",
+        icon: <Plug className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
+      {
         name: "web",
         start: true,
         pro: true,
@@ -165,6 +174,14 @@ export const features = [
         icon: <Layout className="h-4 w-4 mt-0.5 flex-shrink-0" />,
       },
       {
+        name: "brand-kit",
+        start: false,
+        pro: true,
+        enterprise: true,
+        tooltip: "Personalize your videos with your brand's logo, colors, fonts and other visual elements stored in one place for consistent branding.",
+        icon: <Palette className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
+      {
         name: "ai-video-b-rolls",
         start: false,
         pro: true,
@@ -172,24 +189,6 @@ export const features = [
         soon: true,
         tooltip: "Generate contextually relevant B-roll footage with AI to enhance your videos with supporting visuals that match your content perfectly.",
         icon: <Video className="h-4 w-4 mt-0.5 flex-shrink-0" />,
-      },
-      {
-        name: "brand-kit",
-        start: false,
-        pro: true,
-        enterprise: true,
-        soon: true,
-        tooltip: "Personalize your videos with your brand's logo, colors, fonts and other visual elements stored in one place for consistent branding.",
-        icon: <Palette className="h-4 w-4 mt-0.5 flex-shrink-0" />,
-      },
-      {
-        name: "brand-space",
-        start: false,
-        pro: "Limited",
-        enterprise: "Full access",
-        soon: true,
-        tooltip: "Manage and store all your brand assets in one dedicated space, ensuring brand consistency across all your video content.",
-        icon: <Grid className="h-4 w-4 mt-0.5 flex-shrink-0" />,
       },
     ],
   },
@@ -425,7 +424,7 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
                       </p>
                     )}
                   </div>
-                  <ul className="space-y-3">
+                  <ul className="space-y-2">
                     {features.map((category) => {
                       // Déterminer la clé du plan actuel
                       const planKey = plan.name === PlanName.START 
@@ -470,7 +469,7 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
                       if (relevantFeatures.length === 0) return null;
                       
                       return (
-                        <li key={category.category} className="mb-3">
+                        <li key={category.category}>
                           <ul className="space-y-2">
                             {relevantFeatures.map((feature) => {
                               const value = feature[planKey as keyof typeof feature];

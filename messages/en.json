@@ -331,7 +331,8 @@
         "video-producer-agent": "Video Content Producer Agent",
         "community-manager-agent": "Community Manager Agent",
         "ai-model-ultra": "AI Model Ultra",
-        "url-to-video": "URL to video generation"
+        "url-to-video": "URL to video generation",
+        "api-access": "API Access"
       }
     },
     "plan": {
