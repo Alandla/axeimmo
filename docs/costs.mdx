@@ -16,16 +16,7 @@ Hoox API uses a credit-based pricing system where you pay for what you use. Cred
   - **Video Generation**: Based on duration and features
   - **Script Generation**: Fixed cost per generation
   - **Export**: Included for API videos, charged for dashboard videos
-  - **No Monthly Fees**: Pay only for actual usage
 </Card>
-
-### Credit Purchase
-
-Credits can be purchased through:
-- **API Dashboard**: Web interface for credit management
-- **Automatic Top-up**: Set thresholds for automatic refills
-- **Bulk Purchases**: Volume discounts for large credit packages
-- **Enterprise Plans**: Custom credit allocations
 
 ## Video Generation Costs
 
@@ -33,113 +24,56 @@ Video generation costs depend on several factors:
 
 ### Base Costs
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Standard Video" icon="play">
-    **30 credits** for 30 seconds
+    **5 credits** every 30 seconds
     
     - Text-to-speech generation
     - Basic video assembly
     - Standard quality output
-    - Includes thumbnail
-  </Card>
-  
-  <Card title="With Avatar" icon="user">
-    **+20 credits**
-    
-    - AI avatar generation
-    - Lip-sync technology
-    - Natural gestures
-    - Professional appearance
+    - 15 seconds buffer included
   </Card>
   
   <Card title="With Animation" icon="sparkles">
-    **+10-25 credits per image**
+    **+4-7 credits per image**
     
-    - Standard: +10 credits/image
-    - Pro: +25 credits/image
+    - Standard: +4 credits/image
+    - Pro: +7 credits/image
     - AI-powered movement
     - Cinematic effects
   </Card>
+</CardGroup>
 
 ### Detailed Cost Breakdown
 
-| Feature | Cost | Duration Impact | Notes |
-|---------|------|----------------|--------|
-| **Base Generation** | 30 credits | +1 credit per additional second | Includes script-to-speech |
-| **Avatar Usage** | +20 credits | Flat rate | Any avatar, any duration |
-| **Image Animation (Standard)** | +10 credits/image | None | Basic movement effects |
-| **Image Animation (Pro)** | +25 credits/image | None | Advanced cinematic effects |
-| **Web Search** | +5 credits | None | Enhanced content discovery |
-| **Custom Media Processing** | Included | None | URL-based media integration |
+| Feature | Cost |  Notes |
+|---------|------|--------|
+| **Base Generation** | 5 credits | Every 30 seconds (with 15s buffer) |
+| **Image Animation (Standard)** | +4 credits/image | Basic quality |
+| **Image Animation (Pro)** | +7 credits/image | Advanced quality |
+| **Custom Media Processing** | Included | URL-based media integration |
 
 ### Cost Examples
 
 <Tabs>
   <Tab title="Basic Video">
-    **Simple 60-second video with voice only**
+    **Simple 60-second video**
     
     ```
-    Base cost (30s): 30 credits
-    Additional 30s: 30 credits
-    Total: 60 credits
+    Base cost (60s): 10 credits
+    (5 credits per 30s x 2 tranches)
+    Total: 10 credits
     ```
-    
-    **Use cases:**
-    - Audio-only content
-    - Voiceovers
-    - Podcast clips
-    - Simple announcements
-  </Tab>
-  
-  <Tab title="Avatar Video">
-    **60-second video with professional avatar**
-    
-    ```
-    Base cost (60s): 60 credits
-    Avatar usage: +20 credits
-    Total: 80 credits
-    ```
-    
-    **Use cases:**
-    - Business presentations
-    - Training videos
-    - Customer communications
-    - Product demos
   </Tab>
   
   <Tab title="Premium Content">
     **60-second video with avatar + 3 animated images (Pro)**
     
     ```
-    Base cost (60s): 60 credits
-    Avatar usage: +20 credits
-    Image animation (3 × 25): +75 credits
-    Total: 155 credits
+    Base cost (60s): 10 credits
+    Image animation (3 × 7): +21 credits
+    Total: 31 credits
     ```
-    
-    **Use cases:**
-    - Marketing videos
-    - Social media content
-    - Premium presentations
-    - Brand storytelling
-  </Tab>
-  
-  <Tab title="Complex Production">
-    **120-second video with all features**
-    
-    ```
-    Base cost (120s): 90 credits
-    Avatar usage: +20 credits
-    Web search: +5 credits
-    Image animation (5 × 25): +125 credits
-    Total: 240 credits
-    ```
-    
-    **Use cases:**
-    - Comprehensive tutorials
-    - Product launches
-    - Executive communications
-    - Documentary-style content
   </Tab>
 </Tabs>
 
@@ -147,27 +81,11 @@ Video generation costs depend on several factors:
 
 Script generation has a separate, predictable cost structure:
 
-### Fixed Pricing
-
-<CardGroup cols={2}>
-  <Card title="Standard Script" icon="document">
-    **10 credits**
-    
-    - AI-generated script
-    - Up to 600 seconds
-    - Basic optimization
-    - Content structuring
-  </Card>
-  
-  <Card title="Enhanced Script" icon="search">
-    **+5 credits** for web search
-    
-    - Real-time information
-    - URL content extraction
-    - Enhanced accuracy
-    - Current data integration
-  </Card>
-</CardGroup>
+| Feature | Cost | Notes |
+|---------|------|---------|
+| **Base Generation** | 0.1 credits per 60 seconds | AI-generated script |
+| **Web Search** | +0.1 credits | Enhanced with real-time information |
+| **URL Processing** | +0.1 credits per URL | Content extraction from provided URLs |
 
 ### Script Cost Examples
 
@@ -177,7 +95,7 @@ Script generation has a separate, predictable cost structure:
     "prompt": "Create a video about renewable energy",
     "duration": 60
 }
-# Cost: 10 credits
+# Cost: 0.1 credits (1 x 60s tranche)
 
 # Enhanced script with web search
 {
@@ -186,417 +104,12 @@ Script generation has a separate, predictable cost structure:
     "webSearch": True,
     "urls": ["https://energy.gov/renewable"]
 }
-# Cost: 15 credits (10 + 5 for web search)
+# Cost: 0.3 credits (0.1 base + 0.1 web search + 0.1 per URL)
 ```
 
 ## Export Costs
 
-Export costs depend on how the video was originally created:
-
-### API vs Dashboard Videos
-
-<CardGroup cols={2}>
-  <Card title="API-Generated Videos" icon="code" color="#10b981">
-    **FREE Export**
-    
-    - 0 credits for any export
-    - Multiple format exports included
-    - No additional charges
-    - Unlimited downloads (24h validity)
-    
-    *Export costs are included in generation price*
-  </Card>
-  
-  <Card title="Dashboard-Generated Videos" icon="desktop" color="#f59e0b">
-    **Paid Export**
-    
-    - Variable cost based on duration
-    - ~25-50 credits per video
-    - Format conversion may add cost
-    - Each export consumes credits
-    
-    *Separate charge for each export*
-  </Card>
-</CardGroup>
-
-<Info>
-**Why are API exports free?**
-
-API-generated videos include export costs upfront to provide predictable pricing for developers. This encourages API usage and simplifies cost management for automated workflows.
-</Info>
-
-## Cost Optimization Strategies
-
-### 1. Efficient Video Planning
-
-```python
-def estimate_video_cost(script_length, use_avatar=False, animate_images=0, animation_mode="standard"):
-    """Calculate estimated video generation cost"""
-    
-    # Estimate duration (roughly 150 words per minute for speech)
-    words = len(script_length.split())
-    duration_seconds = (words / 150) * 60
-    
-    # Base cost calculation
-    base_cost = 30 + max(0, duration_seconds - 30)  # 30 credits for first 30s, 1 per additional second
-    
-    # Avatar cost
-    avatar_cost = 20 if use_avatar else 0
-    
-    # Animation cost
-    animation_cost = 0
-    if animate_images > 0:
-        cost_per_image = 25 if animation_mode == "pro" else 10
-        animation_cost = animate_images * cost_per_image
-    
-    total_cost = base_cost + avatar_cost + animation_cost
-    
-    return {
-        "estimated_duration": duration_seconds,
-        "base_cost": base_cost,
-        "avatar_cost": avatar_cost,
-        "animation_cost": animation_cost,
-        "total_cost": total_cost
-    }
-
-# Usage
-script = "Welcome to our company. We provide innovative solutions for modern businesses..."
-cost_estimate = estimate_video_cost(script, use_avatar=True, animate_images=2, animation_mode="standard")
-print(f"Estimated cost: {cost_estimate['total_cost']} credits")
-```
-
-### 2. Batch Operations
-
-Process multiple videos efficiently:
-
-```python
-def optimize_batch_generation(video_scripts, shared_settings):
-    """Optimize costs for batch video generation"""
-    
-    total_estimated_cost = 0
-    batch_plan = []
-    
-    for i, script in enumerate(video_scripts):
-        # Use same avatar across batch to maintain consistency
-        cost_estimate = estimate_video_cost(
-            script, 
-            use_avatar=shared_settings.get("use_avatar", False),
-            animate_images=shared_settings.get("animate_images", 0),
-            animation_mode=shared_settings.get("animation_mode", "standard")
-        )
-        
-        batch_plan.append({
-            "video_index": i,
-            "script": script,
-            "estimated_cost": cost_estimate["total_cost"]
-        })
-        
-        total_estimated_cost += cost_estimate["total_cost"]
-    
-    return {
-        "total_videos": len(video_scripts),
-        "total_estimated_cost": total_estimated_cost,
-        "average_cost_per_video": total_estimated_cost / len(video_scripts),
-        "batch_plan": batch_plan
-    }
-
-# Usage
-scripts = [
-    "Introduction to our product features...",
-    "How to get started with our platform...",
-    "Advanced tips and tricks..."
-]
-
-batch_optimization = optimize_batch_generation(scripts, {
-    "use_avatar": True,
-    "animate_images": 1,
-    "animation_mode": "standard"
-})
-
-print(f"Batch cost: {batch_optimization['total_estimated_cost']} credits")
-print(f"Average per video: {batch_optimization['average_cost_per_video']:.1f} credits")
-```
-
-### 3. Smart Feature Usage
-
-Choose features based on content value:
-
-```python
-def recommend_features_by_use_case(use_case, budget_tier="standard"):
-    """Recommend cost-effective features for different use cases"""
-    
-    recommendations = {
-        "internal_training": {
-            "use_avatar": False,  # Voice-only to save costs
-            "animate_images": 0,
-            "web_search": False,
-            "reasoning": "Focus on content over presentation for internal use"
-        },
-        "customer_facing": {
-            "use_avatar": True,   # Professional appearance
-            "animate_images": 1,  # Light animation for engagement
-            "web_search": False,
-            "reasoning": "Balance professional appearance with cost"
-        },
-        "marketing_campaign": {
-            "use_avatar": True,
-            "animate_images": 3,  # Higher engagement
-            "animation_mode": "pro" if budget_tier == "premium" else "standard",
-            "web_search": True,   # Current information
-            "reasoning": "Maximize engagement for marketing ROI"
-        },
-        "social_media": {
-            "use_avatar": True,
-            "animate_images": 2,
-            "animation_mode": "standard",  # Cost-effective animation
-            "web_search": False,
-            "reasoning": "Optimized for social media engagement"
-        }
-    }
-    
-    return recommendations.get(use_case, recommendations["customer_facing"])
-
-# Usage
-training_features = recommend_features_by_use_case("internal_training")
-marketing_features = recommend_features_by_use_case("marketing_campaign", "premium")
-
-print(f"Training recommendation: {training_features}")
-print(f"Marketing recommendation: {marketing_features}")
-```
-
-## Credit Management
-
-### Monitoring Usage
-
-```python
-def track_credit_usage():
-    """Track and analyze credit consumption patterns"""
-    
-    # This would integrate with your actual API usage tracking
-    usage_data = {
-        "current_balance": 1250,
-        "monthly_usage": 2100,
-        "daily_average": 70,
-        "top_cost_drivers": [
-            {"feature": "Avatar usage", "credits": 800, "percentage": 38},
-            {"feature": "Base generation", "credits": 900, "percentage": 43},
-            {"feature": "Image animation", "credits": 300, "percentage": 14},
-            {"feature": "Script generation", "credits": 100, "percentage": 5}
-        ]
-    }
-    
-    # Calculate efficiency metrics
-    projected_monthly = usage_data["daily_average"] * 30
-    efficiency_score = (usage_data["monthly_usage"] / projected_monthly) * 100
-    
-    print(f"Current balance: {usage_data['current_balance']} credits")
-    print(f"Monthly usage: {usage_data['monthly_usage']} credits")
-    print(f"Efficiency score: {efficiency_score:.1f}%")
-    print("\nTop cost drivers:")
-    for driver in usage_data["top_cost_drivers"]:
-        print(f"- {driver['feature']}: {driver['credits']} credits ({driver['percentage']}%)")
-    
-    return usage_data
-
-# Usage
-usage_stats = track_credit_usage()
-```
-
-### Budget Planning
-
-```python
-class CreditBudgetPlanner:
-    def __init__(self, monthly_budget_credits):
-        self.monthly_budget = monthly_budget_credits
-        self.daily_budget = monthly_budget_credits / 30
-    
-    def plan_content_calendar(self, content_plan):
-        """Plan content production within budget constraints"""
-        
-        total_estimated_cost = 0
-        feasible_content = []
-        budget_warnings = []
-        
-        for content in content_plan:
-            estimated_cost = estimate_video_cost(
-                content["script"],
-                content.get("use_avatar", False),
-                content.get("animate_images", 0),
-                content.get("animation_mode", "standard")
-            )["total_cost"]
-            
-            if total_estimated_cost + estimated_cost <= self.monthly_budget:
-                feasible_content.append({
-                    **content,
-                    "estimated_cost": estimated_cost
-                })
-                total_estimated_cost += estimated_cost
-            else:
-                budget_warnings.append({
-                    "content": content["title"],
-                    "estimated_cost": estimated_cost,
-                    "reason": "Exceeds monthly budget"
-                })
-        
-        return {
-            "feasible_content": feasible_content,
-            "total_cost": total_estimated_cost,
-            "budget_utilization": (total_estimated_cost / self.monthly_budget) * 100,
-            "remaining_budget": self.monthly_budget - total_estimated_cost,
-            "warnings": budget_warnings
-        }
-    
-    def optimize_for_budget(self, content_plan):
-        """Suggest optimizations to fit within budget"""
-        
-        optimizations = []
-        
-        for content in content_plan:
-            original_cost = estimate_video_cost(
-                content["script"],
-                content.get("use_avatar", False),
-                content.get("animate_images", 0),
-                content.get("animation_mode", "standard")
-            )["total_cost"]
-            
-            # Suggest cost reductions
-            if content.get("use_avatar") and content.get("animate_images", 0) > 2:
-                optimized_cost = estimate_video_cost(
-                    content["script"],
-                    True,  # Keep avatar
-                    1,     # Reduce animations
-                    "standard"
-                )["total_cost"]
-                
-                optimizations.append({
-                    "content": content["title"],
-                    "original_cost": original_cost,
-                    "optimized_cost": optimized_cost,
-                    "savings": original_cost - optimized_cost,
-                    "suggestion": "Reduce image animations from {} to 1".format(
-                        content.get("animate_images", 0)
-                    )
-                })
-        
-        return optimizations
-
-# Usage
-budget_planner = CreditBudgetPlanner(monthly_budget_credits=3000)
-
-content_calendar = [
-    {
-        "title": "Product Demo",
-        "script": "Detailed walkthrough of our latest features...",
-        "use_avatar": True,
-        "animate_images": 3,
-        "animation_mode": "pro"
-    },
-    {
-        "title": "Tutorial Series",
-        "script": "Step by step guide to getting started...",
-        "use_avatar": True,
-        "animate_images": 2
-    }
-    # ... more content
-]
-
-budget_plan = budget_planner.plan_content_calendar(content_calendar)
-optimizations = budget_planner.optimize_for_budget(content_calendar)
-
-print(f"Budget utilization: {budget_plan['budget_utilization']:.1f}%")
-print(f"Remaining budget: {budget_plan['remaining_budget']} credits")
-```
-
-## Enterprise Pricing
-
-### Volume Discounts
-
-For high-volume usage, enterprise plans offer:
-
-<CardGroup cols={2}>
-  <Card title="Credit Packages" icon="package">
-    **Bulk Credit Purchases**
-    - 10,000+ credits: 5% discount
-    - 50,000+ credits: 10% discount
-    - 100,000+ credits: 15% discount
-    - Custom packages available
-  </Card>
-  
-  <Card title="Annual Plans" icon="calendar">
-    **Predictable Pricing**
-    - Fixed annual credit allocation
-    - 20-30% savings vs pay-per-use
-    - Rollover unused credits
-    - Priority support included
-  </Card>
-</CardGroup>
-
-### Custom Features
-
-Enterprise plans include additional cost efficiencies:
-
-- **Custom voice cloning**: One-time setup fee, unlimited usage
-- **Brand avatar creation**: Custom avatars with no per-use charges
-- **Bulk processing discounts**: Reduced costs for batch operations
-- **API rate limit increases**: Higher throughput capabilities
-
-## Cost Comparison
-
-### API vs Alternatives
-
-| Factor | Hoox API | Traditional Video Production | Other AI Platforms |
-|--------|----------|----------------------------|-------------------|
-| **Setup Cost** | $0 | $5,000-$50,000 | $0-$500/month |
-| **Per Video** | 60-200 credits | $500-$5,000 | $20-$100 |
-| **Quality** | Professional AI | Highest | Variable |
-| **Speed** | 2-10 minutes | Days to weeks | 5-30 minutes |
-| **Scalability** | Unlimited | Limited by resources | Platform limits |
-| **Customization** | High | Highest | Medium |
-
-### ROI Calculation
-
-```python
-def calculate_video_roi(traditional_cost, api_cost, time_saved_hours, hourly_rate):
-    """Calculate ROI of using Hoox API vs traditional methods"""
-    
-    time_savings_value = time_saved_hours * hourly_rate
-    total_savings = traditional_cost - api_cost + time_savings_value
-    roi_percentage = (total_savings / api_cost) * 100
-    
-    return {
-        "traditional_cost": traditional_cost,
-        "api_cost": api_cost,
-        "time_savings_value": time_savings_value,
-        "total_savings": total_savings,
-        "roi_percentage": roi_percentage
-    }
-
-# Example: Marketing video comparison
-roi = calculate_video_roi(
-    traditional_cost=2000,  # Traditional video production
-    api_cost=80,           # API credits cost (80 credits @ $1 each)
-    time_saved_hours=40,   # Time saved vs traditional production
-    hourly_rate=75         # Internal team hourly rate
-)
-
-print(f"ROI: {roi['roi_percentage']:.1f}%")
-print(f"Total savings: ${roi['total_savings']}")
-```
-
-## Getting Started with Budget
-
-### Free Tier
-
-New accounts include:
-
-<Card title="Free Credits" icon="gift">
-  **100 free credits** to get started
-  
-  - Generate 3-5 basic videos
-  - Test different features
-  - Evaluate quality and fit
-  - No time limit on usage
-</Card>
+API-generated videos include first export is free, included in the generation price.
 
 ### Recommended First Steps
 

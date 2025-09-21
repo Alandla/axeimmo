@@ -11,7 +11,6 @@ The Hoox API uses API keys to authenticate requests. Your API key must be includ
 
 Hoox API keys follow this format:
 - **Production**: `hx_live_` followed by 64 hexadecimal characters
-- **Test**: `hx_test_` followed by 64 hexadecimal characters
 
 Example: `hx_live_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef`
 
@@ -19,7 +18,7 @@ Example: `hx_live_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcd
 
 <Steps>
   <Step title="Access settings">
-    Log in to your [Hoox dashboard](https://app.hoox.video) and go to **Settings** > **API**.
+    Log in to your [Hoox dashboard](https://app.hoox.video) and go to **Your Space** > **Settings** > **API**.
   </Step>
   <Step title="Check your plan">
     Make sure you have an **Enterprise** plan. API access is only available for this plan.
@@ -42,7 +41,7 @@ All requests must include the `Authorization` header:
 Authorization: Bearer hx_live_your_api_key_here
 ```
 
-### Exemples d'implémentation
+### Implementation Examples
 
 <CodeGroup>
 
@@ -90,55 +89,55 @@ curl_close($ch);
 
 </CodeGroup>
 
-## Gestion des clés API
+## API Key Management
 
-### Révocation d'une clé
+### Revoking a Key
 
-Si votre clé est compromise :
+If your key is compromised:
 
-1. Allez dans **Paramètres** > **API**
-2. Cliquez sur **Révoquer** à côté de votre clé
-3. Générez une nouvelle clé immédiatement
-4. Mettez à jour vos applications avec la nouvelle clé
+1. Go to **Settings** > **API**
+2. Click **Revoke** next to your key
+3. Generate a new key immediately
+4. Update your applications with the new key
 
-### Régénération
+### Regeneration
 
-Pour renouveler votre clé :
+To renew your key:
 
-1. Cliquez sur **Régénérer** dans les paramètres API
-2. L'ancienne clé sera immédiatement révoquée
-3. Sauvegardez la nouvelle clé
-4. Mettez à jour vos applications
+1. Click **Regenerate** in the API settings
+2. The old key will be immediately revoked
+3. Save the new key
+4. Update your applications
 
 <Warning>
-  La régénération révoque immédiatement l'ancienne clé. Assurez-vous de mettre à jour toutes vos applications.
+  Regeneration immediately revokes the old key. Make sure to update all your applications.
 </Warning>
 
-## Sécurité
+## Security
 
-### Bonnes pratiques
+### Best Practices
 
 <AccordionGroup>
-  <Accordion title="Stockage sécurisé">
-    - Stockez vos clés dans des variables d'environnement
-    - Ne jamais commiter les clés dans le code source
-    - Utilisez des gestionnaires de secrets en production
+  <Accordion title="Secure Storage">
+    - Store your keys in environment variables
+    - Never commit keys to source code
+    - Use secret managers in production
   </Accordion>
 
-  <Accordion title="Rotation des clés">
-    - Régénérez vos clés régulièrement (tous les 3-6 mois)
-    - Surveillez l'utilisation de vos clés
-    - Révoquez immédiatement les clés compromises
+  <Accordion title="Key Rotation">
+    - Regenerate your keys regularly (every 3-6 months)
+    - Monitor your key usage
+    - Immediately revoke compromised keys
   </Accordion>
 
-  <Accordion title="Restriction d'accès">
-    - Limitez l'accès aux clés API aux personnes nécessaires
-    - Utilisez des clés différentes pour différents environnements
-    - Surveillez les logs d'utilisation
+  <Accordion title="Access Restriction">
+    - Limit API key access to necessary personnel only
+    - Use different keys for different environments
+    - Monitor usage logs
   </Accordion>
 </AccordionGroup>
 
-### Variables d'environnement
+### Environment Variables
 
 <CodeGroup>
 
@@ -156,7 +155,7 @@ if (!HOOX_API_KEY) {
   throw new Error('HOOX_API_KEY environment variable is required');
 }
 
-// Utilisation
+// Usage
 const response = await fetch(`${HOOX_API_URL}/resources/voices`, {
   headers: {
     'Authorization': `Bearer ${HOOX_API_KEY}`,
@@ -176,7 +175,7 @@ HOOX_API_URL = os.getenv('HOOX_API_URL', 'https://app.hoox.video/api/public/v1')
 if not HOOX_API_KEY:
     raise ValueError('HOOX_API_KEY environment variable is required')
 
-# Utilisation
+# Usage
 headers = {
     'Authorization': f'Bearer {HOOX_API_KEY}',
     'Content-Type': 'application/json'
@@ -187,17 +186,17 @@ response = requests.get(f'{HOOX_API_URL}/resources/voices', headers=headers)
 
 </CodeGroup>
 
-## Erreurs d'authentification
+## Authentication Errors
 
-### Codes d'erreur courants
+### Common Error Codes
 
 | Code | Status | Description |
 |------|--------|-------------|
-| `invalid_api_key` | 401 | Clé API invalide ou manquante |
-| `plan_required` | 403 | Plan Entreprise requis |
-| `rate_limit_exceeded` | 429 | Limite de taux dépassée |
+| `invalid_api_key` | 401 | Invalid or missing API key |
+| `plan_required` | 403 | Enterprise plan required |
+| `rate_limit_exceeded` | 429 | Rate limit exceeded |
 
-### Exemple de réponse d'erreur
+### Error Response Example
 
 ```json
 {
@@ -213,13 +212,13 @@ response = requests.get(f'{HOOX_API_URL}/resources/voices', headers=headers)
 
 ## Rate Limiting
 
-Chaque clé API a des limites de taux :
+Each API key has rate limits:
 
-- **100 requêtes par minute** pour le plan Entreprise
-- Les limites sont appliquées par espace de travail
-- Les en-têtes de réponse indiquent votre utilisation actuelle
+- **100 requests per minute** for Enterprise plan
+- Limits are applied per workspace
+- Response headers indicate your current usage
 
-### En-têtes de rate limiting
+### Rate Limiting Headers
 
 ```http
 X-RateLimit-Limit: 100
@@ -228,5 +227,5 @@ X-RateLimit-Reset: 1640995200
 ```
 
 <Tip>
-  Surveillez les en-têtes `X-RateLimit-*` pour éviter de dépasser vos limites.
+  Monitor the `X-RateLimit-*` headers to avoid exceeding your limits.
 </Tip>

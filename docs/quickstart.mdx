@@ -25,7 +25,7 @@ The Hoox API follows a simple workflow to create professional videos:
 ## Step 1: Get your API key
 
 1. Log in to your [Hoox dashboard](https://app.hoox.video)
-2. Go to **Settings** > **API**
+2. Go to **Your Space** > **Settings** > **API**
 3. Click **Generate API Key**
 4. **Copy and save** your key (it will only be shown once)
 
@@ -218,9 +218,9 @@ console.log(`Estimated cost: ${generationData.estimated_credits} credits`);
 
 </CodeGroup>
 
-### Option B: Generate Script First (Recommended)
+### Option B: Generate Script First
 
-For better control and cost estimation, generate a script first:
+For better control, generate a script first:
 
 <CodeGroup>
 
@@ -545,7 +545,7 @@ if (videoId) {
 </CodeGroup>
 
 <Info>
-**Free Export for API Videos**: Videos created through the API have export costs included in the generation price, so exports are free! You can export the same video multiple times in different formats at no additional cost.
+**Free Export for API Videos**: Videos created through the API have export costs included in the generation price, so export first export is free.
 </Info>
 
 ## Complete Workflow Example
@@ -670,16 +670,6 @@ video_url = creator.create_video_from_prompt(
 )
 ```
 
-## Understanding Costs
-
-Your first video will likely cost around **60-80 credits**:
-
-- **Script generation**: 15 credits (with web search)
-- **Base video (60s)**: 60 credits
-- **Avatar usage**: +20 credits
-- **Image animation**: +10-25 credits per image
-- **Export**: FREE for API videos
-
 <Info>
 **Free Credits**: New accounts receive 100 free credits to get started. This is enough to create 1-2 complete videos and test the platform.
 </Info>
@@ -694,7 +684,6 @@ Your first video will likely cost around **60-80 credits**:
   <Accordion title="Generate Scripts First">
     Generate scripts separately before video creation. This allows you to:
     - Review and edit content before committing to full generation
-    - Get accurate cost estimates
     - Ensure quality before spending credits
   </Accordion>
   
@@ -706,9 +695,8 @@ Your first video will likely cost around **60-80 credits**:
   </Accordion>
   
   <Accordion title="Optimize Export Strategy">
-    - API videos have free exports - use this advantage
     - Export multiple formats if needed (vertical, square, landscape)
-    - Download videos immediately - URLs expire after 24 hours
+    - Download videos immediately - URLs expire after 7 days
   </Accordion>
 </AccordionGroup>
 
