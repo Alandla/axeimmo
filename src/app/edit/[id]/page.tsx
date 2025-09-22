@@ -275,19 +275,6 @@ export default function VideoEditor() {
   };
 
   const onExportVideo = async () => {
-    // Check if video uses avatar and user is on FREE plan
-    if (video?.video?.avatar && planName === PlanName.FREE) {
-      setShowModalExport(false)
-      setModalPricingTitle(t('modal-pricing-avatar-restriction-title'))
-      setModalPricingDescription(t('modal-pricing-avatar-restriction-description'))
-      setShowModalPricing(true)
-      toast({
-        title: t('toast.title-error'),
-        description: t('toast.description-avatar-export-not-allowed-free-plan'),
-        variant: 'destructive'
-      })
-      return undefined
-    }
 
     try {
       await basicApiCall('/video/save', { video })

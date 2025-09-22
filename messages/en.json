@@ -415,8 +415,6 @@
       "modal-pricing-description-not-enough-credits": "Not enough credits to export your video, upgrade to a higher plan to export your video.",
       "modal-pricing-export-on-free-title": "Export not available on free plan",
       "modal-pricing-export-on-free-description": "Upgrade to a paid plan to export your videos.",
-      "modal-pricing-avatar-restriction-title": "Avatar not available on free plan",
-      "modal-pricing-avatar-restriction-description": "Exporting videos with avatars requires a paid plan. Upgrade to access this feature.",
       "mobile-disclaimer": {
         "title": "Desktop version recommended",
         "description": "For better performance and optimal experience, we recommend using a computer.",
@@ -449,8 +447,7 @@
         "description-regeneration-error": "An error occurred while regenerating the audio.",
         "description-premium-voice-error": "This voice is only available in paid plans. Upgrade your subscription to access it.",
         "description-premium-avatar-error": "This avatar is only available in paid plans. Upgrade your subscription to access it.",
-        "description-export-not-available-on-free-plan": "Video export requires a paid plan.",
-        "description-avatar-export-not-allowed-free-plan": "Exporting videos with avatars is not available on the free plan. Upgrade to access this feature."
+        "description-export-not-available-on-free-plan": "Video export requires a paid plan."
       },
       "sequence": {
         "edit-word": "Edit word",
