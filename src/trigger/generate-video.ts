@@ -507,7 +507,20 @@ export const generateVideoTask = task({
       };
 
       let processedScript = removeEmojis(payload.script);
-      let enhancedScript = processedScript; // Keep a copy for TTS generation
+
+      // Helper function to split and process script into sentences
+      const splitScriptIntoSentences = (script: string): string[] => {
+        return script
+          .replace(/\.\.\./g, '___ELLIPSIS___') // Temporarily replace ellipsis
+          .split(/(?<=[.!?])\s+(?=[A-Z])/g)
+          .map(sentence => sentence.trim())
+          .filter(sentence => sentence.length > 0)
+          .map(sentence => sentence.replace(/___ELLIPSIS___/g, '...')); // Restore ellipsis
+      };
+
+      // Split the original script first
+      const processedSentencesCut = splitScriptIntoSentences(processedScript);
+      let enhancedSentencesCut = [...processedSentencesCut]; // Start with same sentences
 
       // Apply emotion enhancement if enabled and voice is ElevenLabs
       if (payload.emotionEnhancement && payload.voice.mode !== 'minimax') {
@@ -522,10 +535,14 @@ export const generateVideoTask = task({
             enhancements: enhancements.slice(0, 5) // Log first 5 for debug
           });
 
-          // Apply enhancements to the enhanced script copy
+          // Apply enhancements to each sentence individually with global context
           if (enhancements.length > 0) {
-            enhancedScript = applyVoiceEnhancements(processedScript, enhancements);
-            logger.log(`[EMOTION] Script enhanced successfully`, { enhancedScript });
+            enhancedSentencesCut = applyVoiceEnhancementsToSentences(processedSentencesCut, enhancements);
+            logger.log(`[EMOTION] Sentences enhanced successfully`, { 
+              originalCount: processedSentencesCut.length,
+              enhancedCount: enhancedSentencesCut.length,
+              enhancements: enhancedSentencesCut
+            });
           }
         } catch (error) {
           logger.error(`[EMOTION] Error enhancing script:`, {
@@ -535,21 +552,6 @@ export const generateVideoTask = task({
         }
       }
 
-      // Helper function to split and process script into sentences
-      const splitScriptIntoSentences = (script: string): string[] => {
-        return script
-          .replace(/\.\.\./g, '___ELLIPSIS___') // Temporarily replace ellipsis
-          .split(/(?<=[.!?])\s+(?=[A-Z])/g)
-          .map(sentence => sentence.trim())
-          .filter(sentence => sentence.length > 0)
-          .map(sentence => sentence.replace(/___ELLIPSIS___/g, '...')); // Restore ellipsis
-      };
-
-      // Split both scripts using the same logic
-      const processedSentencesCut = splitScriptIntoSentences(processedScript);
-      const enhancedSentencesCut = splitScriptIntoSentences(enhancedScript);
-      
-      // Helper function to create sentence chunks with both original and enhanced versions
       const createSentenceChunks = (
         originalSentences: string[], 
         enhancedSentences: string[], 
@@ -2042,21 +2044,31 @@ async function processBatches<T, R>(
 }
 
 /**
- * Apply voice enhancements to the script
- * @param script Original script
+ * Apply voice enhancements to sentences with proper occurrence handling
+ * @param sentences Array of original sentences
  * @param enhancements Array of enhancements to apply
- * @returns Enhanced script
+ * @returns Array of enhanced sentences
  */
-function applyVoiceEnhancements(
-  script: string,
+function applyVoiceEnhancementsToSentences(
+  sentences: string[],
   enhancements: { type?: string, value?: string, word?: string, occurrence?: number }[]
-): string {
-  let enhancedScript = script;
+): string[] {
+  const enhancedSentences = [...sentences];
+  
+  // Build a global word occurrence counter
+  const globalWordOccurrences: { [word: string]: number } = {};
+  
+  // Count all word occurrences across all sentences first
+  const fullScript = sentences.join(' ');
+  for (const enhancement of enhancements) {
+    if (!enhancement.word) continue;
+    const regex = new RegExp(`\\b${enhancement.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
+    const matches = Array.from(fullScript.matchAll(regex));
+    globalWordOccurrences[enhancement.word.toLowerCase()] = matches.length;
+  }
 
-  // Sort enhancements by occurrence to apply them in order
-  const sortedEnhancements = enhancements.sort((a, b) => (a.occurrence || 0) - (b.occurrence || 0));
-
-  for (const enhancement of sortedEnhancements) {
+  // Apply enhancements with proper occurrence tracking
+  for (const enhancement of enhancements) {
     if (!enhancement.word || !enhancement.type) continue;
     
     // For 'caps' and 'ellipsis' types, value is not required
@@ -2065,50 +2077,52 @@ function applyVoiceEnhancements(
     const wordToReplace = enhancement.word;
     const enhancementType = enhancement.type;
     const enhancementValue = enhancement.value;
+    const targetOccurrence = enhancement.occurrence || 1;
 
-    // Find the word in the script (case insensitive)
-    const regex = new RegExp(`\\b${wordToReplace.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
-    const matches = Array.from(enhancedScript.matchAll(regex));
+    let currentOccurrence = 0;
+    let found = false;
 
-    if (matches.length > 0) {
-      // Apply enhancement based on occurrence (1-indexed)
-      const targetOccurrence = enhancement.occurrence || 1;
-      const targetIndex = targetOccurrence - 1;
+    // Iterate through sentences to find the target occurrence
+    for (let sentenceIndex = 0; sentenceIndex < enhancedSentences.length && !found; sentenceIndex++) {
+      const sentence = enhancedSentences[sentenceIndex];
+      const regex = new RegExp(`\\b${wordToReplace.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
+      const matches = Array.from(sentence.matchAll(regex));
 
-      if (targetIndex < matches.length && matches[targetIndex]) {
-        const match = matches[targetIndex];
-        const matchIndex = match.index!;
-        const originalWord = match[0];
-
-        let enhancedWord = originalWord;
+      for (const match of matches) {
+        currentOccurrence++;
         
-        switch (enhancementType) {
-          case 'tag':
-            // Add tag before the word (no space)
-            // Ensure the tag value is wrapped in brackets if not already
-            if (enhancementValue) {
-              const tagValue = enhancementValue.startsWith('[') ? enhancementValue : `[${enhancementValue}]`;
-              enhancedWord = `${tagValue}${originalWord}`;
-            }
-            break;
-          case 'caps':
-            // Convert word to uppercase
-            enhancedWord = originalWord.toUpperCase();
-            break;
-          case 'ellipsis':
-            // Add ellipsis after the word
-            enhancedWord = `${originalWord}...`;
-            break;
-        }
+        if (currentOccurrence === targetOccurrence) {
+          const matchIndex = match.index!;
+          const originalWord = match[0];
+          let enhancedWord = originalWord;
+          
+          switch (enhancementType) {
+            case 'tag':
+              if (enhancementValue) {
+                const tagValue = enhancementValue.startsWith('[') ? enhancementValue : `[${enhancementValue}]`;
+                enhancedWord = `${tagValue}${originalWord}`;
+              }
+              break;
+            case 'caps':
+              enhancedWord = originalWord.toUpperCase();
+              break;
+            case 'ellipsis':
+              enhancedWord = `${originalWord}...`;
+              break;
+          }
 
-        // Replace the specific occurrence
-        enhancedScript = 
-          enhancedScript.substring(0, matchIndex) + 
-          enhancedWord + 
-          enhancedScript.substring(matchIndex + originalWord.length);
+          // Replace the word in the sentence
+          enhancedSentences[sentenceIndex] = 
+            sentence.substring(0, matchIndex) + 
+            enhancedWord + 
+            sentence.substring(matchIndex + originalWord.length);
+          
+          found = true;
+          break;
+        }
       }
     }
   }
 
-  return enhancedScript;
+  return enhancedSentences;
 }
