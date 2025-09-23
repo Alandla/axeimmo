@@ -57,7 +57,7 @@ export const avatarsConfig: Avatar[] = [
                 id: 'cadbf752f17541a7ba4e3d70a477e3ec',
                 name: 'Ethan Room',
                 place: 'room',
-                format: 'vertical',
+                format: 'horizontal',
                 tags: ["UGC"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/cadbf752f17541a7ba4e3d70a477e3ec/full/2.2/preview_target.webp',
                 previewUrl: 'https://dynamic.heygen.ai/tr:w-720,ac-none/avatar/v3/cadbf752f17541a7ba4e3d70a477e3ec/full/2.2/preview_video_target.mp4'
@@ -117,7 +117,7 @@ export const avatarsConfig: Avatar[] = [
                 id: '71a20616ea5844738a9d359a15caca9e',
                 name: 'Matt Room',
                 place: 'room',
-                format: 'vertical',
+                format: 'horizontal',
                 tags: ["UGC","podcast"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/71a20616ea5844738a9d359a15caca9e/full/2.2/preview_target.webp',
                 previewUrl: 'https://dynamic.heygen.ai/tr:w-720,ac-none/avatar/v3/71a20616ea5844738a9d359a15caca9e/full/2.2/preview_video_target.mp4'
