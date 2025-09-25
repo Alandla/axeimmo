@@ -1,119 +1,115 @@
 ---
-title: "Script Generation Overview"
-description: "Generate high-quality video scripts with AI, enhanced by web content extraction"
+title: 'Script Generation'
+description: 'Generate high-quality video scripts with AI, enhanced by web content extraction'
 ---
 
-## What is Script Generation?
+## How Script Generation Works
 
-The Hoox Script Generation API allows you to create compelling video scripts using AI-powered text generation. This service can incorporate content from web sources, analyze multiple URLs, and generate scripts tailored to specific durations and requirements.
+The Hoox Script Generation API creates compelling video scripts using AI-powered text generation:
 
-## Key Features
+1. **Content Analysis**: Process your prompt and any provided URLs
+2. **Web Enhancement**: Optionally search the web for additional context
+3. **Script Creation**: Generate natural, engaging scripts tailored to your duration
+4. **Image Extraction**: Extract relevant images from web sources for visual elements
 
-### 🧠 AI-Powered Script Generation
-Generate natural, engaging scripts from simple prompts using advanced language models.
+## Result
 
-### 🌐 Web Content Integration
-Automatically extract and incorporate content from provided URLs to enrich your scripts with real-world information.
-
-### 🖼️ Image Extraction
-Extract relevant images from web content that can be used as visual elements in your videos.
-
-### ⏱️ Duration Control
-Specify exact script duration to match your video requirements (10-600 seconds).
-
-### 💰 Transparent Pricing
-Clear credit-based pricing with upfront cost calculation.
-
-## How It Works
-
-1. **Provide a Prompt**: Start with a clear description of what you want your script to be about
-2. **Add URLs (Optional)**: Include web sources to incorporate specific information
-3. **Set Duration**: Specify how long you want the final script to be
-4. **Generate**: The AI creates a comprehensive script incorporating all your requirements
-5. **Get Results**: Receive the script, extracted images, and cost breakdown
-
-## Use Cases
-
-### Educational Content
-Create informative scripts based on research articles, studies, or educational resources.
+The API returns a generated script along with cost information and extracted images when URLs are provided.
 
 ```json
 {
-  "prompt": "Create an educational script about climate change",
-  "duration": 180,
-  "urls": [
-    "https://climate.nasa.gov/facts/",
-    "https://ipcc.ch/reports/"
+  "script": "Imagine having your entire world on your wrist. Our new smartwatch collection offers unparalleled health monitoring, fitness tracking, and connectivity.\n\nThe Series 11 starts at 449€, featuring advanced health sensors that detect hypertension, monitor sleep quality, and even track your menstrual cycle with wrist temperature readings.\n\nOur SE 3 delivers essential health features at just 269€, while the Ultra 3 offers premium adventure capabilities at 899€ with satellite communication and up to 72 hours of battery life.\n\nAll models include 5G connectivity, water resistance, and customizable bands in various styles and colors. With Apple Pay, music streaming, and thousands of apps, these watches truly complement your lifestyle.\n\nShare your thoughts below!",
+  "cost": 0.2,
+  "extractedImages": [
+    "https://www.apple.com/v/watch/bs/images/overview/select/product_s11__c23ym6fc09me_large.png",
+    "https://www.apple.com/v/watch/bs/images/overview/select/product_se__cbhd710p3auq_large.png",
+    "https://www.apple.com/fr/watch/images/overview/select/product_u3__eh9hc0els5g2_large.png",
+    "https://www.apple.com/v/watch/bs/images/overview/incentive/incentive_trade_in__dj8ydvx9fx4y_large.jpg"
   ]
 }
 ```
 
-### Marketing Content
-Generate promotional scripts that incorporate product information from company websites.
+### Image Extraction
+
+When you provide URLs in your request, the system automatically extracts relevant images from those web pages. These extracted image URLs are returned in the `extractedImages` array.
+
+**Why is this useful?** You can directly pass these extracted image URLs to the [Video Generation API](/api-reference/generation/start) using the `media_urls` parameter. This automatically incorporates the images from your source URLs into the generated video, creating a seamless content workflow.
+
+## Parameters
+
+### Required Parameters
+
+#### Prompt
+Your main instruction describing what the script should be about. Be specific about the tone, target audience, and key points you want covered.
 
 ```json
 {
-  "prompt": "Create a marketing script for our new eco-friendly product line",
-  "urls": ["https://company.com/sustainability"],
+  "prompt": "Create an educational script about artificial intelligence that explains its benefits and challenges for everyday users."
+}
+```
+
+### Optional Parameters
+
+#### Duration
+Target script length in seconds (10-600). Defaults to 60 seconds.
+
+```json
+{
+  "prompt": "Create a comprehensive overview of renewable energy sources, covering solar, wind, and hydroelectric power.",
+  "duration": 180
+}
+```
+
+#### URLs
+Array of web sources to incorporate into your script (max 10 URLs). The system automatically scrapes and analyzes these URLs without needing to enable web search.
+
+```json
+{
+  "prompt": "Create a compelling product presentation for our new smartwatch collection, highlighting the innovative health tracking features and battery life.",
+  "urls": [
+    "https://company.com/smartwatch-specs",
+    "https://company.com/health-features"
+  ]
+}
+```
+
+<Tip>
+  URLs are processed automatically - you don't need to enable `webSearch` for URL content extraction.
+</Tip>
+
+#### Web Search
+Enable additional web research to enhance script content with current information.
+
+```json
+{
+  "prompt": "Create an informative script covering the latest developments in artificial intelligence",
   "webSearch": true
-}
-```
-
-### News and Current Events
-Create scripts based on current news articles and trending topics.
-
-```json
-{
-  "prompt": "Summarize today's tech news in an engaging format",
-  "duration": 120,
-  "urls": [
-    "https://techcrunch.com/latest-article",
-    "https://theverge.com/trending"
-  ]
 }
 ```
 
 ## Cost Structure
 
-The pricing is transparent and predictable:
+Transparent credit-based pricing:
 
-- **Base Cost**: 0.1 credit per 60 seconds of script duration
+- **Base Cost**: 0.1 credit per started 60-second segment
+- **URL Processing**: +0.1 credit per URL
 - **Web Search**: +0.1 credit when enabled
-- **URL Processing**: +0.1 credit per URL provided
-- **Additional Services**: Image extraction and content analysis (included)
-
-### Example Cost Calculation
-
-For a 120-second script with 3 URLs and web search enabled:
-- Base cost: (120/60) × 0.1 = 0.2 credits
-- Web search: +0.1 credits  
-- URLs: 3 × 0.1 = 0.3 credits
-- **Total**: 0.6 credits
-
-## Best Practices
-
-### Prompt Writing
-- Be specific about your target audience
-- Include the desired tone and style
-- Mention key points you want covered
-- Specify any constraints or requirements
-
-### URL Selection
-- Choose authoritative and relevant sources
-- Limit to 10 URLs for optimal processing
-- Ensure URLs are publicly accessible
-- Select recent and updated content
-
-### Duration Planning
-- Consider your platform requirements
-- Account for natural speaking pace
-- Leave room for pauses and emphasis
-- Test with different durations for optimal engagement
 
 ## Next Steps
 
-Ready to generate your first script? Check out the [Script Generation API](/api-reference/script/generate) documentation for detailed implementation guidance.
-
-<Card title="Generate Script" icon="code" href="/api-reference/script/generate">
-  Start generating scripts with our API
-</Card>
+<CardGroup cols={2}>
+  <Card
+    title="Video Generation"
+    icon="video"
+    href="/video-generation/overview"
+  >
+    Learn how to generate videos from your scripts
+  </Card>
+  <Card
+    title="Script Generation API"
+    icon="code"
+    href="/api-reference/script/generate"
+  >
+    View the complete API documentation
+  </Card>
+</CardGroup>

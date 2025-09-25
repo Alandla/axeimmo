@@ -39,6 +39,8 @@ Before creating videos, explore the voices and avatars available for your accoun
 
 ### Get Available Voices
 
+Explore all available voices using the [voices API endpoint](/api-reference/resources/voices):
+
 <CodeGroup>
 
 ```bash cURL
@@ -89,6 +91,8 @@ console.log(`Selected voice: ${selectedVoice.name} (${selectedVoice.id})`);
 
 ### Get Available Avatars
 
+Discover available avatars using the [avatars API endpoint](/api-reference/resources/avatars):
+
 <CodeGroup>
 
 ```bash cURL
@@ -137,6 +141,8 @@ if (selectedAvatar) {
 You can generate videos in two ways: directly from a prompt, or by first generating a script for review.
 
 ### Option A: Direct Video Generation
+
+Generate videos directly from prompts using the [video generation API](/api-reference/generation/start):
 
 <CodeGroup>
 
@@ -220,7 +226,7 @@ console.log(`Estimated cost: ${generationData.estimated_credits} credits`);
 
 ### Option B: Generate Script First
 
-For better control, generate a script first:
+For better control, generate a script first using the [script generation API](/api-reference/script/generate):
 
 <CodeGroup>
 
@@ -320,7 +326,7 @@ console.log(`Video generation started! Job ID: ${videoData.job_id}`);
 
 </CodeGroup>
 
-Poll the status endpoint until generation is complete:
+Poll the [generation status API](/api-reference/generation/status) until generation is complete:
 
 <CodeGroup>
 
@@ -415,7 +421,7 @@ const videoId = await waitForGenerationCompletion(generationData.job_id);
 
 ## Step 5: Export the Video
 
-Export your video to a downloadable MP4 file:
+Export your video to a downloadable MP4 file using the [export start API](/api-reference/export/start):
 
 <CodeGroup>
 
@@ -453,7 +459,7 @@ def export_and_download_video(video_id, format="vertical"):
     # Wait for export completion
     while True:
         export_status_response = requests.get(
-            f'https://app.hoox.video/api/public/v1/export/status/{job_id}',
+            f'https://app.hoox.video/api/public/v1/export/status/{export_job_id}',
             headers={'Authorization': 'Bearer your_api_key'}
         )
         
@@ -508,7 +514,7 @@ async function exportAndDownloadVideo(videoId, format = "vertical") {
   // Wait for export completion
   while (true) {
     const exportStatusResponse = await fetch(
-      `https://app.hoox.video/api/public/v1/export/status/${job_id}`,
+      `https://app.hoox.video/api/public/v1/export/status/${exportJobId}`,
       {
         headers: {
           'Authorization': 'Bearer your_api_key'
@@ -545,160 +551,8 @@ if (videoId) {
 </CodeGroup>
 
 <Info>
-**Free Export for API Videos**: Videos created through the API have export costs included in the generation price, so export first export is free.
+**Free first export for API Videos**: Videos created through the API have export costs included in the generation price, so first export is free.
 </Info>
-
-## Complete Workflow Example
-
-Here's a complete end-to-end example that puts it all together:
-
-```python
-import requests
-import time
-
-class HooxVideoCreator:
-    def __init__(self, api_key):
-        self.api_key = api_key
-        self.base_url = 'https://app.hoox.video/api/public/v1'
-        self.headers = {
-            'Authorization': f'Bearer {api_key}',
-            'Content-Type': 'application/json'
-        }
-    
-    def create_video_from_prompt(self, prompt, duration=60):
-        """Complete workflow: prompt -> script -> video -> export -> download"""
-        print("🚀 Starting video creation workflow...")
-        
-        # Step 1: Get resources
-        voices = self.get_voices()
-        avatars = self.get_avatars()
-        
-        selected_voice = next((v for v in voices if v['language'] == 'en' and 'professional' in v['tags']), voices[0])
-        selected_avatar = next((a for a in avatars if 'business' in a['tags']), avatars[0])
-        
-        print(f"📢 Selected voice: {selected_voice['name']}")
-        print(f"👤 Selected avatar: {selected_avatar['name']}")
-        
-        # Step 2: Generate script
-        script_data = self.generate_script(prompt, duration)
-        script = script_data['script']
-        
-        print(f"📝 Script generated (cost: {script_data['cost']} credits)")
-        print(f"Preview: {script[:100]}...")
-        
-        # Step 3: Generate video
-        video_id = self.generate_video(script, selected_voice['id'], selected_avatar['id'])
-        
-        if not video_id:
-            print("❌ Video generation failed")
-            return None
-        
-        # Step 4: Export video
-        download_url = self.export_video(video_id)
-        
-        print(f"✅ Complete! Video ready at: {download_url}")
-        return download_url
-    
-    def get_voices(self):
-        response = requests.get(f"{self.base_url}/resources/voices", headers=self.headers)
-        return response.json()['voices']
-    
-    def get_avatars(self):
-        response = requests.get(f"{self.base_url}/resources/avatars", headers=self.headers)
-        return response.json()['avatars']
-    
-    def generate_script(self, prompt, duration):
-        response = requests.post(
-            f"{self.base_url}/script/generate",
-            headers=self.headers,
-            json={'prompt': prompt, 'duration': duration, 'webSearch': True}
-        )
-        return response.json()['data']
-    
-    def generate_video(self, script, voice_id, avatar_id):
-        response = requests.post(
-            f"{self.base_url}/generation/start",
-            headers=self.headers,
-            json={
-                'script': script,
-                'voice_id': voice_id,
-                'avatar_id': avatar_id,
-                'format': 'vertical',
-                'animate_image': True
-            }
-        )
-        
-        job_id = response.json()['job_id']
-        return self.wait_for_completion(job_id, 'generation')
-    
-    def wait_for_completion(self, job_id, job_type):
-        while True:
-            response = requests.get(
-                f"{self.base_url}/{job_type}/status/{job_id}",
-                headers=self.headers
-            )
-            
-            data = response.json()
-            status = data['status']
-            
-            if status == 'completed':
-                if job_type == 'generation':
-                    return data['result']['video_id']
-                else:
-                    return data['result']['video_url']
-            elif status == 'failed':
-                print(f"❌ {job_type} failed: {data.get('error', {}).get('message', 'Unknown error')}")
-                return None
-            
-            time.sleep(10)
-    
-    def export_video(self, video_id):
-        response = requests.post(
-            f"{self.base_url}/export/start",
-            headers=self.headers,
-            json={'video_id': video_id, 'format': 'vertical'}
-        )
-        
-        export_job_id = response.json()['job_id']
-        return self.wait_for_completion(export_job_id, 'export')
-
-# Usage
-creator = HooxVideoCreator("your_api_key")
-video_url = creator.create_video_from_prompt(
-    "Create an engaging video about the benefits of remote work for modern companies",
-    duration=90
-)
-```
-
-<Info>
-**Free Credits**: New accounts receive 100 free credits to get started. This is enough to create 1-2 complete videos and test the platform.
-</Info>
-
-## Workflow Optimization Tips
-
-<AccordionGroup>
-  <Accordion title="Use Resource Discovery">
-    Always check available voices and avatars first. This ensures you're using IDs that exist in your plan and helps you choose the best options for your content.
-  </Accordion>
-  
-  <Accordion title="Generate Scripts First">
-    Generate scripts separately before video creation. This allows you to:
-    - Review and edit content before committing to full generation
-    - Ensure quality before spending credits
-  </Accordion>
-  
-  <Accordion title="Monitor Status Efficiently">
-    - Start with 5-10 second polling intervals
-    - Increase intervals as time progresses
-    - Use webhooks for production applications
-    - Always handle timeout scenarios
-  </Accordion>
-  
-  <Accordion title="Optimize Export Strategy">
-    - Export multiple formats if needed (vertical, square, landscape)
-    - Download videos immediately - URLs expire after 7 days
-  </Accordion>
-</AccordionGroup>
 
 ## Next Steps
 
@@ -706,27 +560,7 @@ video_url = creator.create_video_from_prompt(
   <Card title="Pricing & Credits" href="/costs" icon="credit-card">
     Understand costs and optimize your usage
   </Card>
-  <Card title="Voice Resources" href="/resources/voices" icon="microphone">
-    Explore available voices for your videos
-  </Card>
-  <Card title="Avatar Resources" href="/resources/avatars" icon="user">
-    Discover professional avatars for presentations
-  </Card>
   <Card title="API Reference" href="/api-reference/generation/start" icon="code">
     Complete API documentation and examples
   </Card>
 </CardGroup>
-
-## Production Considerations
-
-When building production applications:
-
-1. **Error Handling**: Implement robust retry logic and error handling
-2. **Rate Limiting**: Respect API rate limits and implement backoff strategies
-3. **Webhooks**: Use webhooks instead of polling for better efficiency
-4. **Caching**: Cache resource lists (voices/avatars) to reduce API calls
-5. **Monitoring**: Track credit usage and set up alerts for low balances
-
-<Tip>
-**Best Practice**: Start with script generation to validate content and costs before committing to full video generation. This approach saves credits and ensures better results.
-</Tip>

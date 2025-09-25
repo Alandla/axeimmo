@@ -55,33 +55,11 @@
       ]
     },
     {
-      "group": "Video Generation",
-      "pages": [
-        "video-generation/overview",
-        "video-generation/start-generation",
-        "video-generation/check-status"
-      ]
-    },
-    {
-      "group": "Script Generation",
+      "group": "Overview",
       "pages": [
         "script-generation/overview",
-        "script-generation/generate"
-      ]
-    },
-    {
-      "group": "Video Export",
-      "pages": [
-        "video-export/overview",
-        "video-export/start-export", 
-        "video-export/check-status"
-      ]
-    },
-    {
-      "group": "Resources",
-      "pages": [
-        "resources/voices",
-        "resources/avatars"
+        "video-generation/overview",
+        "video-export/overview"
       ]
     },
     {
