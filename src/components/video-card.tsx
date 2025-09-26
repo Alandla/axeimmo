@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useRef, useCallback } from 'react'
-import { MoreVertical, Pen, Edit, Trash2, Settings2, Video as VideoIcon, VideoOff, Download, Loader2 } from 'lucide-react'
+import { MoreVertical, Pen, Edit, Trash2, Download, Loader2, Copy } from 'lucide-react'
 import { formatDistanceToNow, Locale } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
 
@@ -37,7 +37,15 @@ function formatDuration(seconds: number): string {
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
-export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { video: IVideo, setIsModalConfirmDeleteOpen: (isOpen: boolean) => void }) {
+export default function VideoCard({ 
+  video, 
+  setIsModalConfirmDeleteOpen,
+  onDuplicate 
+}: { 
+  video: IVideo, 
+  setIsModalConfirmDeleteOpen: (isOpen: boolean) => void,
+  onDuplicate?: (video: IVideo) => void
+}) {
   const t = useTranslations('videos')
   const { data: session } = useSession()
 
@@ -125,6 +133,14 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
       window.open(downloadUrls[0], '_blank')
     }
   }, [downloadUrls])
+
+  const handleDuplicate = useCallback((e: any) => {
+    e.stopPropagation()
+    if (onDuplicate) {
+      onDuplicate(video)
+    }
+    setIsDropdownOpen(false)
+  }, [onDuplicate, video])
 
   const isOutdated = !video.video?.audio?.voices || video.video?.audio?.voices.length === 0
 
@@ -233,6 +249,12 @@ export default function VideoCard({ video, setIsModalConfirmDeleteOpen }: { vide
               >
                 <Pen  />
                 {t('dropdown-menu.rename')}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={handleDuplicate}
+              >
+                <Copy />
+                {t('dropdown-menu.duplicate')}
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={(e) => {

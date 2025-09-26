@@ -27,6 +27,7 @@ export default function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
+  const [isDuplicating, setIsDuplicating] = useState(false)
   const { activeSpace } = useActiveSpaceStore()
   const { fetchVideosInBackground, getCachedVideos, clearSpaceCache } = useVideosStore()
   const { itemsPerPage, screenSize } = useScreenSize()
@@ -129,6 +130,42 @@ export default function Dashboard() {
     }
   }
 
+  const handleDuplicateVideo = async (video: IVideo) => {
+    if (!activeSpace?.id) return
+    
+    setIsDuplicating(true)
+    
+    try {
+      const duplicatedVideo = await basicApiCall('/video/duplicate', { 
+        videoId: video.id,
+        spaceId: activeSpace.id
+      })
+
+      toast({
+        title: t('toast.title-video-duplicated'),
+        description: t('toast.description-video-duplicated'),
+        variant: "confirm",
+      })
+
+      // Rafraîchir la liste des vidéos
+      clearSpaceCache(activeSpace.id)
+      const videosFromApi = await fetchVideosInBackground(activeSpace.id, currentPage, itemsPerPage, filters)
+      setVideos(videosFromApi.videos)
+      setTotalPages(videosFromApi.totalPages)
+      setTotalCount(videosFromApi.totalCount)
+      
+    } catch (error) {
+      console.error('Erreur lors de la duplication:', error)
+      toast({
+        title: t('toast.error-title'),
+        description: t('toast.error-video-duplicated'),
+        variant: "destructive",
+      })
+    } finally {
+      setIsDuplicating(false)
+    }
+  }
+
   return (
     <>
       <ModalConfirmDelete isOpen={isModalConfirmDeleteOpen} setIsOpen={setIsModalConfirmDeleteOpen} handleDeleteVideo={handleDeleteVideo} />
@@ -138,6 +175,9 @@ export default function Dashboard() {
             <VideoFilters />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
+            {isDuplicating && (
+              <VideoCardSkeleton key="duplicating" />
+            )}
             {isLoading ? (
               Array.from({ length: itemsPerPage }).map((_, index) => (
                 <VideoCardSkeleton key={index} />
@@ -166,7 +206,12 @@ export default function Dashboard() {
               </div>
             ) : (
               videos.map((video) => (
-                <VideoCard key={video.id} video={video} setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteOpen} />
+                <VideoCard 
+                  key={video.id} 
+                  video={video} 
+                  setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteOpen}
+                  onDuplicate={handleDuplicateVideo}
+                />
               ))
             )}
           </div>

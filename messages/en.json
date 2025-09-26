@@ -48,6 +48,7 @@
       "dropdown-menu": {
         "edit": "Edit",
         "rename": "Rename",
+        "duplicate": "Duplicate",
         "delete": "Delete",
         "download": "Download"
       },
@@ -58,6 +59,9 @@
         "title-video-deleted": "Video deleted",
         "description-video-deleted": "Your video has been deleted",
         "error-video-deleted": "An error occurred while deleting the video",
+        "title-video-duplicated": "Video duplicated",
+        "description-video-duplicated": "Your video has been successfully duplicated",
+        "error-video-duplicated": "An error occurred while duplicating the video",
         "error-title": "Error",
         "error-loading-videos": "Failed to load videos"
       },

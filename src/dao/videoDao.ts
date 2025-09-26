@@ -265,3 +265,66 @@ export const getTotalVideoCountBySpaceId = async (spaceId: string): Promise<numb
     throw new Error(`Erreur lors du comptage des vidéos: ${error.message}`);
   }
 };
+
+export const duplicateVideo = async (videoId: string, userId: string): Promise<IVideo> => {
+  try {
+    return await executeWithRetry(async () => {
+      // Récupérer la vidéo originale
+      const originalVideo = await Video.findById(videoId);
+      if (!originalVideo) {
+        throw new Error('Vidéo non trouvée');
+      }
+
+      const originalData = originalVideo.toJSON();
+      
+      // Générer un nouveau titre avec incrément
+      const baseTitle = originalData.title || 'Untitled';
+      const spaceId = originalData.spaceId;
+      
+      // Chercher les titres existants avec le même pattern
+      const titlePattern = new RegExp(`^${baseTitle.replace(/\s*\(\d+\)$/, '')}(\\s*\\(\\d+\\))?$`);
+      const existingVideos = await Video.find({ 
+        spaceId, 
+        title: titlePattern,
+        archived: { $ne: true }
+      }).select('title');
+      
+      // Trouver le prochain numéro disponible
+      let maxNumber = 0;
+      const cleanBaseTitle = baseTitle.replace(/\s*\(\d+\)$/, '');
+      
+      existingVideos.forEach(video => {
+        const match = video.title.match(/\((\d+)\)$/);
+        if (match) {
+          maxNumber = Math.max(maxNumber, parseInt(match[1]));
+        } else if (video.title === cleanBaseTitle) {
+          // Si on trouve le titre de base sans numéro, le prochain sera (1)
+          maxNumber = Math.max(maxNumber, 0);
+        }
+      });
+      
+      const newTitle = `${cleanBaseTitle} (${maxNumber + 1})`;
+      
+      // Créer la nouvelle vidéo
+      const duplicatedData = {
+        ...originalData,
+        _id: undefined,
+        id: undefined,
+        title: newTitle,
+        createdAt: undefined,
+        updatedAt: undefined,
+        history: [{
+          step: 'CREATE',
+          user: new mongoose.Types.ObjectId(userId),
+          date: new Date()
+        }]
+      };
+      
+      const newVideo = new Video(duplicatedData);
+      const savedVideo = await newVideo.save();
+      return savedVideo.toJSON();
+    });
+  } catch (error: any) {
+    throw new Error(`Erreur lors de la duplication de la vidéo: ${error.message}`);
+  }
+};

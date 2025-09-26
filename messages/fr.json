@@ -57,6 +57,7 @@
       "dropdown-menu": {
         "edit": "Editer",
         "rename": "Renommer",
+        "duplicate": "Dupliquer",
         "delete": "Supprimer",
         "download": "Télécharger"
       },
@@ -67,6 +68,9 @@
         "title-video-deleted": "Vidéo supprimée",
         "description-video-deleted": "Votre vidéo a été supprimée",
         "error-video-deleted": "Une erreur est survenue lors de la suppression de la vidéo",
+        "title-video-duplicated": "Vidéo dupliquée",
+        "description-video-duplicated": "Votre vidéo a été dupliquée avec succès",
+        "error-video-duplicated": "Une erreur est survenue lors de la duplication de la vidéo",
         "error-title": "Erreur",
         "error-loading-videos": "Échec du chargement des vidéos"
       },
