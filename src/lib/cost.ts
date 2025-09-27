@@ -7,15 +7,13 @@ interface TokenUsage {
 }
 
 export const KLING_GENERATION_COSTS = {
-  [KlingGenerationMode.STANDARD]: 4,
-  [KlingGenerationMode.PRO]: 7,
-  [KlingGenerationMode.MASTER]: 10
+  [KlingGenerationMode.STANDARD]: 5,
+  [KlingGenerationMode.PRO]: 7
 } as const;
 
 export const KLING_GENERATION_COSTS_GENERATE = {
-  [KlingGenerationMode.STANDARD]: 0.25,
-  [KlingGenerationMode.PRO]: 0.45,
-  [KlingGenerationMode.MASTER]: 1
+  [KlingGenerationMode.STANDARD]: 0.35,
+  [KlingGenerationMode.PRO]: 0.45
 } as const;
 
 export function calculateAnthropicCost(usage: TokenUsage): number {

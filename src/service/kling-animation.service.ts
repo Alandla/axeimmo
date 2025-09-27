@@ -1,8 +1,9 @@
 import { generateKlingAnimationPrompt } from "@/src/lib/workflowai";
 import { startKlingVideoGeneration, KlingGenerationMode, upscaleImage } from "@/src/lib/fal";
-import { uploadImageFromUrlToS3, uploadToS3Image } from "@/src/lib/r2";
+import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import { calculateKlingAnimationCost } from "@/src/lib/cost";
-import { resizeImageTo1080p, getImageFileSize } from "@/src/lib/ffmpeg";
+import { getImageFileSize } from "@/src/utils/image-resize";
+import { optimizeImageForSize } from "@/src/utils/image-resize";
 interface KlingAnimationResult {
   request_id: string;
   cost: number;
@@ -16,16 +17,21 @@ interface GenerateKlingAnimationOptions {
   duration?: "5" | "10";
   mode: KlingGenerationMode;
   upscale?: boolean;
-  skipFFmpegResize?: boolean; // Flag to skip FFmpeg resize (when called from API)
 }
 
 /**
  * Vérifie la taille d'une image et la redimensionne si elle dépasse la limite Kling (10MB)
+ * Teste progressivement les largeurs Vercel de la plus grande à la plus petite
  * @param imageUrl URL de l'image à vérifier
  * @param fileSize Taille du fichier en bytes (optionnel, sera détecté si non fourni)
+ * @param originalWidth Largeur originale de l'image (optionnel)
  * @returns URL de l'image (redimensionnée si nécessaire)
  */
-async function checkAndResizeImageIfNeeded(imageUrl: string, fileSize?: number): Promise<string> {
+async function checkAndResizeImageIfNeeded(
+  imageUrl: string, 
+  fileSize?: number, 
+  originalWidth?: number
+): Promise<string> {
   const KLING_SIZE_LIMIT = 10485760; // 10MB
   
   // Si on n'a pas la taille, essayer de la détecter
@@ -45,37 +51,10 @@ async function checkAndResizeImageIfNeeded(imageUrl: string, fileSize?: number):
     return imageUrl;
   }
   
-  console.log("Image too large for Kling API, resizing to 1080p...");
-  return await handleImageResizeAndUpload(imageUrl);
+  console.log("Image too large for Kling API, trying progressive optimization with Vercel...");
+  return await optimizeImageForSize(imageUrl, KLING_SIZE_LIMIT, originalWidth);
 }
 
-/**
- * Tente de redimensionner une image à 1080p et l'upload sur R2 si nécessaire
- * @param imageUrl URL de l'image à traiter
- * @returns URL de l'image traitée (redimensionnée si nécessaire)
- */
-async function handleImageResizeAndUpload(imageUrl: string): Promise<string> {
-  try {
-    // Redimensionner l'image avec FFmpeg
-    console.log("Resizing image to 1080p to stay under 10MB limit...");
-    const resizedBuffer = await resizeImageTo1080p(imageUrl);
-    
-    // Uploader l'image redimensionnée sur R2
-    const fileName = `resized-image-${Date.now()}`;
-    const { url: resizedUrl } = await uploadToS3Image(resizedBuffer, "medias-users", fileName, 'webp', 'image/webp');
-    
-    console.log("Image resized and uploaded successfully:", resizedUrl);
-    return resizedUrl;
-  } catch (resizeError) {
-    console.error("Error resizing image:", resizeError);
-    
-    // Si le redimensionnement échoue, essayer un upload R2 classique comme fallback
-    console.log("Resize failed, trying R2 upload as fallback...");
-    const fileName = `image-${Date.now()}`;
-    const r2Url = await uploadImageFromUrlToS3(imageUrl, "medias-users", fileName);
-    return r2Url;
-  }
-}
 
 /**
  * Génère une animation Kling avec retry automatique et upload R2 si nécessaire
@@ -85,7 +64,7 @@ async function handleImageResizeAndUpload(imageUrl: string): Promise<string> {
 export async function generateKlingAnimation(
   options: GenerateKlingAnimationOptions
 ): Promise<KlingAnimationResult> {
-  const { imageUrl, context, imageWidth = 1920, imageHeight = 1080, duration = "5", mode, upscale = false, skipFFmpegResize = false } = options;
+  const { imageUrl, context, imageWidth = 1920, imageHeight = 1080, duration = "5", mode, upscale = false } = options;
   
   let finalImageUrl = imageUrl;
   let usedR2Url: string | undefined;
@@ -131,19 +110,31 @@ export async function generateKlingAnimation(
   const aspectRatio = imageWidth >= imageHeight ? "16:9" : "9:16";
   
   // Étape 2: Vérification proactive de la taille de l'image avant génération Kling
-  // Skip FFmpeg resize if client already optimized the image
-  if (!skipFFmpegResize) {
-    console.log("Checking image size before Kling generation...");
-    const checkedImageUrl = await checkAndResizeImageIfNeeded(finalImageUrl, finalImageFileSize);
+  console.log("Checking image size before Kling generation...");
+  const checkedImageUrl = await checkAndResizeImageIfNeeded(
+    finalImageUrl, 
+    finalImageFileSize, 
+    imageWidth // Pass original width for progressive optimization
+  );
+  
+  // Si l'image a été optimisée avec Vercel, l'uploader sur R2 pour Kling
+  if (checkedImageUrl !== finalImageUrl) {
+    console.log("Image was optimized with Vercel before Kling generation", checkedImageUrl);
     
-    // Si l'image a été compressée, mettre à jour l'URL et marquer l'usage R2
-    if (checkedImageUrl !== finalImageUrl) {
+    try {
+      // Upload l'image optimisée sur R2
+      console.log("Uploading optimized image to R2...");
+      const fileName = `optimized-image-${Date.now()}`;
+      const r2Url = await uploadImageFromUrlToS3(checkedImageUrl, "medias-users", fileName);
+      
+      finalImageUrl = r2Url;
+      usedR2Url = r2Url;
+      console.log("Optimized image uploaded to R2:", r2Url);
+    } catch (r2Error) {
+      console.error("Error uploading optimized image to R2:", r2Error);
+      // Continue avec l'URL Vercel si l'upload R2 échoue
       finalImageUrl = checkedImageUrl;
-      usedR2Url = checkedImageUrl;
-      console.log("Image was resized before Kling generation");
     }
-  } else {
-    console.log("Skipping FFmpeg resize - image was optimized by client");
   }
 
   // Étape 3: Générer le prompt d'animation avec retry

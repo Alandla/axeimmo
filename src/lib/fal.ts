@@ -7,14 +7,12 @@ fal.config({
 
 export enum KlingGenerationMode {
   STANDARD = 'standard',
-  PRO = 'pro',
-  MASTER = 'master'
+  PRO = 'pro'
 }
 
 export const KLING_ENDPOINTS = {
-  [KlingGenerationMode.STANDARD]: "fal-ai/kling-video/v2.1/standard/image-to-video",
-  [KlingGenerationMode.PRO]: "fal-ai/kling-video/v2.1/pro/image-to-video", 
-  [KlingGenerationMode.MASTER]: "fal-ai/kling-video/v2.1/master/image-to-video"
+  [KlingGenerationMode.STANDARD]: "fal-ai/kling-video/v2.5-turbo/pro/image-to-video",
+  [KlingGenerationMode.PRO]: "fal-ai/kling-video/v2.1/pro/image-to-video"
 } as const;
 
 export interface KlingRequest {
@@ -61,7 +59,7 @@ export async function startKlingVideoGeneration(
   mode: KlingGenerationMode = KlingGenerationMode.STANDARD
 ): Promise<{ request_id: string }> {
   // En mode test, retourner un ID fixe sans appeler l'API
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'production') {
     console.log(`[TEST MODE] Simulating Kling video generation with mode: ${mode}`);
     return { request_id: 'a07e8111-d339-4b5c-8563-9887bb4bd146' };
   }
@@ -96,7 +94,7 @@ export async function checkKlingRequestStatus(
   mode: KlingGenerationMode = KlingGenerationMode.STANDARD
 ): Promise<FalQueueStatus> {
   // En mode test, simuler une réponse basée sur l'ID de requête
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'production') {
     console.log(`[TEST MODE] Checking status for request ID: ${requestId}`);
     
     // Simuler différents états basés sur le temps écoulé

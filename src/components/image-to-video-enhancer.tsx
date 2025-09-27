@@ -17,8 +17,6 @@ import { KlingGenerationMode } from '@/src/lib/fal'
 import { KLING_GENERATION_COSTS } from '@/src/lib/cost'
 import { PlanName } from '@/src/types/enums'
 import { usePremiumToast } from '@/src/utils/premium-toast'
-import { shouldResizeImage, resizeImageFromUrl } from '@/src/utils/image-resize'
-import { uploadFileWithPresignedUrl } from '@/src/service/upload.service'
 
 interface ImageToVideoEnhancerProps {
   mediaSpace?: IMediaSpace
@@ -156,85 +154,18 @@ export default function ImageToVideoEnhancer({
     setGenerating(true)
 
     try {
-      let finalMediaSpace = mediaSpace
-
-      // Check if image needs resizing
-      const imageSize = mediaSpace.media.image?.size
-      if (imageSize && shouldResizeImage(imageSize)) {
-        console.log('Image needs resizing, starting resize process...')
-
-        toast({
-          title: t('toast.optimizing-image'),
-          description: t('toast.optimizing-image-description'),
-          variant: 'loading'
-        })
-
-        try {
-          // Start both operations in parallel for optimization
-          const [resizeResult, presignedUrlResult] = await Promise.all([
-            // Resize the image
-            resizeImageFromUrl(
-              mediaSpace.media.image!.link,
-              `optimized-${mediaSpace.media.name}.webp`,
-              {
-                maxFileSize: 10485760, // 10MB limit for Kling
-                quality: 0.8,
-                format: 'webp'
-              }
-            ),
-            // Get presigned URL
-            basicApiCall<{ url: string; key: string }>('/media/getPresignedUrl', {
-              filename: `optimized-${mediaSpace.media.name}.webp`,
-              bucket: 'medias-users'
-            })
-          ])
-
-          console.log('Image resized and presigned URL obtained')
-
-          // Upload the resized image
-          await uploadFileWithPresignedUrl(resizeResult.file, presignedUrlResult.url)
-          
-          const optimizedImageUrl = `https://media.hoox.video/${presignedUrlResult.key}`
-          console.log('Resized image uploaded to:', optimizedImageUrl)
-
-          // Create updated mediaSpace with optimized image
-          finalMediaSpace = {
-            ...mediaSpace,
-            media: {
-              ...mediaSpace.media,
-              image: {
-                ...mediaSpace.media.image!,
-                link: optimizedImageUrl,
-                size: resizeResult.size,
-                width: resizeResult.width,
-                height: resizeResult.height
-              }
-            }
-          }
-
-          console.log('MediaSpace updated with optimized image')
-        } catch (resizeError) {
-          console.error('Error during image optimization:', resizeError)
-          // Continue with original image if resize fails
-          console.log('Continuing with original image due to resize error')
-        }
-      }
-
       toast({
         title: t('toast.generating'),
         description: t('toast.generating-video-description'),
         variant: 'loading'
       })
 
-      console.log('Final MediaSpace:', finalMediaSpace)
-
       const result: any = await basicApiCall('/media/enhance', {
-        mediaSpace: finalMediaSpace,
+        mediaSpace: mediaSpace,
         spaceId: activeSpace.id,
         type: 'video',
         context,
-        mode: generationMode,
-        fromClientOptimization: imageSize && shouldResizeImage(imageSize) // Flag to indicate client-side optimization
+        mode: generationMode
       })
 
       decrementCredits(selectedCost)
@@ -301,12 +232,12 @@ export default function ImageToVideoEnhancer({
         )}
       </div>
 
-      {/* Sélecteur de mode de génération */}
+      {/* Sélecteur de mode de génération - Masqué pour l'instant
       <GenerationModeSelector
         value={generationMode}
         onValueChange={handleModeChange}
         activeSpace={activeSpace}
-      />
+      /> */}
 
       {/* Contexte */}
       <div>

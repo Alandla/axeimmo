@@ -56,12 +56,12 @@ export function ExtractedImagesDisplay() {
 
   return (
     <div className="space-y-4 mt-4">
-      {/* Generation Mode Selector */}
+      {/* Generation Mode Selector - Masqué pour l'instant
       <GenerationModeSelector
         value={animationMode}
         onValueChange={handleModeChange}
         activeSpace={activeSpace}
-      />
+      /> */}
 
       <div className="overflow-x-hidden">
         <div 

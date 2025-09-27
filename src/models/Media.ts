@@ -40,7 +40,7 @@ const mediaSchema = new mongoose.Schema({
     },
     generationMode: {
       type: String,
-      enum: ['standard', 'pro', 'master'],
+      enum: ['standard', 'pro'],
       required: false
     },
     description: {

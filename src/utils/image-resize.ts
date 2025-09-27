@@ -1,6 +1,4 @@
-/**
- * Utility functions for client-side image resizing
- */
+import axios from "axios";
 
 export interface ResizeImageOptions {
   maxFileSize?: number; // in bytes, default 10MB (Kling limit)
@@ -17,6 +15,22 @@ export interface ResizeResult {
   height: number;
   size: number;
   wasResized: boolean;
+}
+
+/**
+ * Obtient la taille d'une image à partir de son URL sans la télécharger entièrement
+ * @param imageUrl URL de l'image
+ * @returns Taille du fichier en bytes
+ */
+export async function getImageFileSize(imageUrl: string): Promise<number> {
+  try {
+    const response = await axios.head(imageUrl);
+    const contentLength = response.headers['content-length'];
+    return contentLength ? parseInt(contentLength, 10) : 0;
+  } catch (error) {
+    console.error("Error getting image file size:", error);
+    return 0;
+  }
 }
 
 /**
@@ -178,3 +192,68 @@ function calculateDimensions(
   };
 }
 
+/**
+ * Try to optimize an image by testing different Vercel widths until we find one that meets the size limit
+ * This function tests widths progressively from largest to smallest until the image is under the size limit
+ * 
+ * @param imageUrl - The original image URL
+ * @param maxFileSize - Maximum file size in bytes (default: 10MB for Kling)
+ * @param originalWidth - Original image width to determine starting point (optional)
+ * @returns Promise<string> - The optimized image URL that meets the size requirement
+ */
+export async function optimizeImageForSize(
+  imageUrl: string,
+  maxFileSize: number = 10485760, // 10MB
+  originalWidth?: number
+): Promise<string> {
+  // If it's already a Vercel optimized URL, return as is
+  if (imageUrl.includes('/_next/image?')) {
+    return imageUrl;
+  }
+
+  // Vercel predefined widths (in descending order)
+  const VERCEL_WIDTHS = [2048, 1920, 1200, 1080, 828, 750, 640];
+  
+  // Filter widths to only test those smaller than or equal to original width
+  const availableWidths = originalWidth 
+    ? VERCEL_WIDTHS.filter(w => w <= originalWidth)
+    : VERCEL_WIDTHS;
+
+  if (availableWidths.length === 0) {
+    availableWidths.push(1080);
+  }
+
+  // Always use production URL for consistency
+  const baseUrl = 'https://app.hoox.video';
+
+  // Test each width from largest to smallest
+  for (const width of availableWidths) {
+    const optimizedUrl = `${baseUrl}/_next/image?url=${encodeURIComponent(imageUrl)}&w=${width}&q=100`;
+    
+    try {
+      // Check the file size of this optimized version
+      const response = await fetch(optimizedUrl, { method: 'HEAD' });
+      const contentLength = response.headers.get('content-length');
+      
+      if (contentLength) {
+        const fileSize = parseInt(contentLength, 10);
+        console.log(`Testing width ${width}: ${fileSize} bytes (${(fileSize / 1024 / 1024).toFixed(2)} MB)`);
+        
+        if (fileSize <= maxFileSize) {
+          console.log(`Found suitable width ${width} for image optimization`);
+          return optimizedUrl;
+        }
+      }
+    } catch (error) {
+      console.error(`Error testing width ${width}:`, error);
+      // Continue to next width
+    }
+  }
+  
+  // If all widths failed, return the smallest one as last resort
+  const fallbackWidth = availableWidths[availableWidths.length - 1] || 640;
+  const fallbackUrl = `${baseUrl}/_next/image?url=${encodeURIComponent(imageUrl)}&w=${fallbackWidth}&q=100`;
+  console.log(`Using fallback width ${fallbackWidth} for image optimization`);
+  
+  return fallbackUrl;
+}

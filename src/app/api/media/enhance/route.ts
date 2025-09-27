@@ -179,8 +179,7 @@ async function enhanceMediaInBackground(
         imageWidth: mediaSpace.media.image?.width || 1920,
         imageHeight: mediaSpace.media.image?.height || 1080,
         duration: "5",
-        mode: mode,
-        skipFFmpegResize: true
+        mode: mode
       });
       
       console.log('Generated animation with request ID:', animationResult.request_id);
