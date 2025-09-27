@@ -443,8 +443,11 @@ export function AiChat() {
   }
 
   const handleConfirmAvatar = () => {
-    // Vérifier s'il y a des images extraites à animer
-    if (extractedImagesMedia.length > 0) {
+    // Vérifier s'il y a des images à animer (uploadées ou extraites)
+    const hasUploadedImages = files.some(file => file.usage === 'media' && file.type === 'image');
+    const hasExtractedImages = extractedImagesMedia.length > 0;
+    
+    if (hasUploadedImages || hasExtractedImages) {
       setCreationStep(CreationStep.IMAGES);
       const messageUser = getRandomMessage('user-select-avatar', { "name": selectedLook?.name || '' });
       const messageAi = getRandomMessage('ai-animate-images');
@@ -487,7 +490,11 @@ export function AiChat() {
     addStep({ id: 7, name: Steps.PLACE_BROLL, state: StepState.PENDING, progress: 0 })
     
     // Ajouter l'étape d'animation si nécessaire
-    if (extractedImagesMedia.length > 0 && useCreationStore.getState().animateImages) {
+    const hasUploadedImages = files.some(file => file.usage === 'media' && file.type === 'image');
+    const hasExtractedImages = extractedImagesMedia.length > 0;
+    const hasAnyImages = hasUploadedImages || hasExtractedImages;
+    
+    if (hasAnyImages && useCreationStore.getState().animateImages) {
       addStep({ id: 9, name: Steps.ANIMATE_IMAGES, state: StepState.PENDING, progress: 0 })
       addStep({ id: 10, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
     } else {

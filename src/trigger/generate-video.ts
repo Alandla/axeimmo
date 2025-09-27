@@ -1270,11 +1270,11 @@ export const generateVideoTask = task({
 
       /*
       /
-      /   Animate extracted images if requested
+      /   Animate images if requested (extracted or uploaded)
       /
       */
       
-      if (payload.animateImages && sequences.some(seq => seq.media?.source === 'extracted')) {
+      if (payload.animateImages && sequences.some(seq => seq.media?.type === 'image' && (seq.media?.source === 'extracted' || seq.media?.usage === 'media'))) {
         logger.log(`[ANIMATE] Starting image animation process...`);
 
         await metadata.replace({
@@ -1282,10 +1282,10 @@ export const generateVideoTask = task({
           progress: 0
         });
 
-        // Find sequences with extracted images
+        // Find sequences with images to animate (extracted or uploaded)
         let sequencesToAnimate = sequences
           .map((seq, index) => ({ seq, index }))
-          .filter(({ seq }) => seq.media?.type === 'image' && seq.media?.source === 'extracted');
+          .filter(({ seq }) => seq.media?.type === 'image' && (seq.media?.source === 'extracted' || seq.media?.usage === 'media'));
 
         // Check credits before animation
         if (sequencesToAnimate.length > 0) {
@@ -1556,7 +1556,7 @@ export const generateVideoTask = task({
                     ...sequence,
                     media: {
                       ...animatedMedia,
-                      source: undefined, // Remove extracted source
+                      source: undefined, // Remove source (extracted/uploaded)
                     }
                   };
                 }

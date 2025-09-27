@@ -373,11 +373,11 @@ export function AiChatTab({
             <>
               {selectedLook ? (
                 <Button className="w-full" onClick={!isDisabled ? handleConfirmAvatar : undefined} disabled={isDisabled}>
-                  <Check />{extractedImagesMedia.length > 0 ? t('next-step') : t('start-generation')}
+                  <Check />{(extractedImagesMedia.length > 0 || files.some(file => file.usage === 'media' && file.type === 'image')) ? t('next-step') : t('start-generation')}
                 </Button>
               ) : (
                 <Button className="w-full" onClick={!isDisabled ? handleConfirmAvatar : undefined} disabled={isDisabled}>
-                  <Check />{extractedImagesMedia.length > 0 ? t('next-step') : t('start-generation')}
+                  <Check />{(extractedImagesMedia.length > 0 || files.some(file => file.usage === 'media' && file.type === 'image')) ? t('next-step') : t('start-generation')}
                 </Button>
               )}
             </>
@@ -409,7 +409,11 @@ export function AiChatTab({
               >
                 <Check className="h-4 w-4" />
                 {t('animate-images')} ({
-                  calculateAnimationCost(extractedImagesMedia.length, script, animationMode)
+                  calculateAnimationCost(
+                    extractedImagesMedia.length + files.filter(file => file.usage === 'media' && file.type === 'image').length, 
+                    script, 
+                    animationMode
+                  )
                 } {t('credits')})
               </Button>
             </div>

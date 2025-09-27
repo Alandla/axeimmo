@@ -18,11 +18,32 @@ const EXCLUDED_SOURCE = "EXCLUDED"
 
 export function ExtractedImagesDisplay() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const { extractedImagesMedia, animationMode, setAnimationMode, setExtractedImagesMedia } = useCreationStore()
+  const { extractedImagesMedia, animationMode, setAnimationMode, setExtractedImagesMedia, files } = useCreationStore()
   const { activeSpace } = useActiveSpaceStore()
 
+  // Combiner les images uploadées et les images extraites
+  const uploadedImages = files
+    .filter(file => file.usage === 'media' && file.type === 'image' && 'file' in file)
+    .map(file => {
+      const fileToUpload = file as { file: File; type: string; usage: string }
+      return {
+        id: `uploaded-${fileToUpload.file.name}-${fileToUpload.file.lastModified}`,
+        type: 'image' as const,
+        usage: 'media' as const,
+        name: fileToUpload.file.name,
+        image: {
+          link: URL.createObjectURL(fileToUpload.file),
+          width: 1920,
+          height: 1080
+        },
+        source: 'uploaded'
+      }
+    })
+
+  const allImages = [...uploadedImages, ...extractedImagesMedia]
+
   const handleNext = () => {
-    if (currentIndex + 2 < extractedImagesMedia.length) {
+    if (currentIndex + 2 < allImages.length) {
       setCurrentIndex(prev => prev + 1)
     }
   }
@@ -38,19 +59,37 @@ export function ExtractedImagesDisplay() {
   }
 
   const handleImageSelection = (index: number, isSelected: boolean) => {
-    const updatedMedia = [...extractedImagesMedia]
-    updatedMedia[index] = {
-      ...updatedMedia[index],
-      source: isSelected ? undefined : EXCLUDED_SOURCE
+    const selectedImage = allImages[index]
+    
+    if (selectedImage.source === 'uploaded') {
+      // Pour les images uploadées, on ne peut pas les modifier directement
+      // car elles sont dans files. On pourrait implémenter une logique différente ici
+      // Pour l'instant, les images uploadées sont toujours sélectionnées par défaut
+      return
     }
-    setExtractedImagesMedia(updatedMedia)
+    
+    // Pour les images extraites, on continue avec la logique existante
+    const extractedIndex = index - uploadedImages.length
+    if (extractedIndex >= 0) {
+      const updatedMedia = [...extractedImagesMedia]
+      updatedMedia[extractedIndex] = {
+        ...updatedMedia[extractedIndex],
+        source: isSelected ? undefined : EXCLUDED_SOURCE
+      }
+      setExtractedImagesMedia(updatedMedia)
+    }
   }
 
   const isImageSelected = (media: any) => {
+    // Les images uploadées sont toujours sélectionnées
+    if (media.source === 'uploaded') {
+      return true
+    }
+    // Les images extraites suivent la logique existante
     return media.source !== EXCLUDED_SOURCE
   }
 
-  if (extractedImagesMedia.length === 0) {
+  if (allImages.length === 0) {
     return null
   }
 
@@ -68,7 +107,7 @@ export function ExtractedImagesDisplay() {
           className="flex gap-4 transition-transform duration-300"
           style={{ transform: `translateX(-${currentIndex * 53}%)` }}
         >
-          {extractedImagesMedia.map((media, idx) => (
+          {allImages.map((media, idx) => (
             <div key={idx} className="w-1/2 flex-shrink-0">
               <div className="bg-white rounded-lg border p-4 relative">
                 {/* Checkbox de sélection en haut à droite */}
@@ -78,12 +117,15 @@ export function ExtractedImagesDisplay() {
                       checked={isImageSelected(media)}
                       onCheckedChange={(checked) => handleImageSelection(idx, checked as boolean)}
                       className="w-5 h-5"
+                      disabled={media.source === 'uploaded'}
                     />
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-semibold">Image {idx + 1}</h3>
+                  <h3 className="text-lg font-semibold">
+                    {media.source === 'uploaded' ? 'Uploaded' : 'Extracted'} Image {idx + 1}
+                  </h3>
                 </div>
                 <div className={`w-full aspect-square rounded-md overflow-hidden mb-4 ${!isImageSelected(media) ? 'opacity-50' : ''}`}>
                   <img 
@@ -98,7 +140,7 @@ export function ExtractedImagesDisplay() {
         </div>
       </div>
       
-      {extractedImagesMedia.length > 2 && (
+      {allImages.length > 2 && (
         <Pagination>
           <PaginationContent>
             <PaginationItem>
@@ -111,8 +153,8 @@ export function ExtractedImagesDisplay() {
             <PaginationItem>
               <PaginationNext 
                 onClick={handleNext}
-                isActive={currentIndex + 2 < extractedImagesMedia.length}
-                className={`${currentIndex + 2 < extractedImagesMedia.length ? 'cursor-pointer' : 'opacity-50'}`}
+                isActive={currentIndex + 2 < allImages.length}
+                className={`${currentIndex + 2 < allImages.length ? 'cursor-pointer' : 'opacity-50'}`}
               />
             </PaginationItem>
           </PaginationContent>
