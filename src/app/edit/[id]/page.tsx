@@ -765,92 +765,98 @@ export default function VideoEditor() {
     }
   };
 
-  const handleAddSequence = (afterIndex: number) => {
+  const handleAddSequence = (index: number, before: boolean = false) => {
     if (!video?.video) return;
 
     const newSequences = [...video.video.sequences];
     const newTransitions = [...(video.video.transitions || [])];
-
+    const defaultDuration = 3;
+    const defaultDurationInFrames = defaultDuration * 60;
+    
+    // Déterminer les paramètres selon le mode
+    const insertIndex = before ? index : index + 1;
+    const referenceSequence = newSequences[index];
+    const newSequenceStart = before ? 0 : referenceSequence.end;
+    const newSequenceEnd = newSequenceStart + defaultDuration;
+    const updateStartIndex = before ? 0 : insertIndex;
+    
     // Mettre à jour les indexSequenceBefore des transitions
+    const transitionThreshold = before ? index : index;
     newTransitions.forEach(transition => {
-      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore > afterIndex) {
+      if (transition.indexSequenceBefore !== undefined && 
+          (before ? transition.indexSequenceBefore >= transitionThreshold : transition.indexSequenceBefore > transitionThreshold)) {
         transition.indexSequenceBefore += 1;
       }
     });
 
-    const previousSequence = newSequences[afterIndex];
-    const defaultDuration = 3;
-    const defaultDurationInFrames = defaultDuration * 60;
-
     // Gérer les voix
-    let lastVoiceIndex = 0;
     if (video.video.audio?.voices) {
       const newVoices = [...video.video.audio.voices];
-      const previousVoice = newVoices.find(voice => voice.index === previousSequence.audioIndex);
-      lastVoiceIndex = Math.max(...newVoices.map(voice => voice.index)) + 1;
+      const referenceVoice = newVoices.find(voice => voice.index === referenceSequence.audioIndex);
+      const newVoiceIndex = Math.max(...newVoices.map(voice => voice.index)) + 1;
 
-      if (!previousVoice) return;
+      if (!referenceVoice) return;
 
       // Créer la nouvelle voix
       const newVoice = {
-        url: "", // URL vide car pas encore générée
-        voiceId: previousVoice.voiceId,
-        index: lastVoiceIndex, // Utiliser l'index suivant le dernier
+        url: "",
+        voiceId: referenceVoice.voiceId,
+        index: newVoiceIndex,
         startOffset: 0,
-        start: previousVoice.end,
-        end: previousVoice.end + defaultDuration,
+        start: newSequenceStart,
+        end: newSequenceEnd,
         durationInFrames: defaultDurationInFrames
       };
 
-      // Trouver l'index dans la liste des voix qui correspond à l'index de la séquence précédente
-      const indexBefore = newVoices.findIndex(voice => voice.index === previousSequence.audioIndex);
-      // Insérer la nouvelle voix après la voix précédente
-      newVoices.splice(indexBefore + 1, 0, newVoice);
-
-      // Mettre à jour les timings des voix suivantes
-      for (let i = previousSequence.audioIndex + 2; i < newVoices.length; i++) {
-        const voice = newVoices[i];
-        voice.start += defaultDuration;
-        voice.end += defaultDuration;
+      // Insérer la nouvelle voix
+      if (before) {
+        newVoices.unshift(newVoice);
+      } else {
+        const voiceIndex = newVoices.findIndex(voice => voice.index === referenceSequence.audioIndex);
+        newVoices.splice(voiceIndex + 1, 0, newVoice);
       }
 
-      // Mettre à jour la durée audio totale
-      const newAudioDuration = (video.video.metadata.audio_duration || 0) + defaultDuration;
+      // Mettre à jour les timings des voix suivantes
+      const startUpdateIndex = before ? 1 : newVoices.findIndex(v => v.index === newVoiceIndex) + 1;
+      for (let i = startUpdateIndex; i < newVoices.length; i++) {
+        newVoices[i].start += defaultDuration;
+        newVoices[i].end += defaultDuration;
+      }
 
       // Créer la nouvelle séquence
       const newSequence: ISequence = {
         words: [{
           word: "Texte",
-          start: previousSequence.end,
-          end: previousSequence.end + defaultDuration,
+          start: newSequenceStart,
+          end: newSequenceEnd,
           confidence: 1,
           durationInFrames: defaultDurationInFrames
         }],
         text: "Texte",
         originalText: "Texte",
-        start: previousSequence.end,
-        end: previousSequence.end + defaultDuration,
+        start: newSequenceStart,
+        end: newSequenceEnd,
         durationInFrames: defaultDurationInFrames,
-        audioIndex: lastVoiceIndex,
+        audioIndex: newVoiceIndex,
         needsAudioRegeneration: true
       };
 
       // Insérer la nouvelle séquence
-      newSequences.splice(afterIndex + 1, 0, newSequence);
+      newSequences.splice(insertIndex, 0, newSequence);
 
       // Mettre à jour les timings des séquences suivantes
-      for (let i = afterIndex + 2; i < newSequences.length; i++) {
-        const sequence = newSequences[i];
-        sequence.start += defaultDuration;
-        sequence.end += defaultDuration;
-        sequence.words = sequence.words.map(word => ({
+      for (let i = updateStartIndex === 0 ? 1 : insertIndex + 1; i < newSequences.length; i++) {
+        if (i === insertIndex) continue; // Skip la nouvelle séquence
+        newSequences[i].start += defaultDuration;
+        newSequences[i].end += defaultDuration;
+        newSequences[i].words = newSequences[i].words.map(word => ({
           ...word,
           start: word.start + defaultDuration,
           end: word.end + defaultDuration
         }));
       }
 
-      // Mettre à jour le state avec les nouvelles voix
+      // Mettre à jour le state
       updateVideo({
         ...video,
         video: {
@@ -863,27 +869,13 @@ export default function VideoEditor() {
           },
           metadata: {
             ...video.video.metadata,
-            audio_duration: newAudioDuration
-          }
-        }
-      });
-    } else {
-      // Fallback si pas de voix (cas improbable)
-      updateVideo({
-        ...video,
-        video: {
-          ...video.video,
-          sequences: newSequences,
-          transitions: newTransitions,
-          metadata: {
-            ...video.video.metadata,
             audio_duration: (video.video.metadata.audio_duration || 0) + defaultDuration
           }
         }
       });
     }
 
-    setSelectedSequenceIndex(afterIndex + 1);
+    setSelectedSequenceIndex(before ? 0 : index + 1);
     setSelectedTransitionIndex(-1);
   };
 

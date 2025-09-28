@@ -27,7 +27,7 @@ interface SequencesProps {
     onRegenerateAudio: (index: number) => void;
     onDeleteSequence: (index: number) => void;
     onDeleteTransition: (index: number) => void;
-    onAddSequence: (afterIndex: number) => void;
+    onAddSequence: (index: number, before?: boolean) => void;
     onAddTransition?: (afterIndex: number) => void;
     onUpdateDuration: (index: number, newDuration: number) => void;
     playerRef?: React.RefObject<PlayerRef>;
@@ -85,6 +85,24 @@ export default function Sequences({
     return (
         <ScrollArea className="h-[calc(100vh-25rem)] sm:h-[calc(100vh-8rem)]">
             <div className="relative">
+                {selectedSequenceIndex === 0 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20, height: 0 }}
+                        animate={{ opacity: 1, y: 0, height: "auto" }}
+                        exit={{ opacity: 0, y: -20, height: 0 }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                        className="mx-2 mb-1"
+                    >
+                        <Button 
+                            variant="outline" 
+                            className="w-full flex items-center justify-center gap-2"
+                            onClick={() => onAddSequence(0, true)}
+                        >
+                            <Plus className="w-4 h-4" />
+                            {t('add-sequence')}
+                        </Button>
+                    </motion.div>
+                )}
                 {sequences && sequences.map((sequence, index) => {
                     const canMergeWithPrevious = index > 0 && sequences[index - 1].audioIndex === sequence.audioIndex;
                     const canMergeWithNext = index < sequences.length - 1 && sequences[index + 1].audioIndex === sequence.audioIndex;
