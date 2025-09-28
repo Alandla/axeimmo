@@ -1,9 +1,8 @@
 import { ISequence, ZoomType } from "@/src/types/video";
 import { Card, CardContent } from "../ui/card";
 import SkeletonImage from "../ui/skeleton-image";
-import SkeletonVideo from "../ui/skeleton-video";
 import SkeletonVideoFrame from "../ui/skeleton-video-frame";
-import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen, Video as VideoIcon, User, ArrowUp, ArrowDown, ZoomIn, ZoomOut, X, ChevronDown } from "lucide-react";
+import { Clock, Edit, FileImage, AlertTriangle, MoreVertical, Trash2, Plus, Pen, Video as VideoIcon, User, ArrowUp, ArrowDown, ZoomIn, ZoomOut, X, ChevronDown, Scissors } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useRef, useState, useCallback } from "react";
 import { Badge } from "../ui/badge";
@@ -20,7 +19,6 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
 } from "../ui/select"
 import * as SelectPrimitive from "@radix-ui/react-select"
@@ -37,7 +35,7 @@ interface SequenceProps {
   handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void;
   handleWordAdd: (sequenceIndex: number, wordIndex: number) => number;
   handleWordDelete: (sequenceIndex: number, wordIndex: number) => void;
-  onCutSequence: (cutIndex: number) => void;
+  handleWordCut: (sequenceIndex: number, wordIndex: number) => void;
   setActiveTabMobile?: (tab: string) => void;
   isMobile?: boolean;
   isLastSequenceWithAudioIndex: boolean;
@@ -63,7 +61,7 @@ export default function Sequence({
   handleWordInputChange,
   handleWordAdd,
   handleWordDelete,
-  onCutSequence,
+  handleWordCut,
   setActiveTabMobile,
   isMobile = false,
   isLastSequenceWithAudioIndex,
@@ -610,6 +608,22 @@ export default function Sequence({
                                             >
                                                 <Plus className="h-4 w-4" />
                                             </Button>
+                                            {wordIndex < sequence.words.length - 1 && (
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-6 w-6"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleWordCut(index, wordIndex);
+                                                        setEditingWordIndex(null);
+                                                        setIsEditing(false);
+                                                    }}
+                                                    title={t('cut-sequence')}
+                                                >
+                                                    <Scissors className="h-4 w-4" />
+                                                </Button>
+                                            )}
                                         {wordIndex === 0 && index > 0 && canMergeWithPrevious && (
                                             <Button
                                                 variant="ghost"

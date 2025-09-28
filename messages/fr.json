@@ -377,6 +377,7 @@
         "add": "Ajouter",
         "add-transition": "Ajouter une transition",
         "edit": "Modifier la séquence",
+        "cut-sequence": "Couper la séquence",
         "merge-with-previous": "Fusionner avec la séquence précédente",
         "merge-with-next": "Fusionner avec la séquence suivante",
         "zoom": {

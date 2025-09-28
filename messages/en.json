@@ -465,6 +465,7 @@
         "add": "Add",
         "add-transition": "Add a transition",
         "edit": "Edit sequence",
+        "cut-sequence": "Cut sequence",
         "merge-with-previous": "Merge with previous sequence",
         "merge-with-next": "Merge with next sequence",
         "zoom": {

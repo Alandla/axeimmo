@@ -23,7 +23,7 @@ interface SequencesProps {
     handleWordInputChange: (sequenceIndex: number, wordIndex: number, newWord: string) => void;
     handleWordAdd: (sequenceIndex: number, wordIndex: number) => number;
     handleWordDelete: (sequenceIndex: number, wordIndex: number) => void;
-    handleCutSequence: (cutIndex: number) => void;
+    handleWordCut: (sequenceIndex: number, wordIndex: number) => void;
     onRegenerateAudio: (index: number) => void;
     onDeleteSequence: (index: number) => void;
     onDeleteTransition: (index: number) => void;
@@ -49,7 +49,7 @@ export default function Sequences({
     handleWordInputChange, 
     handleWordAdd, 
     handleWordDelete, 
-    handleCutSequence, 
+    handleWordCut,
     onRegenerateAudio,
     onDeleteSequence,
     onDeleteTransition,
@@ -76,10 +76,6 @@ export default function Sequences({
 
     const hasTransitionAfterSequence = (sequenceIndex: number) => {
         return transitions.some(t => t.indexSequenceBefore === sequenceIndex);
-    };
-
-    const canAddSequence = (index: number) => {
-        return isLastSequenceWithAudioIndex(sequences, index);
     };
 
     return (
@@ -120,7 +116,7 @@ export default function Sequences({
                             handleWordInputChange={handleWordInputChange}
                             handleWordAdd={handleWordAdd}
                             handleWordDelete={handleWordDelete}
-                            onCutSequence={handleCutSequence}
+                            handleWordCut={handleWordCut}
                             onRegenerateAudio={onRegenerateAudio}
                             onDeleteSequence={onDeleteSequence}
                             onUpdateDuration={onUpdateDuration}
@@ -159,49 +155,38 @@ export default function Sequences({
                                 transition={{ duration: 0.3, delay: 0.1 }}
                                 className="mx-2 my-1"
                             >
-                                {canAddSequence(index) ? (
-                                    hasTransitionAfterSequence(index) ? (
-                                        <Button 
-                                            variant="outline" 
-                                            className="w-full flex items-center justify-center gap-2"
-                                            onClick={() => onAddSequence(index)}
-                                        >
-                                            <Plus className="w-4 h-4" />
-                                            {t('add-sequence')}
-                                        </Button>
-                                    ) : (
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button 
-                                                    variant="outline" 
-                                                    className="w-full flex items-center justify-center gap-2"
-                                                >
-                                                    <Plus className="w-4 h-4" />
-                                                    {t('add')}
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent className="w-[var(--radix-dropdown-trigger-width)]">
-                                                <DropdownMenuItem onClick={() => onAddSequence(index)} className="flex items-center gap-2">
-                                                    <ListVideo className="w-4 h-4" />
-                                                    {t('add-sequence')}
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => onAddTransition?.(index)} className="flex items-center gap-2">
-                                                    <Wand2 className="w-4 h-4" />
-                                                    {t('add-transition')}
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    )
-                                ) : !hasTransitionAfterSequence(index) ? (
+                                {hasTransitionAfterSequence(index) ? (
                                     <Button 
                                         variant="outline" 
                                         className="w-full flex items-center justify-center gap-2"
-                                        onClick={() => onAddTransition?.(index)}
+                                        onClick={() => onAddSequence(index)}
                                     >
                                         <Plus className="w-4 h-4" />
-                                        {t('add-transition')}
+                                        {t('add-sequence')}
                                     </Button>
-                                ) : null}
+                                ) : (
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button 
+                                                variant="outline" 
+                                                className="w-full flex items-center justify-center gap-2"
+                                            >
+                                                <Plus className="w-4 h-4" />
+                                                {t('add')}
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-[var(--radix-dropdown-trigger-width)]">
+                                            <DropdownMenuItem onClick={() => onAddSequence(index)} className="flex items-center gap-2">
+                                                <ListVideo className="w-4 h-4" />
+                                                {t('add-sequence')}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => onAddTransition?.(index)} className="flex items-center gap-2">
+                                                <Wand2 className="w-4 h-4" />
+                                                {t('add-transition')}
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                )}
                             </motion.div>
                         )}
                         {index > selectedSequenceIndex && (

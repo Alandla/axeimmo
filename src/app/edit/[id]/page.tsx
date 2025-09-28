@@ -132,9 +132,67 @@ export default function VideoEditor() {
     }
   };
 
-  const handleCutSequence = (cutIndex: number) => {
-    console.log("cutIndex", cutIndex)
-  }
+  const handleWordCut = (sequenceIndex: number, wordIndex: number) => {
+    if (!video?.video || wordIndex >= video.video.sequences[sequenceIndex].words.length - 1) {
+      // Ne pas couper si c'est le dernier mot
+      return;
+    }
+
+    const newSequences = [...video.video.sequences];
+    const originalSequence = newSequences[sequenceIndex];
+
+    const wordsToKeep = originalSequence.words.slice(0, wordIndex + 1);
+    const wordsToMove = originalSequence.words.slice(wordIndex + 1);
+
+    if (wordsToMove.length === 0) return;
+
+    const durationOfWordsToMove = wordsToMove.reduce((total, word) => total + word.durationInFrames, 0);
+    const timeOfWordsToMove = wordsToMove.reduce((total, word) => total + (word.end - word.start), 0);
+
+    originalSequence.words = wordsToKeep;
+    originalSequence.text = wordsToKeep.map(word => word.word).join(' ');
+    originalSequence.originalText = originalSequence.text;
+    originalSequence.needsAudioRegeneration = false;
+    originalSequence.end = wordsToKeep[wordsToKeep.length - 1].end;
+    originalSequence.durationInFrames = (originalSequence.durationInFrames || 0) - durationOfWordsToMove;
+
+    const newSequenceStart = originalSequence.end;
+    const newSequenceEnd = newSequenceStart + timeOfWordsToMove;
+    
+    const newSequence: ISequence = {
+      words: wordsToMove.map(word => ({
+        ...word,
+      })),
+      text: wordsToMove.map(word => word.word).join(' '),
+      originalText: wordsToMove.map(word => word.word).join(' '),
+      start: newSequenceStart,
+      end: newSequenceEnd,
+      durationInFrames: durationOfWordsToMove,
+      audioIndex: originalSequence.audioIndex,
+      needsAudioRegeneration: false,
+      media: originalSequence.media ? { ...originalSequence.media } : undefined
+    };
+
+    newSequences.splice(sequenceIndex + 1, 0, newSequence);
+
+    const newTransitions = [...(video.video.transitions || [])];
+    newTransitions.forEach(transition => {
+      if (transition.indexSequenceBefore !== undefined && transition.indexSequenceBefore > sequenceIndex) {
+        transition.indexSequenceBefore += 1;
+      }
+    });
+
+    updateVideo({
+      ...video,
+      video: {
+        ...video.video,
+        sequences: newSequences,
+        transitions: newTransitions
+      }
+    });
+
+    setSelectedSequenceIndex(sequenceIndex + 1);
+  };
 
   const saveVideo = async (showToast: boolean = true) => {
     const savePromises = [basicApiCall('/video/save', { video })];
@@ -773,14 +831,21 @@ export default function VideoEditor() {
     const defaultDuration = 3;
     const defaultDurationInFrames = defaultDuration * 60;
     
-    // Déterminer les paramètres selon le mode
+    // Helper function to check if a sequence is the last one with its audio index
+    const isLastSequenceWithAudioIndex = (sequences: ISequence[], sequenceIndex: number): boolean => {
+      const currentSequence = sequences[sequenceIndex];
+      const audioIndex = currentSequence.audioIndex;
+      
+      const sequencesWithSameAudio = sequences.filter(seq => seq.audioIndex === audioIndex);
+      return sequencesWithSameAudio[sequencesWithSameAudio.length - 1] === currentSequence;
+    };
+
     const insertIndex = before ? index : index + 1;
     const referenceSequence = newSequences[index];
     const newSequenceStart = before ? 0 : referenceSequence.end;
     const newSequenceEnd = newSequenceStart + defaultDuration;
     const updateStartIndex = before ? 0 : insertIndex;
-    
-    // Mettre à jour les indexSequenceBefore des transitions
+
     const transitionThreshold = before ? index : index;
     newTransitions.forEach(transition => {
       if (transition.indexSequenceBefore !== undefined && 
@@ -789,41 +854,55 @@ export default function VideoEditor() {
       }
     });
 
-    // Gérer les voix
     if (video.video.audio?.voices) {
       const newVoices = [...video.video.audio.voices];
       const referenceVoice = newVoices.find(voice => voice.index === referenceSequence.audioIndex);
-      const newVoiceIndex = Math.max(...newVoices.map(voice => voice.index)) + 1;
 
       if (!referenceVoice) return;
+      
+      const shouldCreateNewAudioIndex = before || isLastSequenceWithAudioIndex(newSequences, index);
+      const newVoiceIndex = shouldCreateNewAudioIndex 
+        ? Math.max(...newVoices.map(voice => voice.index)) + 1 
+        : referenceSequence.audioIndex;
 
-      // Créer la nouvelle voix
-      const newVoice = {
-        url: "",
-        voiceId: referenceVoice.voiceId,
-        index: newVoiceIndex,
-        startOffset: 0,
-        start: newSequenceStart,
-        end: newSequenceEnd,
-        durationInFrames: defaultDurationInFrames
-      };
+      let startUpdateIndex: number;
 
-      // Insérer la nouvelle voix
-      if (before) {
-        newVoices.unshift(newVoice);
+      if (shouldCreateNewAudioIndex) {
+        const newVoice = {
+          url: "",
+          voiceId: referenceVoice.voiceId,
+          index: newVoiceIndex,
+          startOffset: 0,
+          start: newSequenceStart,
+          end: newSequenceEnd,
+          durationInFrames: defaultDurationInFrames
+        };
+
+        if (before) {
+          newVoices.unshift(newVoice);
+          startUpdateIndex = 1;
+        } else {
+          const voiceIndex = newVoices.findIndex(voice => voice.index === referenceSequence.audioIndex);
+          newVoices.splice(voiceIndex + 1, 0, newVoice);
+          startUpdateIndex = newVoices.findIndex(v => v.index === newVoiceIndex) + 1;
+        }
       } else {
-        const voiceIndex = newVoices.findIndex(voice => voice.index === referenceSequence.audioIndex);
-        newVoices.splice(voiceIndex + 1, 0, newVoice);
+        const existingVoiceIndex = newVoices.findIndex(voice => voice.index === referenceSequence.audioIndex);
+        if (existingVoiceIndex !== -1) {
+          newVoices[existingVoiceIndex].end += defaultDuration;
+          newVoices[existingVoiceIndex].durationInFrames += defaultDurationInFrames;
+          
+          startUpdateIndex = existingVoiceIndex + 1;
+        } else {
+          startUpdateIndex = newVoices.length;
+        }
       }
 
-      // Mettre à jour les timings des voix suivantes
-      const startUpdateIndex = before ? 1 : newVoices.findIndex(v => v.index === newVoiceIndex) + 1;
       for (let i = startUpdateIndex; i < newVoices.length; i++) {
         newVoices[i].start += defaultDuration;
         newVoices[i].end += defaultDuration;
       }
 
-      // Créer la nouvelle séquence
       const newSequence: ISequence = {
         words: [{
           word: "Texte",
@@ -838,13 +917,11 @@ export default function VideoEditor() {
         end: newSequenceEnd,
         durationInFrames: defaultDurationInFrames,
         audioIndex: newVoiceIndex,
-        needsAudioRegeneration: true
+        needsAudioRegeneration: shouldCreateNewAudioIndex
       };
 
-      // Insérer la nouvelle séquence
       newSequences.splice(insertIndex, 0, newSequence);
 
-      // Mettre à jour les timings des séquences suivantes
       for (let i = updateStartIndex === 0 ? 1 : insertIndex + 1; i < newSequences.length; i++) {
         if (i === insertIndex) continue; // Skip la nouvelle séquence
         newSequences[i].start += defaultDuration;
@@ -856,7 +933,6 @@ export default function VideoEditor() {
         }));
       }
 
-      // Mettre à jour le state
       updateVideo({
         ...video,
         video: {
@@ -1494,7 +1570,7 @@ export default function VideoEditor() {
                         handleWordInputChange={handleWordInputChange} 
                         handleWordAdd={handleWordAdd}
                         handleWordDelete={handleWordDelete}
-                        handleCutSequence={handleCutSequence}
+                        handleWordCut={handleWordCut}
                         onRegenerateAudio={handleRegenerateAudio}
                         onDeleteSequence={handleDeleteSequence}
                         onDeleteTransition={handleDeleteTransition}
@@ -1663,7 +1739,7 @@ export default function VideoEditor() {
                   handleWordInputChange={handleWordInputChange} 
                   handleWordAdd={handleWordAdd}
                   handleWordDelete={handleWordDelete}
-                  handleCutSequence={handleCutSequence}
+                  handleWordCut={handleWordCut}
                   onRegenerateAudio={handleRegenerateAudio}
                   onDeleteSequence={handleDeleteSequence}
                   onDeleteTransition={handleDeleteTransition}
