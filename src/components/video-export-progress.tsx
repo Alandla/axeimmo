@@ -6,7 +6,9 @@ import {
   AlertCircle,
   CheckCircle2,
   Music,
-  User
+  User,
+  Copy,
+  Check
 } from 'lucide-react';
 import { Button } from "@/src/components/ui/button";
 import { Progress } from "@/src/components/ui/progress";
@@ -40,6 +42,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [runId, setRunId] = useState<string | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [urlCopied, setUrlCopied] = useState<boolean>(false);
 
   // Utilisation du hook useRealtimeRun pour suivre les mises à jour du run
   const { run } = useRealtimeRun(runId || undefined, {
@@ -123,6 +126,23 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
     };
 
     frame();
+  };
+
+  // Fonction pour copier l'URL de la vidéo
+  const copyVideoUrl = async () => {
+    if (!downloadUrl) return;
+    
+    try {
+      await navigator.clipboard.writeText(downloadUrl);
+      setUrlCopied(true);
+      
+      // Reset l'état après 2 secondes
+      setTimeout(() => {
+        setUrlCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to copy URL:', error);
+    }
   };
 
   useEffect(() => {
@@ -235,12 +255,28 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
       {status === 'completed' ? (
         <>
           <CardHeader>
-            <div className="flex justify-center">
+            <div className="flex justify-center mb-2">
               <CheckCircle2 className="w-16 h-16 text-primary" />
             </div>
             <CardTitle className="text-center">{t('title-completed')}</CardTitle>
           </CardHeader>
           <CardContent>
+            <div className="flex justify-center mb-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={copyVideoUrl}
+                className="text-muted-foreground hover:text-foreground transition-colors text-xs h-7 px-2"
+                disabled={!downloadUrl}
+              >
+                {urlCopied ? (
+                  <Check className="w-3 h-3 mr-1 animate-in fade-in-0 zoom-in-95 duration-200" />
+                ) : (
+                  <Copy className="w-3 h-3 mr-1 transition-transform hover:scale-110" />
+                )}
+                {t('copy-url')}
+              </Button>
+            </div>
             <div className="flex justify-center h-96 overflow-hidden">
               <video 
                 className="rounded-lg"

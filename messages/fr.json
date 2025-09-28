@@ -268,7 +268,8 @@
       "processing": "Nous exportons ta vidéo, tu peux fermer cette page et tu recevras un email avec le lien de téléchargement.",
       "waiting-to-start": "En attente de démarrer l'exportation...",
       "download-video": "Télécharger la vidéo",
-      "back-to-dashboard": "Retour au tableau de bord"
+      "back-to-dashboard": "Retour au tableau de bord",
+      "copy-url": "Copier l'URL"
     },
     "export-modal": {
       "title": "Exporter la vidéo ?",
