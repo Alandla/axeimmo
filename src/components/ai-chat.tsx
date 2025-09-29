@@ -54,7 +54,7 @@ interface Message {
 
 
 export function AiChat() {
-  const { script, setScript, totalCost, setTotalCost, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, isWebMode, setExtractedImagesMedia, extractedImagesMedia, setVideoFormat, reset } = useCreationStore()
+  const { setScript, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, isWebMode, setExtractedImagesMedia, extractedImagesMedia, setVideoFormat, reset } = useCreationStore()
   const { activeSpace, setLastUsedParameters } = useActiveSpaceStore()
   const { fetchTotalVideoCount } = useVideosStore()
   const router = useRouter()
@@ -447,7 +447,10 @@ export function AiChat() {
     const hasUploadedImages = files.some(file => file.usage === 'media' && file.type === 'image');
     const hasExtractedImages = extractedImagesMedia.length > 0;
     
-    if (hasUploadedImages || hasExtractedImages) {
+    // Vérifier si le plan permet l'animation d'images (Pro ou Entreprise uniquement)
+    const canAnimateImages = activeSpace?.planName === PlanName.PRO || activeSpace?.planName === PlanName.ENTREPRISE;
+    
+    if ((hasUploadedImages || hasExtractedImages) && canAnimateImages) {
       setCreationStep(CreationStep.IMAGES);
       const messageUser = getRandomMessage('user-select-avatar', { "name": selectedLook?.name || '' });
       const messageAi = getRandomMessage('ai-animate-images');
@@ -456,7 +459,6 @@ export function AiChat() {
       return;
     }
 
-    // Si pas d'images, démarrer directement la génération
     startVideoGeneration();
   }
 

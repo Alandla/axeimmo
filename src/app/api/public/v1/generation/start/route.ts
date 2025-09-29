@@ -8,6 +8,7 @@ import { avatarsConfig } from '@/src/config/avatars.config'
 import { tasks } from '@trigger.dev/sdk/v3'
 import { KlingGenerationMode } from '@/src/lib/fal'
 import { calculateEstimatedCredits } from '@/src/lib/video-estimation'
+import { PlanName } from '@/src/types/enums'
 
 interface GenerateVideoRequest {
   prompt?: string;
@@ -238,6 +239,10 @@ export async function POST(req: NextRequest) {
     }
 
     // 7. Préparation des options pour Trigger
+    // Vérifier si le plan permet l'animation d'images (Pro ou Entreprise uniquement)
+    const canAnimateImages = space.plan?.name === PlanName.PRO || space.plan?.name === PlanName.ENTREPRISE;
+    const shouldAnimateImages = (params.animate_image || false) && canAnimateImages;
+    
     const options = {
       files,
       script: finalScript,
@@ -246,7 +251,7 @@ export async function POST(req: NextRequest) {
       userId: space.ownerId, // Utiliser l'owner du space
       spaceId: space.id,
       webSearch: params.web_search?.images || false,
-      animateImages: params.animate_image || false,
+      animateImages: shouldAnimateImages,
       animationMode: (params.animate_mode as KlingGenerationMode) || KlingGenerationMode.STANDARD,
       format: params.format || 'vertical',
       webhookUrl: params.webhook_url,
