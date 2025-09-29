@@ -1,6 +1,6 @@
 import { basicApiCall } from "@/src/lib/api";
 import { FileToUpload } from "../types/files";
-import { parseMedia } from '@remotion/media-parser';
+import { Input, ALL_FORMATS, UrlSource } from 'mediabunny';
 
 export const uploadFiles = async (
     files: FileToUpload[], 
@@ -111,16 +111,24 @@ export const getImageDimensions = async (url: string): Promise<{width: number, h
 
 export const getVideoDimensions = async (url: string): Promise<{width: number, height: number} | null> => {
     try {
-        const result = await parseMedia({
-            src: url,
-            fields: {
-                dimensions: true,
-            },
+        const input = new Input({
+            source: new UrlSource(url),
+            formats: ALL_FORMATS,
         });
         
-        return result.dimensions || null;
+        const tracks = await input.getTracks();
+        const videoTrack = tracks.find(track => track.isVideoTrack());
+        
+        if (videoTrack && videoTrack.isVideoTrack()) {
+            return {
+                width: videoTrack.codedWidth,
+                height: videoTrack.codedHeight
+            };
+        }
+        
+        return null;
     } catch (error) {
-        console.error('Erreur lors de la récupération des dimensions:', error);
+        console.error('Erreur lors de la récupération des dimensions avec MediaBunny:', error);
         return null;
     }
 };

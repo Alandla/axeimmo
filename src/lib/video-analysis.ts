@@ -3,7 +3,7 @@ import { extractFramesFromVideo } from "./ffmpeg";
 import { analyzeVideoSequence } from "./workflowai";
 import { uploadToS3Image } from "./r2";
 import { v4 as uuidv4 } from 'uuid';
-import { parseMedia } from '@remotion/media-parser';
+import { Input, ALL_FORMATS, UrlSource } from 'mediabunny';
 
 /**
  * Interface pour le résultat de l'analyse vidéo
@@ -27,20 +27,28 @@ export async function analyzeVideo(videoUrl: string, mediaId?: string): Promise<
   logger.log("[ANALYZE] Starting video analysis...", { videoUrl, mediaId });
   
   try {
-    // Extraire les frames de la vidéo
-    logger.log(`[ANALYZE] Extracting frames from video: ${videoUrl}`);
-    const frames = await extractFramesFromVideo(videoUrl);
+    // Lancer en parallèle : extraction des frames et récupération des métadonnées
+    logger.log(`[ANALYZE] Starting parallel extraction of frames and metadata for: ${videoUrl}`);
     
-    // Obtenir la durée de la vidéo en parallèle
-    const metadata = await parseMedia({
-      acknowledgeRemotionLicense: true,
-      src: videoUrl,
-      fields: {
-        durationInSeconds: true,
-      },
-    });
-    
-    const durationInSeconds = (metadata.durationInSeconds as number) || 10;
+    const [frames, durationInSeconds] = await Promise.all([
+      // Extraire les frames de la vidéo
+      (async () => {
+        logger.log(`[ANALYZE] Extracting frames from video: ${videoUrl}`);
+        return await extractFramesFromVideo(videoUrl);
+      })(),
+      
+      // Obtenir la durée de la vidéo avec MediaBunny
+      (async () => {
+        logger.log(`[ANALYZE] Getting video duration with MediaBunny: ${videoUrl}`);
+        const input = new Input({
+          source: new UrlSource(videoUrl),
+          formats: ALL_FORMATS,
+        });
+        const duration = await input.computeDuration() || 10;
+        logger.log(`[ANALYZE] Video duration with MediaBunny: ${duration}`);
+        return duration;
+      })()
+    ]);
     
     // Lancer en parallèle : l'analyse IA et l'upload des frames pour le trim
     const [analysisResult, trimFrameUrls] = await Promise.all([

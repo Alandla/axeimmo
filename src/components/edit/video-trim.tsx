@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { IMedia, ISequence } from "@/src/types/video";
-import { parseMedia } from '@remotion/media-parser';
+import { Input, ALL_FORMATS, UrlSource } from 'mediabunny';
 import { useMediaCacheStore } from '@/src/store/mediaCacheStore';
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 
@@ -128,16 +128,12 @@ export default function VideoTrim({ sequence, sequenceIndex, setSequenceMedia }:
       try {
         // D'abord récupérer les métadonnées si on n'a pas la durée
         if (!sequence.media?.video?.durationInSeconds) {
-          const metadata = await parseMedia({
-            acknowledgeRemotionLicense: true,
-            src: videoUrl,
-            fields: {
-              durationInSeconds: true,
-              dimensions: true,
-            },
+          const input = new Input({
+            source: new UrlSource(videoUrl),
+            formats: ALL_FORMATS,
           });
 
-          const durationInSeconds = (metadata.durationInSeconds as number) || 0;
+          const durationInSeconds = await input.computeDuration() || 0;
           setVideoDurationInSeconds(durationInSeconds);
           
           // Puis générer les miniatures avec la durée correcte (fallback uniquement)
