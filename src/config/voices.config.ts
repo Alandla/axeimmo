@@ -963,18 +963,6 @@ export const voicesConfig: Voice[] = [
     mode: 'elevenlabs'
   },
   {
-    id: 'PBm6YPbx7WbrxFTZwj3E',
-    name: 'Gabriel',
-    language: 'french',
-    accent: 'french',
-    gender: 'male',
-    age: 'middle aged',
-    tags: ['audiobooks', 'podcast', 'storytelling'],
-    plan: PlanName.PRO,
-    previewUrl: 'https://storage.googleapis.com/eleven-public-prod/custom/voices/PBm6YPbx7WbrxFTZwj3E/D8U7C2MgPxZt3MVgeFjn.mp3',
-    mode: 'elevenlabs'
-  },
-  {
     id: 'hPrNlxoc73WWsa2Bn4Xl',
     name: 'Jessica',
     language: 'english',
