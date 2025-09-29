@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/src/lib/auth';
 import { tasks } from '@trigger.dev/sdk/v3';
+import { calculateRequiredMachine } from '@/src/lib/video-estimation';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -16,9 +17,15 @@ export async function POST(req: NextRequest) {
   const { options } = params;
 
   try {
+    // Calculate machine needed based on video sizes
+    const videoFiles = (options.files || []).filter((f: any) => f.type === 'video');
+    const machinePreset = calculateRequiredMachine(videoFiles);
+    
+    console.log(`[MACHINE] Using machine preset: ${machinePreset} for ${videoFiles.length} video(s)`);
 
     const handle = await tasks.trigger("generate-video", options, {
-      tags: [`user:${session.user.id}`]
+      tags: [`user:${session.user.id}`],
+      machine: machinePreset
     })
 
     return NextResponse.json({ data: { runId: handle.id, publicAccessToken: handle.publicAccessToken } })

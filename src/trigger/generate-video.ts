@@ -167,7 +167,7 @@ export const generateVideoTask = task({
                 return null;
               }
             },
-            7 // Limite de 7 analyses vidéo en parallèle
+            10 // Limite de 10 analyses vidéo en parallèle
           ),
           
           // Analyser toutes les images en parallèle (sans limite)

@@ -113,3 +113,22 @@ export const calculateGenerationCredits = (videoDurationInSeconds: number): numb
   
   return creditsNeeded * 10;
 };
+
+/**
+ * Calcule la machine Trigger.dev nécessaire selon la taille des vidéos
+ * @param videoFiles - Liste des fichiers vidéo avec leurs métadonnées
+ * @param thresholdInMB - Seuil en MB pour passer à medium-2x (défaut: 100 MB)
+ * @returns Le preset de machine à utiliser
+ */
+export const calculateRequiredMachine = (
+  videoFiles: { video?: { size?: number } }[],
+  thresholdInMB: number = 100
+): "medium-2x" | "medium-1x" => {
+  const totalVideoSize = videoFiles.reduce(
+    (sum, file) => sum + (file.video?.size || 0), 
+    0
+  );
+  const totalVideoSizeInMB = totalVideoSize / 1024 / 1024;
+  
+  return totalVideoSizeInMB > thresholdInMB ? "medium-2x" : "medium-1x";
+};

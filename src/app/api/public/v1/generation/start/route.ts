@@ -7,7 +7,7 @@ import { voicesConfig } from '@/src/config/voices.config'
 import { avatarsConfig } from '@/src/config/avatars.config'
 import { tasks } from '@trigger.dev/sdk/v3'
 import { KlingGenerationMode } from '@/src/lib/fal'
-import { calculateEstimatedCredits } from '@/src/lib/video-estimation'
+import { calculateEstimatedCredits, calculateRequiredMachine } from '@/src/lib/video-estimation'
 import { PlanName } from '@/src/types/enums'
 
 interface GenerateVideoRequest {
@@ -262,9 +262,16 @@ export async function POST(req: NextRequest) {
 
     console.trace('options', options);
 
-    // 8. Démarrage de la tâche Trigger
+    // 8. Calcul de la machine nécessaire selon la taille des vidéos
+    const videoFiles = files.filter(f => f.type === 'video');
+    const machinePreset = calculateRequiredMachine(videoFiles);
+    
+    console.trace(`[MACHINE] Using machine preset: ${machinePreset} for ${videoFiles.length} video(s)`);
+
+    // 9. Démarrage de la tâche Trigger
     const handle = await tasks.trigger("generate-video", options, {
-      tags: [`space:${space.id}`, `api-request`]
+      tags: [`space:${space.id}`, `api-request`],
+      machine: machinePreset
     });
 
     return NextResponse.json({
