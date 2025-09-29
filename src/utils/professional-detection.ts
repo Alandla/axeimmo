@@ -493,6 +493,12 @@ export function isProfessionalUser(email: string, website?: string): boolean {
   // Extract domain from email
   const emailDomain = email.split('@')[1]?.toLowerCase();
   
+  // Check if email contains numbers (not professional)
+  const hasNumbersInEmail = /\d/.test(email);
+  if (hasNumbersInEmail) {
+    return false;
+  }
+  
   // Check if email domain is NOT a free email provider
   const hasBusinessEmail = emailDomain && !FREE_EMAIL_DOMAINS.includes(emailDomain);
   
