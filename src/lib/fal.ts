@@ -205,9 +205,9 @@ export async function upscaleImage(
     if (!image?.url) throw new Error("No upscaled image returned");
     return {
       url: image.url,
-      content_type: image.content_type,
-      file_name: image.file_name,
-      file_size: image.file_size
+      content_type: image.content_type!,
+      file_name: image.file_name!,
+      file_size: image.file_size!
     };
   } catch (error) {
     console.error("Error upscaling image:", error);
