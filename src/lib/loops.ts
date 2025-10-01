@@ -186,3 +186,34 @@ export async function sendUnsubscribeEvent(email: string) {
     return null;
   }
 }
+
+export async function updateCustomerStatus(email: string, isActiveClient: boolean, hasBeenCustomer: boolean) {
+  try {
+    const result = await loops.updateContact(email, {
+      client: isActiveClient,
+      hasBeenCustomer: hasBeenCustomer
+    });
+    
+    if (!result || !result.success) {
+      const errorDetails = result ? JSON.stringify(result) : 'No response from Loops';
+      logger.error('[LOOPS] Failed to update customer status', { 
+        email, 
+        isActiveClient, 
+        hasBeenCustomer,
+        response: errorDetails 
+      });
+      throw new Error(`Loops API error: ${errorDetails}`);
+    }
+    
+    return result;
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorObj = error instanceof Error ? error : new Error(String(error));
+    logger.error('[LOOPS] Error updating customer status', { 
+      error: errorMessage, 
+      email,
+      fullError: errorObj
+    });
+    throw errorObj;
+  }
+}

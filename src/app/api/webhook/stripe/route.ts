@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import Stripe from "stripe";
 import { findCheckoutSession } from "@/src/lib/stripe";
 import { createUser, getUserByEmail, getUserById } from "@/src/dao/userDao";
-import { addUserIdToContact, updateCancelReason, sendUnsubscribeEvent } from "@/src/lib/loops";
+import { addUserIdToContact, updateCancelReason, sendUnsubscribeEvent, updateCustomerStatus } from "@/src/lib/loops";
 import { createPrivateSpaceForUser, getSpaceById, removeCreditsToSpace, setCreditsToSpace, updateSpacePlan, setupNewSubscription } from "@/src/dao/spaceDao";
 import { plans, storageLimit } from "@/src/config/plan.config";
 import { IPlan, ISpace } from "@/src/types/space";
@@ -129,6 +129,16 @@ export async function POST(req: Request) {
           trackOrderFacebook(user?.email, session?.invoice as string, session?.subscription as string, user?.id?.toString(), priceAmount, priceData.currency.toUpperCase(), fbc, fbp);
         }
 
+        // Update Loops: set customer as active
+        if (user?.email) {
+          try {
+            await updateCustomerStatus(user.email, true, true);
+            console.log(`[LOOPS] Updated customer status for ${user.email}: client=true, hasBeenCustomer=true`);
+          } catch (error) {
+            console.error(`[LOOPS] Failed to update customer status for ${user.email}:`, error);
+          }
+        }
+
         // Track subscription in Mixpanel
         if (user.id) {
           track(MixpanelEvent.SUBSCRIPTION_CREATED, {
@@ -247,6 +257,20 @@ export async function POST(req: Request) {
           creditsMonth: 0,
           storageLimit: storageLimit[SubscriptionType.FREE], // Limite de stockage du plan gratuit
         });
+
+        // Update Loops: set customer as inactive
+        const customerId = event.data.object.customer;
+        if (customerId) {
+          try {
+            const customer = await stripe.customers.retrieve(customerId as string);
+            if (customer && !customer.deleted && customer.email) {
+              await updateCustomerStatus(customer.email, false, true);
+              console.log(`[LOOPS] Updated customer status for ${customer.email}: client=false, hasBeenCustomer=true`);
+            }
+          } catch (error) {
+            console.error(`[LOOPS] Failed to update customer status:`, error);
+          }
+        }
 
         break;
       }
