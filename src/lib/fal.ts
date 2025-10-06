@@ -51,6 +51,59 @@ export interface FalQueueResult {
   data?: KlingResponse;
 }
 
+// Simple avatar image generation via Fal.ai (endpoint configurable)
+export interface AvatarImageRequest {
+  prompt: string;
+  seed?: number;
+}
+
+export interface AvatarImageResponse {
+  url: string;
+  content_type?: string;
+  file_name?: string;
+  file_size?: number;
+  width?: number;
+  height?: number;
+}
+
+export async function generateAvatarImage(
+  request: AvatarImageRequest
+): Promise<AvatarImageResponse> {
+  // Par défaut, utiliser l'endpoint fourni: comfy/Hoox/srpo, à voir selon le modèle qu'on utilisera finalement selon le rendu voulu (ugc, pro, podcast, etc...)
+  const endpoint = "comfy/Hoox/srpo";
+
+  try {
+    const randomSeed = request.seed ?? Math.floor(Math.random() * 10001);
+    const result = await fal.subscribe(endpoint, {
+      input: {
+        srpo_input: request.prompt,
+        random_noise: randomSeed
+      },
+      logs: true
+    });
+
+    const data: any = (result as any).data;
+    const outputs = data?.outputs || {};
+    let url: string | undefined;
+    let file_name: string | undefined;
+    for (const key of Object.keys(outputs)) {
+      const images = outputs[key]?.images;
+      if (Array.isArray(images) && images.length > 0) {
+        const img = images[0];
+        url = img?.url;
+        file_name = img?.filename;
+        break;
+      }
+    }
+    if (!url) throw new Error("No image URL found in Fal response");
+    return { url, file_name };
+  } catch (error) {
+    console.error("Error generating avatar image:", error);
+    throw error;
+  }
+}
+
+
 /**
  * Démarre la génération vidéo avec Kling selon le mode spécifié
  */

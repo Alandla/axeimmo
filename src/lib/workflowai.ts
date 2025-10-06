@@ -299,6 +299,22 @@ const imageAnalysis = workflowAI.agent<ImageAnalysisInput, ImageAnalysisOutput>(
   useCache: "auto"
 })
 
+// Avatar prompt enhancement (configurable)
+export interface AvatarPromptEnhancementInput {
+  basic_prompt?: string
+}
+
+export interface AvatarPromptEnhancementOutput {
+  enhanced_prompt?: string
+}
+
+const avatarPromptEnhancement = workflowAI.agent<AvatarPromptEnhancementInput, AvatarPromptEnhancementOutput>({
+  id: "text-to-image-prompt-enhancement",
+  schemaId: 1,
+  version: 'dev',
+  useCache: 'never'
+})
+
 // Run Your AI agent
 export async function videoScriptKeywordExtractionRun(scriptContent: string): Promise<{
   cost: number,
@@ -721,5 +737,30 @@ export async function textVoiceEnhancementRun(
   } catch (error) {
     console.error('Failed to run text voice enhancement:', error);
     throw error;
+  }
+}
+
+/**
+ * Améliore un prompt d'avatar en utilisant WorkflowAI
+ */
+export async function improveAvatarPrompt(
+  basicPrompt: string
+): Promise<{
+  cost: number,
+  enhancedPrompt: string
+}> {
+  const input: AvatarPromptEnhancementInput = {
+    basic_prompt: basicPrompt
+  }
+
+  try {
+    const response = await avatarPromptEnhancement(input) as WorkflowAIResponse<AvatarPromptEnhancementOutput>
+    return {
+      cost: response.data.cost_usd,
+      enhancedPrompt: response.output.enhanced_prompt || basicPrompt
+    }
+  } catch (error) {
+    console.error('Failed to improve avatar prompt:', error)
+    throw error
   }
 }

@@ -20,6 +20,12 @@ const avatarSchema = new mongoose.Schema({
       enum: ['male', 'female'],
       required: true,
     },
+    seed: {
+      type: Number,
+      required: false,
+      min: 0,
+      max: 10000
+    },
     tags: {
       type: [String],
       default: [],
