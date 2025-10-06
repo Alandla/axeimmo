@@ -154,12 +154,16 @@ export async function validateApiKey(plainKey: string): Promise<{ space: any; ap
       if (!apiKey) {
         return null;
       }
+
+      const now = new Date();
+      const oneMinuteAgo = new Date(now.getTime() - 300 * 1000);
       
-      // Mettre à jour la date de dernière utilisation
-      await SpaceModel.findOneAndUpdate(
-        { _id: space._id, 'apiKeys._id': apiKey._id },
-        { $set: { 'apiKeys.$.lastUsedAt': new Date() } }
-      );
+      if (!apiKey.lastUsedAt || apiKey.lastUsedAt < oneMinuteAgo) {
+        await SpaceModel.findOneAndUpdate(
+          { _id: space._id, 'apiKeys._id': apiKey._id },
+          { $set: { 'apiKeys.$.lastUsedAt': now } }
+        );
+      }
       
       return {
         space: space.toJSON(),
