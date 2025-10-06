@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
     }
 
     console.info(`POST /api/public/v1/script/generate by space: ${space.id}, API key: ${apiKey.id}`);
+    console.info('params', params);
 
     const { prompt, duration = 60, urls = [], webSearch = false } = params;
 

@@ -61,8 +61,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    console.trace(`POST /api/public/v1/generation/start by space: ${space.id}`);
-    console.trace('params', params);
+    console.info(`POST /api/public/v1/generation/start by space: ${space.id}`);
+    console.info('params', params);
 
     // 1. Initialisation des variables
     let finalScript = params.script || '';
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
 
     // 2. Gestion du script
     if (!finalScript && params.prompt && !params.voice_url && !params.avatar_url) {
-      console.trace("Generating script from prompt...");
+      console.info("Generating script from prompt...");
       try {
         // Génération du script avec extraction d'URLs et d'images (version directe sans streaming)
         const result = await generateVideoScriptDirect({
@@ -260,13 +260,13 @@ export async function POST(req: NextRequest) {
       deductCredits: true // API publique : déduire les crédits du space
     };
 
-    console.trace('options', options);
+    console.info('options', options);
 
     // 8. Calcul de la machine nécessaire selon la taille des vidéos
     const videoFiles = files.filter(f => f.type === 'video');
     const machinePreset = calculateRequiredMachine(videoFiles);
     
-    console.trace(`[MACHINE] Using machine preset: ${machinePreset} for ${videoFiles.length} video(s)`);
+    console.info(`[MACHINE] Using machine preset: ${machinePreset} for ${videoFiles.length} video(s)`);
 
     // 9. Démarrage de la tâche Trigger
     const handle = await tasks.trigger("generate-video", options, {
