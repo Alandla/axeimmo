@@ -188,7 +188,7 @@ export const exportVideoTask = task({
                 if (user.email) {
                   sendExportedVideoEmail({
                     email: user.email,
-                    userName: (user.name || '').split(' ')[0],
+                    userName: (user.firstName || '').split(' ')[0],
                     videoName: video.title || '',
                     thumbnailUrl: video.video?.thumbnail || '',
                     exportId
