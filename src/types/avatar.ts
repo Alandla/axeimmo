@@ -3,7 +3,6 @@ export type Avatar = {
     name: string
     age: string,
     gender: 'male' | 'female'
-    seed: number
     tags: string[]
     thumbnail: string
     premium?: boolean

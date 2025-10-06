@@ -80,12 +80,9 @@ export async function POST(
       enhancedPrompt: basePrompt,
     }));
 
-    console.log("improved.enhancedPrompt", improved.enhancedPrompt);
-
-    // 3) Génère l'image via Fal (seed de l'avatar)
+    // 3) Génère l'image via Fal
     const image = await generateAvatarImage({
       prompt: improved.enhancedPrompt || basePrompt,
-      seed: avatar.seed,
     });
 
     // 4) Met à jour le look

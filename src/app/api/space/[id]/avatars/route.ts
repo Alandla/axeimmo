@@ -75,14 +75,11 @@ export async function POST(
 
     const avatarId = nanoid();
 
-    const seed = Math.floor(Math.random() * 10001);
-
     const newAvatar: any = {
       id: avatarId,
       name,
       age,
       gender,
-      seed,
       tags,
       thumbnail: "",
       looks: [],

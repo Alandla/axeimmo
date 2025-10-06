@@ -54,7 +54,6 @@ export interface FalQueueResult {
 // Simple avatar image generation via Fal.ai (endpoint configurable)
 export interface AvatarImageRequest {
   prompt: string;
-  seed?: number;
 }
 
 export interface AvatarImageResponse {
@@ -73,7 +72,7 @@ export async function generateAvatarImage(
   const endpoint = "comfy/Hoox/srpo";
 
   try {
-    const randomSeed = request.seed ?? Math.floor(Math.random() * 10001);
+    const randomSeed = Math.floor(Math.random() * 10001);
     const result = await fal.subscribe(endpoint, {
       input: {
         srpo_input: request.prompt,
