@@ -829,7 +829,7 @@ export function AvatarGridComponent({
         )
       )}
 
-      {activeAvatar && (
+      {activeAvatar && spaceAvatars.some(a => a.id === activeAvatar.id) && (
         <AvatarLookChatbox
           anchorRef={containerRef}
           activeAvatar={activeAvatar}

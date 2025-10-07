@@ -27,10 +27,45 @@ export function AvatarImagePickerDeck({
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const deckRef = useRef<HTMLDivElement | null>(null);
   const cardsGroupRef = useRef<HTMLDivElement | null>(null);
+  const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
 
   const openFilePicker = () => {
     if (disabled || isUploadingImage) return;
     fileInputRef.current?.click();
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    if (disabled || isUploadingImage) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    if (disabled || isUploadingImage) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Only reset when leaving the container itself
+    if (e.currentTarget === e.target) {
+      setIsDraggingOver(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    if (disabled || isUploadingImage) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingOver(false);
+    const files = e.dataTransfer?.files;
+    if (files && files.length > 0) {
+      handleFilesSelected(files);
+    }
   };
 
   const handleFilesSelected = async (files: FileList | null) => {
@@ -100,9 +135,14 @@ export function AvatarImagePickerDeck({
 
   useEffect(() => {
     if (isUploadReady && isGatherDone && isFlipDone && previewUrl) {
-      setRevealFinalImage(true);
-      setIsUploadingImage(false);
-      onImageReady(previewUrl);
+      // Add a tiny delay to ensure the flip animation fully settles
+      // before revealing the final image when upload is extremely fast
+      const revealDelay = setTimeout(() => {
+        setRevealFinalImage(true);
+        setIsUploadingImage(false);
+        onImageReady(previewUrl);
+      }, 150);
+      return () => clearTimeout(revealDelay);
     }
   }, [isUploadReady, isGatherDone, isFlipDone, previewUrl, onImageReady]);
 
@@ -119,7 +159,13 @@ export function AvatarImagePickerDeck({
   }, [resetToken]);
 
   return (
-    <div className="border rounded-md h-72 flex flex-col items-center justify-center text-muted-foreground">
+    <div
+      className={`border rounded-md h-72 flex flex-col items-center justify-center text-muted-foreground transition-colors ${isDraggingOver ? 'border-primary/60 bg-primary/5' : ''}`}
+      onDragOver={handleDragOver}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
       <div className="relative w-[260px] h-[160px] mb-10 perspective-1000">
         {/* Deck: face avant + face arrière */}
         <div ref={deckRef} className={`absolute inset-0 z-10 transition-transform duration-500 [transform-style:preserve-3d] ${isDeckFlipped ? 'rotate-y-180' : ''}`}>
