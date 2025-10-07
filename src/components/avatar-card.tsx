@@ -50,9 +50,10 @@ interface AvatarCardProps {
   onClick: () => void;
   isLastUsed?: boolean;
   selectedAvatarName?: string | String | null;
+  disabled?: boolean;
 }
 
-export function AvatarCard({ avatar, onClick, isLastUsed, selectedAvatarName: propSelectedAvatarName }: AvatarCardProps) {
+export function AvatarCard({ avatar, onClick, isLastUsed, selectedAvatarName: propSelectedAvatarName, disabled = false }: AvatarCardProps) {
     const { selectedAvatarName: storeSelectedAvatarName } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
     const { showPremiumToast } = usePremiumToast()
@@ -64,6 +65,8 @@ export function AvatarCard({ avatar, onClick, isLastUsed, selectedAvatarName: pr
     const isSelected = selectedAvatarName === avatar.name;
 
     const handleAvatarSelection = () => {
+      if (disabled) return;
+      if (!avatar.thumbnail) return;
       if (avatar.premium && activeSpace?.planName === PlanName.FREE) {
         showPremiumToast(
           t('toast.title-error'),
@@ -78,8 +81,9 @@ export function AvatarCard({ avatar, onClick, isLastUsed, selectedAvatarName: pr
   return (
     <Card 
       key={avatar.id} 
-      className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
+      className={`flex flex-col relative ${disabled ? 'cursor-not-allowed opacity-70' : (avatar.thumbnail ? 'cursor-pointer' : 'cursor-not-allowed opacity-70')} transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
       onClick={handleAvatarSelection}
+      aria-disabled={disabled || !avatar.thumbnail}
     >
       {(isSelected || isLastUsed) && (
         <div className="absolute top-2 right-2 transition-all duration-150">
@@ -124,13 +128,19 @@ export function AvatarCard({ avatar, onClick, isLastUsed, selectedAvatarName: pr
             </div>
           </div>
           <div className="w-full aspect-square rounded-md overflow-hidden">
-            <Image 
-              src={avatar.thumbnail} 
-              alt={avatar.name}
-              className="w-full h-full object-cover"
-              width={1280}
-              height={720}
-            />
+            {avatar.thumbnail ? (
+              <Image 
+                src={avatar.thumbnail} 
+                alt={avatar.name}
+                className="w-full h-full object-cover"
+                width={1280}
+                height={720}
+              />
+            ) : (
+              <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
+                <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
 import { getSpaceById } from "@/src/dao/spaceDao";
-import { generateAvatarImage } from "@/src/lib/fal";
-import { improveAvatarPrompt } from "@/src/lib/workflowai";
+import { editAvatarImage } from "@/src/lib/fal";
+import { improveAvatarPrompt, extractImagePromptInfo } from "@/src/lib/workflowai";
 import { nanoid } from "nanoid";
 
 export async function POST(
@@ -32,6 +32,9 @@ export async function POST(
 
     const body = await req.json().catch(() => ({}));
     const description: string | undefined = body?.description;
+    const providedImages: string[] = Array.isArray(body?.images)
+      ? body.images.filter((u: any) => typeof u === "string" && !!u)
+      : [];
     if (!description) {
       return NextResponse.json(
         { error: "description is required" },
@@ -59,44 +62,73 @@ export async function POST(
     };
     avatar.looks = avatar.looks || [];
     avatar.looks.push(look as any);
+
+    // Extraire immédiatement name/place/tags à partir du prompt de base (description)
+    try {
+      const extractedNow = await extractImagePromptInfo(description)
+      const lookRefInit = avatar.looks.find((l: any) => l.id === lookId)
+      if (lookRefInit) {
+        if (extractedNow.name) lookRefInit.name = extractedNow.name
+        if (extractedNow.place) lookRefInit.place = extractedNow.place
+        if (Array.isArray(extractedNow.tags)) lookRefInit.tags = extractedNow.tags
+      }
+    } catch {}
     await space.save();
 
-    // 2) Améliore le prompt en utilisant les infos d'avatar (identité) et la description (scène)
-    const identityHints = [
-      avatar?.name ? `Name: ${avatar.name}` : undefined,
-      avatar?.gender ? `Gender: ${avatar.gender}` : undefined,
-      avatar?.age ? `Age: ${avatar.age}` : undefined,
-      Array.isArray(avatar?.tags) && avatar.tags.length
-        ? `Tags: ${avatar.tags.join(", ")}`
-        : undefined,
-    ]
-      .filter(Boolean)
-      .join(" | ");
+    // 2) Déclencher la génération en arrière-plan (comme pour la création d'avatar)
+    Promise.resolve()
+      .then(async () => {
+        try {
+          const refreshedSpace: any = await getSpaceById(params.id);
+          const avatarRef: any = refreshedSpace?.avatars?.find((a: any) => a.id === params.avatarId);
+          if (!avatarRef) return;
 
-    const basePrompt = identityHints
-      ? `${description}. Keep identity consistent. ${identityHints}.`
-      : `${description}. Keep identity consistent.`;
-    const improved = await improveAvatarPrompt(basePrompt).catch(() => ({
-      enhancedPrompt: basePrompt,
-    }));
+          const identityHints = [
+            avatarRef?.name ? `Name: ${avatarRef.name}` : undefined,
+            avatarRef?.gender ? `Gender: ${avatarRef.gender}` : undefined,
+            avatarRef?.age ? `Age: ${avatarRef.age}` : undefined,
+            Array.isArray(avatarRef?.tags) && avatarRef.tags.length
+              ? `Tags: ${avatarRef.tags.join(", ")}`
+              : undefined,
+          ]
+            .filter(Boolean)
+            .join(" | ");
 
-    // 3) Génère l'image via Fal
-    const image = await generateAvatarImage({
-      prompt: improved.enhancedPrompt || basePrompt,
-    });
+          const basePrompt = identityHints
+            ? `${description}. Keep identity consistent. ${identityHints}.`
+            : `${description}. Keep identity consistent.`;
+          const improved = await improveAvatarPrompt(basePrompt).catch(() => ({ enhancedPrompt: basePrompt }));
 
-    // 4) Met à jour le look
-    const lookRef = avatar.looks.find((l: any) => l.id === lookId);
-    if (lookRef) {
-      lookRef.thumbnail = image.url;
-    }
-    // Définir la miniature de l'avatar si absente, sans écraser une valeur existante
-    if (!avatar.thumbnail) {
-      avatar.thumbnail = image.url;
-    }
-    await space.save();
+          // Préparer les images: priorité aux images fournies, sinon thumbnail
+          const candidates: string[] = (providedImages.length > 0
+            ? providedImages
+            : [avatarRef?.thumbnail]
+          ).filter((v): v is string => typeof v === 'string' && v.length > 0);
+          const imageUrls: string[] = Array.from(new Set(candidates));
+          if (imageUrls.length === 0) return;
 
-    return NextResponse.json({ data: lookRef });
+          const image = await editAvatarImage({
+            prompt: improved.enhancedPrompt || basePrompt,
+            image_urls: imageUrls
+          });
+
+          const lookRef = avatarRef.looks.find((l: any) => l.id === lookId);
+          if (lookRef) {
+            lookRef.thumbnail = image.url;
+          }
+          if (!avatarRef.thumbnail) {
+            avatarRef.thumbnail = image.url;
+          }
+          await refreshedSpace.save();
+        } catch (e) {
+          console.error('Error generating avatar look (background)', e);
+        }
+      })
+      .catch(() => {});
+
+    // 3) Réponse immédiate, le client pollera jusqu'à ce que thumbnail soit rempli
+    const lookRefInit = avatar.looks.find((l: any) => l.id === lookId);
+    return NextResponse.json({ data: lookRefInit }, { status: 201 });
   } catch (error) {
     console.error("Error generating avatar look:", error);
     return NextResponse.json(

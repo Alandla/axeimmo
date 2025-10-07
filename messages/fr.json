@@ -35,7 +35,8 @@
       "Pricing": "Tarifs",
       "Assets": "Médias",
       "Enhance": "Améliorer",
-      "Settings": "Paramètres"
+      "Settings": "Paramètres",
+      "Avatar": "Avatar"
     },
     "dashboard": {
       "title": "Tableau de bord",
@@ -111,7 +112,8 @@
         "title": "Tableau de bord",
         "home": "Accueil",
         "videos": "Vidéos",
-        "assets": "Médias"
+        "assets": "Médias",
+        "avatars": "Avatar"
       },
       "community": {
         "title": "Communauté",
@@ -694,10 +696,31 @@
       }
     },
     "avatars": {
+    "look-chat": {
+      "placeholder-1": "Ajouter mon produit dans la main",
+      "placeholder-2": "Mettre mon avatar en podcast",
+      "add-elements": "Ajouter des éléments",
+      "send": "Uploader",
+      "sending": "Génération...",
+      "images-added": "{count} image(s) ajoutée(s)"
+    },
       "search": "Rechercher un avatar..",
       "preview": "Prévisualiser",
       "no-avatar-name": "Pas d'avatar",
       "no-avatar-description": "Mode voix seulement",
+      "create-new-name": "Créer un nouvel avatar",
+      "create-new-description": "Démarrer depuis zéro",
+      "create": {
+        "title": "Créer un avatar",
+        "from-pictures": { "title": "Depuis des photos", "subtitle": "Utilisez n'importe quelle photo comme avatar.", "drop-hint": "Déposez votre photo ici" },
+        "from-idea": { "title": "Depuis une idée", "subtitle": "Décrivez l'avatar que vous voulez créer.", "placeholder": "Selfie d'un jeune homme au travail, en costume" },
+        "start": "Lancer la génération",
+        "create-avatar": "Créer l'avatar"
+      },
+      "sections": {
+        "yours": "Vos avatars",
+        "public": "Avatars publics"
+      },
       "no-looks-found": "Aucun look trouvé pour les filtres sélectionnés",
       "toast": {
         "title-error": "Plan payant requis",

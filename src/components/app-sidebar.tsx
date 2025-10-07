@@ -8,6 +8,7 @@ import {
   MessageSquare,
   DollarSign,
   HelpCircle,
+  UserCircle,
 } from "lucide-react"
 import Image from "next/image"
 
@@ -74,6 +75,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       name: `${t('links.assets')}`,
       url: "/dashboard/assets",
       icon: ImageIcon,
+    },
+    {
+      name: `${t('links.avatars')}`,
+      url: "/dashboard/avatar",
+      icon: UserCircle,
     },
   ]
 

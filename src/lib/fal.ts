@@ -65,6 +65,84 @@ export interface AvatarImageResponse {
   height?: number;
 }
 
+// Image editing via Fal.ai nano-banana/edit
+export interface EditImageRequest {
+  prompt: string;
+  image_urls: string[];
+}
+
+export interface EditImageResponse {
+  url: string;
+  content_type?: string;
+  file_name?: string;
+  file_size?: number;
+  width?: number;
+  height?: number;
+}
+
+function extractImageFromFalData(data: any): EditImageResponse | undefined {
+  if (!data) return undefined;
+  // Common structures across Fal endpoints
+  if (data.image?.url) {
+    const img = data.image;
+    return {
+      url: img.url,
+      content_type: img.content_type,
+      file_name: img.file_name,
+      file_size: img.file_size,
+      width: img.width,
+      height: img.height
+    };
+  }
+  if (Array.isArray(data.images) && data.images[0]?.url) {
+    const img = data.images[0];
+    return {
+      url: img.url,
+      content_type: img.content_type,
+      file_name: img.file_name,
+      file_size: img.file_size,
+      width: img.width,
+      height: img.height
+    };
+  }
+  if (data.outputs) {
+    for (const key of Object.keys(data.outputs)) {
+      const images = data.outputs[key]?.images;
+      if (Array.isArray(images) && images.length > 0 && images[0]?.url) {
+        const img = images[0];
+        return {
+          url: img.url,
+          file_name: img.filename
+        } as EditImageResponse;
+      }
+    }
+  }
+  return undefined;
+}
+
+export async function editAvatarImage(
+  request: EditImageRequest
+): Promise<EditImageResponse> {
+  const endpoint = "fal-ai/nano-banana/edit";
+  try {
+    const result = await fal.subscribe(endpoint, {
+      input: {
+        prompt: request.prompt,
+        image_urls: request.image_urls
+      },
+      logs: true
+    });
+
+    const data: any = (result as any).data;
+    const image = extractImageFromFalData(data);
+    if (!image?.url) throw new Error("No image URL found in Fal response");
+    return image;
+  } catch (error) {
+    console.error("Error editing avatar image:", error);
+    throw error;
+  }
+}
+
 export async function generateAvatarImage(
   request: AvatarImageRequest
 ): Promise<AvatarImageResponse> {

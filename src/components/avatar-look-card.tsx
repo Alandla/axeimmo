@@ -68,6 +68,7 @@ export function AvatarLookCard({
   const isSelected = selectedLook?.id === look.id;
 
   const handleClick = () => {
+    if (!look.thumbnail) return;
     if (onLookChange) {
       onLookChange(look)
     } else {
@@ -85,6 +86,7 @@ export function AvatarLookCard({
     <Card 
       className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
       onClick={handleClick}
+      aria-disabled={!look.thumbnail}
     >
       {(isSelected || isLastUsed) && (
         <div className="absolute top-2 right-2 transition-all duration-150">
@@ -98,7 +100,7 @@ export function AvatarLookCard({
       <CardContent className="flex flex-col justify-between p-4 h-full">
         <div>
           <div className="flex items-center mb-2">
-            <h3 className="text-lg font-semibold">{t(`place.${look.place}`)}</h3>
+            <h3 className="text-lg font-semibold">{look.name}</h3>
           </div>
           <div 
             className="mb-4 overflow-x-auto scrollbar-hide"
@@ -115,13 +117,19 @@ export function AvatarLookCard({
             </div>
           </div>
           <div className="w-full aspect-square rounded-md overflow-hidden mb-4">
-            <Image 
-              src={look.thumbnail || ''} 
-              alt={look.name || ''}
-              className="w-full h-full object-cover"
-              width={1280}
-              height={720}
-            />
+            {look.thumbnail ? (
+              <Image 
+                src={look.thumbnail} 
+                alt={look.name || ''}
+                className="w-full h-full object-cover"
+                width={1280}
+                height={720}
+              />
+            ) : (
+              <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
+                <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
+              </div>
+            )}
           </div>
           <PreviewModal previewUrl={look.previewUrl || ''} avatarName={selectedLook?.name || ''} lookPlace={t(`place.${look.place}`)}>
             <Button

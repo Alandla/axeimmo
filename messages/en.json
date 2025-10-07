@@ -26,7 +26,8 @@
       "Pricing": "Pricing",
       "Assets": "Assets",
       "Enhance": "Enhance",
-      "Settings": "Settings"
+      "Settings": "Settings",
+      "Avatar": "Avatar"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -102,7 +103,8 @@
         "title": "Dashboard",
         "home": "Home",
         "videos": "Videos",
-        "assets": "Assets"
+        "assets": "Assets",
+        "avatars": "Avatar"
       },
       "community": {
         "title": "Community",
@@ -782,10 +784,31 @@
       }
     },
     "avatars": {
+    "look-chat": {
+      "placeholder-1": "Add my product in the hand",
+      "placeholder-2": "Make my avatar in podcast",
+      "add-elements": "Add elements",
+      "send": "Upload",
+      "sending": "Generating...",
+      "images-added": "{count} image(s) added"
+    },
       "search": "Search an avatar..",
       "preview": "Preview",
       "no-avatar-name": "No avatar",
       "no-avatar-description": "Voice only mode",
+      "create-new-name": "Create a new avatar",
+      "create-new-description": "Start from scratch",
+      "create": {
+        "title": "Create avatar",
+        "from-pictures": { "title": "From pictures", "subtitle": "Use any picture as avatar.", "drop-hint": "Drop your picture here" },
+        "from-idea": { "title": "From idea", "subtitle": "Describe the avatar you want to create.", "placeholder": "Selfie of a young man at work, wearing a suit" },
+        "start": "Start generation",
+        "create-avatar": "Create avatar"
+      },
+      "sections": {
+        "yours": "Your avatars",
+        "public": "Public avatars"
+      },
       "no-looks-found": "No looks found for the selected filters",
       "toast": {
         "title-error": "Paid plan required",

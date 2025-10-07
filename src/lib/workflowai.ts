@@ -315,6 +315,44 @@ const avatarPromptEnhancement = workflowAI.agent<AvatarPromptEnhancementInput, A
   useCache: 'never'
 })
 
+// Avatar identity extraction (name, gender, age, tags) from a free-form prompt
+export interface AvatarIdentityExtractionInput {
+  prompt?: string
+}
+
+export interface AvatarIdentityExtractionOutput {
+  name?: string
+  gender?: ("male" | "female" | "unknown")
+  age?: string
+  tags?: string[]
+  place?: string
+}
+
+const avatarIdentityExtraction = workflowAI.agent<AvatarIdentityExtractionInput, AvatarIdentityExtractionOutput>({
+  id: "avatar-prompt-extraction",
+  schemaId: 1,
+  version: 'dev',
+  useCache: 'never'
+})
+
+// Image prompt information extraction (name, place, tags)
+export interface ImagePromptInformationExtractionInput {
+  prompt?: string
+}
+
+export interface ImagePromptInformationExtractionOutput {
+  name?: string
+  place?: string
+  tags?: string[]
+}
+
+const imagePromptInformationExtraction = workflowAI.agent<ImagePromptInformationExtractionInput, ImagePromptInformationExtractionOutput>({
+  id: "image-prompt-information-extraction",
+  schemaId: 1,
+  version: 'dev',
+  useCache: 'never'
+})
+
 // Run Your AI agent
 export async function videoScriptKeywordExtractionRun(scriptContent: string): Promise<{
   cost: number,
@@ -762,5 +800,71 @@ export async function improveAvatarPrompt(
   } catch (error) {
     console.error('Failed to improve avatar prompt:', error)
     throw error
+  }
+}
+
+/**
+ * Extrait l'identité d'un avatar (name, gender, age, tags) depuis un prompt libre
+ */
+export async function extractAvatarIdentityFromPrompt(
+  prompt: string
+): Promise<{
+  cost: number,
+  name?: string,
+  gender?: 'male' | 'female',
+  age?: string,
+  tags?: string[]
+  place?: string
+}> {
+  const input: AvatarIdentityExtractionInput = { prompt }
+
+  try {
+    const response = await avatarIdentityExtraction(input) as WorkflowAIResponse<AvatarIdentityExtractionOutput>
+    // Normalisation minimale
+    const rawGender = (response.output.gender || 'unknown').toLowerCase()
+    const gender = rawGender === 'male' || rawGender === 'm' ? 'male' : rawGender === 'female' || rawGender === 'f' ? 'female' : undefined
+
+    return {
+      cost: response.data.cost_usd,
+      name: response.output.name,
+      gender,
+      age: response.output.age,
+      tags: Array.isArray(response.output.tags) ? response.output.tags.filter(Boolean) as string[] : undefined,
+      place: response.output.place
+    }
+  } catch (error) {
+    console.error('Failed to extract avatar identity:', error)
+    // En cas d'échec, retourner des valeurs neutres pour ne pas bloquer la création
+    return {
+      cost: 0,
+      tags: []
+    }
+  }
+}
+
+/**
+ * Extrait name, place et tags depuis un prompt d'image amélioré
+ */
+export async function extractImagePromptInfo(
+  prompt: string
+): Promise<{
+  cost: number,
+  name?: string,
+  place?: string,
+  tags?: string[]
+}> {
+  const input: ImagePromptInformationExtractionInput = { prompt }
+
+  try {
+    const response = await imagePromptInformationExtraction(input) as WorkflowAIResponse<ImagePromptInformationExtractionOutput>
+    return {
+      cost: response.data.cost_usd,
+      name: response.output.name,
+      place: response.output.place,
+      tags: Array.isArray(response.output.tags) ? response.output.tags.filter(Boolean) as string[] : undefined
+    }
+  } catch (error) {
+    console.error('Failed to extract image prompt info:', error)
+    return { cost: 0 }
   }
 }
