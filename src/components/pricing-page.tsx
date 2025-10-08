@@ -67,8 +67,8 @@ export const features = [
       {
         name: "voices-library",
         start: "20",
-        pro: "+100",
-        enterprise: "+120",
+        pro: "+110",
+        enterprise: "+130",
         soon: false,
         tooltip: "Choose from our collection of ultra-realistic AI voice-overs in multiple languages and accents for your video narration.",
         icon: <Mic className="h-4 w-4 mt-0.5 flex-shrink-0" />,
