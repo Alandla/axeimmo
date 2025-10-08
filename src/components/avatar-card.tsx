@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, History } from 'lucide-react'
+import { Check, History, Users } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
 import { useTranslations } from 'next-intl'
@@ -81,69 +81,70 @@ export function AvatarCard({ avatar, onClick, isLastUsed, selectedAvatarName: pr
   return (
     <Card 
       key={avatar.id} 
-      className={`flex flex-col relative ${disabled ? 'cursor-not-allowed opacity-70' : (avatar.thumbnail ? 'cursor-pointer' : 'cursor-not-allowed opacity-70')} transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
+      className={`relative overflow-hidden rounded-lg ${disabled ? 'cursor-not-allowed opacity-70' : (avatar.thumbnail ? 'cursor-pointer' : 'cursor-not-allowed opacity-70')} transition-all duration-150 ${isSelected ? 'ring-2 ring-primary' : ''}`}
       onClick={handleAvatarSelection}
       aria-disabled={disabled || !avatar.thumbnail}
     >
+      {/* Tags superposés en haut à gauche */}
+      <div className="absolute top-3 left-3 z-10 flex gap-2">
+        {avatar.tags.slice(0, 2).map((tag, index) => (
+          <Badge 
+            key={index} 
+            variant="secondary" 
+            className="bg-white/90 text-gray-800 text-xs px-2 py-1 backdrop-blur-sm"
+          >
+            {t(`tags.${tag}`)}
+          </Badge>
+        ))}
+      </div>
+
+      {/* Icône de sélection en haut à droite */}
       {(isSelected || isLastUsed) && (
-        <div className="absolute top-2 right-2 transition-all duration-150">
+        <div className="absolute top-3 right-3 z-10">
           {isSelected ? (
-            <Check className="h-5 w-5 text-primary" />
+            <div className="bg-primary text-primary-foreground rounded-full p-1">
+              <Check className="h-4 w-4" />
+            </div>
           ) : (
-            <History className="h-5 w-5 text-gray-400" />
+            <div className="bg-white/90 text-gray-600 rounded-full p-1 backdrop-blur-sm">
+              <History className="h-4 w-4" />
+            </div>
           )}
         </div>
       )}
-      <CardContent className="flex flex-col justify-between p-4 h-full">
-        <div>
-          <div className="flex items-center mb-2">
-            {avatar.gender === 'male' ? (
-              <IconGenderMale className="h-5 w-5 mr-2 text-blue-500" />
-            ) : (
-              <IconGenderFemale className="h-5 w-5 mr-2 text-pink-500" />
-            )}
-            <h3 className="text-lg font-semibold">{avatar.name}</h3>
-            {avatar.premium && (
-              <Badge variant="plan" className="ml-2">
-                Pro
-              </Badge>
-            )}
+
+      {/* Image principale */}
+      <div className="w-full aspect-[3/4] relative">
+        {avatar.thumbnail ? (
+          <Image 
+            src={avatar.thumbnail} 
+            alt={avatar.name}
+            className="w-full h-full object-cover"
+            width={1280}
+            height={720}
+          />
+        ) : (
+          <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
+            <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
           </div>
-          <div 
-            className="mb-4 overflow-x-auto scrollbar-hide"
-            onWheel={(e) => {
-              e.preventDefault();
-              e.currentTarget.scrollLeft += e.deltaY;
-            }}
-          >
-            <div className="flex gap-1 min-w-min">
-              <Badge variant="secondary" className="shrink-0 whitespace-nowrap">
-                {avatar.looks.length} Looks
-              </Badge>
-              {avatar.tags.map((tag, index) => (
-                <Badge key={index} variant="secondary" className="shrink-0 whitespace-nowrap">
-                  {t(`tags.${tag}`)}
-                </Badge>
-              ))}
-            </div>
-          </div>
-          <div className="w-full aspect-square rounded-md overflow-hidden">
-            {avatar.thumbnail ? (
-              <Image 
-                src={avatar.thumbnail} 
-                alt={avatar.name}
-                className="w-full h-full object-cover"
-                width={1280}
-                height={720}
-              />
-            ) : (
-              <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
-                <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
-              </div>
-            )}
+        )}
+      </div>
+
+      {/* Bande d'information en bas */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-white font-semibold text-lg">{avatar.name}</h3>
+          <div className="flex items-center gap-1">
+            <span className="text-white text-sm font-medium">{avatar.looks.length}</span>
+            <Users className="h-3 w-3 text-white" />
           </div>
         </div>
-      </CardContent>
+        {avatar.premium && (
+          <Badge variant="plan" className="mt-2 text-xs">
+            Pro
+          </Badge>
+        )}
+      </div>
     </Card>
   )
 }

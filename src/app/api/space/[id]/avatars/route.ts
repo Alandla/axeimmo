@@ -83,9 +83,17 @@ export async function POST(
     const body = await req.json().catch(() => ({}));
     const basePrompt: string | undefined = body?.prompt;
     const imageUrl: string | undefined = body?.imageUrl;
-    if (!basePrompt && !imageUrl) {
+    const imageUrls: string[] = Array.isArray(body?.imageUrls)
+      ? (body.imageUrls as string[]).filter((u) => typeof u === "string" && u.length > 0)
+      : [];
+    // Backward compatibility: allow single imageUrl or array imageUrls
+    const providedImageUrls: string[] = [
+      ...imageUrls,
+      ...(typeof imageUrl === "string" && imageUrl.length > 0 ? [imageUrl] : []),
+    ];
+    if (!basePrompt && providedImageUrls.length === 0) {
       return NextResponse.json(
-        { error: "prompt or imageUrl is required" },
+        { error: "prompt or imageUrl(s) is required" },
         { status: 400 }
       );
     }
@@ -113,26 +121,37 @@ export async function POST(
 
     const avatarId = nanoid();
 
-    // 2) Créer automatiquement le premier look
-    // Si imageUrl est fourni, on l'utilise directement, sinon on génère depuis le prompt
+    // 2) Créer automatiquement les looks
+    // Si des images sont fournies, créer un look par image, sinon générer depuis le prompt
     let finalPrompt: string | undefined = undefined;
-    if (!imageUrl && basePrompt) {
+    if (providedImageUrls.length === 0 && basePrompt) {
       const improved = await improveAvatarPrompt(basePrompt).catch(() => ({ enhancedPrompt: basePrompt }));
       finalPrompt = improved.enhancedPrompt || basePrompt;
     }
 
-    const lookId = nanoid();
-    const look = {
-      id: lookId,
-      name: "First Look",
-      place: place,
-      tags: tags,
-      thumbnail: imageUrl || "",
-      previewUrl: "",
-      videoUrl: "",
-      format: "vertical",
-      settings: {},
-    };
+    const looks = (providedImageUrls.length > 0)
+      ? providedImageUrls.map((url: string, idx: number) => ({
+          id: nanoid(),
+          name: `Look ${idx + 1}`,
+          place: place,
+          tags: tags,
+          thumbnail: url,
+          previewUrl: "",
+          videoUrl: "",
+          format: "vertical",
+          settings: {},
+        }))
+      : [{
+          id: nanoid(),
+          name: "First Look",
+          place: place,
+          tags: tags,
+          thumbnail: "",
+          previewUrl: "",
+          videoUrl: "",
+          format: "vertical",
+          settings: {},
+        }];
 
     const newAvatar: any = {
       id: avatarId,
@@ -140,25 +159,24 @@ export async function POST(
       age,
       gender,
       tags,
-      thumbnail: imageUrl || "",
-      looks: [look],
+      thumbnail: providedImageUrls[0] || "",
+      looks: looks,
     };
 
     (space as any).avatars.push(newAvatar);
     await (space as any).save();
 
     // Génération image en arrière-plan uniquement si aucune image n'a été fournie
-    if (!imageUrl && finalPrompt) {
+    if (providedImageUrls.length === 0 && finalPrompt) {
       Promise.resolve()
         .then(async () => {
           try {
             const img = await generateAvatarImage({ prompt: finalPrompt as string });
             const refreshedSpace: ISpace = await getSpaceById(params.id);
             const avatarRef: any = (refreshedSpace as any).avatars.find((a: any) => a.id === avatarId);
-            const lookRef: any = avatarRef?.looks?.find((l: any) => l.id === lookId);
-            if (lookRef) {
-              lookRef.thumbnail = img.url;
-            }
+            // Update the first look only when none were provided initially
+            const firstLook: any = avatarRef?.looks?.[0];
+            if (firstLook && !firstLook.thumbnail) firstLook.thumbnail = img.url;
             if (avatarRef && !avatarRef.thumbnail) {
               avatarRef.thumbnail = img.url;
             }

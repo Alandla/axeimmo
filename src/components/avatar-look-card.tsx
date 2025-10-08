@@ -84,65 +84,78 @@ export function AvatarLookCard({
 
   return (
     <Card 
-      className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
+      className={`relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 ${isSelected ? 'ring-2 ring-primary' : ''}`}
       onClick={handleClick}
       aria-disabled={!look.thumbnail}
     >
+      {/* Tags superposés en haut à gauche */}
+      {look.tags && look.tags.length > 0 && (
+        <div className="absolute top-3 left-3 z-10 flex gap-2">
+          {look.tags.slice(0, 2).map((tag, index) => (
+            <Badge 
+              key={index} 
+              variant="secondary" 
+              className="bg-white/90 text-gray-800 text-xs px-2 py-1 backdrop-blur-sm"
+            >
+              {t(`tags.${tag}`)}
+            </Badge>
+          ))}
+        </div>
+      )}
+
+      {/* Icône de sélection en haut à droite */}
       {(isSelected || isLastUsed) && (
-        <div className="absolute top-2 right-2 transition-all duration-150">
+        <div className="absolute top-3 right-3 z-10">
           {isSelected ? (
-            <Check className="h-5 w-5 text-primary" />
+            <div className="bg-primary text-primary-foreground rounded-full p-1">
+              <Check className="h-4 w-4" />
+            </div>
           ) : (
-            <History className="h-5 w-5 text-gray-400" />
+            <div className="bg-white/90 text-gray-600 rounded-full p-1 backdrop-blur-sm">
+              <History className="h-4 w-4" />
+            </div>
           )}
         </div>
       )}
-      <CardContent className="flex flex-col justify-between p-4 h-full">
-        <div>
-          <div className="flex items-center mb-2">
-            <h3 className="text-lg font-semibold">{look.name}</h3>
+
+      {/* Image principale */}
+      <div className="w-full aspect-[3/4] relative">
+        {look.thumbnail ? (
+          <Image 
+            src={look.thumbnail} 
+            alt={look.name || ''}
+            className="w-full h-full object-cover"
+            width={1280}
+            height={720}
+          />
+        ) : (
+          <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
+            <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
           </div>
-          <div 
-            className="mb-4 overflow-x-auto scrollbar-hide"
-            onWheel={(e) => {
-              e.currentTarget.scrollLeft += e.deltaY;
-            }}
-          >
-            <div className="flex gap-1 min-w-min">
-              {look.tags?.map((tag, index) => (
-                <Badge key={index} variant="secondary" className="shrink-0 whitespace-nowrap">
-                  {t(`tags.${tag}`)}
-                </Badge>
-              ))}
-            </div>
-          </div>
-          <div className="w-full aspect-square rounded-md overflow-hidden mb-4">
-            {look.thumbnail ? (
-              <Image 
-                src={look.thumbnail} 
-                alt={look.name || ''}
-                className="w-full h-full object-cover"
-                width={1280}
-                height={720}
-              />
-            ) : (
-              <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
-                <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
-              </div>
-            )}
-          </div>
-          <PreviewModal previewUrl={look.previewUrl || ''} avatarName={selectedLook?.name || ''} lookPlace={t(`place.${look.place}`)}>
+        )}
+      </div>
+
+      {/* Bande d'information en bas */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-white font-semibold text-lg">{look.name}</h3>
+        </div>
+      </div>
+
+      {/* Bouton preview en bas à droite */}
+      {look.previewUrl && (
+        <div className="absolute bottom-3 right-3 z-10">
+          <PreviewModal previewUrl={look.previewUrl} avatarName={selectedLook?.name || ''} lookPlace={t(`place.${look.place}`)}>
             <Button
               variant="outline"
-              size="sm"
-              className="w-full"
+              size="icon"
+              className="bg-white/90 text-gray-800 hover:bg-white border-white/20 h-8 w-8"
             >
-              <Play className="h-4 w-4 mr-2" />
-              {t('preview')}
+              <Play className="h-4 w-4" />
             </Button>
           </PreviewModal>
         </div>
-      </CardContent>
+      )}
     </Card>
   )
 }

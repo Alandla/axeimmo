@@ -3,7 +3,7 @@ import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
 import { getSpaceById } from "@/src/dao/spaceDao";
 import { editAvatarImage } from "@/src/lib/fal";
-import { improveAvatarPrompt, extractImagePromptInfo } from "@/src/lib/workflowai";
+import { extractImagePromptInfo } from "@/src/lib/workflowai";
 import { nanoid } from "nanoid";
 
 export async function POST(
@@ -63,9 +63,25 @@ export async function POST(
     avatar.looks = avatar.looks || [];
     avatar.looks.push(look as any);
 
-    // Extraire immédiatement name/place/tags à partir du prompt de base (description)
+    // Extraire immédiatement name/place/tags à partir du prompt utilisateur
+    // en aidant le modèle avec des infos d'avatar si disponibles
     try {
-      const extractedNow = await extractImagePromptInfo(description)
+      const avatarHints = [
+        avatar?.name ? `Name: ${avatar.name}` : undefined,
+        avatar?.gender ? `Gender: ${avatar.gender}` : undefined,
+        avatar?.age ? `Age: ${avatar.age}` : undefined,
+        Array.isArray(avatar?.tags) && avatar.tags.length
+          ? `Tags: ${avatar.tags.join(', ')}`
+          : undefined,
+      ]
+        .filter(Boolean)
+        .join(' | ')
+
+      const extractionPrompt = avatarHints
+        ? `${description}. Context: ${avatarHints}.`
+        : description
+
+      const extractedNow = await extractImagePromptInfo(extractionPrompt)
       const lookRefInit = avatar.looks.find((l: any) => l.id === lookId)
       if (lookRefInit) {
         if (extractedNow.name) lookRefInit.name = extractedNow.name
@@ -83,21 +99,8 @@ export async function POST(
           const avatarRef: any = refreshedSpace?.avatars?.find((a: any) => a.id === params.avatarId);
           if (!avatarRef) return;
 
-          const identityHints = [
-            avatarRef?.name ? `Name: ${avatarRef.name}` : undefined,
-            avatarRef?.gender ? `Gender: ${avatarRef.gender}` : undefined,
-            avatarRef?.age ? `Age: ${avatarRef.age}` : undefined,
-            Array.isArray(avatarRef?.tags) && avatarRef.tags.length
-              ? `Tags: ${avatarRef.tags.join(", ")}`
-              : undefined,
-          ]
-            .filter(Boolean)
-            .join(" | ");
-
-          const basePrompt = identityHints
-            ? `${description}. Keep identity consistent. ${identityHints}.`
-            : `${description}. Keep identity consistent.`;
-          const improved = await improveAvatarPrompt(basePrompt).catch(() => ({ enhancedPrompt: basePrompt }));
+          // Utiliser strictement le prompt utilisateur, sans amélioration ni hints
+          const basePrompt = description;
 
           // Préparer les images: priorité aux images fournies, sinon thumbnail
           const candidates: string[] = (providedImages.length > 0
@@ -108,7 +111,7 @@ export async function POST(
           if (imageUrls.length === 0) return;
 
           const image = await editAvatarImage({
-            prompt: improved.enhancedPrompt || basePrompt,
+            prompt: basePrompt,
             image_urls: imageUrls
           });
 

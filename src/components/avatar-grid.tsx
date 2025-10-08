@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/src/components/ui/button"
 import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } from './voice-card'
 import { Badge } from "@/src/components/ui/badge"
-import { Check, UserRoundX, UserPlus } from "lucide-react"
+import { Check, UserRoundX, Plus } from "lucide-react"
 import { useTranslations } from 'next-intl'
 import { avatarsConfig } from '../config/avatars.config'
 import { Avatar, AvatarLook } from '../types/avatar'
@@ -29,8 +29,11 @@ import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { getSpaceAvatars } from '../service/space.service'
 import { HorizontalScrollList } from './ui/horizontal-scroll-list'
 import { Card, CardContent } from "@/src/components/ui/card"
+import { InfiniteScroll } from '@/src/components/ui/infinite-scroll'
 import CreateAvatarModal from '@/src/components/modal/create-avatar-modal'
 import AvatarLookChatbox from '@/src/components/avatar-look-chatbox'
+import { getMediaUrlFromFileByPresignedUrl } from '@/src/service/upload.service'
+import { AddLookCard } from './add-look-card'
 
 // Composant pour la carte "No avatar"
 function NoAvatarCard({ 
@@ -52,31 +55,28 @@ function NoAvatarCard({
 
   return (
     <Card 
-      className={`flex flex-col relative cursor-pointer transition-all duration-150 ${isSelected ? 'border-primary border' : ''}`}
+      className={`relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 ${isSelected ? 'ring-2 ring-primary' : ''}`}
       onClick={handleClick}
     >
       {isSelected && (
-        <div className="absolute top-2 right-2 transition-all duration-150">
-          <Check className="h-5 w-5 text-primary" />
+        <div className="absolute top-3 right-3 z-10">
+          <div className="bg-primary text-primary-foreground rounded-full p-1">
+            <Check className="h-4 w-4" />
+          </div>
         </div>
       )}
-      <CardContent className="flex flex-col justify-between p-4 h-full">
-        <div>
-          <div className="flex items-center mb-2">
-            <h3 className="text-lg font-semibold">{t('no-avatar-name')}</h3>
-          </div>
-          <div className="mb-4">
-            <div className="flex gap-1 min-w-min">
-              <Badge variant="secondary" className="shrink-0 whitespace-nowrap">
-                {t('no-avatar-description')}
-              </Badge>
-            </div>
-          </div>
-          <div className="w-full aspect-square rounded-md overflow-hidden bg-gray-100 flex items-center justify-center">
-            <UserRoundX className="h-12 w-12 text-gray-400" />
-          </div>
+
+      {/* Image principale */}
+      <div className="w-full aspect-[3/4] relative bg-gray-100 flex items-center justify-center">
+        <UserRoundX className="h-12 w-12 text-gray-400" />
+      </div>
+
+      {/* Bande d'information en bas */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-white font-semibold text-lg">{t('no-avatar-name')}</h3>
         </div>
-      </CardContent>
+      </div>
     </Card>
   )
 }
@@ -137,13 +137,16 @@ export function AvatarGridComponent({
   const [selectedGender, setSelectedGender] = useState<string>(selectedVoice?.gender || 'all')
   const [currentPage, setCurrentPage] = useState(1)
   const avatarsPerPage = mode === 'large' ? 12 : 6
+  const [visiblePublicCount, setVisiblePublicCount] = useState<number>(avatarsPerPage)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null)
   const [publicAvatars, setPublicAvatars] = useState<Avatar[]>(avatarsConfig)
   const [spaceAvatars, setSpaceAvatars] = useState<Avatar[]>([])
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [isUploadingLook, setIsUploadingLook] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [barRect, setBarRect] = useState<{left:number;width:number}>({ left: 0, width: 0 })
+  const [hasMultipleRows, setHasMultipleRows] = useState(false)
 
   useEffect(() => {
     const updateRect = () => {
@@ -335,22 +338,18 @@ export function AvatarGridComponent({
     return matchesSearch && matchesGender && matchesTags
   }))
 
-  // Calculer les avatars pour la page courante
-  const indexOfLastAvatar = currentPage * avatarsPerPage
-  const indexOfFirstAvatar = indexOfLastAvatar - avatarsPerPage
-  const currentAvatars = filteredPublicAvatars.slice(indexOfFirstAvatar, indexOfLastAvatar)
+  // Infinite scroll pour avatars publics
+  const totalPublicWithNoAvatar = filteredPublicAvatars.length + (variant === 'select' && !activeAvatar && currentPage === 1 && showNoAvatar ? 1 : 0)
+  const showNoAvatarCard = variant === 'select' && !activeAvatar && currentPage === 1 && showNoAvatar
+  const effectivePublicCount = Math.min(visiblePublicCount, totalPublicWithNoAvatar)
+  const numAvatarsToShow = Math.max(0, effectivePublicCount - (showNoAvatarCard ? 1 : 0))
+  const currentAvatars = filteredPublicAvatars.slice(0, numAvatarsToShow)
   const totalPages = Math.ceil(filteredPublicAvatars.length / avatarsPerPage)
 
-  // Pour la première page, on affiche la carte "No avatar" + (avatarsPerPage - 1) avatars
-  // Pour les autres pages, on affiche avatarsPerPage avatars normaux
-  const showNoAvatarCard = variant === 'select' && !activeAvatar && currentPage === 1 && showNoAvatar
-  const avatarsToShow = showNoAvatarCard 
-    ? currentAvatars.slice(0, avatarsPerPage - 1) 
-    : currentAvatars
+  // Pour la première vue, inclure éventuellement la carte "No avatar"
+  const avatarsToShow = currentAvatars
 
-  // Ajuster le calcul du total des pages pour tenir compte de la carte "No avatar"
-  const adjustedTotalAvatars = filteredPublicAvatars.length + (showNoAvatarCard ? 1 : 0)
-  const adjustedTotalPages = Math.ceil(adjustedTotalAvatars / avatarsPerPage)
+
 
   // Calculs pour la pagination des looks
   const filteredLooks = activeAvatar ? sortLooksByLastUsed(activeAvatar.looks.filter(look => {
@@ -388,6 +387,16 @@ export function AvatarGridComponent({
       return matchesSearch && matchesGender && matchesTags
     }))
     handleFilters(newFilteredAvatars)
+  }
+
+  // Reset du compteur visible quand les filtres changent ou vue change
+  useEffect(() => {
+    setVisiblePublicCount(avatarsPerPage)
+  }, [searchQuery, selectedGender, selectedTags, avatarsPerPage, activeAvatar])
+
+  const hasMorePublic = effectivePublicCount < totalPublicWithNoAvatar
+  const loadMorePublic = () => {
+    setVisiblePublicCount((c) => c + avatarsPerPage)
   }
 
   // Fonctions de pagination pour les looks
@@ -449,7 +458,81 @@ export function AvatarGridComponent({
     }
   }
 
+  // Fonctions pour créer un nouveau look
+  const handleFileUpload = () => {
+    if (!activeAvatar || !activeSpace?.id) return;
+    
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      
+      try {
+        setIsUploadingLook(true);
+        const { mediaUrl } = await getMediaUrlFromFileByPresignedUrl(file);
+        
+        // Créer le nouveau look avec l'image
+        const response = await fetch(`/api/space/${activeSpace.id}/avatars/${activeAvatar.id}/looks`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            imageUrl: mediaUrl,
+            lookName: `Look ${activeAvatar.looks.length + 1}`,
+            place: "unspecified",
+            tags: [],
+            format: "vertical"
+          }),
+        });
+        
+        if (response.ok) {
+          // Rafraîchir la liste des avatars pour afficher le nouveau look
+          await fetchSpaceAvatars();
+        }
+      } catch (error) {
+        console.error('Error creating new look:', error);
+      } finally {
+        setIsUploadingLook(false);
+      }
+    };
+    input.click();
+  };
+
   // chatbox now extracted
+
+  // Compute if the looks grid spans multiple rows to avoid overlap with the fixed chatbox
+  useEffect(() => {
+    const computeHasMultipleRows = () => {
+      if (!activeAvatar) {
+        setHasMultipleRows(false)
+        return
+      }
+      const width = window.innerWidth
+      let cols = 2
+      if (mode === 'large') {
+        // grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
+        if (width < 768) cols = 2
+        else if (width < 1024) cols = 3
+        else if (width < 1280) cols = 4
+        else cols = 5
+      } else {
+        // grid-cols-2 md:grid-cols-3 lg:grid-cols-2
+        if (width < 768) cols = 2
+        else if (width < 1024) cols = 3
+        else cols = 2
+      }
+      // Include the add-look card in the first page rendering
+      const itemCount = 1 + currentLooks.length
+      const rows = Math.ceil(itemCount / Math.max(cols, 1))
+      setHasMultipleRows(rows > 1)
+    }
+    computeHasMultipleRows()
+    window.addEventListener('resize', computeHasMultipleRows)
+    return () => window.removeEventListener('resize', computeHasMultipleRows)
+  }, [activeAvatar, currentLooks.length, mode])
 
   return (
     <div className="space-y-4 mt-4" ref={containerRef}>
@@ -569,26 +652,35 @@ export function AvatarGridComponent({
         )}
       </HorizontalScrollList>
 
-      <div className={`grid gap-4 ${mode === 'large' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-2'}`}>
+      <div className={`grid gap-4 ${mode === 'large' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-2'} ${activeAvatar ? (hasMultipleRows ? 'pb-40' : 'pb-24') : ''}`}>
         {activeAvatar ? (
           // Afficher les looks de l'avatar sélectionné
-          (currentLooks as AvatarLook[]).length > 0 ? (
-            (currentLooks as AvatarLook[]).map((look: AvatarLook) => (
-              <AvatarLookCard
-                key={look.id}
-                look={look}
-                avatarName={activeAvatar.name}
-                isLastUsed={look.id ? lastUsedParameters?.avatars?.includes(look.id) : false}
-                selectedLook={selectedLook}
-                onLookChange={variant === 'create' ? () => {} : setSelectedLook}
-                onAvatarNameChange={variant === 'create' ? () => {} : setSelectedAvatarName}
-              />
-            ))
-          ) : (
-            <div className="col-span-full text-center py-8 text-muted-foreground">
-              {t('no-looks-found')}
-            </div>
-          )
+          <>
+            {/* Carte pour créer un nouveau look */}
+            <AddLookCard
+              onFileUpload={handleFileUpload}
+              isUploading={isUploadingLook}
+            />
+
+            {/* Looks existants */}
+            {(currentLooks as AvatarLook[]).length > 0 ? (
+              (currentLooks as AvatarLook[]).map((look: AvatarLook) => (
+                <AvatarLookCard
+                  key={look.id}
+                  look={look}
+                  avatarName={activeAvatar.name}
+                  isLastUsed={look.id ? lastUsedParameters?.avatars?.includes(look.id) : false}
+                  selectedLook={selectedLook}
+                  onLookChange={variant === 'create' ? () => {} : setSelectedLook}
+                  onAvatarNameChange={variant === 'create' ? () => {} : setSelectedAvatarName}
+                />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-8 text-muted-foreground">
+                {t('no-looks-found')}
+              </div>
+            )}
+          </>
         ) : (
           // Afficher d'abord la section des avatars du space, puis la section des avatars publics
           <>
@@ -598,26 +690,21 @@ export function AvatarGridComponent({
               </div>
               {variant === 'create' && (
                 <Card 
-                  className={"flex flex-col relative cursor-pointer transition-all duration-150"}
+                  className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150"
                   onClick={() => setShowCreateModal(true)}
                 >
-                  <CardContent className="flex flex-col justify-between p-4 h-full">
-                    <div>
-                      <div className="flex items-center mb-2">
-                        <h3 className="text-lg font-semibold">{t('create-new-name')}</h3>
-                      </div>
-                      <div className="mb-4">
-                        <div className="flex gap-1 min-w-min">
-                          <Badge variant="secondary" className="shrink-0 whitespace-nowrap">
-                            {t('create-new-description')}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="w-full aspect-square rounded-md overflow-hidden bg-gray-100 flex items-center justify-center">
-                        <UserPlus className="h-12 w-12 text-gray-400" />
-                      </div>
+                  {/* Contenu principal centré */}
+                  <div className="w-full aspect-[3/4] relative bg-white flex flex-col items-center justify-center p-4">
+                    <Plus className="h-12 w-12 text-gray-400 mb-3" />
+                    <p className="text-sm text-gray-600 text-center font-medium">{t('create-new-name')}</p>
+                  </div>
+
+                  {/* Compteur en bas */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm p-3 border-t">
+                    <div className="text-center">
+                      <span className="text-xs text-gray-600">3/5 left</span>
                     </div>
-                  </CardContent>
+                  </div>
                 </Card>
               )}
               {filteredSpaceAvatars.length > 0 && filteredSpaceAvatars.map((avatar: Avatar) => (
@@ -650,6 +737,14 @@ export function AvatarGridComponent({
                 selectedAvatarName={selectedAvatarName}
               />
             ))}
+            <div className="col-span-full">
+              <InfiniteScroll
+                onLoadMore={loadMorePublic}
+                hasMore={hasMorePublic}
+                loader={<div className="text-center py-4 text-muted-foreground">{tCommon('infinite-scroll.loading')}</div>}
+                endMessage={<div className="text-center py-4 text-muted-foreground">{tCommon('infinite-scroll.end')}</div>}
+              />
+            </div>
           </>
         )}
       </div>
@@ -659,6 +754,13 @@ export function AvatarGridComponent({
         onClose={() => {
           setShowCreateModal(false)
           // Rafraîchir la liste des avatars pour afficher le nouvel avatar (même sans thumbnail au début)
+          fetchSpaceAvatars()
+        }}
+        onCreated={(avatar) => {
+          // Sélectionner automatiquement l'avatar nouvellement créé et ouvrir ses looks
+          setActiveAvatar(avatar)
+          setCurrentLookPage(1)
+          // Synchroniser les données complètes depuis l'API (thumbnails/looks à jour)
           fetchSpaceAvatars()
         }} 
       />
@@ -745,89 +847,7 @@ export function AvatarGridComponent({
             </PaginationContent>
           </Pagination>
         )
-      ) : (
-        // Pagination des avatars
-        adjustedTotalPages > 1 && (
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  showText={false}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  className={cn(
-                    "cursor-pointer sm:hidden",
-                    currentPage === 1 && "pointer-events-none opacity-50"
-                  )}
-                />
-                <PaginationPrevious 
-                  showText={true}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  className={cn(
-                    "cursor-pointer hidden sm:flex",
-                    currentPage === 1 && "pointer-events-none opacity-50"
-                  )}
-                />
-              </PaginationItem>
-
-              {getPageNumbers().showStartEllipsis && (
-                <>
-                  <PaginationItem>
-                    <PaginationLink onClick={() => handlePageChange(1)}>
-                      1
-                    </PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                </>
-              )}
-
-              {getPageNumbers().numbers.map((pageNumber) => (
-                <PaginationItem key={pageNumber}>
-                  <PaginationLink
-                    isActive={currentPage === pageNumber}
-                    onClick={() => handlePageChange(pageNumber)}
-                  >
-                    {pageNumber}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-
-              {getPageNumbers().showEndEllipsis && (
-                <>
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink onClick={() => handlePageChange(adjustedTotalPages)}>
-                      {adjustedTotalPages}
-                    </PaginationLink>
-                  </PaginationItem>
-                </>
-              )}
-
-              <PaginationItem>
-                <PaginationNext 
-                  showText={false}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className={cn(
-                    "cursor-pointer sm:hidden",
-                    currentPage === adjustedTotalPages && "pointer-events-none opacity-50"
-                  )}
-                />
-                <PaginationNext 
-                  showText={true}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className={cn(
-                    "cursor-pointer hidden sm:flex",
-                    currentPage === adjustedTotalPages && "pointer-events-none opacity-50"
-                  )}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )
-      )}
+      ) : null}
 
       {activeAvatar && spaceAvatars.some(a => a.id === activeAvatar.id) && (
         <AvatarLookChatbox

@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@/src/components/ui/button'
 import { Input } from '@/src/components/ui/input'
 import { useTranslations } from 'next-intl'
-import { Loader2, Plus, X } from 'lucide-react'
+import { Loader2, Plus, X, Send, Check, Settings2 } from 'lucide-react'
 import { Avatar, AvatarLook } from '@/src/types/avatar'
 import { basicApiCall } from '@/src/lib/api'
 import { getMediaUrlFromFileByPresignedUrl } from '@/src/service/upload.service'
@@ -129,14 +129,26 @@ export function AvatarLookChatbox({ anchorRef, activeAvatar, spaceId, onRefresh 
 
   return (
     <div className="fixed bottom-4 z-50" style={{ left: popupDims.left, width: popupDims.width }}>
-      <div className="flex items-center gap-2 bg-white border rounded-xl p-2 shadow-md">
-        <div className="flex items-center gap-2 pl-1">
-          <div className="flex items-center gap-2 overflow-x-auto overflow-y-hidden h-10 flex-shrink-0">
+      <div className="bg-white border rounded-xl p-2 shadow-md">
+        {/* Top: prompt */}
+        <div className="mb-2">
+          <Input
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder={`${t('look-chat.placeholder-1')}`}
+            className="w-full h-10 rounded-lg border-0 shadow-none bg-transparent focus-visible:ring-0 focus:ring-0 focus:outline-none"
+          />
+        </div>
+        {/* Bottom bar: left elements + right send */}
+        <div className="flex items-center justify-between gap-2">
+          {/* Left block: look selector + separator + attachments */}
+          <div className="flex items-center gap-2 overflow-hidden">
+            {/* Look selector */}
             <div className="relative flex-shrink-0 h-10">
               {referenceImage && (
                 <button
                   type="button"
-                  className="inline-flex items-center justify-center h-10 w-10 rounded-md overflow-hidden border flex-shrink-0"
+                  className="group inline-flex items-center justify-center h-10 w-10 rounded-md overflow-hidden border flex-shrink-0 bg-white relative"
                   ref={refButtonRef}
                   onClick={() => {
                     const r = refButtonRef.current?.getBoundingClientRect()
@@ -148,57 +160,76 @@ export function AvatarLookChatbox({ anchorRef, activeAvatar, spaceId, onRefresh 
                   title="Reference image"
                 >
                   <img src={referenceImage} alt="ref" className="h-full w-full object-cover" />
+                  <span className="pointer-events-none absolute inset-0 hidden group-hover:block bg-black/40" />
+                  <span className="pointer-events-none absolute inset-0 hidden group-hover:flex items-center justify-center">
+                    <Settings2 className="h-4 w-4 text-white" />
+                  </span>
                 </button>
               )}
               {pickerOpen && (
-                <div className="fixed bg-white border rounded-lg shadow-lg p-2 z-[1000] w-[220px]" style={{ left: pickerCoords.left, bottom: pickerCoords.bottom }}>
-                  <div className="grid grid-cols-3 gap-2 max-h-48 overflow-auto">
+                <div className="fixed inline-block bg-white border rounded-2xl shadow-2xl p-3 z-[1000]" style={{ left: pickerCoords.left, bottom: pickerCoords.bottom }}>
+                  <div className="flex flex-wrap items-start gap-3">
                     {candidateImages.map((u) => (
                       <button
                         key={u}
                         type="button"
-                        className={cn(
-                          'h-16 w-16 rounded-md overflow-hidden border',
-                          referenceImage === u && 'ring-2 ring-primary'
-                        )}
+                        className="relative h-28 rounded-xl overflow-hidden border bg-white flex-shrink-0"
                         onClick={() => { setReferenceImage(u); setPickerOpen(false) }}
+                        title="Select look"
                       >
-                        <img src={u} alt="candidate" className="h-full w-full object-cover" />
+                        <img src={u} alt="candidate" className="h-full w-auto object-contain" />
+                        {referenceImage === u && (
+                          <>
+                            <span className="absolute inset-0 bg-black/50" />
+                            <span className="absolute inset-0 flex items-center justify-center">
+                              <Check className="h-6 w-6 text-white" />
+                            </span>
+                          </>
+                        )}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
             </div>
-            <Thumbnails urls={images} onRemove={removeImage} />
-            <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFiles(e.target.files)} />
-            <Button type="button" variant="outline" size="icon" className="h-10 w-10 flex-shrink-0" onClick={() => fileInputRef.current?.click()}>
-              <Plus className="h-4 w-4" />
-            </Button>
+            {/* Separator */}
+            <div className="h-6 w-px bg-gray-200" />
+            {/* Attachments block */}
+            <div className="flex items-center gap-2 overflow-x-auto overflow-y-hidden">
+              {images.length === 0 ? (
+                <>
+                  <Button type="button" variant="outline" className="h-9 px-3" onClick={() => fileInputRef.current?.click()}>
+                    {t('look-chat.add-elements')}
+                  </Button>
+                  <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFiles(e.target.files)} />
+                </>
+              ) : (
+                <>
+                  <Thumbnails urls={images} onRemove={removeImage} />
+                  <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFiles(e.target.files)} />
+                  <Button type="button" variant="outline" size="icon" className="h-9 w-9 flex-shrink-0" onClick={() => fileInputRef.current?.click()}>
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
+          {/* Right: send */}
+          <Button
+            size="icon"
+            className="h-10 w-10 rounded-lg"
+            disabled={isGenerating || isUploading || !prompt.trim()}
+            onClick={handleGenerate}
+            aria-label={t('look-chat.send') as string}
+          >
+            {isGenerating || isUploading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+          </Button>
         </div>
-        <div className="flex-1">
-          <Input
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder={`${t('look-chat.placeholder-1')} / ${t('look-chat.placeholder-2')}`}
-            className="w-full"
-          />
-        </div>
-        <Button
-          disabled={isGenerating || isUploading || !prompt.trim()}
-          onClick={handleGenerate}
-        >
-          {isGenerating ? (
-            <span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" />{t('look-chat.sending')}</span>
-          ) : isUploading ? (
-            <span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" />{t('common.loading')}</span>
-          ) : (
-            t('look-chat.send')
-          )}
-        </Button>
       </div>
-      {/* thumbnails now shown inline in the bar */}
     </div>
   )
 }
