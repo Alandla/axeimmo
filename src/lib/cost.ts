@@ -44,13 +44,17 @@ export function calculateMinimaxCost(text: string): number {
   return (text.length / 1000) * COST_PER_1000_CHARS;
 }
 
-export function calculateHeygenCost(durationInSeconds: number): number {
-  const COST_PER_30_SECONDS = 0.25;
-  
-  // Arrondir au multiple de 30 secondes supérieur
-  const segments = Math.ceil(durationInSeconds / 30);
-  
-  return segments * COST_PER_30_SECONDS;
+export function calculateHeygenCost(durationInSeconds: number, model: 'heygen' | 'heygen-iv' = 'heygen'): number {
+  if (model === 'heygen-iv') {
+    // Avatar IV: $0.025 per second
+    const COST_PER_SECOND = 0.025;
+    return durationInSeconds * COST_PER_SECOND;
+  } else {
+    // Original model: $0.25 per 30 seconds segment
+    const COST_PER_30_SECONDS = 0.25;
+    const segments = Math.ceil(durationInSeconds / 30);
+    return segments * COST_PER_30_SECONDS;
+  }
 }
 
 export function calculateWhisperGroqCost(durationInSeconds: number, isTurbo: boolean = false): number {

@@ -345,46 +345,78 @@ export const BackgroundWithAvatar = ({
             {/* Media Elements - Rendered first in JSX order */} 
             {mediaElements}
             
-            {/* Avatar Sequence - Rendered second in JSX order */} 
-            <Sequence 
-                from={0} 
-                durationInFrames={duration * 60} 
-                style={avatarSequenceStyle} // Apply style to Sequence
-            >
-                <AbsoluteFill style={avatarAbsoluteFillStyle}> {/* Style only for zIndex */}
-                    <div 
-                        ref={avatarRef}
-                        style={{ 
-                            width: '100%',
-                            height: '100%',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            cursor: 'move'
-                        }}
-                        onMouseDown={(e) => {
-                            if (getRemotionEnvironment().isPlayer) {
-                                e.preventDefault();
-                                startAvatarDrag(e);
-                            }
-                        }}
-                    >
-                        {avatar.videoUrl ? (
-                            <OffthreadVideo
-                                src={avatar.videoUrl}
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover',
-                                    objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
-                                    transform: `scale(${avatarZoomScale})`,
-                                }}
-                                muted
-                            />
-                        ) : (
-                            <Loop durationInFrames={Math.ceil(duration * 60)}>
-                                <Video
-                                    src={avatar.previewUrl}
-                                    startFrom={0}
+            {/* Avatar Sequence - Rendered second in JSX order */}
+            {avatar.renders && avatar.renders.length > 0 ? (
+                // New method: multiple renders
+                <div style={avatarSequenceStyle}>
+                    <AbsoluteFill style={avatarAbsoluteFillStyle}>
+                        <div 
+                            ref={avatarRef}
+                            style={{ 
+                                width: '100%',
+                                height: '100%',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                cursor: 'move'
+                            }}
+                            onMouseDown={(e) => {
+                                if (getRemotionEnvironment().isPlayer) {
+                                    e.preventDefault();
+                                    startAvatarDrag(e);
+                                }
+                            }}
+                        >
+                            {avatar.renders.map((render: any, index: number) => {
+                                return (
+                                    <Sequence
+                                        key={index}
+                                        from={render.startInFrames}
+                                        premountFor={120}
+                                    >
+                                        <OffthreadVideo
+                                            src={render.url}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                                objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
+                                                transform: `scale(${avatarZoomScale})`,
+                                            }}
+                                            muted
+                                        />
+                                    </Sequence>
+                                );
+                            })}
+                        </div>
+                    </AbsoluteFill>
+                </div>
+            ) : (
+                // Old method: single video/preview/image
+                <Sequence 
+                    from={0} 
+                    durationInFrames={duration * 60} 
+                    style={avatarSequenceStyle}
+                >
+                    <AbsoluteFill style={avatarAbsoluteFillStyle}>
+                        <div 
+                            ref={avatarRef}
+                            style={{ 
+                                width: '100%',
+                                height: '100%',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                cursor: 'move'
+                            }}
+                            onMouseDown={(e) => {
+                                if (getRemotionEnvironment().isPlayer) {
+                                    e.preventDefault();
+                                    startAvatarDrag(e);
+                                }
+                            }}
+                        >
+                            {avatar.videoUrl ? (
+                                <OffthreadVideo
+                                    src={avatar.videoUrl}
                                     style={{
                                         width: '100%',
                                         height: '100%',
@@ -392,14 +424,40 @@ export const BackgroundWithAvatar = ({
                                         objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
                                         transform: `scale(${avatarZoomScale})`,
                                     }}
-                                    loop
                                     muted
                                 />
-                            </Loop>
-                        )}
-                    </div>
-                </AbsoluteFill>
-            </Sequence>
+                            ) : avatar.previewUrl ? (
+                                <Loop durationInFrames={Math.ceil(duration * 60)}>
+                                    <Video
+                                        src={avatar.previewUrl}
+                                        startFrom={0}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                            objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
+                                            transform: `scale(${avatarZoomScale})`,
+                                        }}
+                                        loop
+                                        muted
+                                    />
+                                </Loop>
+                            ) : (
+                                <Img
+                                    src={avatar.thumbnail}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                        objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
+                                        transform: `scale(${avatarZoomScale})`,
+                                    }}
+                                />
+                            )}
+                        </div>
+                    </AbsoluteFill>
+                </Sequence>
+            )}
             
             {/* Resize Bar */} 
             {getRemotionEnvironment().isPlayer && isHovering && showResizeBar && (

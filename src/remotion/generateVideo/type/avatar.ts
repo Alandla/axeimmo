@@ -1,3 +1,9 @@
+export type AvatarRender = {
+    audioIndex: number
+    startInFrames: number
+    url: string
+}
+
 export type AvatarLook = {
     id: string
     name: string
@@ -6,6 +12,7 @@ export type AvatarLook = {
     thumbnail: string
     previewUrl: string
 	videoUrl?: string
+	renders?: AvatarRender[]
 	settings?: {
 		position: number  // Position horizontale (en pourcentage)
 		verticalPosition?: number  // Position verticale (en pourcentage)

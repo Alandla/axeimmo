@@ -33,12 +33,14 @@ export const Transitions = ({sequences, transitions}: {sequences: any[], transit
                 }}
               />
             </Sequence>
+            {transition.sound && (
             <Sequence key={`sound-${index}`} from={soundStartAt} durationInFrames={transition.durationInFrames} premountFor={20}>
               <Audio
                 src={transition.sound}
                 volume={transition.volume}
               />
             </Sequence>
+            )}
           </>
         );
       })}
