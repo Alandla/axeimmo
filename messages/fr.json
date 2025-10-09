@@ -831,7 +831,11 @@
       "unauthorized": "Non autorisé",
       "fetchingUserSpaces": "Erreur lors de la récupération des espaces de l'utilisateur",
       "userNotFound": "Utilisateur non trouvé",
-      "serverError": "Erreur serveur"
+      "serverError": "Erreur serveur",
+      "upload": {
+        "avif-not-supported": "Le format AVIF n'est pas supporté.",
+        "avif-partially-skipped": "Certains fichiers AVIF ont été ignorés. Les autres fichiers ont été importés."
+      }
     },
     "footer": {
       "rights": "© 2024 Hoox inc. Tous droits réservés",

@@ -918,7 +918,11 @@
       "unauthorized": "Unauthorized",
       "fetchingUserSpaces": "Error fetching user spaces",
       "userNotFound": "User not found",
-      "serverError": "Server error"
+      "serverError": "Server error",
+      "upload": {
+        "avif-not-supported": "AVIF format is not supported.",
+        "avif-partially-skipped": "Some AVIF files were skipped. Other files have been uploaded."
+      }
     },
     "footer": {
       "rights": "© 2024 Hoox inc. All rights reserved",

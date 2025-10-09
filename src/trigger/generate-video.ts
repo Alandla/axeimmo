@@ -177,7 +177,7 @@ export const generateVideoTask = task({
                 if (media.image?.link) {
                   // Analyser l'image avec WorkflowAI
                   logger.log(`[ANALYZE] Analyzing image with WorkflowAI: ${media.image.link}`);
-                  const { description: imageDescription, cost: imageCost } = await imageAnalysisRun(media.image.link);
+                  const { description: imageDescription, cost: imageCost, safeUrl } = await imageAnalysisRun(media.image.link);
                   cost += imageCost;
 
                   if (imageDescription) {
@@ -188,6 +188,7 @@ export const generateVideoTask = task({
                     
                     return mediaToMediaSpace([{
                       ...media,
+                      image: media.image ? { ...media.image, link: safeUrl || media.image.link } : media.image,
                       description: descriptions
                     }], payload.userId)[0];
                   }
@@ -279,13 +280,14 @@ export const generateVideoTask = task({
             if (media.type === 'image' && media.image?.link) {
               // Analyser l'image avec WorkflowAI
               logger.log(`[GOOGLE_IMAGES] Analyzing image with WorkflowAI: ${media.image.link}`);
-              const { description: imageDescription, cost: imageCost } = await imageAnalysisRun(media.image.link);
+              const { description: imageDescription, cost: imageCost, safeUrl } = await imageAnalysisRun(media.image.link);
               cost += imageCost;
               logger.log(`[GOOGLE_IMAGES] Analysis result:`, { imageDescription });
               
               if (imageDescription) {
                 const mediaWithDescription = {
                   ...media,
+                  image: media.image ? { ...media.image, link: safeUrl || media.image.link } : media.image,
                   description: [{
                     start: 0,
                     text: imageDescription

@@ -1,17 +1,48 @@
 import { basicApiCall } from "@/src/lib/api";
+import { toast } from "@/src/hooks/use-toast";
+import frMessages from "../../messages/fr.json";
+import enMessages from "../../messages/en.json";
 import { FileToUpload } from "../types/files";
 import { Input, ALL_FORMATS, UrlSource } from 'mediabunny';
+
+// Simple translation resolver without React context
+function translate(key: string): string {
+    const lang = typeof window !== 'undefined' ? (localStorage.getItem('lang') || navigator.language || 'en') : 'en';
+    const locale = lang.toLowerCase().startsWith('fr') ? 'fr' : 'en';
+    const messages: any = locale === 'fr' ? (frMessages as any) : (enMessages as any);
+    return key.split('.').reduce((acc: any, k: string) => (acc && acc[k] !== undefined ? acc[k] : undefined), messages) || key;
+}
 
 export const uploadFiles = async (
     files: FileToUpload[], 
     updateStepProgress?: (stepName: string, progress: number) => void
 ) => {
     try {
+        // Skip AVIF files, upload the rest
+        const avifFiles: FileToUpload[] = []
+        const filesToProcess = files.filter((f) => {
+            const name = f.file?.name || "";
+            const mime = (f.file as any)?.type || "";
+            const isAvif = f.type === "image" && (mime === "image/avif" || /\.avif$/i.test(name));
+            if (isAvif) avifFiles.push(f)
+            return !isAvif;
+        });
+
+        if (filesToProcess.length === 0) {
+            try { toast({ title: translate('errors.upload.avif-not-supported') }) } catch {}
+            throw new Error('errors.upload.avif-not-supported');
+        }
+
+        // Notify user that some files were skipped
+        if (avifFiles.length > 0) {
+            try { toast({ title: translate('errors.upload.avif-partially-skipped') }) } catch {}
+        }
+
         let completedFiles = 0
-        const totalFiles = files.length
+        const totalFiles = filesToProcess.length
 
         // Utiliser Promise.all avec map pour collecter les résultats
-        const results = await Promise.all(files.map(async (fileToUpload) => {
+        const results = await Promise.all(filesToProcess.map(async (fileToUpload) => {
             const url = await getMediaUrlFromFileByPresignedUrl(fileToUpload.file)
             
             completedFiles++
@@ -70,7 +101,16 @@ export const uploadFiles = async (
     }
 }
 
-export const getMediaUrlFromFileByPresignedUrl = async (file: File) => {
+export const getMediaUrlFromFileByPresignedUrl = async (
+    file: File
+) => {
+    // Block AVIF at helper level as well (defense-in-depth)
+    const fileName = file?.name || ""
+    const fileMime = (file as any)?.type || ""
+    if (fileMime === 'image/avif' || /\.avif$/i.test(fileName)) {
+        try { toast({ title: translate('errors.upload.avif-not-supported') }) } catch {}
+        throw new Error('errors.upload.avif-not-supported')
+    }
 
     let responsePresignedUrl
     console.log('start upload of file: ', file.name)

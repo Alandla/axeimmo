@@ -45,10 +45,12 @@ export async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId:
       }
     } else if (media.type === "image") {
       let imageDescription;
+      let finalUrl: string | undefined;
       
       try {
         const result = await imageAnalysisRun(mediaUrl);
         imageDescription = result.description;
+        finalUrl = result.safeUrl;
       } catch (error) {
         console.error("Error analyzing image with original URL, uploading to R2 and retrying:", error);
         
@@ -59,6 +61,7 @@ export async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId:
           
           const result = await imageAnalysisRun(r2Url);
           imageDescription = result.description;
+          finalUrl = result.safeUrl || r2Url;
         } catch (retryError) {
           console.error("Error analyzing image even after uploading to R2:", retryError);
           return;
@@ -74,7 +77,8 @@ export async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId:
         const updatedSpaceMedia = {
             ...media,
             _id: media.id,
-            description: description
+            description: description,
+            image: media.image ? { ...media.image, link: finalUrl || media.image.link } : media.image
         }
         
         await updateMedia(spaceId, mediaId, updatedSpaceMedia);
