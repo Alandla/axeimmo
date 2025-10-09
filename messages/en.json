@@ -27,7 +27,7 @@
     "Assets": "Assets",
     "Enhance": "Enhance",
     "Settings": "Settings",
-    "Avatar": "Avatar"
+    "Avatars": "Avatars"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -254,6 +254,7 @@
     "max-duration": "Maximum duration of",
     "minute": "minute",
     "soon": "Soon",
+    "avatars-limit": "Up to {limit} custom avatars",
     "premium-toast": {
       "title": "Premium plan required",
       "description": "This feature requires a paid plan. You need the {plan} plan to access it.",
@@ -784,12 +785,32 @@
     }
   },
   "avatars": {
+    "unlock-title": "Unlock avatar creation",
+    "unlock-description": "Create your own avatar, add your product and clone new angles.",
+    "unlock": {
+      "features": {
+        "1": "Create your own avatar only with prompt",
+        "2": "Add your product, logo or create new angles in second",
+        "3": "Clone any person with only a few pictures"
+      },
+      "see-in-action": "See in action",
+      "upgrade": "Upgrade"
+    },
+    "limit-reached": "Avatar limit reached",
+    "limit-reached-description": "Upgrade your plan to create more avatars.",
+    "left-counter": "{remaining}/{limit} left",
     "look-chat": {
       "placeholder-1": "Add my product in the hand",
       "add-elements": "Add elements",
       "send": "Upload",
       "sending": "Generating...",
-      "images-added": "{count} image(s) added"
+      "images-added": "{count} image(s) added",
+      "style": "Style",
+      "styles": {
+        "ugc-realist": "UGC",
+        "studio": "Studio",
+        "podcast": "Podcast"
+      }
     },
     "search": "Search an avatar..",
     "preview": "Preview",
@@ -799,6 +820,33 @@
     "create-new-description": "Start from scratch",
     "create-new-look": "Create a new look",
     "create-new-look-name": "New look",
+    "add-picture": "Add picture",
+    "drop-image-here": "Drop image here",
+    "click-to-edit": "Click to edit name",
+    "created-by": "Created by",
+    "more-options": "More options",
+    "dropdown-menu": {
+      "see-looks": "See looks",
+      "rename": "Rename",
+      "delete": "Delete"
+    },
+    "toast": {
+      "avatar-name-saved": "Avatar name saved",
+      "name-updated": "Name updated",
+      "description-updated": "The name has been updated",
+      "error-message": "An error occurred while updating the name",
+      "avatar-name-saved-description": "The avatar name has been updated successfully",
+      "avatar-name-error": "An error occurred while updating the avatar name",
+      "avatar-deleted": "Avatar deleted",
+      "avatar-deleted-description": "The avatar has been deleted successfully",
+      "avatar-delete-error": "An error occurred while deleting the avatar",
+      "look-deleted": "Look deleted",
+      "look-deleted-description": "The look has been deleted successfully",
+      "look-delete-error": "An error occurred while deleting the look",
+      "error": "Error",
+      "title-error": "Paid plan required",
+      "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it."
+    },
     "create": {
       "title": "Create avatar",
       "from-pictures": {
@@ -812,7 +860,13 @@
         "placeholder": "Selfie of a young man at work, wearing a suit"
       },
       "start": "Start generation",
-      "create-avatar": "Create avatar"
+      "create-avatar": "Create avatar",
+      "style": "Style",
+      "styles": {
+        "ugc-realist": "UGC",
+        "studio": "Studio",
+        "podcast": "Podcast"
+      }
     },
 
     "sections": {
@@ -820,10 +874,6 @@
       "public": "Public avatars"
     },
     "no-looks-found": "No looks found for the selected filters",
-    "toast": {
-      "title-error": "Paid plan required",
-      "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it."
-    },
     "tags": {
       "professional": "Professional",
       "cossy": "Cossy",

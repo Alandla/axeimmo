@@ -20,6 +20,8 @@ export const createPrivateSpaceForUser = async (userId: string, userName?: strin
       },
       credits: 10,
       usedStorageBytes: 0,
+      avatarsCreatedCount: 0,
+      avatarsLimit: 0,
     });
 
     await space.save();
@@ -61,7 +63,20 @@ export const addMediasToSpace = async (spaceId: string, medias: IMediaSpace[]) =
 export const updateSpacePlan = async (spaceId: string, plan: Partial<IPlan>) => {
   try {
     return await executeWithRetry(async () => {
-      const space = await SpaceModel.findByIdAndUpdate(spaceId, { $set: { plan } }, { new: true });
+      const space = await SpaceModel.findById(spaceId);
+      if (!space) throw new Error("Space not found");
+
+      // Update plan
+      space.plan = { ...(space.plan as any), ...(plan as any) };
+
+      // Adjust avatar limit based on plan name when provided
+      const name = plan.name || space.plan.name;
+      if (name) {
+        const limit = name === PlanName.ENTREPRISE ? 20 : name === PlanName.PRO ? 10 : (name === PlanName.START ? 5 : 0);
+        (space as any).avatarsLimit = limit;
+      }
+
+      await space.save();
       if (!space) throw new Error("Space not found");
       return space.plan;
     });
@@ -216,7 +231,7 @@ export const getUserSpaces = async (userId: string) => {
 
       const spaces = await SpaceModel.find(
         { _id: { $in: user.spaces } },
-        'name plan credits members videoIdeas details usedStorageBytes imageToVideoUsed logo'
+        'name plan credits members videoIdeas details usedStorageBytes imageToVideoUsed logo avatarsCreatedCount avatarsLimit'
       );
 
       return spaces.map((space) => {
@@ -236,6 +251,8 @@ export const getUserSpaces = async (userId: string) => {
           storageLimit: space.plan.storageLimit,
           imageToVideoLimit: space.plan.imageToVideoLimit,
           imageToVideoUsed: space.imageToVideoUsed || 0,
+          avatarsCreatedCount: (space as any).avatarsCreatedCount || 0,
+          avatarsLimit: (space as any).avatarsLimit ?? 0,
           members: space.members.map((member: any) => ({
             id: member.userId.toString()
           }))
@@ -407,7 +424,9 @@ export const updateSpace = async (spaceId: string, updateData: Partial<ISpace>) 
         usedStorageBytes: updatedSpace.usedStorageBytes,
         storageLimit: updatedSpace.plan.storageLimit,
         imageToVideoLimit: updatedSpace.plan.imageToVideoLimit,
-        imageToVideoUsed: updatedSpace.imageToVideoUsed || 0
+        imageToVideoUsed: updatedSpace.imageToVideoUsed || 0,
+        avatarsCreatedCount: (updatedSpace as any).avatarsCreatedCount || 0,
+        avatarsLimit: (updatedSpace as any).avatarsLimit || 0
       };
     });
   } catch (error) {
@@ -437,19 +456,18 @@ export const incrementImageToVideoUsage = async (spaceId: string) => {
 export const setupNewSubscription = async (spaceId: string, plan: IPlan, credits: number) => {
   try {
     return await executeWithRetry(async () => {
-      const space = await SpaceModel.findByIdAndUpdate(
-        spaceId,
-        { 
-          $set: { 
-            plan,
-            credits,
-            imageToVideoUsed: 0
-          }
-        },
-        { new: true }
-      );
-      
+      const space = await SpaceModel.findById(spaceId);
       if (!space) throw new Error("Space not found");
+
+      space.plan = plan;
+      space.credits = credits;
+      space.imageToVideoUsed = 0;
+      // Update avatar limit according to plan
+      const limit = plan.name === PlanName.ENTREPRISE ? 20 : plan.name === PlanName.PRO ? 10 : (plan.name === PlanName.START ? 5 : 0);
+      (space as any).avatarsLimit = limit;
+
+      await space.save();
+      
       return space;
     });
   } catch (error) {

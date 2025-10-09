@@ -399,6 +399,12 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
                       </span>
                     </div>
                     <div className="flex items-start gap-2">
+                      <User className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm font-medium">
+                        {tPricing('avatars-limit', { limit: plan.name === PlanName.ENTREPRISE ? 20 : (plan.name === PlanName.PRO ? 10 : 5) })}
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-2">
                       <Database className="h-4 w-4 flex-shrink-0 mt-0.5" />
                       <span className="text-sm font-medium">
                         {formatBytes(plan.storageLimit || 0)} {tPricing('storage')}

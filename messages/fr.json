@@ -36,7 +36,7 @@
     "Assets": "Médias",
     "Enhance": "Améliorer",
     "Settings": "Paramètres",
-    "Avatar": "Avatar"
+    "Avatars": "Avatars"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -167,6 +167,7 @@
     "max-duration": "Durée maximale de",
     "minute": "minute",
     "soon": "Bientôt",
+    "avatars-limit": "Jusqu'à {limit} avatars personnalisés",
     "premium-toast": {
       "title": "Plan payant requis",
       "description": "Cette fonctionnalité nécessite un plan payant. Vous avez besoin du plan {plan} pour y accéder."
@@ -696,12 +697,32 @@
     }
   },
   "avatars": {
+    "unlock-title": "Débloquer la création d'avatar",
+    "unlock-description": "Crée ton avatar, ajoute ton produit et génère de nouveaux angles.",
+    "unlock": {
+      "features": {
+        "1": "Crée ton avatar uniquement avec un prompt",
+        "2": "Ajoute ton produit, ton logo ou crée de nouveaux angles en secondes",
+        "3": "Clone n'importe quelle personne avec seulement quelques photos"
+      },
+      "see-in-action": "Voir en action",
+      "upgrade": "Upgrade"
+    },
+    "limit-reached": "Limite d'avatars atteinte",
+    "limit-reached-description": "Passez à un plan supérieur pour créer plus d'avatars.",
+    "left-counter": "{remaining}/{limit} restants",
     "look-chat": {
       "placeholder-1": "Ajouter mon produit dans la main",
       "add-elements": "Ajouter des éléments",
       "send": "Uploader",
       "sending": "Génération...",
-      "images-added": "{count} image(s) ajoutée(s)"
+      "images-added": "{count} image(s) ajoutée(s)",
+      "style": "Style",
+      "styles": {
+        "ugc-realist": "UGC",
+        "studio": "Studio",
+        "podcast": "Podcast"
+      }
     },
     "search": "Rechercher un avatar..",
     "preview": "Prévisualiser",
@@ -711,6 +732,33 @@
     "create-new-description": "Démarrer depuis zéro",
     "create-new-look": "Créer un nouveau look",
     "create-new-look-name": "Nouveau look",
+    "add-picture": "Ajouter une image",
+    "drop-image-here": "Déposez l'image ici",
+    "click-to-edit": "Cliquer pour modifier le nom",
+    "created-by": "Créé par",
+    "more-options": "Plus d'options",
+    "dropdown-menu": {
+      "see-looks": "Voir les looks",
+      "rename": "Renommer",
+      "delete": "Supprimer"
+    },
+    "toast": {
+      "avatar-name-saved": "Nom d'avatar sauvegardé",
+      "name-updated": "Nom mis à jour",
+      "description-updated": "Le nom a été mis à jour",
+      "error-message": "Une erreur est survenue lors de la mise à jour du nom",
+      "avatar-name-saved-description": "Le nom de l'avatar a été mis à jour avec succès",
+      "avatar-name-error": "Une erreur est survenue lors de la mise à jour du nom de l'avatar",
+      "avatar-deleted": "Avatar supprimé",
+      "avatar-deleted-description": "L'avatar a été supprimé avec succès",
+      "avatar-delete-error": "Une erreur est survenue lors de la suppression de l'avatar",
+      "look-deleted": "Look supprimé",
+      "look-deleted-description": "Le look a été supprimé avec succès",
+      "look-delete-error": "Une erreur est survenue lors de la suppression du look",
+      "title-error": "Plan payant requis",
+      "description-premium-error": "Cet avatar n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder.",
+      "error": "Erreur"
+    },
     "create": {
       "title": "Créer un avatar",
       "from-pictures": {
@@ -724,7 +772,13 @@
         "placeholder": "Selfie d'un jeune homme au travail, en costume"
       },
       "start": "Lancer la génération",
-      "create-avatar": "Créer l'avatar"
+      "create-avatar": "Créer l'avatar",
+      "style": "Style",
+      "styles": {
+        "ugc-realist": "UGC",
+        "studio": "Studio",
+        "podcast": "Podcast"
+      }
     },
 
     "sections": {
@@ -732,10 +786,6 @@
       "public": "Avatars publics"
     },
     "no-looks-found": "Aucun look trouvé pour les filtres sélectionnés",
-    "toast": {
-      "title-error": "Plan payant requis",
-      "description-premium-error": "Cet avatar n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder."
-    },
     "tags": {
       "professional": "Professionnel",
       "cossy": "Cossy",

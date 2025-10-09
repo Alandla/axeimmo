@@ -78,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
     {
       name: `${t('links.avatars')}`,
-      url: "/dashboard/avatar",
+      url: "/dashboard/avatars",
       icon: UserCircle,
     },
   ]

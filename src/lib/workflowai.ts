@@ -330,7 +330,7 @@ export interface AvatarIdentityExtractionOutput {
 
 const avatarIdentityExtraction = workflowAI.agent<AvatarIdentityExtractionInput, AvatarIdentityExtractionOutput>({
   id: "avatar-prompt-extraction",
-  schemaId: 1,
+  schemaId: 2,
   version: 'dev',
   useCache: 'never'
 })
@@ -348,7 +348,7 @@ export interface ImagePromptInformationExtractionOutput {
 
 const imagePromptInformationExtraction = workflowAI.agent<ImagePromptInformationExtractionInput, ImagePromptInformationExtractionOutput>({
   id: "image-prompt-information-extraction",
-  schemaId: 1,
+  schemaId: 2,
   version: 'dev',
   useCache: 'never'
 })

@@ -1,6 +1,6 @@
 import { fal } from "@fal-ai/client";
 
-// Configuration Fal.ai
+// Fal.ai client configuration
 fal.config({
   credentials: process.env.FAL_KEY
 });
@@ -10,9 +10,16 @@ export enum KlingGenerationMode {
   PRO = 'pro'
 }
 
+// Centralized endpoints
 export const KLING_ENDPOINTS = {
   [KlingGenerationMode.STANDARD]: "fal-ai/kling-video/v2.5-turbo/pro/image-to-video",
   [KlingGenerationMode.PRO]: "fal-ai/kling-video/v2.1/pro/image-to-video"
+} as const;
+const AVATAR_IMAGE_ENDPOINTS = {
+  EDIT: "fal-ai/nano-banana/edit",
+  COMFY_SRPO: "comfy/Hoox/srpo",
+  FLUX_SRPO: "fal-ai/flux/srpo",
+  UPSCALE_CRISP: "fal-ai/recraft/upscale/crisp"
 } as const;
 
 export interface KlingRequest {
@@ -54,6 +61,8 @@ export interface FalQueueResult {
 // Simple avatar image generation via Fal.ai (endpoint configurable)
 export interface AvatarImageRequest {
   prompt: string;
+  // Select model by style: 'ugc-realist' -> comfy/Hoox/srpo, others -> fal-ai/flux/srpo
+  style?: 'ugc-realist' | 'studio' | 'podcast';
 }
 
 export interface AvatarImageResponse {
@@ -69,6 +78,8 @@ export interface AvatarImageResponse {
 export interface EditImageRequest {
   prompt: string;
   image_urls: string[];
+  // keep type flexible to allow future ratios like 4:5, 2:3, etc.
+  aspect_ratio?: string;
 }
 
 export interface EditImageResponse {
@@ -123,12 +134,13 @@ function extractImageFromFalData(data: any): EditImageResponse | undefined {
 export async function editAvatarImage(
   request: EditImageRequest
 ): Promise<EditImageResponse> {
-  const endpoint = "fal-ai/nano-banana/edit";
+  const endpoint = AVATAR_IMAGE_ENDPOINTS.EDIT;
   try {
     const result = await fal.subscribe(endpoint, {
       input: {
         prompt: request.prompt,
-        image_urls: request.image_urls
+        image_urls: request.image_urls,
+        aspect_ratio: request.aspect_ratio
       },
       logs: true
     });
@@ -143,18 +155,17 @@ export async function editAvatarImage(
   }
 }
 
-export async function generateAvatarImage(
-  request: AvatarImageRequest
+// SRPO via Comfy pipeline: response nested in data.outputs.*.images
+export async function generateAvatarImageComfySrpo(
+  request: { prompt: string }
 ): Promise<AvatarImageResponse> {
-  // Par défaut, utiliser l'endpoint fourni: comfy/Hoox/srpo, à voir selon le modèle qu'on utilisera finalement selon le rendu voulu (ugc, pro, podcast, etc...)
-  const endpoint = "comfy/Hoox/srpo";
-
+  const endpoint = AVATAR_IMAGE_ENDPOINTS.COMFY_SRPO;
   try {
-    const randomSeed = Math.floor(Math.random() * 10001);
+    // const randomSeed = Math.floor(Math.random() * 10001);
     const result = await fal.subscribe(endpoint, {
       input: {
-        srpo_input: request.prompt,
-        random_noise: randomSeed
+        prompt: request.prompt,
+        // random_noise: randomSeed
       },
       logs: true
     });
@@ -172,12 +183,56 @@ export async function generateAvatarImage(
         break;
       }
     }
-    if (!url) throw new Error("No image URL found in Fal response");
+    if (!url) throw new Error("No image URL found in Comfy SRPO response");
     return { url, file_name };
   } catch (error) {
-    console.error("Error generating avatar image:", error);
+    console.error("Error generating avatar image (Comfy SRPO):", error);
     throw error;
   }
+}
+
+// SRPO via Flux: response at data.images[{ url, width, height, content_type }]
+export async function generateAvatarImageFluxSrpo(
+  request: { prompt: string; image_size?: 'portrait_16_9' | 'landscape_16_9' }
+): Promise<AvatarImageResponse> {
+  const endpoint = AVATAR_IMAGE_ENDPOINTS.FLUX_SRPO;
+  try {
+    const result = await fal.subscribe(endpoint, {
+      input: {
+        prompt: request.prompt,
+        ...(request.image_size ? { image_size: request.image_size } : {})
+      },
+      logs: true
+    });
+
+    const data: any = (result as any).data;
+    const images = data?.images;
+    if (!Array.isArray(images) || images.length === 0 || !images[0]?.url) {
+      throw new Error("No image URL found in Flux SRPO response");
+    }
+    const img = images[0];
+    return {
+      url: img.url,
+      width: img.width,
+      height: img.height,
+      content_type: img.content_type
+    };
+  } catch (error) {
+    console.error("Error generating avatar image (Flux SRPO):", error);
+    throw error;
+  }
+}
+
+// Back-compat wrapper routing by style
+// Back-compat wrapper routing by style (kept for potential external imports)
+export async function generateAvatarImage(
+  request: AvatarImageRequest
+): Promise<AvatarImageResponse> {
+  const style = request.style || 'ugc-realist';
+  if (style === 'ugc-realist') {
+    return generateAvatarImageComfySrpo({ prompt: request.prompt });
+  }
+  return generateAvatarImageFluxSrpo({ prompt: request.prompt });
 }
 
 

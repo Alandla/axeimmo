@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Play, History } from 'lucide-react'
+import { Check, Play, History, Maximize2, MoreVertical, Pen, Trash2 } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
 import { useTranslations } from 'next-intl'
@@ -9,6 +9,27 @@ import { AvatarLook } from '../types/avatar'
 import Image from 'next/image'
 import { Button } from './ui/button'
 import { PreviewModal } from './modal/preview-avatar'
+import { ImageModal } from './modal/image-modal'
+import { useState, useRef, useCallback } from 'react'
+import { formatDistanceToNow, Locale } from 'date-fns'
+import { fr, enUS } from 'date-fns/locale'
+import { useSession } from 'next-auth/react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/src/components/ui/dropdown-menu"
+import { Avatar as UIAvatar, AvatarFallback } from './ui/avatar'
+import { AvatarImage } from '@radix-ui/react-avatar'
+import { cn } from '../lib/utils'
+import { apiClient } from '../lib/api'
+import { useToast } from '../hooks/use-toast'
+import { useActiveSpaceStore } from '../store/activeSpaceStore'
+import { useLookToDeleteStore } from '../store/lookToDelete'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -47,25 +68,63 @@ export const IconGenderFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props)
 interface AvatarLookCardProps {
   look: AvatarLook
   avatarName: String
+  avatarId?: string
   isLastUsed?: boolean
   selectedLook?: AvatarLook | null
   onLookChange?: (look: AvatarLook | null) => void
   onAvatarNameChange?: (name: string | null) => void
+  setIsModalConfirmDeleteOpen?: (isOpen: boolean) => void
+  isPublic?: boolean
 }
 
 export function AvatarLookCard({ 
   look, 
   avatarName, 
+  avatarId,
   isLastUsed,
   selectedLook: propSelectedLook,
   onLookChange,
-  onAvatarNameChange
+  onAvatarNameChange,
+  setIsModalConfirmDeleteOpen,
+  isPublic = false
 }: AvatarLookCardProps) {
   const { selectedLook: storeSelectedLook, setSelectedLook: setStoreSelectedLook, setSelectedAvatarName: setStoreSelectedAvatarName } = useCreationStore()
+  const { activeSpace } = useActiveSpaceStore()
+  const { data: session } = useSession()
+  const { toast } = useToast()
+  const { setLook } = useLookToDeleteStore()
   const t = useTranslations('avatars')
+
+  // États pour le dropdown et l'édition
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(look.name || '');
+  const [displayName, setDisplayName] = useState(look.name || '');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  // Sync display name when prop changes, avoid updating while editing
+  
+  
+  
 
   const selectedLook = propSelectedLook !== undefined ? propSelectedLook : storeSelectedLook
   const isSelected = selectedLook?.id === look.id;
+
+  // Récupérer les informations du créateur depuis activeSpace.members
+  const getCreator = () => {
+    if (isPublic) {
+      return { id: '', name: 'Hoox', image: '' };
+    }
+    // Pour l'instant, on utilise le premier membre disponible ou on retourne des valeurs par défaut
+    // TODO: Ajouter un système d'historique pour les looks
+    if (activeSpace?.members && activeSpace.members.length > 0) {
+      return activeSpace.members[0] || { id: '', name: '', image: '' };
+    }
+    return { id: '', name: 'API', image: '' };
+  };
+
+  const creator = getCreator();
 
   const handleClick = () => {
     if (!look.thumbnail) return;
@@ -82,41 +141,170 @@ export function AvatarLookCard({
     }
   }
 
+  const handleDelete = (e: any) => {
+    e.stopPropagation()
+    setLook(look)
+    if (setIsModalConfirmDeleteOpen) {
+      setIsModalConfirmDeleteOpen(true)
+    }
+    setIsDropdownOpen(false)
+  }
+
+  const startEditing = useCallback(() => {
+    setIsEditing(true);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 200);
+  }, []);
+
+  const handleNameSave = useCallback(async () => {
+    setIsEditing(false);
+    if (editedName !== look.name) {
+      try {
+        if (!activeSpace?.id || !avatarId || !look.id) throw new Error('Missing identifiers');
+        await apiClient.patch(`/space/${activeSpace.id}/avatars/${avatarId}/looks/${look.id}`, {
+          name: editedName.trim()
+        })
+        setDisplayName(editedName.trim())
+        toast({
+          title: t('toast.name-updated'),
+          description: t('toast.description-updated'),
+          variant: "confirm",
+        });
+      } catch (error) {
+        console.error(t('toast.error-message'), error);
+        setEditedName(look.name || '');
+      }
+    }
+  }, [editedName, look, t, toast]);
+
   return (
     <Card 
-      className={`relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 ${isSelected ? 'ring-2 ring-primary' : ''}`}
+      className={`group relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 ${isSelected ? 'ring-2 ring-primary' : ''}`}
       onClick={handleClick}
       aria-disabled={!look.thumbnail}
     >
       {/* Tags superposés en haut à gauche */}
       {look.tags && look.tags.length > 0 && (
-        <div className="absolute top-3 left-3 z-10 flex gap-2">
-          {look.tags.slice(0, 2).map((tag, index) => (
+        <div className="absolute top-3 left-3 z-20 flex gap-2 group/tags">
+          <Badge 
+            variant="secondary" 
+            className="bg-white/70 text-gray-800 text-xs px-2 py-1 backdrop-blur-sm"
+          >
+            {t(`tags.${look.tags[0]}`)}
+          </Badge>
+          {look.tags.length > 1 && (
             <Badge 
-              key={index} 
               variant="secondary" 
-              className="bg-white/90 text-gray-800 text-xs px-2 py-1 backdrop-blur-sm"
+              className="bg-white/70 text-gray-800 text-xs px-2 py-1 backdrop-blur-sm"
             >
-              {t(`tags.${tag}`)}
+              +{look.tags.length - 1}
             </Badge>
-          ))}
-        </div>
-      )}
+          )}
 
-      {/* Icône de sélection en haut à droite */}
-      {(isSelected || isLastUsed) && (
-        <div className="absolute top-3 right-3 z-10">
-          {isSelected ? (
-            <div className="bg-primary text-primary-foreground rounded-full p-1">
-              <Check className="h-4 w-4" />
-            </div>
-          ) : (
-            <div className="bg-white/90 text-gray-600 rounded-full p-1 backdrop-blur-sm">
-              <History className="h-4 w-4" />
+          {/* Tooltip avec tous les tags au hover des tags uniquement */}
+          {look.tags.length > 1 && (
+            <div className="absolute top-full left-0 z-30 opacity-0 group-hover/tags:opacity-100 transition-opacity duration-200 pointer-events-none mt-1">
+              <div className="bg-black/80 backdrop-blur-sm rounded-lg p-3">
+                <div className="flex flex-wrap gap-2 max-w-64">
+                  {look.tags.map((tag, index) => (
+                    <Badge 
+                      key={index} 
+                      variant="secondary" 
+                      className="bg-white/70 text-gray-800 text-xs px-2 py-1 backdrop-blur-sm whitespace-nowrap"
+                    >
+                      {t(`tags.${tag}`)}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </div>
       )}
+
+      {/* Icône de sélection et dropdown en haut à droite */}
+      <div className="absolute top-3 right-3 z-40 flex items-center gap-2">
+        {(isSelected || isLastUsed) && (
+          <>
+            {isSelected ? (
+              <div className="bg-primary text-primary-foreground rounded-full p-1">
+                <Check className="h-4 w-4" />
+              </div>
+            ) : (
+              <div className="bg-white/90 text-gray-600 rounded-full p-1 backdrop-blur-sm">
+                <History className="h-4 w-4" />
+              </div>
+            )}
+          </>
+        )}
+        {!isPublic && (
+          <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <MoreVertical className="h-3 w-3" />
+                <span className="sr-only">{t('more-options')}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+              side={"bottom"}
+              align="end"
+              sideOffset={4}
+            >
+              <DropdownMenuLabel className="p-0 font-normal">
+                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                  <UIAvatar className="h-8 w-8 rounded-lg">
+                    {creator.image && <AvatarImage src={creator.image} alt={creator.name ?? ''} />}
+                    <AvatarFallback className="rounded-lg">{creator.name?.charAt(0) ?? 'A'}</AvatarFallback>
+                  </UIAvatar>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">{creator.name || 'API'}</span>
+                    {!isPublic && (
+                      <span className="truncate text-xs">
+                        {/* TODO: Ajouter une propriété createdAt au type AvatarLook */}
+                        {new Date().toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    startEditing();
+                  }}
+                >
+                  <Pen />
+                  {t('dropdown-menu.rename')}
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault()
+                  handleDelete(e)
+                }}
+                className={cn(
+                  "flex items-center cursor-pointer text-destructive",
+                  "hover:bg-red-200 hover:text-destructive",
+                  "focus:bg-red-200 focus:text-destructive"
+                )}
+              >
+                <Trash2 />
+                {t('dropdown-menu.delete')}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+      </div>
 
       {/* Image principale */}
       <div className="w-full aspect-[3/4] relative">
@@ -138,24 +326,55 @@ export function AvatarLookCard({
       {/* Bande d'information en bas */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-white font-semibold text-lg">{look.name}</h3>
+          <div className="flex-1 min-w-0">
+            {isEditing ? (
+              <input
+                ref={inputRef}
+                type="text"
+                value={editedName}
+                onChange={(e) => setEditedName(e.target.value)}
+                onBlur={handleNameSave}
+                onKeyDown={(e) => e.key === 'Enter' && handleNameSave()}
+                className="w-auto text-white font-semibold text-lg border-0 border-b border-b-white/50 focus:outline-none focus:ring-0 bg-transparent"
+                onClick={(e) => e.stopPropagation()}
+                autoFocus
+              />
+            ) : (
+              <h3 
+                className="text-white font-semibold text-lg truncate cursor-text" 
+                onClick={() => setIsEditing(true)}
+              >
+                {displayName}
+              </h3>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Bouton preview en bas à droite */}
-      {look.previewUrl && (
-        <div className="absolute bottom-3 right-3 z-10">
+      <div className="absolute bottom-3 right-3 z-10">
+        {look.previewUrl ? (
           <PreviewModal previewUrl={look.previewUrl} avatarName={selectedLook?.name || ''} lookPlace={t(`place.${look.place}`)}>
             <Button
               variant="outline"
               size="icon"
-              className="bg-white/90 text-gray-800 hover:bg-white border-white/20 h-8 w-8"
+              className="bg-white/70 text-gray-800 hover:bg-white border-white/20 h-6 w-6"
             >
-              <Play className="h-4 w-4" />
+              <Play className="h-2.5 w-2.5" />
             </Button>
           </PreviewModal>
-        </div>
-      )}
+        ) : look.thumbnail ? (
+          <ImageModal imageUrl={look.thumbnail} title={look.name || ''}>
+            <Button
+              variant="outline"
+              size="icon"
+              className="bg-white/70 text-gray-800 hover:bg-white border-white/20 h-6 w-6"
+            >
+              <Maximize2 className="h-2 w-2" />
+            </Button>
+          </ImageModal>
+        ) : null}
+      </div>
     </Card>
   )
 }

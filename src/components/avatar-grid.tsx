@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Input } from "@/src/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Button } from "@/src/components/ui/button"
@@ -8,6 +9,8 @@ import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } fro
 import { Badge } from "@/src/components/ui/badge"
 import { Check, UserRoundX, Plus } from "lucide-react"
 import { useTranslations } from 'next-intl'
+import { useToast } from '@/src/hooks/use-toast'
+import { basicApiCall, basicApiDeleteCall } from '@/src/lib/api'
 import { avatarsConfig } from '../config/avatars.config'
 import { Avatar, AvatarLook } from '../types/avatar'
 import { AvatarCard } from './avatar-card'
@@ -34,6 +37,11 @@ import CreateAvatarModal from '@/src/components/modal/create-avatar-modal'
 import AvatarLookChatbox from '@/src/components/avatar-look-chatbox'
 import { getMediaUrlFromFileByPresignedUrl } from '@/src/service/upload.service'
 import { AddLookCard } from './add-look-card'
+import ModalConfirmDeleteAvatar from '@/src/components/modal/confirm-delete-avatar'
+import ModalConfirmDeleteLook from '@/src/components/modal/confirm-delete-look'
+import { Avatar as UIAvatar, AvatarFallback } from './ui/avatar'
+import { AvatarImage } from '@radix-ui/react-avatar'
+import UnlockAvatarCreationModal from '@/src/components/modal/unlock-avatar-creation'
 
 // Composant pour la carte "No avatar"
 function NoAvatarCard({ 
@@ -104,6 +112,9 @@ export function AvatarGridComponent({
 }: AvatarGridComponentProps) {
   const t = useTranslations('avatars')
   const tCommon = useTranslations('common')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   // Déterminer si on est en mode contrôlé
   const isControlled = controlledSelectedLook !== undefined || onLookChange !== undefined
@@ -147,6 +158,28 @@ export function AvatarGridComponent({
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [barRect, setBarRect] = useState<{left:number;width:number}>({ left: 0, width: 0 })
   const [hasMultipleRows, setHasMultipleRows] = useState(false)
+  const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] = useState(false)
+  const [isModalConfirmDeleteLookOpen, setIsModalConfirmDeleteLookOpen] = useState(false)
+  const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false)
+  
+  // États pour l'édition du nom d'avatar
+  const [isEditingAvatarName, setIsEditingAvatarName] = useState(false)
+  const [editedAvatarName, setEditedAvatarName] = useState('')
+  const avatarNameInputRef = useRef<HTMLInputElement>(null)
+  const { toast } = useToast()
+
+  const updateUrlParamsForAvatar = (avatar: Avatar | null) => {
+    const params = new URLSearchParams(searchParams?.toString() || '')
+    if (avatar) {
+      params.set('avatar', avatar.id)
+      try { localStorage.setItem('activeAvatarName', avatar.name) } catch {}
+    } else {
+      params.delete('avatar')
+      try { localStorage.removeItem('activeAvatarName') } catch {}
+    }
+    const query = params.toString()
+    router.replace(query ? `${pathname}?${query}` : `${pathname}`, { scroll: false })
+  }
 
   useEffect(() => {
     const updateRect = () => {
@@ -167,9 +200,150 @@ export function AvatarGridComponent({
 
   const { activeSpace, lastUsedParameters } = useActiveSpaceStore()
 
+  // Récupérer les informations du créateur de l'avatar
+  const getAvatarCreator = () => {
+    if (!activeAvatar || !activeSpace?.members) {
+      return { id: '', name: 'API', image: '' };
+    }
+    // Pour l'instant, on utilise le premier membre disponible ou on retourne des valeurs par défaut
+    // TODO: Ajouter un système d'historique pour les avatars
+    if (activeSpace.members.length > 0) {
+      return activeSpace.members[0] || { id: '', name: 'API', image: '' };
+    }
+    return { id: '', name: 'API', image: '' };
+  };
+
+  const avatarCreator = getAvatarCreator();
+
   // Ajouter l'état pour la pagination des looks
   const [currentLookPage, setCurrentLookPage] = useState(1)
   const looksPerPage = mode === 'large' ? 12 : 6
+
+  // Fonctions pour l'édition du nom d'avatar
+  const startEditingAvatarName = useCallback(() => {
+    if (!activeAvatar) return
+    setIsEditingAvatarName(true)
+    setEditedAvatarName(activeAvatar.name)
+    setTimeout(() => {
+      avatarNameInputRef.current?.focus()
+    }, 200)
+  }, [activeAvatar])
+
+  const handleAvatarNameSave = useCallback(async () => {
+    if (!activeAvatar || !activeSpace?.id) return
+    
+    setIsEditingAvatarName(false)
+    if (editedAvatarName !== activeAvatar.name && editedAvatarName.trim()) {
+      try {
+        await basicApiCall(`/space/${activeSpace.id}/avatars/${activeAvatar.id}`, {
+          name: editedAvatarName.trim()
+        })
+
+        // Mettre à jour l'avatar local
+        const updatedAvatar = { ...activeAvatar, name: editedAvatarName.trim() }
+        setActiveAvatar(updatedAvatar)
+        
+        // Mettre à jour dans la liste des avatars de l'espace
+        setSpaceAvatars(prev => 
+          prev.map(avatar => 
+            avatar.id === activeAvatar.id 
+              ? { ...avatar, name: editedAvatarName.trim() }
+              : avatar
+          )
+        )
+
+        toast({
+          title: t('toast.avatar-name-saved'),
+          description: t('toast.avatar-name-saved-description'),
+          variant: "confirm",
+        })
+      } catch (error) {
+        console.error('Error updating avatar name:', error)
+        setEditedAvatarName(activeAvatar.name)
+        toast({
+          title: t('toast.error'),
+          description: t('toast.avatar-name-error'),
+          variant: "destructive",
+        })
+      }
+    } else {
+      setEditedAvatarName(activeAvatar.name)
+    }
+  }, [activeAvatar, activeSpace?.id, editedAvatarName, t, toast])
+
+  // Fonction pour supprimer un avatar
+  const handleDeleteAvatar = useCallback(async (avatar: Avatar) => {
+    if (!activeSpace?.id) return
+
+    try {
+      await basicApiDeleteCall(`/space/${activeSpace.id}/avatars/${avatar.id}`)
+
+      // Retirer l'avatar de la liste des avatars de l'espace
+      setSpaceAvatars(prev => prev.filter(a => a.id !== avatar.id))
+
+      // Si l'avatar supprimé était l'avatar actif, le désélectionner
+      if (activeAvatar?.id === avatar.id) {
+        setActiveAvatar(null)
+        updateUrlParamsForAvatar(null)
+      }
+
+      toast({
+        title: t('toast.avatar-deleted'),
+        description: t('toast.avatar-deleted-description'),
+        variant: "confirm",
+      })
+    } catch (error) {
+      console.error('Error deleting avatar:', error)
+      toast({
+        title: t('toast.error'),
+        description: t('toast.avatar-delete-error'),
+        variant: "destructive",
+      })
+    }
+  }, [activeSpace?.id, activeAvatar, t, toast])
+
+  // Fonction pour supprimer un look
+  const handleDeleteLook = useCallback(async (look: AvatarLook) => {
+    if (!activeSpace?.id || !activeAvatar?.id || !look.id) return
+
+    try {
+      await basicApiDeleteCall(`/space/${activeSpace.id}/avatars/${activeAvatar.id}/looks/${look.id}`)
+
+      // Retirer le look de l'avatar local
+      const updatedAvatar = {
+        ...activeAvatar,
+        looks: activeAvatar.looks.filter((l: AvatarLook) => l.id !== look.id)
+      }
+      setActiveAvatar(updatedAvatar)
+      
+      // Mettre à jour dans la liste des avatars de l'espace
+      setSpaceAvatars(prev => 
+        prev.map(avatar => 
+          avatar.id === activeAvatar.id 
+            ? updatedAvatar
+            : avatar
+        )
+      )
+
+      // Si le look supprimé était sélectionné, le désélectionner
+      if (selectedLook?.id === look.id) {
+        setSelectedLook(null)
+      }
+
+      toast({
+        title: t('toast.look-deleted'),
+        description: t('toast.look-deleted-description'),
+        variant: "confirm",
+      })
+    } catch (error) {
+      console.error('Error deleting look:', error)
+      toast({
+        title: t('toast.error'),
+        description: t('toast.look-delete-error'),
+        variant: "destructive",
+      })
+    }
+  }, [activeSpace?.id, activeAvatar, selectedLook, t, toast])
 
   // Polling pour rafraîchir tant que des thumbnails manquent
   const pollingRef = useRef<NodeJS.Timeout | null>(null)
@@ -245,6 +419,16 @@ export function AvatarGridComponent({
             }
           }
         }
+        // Sync initial active avatar from URL after fetch
+        const avatarFromUrl = searchParams?.get('avatar')
+        if (avatarFromUrl) {
+          const foundSpace = spaceAvatarsFetched.find(a => a.id === avatarFromUrl)
+          const foundPublic = avatarsConfig.find(a => a.id === avatarFromUrl)
+          const toActivate = foundSpace || foundPublic || null
+          if (toActivate) {
+            setActiveAvatar(toActivate)
+          }
+        }
       }
     }
   }
@@ -270,6 +454,18 @@ export function AvatarGridComponent({
       fetchSpaceAvatars(lastUsed)
     }
 }, [activeSpace?.id])
+
+  // Handle initial activation from URL when already have public avatars (no space)
+  useEffect(() => {
+    if (spaceAvatars.length === 0) {
+      const avatarFromUrl = searchParams?.get('avatar')
+      if (avatarFromUrl) {
+        const foundPublic = avatarsConfig.find(a => a.id === avatarFromUrl)
+        if (foundPublic) setActiveAvatar(foundPublic)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [avatarsConfig.length])
 
   // Démarrer/arrêter un polling si des thumbnails manquent (ou si on est en génération look)
   useEffect(() => {
@@ -468,37 +664,47 @@ export function AvatarGridComponent({
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
-      
-      try {
-        setIsUploadingLook(true);
-        const { mediaUrl } = await getMediaUrlFromFileByPresignedUrl(file);
-        
-        // Créer le nouveau look avec l'image
-        const response = await fetch(`/api/space/${activeSpace.id}/avatars/${activeAvatar.id}/looks`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            imageUrl: mediaUrl,
-            lookName: `Look ${activeAvatar.looks.length + 1}`,
-            place: "unspecified",
-            tags: [],
-            format: "vertical"
-          }),
-        });
-        
-        if (response.ok) {
-          // Rafraîchir la liste des avatars pour afficher le nouveau look
-          await fetchSpaceAvatars();
-        }
-      } catch (error) {
-        console.error('Error creating new look:', error);
-      } finally {
-        setIsUploadingLook(false);
-      }
+      await processFileUpload(file);
     };
     input.click();
+  };
+
+  const handleFileDrop = async (file: File) => {
+    if (!activeAvatar || !activeSpace?.id) return;
+    await processFileUpload(file);
+  };
+
+  const processFileUpload = async (file: File) => {
+    if (!activeAvatar || !activeSpace?.id) return;
+    
+    try {
+      setIsUploadingLook(true);
+      const { mediaUrl } = await getMediaUrlFromFileByPresignedUrl(file);
+      
+      // Créer le nouveau look avec l'image
+      const response = await fetch(`/api/space/${activeSpace.id}/avatars/${activeAvatar.id}/looks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageUrl: mediaUrl,
+          lookName: `Look ${activeAvatar.looks.length + 1}`,
+          place: "unspecified",
+          tags: [],
+          format: "vertical"
+        }),
+      });
+      
+      if (response.ok) {
+        // Rafraîchir la liste des avatars pour afficher le nouveau look
+        await fetchSpaceAvatars();
+      }
+    } catch (error) {
+      console.error('Error creating new look:', error);
+    } finally {
+      setIsUploadingLook(false);
+    }
   };
 
   // chatbox now extracted
@@ -513,16 +719,15 @@ export function AvatarGridComponent({
       const width = window.innerWidth
       let cols = 2
       if (mode === 'large') {
-        // grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
-        if (width < 768) cols = 2
-        else if (width < 1024) cols = 3
-        else if (width < 1280) cols = 4
-        else cols = 5
+        // grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6
+        if (width < 1024) cols = 2
+        else if (width < 1536) cols = 5
+        else cols = 6
       } else {
-        // grid-cols-2 md:grid-cols-3 lg:grid-cols-2
-        if (width < 768) cols = 2
-        else if (width < 1024) cols = 3
-        else cols = 2
+        // grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6
+        if (width < 1024) cols = 2
+        else if (width < 1536) cols = 5
+        else cols = 6
       }
       // Include the add-look card in the first page rendering
       const itemCount = 1 + currentLooks.length
@@ -535,7 +740,7 @@ export function AvatarGridComponent({
   }, [activeAvatar, currentLooks.length, mode])
 
   return (
-    <div className="space-y-4 mt-4" ref={containerRef}>
+    <div className="space-y-4" ref={containerRef}>
       <AnimatePresence mode="wait">
         {activeAvatar ? (
           <motion.div
@@ -548,13 +753,42 @@ export function AvatarGridComponent({
             <Button size="icon" variant="ghost" onClick={() => {
               setActiveAvatar(null)
               setCurrentLookPage(1)
+              updateUrlParamsForAvatar(null)
             }}>
               <ArrowLeft className="w-4 h-4" />
             </Button>
-            <h2 className="text-xl font-semibold">{activeAvatar.name}</h2>
+            {isEditingAvatarName ? (
+              <input
+                ref={avatarNameInputRef}
+                type="text"
+                value={editedAvatarName}
+                onChange={(e) => setEditedAvatarName(e.target.value)}
+                onBlur={handleAvatarNameSave}
+                onKeyDown={(e) => e.key === 'Enter' && handleAvatarNameSave()}
+                className="text-xl font-semibold border-0 border-b border-b-input focus:outline-none focus:ring-0 bg-transparent min-w-0 w-auto"
+                onClick={(e) => e.stopPropagation()}
+                autoFocus
+              />
+            ) : (
+              <h2 
+                className="text-xl font-semibold cursor-text hover:bg-muted/50 px-2 py-1 rounded transition-colors" 
+                onClick={startEditingAvatarName}
+                title={t('click-to-edit')}
+              >
+                {activeAvatar.name}
+              </h2>
+            )}
             <Badge variant="secondary" className="shrink-0 whitespace-nowrap">
               {activeAvatar.looks.length} Looks
             </Badge>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span>{t('created-by')}</span>
+              <UIAvatar className="h-5 w-5">
+                {avatarCreator.image && <AvatarImage src={avatarCreator.image} alt={avatarCreator.name ?? ''} />}
+                <AvatarFallback className="text-xs">{avatarCreator.name?.charAt(0) ?? 'A'}</AvatarFallback>
+              </UIAvatar>
+              <span className="font-medium">{avatarCreator.name}</span>
+            </div>
           </motion.div>
         ) : (
           <motion.div
@@ -563,18 +797,18 @@ export function AvatarGridComponent({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
           >
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center w-full">
               <Input
                 placeholder={t('search')}
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="max-w-xl"
+                className="w-full"
               />
               <Select value={selectedGender} onValueChange={(value) => {
                 setSelectedGender(value)
                 handleFilters(filteredPublicAvatars)
               }}>
-                <SelectTrigger className="w-[100px] sm:w-[180px]">
+                <SelectTrigger className="w-[140px] sm:w-[200px]">
                   <SelectValue>
                     {selectedGender === 'all' ? (
                       <div className="flex items-center">
@@ -652,15 +886,18 @@ export function AvatarGridComponent({
         )}
       </HorizontalScrollList>
 
-      <div className={`grid gap-4 ${mode === 'large' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-2'} ${activeAvatar ? (hasMultipleRows ? 'pb-40' : 'pb-24') : ''}`}>
+      <div className={`grid gap-4 ${mode === 'large' ? 'grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6' : 'grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6'} ${activeAvatar ? (hasMultipleRows ? 'pb-40' : 'pb-24') : ''}`}>
         {activeAvatar ? (
           // Afficher les looks de l'avatar sélectionné
           <>
-            {/* Carte pour créer un nouveau look */}
-            <AddLookCard
-              onFileUpload={handleFileUpload}
-              isUploading={isUploadingLook}
-            />
+            {/* Carte pour créer un nouveau look (uniquement pour les avatars de l'espace) */}
+            {spaceAvatars.some(a => a.id === activeAvatar.id) && (
+              <AddLookCard
+                onFileUpload={handleFileUpload}
+                onFileDrop={handleFileDrop}
+                isUploading={isUploadingLook}
+              />
+            )}
 
             {/* Looks existants */}
             {(currentLooks as AvatarLook[]).length > 0 ? (
@@ -669,10 +906,13 @@ export function AvatarGridComponent({
                   key={look.id}
                   look={look}
                   avatarName={activeAvatar.name}
+                  avatarId={activeAvatar.id}
                   isLastUsed={look.id ? lastUsedParameters?.avatars?.includes(look.id) : false}
                   selectedLook={selectedLook}
                   onLookChange={variant === 'create' ? () => {} : setSelectedLook}
                   onAvatarNameChange={variant === 'create' ? () => {} : setSelectedAvatarName}
+                  setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteLookOpen}
+                  isPublic={!spaceAvatars.some(a => a.id === activeAvatar.id)}
                 />
               ))
             ) : (
@@ -690,8 +930,15 @@ export function AvatarGridComponent({
               </div>
               {variant === 'create' && (
                 <Card 
-                  className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150"
-                  onClick={() => setShowCreateModal(true)}
+                  className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-primary/20"
+                  onClick={() => {
+                    const remaining = Math.max(0, (activeSpace?.avatarsLimit || 0) - (activeSpace?.avatarsCreatedCount || 0))
+                    if (remaining <= 0) {
+                      setIsUnlockModalOpen(true)
+                      return
+                    }
+                    setShowCreateModal(true)
+                  }}
                 >
                   {/* Contenu principal centré */}
                   <div className="w-full aspect-[3/4] relative bg-white flex flex-col items-center justify-center p-4">
@@ -702,7 +949,14 @@ export function AvatarGridComponent({
                   {/* Compteur en bas */}
                   <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm p-3 border-t">
                     <div className="text-center">
-                      <span className="text-xs text-gray-600">3/5 left</span>
+                      <span className="text-xs text-gray-600">{
+                        (() => {
+                          const limit = activeSpace?.avatarsLimit || 0
+                          const used = activeSpace?.avatarsCreatedCount || 0
+                          const remaining = Math.max(0, limit - used)
+                          return t('left-counter', { remaining, limit })
+                        })()
+                      }</span>
                     </div>
                   </div>
                 </Card>
@@ -711,9 +965,18 @@ export function AvatarGridComponent({
                 <AvatarCard
                   key={`space-${avatar.id}`}
                   avatar={avatar}
-                  onClick={() => setActiveAvatar(avatar)}
+                  onClick={() => {
+                    setActiveAvatar(avatar)
+                    updateUrlParamsForAvatar(avatar)
+                  }}
                   isLastUsed={avatar.looks.some(look => look.id && lastUsedParameters?.avatars?.includes(look.id))}
                   selectedAvatarName={selectedAvatarName}
+                  setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteOpen}
+                  onSeeLooks={(avatar) => {
+                    setActiveAvatar(avatar)
+                    updateUrlParamsForAvatar(avatar)
+                  }}
+                  isPublic={false}
                 />
               ))}
             </>
@@ -732,9 +995,18 @@ export function AvatarGridComponent({
               <AvatarCard
                 key={`public-${avatar.id}`}
                 avatar={avatar}
-                onClick={() => setActiveAvatar(avatar)}
+                onClick={() => {
+                  setActiveAvatar(avatar)
+                  updateUrlParamsForAvatar(avatar)
+                }}
                 isLastUsed={avatar.looks.some(look => look.id && lastUsedParameters?.avatars?.includes(look.id))}
                 selectedAvatarName={selectedAvatarName}
+                setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteOpen}
+                onSeeLooks={(avatar) => {
+                  setActiveAvatar(avatar)
+                  updateUrlParamsForAvatar(avatar)
+                }}
+                isPublic={true}
               />
             ))}
             <div className="col-span-full">
@@ -763,6 +1035,11 @@ export function AvatarGridComponent({
           // Synchroniser les données complètes depuis l'API (thumbnails/looks à jour)
           fetchSpaceAvatars()
         }} 
+      />
+
+      <UnlockAvatarCreationModal
+        isOpen={isUnlockModalOpen}
+        setIsOpen={setIsUnlockModalOpen}
       />
 
       {activeAvatar ? (
@@ -857,6 +1134,18 @@ export function AvatarGridComponent({
           onRefresh={() => fetchSpaceAvatars()}
         />
       )}
+
+      <ModalConfirmDeleteAvatar
+        isOpen={isModalConfirmDeleteOpen}
+        setIsOpen={setIsModalConfirmDeleteOpen}
+        handleDeleteAvatar={handleDeleteAvatar}
+      />
+
+      <ModalConfirmDeleteLook
+        isOpen={isModalConfirmDeleteLookOpen}
+        setIsOpen={setIsModalConfirmDeleteLookOpen}
+        handleDeleteLook={handleDeleteLook}
+      />
     </div>
   )
 }

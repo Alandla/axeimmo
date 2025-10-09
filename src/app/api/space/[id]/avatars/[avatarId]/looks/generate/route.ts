@@ -3,8 +3,12 @@ import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
 import { getSpaceById } from "@/src/dao/spaceDao";
 import { editAvatarImage } from "@/src/lib/fal";
+import { VIDEO_FORMATS, VideoFormat } from "@/src/types/video";
 import { extractImagePromptInfo } from "@/src/lib/workflowai";
 import { nanoid } from "nanoid";
+
+// Common hint used to bias generations for podcast scenes
+const PODCAST_HINT = " The scene is a podcast, the avatar is not looking at the camera, he is looking away as if he were talking, there is a microphone in front of him.";
 
 export async function POST(
   req: NextRequest,
@@ -32,6 +36,9 @@ export async function POST(
 
     const body = await req.json().catch(() => ({}));
     const description: string | undefined = body?.description;
+    const format: VideoFormat | undefined =
+      typeof body?.format === 'string' ? (body.format as VideoFormat) : undefined;
+    const style: 'ugc-realist' | 'studio' | 'podcast' | undefined = body?.style;
     const providedImages: string[] = Array.isArray(body?.images)
       ? body.images.filter((u: any) => typeof u === "string" && !!u)
       : [];
@@ -47,7 +54,7 @@ export async function POST(
       return NextResponse.json({ error: "Avatar not found" }, { status: 404 });
     }
 
-    // 1) Crée un look pending
+    // 1) Create a pending look entry
     const lookId = nanoid();
     const look = {
       id: lookId,
@@ -57,14 +64,13 @@ export async function POST(
       thumbnail: "",
       previewUrl: "",
       videoUrl: "",
-      format: body?.format === "horizontal" ? "horizontal" : "vertical",
+      format: (format && ["vertical","ads","square","horizontal"].includes(format)) ? format : "vertical",
       settings: {},
     };
     avatar.looks = avatar.looks || [];
     avatar.looks.push(look as any);
 
-    // Extraire immédiatement name/place/tags à partir du prompt utilisateur
-    // en aidant le modèle avec des infos d'avatar si disponibles
+    // Immediately extract name/place/tags from user prompt, helping the model with avatar info when available
     try {
       const avatarHints = [
         avatar?.name ? `Name: ${avatar.name}` : undefined,
@@ -99,8 +105,8 @@ export async function POST(
           const avatarRef: any = refreshedSpace?.avatars?.find((a: any) => a.id === params.avatarId);
           if (!avatarRef) return;
 
-          // Utiliser strictement le prompt utilisateur, sans amélioration ni hints
-          const basePrompt = description;
+          // Use the user's prompt as-is; add podcast hint when needed
+          const basePrompt = style === 'podcast' ? `${description}${PODCAST_HINT}` : description;
 
           // Préparer les images: priorité aux images fournies, sinon thumbnail
           const candidates: string[] = (providedImages.length > 0
@@ -110,9 +116,14 @@ export async function POST(
           const imageUrls: string[] = Array.from(new Set(candidates));
           if (imageUrls.length === 0) return;
 
+          // Mapper format -> aspect_ratio via VIDEO_FORMATS (fallback 9:16)
+          const selectedFormat = (format && ["vertical","ads","square","horizontal"].includes(format)) ? format : "vertical";
+          const aspect_ratio = (VIDEO_FORMATS.find(f => f.value === selectedFormat)?.ratio) || '9:16';
+
           const image = await editAvatarImage({
             prompt: basePrompt,
-            image_urls: imageUrls
+            image_urls: imageUrls,
+            aspect_ratio
           });
 
           const lookRef = avatarRef.looks.find((l: any) => l.id === lookId);

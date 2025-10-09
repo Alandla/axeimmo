@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -10,16 +10,12 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
   } from "@/src/components/ui/breadcrumb"
-import { Fragment } from "react"
+import { Fragment, useEffect, useState } from "react"
 import Link from "next/link";
 
 function generateBreadcrumbs(pathname: string) {
     const paths = pathname.split('/').filter(Boolean);
-    
-    // If path contains "enhance", stop at "enhance" and don't show following segments
-    const enhanceIndex = paths.indexOf('enhance');
-    const filteredPaths = enhanceIndex !== -1 ? paths.slice(0, enhanceIndex + 1) : paths;
-    
+    const filteredPaths = paths;
     return filteredPaths.map((path, index) => {
       const href = '/' + filteredPaths.slice(0, index + 1).join('/');
       return { href, label: path.charAt(0).toUpperCase() + path.slice(1) };
@@ -29,7 +25,19 @@ function generateBreadcrumbs(pathname: string) {
 export function BreadcrumbDashboard( ) {
   const t = useTranslations('breadcrumbs')
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const breadcrumbs = generateBreadcrumbs(pathname);
+  const avatarId = searchParams?.get('avatar')
+  const [lastLabel, setLastLabel] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (avatarId) {
+      try {
+        const avatarName = localStorage.getItem('activeAvatarName')
+        setLastLabel(avatarName)
+      } catch {}
+    }
+  }, [avatarId])
 
   return (
     <Breadcrumb>
@@ -50,6 +58,14 @@ export function BreadcrumbDashboard( ) {
                 </BreadcrumbItem>
             </Fragment>
             ))}
+            {lastLabel && (
+              <>
+                <BreadcrumbSeparator/>
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{lastLabel}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </>
+            )}
         </BreadcrumbList>
     </Breadcrumb>
   )

@@ -8,6 +8,7 @@ export type Avatar = {
     premium?: boolean
     looks: AvatarLook[]
     look_ids?: string[] // IDs des looks pour une recherche rapide
+    createdAt?: string
 }
 
 export type AvatarLook = {

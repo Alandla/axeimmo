@@ -19,9 +19,18 @@ import { useState } from "react";
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
 import { apiClient, basicApiCall } from "@/src/lib/api";
 import AvatarImagePickerDeck from "@/src/components/AvatarImagePickerDeck";
-import VideoFormatSelector from "@/src/components/edit/video-format-selector";
-import { VideoFormat } from "@/src/types/video";
+import { VideoFormat, VIDEO_FORMATS } from "@/src/types/video";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select";
 import type { Avatar } from "@/src/types/avatar";
+import StyleSelector from "@/src/components/style-selector";
+
+type AvatarStyle = 'ugc-realist' | 'studio' | 'podcast'
 
 interface CreateAvatarModalProps {
   isOpen: boolean;
@@ -33,11 +42,13 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
   const t = useTranslations("avatars.create");
   const [tab, setTab] = useState<"pictures" | "idea">("pictures");
   const [ideaText, setIdeaText] = useState<string>("");
-  const [videoFormat, setVideoFormat] = useState<VideoFormat>("vertical");
+  // Limiter aux deux formats utilisés pour la génération d'avatars: vertical (9:16) et horizontal (16:9)
+  const [videoFormat, setVideoFormat] = useState<Extract<VideoFormat, 'vertical' | 'horizontal'>>("vertical");
+  const [avatarStyle, setAvatarStyle] = useState<AvatarStyle>("ugc-realist");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
   const [resetToken, setResetToken] = useState<number>(0);
-  const { activeSpace } = useActiveSpaceStore();
+  const { activeSpace, incrementAvatarsCreatedCount } = useActiveSpaceStore();
 
   const handleStart = async () => {
     if (!activeSpace) return;
@@ -52,10 +63,14 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
         const res = await apiClient.post<{ data: Avatar }>(`/space/${activeSpace.id}/avatars`, {
           prompt,
           format: videoFormat,
+          style: avatarStyle,
         });
         const created = (res as any)?.data as Avatar | undefined;
         setIdeaText("");
-        if (created && onCreated) onCreated(created);
+        if (created) {
+          incrementAvatarsCreatedCount();
+          if (onCreated) onCreated(created);
+        }
         onClose();
       } catch (e) {
         console.error("Error creating avatar:", e);
@@ -67,12 +82,15 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
       try {
         setIsSubmitting(true);
         const payload = selectedImageUrls.length === 1
-          ? { imageUrl: selectedImageUrls[0] }
-          : { imageUrls: selectedImageUrls };
+          ? { imageUrl: selectedImageUrls[0], style: avatarStyle }
+          : { imageUrls: selectedImageUrls, style: avatarStyle };
         const res = await apiClient.post<{ data: Avatar }>(`/space/${activeSpace.id}/avatars`, payload);
         const created = (res as any)?.data as Avatar | undefined;
         setSelectedImageUrls([]);
-        if (created && onCreated) onCreated(created);
+        if (created) {
+          incrementAvatarsCreatedCount();
+          if (onCreated) onCreated(created);
+        }
         onClose();
       } catch (e) {
         console.error("Error creating avatar from image:", e);
@@ -93,6 +111,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           setSelectedImageUrls([]);
           setIdeaText("");
           setVideoFormat("vertical");
+          setAvatarStyle("ugc-realist");
           setResetToken((n) => n + 1);
           onClose();
         }
@@ -109,6 +128,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           setSelectedImageUrls([]);
           setIdeaText("");
           setVideoFormat("vertical");
+          setAvatarStyle("ugc-realist");
           setResetToken((n) => n + 1);
         }}>
           <TabsList className="w-full mb-4 gap-2 h-auto p-1">
@@ -157,13 +177,51 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
                 placeholder={t("from-idea.placeholder")}
                 className="h-full resize-none pr-2 pb-14"
               />
-              <div className="absolute left-0 bottom-0 p-2">
-                <VideoFormatSelector
-                  value={videoFormat}
-                  onValueChange={setVideoFormat}
+              <div className="absolute right-0 bottom-0 p-2 flex items-center gap-2">
+                <StyleSelector
+                  value={avatarStyle}
+                  onValueChange={setAvatarStyle}
                   disabled={isSubmitting}
                   light
                 />
+                <Select 
+                  value={videoFormat}
+                  onValueChange={(value: string) => setVideoFormat(value as any)}
+                  disabled={isSubmitting}
+                >
+                  <SelectTrigger variant="ghost" className="h-8 w-auto px-2">
+                    <SelectValue>
+                      <div className="flex items-center gap-2">
+                        {(() => {
+                          if (videoFormat === 'vertical') {
+                            return <div className="h-4 w-2.5 border border-current rounded-sm flex-shrink-0" />
+                          }
+                          if (videoFormat === 'horizontal') {
+                            return <div className="h-2.5 w-4 border border-current rounded-sm flex-shrink-0" />
+                          }
+                          return null
+                        })()}
+                        <span className="text-sm">
+                          {VIDEO_FORMATS.find(f => f.value === videoFormat)?.ratio}
+                        </span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {VIDEO_FORMATS.filter(f => f.value === 'vertical' || f.value === 'horizontal').map((formatOption) => (
+                      <SelectItem key={formatOption.value} value={formatOption.value}>
+                        <div className="flex items-center gap-2">
+                          {formatOption.value === 'vertical' ? (
+                            <div className="h-4 w-2.5 border border-current rounded-sm flex-shrink-0" />
+                          ) : (
+                            <div className="h-2.5 w-4 border border-current rounded-sm flex-shrink-0" />
+                          )}
+                          <span>{formatOption.ratio}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </TabsContent>

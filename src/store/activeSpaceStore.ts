@@ -9,6 +9,7 @@ type ActiveSpaceStore = {
   setLastUsedParameters: (space: ILastUsed) => void
   decrementCredits: (amount: number) => void
   incrementImageToVideoUsage: () => void
+  incrementAvatarsCreatedCount: () => void
 }
 
 export const useActiveSpaceStore = create<ActiveSpaceStore>((set) => ({
@@ -30,6 +31,8 @@ export const useActiveSpaceStore = create<ActiveSpaceStore>((set) => ({
       storageLimit: space.plan.storageLimit,
       imageToVideoLimit: space.plan.imageToVideoLimit,
       imageToVideoUsed: space.imageToVideoUsed,
+      avatarsCreatedCount: (space as any).avatarsCreatedCount || 0,
+      avatarsLimit: (space as any).avatarsLimit || 0,
     }
   }),
   setLastUsedParameters: (lastUsedParameters) => set({ lastUsedParameters }),
@@ -43,6 +46,12 @@ export const useActiveSpaceStore = create<ActiveSpaceStore>((set) => ({
     activeSpace: state.activeSpace ? {
       ...state.activeSpace,
       imageToVideoUsed: (state.activeSpace.imageToVideoUsed || 0) + 1
+    } : null
+  })),
+  incrementAvatarsCreatedCount: () => set((state) => ({
+    activeSpace: state.activeSpace ? {
+      ...state.activeSpace,
+      avatarsCreatedCount: (state.activeSpace.avatarsCreatedCount || 0) + 1
     } : null
   }))
 }))
