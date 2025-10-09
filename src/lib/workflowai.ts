@@ -336,17 +336,17 @@ const avatarIdentityExtraction = workflowAI.agent<AvatarIdentityExtractionInput,
 })
 
 // Image prompt information extraction (name, place, tags)
-export interface ImagePromptInformationExtractionInput {
+export interface LookIdentityExtractionInput {
   prompt?: string
 }
 
-export interface ImagePromptInformationExtractionOutput {
+export interface LookIdentityExtractionOutput {
   name?: string
   place?: string
   tags?: string[]
 }
 
-const imagePromptInformationExtraction = workflowAI.agent<ImagePromptInformationExtractionInput, ImagePromptInformationExtractionOutput>({
+const lookIdentityExtraction = workflowAI.agent<LookIdentityExtractionInput, LookIdentityExtractionOutput>({
   id: "image-prompt-information-extraction",
   schemaId: 2,
   version: 'dev',
@@ -845,7 +845,7 @@ export async function extractAvatarIdentityFromPrompt(
 /**
  * Extrait name, place et tags depuis un prompt d'image amélioré
  */
-export async function extractImagePromptInfo(
+export async function extractLookIdentityInfo(
   prompt: string
 ): Promise<{
   cost: number,
@@ -853,10 +853,10 @@ export async function extractImagePromptInfo(
   place?: string,
   tags?: string[]
 }> {
-  const input: ImagePromptInformationExtractionInput = { prompt }
+  const input: LookIdentityExtractionInput = { prompt }
 
   try {
-    const response = await imagePromptInformationExtraction(input) as WorkflowAIResponse<ImagePromptInformationExtractionOutput>
+    const response = await lookIdentityExtraction(input) as WorkflowAIResponse<LookIdentityExtractionOutput>
     return {
       cost: response.data.cost_usd,
       name: response.output.name,

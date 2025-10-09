@@ -4,7 +4,7 @@ import { isUserInSpace } from "@/src/dao/userDao";
 import { getSpaceById } from "@/src/dao/spaceDao";
 import { editAvatarImage } from "@/src/lib/fal";
 import { VIDEO_FORMATS, VideoFormat } from "@/src/types/video";
-import { extractImagePromptInfo } from "@/src/lib/workflowai";
+import { extractLookIdentityInfo } from "@/src/lib/workflowai";
 import { nanoid } from "nanoid";
 
 // Common hint used to bias generations for podcast scenes
@@ -87,7 +87,7 @@ export async function POST(
         ? `${description}. Context: ${avatarHints}.`
         : description
 
-      const extractedNow = await extractImagePromptInfo(extractionPrompt)
+      const extractedNow = await extractLookIdentityInfo(extractionPrompt)
       const lookRefInit = avatar.looks.find((l: any) => l.id === lookId)
       if (lookRefInit) {
         if (extractedNow.name) lookRefInit.name = extractedNow.name
