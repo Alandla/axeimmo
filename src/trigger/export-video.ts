@@ -18,6 +18,7 @@ import fetch from "node-fetch";
 import { Readable } from "node:stream";
 import os from "os";
 import path from "path";
+import { randomUUID } from "crypto";
 
 interface RenderStatus {
   status: string;
@@ -218,7 +219,8 @@ export const exportVideoTask = task({
               if (!render) return null;
               
               try {
-                const fileName = `avatar-iv-${video.id}-${render.audioIndex}-${Date.now()}`;
+                // Use startInFrames to ensure unique filenames even when multiple renders share the same audioIndex
+                const fileName = `avatar-iv-${video.id}-${render.audioIndex}-${render.startInFrames}-${Date.now()}`;
                 const r2VideoUrl = await uploadVideoFromUrlToS3(videoUrl, "medias-users", fileName);
                 logger.log(`Avatar ${render.audioIndex} uploaded to R2`, { r2VideoUrl });
                 
@@ -411,7 +413,7 @@ const trimAudioLocal = async (audioUrl: string, start?: number, end?: number, re
   const maxRetries = 3;
   const startTime = start || 0;
   const tempDirectory = os.tmpdir();
-  const outputPath = path.join(tempDirectory, `trimmed_audio_${Date.now()}_${retryCount}.wav`);
+  const outputPath = path.join(tempDirectory, `trimmed_audio_${randomUUID()}_${retryCount}.wav`);
 
   try {
     logger.log("Fetching audio from URL", { audioUrl, start: startTime, end, retryCount });

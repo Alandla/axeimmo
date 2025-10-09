@@ -752,8 +752,18 @@ export default function VideoEditor() {
     if (!video.video.audio) return;
 
     const newAudio = [...video.video.audio.voices];
+
     const audioArrayIndex = newAudio.findIndex(audio => audio.index === audioIndex);
     const audioToUpdate = newAudio[audioArrayIndex];
+    
+    // Calculer la durée de la séquence à supprimer
+    const sequenceDuration = sequence.end - sequence.start;
+
+    // Mettre à jour les start et end de tous les audios suivants
+    for (let i = audioArrayIndex + 1; i < newAudio.length; i++) {
+      newAudio[i].start -= sequenceDuration;
+      newAudio[i].end -= sequenceDuration;
+  }
     
     if (isLast) {
         // Réduire la durée de l'audio
@@ -772,10 +782,9 @@ export default function VideoEditor() {
         if (audioArrayIndex !== -1) {
             newAudio.splice(audioArrayIndex, 1);
         }
+    } else {
+        audioToUpdate.end -= sequenceDuration;
     }
-    
-    // Calculer la durée de la séquence à supprimer
-    const sequenceDuration = sequence.end - sequence.start;
     
     // Supprimer la séquence
     newSequences.splice(sequenceIndex, 1);
