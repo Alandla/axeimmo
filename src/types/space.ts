@@ -69,7 +69,6 @@ export interface SimpleSpace {
   storageLimit?: number;
   imageToVideoLimit?: number;
   imageToVideoUsed?: number;
-  avatarsCreatedCount?: number;
   avatarsLimit?: number;
   members?: {
     id: string;
@@ -105,6 +104,5 @@ export interface ISpace {
   usedStorageBytes: number;
   imageToVideoUsed: number;
   logo: Logo;
-  avatarsCreatedCount?: number;
   avatarsLimit?: number;
 }

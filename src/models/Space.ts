@@ -169,11 +169,6 @@ const spaceSchema = new mongoose.Schema(
       formats: [],
       config: {}
     },
-    // Avatar quotas
-    avatarsCreatedCount: {
-      type: Number,
-      default: 0,
-    },
     avatarsLimit: {
       type: Number,
       default: 0,

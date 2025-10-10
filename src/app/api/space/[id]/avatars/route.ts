@@ -108,9 +108,32 @@ export async function POST(
     }
 
     // Enforce avatar creation limit (space-level)
-    const currentCount = ((space as any).avatarsCreatedCount as number) || 0;
-    const limit = ((space as any).avatarsLimit as number) ?? 5;
-    if (currentCount >= limit) {
+    const existingAvatars = ((space as any).avatars as any[]) || [];
+    const currentAvatarCount = existingAvatars.length;
+    console.log('limit: ', (space as any).avatarsLimit);
+    
+    // Calculate limit based on plan if avatarsLimit is not set
+    let limit = ((space as any).avatarsLimit as number);
+    if (!limit || limit === 0) {
+      const planName = space.plan?.name;
+      switch (planName) {
+        case 'ENTREPRISE':
+          limit = 20;
+          break;
+        case 'PRO':
+          limit = 10;
+          break;
+        case 'START':
+          limit = 5;
+          break;
+        case 'FREE':
+        default:
+          limit = 0;
+          break;
+      }
+    }
+    
+    if (currentAvatarCount >= limit) {
       return NextResponse.json({ error: "Avatar limit reached" }, { status: 403 });
     }
 
@@ -202,7 +225,6 @@ export async function POST(
     };
 
     (space as any).avatars.push(newAvatar);
-    (space as any).avatarsCreatedCount = currentCount + 1;
     await (space as any).save();
 
     // Background image generation only when no image was provided

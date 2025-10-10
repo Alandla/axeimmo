@@ -48,7 +48,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
   const [resetToken, setResetToken] = useState<number>(0);
-  const { activeSpace, incrementAvatarsCreatedCount } = useActiveSpaceStore();
+  const { activeSpace } = useActiveSpaceStore();
 
   const handleStart = async () => {
     if (!activeSpace) return;
@@ -68,7 +68,6 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
         const created = (res as any)?.data as Avatar | undefined;
         setIdeaText("");
         if (created) {
-          incrementAvatarsCreatedCount();
           if (onCreated) onCreated(created);
         }
         onClose();
@@ -88,7 +87,6 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
         const created = (res as any)?.data as Avatar | undefined;
         setSelectedImageUrls([]);
         if (created) {
-          incrementAvatarsCreatedCount();
           if (onCreated) onCreated(created);
         }
         onClose();

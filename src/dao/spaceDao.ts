@@ -20,7 +20,6 @@ export const createPrivateSpaceForUser = async (userId: string, userName?: strin
       },
       credits: 10,
       usedStorageBytes: 0,
-      avatarsCreatedCount: 0,
       avatarsLimit: 0,
     });
 
@@ -231,7 +230,7 @@ export const getUserSpaces = async (userId: string) => {
 
       const spaces = await SpaceModel.find(
         { _id: { $in: user.spaces } },
-        'name plan credits members videoIdeas details usedStorageBytes imageToVideoUsed logo avatarsCreatedCount avatarsLimit'
+        'name plan credits members videoIdeas details usedStorageBytes imageToVideoUsed logo avatarsLimit'
       );
 
       return spaces.map((space) => {
@@ -251,7 +250,6 @@ export const getUserSpaces = async (userId: string) => {
           storageLimit: space.plan.storageLimit,
           imageToVideoLimit: space.plan.imageToVideoLimit,
           imageToVideoUsed: space.imageToVideoUsed || 0,
-          avatarsCreatedCount: (space as any).avatarsCreatedCount || 0,
           avatarsLimit: (space as any).avatarsLimit ?? 0,
           members: space.members.map((member: any) => ({
             id: member.userId.toString()
@@ -425,7 +423,6 @@ export const updateSpace = async (spaceId: string, updateData: Partial<ISpace>) 
         storageLimit: updatedSpace.plan.storageLimit,
         imageToVideoLimit: updatedSpace.plan.imageToVideoLimit,
         imageToVideoUsed: updatedSpace.imageToVideoUsed || 0,
-        avatarsCreatedCount: (updatedSpace as any).avatarsCreatedCount || 0,
         avatarsLimit: (updatedSpace as any).avatarsLimit || 0
       };
     });
