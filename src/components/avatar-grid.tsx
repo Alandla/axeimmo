@@ -42,6 +42,7 @@ import ModalConfirmDeleteLook from '@/src/components/modal/confirm-delete-look'
 import { Avatar as UIAvatar, AvatarFallback } from './ui/avatar'
 import { AvatarImage } from '@radix-ui/react-avatar'
 import UnlockAvatarCreationModal from '@/src/components/modal/unlock-avatar-creation'
+import { PlanName } from '../types/enums'
 
 // Composant pour la carte "No avatar"
 function NoAvatarCard({ 
@@ -467,8 +468,9 @@ export function AvatarGridComponent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [avatarsConfig.length])
 
-  // Démarrer/arrêter un polling si des thumbnails manquent (ou si on est en génération look)
+  // Abonnement SSE temps réel + fallback polling sur thumbnails manquants
   useEffect(() => {
+    let evtSrc: EventSource | null = null
     const hasMissingThumbnails = spaceAvatars.some(a => !a.thumbnail || a.looks.some(l => !l.thumbnail || l.thumbnail === ''))
 
     const startPolling = () => {
@@ -497,20 +499,41 @@ export function AvatarGridComponent({
       }, 10000)
     }
 
-    const stopPolling = () => {
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current)
-        pollingRef.current = null
-      }
-    }
+   
 
-    if (hasMissingThumbnails) {
+    // Try SSE when space is active
+    if (activeSpace?.id) {
+      try {
+        evtSrc = new EventSource(`/api/space/${activeSpace.id}/avatars/stream`)
+        evtSrc.onmessage = async (ev) => {
+          try {
+            const msg = JSON.parse(ev.data)
+            if (msg?.type === 'look.updated' || msg?.type === 'avatar.updated') {
+              const latest: Avatar[] = await getSpaceAvatars(activeSpace.id as string)
+              setSpaceAvatars(latest)
+              if (activeAvatar?.id) {
+                const refreshedActive = latest.find(a => a.id === activeAvatar.id)
+                if (refreshedActive) setActiveAvatar(refreshedActive)
+              }
+            }
+          } catch {}
+        }
+        evtSrc.onerror = () => {
+          // fallback polling on SSE failure
+          if (hasMissingThumbnails) startPolling()
+        }
+      } catch {
+        if (hasMissingThumbnails) startPolling()
+      }
+    } else if (hasMissingThumbnails) {
       startPolling()
-    } else {
-      stopPolling()
     }
 
     return () => {
+      if (evtSrc) {
+        try { evtSrc.close() } catch {}
+        evtSrc = null
+      }
       if (pollingRef.current) {
         clearInterval(pollingRef.current)
         pollingRef.current = null
@@ -913,6 +936,16 @@ export function AvatarGridComponent({
                   onAvatarNameChange={variant === 'create' ? () => {} : setSelectedAvatarName}
                   setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteLookOpen}
                   isPublic={!spaceAvatars.some(a => a.id === activeAvatar.id)}
+                  onLookRenamed={(lookId, newName) => {
+                    // Update activeAvatar
+                    const updatedAvatar = {
+                      ...activeAvatar,
+                      looks: activeAvatar.looks.map(l => l.id === lookId ? { ...l, name: newName } : l)
+                    }
+                    setActiveAvatar(updatedAvatar)
+                    // Update in spaceAvatars
+                    setSpaceAvatars(prev => prev.map(a => a.id === activeAvatar.id ? updatedAvatar : a))
+                  }}
                 />
               ))
             ) : (
@@ -932,7 +965,17 @@ export function AvatarGridComponent({
                 <Card 
                   className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-primary/20"
                   onClick={() => {
-                    const remaining = Math.max(0, (activeSpace?.avatarsLimit || 0) - (activeSpace?.avatarsCreatedCount || 0))
+                    const limit = ((): number => {
+                      if (typeof activeSpace?.avatarsLimit === 'number' && activeSpace.avatarsLimit > 0) return activeSpace.avatarsLimit
+                      switch (activeSpace?.planName) {
+                        case PlanName.ENTREPRISE: return 20
+                        case PlanName.PRO: return 10
+                        case PlanName.START: return 5
+                        default: return 0
+                      }
+                    })()
+                    const used = spaceAvatars.length
+                    const remaining = Math.max(0, limit - used)
                     if (remaining <= 0) {
                       setIsUnlockModalOpen(true)
                       return
@@ -951,8 +994,16 @@ export function AvatarGridComponent({
                     <div className="text-center">
                       <span className="text-xs text-gray-600">{
                         (() => {
-                          const limit = activeSpace?.avatarsLimit || 0
-                          const used = activeSpace?.avatarsCreatedCount || 0
+                          const limit = ((): number => {
+                            if (typeof activeSpace?.avatarsLimit === 'number' && activeSpace.avatarsLimit > 0) return activeSpace.avatarsLimit
+                            switch (activeSpace?.planName) {
+                              case PlanName.ENTREPRISE: return 20
+                              case PlanName.PRO: return 10
+                              case PlanName.START: return 5
+                              default: return 0
+                            }
+                          })()
+                          const used = spaceAvatars.length
                           const remaining = Math.max(0, limit - used)
                           return t('left-counter', { remaining, limit })
                         })()

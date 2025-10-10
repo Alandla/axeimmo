@@ -27,13 +27,14 @@ const STYLE_PREVIEWS = {
 
 export function StyleSelector({ value, onValueChange, disabled, className, light = false, hiddenStyles = [] }: StyleSelectorProps) {
   const t = useTranslations('avatars.look-chat')
-  const [isOpen, setIsOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  const [menuState, setMenuState] = useState<'open' | 'closed'>('closed')
   const [coords, setCoords] = useState<{ left: number; bottom: number }>({ left: 0, bottom: 0 })
   const buttonRef = useRef<HTMLButtonElement | null>(null)
 
   // Close picker when clicking outside
   useEffect(() => {
-    if (!isOpen) return
+    if (!isMounted) return
 
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element
@@ -46,27 +47,29 @@ export function StyleSelector({ value, onValueChange, disabled, className, light
         buttonElement && 
         !buttonElement.contains(target)
       ) {
-        setIsOpen(false)
+        setMenuState('closed')
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
+    const handleRatioOpen = () => setMenuState('closed')
+    window.addEventListener('ratio-select-opened', handleRatioOpen as EventListener)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isOpen])
+  }, [isMounted])
 
   const handleButtonClick = () => {
     if (disabled) return
-    
     const rect = buttonRef.current?.getBoundingClientRect()
     if (rect) {
       setCoords({ left: rect.left, bottom: window.innerHeight - rect.top + 8 })
     }
-    setIsOpen((prev) => !prev)
+    if (!isMounted) setIsMounted(true)
+    setMenuState((prev) => (prev === 'open' ? 'closed' : 'open'))
   }
 
   const handleStyleSelect = (style: AvatarStyle) => {
     onValueChange(style)
-    setIsOpen(false)
+    setMenuState('closed')
   }
 
   return (
@@ -89,10 +92,11 @@ export function StyleSelector({ value, onValueChange, disabled, className, light
         <ChevronsUpDown className="h-4 w-4" />
       </button>
 
-      {isOpen && typeof window !== 'undefined' && createPortal(
+      {isMounted && typeof window !== 'undefined' && createPortal(
         <div 
           data-style-picker-menu
-          className="fixed inline-block bg-white border rounded-2xl shadow-2xl p-3 z-[9999] pointer-events-auto" 
+          data-state={menuState}
+          className="fixed inline-block bg-white border rounded-2xl shadow-2xl p-3 z-[9999] pointer-events-auto transition duration-200 ease-out will-change-[transform,opacity] transform-gpu [backface-visibility:hidden] [contain:content] data-[state=closed]:pointer-events-none data-[state=open]:opacity-100 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=closed]:scale-95 data-[state=open]:translate-y-0 data-[state=closed]:-translate-y-2" 
           style={{ left: coords.left, bottom: coords.bottom }}
         >
           <div className="flex flex-wrap items-start gap-3">
@@ -110,6 +114,11 @@ export function StyleSelector({ value, onValueChange, disabled, className, light
                   src={imageUrl} 
                   alt={t(`styles.${styleKey}`)} 
                   className="h-full w-full object-cover" 
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                  width={112}
+                  height={112}
                 />
                 {value === styleKey && (
                   <>

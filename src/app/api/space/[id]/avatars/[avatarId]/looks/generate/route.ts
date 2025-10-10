@@ -6,9 +6,12 @@ import { editAvatarImage } from "@/src/lib/fal";
 import { VIDEO_FORMATS, VideoFormat } from "@/src/types/video";
 import { extractLookIdentityInfo } from "@/src/lib/workflowai";
 import { nanoid } from "nanoid";
+import { eventBus } from "@/src/lib/events";
+import SpaceModel from "@/src/models/Space";
+import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 
 // Common hint used to bias generations for podcast scenes
-const PODCAST_HINT = " The scene is a podcast, the avatar is not looking at the camera, he is looking away as if he were talking, there is a microphone in front of him.";
+const PODCAST_HINT = " Podcast scene, cinematic lighting, subject in three-quarter view (3/4, slight angle), not looking at camera, speaking to someone off-camera. In front of the subject, include a realistic broadcast microphone that clearly resembles a Shure SM7B: large dynamic capsule, yoke mount on a boom arm, cylindrical body with foam windscreen. Frame so the microphone is visible and well-lit without blocking the face.";
 
 export async function POST(
   req: NextRequest,
@@ -56,6 +59,7 @@ export async function POST(
 
     // 1) Create a pending look entry
     const lookId = nanoid();
+    const now = new Date()
     const look = {
       id: lookId,
       name: body?.lookName || "Generated Look",
@@ -66,6 +70,8 @@ export async function POST(
       videoUrl: "",
       format: (format && ["vertical","ads","square","horizontal"].includes(format)) ? format : "vertical",
       settings: {},
+      status: 'pending',
+      createdAt: now,
     };
     avatar.looks = avatar.looks || [];
     avatar.looks.push(look as any);
@@ -83,11 +89,17 @@ export async function POST(
         .filter(Boolean)
         .join(' | ')
 
-      const extractionPrompt = avatarHints
-        ? `${description}. Context: ${avatarHints}.`
-        : description
+      // Build extraction prompt: include podcast hint when relevant; allow hint-only
+      const trimmedDesc = typeof description === 'string' ? description.trim() : undefined;
+      const promptForExtraction = (body?.style === 'podcast')
+        ? `${trimmedDesc || ''}${PODCAST_HINT}`.trim()
+        : (trimmedDesc || '');
 
-      const extractedNow = await extractLookIdentityInfo(extractionPrompt)
+      const extractionPrompt = avatarHints
+        ? `${promptForExtraction}${promptForExtraction ? '. ' : ''}Context: ${avatarHints}.`.trim()
+        : (promptForExtraction || undefined)
+
+      const extractedNow = await extractLookIdentityInfo(extractionPrompt || "")
       const lookRefInit = avatar.looks.find((l: any) => l.id === lookId)
       if (lookRefInit) {
         if (extractedNow.name) lookRefInit.name = extractedNow.name
@@ -105,8 +117,10 @@ export async function POST(
           const avatarRef: any = refreshedSpace?.avatars?.find((a: any) => a.id === params.avatarId);
           if (!avatarRef) return;
 
-          // Use the user's prompt as-is; add podcast hint when needed
-          const basePrompt = style === 'podcast' ? `${description}${PODCAST_HINT}` : description;
+          // Use the user's prompt; add podcast hint when needed. Allow hint-only if no description provided.
+          const basePrompt = style === 'podcast'
+            ? `${description || ''}${PODCAST_HINT}`.trim()
+            : (description as string);
 
           // Préparer les images: priorité aux images fournies, sinon thumbnail
           const candidates: string[] = (providedImages.length > 0
@@ -120,20 +134,57 @@ export async function POST(
           const selectedFormat = (format && ["vertical","ads","square","horizontal"].includes(format)) ? format : "vertical";
           const aspect_ratio = (VIDEO_FORMATS.find(f => f.value === selectedFormat)?.ratio) || '9:16';
 
-          const image = await editAvatarImage({
-            prompt: basePrompt,
-            image_urls: imageUrls,
-            aspect_ratio
-          });
+          try {
+            const image = await editAvatarImage({
+              prompt: basePrompt,
+              image_urls: imageUrls,
+              aspect_ratio
+            });
 
-          const lookRef = avatarRef.looks.find((l: any) => l.id === lookId);
-          if (lookRef) {
-            lookRef.thumbnail = image.url;
+            // Persist FAL image to our storage and use internal URL
+            const fileName = `look-${params.avatarId}-${lookId}-${Date.now()}`;
+            const savedUrl = await uploadImageFromUrlToS3(image.url, "medias-users", fileName);
+
+            await SpaceModel.updateOne(
+              { _id: params.id },
+              {
+                $set: {
+                  "avatars.$[a].looks.$[l].thumbnail": savedUrl,
+                  "avatars.$[a].looks.$[l].status": 'ready',
+                }
+              },
+              {
+                arrayFilters: [
+                  { "a.id": params.avatarId },
+                  { "l.id": lookId }
+                ]
+              }
+            )
+            try {
+              eventBus.emit('look.updated', { spaceId: params.id, avatarId: params.avatarId, lookId, status: 'ready' })
+            } catch {}
+          } catch (falErr) {
+            await SpaceModel.updateOne(
+              { _id: params.id },
+              {
+                $set: {
+                  "avatars.$[a].looks.$[l].status": 'error',
+                  "avatars.$[a].looks.$[l].errorMessage": (falErr as any)?.message || 'FAL generation failed',
+                  "avatars.$[a].looks.$[l].errorAt": new Date(),
+                }
+              },
+              {
+                arrayFilters: [
+                  { "a.id": params.avatarId },
+                  { "l.id": lookId }
+                ]
+              }
+            )
+            try {
+              eventBus.emit('look.updated', { spaceId: params.id, avatarId: params.avatarId, lookId, status: 'error' })
+            } catch {}
+            throw falErr;
           }
-          if (!avatarRef.thumbnail) {
-            avatarRef.thumbnail = image.url;
-          }
-          await refreshedSpace.save();
         } catch (e) {
           console.error('Error generating avatar look (background)', e);
         }

@@ -798,6 +798,7 @@
     },
     "limit-reached": "Avatar limit reached",
     "limit-reached-description": "Upgrade your plan to create more avatars.",
+    "look-error": "Generation failed. Please try again.",
     "left-counter": "{remaining}/{limit} left",
     "look-chat": {
       "placeholder-1": "Add my product in the hand",

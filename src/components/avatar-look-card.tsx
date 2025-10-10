@@ -75,6 +75,7 @@ interface AvatarLookCardProps {
   onAvatarNameChange?: (name: string | null) => void
   setIsModalConfirmDeleteOpen?: (isOpen: boolean) => void
   isPublic?: boolean
+  onLookRenamed?: (lookId: string, newName: string) => void
 }
 
 export function AvatarLookCard({ 
@@ -86,7 +87,8 @@ export function AvatarLookCard({
   onLookChange,
   onAvatarNameChange,
   setIsModalConfirmDeleteOpen,
-  isPublic = false
+  isPublic = false,
+  onLookRenamed
 }: AvatarLookCardProps) {
   const { selectedLook: storeSelectedLook, setSelectedLook: setStoreSelectedLook, setSelectedAvatarName: setStoreSelectedAvatarName } = useCreationStore()
   const { activeSpace } = useActiveSpaceStore()
@@ -127,7 +129,7 @@ export function AvatarLookCard({
   const creator = getCreator();
 
   const handleClick = () => {
-    if (!look.thumbnail) return;
+    if (!look.thumbnail || look.status === 'error') return;
     if (onLookChange) {
       onLookChange(look)
     } else {
@@ -162,10 +164,16 @@ export function AvatarLookCard({
     if (editedName !== look.name) {
       try {
         if (!activeSpace?.id || !avatarId || !look.id) throw new Error('Missing identifiers');
+        // Optimistic UI update
+        const trimmed = editedName.trim();
+        setDisplayName(trimmed);
         await apiClient.patch(`/space/${activeSpace.id}/avatars/${avatarId}/looks/${look.id}`, {
           name: editedName.trim()
         })
-        setDisplayName(editedName.trim())
+        setDisplayName(trimmed)
+        if (onLookRenamed && look.id) {
+          onLookRenamed(look.id, trimmed)
+        }
         toast({
           title: t('toast.name-updated'),
           description: t('toast.description-updated'),
@@ -174,9 +182,10 @@ export function AvatarLookCard({
       } catch (error) {
         console.error(t('toast.error-message'), error);
         setEditedName(look.name || '');
+        setDisplayName(look.name || '');
       }
     }
-  }, [editedName, look, t, toast]);
+  }, [editedName, look, t, toast, activeSpace?.id, avatarId, onLookRenamed]);
 
   return (
     <Card 
@@ -242,7 +251,7 @@ export function AvatarLookCard({
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 size="icon"
                 className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
                 onClick={(e) => e.stopPropagation()}
@@ -321,6 +330,14 @@ export function AvatarLookCard({
             <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
           </div>
         )}
+
+        {look.status === 'error' && (
+          <div className="absolute inset-0 bg-red-600/60 backdrop-blur-[1px] flex items-center justify-center p-4">
+            <span className="text-white text-xs sm:text-sm font-medium text-center">
+              {t('look-error')}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Bande d'information en bas */}
@@ -335,14 +352,14 @@ export function AvatarLookCard({
                 onChange={(e) => setEditedName(e.target.value)}
                 onBlur={handleNameSave}
                 onKeyDown={(e) => e.key === 'Enter' && handleNameSave()}
-                className="w-auto text-white font-semibold text-lg border-0 border-b border-b-white/50 focus:outline-none focus:ring-0 bg-transparent"
+                className="w-[calc(100%-56px)] text-white font-semibold text-lg border-0 border-b border-b-white/50 focus:outline-none focus:ring-0 bg-transparent align-baseline leading-tight"
                 onClick={(e) => e.stopPropagation()}
                 autoFocus
               />
             ) : (
               <h3 
-                className="text-white font-semibold text-lg truncate cursor-text" 
-                onClick={() => setIsEditing(true)}
+                className="text-white font-semibold text-lg truncate cursor-text align-baseline leading-tight" 
+                onClick={(e) => { e.stopPropagation(); setIsEditing(true); }}
               >
                 {displayName}
               </h3>
@@ -353,22 +370,22 @@ export function AvatarLookCard({
 
       {/* Bouton preview en bas à droite */}
       <div className="absolute bottom-3 right-3 z-10">
-        {look.previewUrl ? (
+        {look.previewUrl && look.status !== 'error' ? (
           <PreviewModal previewUrl={look.previewUrl} avatarName={selectedLook?.name || ''} lookPlace={t(`place.${look.place}`)}>
             <Button
               variant="outline"
               size="icon"
-              className="bg-white/70 text-gray-800 hover:bg-white border-white/20 h-6 w-6"
+              className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
             >
               <Play className="h-2.5 w-2.5" />
             </Button>
           </PreviewModal>
-        ) : look.thumbnail ? (
+        ) : look.thumbnail && look.status !== 'error' ? (
           <ImageModal imageUrl={look.thumbnail} title={look.name || ''}>
             <Button
               variant="outline"
               size="icon"
-              className="bg-white/70 text-gray-800 hover:bg-white border-white/20 h-6 w-6"
+              className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
             >
               <Maximize2 className="h-2 w-2" />
             </Button>

@@ -45,11 +45,19 @@ export default function VideoFormatSelector({
   onValueChange,
   disabled = false,
   light = false,
-}: VideoFormatSelectorProps) {
+  onOpen,
+}: VideoFormatSelectorProps & { onOpen?: () => void }) {
   const t = useTranslations("edit.video-format");
 
   return (
-    <Select value={value} onValueChange={onValueChange} disabled={disabled}>
+    <Select
+      value={value}
+      onValueChange={onValueChange}
+      disabled={disabled}
+      onOpenChange={(open) => {
+        if (open) onOpen?.();
+      }}
+    >
       <SelectTrigger variant={light ? "ghost" : "default"}>
         <SelectValue placeholder="Sélectionner format...">
           <div className="flex items-center gap-2">

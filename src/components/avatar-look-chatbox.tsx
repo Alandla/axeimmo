@@ -108,12 +108,15 @@ export function AvatarLookChatbox({
   );
   const [isGenerating, setIsGenerating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerMounted, setPickerMounted] = useState(false);
+  const [pickerState, setPickerState] = useState<"open" | "closed">("closed");
   const refButtonRef = useRef<HTMLButtonElement | null>(null);
   const [pickerCoords, setPickerCoords] = useState<{
-    left: number;
+    centerX: number;
     bottom: number;
-  }>({ left: 0, bottom: 0 });
+  }>({ centerX: 0, bottom: 0 });
+  const [pickerLeft, setPickerLeft] = useState<number | null>(null);
+  const pickerMenuRef = useRef<HTMLDivElement | null>(null);
   const [rect, setRect] = useState<{ left: number; width: number }>({
     left: 0,
     width: 0,
@@ -129,7 +132,7 @@ export function AvatarLookChatbox({
 
   // Close picker when clicking outside
   useEffect(() => {
-    if (!pickerOpen) return;
+    if (!pickerMounted) return;
 
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
@@ -142,13 +145,40 @@ export function AvatarLookChatbox({
         buttonElement &&
         !buttonElement.contains(target)
       ) {
-        setPickerOpen(false);
+        setPickerState("closed");
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [pickerOpen]);
+
+    // Compute popup left with margin and center on button using the actual popup width
+    const computeLeft = () => {
+      const el = pickerMenuRef.current;
+      if (!el) return;
+      const width = el.offsetWidth || 0;
+      const margin = 24;
+      const vw = window.innerWidth;
+      const idealLeft = pickerCoords.centerX - width / 2;
+      const clampedLeft = Math.max(margin, Math.min(idealLeft, vw - width - margin));
+      setPickerLeft(clampedLeft);
+    };
+    // initial compute after mount/open
+    // Use rAF to wait for layout
+    const raf = requestAnimationFrame(computeLeft);
+    window.addEventListener('resize', computeLeft);
+    // Observe size changes of the popup to recompute
+    const ro = new ResizeObserver(computeLeft);
+    if (pickerMenuRef.current) ro.observe(pickerMenuRef.current);
+    const handleRatioOpen = () => setPickerState("closed");
+    window.addEventListener("ratio-select-opened", handleRatioOpen as EventListener);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener('resize', computeLeft);
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      window.removeEventListener("ratio-select-opened", handleRatioOpen as EventListener);
+    };
+  }, [pickerMounted, pickerCoords.centerX]);
 
   // Positionnement calé sur l'anchor via ResizeObserver
   useEffect(() => {
@@ -202,17 +232,13 @@ export function AvatarLookChatbox({
   }, []);
 
   const handleGenerate = async () => {
-    if (!prompt.trim()) return;
+    if (!prompt.trim() && style !== "podcast") return;
     setIsGenerating(true);
     try {
-      const podcastHint =
-        " The scene is a podcast, the avatar is not looking at the camera, he is looking away as if he were talking, there is a microphone in front of him.";
-      const finalPrompt =
-        style === "podcast" ? `${prompt.trim()}${podcastHint}` : prompt.trim();
       await basicApiCall(
         `/space/${spaceId}/avatars/${activeAvatar.id}/looks/generate`,
         {
-          description: finalPrompt,
+          description: prompt.trim() || " ", // Laisser un string non vide pour générer le podcast
           images: [referenceImage, ...images].filter((u): u is string => !!u),
           format,
           style,
@@ -220,7 +246,8 @@ export function AvatarLookChatbox({
       );
       setPrompt("");
       setImages([]);
-      setPickerOpen(false);
+      setPickerState("closed");
+      setTimeout(() => setPickerMounted(false), 180);
       await onRefresh();
     } finally {
       setIsGenerating(false);
@@ -265,11 +292,12 @@ export function AvatarLookChatbox({
                     const r = refButtonRef.current?.getBoundingClientRect();
                     if (r) {
                       setPickerCoords({
-                        left: r.left,
+                        centerX: r.left + r.width / 2,
                         bottom: window.innerHeight - r.top + 8,
                       });
                     }
-                    setPickerOpen((v) => !v);
+                    if (!pickerMounted) setPickerMounted(true);
+                    setPickerState((s) => (s === "open" ? "closed" : "open"));
                   }}
                   title="Reference image"
                 >
@@ -284,13 +312,16 @@ export function AvatarLookChatbox({
                   </span>
                 </button>
               )}
-              {pickerOpen && (
+              {pickerMounted && (
                 <div
+                  ref={pickerMenuRef}
                   data-picker-menu
-                  className="fixed inline-block bg-white border rounded-2xl shadow-2xl p-3 z-[1000]"
+                  data-state={pickerState}
+                  className="fixed inline-block bg-white border rounded-2xl shadow-2xl p-3 z-[1000] transition duration-200 ease-out will-change-[transform,opacity] transform-gpu [backface-visibility:hidden] [contain:content] data-[state=closed]:pointer-events-none data-[state=open]:opacity-100 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=closed]:scale-95 data-[state=open]:translate-y-0 data-[state=closed]:-translate-y-2"
                   style={{
-                    left: pickerCoords.left,
+                    left: pickerLeft ?? Math.max(24, Math.min(pickerCoords.centerX - 288, window.innerWidth - 24 - 576)),
                     bottom: pickerCoords.bottom,
+                    maxWidth: "calc(100vw - 48px)",
                   }}
                 >
                   <div className="flex flex-wrap items-start gap-3">
@@ -301,7 +332,7 @@ export function AvatarLookChatbox({
                         className="relative h-28 rounded-xl overflow-hidden border bg-white flex-shrink-0"
                         onClick={() => {
                           setReferenceImage(u);
-                          setPickerOpen(false);
+                          setPickerState("closed");
                         }}
                         title="Select look"
                       >
@@ -309,6 +340,11 @@ export function AvatarLookChatbox({
                           src={u}
                           alt="candidate"
                           className="h-full w-auto object-contain"
+                          loading="lazy"
+                          decoding="async"
+                          fetchPriority="low"
+                          width={224}
+                          height={112}
                         />
                         {referenceImage === u && (
                           <>
@@ -336,7 +372,7 @@ export function AvatarLookChatbox({
                     className="h-9 px-3"
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    <PaintbrushVertical className="h-4 w-4 mr-1" />
+                    <PaintbrushVertical className="h-4 w-4" />
                     {t("look-chat.add-elements")}
                   </Button>
                   <input
@@ -388,6 +424,15 @@ export function AvatarLookChatbox({
               onValueChange={(value: string) =>
                 setFormat(value as AvatarLookFormat)
               }
+              onOpenChange={(open: boolean) => {
+                if (open) {
+                  try {
+                    window.dispatchEvent(new CustomEvent('ratio-select-opened'))
+                  } catch {}
+                  setPickerState("closed");
+                  if (!pickerMounted) return;
+                }
+              }}
               disabled={isGenerating || isUploading}
             >
               <SelectTrigger variant="ghost" className="h-9 w-auto px-2">
@@ -420,7 +465,11 @@ export function AvatarLookChatbox({
             <Button
               size="icon"
               className="h-10 w-10 rounded-lg"
-              disabled={isGenerating || isUploading || !prompt.trim()}
+              disabled={
+                isGenerating ||
+                isUploading ||
+                (!prompt.trim() && style !== "podcast")
+              }
               onClick={handleGenerate}
               aria-label={t("look-chat.send") as string}
             >

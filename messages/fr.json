@@ -710,6 +710,7 @@
     },
     "limit-reached": "Limite d'avatars atteinte",
     "limit-reached-description": "Passez à un plan supérieur pour créer plus d'avatars.",
+    "look-error": "Échec de génération. Réessayez.",
     "left-counter": "{remaining}/{limit} restants",
     "look-chat": {
       "placeholder-1": "Ajouter mon produit dans la main",

@@ -20,6 +20,10 @@ export type AvatarLook = {
     previewUrl?: string
     videoUrl?: string
     format?: 'vertical' | 'horizontal'
+    status?: 'pending' | 'ready' | 'error'
+    errorMessage?: string
+    errorAt?: string
+    createdAt?: string
     settings?: {
         heygenType?: 'avatar' | 'talking_photo'
 		position?: number  // Position horizontale (en pourcentage)

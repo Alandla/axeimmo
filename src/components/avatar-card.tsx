@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, History, Users, MoreVertical, Pen, Edit, Trash2, Eye } from 'lucide-react'
+import { Check, History, Users, MoreVertical, Pen, Trash2, Eye } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
 import { useTranslations } from 'next-intl'
@@ -98,6 +98,7 @@ export function AvatarCard({
     // États pour le dropdown et l'édition
     const [isEditing, setIsEditing] = useState(false);
     const [editedName, setEditedName] = useState(avatar.name);
+    const [displayName, setDisplayName] = useState(avatar.name);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     
     const inputRef = useRef<HTMLInputElement>(null);
@@ -153,15 +154,16 @@ export function AvatarCard({
 
     const handleNameSave = useCallback(async () => {
       setIsEditing(false);
-      if (editedName !== avatar.name) {
+      const trimmed = editedName.trim();
+      if (trimmed && trimmed !== avatar.name && activeSpace?.id) {
         try {
-          avatar.name = editedName;
-          await basicApiCall('/avatar/save', {
-            avatar: {
-              id: avatar.id,
-              name: editedName
-            }
+          // Optimistic UI update
+          setDisplayName(trimmed);
+          await basicApiCall(`/space/${activeSpace.id}/avatars/${avatar.id}`, {
+            name: trimmed
           });
+          avatar.name = trimmed;
+          setEditedName(trimmed);
           toast({
             title: t('toast.name-updated'),
             description: t('toast.description-updated'),
@@ -169,10 +171,14 @@ export function AvatarCard({
           });
         } catch (error) {
           console.error(t('toast.error-message'), error);
-          setEditedName(avatar.name); // Restaurer l'ancien nom en cas d'erreur
+          setEditedName(avatar.name); // Restore previous name on error
+          setDisplayName(avatar.name);
         }
+      } else {
+        setEditedName(avatar.name);
+        setDisplayName(avatar.name);
       }
-    }, [editedName, avatar, t, toast]);
+    }, [editedName, avatar, activeSpace?.id, t, toast]);
 
     const handleSeeLooks = useCallback((e: any) => {
       e.stopPropagation()
@@ -248,24 +254,25 @@ export function AvatarCard({
             )}
           </>
         )}
-        <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-          <DropdownMenuTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
-              onClick={(e) => e.stopPropagation()}
+        {!isPublic && (
+          <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="icon"
+                className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <MoreVertical className="h-3 w-3" />
+                <span className="sr-only">{t('more-options')}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+              side={"bottom"}
+              align="end"
+              sideOffset={4}
             >
-              <MoreVertical className="h-3 w-3" />
-              <span className="sr-only">{t('more-options')}</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={"bottom"}
-            align="end"
-            sideOffset={4}
-          >
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <UIAvatar className="h-8 w-8 rounded-lg">
@@ -304,27 +311,26 @@ export function AvatarCard({
                     </>
                   )}
                 </DropdownMenuGroup>
-                {!isPublic && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onSelect={(e) => {
-                        e.preventDefault()
-                        handleDelete(e)
-                      }}
-                      className={cn(
-                        "flex items-center cursor-pointer text-destructive",
-                        "hover:bg-red-200 hover:text-destructive",
-                        "focus:bg-red-200 focus:text-destructive"
-                      )}
-                    >
-                      <Trash2 />
-                      {t('dropdown-menu.delete')}
-                    </DropdownMenuItem>
-                  </>
-                )}
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault()
+                      handleDelete(e)
+                    }}
+                    className={cn(
+                      "flex items-center cursor-pointer text-destructive",
+                      "hover:bg-red-200 hover:text-destructive",
+                      "focus:bg-red-200 focus:text-destructive"
+                    )}
+                  >
+                    <Trash2 />
+                    {t('dropdown-menu.delete')}
+                  </DropdownMenuItem>
+                </>
           </DropdownMenuContent>
         </DropdownMenu>
+        )}
       </div>
 
       {/* Image principale */}
@@ -339,7 +345,7 @@ export function AvatarCard({
               height={720}
             />
             {!disabled && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 hover:opacity-100">
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none">
                 <Eye className="text-white w-8 h-8" />
               </div>
             )}
@@ -352,7 +358,7 @@ export function AvatarCard({
       </div>
 
       {/* Bande d'information en bas */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 z-30">
         <div className="flex items-baseline justify-between">
           <div className="flex-1 min-w-0">
             {isEditing ? (
@@ -363,16 +369,16 @@ export function AvatarCard({
                 onChange={(e) => setEditedName(e.target.value)}
                 onBlur={handleNameSave}
                 onKeyDown={(e) => e.key === 'Enter' && handleNameSave()}
-                className="w-full text-white font-semibold text-lg border-0 border-b border-b-white/50 focus:outline-none focus:ring-0 bg-transparent"
+                className="w-full text-white font-semibold text-lg border-0 border-b border-b-white/50 focus:outline-none focus:ring-0 bg-transparent align-baseline leading-tight"
                 onClick={(e) => e.stopPropagation()}
                 autoFocus
               />
             ) : (
               <h3 
-                className="text-white font-semibold text-lg truncate cursor-text" 
-                onClick={() => setIsEditing(true)}
+                className="text-white font-semibold text-lg truncate cursor-text align-baseline leading-tight" 
+                onClick={(e) => { e.stopPropagation(); setIsEditing(true); }}
               >
-                {avatar.name}
+                {displayName}
               </h3>
             )}
           </div>
