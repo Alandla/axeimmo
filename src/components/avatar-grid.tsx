@@ -32,6 +32,7 @@ import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { getSpaceAvatars } from '../service/space.service'
 import { HorizontalScrollList } from './ui/horizontal-scroll-list'
 import { Card, CardContent } from "@/src/components/ui/card"
+import { Skeleton } from "@/src/components/ui/skeleton"
 import { InfiniteScroll } from '@/src/components/ui/infinite-scroll'
 import CreateAvatarModal from '@/src/components/modal/create-avatar-modal'
 import AvatarLookChatbox from '@/src/components/avatar-look-chatbox'
@@ -85,6 +86,20 @@ function NoAvatarCard({
         <div className="flex items-center justify-between">
           <h3 className="text-white font-semibold text-lg">{t('no-avatar-name')}</h3>
         </div>
+      </div>
+    </Card>
+  )
+}
+
+// Skeleton pour une carte d'avatar personnel en chargement
+function AvatarSkeletonCard() {
+  return (
+    <Card className="relative overflow-hidden rounded-lg">
+      <div className="w-full aspect-[3/4] relative">
+        <Skeleton className="absolute inset-0" />
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 p-3">
+        <Skeleton className="h-4 w-2/3" />
       </div>
     </Card>
   )
@@ -154,6 +169,7 @@ export function AvatarGridComponent({
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null)
   const [publicAvatars, setPublicAvatars] = useState<Avatar[]>(avatarsConfig)
   const [spaceAvatars, setSpaceAvatars] = useState<Avatar[]>([])
+  const [isLoadingSpaceAvatars, setIsLoadingSpaceAvatars] = useState<boolean>(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [isUploadingLook, setIsUploadingLook] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -403,15 +419,16 @@ export function AvatarGridComponent({
 
   const fetchSpaceAvatars = async (lastUsed? : String | undefined) => {
     if (activeSpace?.id) {
-      const spaceAvatarsFetched : Avatar[] = await getSpaceAvatars(activeSpace.id)
-      if (spaceAvatarsFetched && spaceAvatarsFetched.length > 0) {
-        setSpaceAvatars(spaceAvatarsFetched);
+      try {
+        setIsLoadingSpaceAvatars(true)
+        const spaceAvatarsFetched : Avatar[] = await getSpaceAvatars(activeSpace.id)
+        setSpaceAvatars(spaceAvatarsFetched || []);
         // Mettre à jour l'activeAvatar pour refléter les dernières thumbnails/looks
-        if (activeAvatar?.id) {
+        if (activeAvatar?.id && spaceAvatarsFetched) {
           const refreshedActive = spaceAvatarsFetched.find(a => a.id === activeAvatar.id)
           if (refreshedActive) setActiveAvatar(refreshedActive)
         }
-        if (lastUsed) {
+        if (lastUsed && spaceAvatarsFetched) {
           const avatar = spaceAvatarsFetched.find((avatar) => avatar.id === lastUsed);
           if (avatar) {
             const look = avatar.looks.find(l => l.id === lastUsed);
@@ -423,13 +440,15 @@ export function AvatarGridComponent({
         // Sync initial active avatar from URL after fetch
         const avatarFromUrl = searchParams?.get('avatar')
         if (avatarFromUrl) {
-          const foundSpace = spaceAvatarsFetched.find(a => a.id === avatarFromUrl)
+          const foundSpace = spaceAvatarsFetched?.find(a => a.id === avatarFromUrl)
           const foundPublic = avatarsConfig.find(a => a.id === avatarFromUrl)
           const toActivate = foundSpace || foundPublic || null
           if (toActivate) {
             setActiveAvatar(toActivate)
           }
         }
+      } finally {
+        setIsLoadingSpaceAvatars(false)
       }
     }
   }
@@ -741,13 +760,12 @@ export function AvatarGridComponent({
       }
       const width = window.innerWidth
       let cols = 2
-      if (mode === 'large') {
-        // grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6
-        if (width < 1024) cols = 2
-        else if (width < 1536) cols = 5
-        else cols = 6
+      // Limiter à 4 colonnes hors mode create
+      if (variant !== 'create') {
+        if (width < 640) cols = 2
+        else if (width < 1024) cols = 3
+        else cols = 4
       } else {
-        // grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6
         if (width < 1024) cols = 2
         else if (width < 1536) cols = 5
         else cols = 6
@@ -760,7 +778,7 @@ export function AvatarGridComponent({
     computeHasMultipleRows()
     window.addEventListener('resize', computeHasMultipleRows)
     return () => window.removeEventListener('resize', computeHasMultipleRows)
-  }, [activeAvatar, currentLooks.length, mode])
+  }, [activeAvatar, currentLooks.length, mode, variant])
 
   return (
     <div className="space-y-4" ref={containerRef}>
@@ -909,12 +927,12 @@ export function AvatarGridComponent({
         )}
       </HorizontalScrollList>
 
-      <div className={`grid gap-4 ${mode === 'large' ? 'grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6' : 'grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6'} ${activeAvatar ? (hasMultipleRows ? 'pb-40' : 'pb-24') : ''}`}>
+      <div className={`grid gap-4 ${variant === 'create' ? 'grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'} ${activeAvatar ? (hasMultipleRows ? 'pb-40' : 'pb-24') : ''}`}>
         {activeAvatar ? (
           // Afficher les looks de l'avatar sélectionné
           <>
             {/* Carte pour créer un nouveau look (uniquement pour les avatars de l'espace) */}
-            {spaceAvatars.some(a => a.id === activeAvatar.id) && (
+            {variant === 'create' && spaceAvatars.some(a => a.id === activeAvatar.id) && (
               <AddLookCard
                 onFileUpload={handleFileUpload}
                 onFileDrop={handleFileDrop}
@@ -936,6 +954,7 @@ export function AvatarGridComponent({
                   onAvatarNameChange={variant === 'create' ? () => {} : setSelectedAvatarName}
                   setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteLookOpen}
                   isPublic={!spaceAvatars.some(a => a.id === activeAvatar.id)}
+                  canEdit={variant === 'create'}
                   onLookRenamed={(lookId, newName) => {
                     // Update activeAvatar
                     const updatedAvatar = {
@@ -1012,8 +1031,13 @@ export function AvatarGridComponent({
                   </div>
                 </Card>
               )}
+              {isLoadingSpaceAvatars && filteredSpaceAvatars.length === 0 && (
+                Array.from({ length: 4 }).map((_, idx) => (
+                  <AvatarSkeletonCard key={`skeleton-${idx}`} />
+                ))
+              )}
               {filteredSpaceAvatars.length > 0 && filteredSpaceAvatars.map((avatar: Avatar) => (
-                <AvatarCard
+              <AvatarCard
                   key={`space-${avatar.id}`}
                   avatar={avatar}
                   onClick={() => {
@@ -1028,6 +1052,7 @@ export function AvatarGridComponent({
                     updateUrlParamsForAvatar(avatar)
                   }}
                   isPublic={false}
+                canEdit={variant === 'create'}
                 />
               ))}
             </>
@@ -1058,6 +1083,7 @@ export function AvatarGridComponent({
                   updateUrlParamsForAvatar(avatar)
                 }}
                 isPublic={true}
+                canEdit={false}
               />
             ))}
             <div className="col-span-full">
@@ -1177,7 +1203,7 @@ export function AvatarGridComponent({
         )
       ) : null}
 
-      {activeAvatar && spaceAvatars.some(a => a.id === activeAvatar.id) && (
+      {variant === 'create' && activeAvatar && spaceAvatars.some(a => a.id === activeAvatar.id) && (
         <AvatarLookChatbox
           anchorRef={containerRef}
           activeAvatar={activeAvatar}

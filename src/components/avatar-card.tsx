@@ -74,6 +74,7 @@ interface AvatarCardProps {
   setIsModalConfirmDeleteOpen?: (isOpen: boolean) => void;
   onSeeLooks?: (avatar: Avatar) => void;
   isPublic?: boolean;
+  canEdit?: boolean;
 }
 
 export function AvatarCard({ 
@@ -84,7 +85,8 @@ export function AvatarCard({
   disabled = false,
   setIsModalConfirmDeleteOpen,
   onSeeLooks,
-  isPublic = false
+  isPublic = false,
+  canEdit = false
 }: AvatarCardProps) {
     const { selectedAvatarName: storeSelectedAvatarName } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
@@ -254,7 +256,7 @@ export function AvatarCard({
             )}
           </>
         )}
-        {!isPublic && (
+        {!isPublic && canEdit && (
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button 
@@ -297,7 +299,7 @@ export function AvatarCard({
                     <Eye />
                     {t('dropdown-menu.see-looks')}
                   </DropdownMenuItem>
-                  {!isPublic && (
+                  {!isPublic && canEdit && (
                     <>
                       <DropdownMenuItem 
                         onClick={(e) => {
@@ -375,8 +377,8 @@ export function AvatarCard({
               />
             ) : (
               <h3 
-                className="text-white font-semibold text-lg truncate cursor-text align-baseline leading-tight" 
-                onClick={(e) => { e.stopPropagation(); setIsEditing(true); }}
+                className="text-white font-semibold text-lg truncate align-baseline leading-tight" 
+                onClick={(e) => { if (!canEdit) return; e.stopPropagation(); setIsEditing(true); }}
               >
                 {displayName}
               </h3>

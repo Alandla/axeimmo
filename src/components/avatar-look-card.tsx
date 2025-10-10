@@ -76,6 +76,7 @@ interface AvatarLookCardProps {
   setIsModalConfirmDeleteOpen?: (isOpen: boolean) => void
   isPublic?: boolean
   onLookRenamed?: (lookId: string, newName: string) => void
+  canEdit?: boolean
 }
 
 export function AvatarLookCard({ 
@@ -88,7 +89,8 @@ export function AvatarLookCard({
   onAvatarNameChange,
   setIsModalConfirmDeleteOpen,
   isPublic = false,
-  onLookRenamed
+  onLookRenamed,
+  canEdit = false
 }: AvatarLookCardProps) {
   const { selectedLook: storeSelectedLook, setSelectedLook: setStoreSelectedLook, setSelectedAvatarName: setStoreSelectedAvatarName } = useCreationStore()
   const { activeSpace } = useActiveSpaceStore()
@@ -153,6 +155,7 @@ export function AvatarLookCard({
   }
 
   const startEditing = useCallback(() => {
+    if (!canEdit) return;
     setIsEditing(true);
     setTimeout(() => {
       inputRef.current?.focus();
@@ -247,7 +250,7 @@ export function AvatarLookCard({
             )}
           </>
         )}
-        {!isPublic && (
+        {!isPublic && canEdit && (
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button 
@@ -358,8 +361,8 @@ export function AvatarLookCard({
               />
             ) : (
               <h3 
-                className="text-white font-semibold text-lg truncate cursor-text align-baseline leading-tight" 
-                onClick={(e) => { e.stopPropagation(); setIsEditing(true); }}
+                className="text-white font-semibold text-lg truncate align-baseline leading-tight" 
+                onClick={(e) => { if (!canEdit) return; e.stopPropagation(); setIsEditing(true); }}
               >
                 {displayName}
               </h3>
