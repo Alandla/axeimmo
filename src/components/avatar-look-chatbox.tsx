@@ -15,14 +15,13 @@ import {
   Plus,
   X,
   Send,
-  Check,
   Settings2,
+  Check,
   PaintbrushVertical,
 } from "lucide-react";
 import { Avatar, AvatarLook } from "@/src/types/avatar";
 import { basicApiCall } from "@/src/lib/api";
 import { getMediaUrlFromFileByPresignedUrl } from "@/src/service/upload.service";
-import { cn } from "@/src/lib/utils";
 import { VideoFormat, VIDEO_FORMATS } from "@/src/types/video";
 import {
   Select,
@@ -62,6 +61,9 @@ type Props = {
   activeAvatar: Avatar;
   spaceId: string;
   onRefresh: () => Promise<void> | void;
+  initialReferenceImage?: string | null;
+  shouldFocus?: boolean;
+  onFocusComplete?: () => void;
 };
 
 const Thumbnails = React.memo(function Thumbnails({
@@ -99,86 +101,102 @@ export function AvatarLookChatbox({
   activeAvatar,
   spaceId,
   onRefresh,
+  initialReferenceImage,
+  shouldFocus = false,
+  onFocusComplete,
 }: Props) {
   const t = useTranslations("avatars");
   const [prompt, setPrompt] = useState("");
   const [images, setImages] = useState<string[]>([]);
-  const [referenceImage, setReferenceImage] = useState<string | null>(
-    activeAvatar?.thumbnail || null
-  );
+  const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [pickerMounted, setPickerMounted] = useState(false);
-  const [pickerState, setPickerState] = useState<"open" | "closed">("closed");
-  const refButtonRef = useRef<HTMLButtonElement | null>(null);
-  const [pickerCoords, setPickerCoords] = useState<{
-    centerX: number;
-    bottom: number;
-  }>({ centerX: 0, bottom: 0 });
-  const [pickerLeft, setPickerLeft] = useState<number | null>(null);
-  const pickerMenuRef = useRef<HTMLDivElement | null>(null);
+  // Removed custom picker state, now using Select primitives for reference image selection
   const [rect, setRect] = useState<{ left: number; width: number }>({
     left: 0,
     width: 0,
   });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const promptInputRef = useRef<HTMLInputElement | null>(null);
   const [format, setFormat] = useState<AvatarLookFormat>("vertical");
   // Désactiver UGC: style par défaut 'studio' et empêcher la sélection UGC
   const [style, setStyle] = useState<AvatarLookStyle>("studio");
+  const [isFocused, setIsFocused] = useState(false);
+  const [isPulsing, setIsPulsing] = useState(false);
+
+  const candidateImages = useMemo(() => {
+    const fromLooks = (activeAvatar?.looks || [])
+      .map((l: AvatarLook) => l.thumbnail)
+      .filter((u): u is string => !!u);
+    const unique = Array.from(new Set(fromLooks));
+    if (unique.length > 0) return unique;
+    return activeAvatar?.thumbnail ? [activeAvatar.thumbnail] : [];
+  }, [activeAvatar?.id, activeAvatar?.looks, activeAvatar?.thumbnail]);
 
   useEffect(() => {
-    setReferenceImage(activeAvatar?.thumbnail || null);
-  }, [activeAvatar?.id, activeAvatar?.thumbnail]);
-
-  // Close picker when clicking outside
-  useEffect(() => {
-    if (!pickerMounted) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      const pickerElement = document.querySelector("[data-picker-menu]");
-      const buttonElement = refButtonRef.current;
-
-      if (
-        pickerElement &&
-        !pickerElement.contains(target) &&
-        buttonElement &&
-        !buttonElement.contains(target)
-      ) {
-        setPickerState("closed");
+    setReferenceImage((prev) => {
+      // Si une image de référence initiale est fournie et qu'elle est valide, l'utiliser
+      if (initialReferenceImage && candidateImages.includes(initialReferenceImage)) {
+        return initialReferenceImage;
       }
-    };
+      // Sinon, garder l'image actuelle si elle est toujours valide
+      if (prev && candidateImages.includes(prev)) return prev;
+      // Sinon, utiliser la première image disponible
+      return candidateImages[0] ?? null;
+    });
+  }, [activeAvatar?.id, candidateImages, initialReferenceImage]);
 
-    document.addEventListener("mousedown", handleClickOutside);
+  // Gérer le focus du prompt input
+  useEffect(() => {
+    if (shouldFocus && !isFocused) {
+      console.log('Focus requested for chatbox');
+      setIsFocused(true);
+      
+      // Essayer plusieurs fois de focuser l'élément
+      const attemptFocus = (attempts = 0) => {
+        if (attempts > 10) {
+          console.log('Max focus attempts reached');
+          return;
+        }
+        
+        if (promptInputRef.current) {
+          console.log(`Focusing input element (attempt ${attempts + 1})`);
+          // S'assurer que l'élément est visible
+          promptInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          
+          // Forcer le focus - essayer plusieurs méthodes
+          promptInputRef.current.focus();
+          promptInputRef.current.click();
+          
+          // Vérifier si le focus a réussi
+          setTimeout(() => {
+            if (document.activeElement !== promptInputRef.current) {
+              console.log('Focus failed, retrying...');
+              attemptFocus(attempts + 1);
+            } else {
+              console.log('Input successfully focused');
+            }
+          }, 50);
+        } else {
+          console.log('Input ref not found, retrying...');
+          setTimeout(() => attemptFocus(attempts + 1), 100);
+        }
+      };
+      
+      // Démarrer les tentatives de focus
+      setTimeout(attemptFocus, 200);
+    }
+  }, [shouldFocus, isFocused]);
 
-    // Compute popup left with margin and center on button using the actual popup width
-    const computeLeft = () => {
-      const el = pickerMenuRef.current;
-      if (!el) return;
-      const width = el.offsetWidth || 0;
-      const margin = 24;
-      const vw = window.innerWidth;
-      const idealLeft = pickerCoords.centerX - width / 2;
-      const clampedLeft = Math.max(margin, Math.min(idealLeft, vw - width - margin));
-      setPickerLeft(clampedLeft);
-    };
-    // initial compute after mount/open
-    // Use rAF to wait for layout
-    const raf = requestAnimationFrame(computeLeft);
-    window.addEventListener('resize', computeLeft);
-    // Observe size changes of the popup to recompute
-    const ro = new ResizeObserver(computeLeft);
-    if (pickerMenuRef.current) ro.observe(pickerMenuRef.current);
-    const handleRatioOpen = () => setPickerState("closed");
-    window.addEventListener("ratio-select-opened", handleRatioOpen as EventListener);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener('resize', computeLeft);
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      window.removeEventListener("ratio-select-opened", handleRatioOpen as EventListener);
-    };
-  }, [pickerMounted, pickerCoords.centerX]);
+  // Animation: petit zoom puis de-zoom rapidement sans attendre le blur
+  useEffect(() => {
+    if (!shouldFocus) return;
+    setIsPulsing(true);
+    const t = setTimeout(() => setIsPulsing(false), 250);
+    return () => clearTimeout(t);
+  }, [shouldFocus]);
+
+  // Removed popup listeners since we rely on Radix Select
 
   // Positionnement calé sur l'anchor via ResizeObserver
   useEffect(() => {
@@ -200,15 +218,7 @@ export function AvatarLookChatbox({
     };
   }, [anchorRef]);
 
-  const candidateImages = useMemo(() => {
-    const list = [
-      ...(activeAvatar?.thumbnail ? [activeAvatar.thumbnail] : []),
-      ...activeAvatar.looks
-        .map((l: AvatarLook) => l.thumbnail)
-        .filter((u): u is string => !!u),
-    ];
-    return Array.from(new Set(list));
-  }, [activeAvatar?.id, activeAvatar?.thumbnail, activeAvatar?.looks]);
+  // candidateImages is defined above using looks first
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -246,8 +256,6 @@ export function AvatarLookChatbox({
       );
       setPrompt("");
       setImages([]);
-      setPickerState("closed");
-      setTimeout(() => setPickerMounted(false), 180);
       await onRefresh();
     } finally {
       setIsGenerating(false);
@@ -267,14 +275,25 @@ export function AvatarLookChatbox({
       className="fixed bottom-8 z-50 max-w-xl"
       style={{ left: popupDims.left, width: popupDims.width }}
     >
-      <div className="bg-white border rounded-xl p-2 shadow-md">
+      <div className={`bg-white border rounded-xl p-2 shadow-md transition-transform duration-200 ${isPulsing ? 'scale-105' : 'scale-100'}`}>
         {/* Top: prompt */}
         <div className="mb-2">
           <Input
+            ref={promptInputRef}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            onFocus={() => {
+              console.log('Input focused by user or programmatically');
+            }}
+            onBlur={() => {
+              // Appeler onFocusComplete seulement quand l'utilisateur perd le focus
+              if (shouldFocus && isFocused) {
+                onFocusComplete?.();
+                setIsFocused(false);
+              }
+            }}
             placeholder={`${t("look-chat.placeholder-1")}`}
-            className="w-full h-10 rounded-lg border-0 shadow-none bg-transparent focus-visible:ring-0 focus:ring-0 focus:outline-none"
+            className={`w-full h-10 rounded-lg border-0 shadow-none bg-transparent focus-visible:ring-0 focus:ring-0 focus:outline-none transition-all duration-150 ${isPulsing ? 'bg-gray-50 border border-gray-200' : ''}`}
           />
         </div>
         {/* Bottom bar: left elements + right send */}
@@ -284,80 +303,46 @@ export function AvatarLookChatbox({
             {/* Look selector */}
             <div className="relative flex-shrink-0 h-10">
               {referenceImage && (
-                <button
-                  type="button"
-                  className="group inline-flex items-center justify-center h-10 w-10 rounded-md overflow-hidden border flex-shrink-0 bg-white relative"
-                  ref={refButtonRef}
-                  onClick={() => {
-                    const r = refButtonRef.current?.getBoundingClientRect();
-                    if (r) {
-                      setPickerCoords({
-                        centerX: r.left + r.width / 2,
-                        bottom: window.innerHeight - r.top + 8,
-                      });
-                    }
-                    if (!pickerMounted) setPickerMounted(true);
-                    setPickerState((s) => (s === "open" ? "closed" : "open"));
-                  }}
-                  title="Reference image"
+                <Select
+                  value={referenceImage}
+                  onValueChange={(v) => setReferenceImage(v)}
+                  disabled={isGenerating || isUploading}
                 >
-                  <img
-                    src={referenceImage}
-                    alt="ref"
-                    className="h-full w-full object-cover"
-                  />
-                  <span className="pointer-events-none absolute inset-0 hidden group-hover:block bg-black/40" />
-                  <span className="pointer-events-none absolute inset-0 hidden group-hover:flex items-center justify-center">
-                    <Settings2 className="h-4 w-4 text-white" />
-                  </span>
-                </button>
-              )}
-              {pickerMounted && (
-                <div
-                  ref={pickerMenuRef}
-                  data-picker-menu
-                  data-state={pickerState}
-                  className="fixed inline-block bg-white border rounded-2xl shadow-2xl p-3 z-[1000] transition duration-200 ease-out will-change-[transform,opacity] transform-gpu [backface-visibility:hidden] [contain:content] data-[state=closed]:pointer-events-none data-[state=open]:opacity-100 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=closed]:scale-95 data-[state=open]:translate-y-0 data-[state=closed]:-translate-y-2"
-                  style={{
-                    left: pickerLeft ?? Math.max(24, Math.min(pickerCoords.centerX - 288, window.innerWidth - 24 - 576)),
-                    bottom: pickerCoords.bottom,
-                    maxWidth: "calc(100vw - 48px)",
-                  }}
-                >
-                  <div className="flex flex-wrap items-start gap-3">
+                  <SelectTrigger className="relative group h-10 w-10 p-0 overflow-hidden rounded-md border border-transparent focus:ring-0 focus:outline-none [&>svg]:hidden">
+                    <SelectValue className="block h-full w-full">
+                      <div className="relative h-full w-full">
+                        <img src={referenceImage} alt="ref" className="block h-full w-full object-cover" />
+                        <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/40" />
+                        <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Settings2 className="h-4 w-4 text-white" />
+                        </span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent side="bottom" align="start" sideOffset={4} className="p-2 w-auto max-w-[90vw] min-w-0">
                     {candidateImages.map((u) => (
-                      <button
-                        key={u}
-                        type="button"
-                        className="relative h-28 rounded-xl overflow-hidden border bg-white flex-shrink-0"
-                        onClick={() => {
-                          setReferenceImage(u);
-                          setPickerState("closed");
-                        }}
-                        title="Select look"
-                      >
-                        <img
-                          src={u}
-                          alt="candidate"
-                          className="h-full w-auto object-contain"
-                          loading="lazy"
-                          decoding="async"
-                          fetchPriority="low"
-                          width={224}
-                          height={112}
-                        />
-                        {referenceImage === u && (
-                          <>
-                            <span className="absolute inset-0 bg-black/50" />
-                            <span className="absolute inset-0 flex items-center justify-center">
-                              <Check className="h-6 w-6 text-white" />
-                            </span>
-                          </>
-                        )}
-                      </button>
+                      <SelectItem key={u} value={u} className="inline-flex w-auto p-0 mr-2 mb-2">
+                        <div className="relative group/item">
+                          <img
+                            src={u}
+                            alt="candidate"
+                            className="h-20 w-auto max-w-[280px] object-contain rounded-md border hover:border-primary transition-colors"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          {referenceImage === u && (
+                            <>
+                              <span className="absolute inset-0 bg-black/50 rounded-md" />
+                              <span className="absolute inset-0 flex items-center justify-center">
+                                <Check className="h-5 w-5 text-white" />
+                              </span>
+                            </>
+                          )}
+                        </div>
+                      </SelectItem>
                     ))}
-                  </div>
-                </div>
+                  </SelectContent>
+                </Select>
               )}
             </div>
             {/* Separator */}
@@ -429,8 +414,6 @@ export function AvatarLookChatbox({
                   try {
                     window.dispatchEvent(new CustomEvent('ratio-select-opened'))
                   } catch {}
-                  setPickerState("closed");
-                  if (!pickerMounted) return;
                 }
               }}
               disabled={isGenerating || isUploading}

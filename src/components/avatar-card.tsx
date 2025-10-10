@@ -262,10 +262,10 @@ export function AvatarCard({
               <Button 
                 variant="outline" 
                 size="icon"
-                className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
+                className="h-6 w-6"
                 onClick={(e) => e.stopPropagation()}
               >
-                <MoreVertical className="h-3 w-3" />
+                <MoreVertical style={{ width: '12px', height: '12px' }} />
                 <span className="sr-only">{t('more-options')}</span>
               </Button>
             </DropdownMenuTrigger>

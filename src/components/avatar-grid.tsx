@@ -178,6 +178,8 @@ export function AvatarGridComponent({
   const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] = useState(false)
   const [isModalConfirmDeleteLookOpen, setIsModalConfirmDeleteLookOpen] = useState(false)
   const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false)
+  const [editingLook, setEditingLook] = useState<AvatarLook | null>(null)
+  const [shouldFocusChatbox, setShouldFocusChatbox] = useState(false)
   
   // États pour l'édition du nom d'avatar
   const [isEditingAvatarName, setIsEditingAvatarName] = useState(false)
@@ -361,6 +363,19 @@ export function AvatarGridComponent({
       })
     }
   }, [activeSpace?.id, activeAvatar, selectedLook, t, toast])
+
+  // Fonction pour gérer l'édition d'un look
+  const handleEditLook = useCallback((look: AvatarLook) => {
+    console.log('Edit look clicked:', look);
+    setEditingLook(look)
+    setShouldFocusChatbox(true)
+    console.log('Should focus chatbox set to true');
+  }, [])
+
+  // Fonction pour gérer la fin du focus du chatbox
+  const handleFocusComplete = useCallback(() => {
+    setShouldFocusChatbox(false)
+  }, [])
 
   // Polling pour rafraîchir tant que des thumbnails manquent
   const pollingRef = useRef<NodeJS.Timeout | null>(null)
@@ -965,6 +980,7 @@ export function AvatarGridComponent({
                     // Update in spaceAvatars
                     setSpaceAvatars(prev => prev.map(a => a.id === activeAvatar.id ? updatedAvatar : a))
                   }}
+                  onEditLook={variant === 'create' ? handleEditLook : undefined}
                 />
               ))
             ) : (
@@ -1209,6 +1225,9 @@ export function AvatarGridComponent({
           activeAvatar={activeAvatar}
           spaceId={activeSpace?.id as string}
           onRefresh={() => fetchSpaceAvatars()}
+          initialReferenceImage={editingLook?.thumbnail || null}
+          shouldFocus={shouldFocusChatbox}
+          onFocusComplete={handleFocusComplete}
         />
       )}
 

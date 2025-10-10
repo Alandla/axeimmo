@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Play, History, Maximize2, MoreVertical, Pen, Trash2 } from 'lucide-react'
+import { Check, Play, History, Maximize2, MoreVertical, Pen, Trash2, Edit } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
 import { useTranslations } from 'next-intl'
@@ -77,6 +77,7 @@ interface AvatarLookCardProps {
   isPublic?: boolean
   onLookRenamed?: (lookId: string, newName: string) => void
   canEdit?: boolean
+  onEditLook?: (look: AvatarLook) => void
 }
 
 export function AvatarLookCard({ 
@@ -90,7 +91,8 @@ export function AvatarLookCard({
   setIsModalConfirmDeleteOpen,
   isPublic = false,
   onLookRenamed,
-  canEdit = false
+  canEdit = false,
+  onEditLook
 }: AvatarLookCardProps) {
   const { selectedLook: storeSelectedLook, setSelectedLook: setStoreSelectedLook, setSelectedAvatarName: setStoreSelectedAvatarName } = useCreationStore()
   const { activeSpace } = useActiveSpaceStore()
@@ -256,10 +258,10 @@ export function AvatarLookCard({
               <Button 
                 variant="outline" 
                 size="icon"
-                className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
+                className="h-6 w-6"
                 onClick={(e) => e.stopPropagation()}
               >
-                <MoreVertical className="h-3 w-3" />
+                <MoreVertical style={{ width: '12px', height: '12px' }} />
                 <span className="sr-only">{t('more-options')}</span>
               </Button>
             </DropdownMenuTrigger>
@@ -288,6 +290,17 @@ export function AvatarLookCard({
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
+                {onEditLook && (
+                  <DropdownMenuItem 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEditLook(look);
+                    }}
+                  >
+                    <Edit />
+                    {t('dropdown-menu.edit')}
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem 
                   onClick={(e) => {
                     e.stopPropagation();
@@ -372,15 +385,15 @@ export function AvatarLookCard({
       </div>
 
       {/* Bouton preview en bas à droite */}
-      <div className="absolute bottom-3 right-3 z-10">
+      <div className="absolute bottom-4 right-3 z-10">
         {look.previewUrl && look.status !== 'error' ? (
           <PreviewModal previewUrl={look.previewUrl} avatarName={selectedLook?.name || ''} lookPlace={t(`place.${look.place}`)}>
             <Button
               variant="outline"
               size="icon"
-              className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
+              className="h-6 w-6"
             >
-              <Play className="h-2.5 w-2.5" />
+              <Play style={{ width: '12px', height: '12px' }} />
             </Button>
           </PreviewModal>
         ) : look.thumbnail && look.status !== 'error' ? (
@@ -388,9 +401,9 @@ export function AvatarLookCard({
             <Button
               variant="outline"
               size="icon"
-              className="h-6 w-6 text-white hover:bg-white/20 bg-black/20 backdrop-blur-sm"
+              className="h-6 w-6"
             >
-              <Maximize2 className="h-2 w-2" />
+              <Maximize2 style={{ width: '12px', height: '12px' }} />
             </Button>
           </ImageModal>
         ) : null}

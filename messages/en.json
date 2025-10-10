@@ -828,6 +828,7 @@
     "more-options": "More options",
     "dropdown-menu": {
       "see-looks": "See looks",
+      "edit": "Edit",
       "rename": "Rename",
       "delete": "Delete"
     },
