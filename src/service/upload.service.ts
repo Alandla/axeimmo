@@ -1,17 +1,8 @@
 import { basicApiCall } from "@/src/lib/api";
-import { toast } from "@/src/hooks/use-toast";
-import frMessages from "../../messages/fr.json";
-import enMessages from "../../messages/en.json";
 import { FileToUpload } from "../types/files";
 import { Input, ALL_FORMATS, UrlSource } from 'mediabunny';
 
-// Simple translation resolver without React context
-function translate(key: string): string {
-    const lang = typeof window !== 'undefined' ? (localStorage.getItem('lang') || navigator.language || 'en') : 'en';
-    const locale = lang.toLowerCase().startsWith('fr') ? 'fr' : 'en';
-    const messages: any = locale === 'fr' ? (frMessages as any) : (enMessages as any);
-    return key.split('.').reduce((acc: any, k: string) => (acc && acc[k] !== undefined ? acc[k] : undefined), messages) || key;
-}
+//
 
 export const uploadFiles = async (
     files: FileToUpload[], 
@@ -29,13 +20,7 @@ export const uploadFiles = async (
         });
 
         if (filesToProcess.length === 0) {
-            try { toast({ title: translate('errors.upload.avif-not-supported') }) } catch {}
             throw new Error('errors.upload.avif-not-supported');
-        }
-
-        // Notify user that some files were skipped
-        if (avifFiles.length > 0) {
-            try { toast({ title: translate('errors.upload.avif-partially-skipped') }) } catch {}
         }
 
         let completedFiles = 0
@@ -97,7 +82,7 @@ export const uploadFiles = async (
         if (updateStepProgress) {
             updateStepProgress("MEDIA_UPLOAD", 0)
         }
-        return []
+        throw error
     }
 }
 
@@ -108,7 +93,6 @@ export const getMediaUrlFromFileByPresignedUrl = async (
     const fileName = file?.name || ""
     const fileMime = (file as any)?.type || ""
     if (fileMime === 'image/avif' || /\.avif$/i.test(fileName)) {
-        try { toast({ title: translate('errors.upload.avif-not-supported') }) } catch {}
         throw new Error('errors.upload.avif-not-supported')
     }
 
