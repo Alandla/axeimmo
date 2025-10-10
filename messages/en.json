@@ -371,7 +371,16 @@
       "modal-pricing-title": "Remove the watermark",
       "modal-pricing-description": "Upgrade to a paid plan to remove the Hoox watermark from your videos.",
       "modal-pricing-watermark-title": "Remove watermarks from your videos",
-      "modal-pricing-watermark-description": "Upgrade to a paid plan to export your videos without watermark and unlock all premium features."
+      "modal-pricing-watermark-description": "Upgrade to a paid plan to export your videos without watermark and unlock all premium features.",
+      "avatar-model-label": "Avatar model",
+      "avatar-model-standard": "Standard",
+      "avatar-model-standard-description": "Basic quality, free",
+      "avatar-model-pro": "Pro",
+      "avatar-model-pro-description": "Highly realistic and dynamic",
+      "avatar-model-ultra": "Ultra",
+      "avatar-model-ultra-description": "Longer but enhanced realism",
+      "credits-per-second": "{credits} credits/sec",
+      "cost-details-tooltip": "Base: {baseCost} credits\nAvatar: {avatarCost} ({rate} x {duration}s)"
     },
     "edit": {
       "loading-video-data": "Loading video data...",

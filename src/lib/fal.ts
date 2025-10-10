@@ -242,7 +242,7 @@ export async function upscaleImage(
 export async function startOmniHumanVideoGeneration(
   request: OmniHumanRequest
 ): Promise<{ request_id: string }> {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'development') {
     console.log('[TEST MODE] Simulating OmniHuman video generation');
     return { request_id: 'omnihuman-test-' + Date.now() };
   }
@@ -269,7 +269,7 @@ export async function startOmniHumanVideoGeneration(
 export async function checkOmniHumanRequestStatus(
   requestId: string
 ): Promise<FalQueueStatus> {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'development') {
     console.log(`[TEST MODE] Checking OmniHuman status for request ID: ${requestId}`);
     
     // Simulate different states based on elapsed time

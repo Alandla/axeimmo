@@ -1,4 +1,5 @@
 import { KlingGenerationMode } from "./fal";
+import { generateAvatarRenderList } from './avatar-render';
 
 interface TokenUsage {
   completionTokens: number;
@@ -95,5 +96,26 @@ export function calculateKlingAnimationCost(mode: KlingGenerationMode, upscaleCo
   const upscaleCost = calculateUpscaleCost(upscaleCount);
   
   return animationCost + upscaleCost;
+}
+
+// Avatar model credit rates (credits per second)
+export const AVATAR_MODEL_CREDIT_RATES = {
+  'heygen': 0,
+  'heygen-iv': 0.5,
+  'omnihuman': 2.3
+} as const;
+
+// Calcule le coût avatar en crédits pour l'utilisateur (avec marge)
+export function calculateAvatarCreditsForUser(
+  durationInSeconds: number, 
+  model: 'heygen' | 'heygen-iv' | 'omnihuman'
+): number {
+  return durationInSeconds * AVATAR_MODEL_CREDIT_RATES[model];
+}
+
+// Calcule la durée totale où l'avatar est visible
+export function calculateTotalAvatarDuration(video: any): number {
+  const avatarRenders = generateAvatarRenderList(video);
+  return avatarRenders.reduce((sum: number, render: any) => sum + render.durationInSeconds, 0);
 }
 

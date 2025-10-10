@@ -283,7 +283,16 @@
       "modal-pricing-title": "Retirez le filigrane",
       "modal-pricing-description": "Passez à un plan payant pour retirer le filigrane Hoox de vos vidéos.",
       "modal-pricing-watermark-title": "Supprimez le watermark de vos vidéos",
-      "modal-pricing-watermark-description": "Passez à un plan payant pour exporter vos vidéos sans watermark et débloquer toutes les fonctionnalités premium."
+      "modal-pricing-watermark-description": "Passez à un plan payant pour exporter vos vidéos sans watermark et débloquer toutes les fonctionnalités premium.",
+      "avatar-model-label": "Modèle d'avatar",
+      "avatar-model-standard": "Standard",
+      "avatar-model-standard-description": "Qualité basique, gratuit",
+      "avatar-model-pro": "Pro",
+      "avatar-model-pro-description": "Hautement réaliste et dynamique",
+      "avatar-model-ultra": "Ultra",
+      "avatar-model-ultra-description": "Plus long mais réalisme augmenté",
+      "credits-per-second": "{credits} crédits/sec",
+      "cost-details-tooltip": "Base : {baseCost} crédits\nAvatar : {avatarCost} ({rate} x {duration}s)"
     },
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",

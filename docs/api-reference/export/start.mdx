@@ -25,6 +25,10 @@ This endpoint requires API key authentication. Export costs may apply depending 
   If not specified, uses the original video format.
 </ParamField>
 
+<ParamField body="avatar_model" type="string">
+  Avatar model: `standard`, `pro`, or `ultra`. Defaults to `standard`.
+</ParamField>
+
 <ParamField body="webhook_url" type="string">
   URL to receive webhook notifications when export completes.
 </ParamField>
@@ -147,14 +151,40 @@ console.log(data);
 
 ## Credit Costs
 
-Export costs depend on how the video was created:
+Export costs depend on how the video was created and which avatar model you choose:
 
-- **API-generated videos**: **0 credits** (export included in generation cost, only for first export)
-- **Dashboard-created videos**: Standard export cost applies (5 credits every 30 seconds)
+### Base Export Cost
+
+- **API-generated videos**: **0 credits** for base export (included in generation)
+- **Dashboard-created videos**: 5 credits per 30 seconds
+
+### Avatar Model Costs
+
+Avatar costs apply only when your video includes an avatar and are calculated based on avatar visibility duration:
+
+<CardGroup cols={3}>
+  <Card title="Standard" icon="zap">
+    **Free**
+    Basic avatar quality with no additional cost
+  </Card>
+  <Card title="Pro" icon="gem">
+    **0.5 credits/sec**
+    Highly realistic and dynamic avatars
+  </Card>
+  <Card title="Ultra" icon="crown">
+    **2.3 credits/sec**
+    Enhanced realism with longer processing time
+  </Card>
+</CardGroup>
 
 <Info>
-Videos created through the API have export costs included in the initial generation cost, making first export free.
+Avatar costs are charged separately from base export costs. Total cost = Base export cost + Avatar cost.
 </Info>
+
+**Example**: A 60-second video with 40 seconds of avatar visibility using the Pro model:
+- Base export (API video): 0 credits
+- Avatar cost: 40s × 0.5 = 20 credits
+- **Total**: 20 credits
 
 ## Prerequisites
 

@@ -6,12 +6,22 @@ import { createExport } from '@/src/dao/exportDao'
 import { tasks } from '@trigger.dev/sdk/v3'
 import { calculateGenerationCredits } from '@/src/lib/video-estimation'
 import { objectIdToString } from '@/src/lib/utils'
+import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration } from '@/src/lib/cost'
 
 interface ExportVideoRequest {
   video_id: string;
   format?: 'vertical' | 'square' | 'ads';
   webhook_url?: string;
-  model?: 'heygen' | 'heygen-iv' | 'omnihuman';
+  avatar_model?: 'standard' | 'pro' | 'ultra';
+}
+
+function convertAvatarModel(publicModel?: string): 'heygen' | 'heygen-iv' | 'omnihuman' {
+  switch (publicModel) {
+    case 'pro': return 'heygen-iv';
+    case 'ultra': return 'omnihuman';
+    case 'standard':
+    default: return 'heygen';
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -41,6 +51,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({
         error: "Invalid format",
         details: [{ code: API_ERROR_CODES.INVALID_FORMAT, message: "Format must be one of: 'vertical', 'square', 'ads'", field: "format" }]
+      }, { 
+        status: 400,
+        headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
+      });
+    }
+
+    if (params.avatar_model && !['standard', 'pro', 'ultra'].includes(params.avatar_model)) {
+      return NextResponse.json({
+        error: "Invalid avatar model",
+        details: [{ code: "INVALID_AVATAR_MODEL", message: "avatar_model must be one of: 'standard', 'pro', 'ultra'", field: "avatar_model" }]
       }, { 
         status: 400,
         headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
@@ -86,17 +106,29 @@ export async function POST(req: NextRequest) {
     const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
     const wasCreatedViaAPI = !createEvent?.user;
     
-    // Calculer le coût de l'export
+    // Convert the avatar model from public to internal format
+    const internalModel = convertAvatarModel(params.avatar_model);
+    
+    // Calculate base export cost
     const duration = video.video?.metadata?.audio_duration || 30;
-    const exportCost = wasCreatedViaAPI ? 0 : calculateGenerationCredits(duration);
+    const baseCost = wasCreatedViaAPI ? 0 : calculateGenerationCredits(duration);
 
-    // Vérifier les crédits seulement si ce n'est pas une vidéo créée via API
-    if (!wasCreatedViaAPI && space.credits < exportCost) {
+    // Calculate avatar cost if applicable
+    let avatarCost = 0;
+    if (video.video?.avatar && internalModel !== 'heygen') {
+      const avatarDuration = calculateTotalAvatarDuration(video);
+      avatarCost = calculateAvatarCreditsForUser(avatarDuration, internalModel);
+    }
+
+    const totalCost = baseCost + avatarCost;
+
+    // Check credits if cost > 0
+    if (totalCost > 0 && space.credits < totalCost) {
       return NextResponse.json({
         error: "Insufficient credits",
         details: [{ 
           code: API_ERROR_CODES.INSUFFICIENT_CREDITS, 
-          message: `Required ${exportCost} credits, but only ${space.credits} available` 
+          message: `Required ${totalCost} credits, but only ${space.credits} available` 
         }]
       }, { 
         status: 402,
@@ -113,7 +145,8 @@ export async function POST(req: NextRequest) {
     const exportData = await createExport({
       videoId: params.video_id,
       spaceId: space.id,
-      creditCost: exportCost,
+      creditCost: totalCost,
+      avatarModel: internalModel,
       status: 'pending',
       webhookUrl: params.webhook_url
     });
@@ -121,8 +154,7 @@ export async function POST(req: NextRequest) {
     // Démarrer la tâche d'export
     const handle = await tasks.trigger("export-video", {
       videoId: params.video_id,
-      exportId: exportData.id,
-      model: params.model || 'heygen'
+      exportId: exportData.id
     }, {
       tags: [`space:${space.id}`, `api-request`, `export:${exportData.id}`]
     });
@@ -130,7 +162,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       job_id: handle.id,
       status: 'pending',
-      estimated_credits: exportCost
+      estimated_credits: totalCost
     }, { 
       status: 201,
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)

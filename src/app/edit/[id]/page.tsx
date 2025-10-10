@@ -332,12 +332,16 @@ export default function VideoEditor() {
     }
   };
 
-  const onExportVideo = async () => {
+  const onExportVideo = async (avatarModel?: 'heygen' | 'heygen-iv' | 'omnihuman') => {
 
     try {
       await basicApiCall('/video/save', { video })
 
-      const exportResult : IExport = await basicApiCall('/export/create', { videoId: video?.id, spaceId: video?.spaceId })
+      const exportResult : IExport = await basicApiCall('/export/create', { 
+        videoId: video?.id, 
+        spaceId: video?.spaceId,
+        avatarModel 
+      })
       return exportResult.id
     } catch (error : any) {
       console.error(error)
@@ -1471,6 +1475,8 @@ export default function VideoEditor() {
       setIsOpen={setShowModalExport}
       onExportVideo={onExportVideo}
       showWatermark={showWatermark}
+      video={video || undefined}
+      planName={planName}
       onOpenPricing={() => {
         setModalPricingTitle(exportModalT('modal-pricing-watermark-title'))
         setModalPricingDescription(exportModalT('modal-pricing-watermark-description'))
