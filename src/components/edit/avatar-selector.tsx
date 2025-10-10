@@ -30,7 +30,10 @@ export default function AvatarSelector({
       <div className="flex items-center gap-2">
         <User className="h-4 w-4 flex-shrink-0" />
         <span className="truncate">
-          {selectedAvatar?.name || t('no-avatar')}
+          {selectedAvatar 
+            ? (selectedAvatar.name || t('custom-avatar'))
+            : t('no-avatar')
+          }
         </span>
       </div>
       <CaretSortIcon className="h-4 w-4 opacity-50" />
