@@ -57,6 +57,11 @@ export function calculateHeygenCost(durationInSeconds: number, model: 'heygen' |
   }
 }
 
+export function calculateOmniHumanCost(durationInSeconds: number): number {
+  const COST_PER_SECOND = 0.16;
+  return durationInSeconds * COST_PER_SECOND;
+}
+
 export function calculateWhisperGroqCost(durationInSeconds: number, isTurbo: boolean = false): number {
   // Convertir les secondes en heures
   const durationInHours = durationInSeconds / 3600;

@@ -11,6 +11,7 @@ interface ExportVideoRequest {
   video_id: string;
   format?: 'vertical' | 'square' | 'ads';
   webhook_url?: string;
+  model?: 'heygen' | 'heygen-iv' | 'omnihuman';
 }
 
 export async function POST(req: NextRequest) {
@@ -120,7 +121,8 @@ export async function POST(req: NextRequest) {
     // Démarrer la tâche d'export
     const handle = await tasks.trigger("export-video", {
       videoId: params.video_id,
-      exportId: exportData.id
+      exportId: exportData.id,
+      model: params.model || 'heygen'
     }, {
       tags: [`space:${space.id}`, `api-request`, `export:${exportData.id}`]
     });

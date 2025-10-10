@@ -7,7 +7,8 @@ import { IVideo } from "../types/video";
 import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails, uploadImageToHeygen, generateAvatarIVVideo } from "../lib/heygen";
-import { calculateHeygenCost } from "../lib/cost";
+import { calculateHeygenCost, calculateOmniHumanCost } from "../lib/cost";
+import { startOmniHumanVideoGeneration, checkOmniHumanRequestStatus, getOmniHumanRequestResult } from "../lib/fal";
 import { addVideoExportedContact, sendExportedVideoEmail } from "../lib/loops";
 import UserModel from "../models/User";
 import { MixpanelEvent } from "../types/events";
@@ -31,7 +32,7 @@ interface RenderStatus {
 interface ExportVideoPayload {
   videoId: string
   exportId: string
-  model?: 'heygen' | 'heygen-iv'
+  model?: 'heygen' | 'heygen-iv' | 'omnihuman'
 }
 
 interface AvatarRenderData {
@@ -42,10 +43,223 @@ interface AvatarRenderData {
   startInFrames: number
   durationInSeconds: number
   heygenVideoId?: string
+  omnihumanRequestId?: string
+  requestId?: string
   firstWordStart?: number
   lastWordEnd?: number
 }
 
+interface AvatarModelAdapter {
+  modelName: string
+  batchSize: number
+  prepareImageResource: (thumbnail: string) => Promise<string>
+  generateVideo: (imageResource: string, render: AvatarRenderData, video: IVideo, index: number) => Promise<string>
+  checkStatus: (requestId: string) => Promise<{ status: 'completed' | 'failed' | 'processing', videoUrl?: string, error?: any }>
+  calculateCost: (durationInSeconds: number) => number
+  getFileNamePrefix: () => string
+}
+
+// Adapter for Heygen-IV model
+const heygenIVAdapter: AvatarModelAdapter = {
+  modelName: 'heygen-iv',
+  batchSize: 3,
+  prepareImageResource: async (thumbnail: string) => {
+    logger.log("Uploading avatar thumbnail to Heygen...");
+    const imageKey = await uploadImageToHeygen(thumbnail);
+    logger.log("Avatar thumbnail uploaded", { imageKey });
+    return imageKey;
+  },
+  generateVideo: async (imageKey: string, render: AvatarRenderData, video: IVideo, index: number) => {
+    const title = `${video.title || 'Video'} - Avatar ${index + 1}`;
+    const response = await generateAvatarIVVideo(
+      imageKey,
+      render.audioUrl,
+      video.video?.format,
+      title
+    );
+    return response.data.video_id;
+  },
+  checkStatus: async (videoId: string) => {
+    const status = await getVideoDetails(videoId);
+    if (status.data.status === 'completed' && status.data.video_url) {
+      return { status: 'completed', videoUrl: status.data.video_url };
+    } else if (status.data.status === 'failed') {
+      return { status: 'failed', error: status.data.error };
+    }
+    return { status: 'processing' };
+  },
+  calculateCost: (durationInSeconds: number) => calculateHeygenCost(durationInSeconds, 'heygen-iv'),
+  getFileNamePrefix: () => 'avatar-iv'
+};
+
+// Adapter for OmniHuman model
+const omnihumanAdapter: AvatarModelAdapter = {
+  modelName: 'omnihuman',
+  batchSize: 50,
+  prepareImageResource: async (thumbnail: string) => {
+    logger.log("Using avatar thumbnail directly", { thumbnail });
+    return thumbnail;
+  },
+  generateVideo: async (imageUrl: string, render: AvatarRenderData) => {
+    const response = await startOmniHumanVideoGeneration({
+      image_url: imageUrl,
+      audio_url: render.audioUrl
+    });
+    return response.request_id;
+  },
+  checkStatus: async (requestId: string) => {
+    const status = await checkOmniHumanRequestStatus(requestId);
+    if (status.status === 'COMPLETED' && status.response_url) {
+      const result = await getOmniHumanRequestResult(requestId);
+      if (result.data?.video?.url) {
+        return { status: 'completed', videoUrl: result.data.video.url };
+      }
+      throw new Error(`No video URL in OmniHuman result for ${requestId}`);
+    } else if ((status as any).status === 'FAILED') {
+      return { status: 'failed', error: (status as any).error };
+    }
+    return { status: 'processing' };
+  },
+  calculateCost: (durationInSeconds: number) => calculateOmniHumanCost(durationInSeconds),
+  getFileNamePrefix: () => 'avatar-omnihuman'
+};
+
+// Common function to generate avatar videos with any model
+async function generateAvatarVideosWithModel(
+  adapter: AvatarModelAdapter,
+  video: IVideo,
+  trimmedAvatarRenders: AvatarRenderData[]
+): Promise<{ renders: { audioIndex: number; startInFrames: number; url: string }[], cost: number }> {
+  // Prepare image resource (upload for heygen-iv, direct URL for omnihuman)
+  const imageResource = await adapter.prepareImageResource(video.video!.avatar!.thumbnail!);
+  
+  // Generate all avatar videos in batches
+  logger.log(`Starting ${adapter.modelName} video generation for all segments...`);
+  const avatarRendersWithRequestIds: Array<AvatarRenderData & { requestId: string }> = [];
+  const batchSize = adapter.batchSize;
+  
+  for (let i = 0; i < trimmedAvatarRenders.length; i += batchSize) {
+    const batch = trimmedAvatarRenders.slice(i, i + batchSize);
+    logger.log(`Processing batch ${Math.floor(i / batchSize) + 1} (${batch.length} videos)...`);
+    
+    const batchPromises = batch.map(async (render, batchIndex) => {
+      const globalIndex = i + batchIndex;
+      try {
+        const requestId = await adapter.generateVideo(imageResource, render, video, globalIndex);
+        logger.log(`${adapter.modelName} video ${globalIndex + 1} generation started`, { requestId });
+        return {
+          ...render,
+          requestId
+        };
+      } catch (error) {
+        logger.error(`Error generating ${adapter.modelName} video ${globalIndex + 1}`, { error });
+        throw error;
+      }
+    });
+    
+    const batchResults = await Promise.all(batchPromises);
+    avatarRendersWithRequestIds.push(...batchResults);
+    
+    // Wait 1 second before next batch (except for the last batch)
+    if (i + batchSize < trimmedAvatarRenders.length) {
+      logger.log("Waiting 1 second before next batch...");
+      await wait.for({ seconds: 1 });
+    }
+  }
+  logger.log(`All ${adapter.modelName} video generations started`, { avatarRendersWithRequestIds });
+  
+  // Poll each avatar video status
+  logger.log(`Polling ${adapter.modelName} avatar video statuses...`);
+  
+  const pendingAvatars = new Map(
+    avatarRendersWithRequestIds.map(render => [render.requestId!, render])
+  );
+  const completedAvatars = new Map<string, string>(); // requestId -> videoUrl
+  
+  let attempts = 0;
+  const maxAttempts = 200; // 200 * 6s = 1200s = 20min max
+  
+  // Poll with sequential waits
+  while (pendingAvatars.size > 0 && attempts < maxAttempts) {
+    attempts++;
+    // Check all pending avatars status in parallel
+    const statusChecks = Array.from(pendingAvatars.keys()).map(async (requestId) => {
+      try {
+        const status = await adapter.checkStatus(requestId);
+        return { requestId, status };
+      } catch (error) {
+        logger.error(`Error checking status for ${adapter.modelName} avatar ${requestId}:`, { error });
+        return { requestId, status: { status: 'failed' as const, error } };
+      }
+    });
+    
+    // Wait for all status checks to complete
+    const allStatuses = await Promise.all(statusChecks);
+    
+    // Process completed avatars
+    for (const { requestId, status } of allStatuses) {
+      const render = pendingAvatars.get(requestId);
+      if (!render) continue;
+      
+      if (status.status === 'completed' && status.videoUrl) {
+        logger.log(`${adapter.modelName} avatar video ${requestId} completed`, { videoUrl: status.videoUrl });
+        completedAvatars.set(requestId, status.videoUrl);
+        pendingAvatars.delete(requestId);
+      } else if (status.status === 'failed') {
+        logger.error(`${adapter.modelName} avatar video ${requestId} failed`, { error: status.error });
+        pendingAvatars.delete(requestId);
+        throw new Error(`${adapter.modelName} avatar video generation failed: ${status.error}`);
+      }
+    }
+    
+    // If there are still pending avatars, wait before next check
+    if (pendingAvatars.size > 0) {
+      await wait.for({ seconds: 6 });
+    }
+  }
+  
+  // Check if we timed out
+  if (pendingAvatars.size > 0) {
+    throw new Error(`Timeout: ${pendingAvatars.size} ${adapter.modelName} avatar(s) did not complete after ${maxAttempts * 6} seconds`);
+  }
+  
+  // Upload all completed avatars to R2 in parallel
+  logger.log(`Uploading completed ${adapter.modelName} avatars to R2...`);
+  const uploadPromises = Array.from(completedAvatars.entries()).map(async ([requestId, videoUrl]) => {
+    const render = avatarRendersWithRequestIds.find(r => r.requestId === requestId);
+    if (!render) return null;
+    
+    try {
+      const fileName = `${adapter.getFileNamePrefix()}-${video.id}-${render.audioIndex}-${render.startInFrames}-${Date.now()}`;
+      const r2VideoUrl = await uploadVideoFromUrlToS3(videoUrl, "medias-users", fileName);
+      logger.log(`${adapter.modelName} avatar ${render.audioIndex} uploaded to R2`, { r2VideoUrl });
+      
+      return {
+        audioIndex: render.audioIndex,
+        startInFrames: render.startInFrames,
+        url: r2VideoUrl
+      };
+    } catch (error) {
+      logger.error(`Error uploading ${adapter.modelName} avatar ${render.audioIndex} to R2`, { error });
+      throw error;
+    }
+  });
+  
+  const uploadResults = await Promise.all(uploadPromises);
+  const finalAvatarRenders = uploadResults.filter(r => r !== null) as { audioIndex: number; startInFrames: number; url: string }[];
+  
+  // Sort renders by startInFrames to ensure correct z-index order
+  finalAvatarRenders.sort((a, b) => a.startInFrames - b.startInFrames);
+  
+  logger.log(`All ${adapter.modelName} avatar videos completed and uploaded`, { finalAvatarRenders });
+  
+  // Calculate total avatar cost
+  const totalAvatarDuration = trimmedAvatarRenders.reduce((sum, render) => sum + render.durationInSeconds, 0);
+  const cost = adapter.calculateCost(totalAvatarDuration);
+  logger.log(`${adapter.modelName} cost calculated`, { totalAvatarDuration, cost });
+  
+  return { renders: finalAvatarRenders, cost };
+}
 
 export const exportVideoTask = task({
   id: "export-video",
@@ -97,9 +311,10 @@ export const exportVideoTask = task({
       // Intégration de l'export audio si un avatar est présent
       if (video.video?.avatar?.id && video.video?.audio?.voices && ctx.attempt.number === 1) {
         
-        if (model === 'heygen-iv') {
-          // New model: generate multiple avatar videos for each visible segment
-          logger.log("Using heygen-iv model - generating avatar render list...");
+        if (model === 'heygen-iv' || model === 'omnihuman') {
+          // Use adapter pattern for multi-segment avatar models
+          const adapter = model === 'heygen-iv' ? heygenIVAdapter : omnihumanAdapter;
+          logger.log(`Using ${adapter.modelName} model - generating avatar render list...`);
           
           const avatarRenderList = generateAvatarRenderList(video);
           logger.log(`Generated ${avatarRenderList.length} avatar renders`, { avatarRenderList });
@@ -109,144 +324,9 @@ export const exportVideoTask = task({
             const trimmedAvatarRenders = await trimAvatarAudios(avatarRenderList);
             logger.log("Avatar audios trimmed", { trimmedAvatarRenders });
             
-            // Upload avatar thumbnail to Heygen
-            logger.log("Uploading avatar thumbnail to Heygen...");
-            const imageKey = await uploadImageToHeygen(video.video.avatar.thumbnail!);
-            logger.log("Avatar thumbnail uploaded", { imageKey });
-            
-            // Generate all avatar videos in batches of 3 with 1 second delay between batches
-            logger.log("Starting avatar IV video generation for all segments...");
-            const avatarRendersWithVideoIds: Array<AvatarRenderData & { heygenVideoId: string }> = [];
-            const batchSize = 3;
-            
-            for (let i = 0; i < trimmedAvatarRenders.length; i += batchSize) {
-              const batch = trimmedAvatarRenders.slice(i, i + batchSize);
-              logger.log(`Processing batch ${Math.floor(i / batchSize) + 1} (${batch.length} videos)...`);
-              
-              const batchPromises = batch.map(async (render, batchIndex) => {
-                const globalIndex = i + batchIndex;
-                try {
-                  const title = `${video.title || 'Video'} - Avatar ${globalIndex + 1}`;
-                  const response = await generateAvatarIVVideo(
-                    imageKey,
-                    render.audioUrl,
-                    video.video?.format,
-                    title
-                  );
-                  logger.log(`Avatar IV video ${globalIndex + 1} generation started`, { heygenVideoId: response.data.video_id });
-                  return {
-                    ...render,
-                    heygenVideoId: response.data.video_id
-                  };
-                } catch (error) {
-                  logger.error(`Error generating avatar IV video ${globalIndex + 1}`, { error });
-                  throw error;
-                }
-              });
-              
-              const batchResults = await Promise.all(batchPromises);
-              avatarRendersWithVideoIds.push(...batchResults);
-              
-              // Wait 1 second before next batch (except for the last batch)
-              if (i + batchSize < trimmedAvatarRenders.length) {
-                logger.log("Waiting 1 second before next batch...");
-                await wait.for({ seconds: 1 });
-              }
-            }
-            logger.log("All avatar IV video generations started", { avatarRendersWithVideoIds });
-            
-            // Poll each avatar video status with sequential waits (no parallel waits allowed)
-            logger.log("Polling avatar video statuses...");
-            
-            const pendingAvatars = new Map(
-              avatarRendersWithVideoIds.map(render => [render.heygenVideoId!, render])
-            );
-            const completedAvatars = new Map<string, string>(); // videoId -> videoUrl
-            const finalAvatarRenders: { audioIndex: number; startInFrames: number; url: string }[] = [];
-            
-            let attempts = 0;
-            const maxAttempts = 200; // 200 * 6s = 1200s = 20min max
-            
-            // Poll with sequential waits
-            while (pendingAvatars.size > 0 && attempts < maxAttempts) {
-              attempts++;
-              // Check all pending avatars status in parallel (no wait here)
-              const statusChecks = Array.from(pendingAvatars.keys()).map(async (videoId) => {
-                try {
-                  const status = await getVideoDetails(videoId);
-                  return { videoId, status };
-                } catch (error) {
-                  logger.error(`Error checking status for avatar ${videoId}:`, { error });
-                  return { videoId, status: { data: { status: 'failed', error } } };
-                }
-              });
-              
-              // Wait for all status checks to complete
-              const allStatuses = await Promise.all(statusChecks);
-              
-              // Process completed avatars
-              for (const { videoId, status } of allStatuses) {
-                const render = pendingAvatars.get(videoId);
-                if (!render) continue;
-                
-                if (status.data.status === 'completed' && status.data.video_url) {
-                  logger.log(`Avatar video ${videoId} completed`, { videoUrl: status.data.video_url });
-                  logger.log("status.data", status.data);
-                  completedAvatars.set(videoId, status.data.video_url);
-                  pendingAvatars.delete(videoId);
-                } else if (status.data.status === 'failed') {
-                  logger.error(`Avatar video ${videoId} failed`, { error: status.data.error });
-                  pendingAvatars.delete(videoId);
-                  throw new Error(`Avatar video generation failed: ${status.data.error}`);
-                }
-              }
-              
-              // If there are still pending avatars, wait before next check
-              if (pendingAvatars.size > 0) {
-                await wait.for({ seconds: 6 });
-              }
-            }
-            
-            // Check if we timed out
-            if (pendingAvatars.size > 0) {
-              throw new Error(`Timeout: ${pendingAvatars.size} avatar(s) did not complete after ${maxAttempts * 6} seconds`);
-            }
-            
-            // Upload all completed avatars to R2 in parallel
-            logger.log("Uploading completed avatars to R2...");
-            const uploadPromises = Array.from(completedAvatars.entries()).map(async ([videoId, videoUrl]) => {
-              const render = avatarRendersWithVideoIds.find(r => r.heygenVideoId === videoId);
-              if (!render) return null;
-              
-              try {
-                // Use startInFrames to ensure unique filenames even when multiple renders share the same audioIndex
-                const fileName = `avatar-iv-${video.id}-${render.audioIndex}-${render.startInFrames}-${Date.now()}`;
-                const r2VideoUrl = await uploadVideoFromUrlToS3(videoUrl, "medias-users", fileName);
-                logger.log(`Avatar ${render.audioIndex} uploaded to R2`, { r2VideoUrl });
-                
-                return {
-                  audioIndex: render.audioIndex,
-                  startInFrames: render.startInFrames,
-                  url: r2VideoUrl
-                };
-              } catch (error) {
-                logger.error(`Error uploading avatar ${render.audioIndex} to R2`, { error });
-                throw error;
-              }
-            });
-            
-            const uploadResults = await Promise.all(uploadPromises);
-            finalAvatarRenders.push(...uploadResults.filter(r => r !== null) as typeof finalAvatarRenders);
-            
-            // Sort renders by startInFrames to ensure correct z-index order (first appearance comes first)
-            finalAvatarRenders.sort((a, b) => a.startInFrames - b.startInFrames);
-            
-            logger.log("All avatar videos completed and uploaded", { finalAvatarRenders });
-            
-            // Calculate total avatar cost for IV model
-            const totalAvatarDuration = trimmedAvatarRenders.reduce((sum, render) => sum + render.durationInSeconds, 0);
-            avatarCost = calculateHeygenCost(totalAvatarDuration, 'heygen-iv');
-            logger.log("Avatar IV cost calculated", { totalAvatarDuration, avatarCost });
+            // Generate avatar videos using the common function
+            const { renders, cost } = await generateAvatarVideosWithModel(adapter, video, trimmedAvatarRenders);
+            avatarCost = cost;
             
             // Store the final renders in the video avatar object
             if (!video.video.avatar) {
@@ -254,7 +334,7 @@ export const exportVideoTask = task({
             }
             
             if (video.video.avatar) {
-              video.video.avatar.renders = finalAvatarRenders;
+              video.video.avatar.renders = renders;
               await updateVideo(video);
               logger.log("Avatar renders saved to video", { renders: video.video.avatar.renders });
             }

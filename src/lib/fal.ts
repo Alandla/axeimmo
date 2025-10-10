@@ -51,6 +51,27 @@ export interface FalQueueResult {
   data?: KlingResponse;
 }
 
+// OmniHuman types and constants
+export const OMNIHUMAN_ENDPOINT = "fal-ai/bytedance/omnihuman/v1.5";
+
+export interface OmniHumanRequest {
+  image_url: string;
+  audio_url: string;
+}
+
+export interface OmniHumanResponse {
+  video: {
+    url: string;
+    width: number;
+    height: number;
+    content_type: string;
+  };
+}
+
+export interface OmniHumanQueueResult {
+  data?: OmniHumanResponse;
+}
+
 /**
  * Démarre la génération vidéo avec Kling selon le mode spécifié
  */
@@ -211,6 +232,107 @@ export async function upscaleImage(
     };
   } catch (error) {
     console.error("Error upscaling image:", error);
+    throw error;
+  }
+}
+
+/**
+ * Start OmniHuman avatar video generation
+ */
+export async function startOmniHumanVideoGeneration(
+  request: OmniHumanRequest
+): Promise<{ request_id: string }> {
+  if (process.env.NODE_ENV === 'production') {
+    console.log('[TEST MODE] Simulating OmniHuman video generation');
+    return { request_id: 'omnihuman-test-' + Date.now() };
+  }
+  
+  try {
+    const result = await fal.queue.submit(OMNIHUMAN_ENDPOINT, {
+      input: {
+        image_url: request.image_url,
+        audio_url: request.audio_url
+      }
+    });
+
+    console.log(`OmniHuman video generation started, request_id: ${result.request_id}`);
+    return { request_id: result.request_id };
+  } catch (error) {
+    console.error('Error starting OmniHuman video generation:', error);
+    throw error;
+  }
+}
+
+/**
+ * Check OmniHuman request status
+ */
+export async function checkOmniHumanRequestStatus(
+  requestId: string
+): Promise<FalQueueStatus> {
+  if (process.env.NODE_ENV === 'production') {
+    console.log(`[TEST MODE] Checking OmniHuman status for request ID: ${requestId}`);
+    
+    // Simulate different states based on elapsed time
+    const now = Date.now();
+    const requestTime = parseInt(requestId.split('-').pop() || '0');
+    const elapsedSeconds = Math.floor((now - requestTime) / 1000);
+    
+    if (elapsedSeconds < 5) {
+      return { 
+        status: "IN_QUEUE", 
+        queue_position: Math.max(1, 3 - Math.floor(elapsedSeconds / 2)) 
+      };
+    } else if (elapsedSeconds < 15) {
+      return { 
+        status: "IN_PROGRESS",
+        logs: [{ 
+          message: `Processing OmniHuman video (${Math.floor((elapsedSeconds - 5) / 10 * 100)}%)`, 
+          level: "info", 
+          timestamp: new Date().toISOString() 
+        }]
+      };
+    } else {
+      return { 
+        status: "COMPLETED",
+        response_url: "https://example.com/omnihuman-completed" 
+      };
+    }
+  }
+
+  try {
+    const status = await fal.queue.status(OMNIHUMAN_ENDPOINT, {
+      requestId: requestId,
+      logs: true,
+    });
+
+    return {
+      status: status.status as "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED",
+      response_url: status.response_url,
+      queue_position: (status as any).queue_position,
+      logs: (status as any).logs
+    };
+  } catch (error) {
+    console.error('Error checking OmniHuman request status:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get OmniHuman request result
+ */
+export async function getOmniHumanRequestResult(
+  requestId: string
+): Promise<OmniHumanQueueResult> {
+  try {
+    const result = await fal.queue.result(OMNIHUMAN_ENDPOINT, {
+      requestId: requestId
+    });
+
+    return {
+      data: result.data as OmniHumanResponse
+    };
+  } catch (error) {
+    console.error('Error getting OmniHuman request result:', error);
     throw error;
   }
 } 
