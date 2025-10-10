@@ -591,16 +591,20 @@ export function AvatarGridComponent({
     return matchesSearch && matchesGender && matchesTags
   }))
 
-  // Infinite scroll pour avatars publics
-  const totalPublicWithNoAvatar = filteredPublicAvatars.length + (variant === 'select' && !activeAvatar && currentPage === 1 && showNoAvatar ? 1 : 0)
+  // Pagination pour avatars publics (variant select) ou infinite scroll (variant create)
   const showNoAvatarCard = variant === 'select' && !activeAvatar && currentPage === 1 && showNoAvatar
-  const effectivePublicCount = Math.min(visiblePublicCount, totalPublicWithNoAvatar)
-  const numAvatarsToShow = Math.max(0, effectivePublicCount - (showNoAvatarCard ? 1 : 0))
-  const currentAvatars = filteredPublicAvatars.slice(0, numAvatarsToShow)
+  
+  // Pour le variant select, utiliser la pagination classique
+  const currentAvatars = variant === 'select' 
+    ? filteredPublicAvatars.slice((currentPage - 1) * avatarsPerPage, currentPage * avatarsPerPage)
+    : filteredPublicAvatars.slice(0, visiblePublicCount)
+  
   const totalPages = Math.ceil(filteredPublicAvatars.length / avatarsPerPage)
-
-  // Pour la première vue, inclure éventuellement la carte "No avatar"
-  const avatarsToShow = currentAvatars
+  
+  // Pour la première page du variant select, inclure éventuellement la carte "No avatar"
+  const avatarsToShow = variant === 'select' && showNoAvatarCard 
+    ? currentAvatars.slice(0, avatarsPerPage - 1) 
+    : currentAvatars
 
 
 
@@ -642,14 +646,21 @@ export function AvatarGridComponent({
     handleFilters(newFilteredAvatars)
   }
 
-  // Reset du compteur visible quand les filtres changent ou vue change
+  // Reset du compteur visible quand les filtres changent ou vue change (pour variant create)
   useEffect(() => {
-    setVisiblePublicCount(avatarsPerPage)
-  }, [searchQuery, selectedGender, selectedTags, avatarsPerPage, activeAvatar])
+    if (variant === 'create') {
+      setVisiblePublicCount(avatarsPerPage)
+    }
+  }, [searchQuery, selectedGender, selectedTags, avatarsPerPage, activeAvatar, variant])
 
-  const hasMorePublic = effectivePublicCount < totalPublicWithNoAvatar
+  // Pour le variant create, garder la logique infinite scroll
+  const totalPublicWithNoAvatar = variant === 'create' ? filteredPublicAvatars.length + (showNoAvatarCard ? 1 : 0) : 0
+  const effectivePublicCount = variant === 'create' ? Math.min(visiblePublicCount, totalPublicWithNoAvatar) : 0
+  const hasMorePublic = variant === 'create' && effectivePublicCount < totalPublicWithNoAvatar
   const loadMorePublic = () => {
-    setVisiblePublicCount((c) => c + avatarsPerPage)
+    if (variant === 'create') {
+      setVisiblePublicCount((c) => c + avatarsPerPage)
+    }
   }
 
   // Fonctions de pagination pour les looks
@@ -779,7 +790,7 @@ export function AvatarGridComponent({
       if (variant !== 'create') {
         if (width < 640) cols = 2
         else if (width < 1024) cols = 3
-        else cols = 4
+        else cols = 3
       } else {
         if (width < 1024) cols = 2
         else if (width < 1536) cols = 5
@@ -1102,14 +1113,16 @@ export function AvatarGridComponent({
                 canEdit={false}
               />
             ))}
-            <div className="col-span-full">
-              <InfiniteScroll
-                onLoadMore={loadMorePublic}
-                hasMore={hasMorePublic}
-                loader={<div className="text-center py-4 text-muted-foreground">{tCommon('infinite-scroll.loading')}</div>}
-                endMessage={<div className="text-center py-4 text-muted-foreground">{tCommon('infinite-scroll.end')}</div>}
-              />
-            </div>
+            {variant === 'create' && (
+              <div className="col-span-full">
+                <InfiniteScroll
+                  onLoadMore={loadMorePublic}
+                  hasMore={hasMorePublic}
+                  loader={<div className="text-center py-4 text-muted-foreground">{tCommon('infinite-scroll.loading')}</div>}
+                  endMessage={<div className="text-center py-4 text-muted-foreground">{tCommon('infinite-scroll.end')}</div>}
+                />
+              </div>
+            )}
           </>
         )}
       </div>
@@ -1218,6 +1231,88 @@ export function AvatarGridComponent({
           </Pagination>
         )
       ) : null}
+
+      {variant === 'select' && !activeAvatar && totalPages > 1 && (
+        // Pagination des avatars publics
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious 
+                showText={false}
+                onClick={() => handlePageChange(currentPage - 1)}
+                className={cn(
+                  "cursor-pointer sm:hidden",
+                  currentPage === 1 && "pointer-events-none opacity-50"
+                )}
+              />
+              <PaginationPrevious 
+                showText={true}
+                onClick={() => handlePageChange(currentPage - 1)}
+                className={cn(
+                  "cursor-pointer hidden sm:flex",
+                  currentPage === 1 && "pointer-events-none opacity-50"
+                )}
+              />
+            </PaginationItem>
+
+            {getPageNumbers().showStartEllipsis && (
+              <>
+                <PaginationItem>
+                  <PaginationLink onClick={() => handlePageChange(1)}>
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              </>
+            )}
+
+            {getPageNumbers().numbers.map((pageNumber) => (
+              <PaginationItem key={pageNumber}>
+                <PaginationLink
+                  isActive={currentPage === pageNumber}
+                  onClick={() => handlePageChange(pageNumber)}
+                >
+                  {pageNumber}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            {getPageNumbers().showEndEllipsis && (
+              <>
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink onClick={() => handlePageChange(totalPages)}>
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
+            )}
+
+            <PaginationItem>
+              <PaginationNext 
+                showText={false}
+                onClick={() => handlePageChange(currentPage + 1)}
+                className={cn(
+                  "cursor-pointer sm:hidden",
+                  currentPage === totalPages && "pointer-events-none opacity-50"
+                )}
+              />
+              <PaginationNext 
+                showText={true}
+                onClick={() => handlePageChange(currentPage + 1)}
+                className={cn(
+                  "cursor-pointer hidden sm:flex",
+                  currentPage === totalPages && "pointer-events-none opacity-50"
+                )}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
 
       {variant === 'create' && activeAvatar && spaceAvatars.some(a => a.id === activeAvatar.id) && (
         <AvatarLookChatbox
