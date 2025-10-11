@@ -13,6 +13,7 @@ export type Avatar = {
 export type AvatarRender = {
     audioIndex: number
     startInFrames: number
+    durationInSeconds?: number
     url: string
 }
 

@@ -119,7 +119,7 @@ async function generateAvatarVideosWithModel(
   adapter: AvatarModelAdapter,
   video: IVideo,
   trimmedAvatarRenders: AvatarRenderData[]
-): Promise<{ renders: { audioIndex: number; startInFrames: number; url: string }[], cost: number }> {
+): Promise<{ renders: { audioIndex: number; startInFrames: number; durationInSeconds: number; url: string }[], cost: number }> {
   // Prepare image resource (upload for heygen-iv, direct URL for omnihuman)
   const imageResource = await adapter.prepareImageResource(video.video!.avatar!.thumbnail!);
   
@@ -227,6 +227,7 @@ async function generateAvatarVideosWithModel(
       return {
         audioIndex: render.audioIndex,
         startInFrames: render.startInFrames,
+        durationInSeconds: render.durationInSeconds,
         url: r2VideoUrl
       };
     } catch (error) {
@@ -236,7 +237,7 @@ async function generateAvatarVideosWithModel(
   });
   
   const uploadResults = await Promise.all(uploadPromises);
-  const finalAvatarRenders = uploadResults.filter(r => r !== null) as { audioIndex: number; startInFrames: number; url: string }[];
+  const finalAvatarRenders = uploadResults.filter(r => r !== null) as { audioIndex: number; startInFrames: number; durationInSeconds: number; url: string }[];
   
   // Sort renders by startInFrames to ensure correct z-index order
   finalAvatarRenders.sort((a, b) => a.startInFrames - b.startInFrames);

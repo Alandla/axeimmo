@@ -141,6 +141,7 @@ const videoSchema = new mongoose.Schema({
           {
             audioIndex: Number,
             startInFrames: Number,
+            durationInSeconds: Number,
             url: String,
           },
         ],
