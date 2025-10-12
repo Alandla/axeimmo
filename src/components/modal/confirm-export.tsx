@@ -15,11 +15,13 @@ import { Download, AlertCircle, HelpCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { getSpaceById } from '@/src/service/space.service'
 import { useRouter } from 'next/navigation'
-import { AvatarModelSelector, AvatarModel } from '@/src/components/ui/avatar-model-selector'
+import { AvatarModelSelector, AvatarModel, isAvatarModelAllowed, getRequiredPlanForModel } from '@/src/components/ui/avatar-model-selector'
 import { IVideo } from '@/src/types/video'
 import { calculateTotalAvatarDuration, calculateAvatarCreditsForUser, AVATAR_MODEL_CREDIT_RATES } from '@/src/lib/cost'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
 import { Label } from '@radix-ui/react-dropdown-menu'
+import ModalPricing from './modal-pricing'
+import { PlanName } from '@/src/types/enums'
 
 const formatCredits = (credits: number): string => {
   return credits % 1 === 0 ? credits.toFixed(0) : credits.toFixed(1)
@@ -53,6 +55,8 @@ export default function ModalConfirmExport({
   const [isPending, setIsPending] = useState(false)
   const [credits, setCredits] = useState<number | undefined>(initialCredits)
   const [selectedAvatarModel, setSelectedAvatarModel] = useState<AvatarModel>('heygen')
+  const [showPricingModal, setShowPricingModal] = useState(false)
+  const [pricingRecommendedPlan, setPricingRecommendedPlan] = useState<PlanName>(PlanName.PRO)
   const t = useTranslations('export-modal')
   const router = useRouter()
 
@@ -63,6 +67,17 @@ export default function ModalConfirmExport({
   const totalCost = cost + avatarCost
 
   const handleConfirm = async () => {
+    // Check if the selected model is allowed for the current plan
+    const currentPlanName = planName as PlanName | null
+    if (!isAvatarModelAllowed(selectedAvatarModel, currentPlanName)) {
+      const requiredPlan = getRequiredPlanForModel(selectedAvatarModel)
+      if (requiredPlan) {
+        setPricingRecommendedPlan(requiredPlan)
+        setShowPricingModal(true)
+        return
+      }
+    }
+
     setIsPending(true)
     const exportId = await onExportVideo(selectedAvatarModel)
     if (exportId) {
@@ -147,6 +162,7 @@ export default function ModalConfirmExport({
                   onValueChange={(value) => setSelectedAvatarModel(value as AvatarModel)}
                   planName={planName as any}
                   avatarDuration={avatarDuration}
+                  showStandard={!!video?.video?.avatar?.previewUrl}
                 />
               </div>
             )}
@@ -187,6 +203,14 @@ export default function ModalConfirmExport({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ModalPricing
+        title={t('modal-pricing-avatar-title')}
+        description={t('modal-pricing-avatar-description')}
+        isOpen={showPricingModal}
+        setIsOpen={setShowPricingModal}
+        recommendedPlan={pricingRecommendedPlan}
+      />
     </>
   )
 }

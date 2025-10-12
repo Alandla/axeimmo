@@ -12,12 +12,12 @@ interface ExportVideoRequest {
   video_id: string;
   format?: 'vertical' | 'square' | 'ads';
   webhook_url?: string;
-  avatar_model?: 'standard' | 'pro' | 'ultra';
+  avatar_model?: 'standard' | 'premium' | 'ultra';
 }
 
 function convertAvatarModel(publicModel?: string): 'heygen' | 'heygen-iv' | 'omnihuman' {
   switch (publicModel) {
-    case 'pro': return 'heygen-iv';
+    case 'premium': return 'heygen-iv';
     case 'ultra': return 'omnihuman';
     case 'standard':
     default: return 'heygen';
@@ -57,10 +57,10 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    if (params.avatar_model && !['standard', 'pro', 'ultra'].includes(params.avatar_model)) {
+    if (params.avatar_model && !['standard', 'premium', 'ultra'].includes(params.avatar_model)) {
       return NextResponse.json({
         error: "Invalid avatar model",
-        details: [{ code: "INVALID_AVATAR_MODEL", message: "avatar_model must be one of: 'standard', 'pro', 'ultra'", field: "avatar_model" }]
+        details: [{ code: "INVALID_AVATAR_MODEL", message: "avatar_model must be one of: 'standard', 'premium', 'ultra'", field: "avatar_model" }]
       }, { 
         status: 400,
         headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)

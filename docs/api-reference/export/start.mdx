@@ -26,7 +26,7 @@ This endpoint requires API key authentication. Export costs may apply depending 
 </ParamField>
 
 <ParamField body="avatar_model" type="string">
-  Avatar model: `standard`, `pro`, or `ultra`. Defaults to `standard`.
+  Avatar model: `standard`, `premium`, or `ultra`. Defaults to `standard`.
 </ParamField>
 
 <ParamField body="webhook_url" type="string">
@@ -167,13 +167,15 @@ Avatar costs apply only when your video includes an avatar and are calculated ba
     **Free**
     Basic avatar quality with no additional cost
   </Card>
-  <Card title="Pro" icon="gem">
+  <Card title="Premium" icon="gem">
     **0.5 credits/sec**
     Highly realistic and dynamic avatars
+    *Available from Start plan*
   </Card>
   <Card title="Ultra" icon="crown">
     **2.3 credits/sec**
     Enhanced realism with longer processing time
+    *Enterprise plan only*
   </Card>
 </CardGroup>
 
@@ -181,7 +183,7 @@ Avatar costs apply only when your video includes an avatar and are calculated ba
 Avatar costs are charged separately from base export costs. Total cost = Base export cost + Avatar cost.
 </Info>
 
-**Example**: A 60-second video with 40 seconds of avatar visibility using the Pro model:
+**Example**: A 60-second video with 40 seconds of avatar visibility using the Premium model:
 - Base export (API video): 0 credits
 - Avatar cost: 40s × 0.5 = 20 credits
 - **Total**: 20 credits
