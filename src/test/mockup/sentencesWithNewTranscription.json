@@ -1,257 +1,432 @@
 [
-    {
-      "text": "Video marketing mistakes cost you money and time!",
-      "index": 0,
-      "audioUrl": "https://media.hoox.video/ba4d5797-af01-431f-a76a-4fd589f091f3.mp3",
-      "transcription": {
-        "end": 2.8,
-        "text": " Video marketing mistakes cost you money and time!",
-        "start": 0.02,
-        "language": "English",
-        "words": [
-          {
-            "end": 0.26,
-            "word": "Video",
-            "start": 0.02
-          },
-          {
-            "end": 0.78,
-            "word": "marketing",
-            "start": 0.26
-          },
-          {
-            "end": 1.26,
-            "word": "mistakes",
-            "start": 0.78
-          },
-          {
-            "end": 1.64,
-            "word": "cost",
-            "start": 1.26
-          },
-          {
-            "end": 1.78,
-            "word": "you",
-            "start": 1.64
-          },
-          {
-            "end": 2.06,
-            "word": "money",
-            "start": 1.78
-          },
-          {
-            "end": 2.3,
-            "word": "and",
-            "start": 2.06
-          },
-          {
-            "end": 2.8,
-            "word": "time!",
-            "start": 2.3
-          }
-        ]
-      }
-    },
-    {
-      "text": "Many businesses struggle with ineffective videos that don't convert.",
-      "index": 1,
-      "audioUrl": "https://media.hoox.video/fbaaac37-6add-4b1d-b45c-a60f5f178d11.mp3",
-      "transcription": {
-        "end": 3.96,
-        "text": " Many businesses struggle with ineffective videos that don't convert.",
-        "start": 0.02,
-        "language": "English",
-        "words": [
-          {
-            "end": 0.22,
-            "word": "Many",
-            "start": 0.02
-          },
-          {
-            "end": 0.66,
-            "word": "businesses",
-            "start": 0.22
-          },
-          {
-            "end": 1.1,
-            "word": "struggle",
-            "start": 0.66
-          },
-          {
-            "end": 1.36,
-            "word": "with",
-            "start": 1.1
-          },
-          {
-            "end": 1.9,
-            "word": "ineffective",
-            "start": 1.36
-          },
-          {
-            "end": 2.42,
-            "word": "videos",
-            "start": 1.9
-          },
-          {
-            "end": 2.72,
-            "word": "that",
-            "start": 2.42
-          },
-          {
-            "end": 2.92,
-            "word": "don't",
-            "start": 2.72
-          },
-          {
-            "end": 3.96,
-            "word": "convert.",
-            "start": 2.92
-          }
-        ]
-      }
-    },
-    {
-      "text": "Poor voiceover quality immediately turns viewers away.",
-      "index": 2,
-      "audioUrl": "https://media.hoox.video/9de3829b-9abc-4353-891e-e8fab91a391c.mp3",
-      "transcription": {
-        "end": 3.6,
-        "text": " Poor voiceover quality immediately turns viewers away.",
-        "start": 0.04,
-        "language": "English",
-        "words": [
-          {
-            "end": 0.32,
-            "word": "Poor",
-            "start": 0.04
-          },
-          {
-            "end": 0.9,
-            "word": "voiceover",
-            "start": 0.32
-          },
-          {
-            "end": 1.38,
-            "word": "quality",
-            "start": 0.9
-          },
-          {
-            "end": 1.9,
-            "word": "immediately",
-            "start": 1.38
-          },
-          {
-            "end": 2.3,
-            "word": "turns",
-            "start": 1.9
-          },
-          {
-            "end": 2.68,
-            "word": "viewers",
-            "start": 2.3
-          },
-          {
-            "end": 3.6,
-            "word": "away.",
-            "start": 2.68
-          }
-        ]
-      }
-    },
-    {
-      "text": "Choose professional voice talent that matches your brand's personality.",
-      "index": 3,
-      "audioUrl": "https://media.hoox.video/13c6dde6-e30d-49a2-9e93-3c93ce2a3531.mp3",
-      "transcription": {
-        "end": 4.4,
-        "text": " Choose professional voice talent that matches your brand's personality.",
-        "start": 0.08,
-        "language": "English",
-        "words": [
-          {
-            "end": 0.28,
-            "word": "Choose",
-            "start": 0.08
-          },
-          {
-            "end": 0.84,
-            "word": "professional",
-            "start": 0.28
-          },
-          {
-            "end": 1.26,
-            "word": "voice",
-            "start": 0.84
-          },
-          {
-            "end": 1.62,
-            "word": "talent",
-            "start": 1.26
-          },
-          {
-            "end": 1.8,
-            "word": "that",
-            "start": 1.62
-          },
-          {
-            "end": 2.2,
-            "word": "matches",
-            "start": 1.8
-          },
-          {
-            "end": 2.42,
-            "word": "your",
-            "start": 2.2
-          },
-          {
-            "end": 2.86,
-            "word": "brand's",
-            "start": 2.42
-          },
-          {
-            "end": 4.4,
-            "word": "personality.",
-            "start": 2.86
-          }
-        ]
-      }
-    },
-    {
-      "text": "Share your biggest challenge below!",
-      "index": 4,
-      "audioUrl": "https://media.hoox.video/5eadf1ca-37d3-4085-803f-8a0911519a42.mp3",
-      "transcription": {
-        "end": 1.74,
-        "text": " Share your biggest challenge below!",
-        "start": 0.04,
-        "language": "English",
-        "words": [
-          {
-            "end": 0.22,
-            "word": "Share",
-            "start": 0.04
-          },
-          {
-            "end": 0.38,
-            "word": "your",
-            "start": 0.22
-          },
-          {
-            "end": 0.78,
-            "word": "biggest",
-            "start": 0.38
-          },
-          {
-            "end": 1.26,
-            "word": "challenge",
-            "start": 0.78
-          },
-          {
-            "end": 1.74,
-            "word": "below!",
-            "start": 1.26
-          }
-        ]
-      }
+  {
+    "text": "Vous n'allez pas croire ce que Hoox vient de créer.",
+    "index": 0,
+    "audioUrl": "https://media.hoox.video/e873795c-b19c-46e4-8881-450b668b32fb.mp3",
+    "transcription": {
+      "end": 2.46,
+      "text": " Vous n'allez pas croire ce que Hoox vient de créer.",
+      "start": 0,
+      "language": "French",
+      "words": [
+        {
+          "end": 0.14,
+          "word": "Vous",
+          "start": 0
+        },
+        {
+          "end": 0.36,
+          "word": "n'allez",
+          "start": 0.14
+        },
+        {
+          "end": 0.5,
+          "word": "pas",
+          "start": 0.36
+        },
+        {
+          "end": 0.76,
+          "word": "croire",
+          "start": 0.5
+        },
+        {
+          "end": 0.94,
+          "word": "ce",
+          "start": 0.76
+        },
+        {
+          "end": 1.1,
+          "word": "que",
+          "start": 0.94
+        },
+        {
+          "end": 1.32,
+          "word": "Hoox",
+          "start": 1.1
+        },
+        {
+          "end": 1.52,
+          "word": "vient",
+          "start": 1.32
+        },
+        {
+          "end": 1.68,
+          "word": "de",
+          "start": 1.52
+        },
+        {
+          "end": 2.46,
+          "word": "créer.",
+          "start": 1.68
+        }
+      ]
     }
+  },
+  {
+    "text": "Ces nouveaux modèles d'avatars repoussent les limites du réalisme numérique avec une qualité visuelle époustouflante.",
+    "index": 1,
+    "audioUrl": "https://media.hoox.video/c1693a17-76db-4d3f-8beb-1a16808a96a7.mp3",
+    "transcription": {
+      "end": 6.2,
+      "text": " Dépôt, ces nouveaux modèles d'avatars repoussent les limites du réalisme numérique avec une qualité visuelle époustouflante.",
+      "start": 0,
+      "language": "French",
+      "words": [
+        {
+          "end": 0.42,
+          "word": "Dépôt,",
+          "start": 0
+        },
+        {
+          "end": 0.48,
+          "word": "ces",
+          "start": 0.42
+        },
+        {
+          "end": 0.72,
+          "word": "nouveaux",
+          "start": 0.48
+        },
+        {
+          "end": 1.04,
+          "word": "modèles",
+          "start": 0.72
+        },
+        {
+          "end": 1.6,
+          "word": "d'avatars",
+          "start": 1.04
+        },
+        {
+          "end": 2.02,
+          "word": "repoussent",
+          "start": 1.6
+        },
+        {
+          "end": 2.2,
+          "word": "les",
+          "start": 2.02
+        },
+        {
+          "end": 2.58,
+          "word": "limites",
+          "start": 2.2
+        },
+        {
+          "end": 2.74,
+          "word": "du",
+          "start": 2.58
+        },
+        {
+          "end": 3.14,
+          "word": "réalisme",
+          "start": 2.74
+        },
+        {
+          "end": 3.64,
+          "word": "numérique",
+          "start": 3.14
+        },
+        {
+          "end": 3.94,
+          "word": "avec",
+          "start": 3.64
+        },
+        {
+          "end": 4.16,
+          "word": "une",
+          "start": 3.94
+        },
+        {
+          "end": 4.44,
+          "word": "qualité",
+          "start": 4.16
+        },
+        {
+          "end": 4.96,
+          "word": "visuelle",
+          "start": 4.44
+        },
+        {
+          "end": 6.2,
+          "word": "époustouflante.",
+          "start": 4.96
+        }
+      ]
+    }
+  },
+  {
+    "text": "Chaque détail, de la texture de peau aux expressions faciales, est rendu avec une précision incroyable.",
+    "index": 2,
+    "audioUrl": "https://media.hoox.video/4104c1c6-f2c4-407f-bc1a-360c0cb058b1.mp3",
+    "transcription": {
+      "end": 4.48,
+      "text": " Chaque détail, de la texture de peau aux expressions faciales, est rendu avec une précision incroyable.",
+      "start": 0,
+      "language": "French",
+      "words": [
+        {
+          "end": 0.26,
+          "word": "Chaque",
+          "start": 0
+        },
+        {
+          "end": 0.66,
+          "word": "détail,",
+          "start": 0.26
+        },
+        {
+          "end": 0.78,
+          "word": "de",
+          "start": 0.66
+        },
+        {
+          "end": 0.9,
+          "word": "la",
+          "start": 0.78
+        },
+        {
+          "end": 1.2,
+          "word": "texture",
+          "start": 0.9
+        },
+        {
+          "end": 1.38,
+          "word": "de",
+          "start": 1.2
+        },
+        {
+          "end": 1.64,
+          "word": "peau",
+          "start": 1.38
+        },
+        {
+          "end": 1.78,
+          "word": "aux",
+          "start": 1.64
+        },
+        {
+          "end": 2.2,
+          "word": "expressions",
+          "start": 1.78
+        },
+        {
+          "end": 2.82,
+          "word": "faciales,",
+          "start": 2.2
+        },
+        {
+          "end": 2.88,
+          "word": "est",
+          "start": 2.82
+        },
+        {
+          "end": 3.14,
+          "word": "rendu",
+          "start": 2.88
+        },
+        {
+          "end": 3.28,
+          "word": "avec",
+          "start": 3.14
+        },
+        {
+          "end": 3.46,
+          "word": "une",
+          "start": 3.28
+        },
+        {
+          "end": 3.9,
+          "word": "précision",
+          "start": 3.46
+        },
+        {
+          "end": 4.48,
+          "word": "incroyable.",
+          "start": 3.9
+        }
+      ]
+    }
+  },
+  {
+    "text": "La technologie utilisée permet une personnalisation poussée, offrant des avatars qui semblent vraiment vivants.",
+    "index": 3,
+    "audioUrl": "https://media.hoox.video/47637204-909f-45a7-a76f-4dc1cb9c1c6b.mp3",
+    "transcription": {
+      "end": 4.9,
+      "text": " La technologie utilisée permet une personnalisation poussée, offrant des avatars qui semblent vraiment vivants.",
+      "start": 0,
+      "language": "French",
+      "words": [
+        {
+          "end": 0.12,
+          "word": "La",
+          "start": 0
+        },
+        {
+          "end": 0.66,
+          "word": "technologie",
+          "start": 0.12
+        },
+        {
+          "end": 1.16,
+          "word": "utilisée",
+          "start": 0.66
+        },
+        {
+          "end": 1.4,
+          "word": "permet",
+          "start": 1.16
+        },
+        {
+          "end": 1.54,
+          "word": "une",
+          "start": 1.4
+        },
+        {
+          "end": 2.24,
+          "word": "personnalisation",
+          "start": 1.54
+        },
+        {
+          "end": 2.92,
+          "word": "poussée,",
+          "start": 2.24
+        },
+        {
+          "end": 3.08,
+          "word": "offrant",
+          "start": 2.92
+        },
+        {
+          "end": 3.22,
+          "word": "des",
+          "start": 3.08
+        },
+        {
+          "end": 3.66,
+          "word": "avatars",
+          "start": 3.22
+        },
+        {
+          "end": 3.82,
+          "word": "qui",
+          "start": 3.66
+        },
+        {
+          "end": 4.1,
+          "word": "semblent",
+          "start": 3.82
+        },
+        {
+          "end": 4.52,
+          "word": "vraiment",
+          "start": 4.1
+        },
+        {
+          "end": 4.9,
+          "word": "vivants.",
+          "start": 4.52
+        }
+      ]
+    }
+  },
+  {
+    "text": "Ces créations révolutionnaires transforment notre façon d'interagir dans les espaces virtuels, rendant l'expérience plus immersive que jamais.",
+    "index": 4,
+    "audioUrl": "https://media.hoox.video/aa95e591-dee3-4963-b039-4071b13cf286.mp3",
+    "transcription": {
+      "end": 6.72,
+      "text": " Ces créations révolutionnaires transforment notre façon d'interagir dans les espaces virtuels, rendant l'expérience plus immersive que jamais.",
+      "start": 0,
+      "language": "French",
+      "words": [
+        {
+          "end": 0.14,
+          "word": "Ces",
+          "start": 0
+        },
+        {
+          "end": 0.58,
+          "word": "créations",
+          "start": 0.14
+        },
+        {
+          "end": 1.3,
+          "word": "révolutionnaires",
+          "start": 0.58
+        },
+        {
+          "end": 1.96,
+          "word": "transforment",
+          "start": 1.3
+        },
+        {
+          "end": 2.3,
+          "word": "notre",
+          "start": 1.96
+        },
+        {
+          "end": 2.62,
+          "word": "façon",
+          "start": 2.3
+        },
+        {
+          "end": 3.26,
+          "word": "d'interagir",
+          "start": 2.62
+        },
+        {
+          "end": 3.4,
+          "word": "dans",
+          "start": 3.26
+        },
+        {
+          "end": 3.56,
+          "word": "les",
+          "start": 3.4
+        },
+        {
+          "end": 4.18,
+          "word": "espaces",
+          "start": 3.56
+        },
+        {
+          "end": 4.94,
+          "word": "virtuels,",
+          "start": 4.18
+        },
+        {
+          "end": 5.1,
+          "word": "rendant",
+          "start": 4.94
+        },
+        {
+          "end": 5.62,
+          "word": "l'expérience",
+          "start": 5.1
+        },
+        {
+          "end": 5.86,
+          "word": "plus",
+          "start": 5.62
+        },
+        {
+          "end": 6.26,
+          "word": "immersive",
+          "start": 5.86
+        },
+        {
+          "end": 6.48,
+          "word": "que",
+          "start": 6.26
+        },
+        {
+          "end": 6.72,
+          "word": "jamais.",
+          "start": 6.48
+        }
+      ]
+    }
+  }
 ]

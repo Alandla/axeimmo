@@ -134,7 +134,7 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
 
   const audioDuration = transcription.end;
 
-  updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, audioDuration, duration);
+  updatedVideo = updateVideoWithNewAudio(video, audioIndex, audioUrl, audioDuration, duration, durationDifference);
   
   // Fix transitions positions after audio regeneration
   let updatedTransitions = [...video?.video?.transitions || []];
@@ -194,7 +194,8 @@ export function updateVideoWithNewAudio(
   audioIndex: number,
   audioUrl: string,
   audioDuration: number,
-  duration: number
+  duration: number,
+  durationDifference: number
 ): IVideo {
 
   if (!video?.video?.audio) {
@@ -205,10 +206,20 @@ export function updateVideoWithNewAudio(
 
   const newVoices = video.video.audio.voices.map(voice => {
     if (voice.index === audioIndex) {
+      const newEnd = voice.start + audioDuration;
       return {
         ...voice,
         url: audioUrl,
-        durationInFrames
+        durationInFrames,
+        end: newEnd
+      };
+    }
+
+    if (voice.index > audioIndex) {
+      return {
+        ...voice,
+        start: voice.start + durationDifference,
+        end: voice.end + durationDifference
       };
     }
     return voice;

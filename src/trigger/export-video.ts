@@ -168,6 +168,8 @@ async function generateAvatarVideosWithModel(
   
   let attempts = 0;
   const maxAttempts = 200; // 200 * 6s = 1200s = 20min max
+  const totalAvatars = avatarRendersWithRequestIds.length;
+  let lastProgressSent = -1; // Track last progress percentage sent to avoid duplicate updates
   
   // Poll with sequential waits
   while (pendingAvatars.size > 0 && attempts < maxAttempts) {
@@ -200,6 +202,26 @@ async function generateAvatarVideosWithModel(
         pendingAvatars.delete(requestId);
         throw new Error(`${adapter.modelName} avatar video generation failed: ${status.error}`);
       }
+    }
+    
+    // Update progress only if it has changed
+    let currentProgress: number;
+    if (completedAvatars.size === 0) {
+      // No avatar completed yet: add 1% per attempt
+      currentProgress = Math.min(attempts, 99); // Cap at 99% until at least one completes
+    } else {
+      // At least one avatar completed: show real percentage
+      currentProgress = Math.round((completedAvatars.size / totalAvatars) * 100);
+    }
+    
+    // Only update metadata if progress has changed
+    if (currentProgress !== lastProgressSent) {
+      await metadata.replace({
+        status: 'processing',
+        step: 'avatar',
+        progress: currentProgress
+      });
+      lastProgressSent = currentProgress;
     }
     
     // If there are still pending avatars, wait before next check
@@ -581,11 +603,29 @@ const trimAudioLocal = async (audioUrl: string, start?: number, end?: number, re
 const trimAvatarAudios = async (avatarRenders: AvatarRenderData[]): Promise<AvatarRenderData[]> => {
   logger.log(`Trimming ${avatarRenders.length} avatar audios in parallel...`);
   
+  const totalAudios = avatarRenders.length;
+  let completedAudios = 0;
+  let lastProgressSent = -1;
+  
   const trimPromises = avatarRenders.map(async (render) => {
     // Only trim if we have start or end defined
     if (render.start !== undefined || render.end !== undefined) {
       try {
         const trimResult = await trimAudioLocal(render.audioUrl, render.start, render.end);
+        
+        // Update progress
+        completedAudios++;
+        const currentProgress = Math.round((completedAudios / totalAudios) * 100);
+        
+        if (currentProgress !== lastProgressSent) {
+          await metadata.replace({
+            status: 'processing',
+            step: 'render-audio',
+            progress: currentProgress
+          });
+          lastProgressSent = currentProgress;
+        }
+        
         return {
           ...render,
           audioUrl: trimResult.audioUrl
@@ -596,6 +636,7 @@ const trimAvatarAudios = async (avatarRenders: AvatarRenderData[]): Promise<Avat
       }
     }
     // No trimming needed, return as is
+    completedAudios++;
     return render;
   });
 

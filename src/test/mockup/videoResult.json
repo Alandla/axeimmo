@@ -6,15 +6,7 @@
   "state": {
     "type": "done"
   },
-  "title": "Réveillez-vous avec une peau parfaite (1)",
-  "style": "Informative",
-  "isNews": false,
-  "runId": "run_cmbobi70e4a1p1vndeknq0yyy",
-  "costToGenerate": 0.552348325,
-  "settings": {
-    "avatarHeightRatio": 64.37552560868049
-  },
-  "extractedMedia": [],
+  "runId": "run_cmgmbjlljay1s2yoru02q3l7q",
   "history": [
     {
       "step": "CREATE",
@@ -22,890 +14,1358 @@
         "$oid": "6751efc06fa24b6bfc7c6582"
       },
       "date": {
-        "$date": "2025-10-07T19:10:40.949Z"
+        "$date": "2025-10-11T13:36:16.181Z"
       },
       "_id": {
-        "$oid": "68e565b03b37d30c3d182dc5"
+        "$oid": "68ea5d50e79aac449a37f08b"
       }
     }
   ],
   "video": {
     "audio": {
+      "music": {
+        "url": "https://music.hoox.video/Point%20Being%20-%20Go%20By%20Ocean%20_%20Ryan%20McCaffrey.mp3",
+        "volume": 0.07,
+        "name": "Point Being",
+        "genre": "Inspirational"
+      },
       "voices": [
         {
-          "url": "https://media.hoox.video/45f761bb-83f1-4856-98b6-4403c4562ab6.mp3",
+          "url": "https://media.hoox.video/e873795c-b19c-46e4-8881-450b668b32fb.mp3",
           "index": 0,
           "start": 0,
-          "end": 3.34,
-          "durationInFrames": 201,
+          "end": 2.46,
+          "durationInFrames": 148,
           "voiceId": "5OnMHwgTFgvPVwE8jP6B",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "6846223c74ded6f5731c4c1f"
+            "$oid": "68ea5df6e79aac449a37f4c4"
           }
         },
         {
-          "url": "https://media.hoox.video/12a3dacb-3fdb-4b01-bed6-189fd3dd5810.mp3",
+          "url": "https://media.hoox.video/fec569d2-22a0-4102-85dd-5bfea6c03342.mp3",
           "index": 1,
-          "start": 3.34,
-          "end": 9.739999999999998,
-          "durationInFrames": 386,
+          "start": 2.46,
+          "end": 8.66,
+          "durationInFrames": 314,
           "voiceId": "5OnMHwgTFgvPVwE8jP6B",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "6846223c74ded6f5731c4c20"
+            "$oid": "68ea5df6e79aac449a37f4c5"
           }
         },
         {
-          "url": "https://media.hoox.video/78eb1040-477a-400e-aeec-2335c44a2e7d.mp3",
+          "url": "https://media.hoox.video/4104c1c6-f2c4-407f-bc1a-360c0cb058b1.mp3",
           "index": 2,
-          "start": 9.739999999999998,
-          "end": 15.36,
-          "durationInFrames": 336,
+          "start": 8.66,
+          "end": 13.14,
+          "durationInFrames": 269,
           "voiceId": "5OnMHwgTFgvPVwE8jP6B",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "6846223c74ded6f5731c4c21"
+            "$oid": "68ea5df6e79aac449a37f4c6"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/47637204-909f-45a7-a76f-4dc1cb9c1c6b.mp3",
+          "index": 3,
+          "start": 13.14,
+          "end": 18.04,
+          "durationInFrames": 293,
+          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
+          "startOffset": 0,
+          "emotionEnhancement": false,
+          "_id": {
+            "$oid": "68ea5df6e79aac449a37f4c7"
+          }
+        },
+        {
+          "url": "https://media.hoox.video/aa95e591-dee3-4963-b039-4071b13cf286.mp3",
+          "index": 4,
+          "start": 18.04,
+          "end": 25.259999999999998,
+          "durationInFrames": 431,
+          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
+          "startOffset": 0,
+          "emotionEnhancement": false,
+          "_id": {
+            "$oid": "68ea5df6e79aac449a37f4c8"
           }
         }
       ],
       "volume": 1
     },
     "subtitle": {
-      "name": "Clean",
+      "name": "Daniel",
       "style": {
-        "template": "clean",
-        "fontFamily": "Montserrat",
-        "fontWeight": "800",
-        "fontSize": 40,
-        "color": "#B0B0B0",
+        "template": "daniel",
+        "fontFamily": "Arial",
+        "fontWeight": "700",
+        "fontSize": 80,
+        "color": "#ffffff",
         "isItalic": false,
         "isPunctuation": true,
-        "isUppercase": true,
+        "isUppercase": false,
         "mode": "twoLines",
-        "position": 81,
-        "animation": {
-          "appear": "none"
-        },
-        "activeWord": {
+        "position": 54,
+        "shadow": {
           "isActive": true,
-          "fontFamily": "Montserrat",
-          "fontWeight": "800",
-          "fontSize": 40,
-          "color": "#000000",
-          "isItalic": false,
-          "isPunctuation": true,
-          "isUppercase": true
-        },
-        "background": {
-          "isActive": true,
-          "color": "#E5E7E5",
-          "radius": 16,
-          "mode": "full"
+          "size": 1,
+          "color": "#000000"
         }
       }
     },
     "metadata": {
-      "audio_duration": 15.36
+      "audio_duration": 24.299999999999997
     },
     "avatar": {
       "settings": {
-        "heygenType": "talking_photo",
-        "position": 50.13856697137726,
-        "verticalPosition": 19.276762455643762
+        "position": 48.23327111493994,
+        "verticalPosition": 21.812606513235394
       },
-      "name": "Sharon Room",
-      "thumbnail": "https://v3.fal.media/files/lion/6irbmagT_jqm7jqAQyUmD_ComfyUI_00006_.png",
-      "format": "vertical",
+      "thumbnail": "https://d3u0tzju9qaucj.cloudfront.net/7b55a4e4-3941-49da-a645-29967bd96af2/53548ead-627e-4e5a-8f91-a43c72a6df6b.png",
       "renders": [
         {
-          "audioIndex": 0,
-          "startInFrames": 0,
-          "url": "https://media.hoox.video/avatar-iv-68e565b03b37d30c3d182dc4-0-1759884133304.mp4",
-          "_id": {
-            "$oid": "68e5b382c622ca17a17bfdd9"
-          }
-        },
-        {
           "audioIndex": 1,
-          "startInFrames": 367,
-          "url": "https://media.hoox.video/avatar-iv-68e565b03b37d30c3d182dc4-1-1759884133305.mp4",
+          "startInFrames": 148,
+          "durationInSeconds": 5.24,
+          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-1-148-1760196467390.mp4",
           "_id": {
-            "$oid": "68e5b382c622ca17a17bfdda"
+            "$oid": "68ea77760876fb2d2a39fbbd"
           }
         },
         {
           "audioIndex": 2,
-          "startInFrames": 587,
-          "url": "https://media.hoox.video/avatar-iv-68e565b03b37d30c3d182dc4-2-1759884133301.mp4",
+          "startInFrames": 635,
+          "durationInSeconds": 1.6000000000000014,
+          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-2-635-1760196467366.mp4",
           "_id": {
-            "$oid": "68e5b382c622ca17a17bfdd8"
+            "$oid": "68ea77760876fb2d2a39fbbe"
+          }
+        },
+        {
+          "audioIndex": 3,
+          "startInFrames": 731,
+          "durationInSeconds": 4.899999999999999,
+          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-3-731-1760196467391.mp4",
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbbf"
+          }
+        },
+        {
+          "audioIndex": 4,
+          "startInFrames": 1180,
+          "durationInSeconds": 4.599999999999998,
+          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-4-1180-1760196467391.mp4",
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbc0"
           }
         }
       ]
     },
-    "thumbnail": "",
     "keywords": [
-      "night cream",
-      "skincare",
-      "sleeping woman",
-      "face closeup",
-      "smooth skin",
-      "radiant skin",
-      "morning routine",
-      "beauty sleep",
-      "applying cream",
-      "healthy skin"
+      "digital avatar",
+      "realism",
+      "visual quality",
+      "skin texture",
+      "facial expressions",
+      "personalization",
+      "virtual space",
+      "immersion",
+      "technology",
+      "interaction"
     ],
+    "transitions": [],
+    "thumbnail": "",
     "format": "vertical",
-    "transitions": [
-      {
-        "indexSequenceBefore": 0,
-        "durationInFrames": 90,
-        "video": "https://assets.hoox.video/Film_Burns_14.mp4",
-        "thumbnail": "https://assets.hoox.video/Film_Burns_14-thumbnail.png",
-        "sound": "https://assets.hoox.video/11_Impact.wav",
-        "volume": 0.15,
-        "fullAt": 41,
-        "category": "Burnt Film",
-        "mode": "lighten",
-        "_id": {
-          "$oid": "6846223c74ded6f5731c4c19"
-        }
-      },
-      {
-        "indexSequenceBefore": 2,
-        "durationInFrames": 44,
-        "video": "https://assets.hoox.video/Film_Burns_10.mp4",
-        "thumbnail": "https://assets.hoox.video/Film_Burns_10-thumbnail.png",
-        "volume": 0.15,
-        "fullAt": 23,
-        "category": "Burnt Film",
-        "mode": "lighten",
-        "_id": {
-          "$oid": "6846223c74ded6f5731c4c1a"
-        }
-      }
-    ],
     "sequences": [
       {
         "words": [
           {
-            "word": "Réveillez-vous",
+            "word": "Vous",
             "start": 0,
-            "end": 0.68,
-            "durationInFrames": 41,
+            "end": 0.14,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "6846223c74ded6f5731c4ba7"
+              "$oid": "68ea5df6e79aac449a37f45d"
             }
           },
           {
-            "word": "avec",
-            "start": 0.68,
-            "end": 0.92,
-            "durationInFrames": 14,
+            "word": "n'allez",
+            "start": 0.14,
+            "end": 0.36,
+            "durationInFrames": 13,
             "_id": {
-              "$oid": "6846223c74ded6f5731c4ba8"
+              "$oid": "68ea5df6e79aac449a37f45e"
             }
           },
           {
-            "word": "une",
-            "start": 0.92,
-            "end": 1.18,
+            "word": "pas",
+            "start": 0.36,
+            "end": 0.5,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f45f"
+            }
+          },
+          {
+            "word": "croire",
+            "start": 0.5,
+            "end": 0.76,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "6846223c74ded6f5731c4ba9"
+              "$oid": "68ea5df6e79aac449a37f460"
             }
           },
           {
-            "word": "peau",
-            "start": 1.18,
-            "end": 1.38,
-            "durationInFrames": 12,
+            "word": "ce",
+            "start": 0.76,
+            "end": 0.94,
+            "durationInFrames": 11,
             "_id": {
-              "$oid": "6846223c74ded6f5731c4baa"
+              "$oid": "68ea5df6e79aac449a37f461"
             }
           },
           {
             "word": "que",
-            "start": 1.38,
+            "start": 0.94,
+            "end": 1.1,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f462"
+            }
+          },
+          {
+            "word": "Hoox",
+            "start": 1.1,
+            "end": 1.32,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f463"
+            }
+          },
+          {
+            "word": "vient",
+            "start": 1.32,
             "end": 1.52,
-            "durationInFrames": 8,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "6846223c74ded6f5731c4bab"
+              "$oid": "68ea5df6e79aac449a37f464"
             }
           },
           {
-            "word": "vous",
+            "word": "de",
             "start": 1.52,
-            "end": 1.7,
-            "durationInFrames": 11,
+            "end": 1.68,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "6846223c74ded6f5731c4bac"
+              "$oid": "68ea5df6e79aac449a37f465"
             }
           },
           {
-            "word": "n'avez",
-            "start": 1.7,
-            "end": 1.94,
-            "durationInFrames": 14,
+            "word": "créer.",
+            "start": 1.68,
+            "end": 2.46,
+            "durationInFrames": 47,
             "_id": {
-              "$oid": "6846223c74ded6f5731c4bad"
-            }
-          },
-          {
-            "word": "jamais",
-            "start": 1.94,
-            "end": 2.42,
-            "durationInFrames": 29,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bae"
-            }
-          },
-          {
-            "word": "vue",
-            "start": 2.42,
-            "end": 2.68,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4baf"
-            }
-          },
-          {
-            "word": "auparavant.",
-            "start": 2.68,
-            "end": 3.34,
-            "durationInFrames": 40,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bb0"
+              "$oid": "68ea5df6e79aac449a37f466"
             }
           }
         ],
-        "text": "Réveillez-vous avec une peau que vous n'avez jamais vue auparavant.",
+        "text": "Vous n'allez pas croire ce que Hoox vient de créer.",
         "start": 0,
-        "end": 3.34,
-        "durationInFrames": 201,
+        "end": 2.46,
+        "durationInFrames": 148,
         "audioIndex": 0,
         "media": {
           "type": "video",
           "usage": "media",
-          "show": "hide",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "Close-up of a person's face, likely a young woman, lying down. The first few frames show the person's face with eyes closed, and the person appears to be resting or sleeping. The lighting is soft and pinkish-toned. The person has light blonde hair. The video shows a gradual transition from a slightly open mouth to closed eyes.",
-              "_id": {
-                "$oid": "6846223c74ded6f5731c4bb2"
-              }
-            }
-          ],
-          "video": {
-            "id": "10180457",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 23553810,
-            "width": 2048,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/6789667/6789667-hd_2048_1080_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/6789667/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/6789667/pictures/preview-1.jpg",
-              "https://images.pexels.com/videos/6789667/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/6789667/pictures/preview-4.jpg",
-              "https://images.pexels.com/videos/6789667/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/6789667/pictures/preview-7.jpg",
-              "https://images.pexels.com/videos/6789667/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/6789667/pictures/preview-10.jpg",
-              "https://images.pexels.com/videos/6789667/pictures/preview-12.jpg",
-              "https://images.pexels.com/videos/6789667/pictures/preview-13.jpg"
-            ],
-            "durationInSeconds": 48
-          },
-          "image": {
-            "id": "6789667",
-            "link": "https://images.pexels.com/videos/6789667/asian-beautiful-bed-bedroom-6789667.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "68e5b3fa5f57dd435e7ed7d6"
-          },
-          "createdAt": {
-            "$date": "2025-10-07T19:10:40.994Z"
-          },
-          "updatedAt": {
-            "$date": "2025-10-07T19:10:40.994Z"
-          }
-        },
-        "_id": {
-          "$oid": "6846223c74ded6f5731c4ba6"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Notre",
-            "start": 3.34,
-            "end": 3.5999999999999996,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bb4"
-            }
-          },
-          {
-            "word": "crème",
-            "start": 3.5999999999999996,
-            "end": 3.98,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bb5"
-            }
-          },
-          {
-            "word": "de",
-            "start": 3.98,
-            "end": 4.16,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bb6"
-            }
-          },
-          {
-            "word": "nuit",
-            "start": 4.16,
-            "end": 4.32,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bb7"
-            }
-          },
-          {
-            "word": "transforme",
-            "start": 4.32,
-            "end": 4.9799999999999995,
-            "durationInFrames": 40,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bb8"
-            }
-          },
-          {
-            "word": "votre",
-            "start": 4.9799999999999995,
-            "end": 5.2,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bb9"
-            }
-          },
-          {
-            "word": "peau",
-            "start": 5.2,
-            "end": 5.52,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bba"
-            }
-          },
-          {
-            "word": "pendant",
-            "start": 5.52,
-            "end": 5.74,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bbb"
-            }
-          },
-          {
-            "word": "que",
-            "start": 5.74,
-            "end": 5.9,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bbc"
-            }
-          },
-          {
-            "word": "vous",
-            "start": 5.9,
-            "end": 6.08,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bbd"
-            }
-          },
-          {
-            "word": "dormez,",
-            "start": 6.08,
-            "end": 7.119999999999999,
-            "durationInFrames": 62,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bbe"
-            }
-          }
-        ],
-        "text": "Notre crème de nuit transforme votre peau pendant que vous dormez,",
-        "start": 3.34,
-        "end": 7.119999999999999,
-        "durationInFrames": 228,
-        "audioIndex": 1,
-        "media": {
-          "type": "video",
-          "usage": "media",
           "show": "full",
           "startAt": 0,
           "generationStatus": "completed",
           "description": [
             {
               "start": 0,
-              "text": "A woman with a white towel on her head is applying a white facial cream or mask to her face.  The images show her applying the cream to different areas of her face, from her cheeks to her forehead and nose, over the course of the first four seconds of the video.",
+              "text": "The video shows a digital representation of Earth from different angles, with illuminated continents and connecting lines, suggesting a theme of global connectivity or technology.",
               "_id": {
-                "$oid": "6846223c74ded6f5731c4bc0"
-              }
-            }
-          ],
-          "position": {
-            "x": 29.14293593328729,
-            "y": 57.239980819455475
-          },
-          "video": {
-            "id": "9858381",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 15314321,
-            "width": 1080,
-            "height": 1920,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/5927788/5927788-hd_1080_1920_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/5927788/pictures/preview-0.jpeg",
-              "https://images.pexels.com/videos/5927788/pictures/preview-1.jpeg",
-              "https://images.pexels.com/videos/5927788/pictures/preview-3.jpeg",
-              "https://images.pexels.com/videos/5927788/pictures/preview-4.jpeg",
-              "https://images.pexels.com/videos/5927788/pictures/preview-6.jpeg",
-              "https://images.pexels.com/videos/5927788/pictures/preview-7.jpeg",
-              "https://images.pexels.com/videos/5927788/pictures/preview-9.jpeg",
-              "https://images.pexels.com/videos/5927788/pictures/preview-10.jpeg",
-              "https://images.pexels.com/videos/5927788/pictures/preview-12.jpeg",
-              "https://images.pexels.com/videos/5927788/pictures/preview-13.jpeg"
-            ],
-            "durationInSeconds": 28
-          },
-          "_id": {
-            "$oid": "68e5b3fa5f57dd435e7ed7e4"
-          },
-          "createdAt": {
-            "$date": "2025-10-07T19:10:40.994Z"
-          },
-          "updatedAt": {
-            "$date": "2025-10-07T19:10:40.994Z"
-          }
-        },
-        "_id": {
-          "$oid": "6846223c74ded6f5731c4bb3"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "grâce",
-            "start": 7.119999999999999,
-            "end": 7.18,
-            "durationInFrames": 4,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bc2"
-            }
-          },
-          {
-            "word": "à",
-            "start": 7.18,
-            "end": 7.359999999999999,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bc3"
-            }
-          },
-          {
-            "word": "sa",
-            "start": 7.359999999999999,
-            "end": 7.4799999999999995,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bc4"
-            }
-          },
-          {
-            "word": "formule",
-            "start": 7.4799999999999995,
-            "end": 7.8999999999999995,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bc5"
-            }
-          },
-          {
-            "word": "enrichie",
-            "start": 7.8999999999999995,
-            "end": 8.5,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bc6"
-            }
-          },
-          {
-            "word": "en",
-            "start": 8.5,
-            "end": 8.66,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bc7"
-            }
-          },
-          {
-            "word": "actifs",
-            "start": 8.66,
-            "end": 9.08,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bc8"
-            }
-          },
-          {
-            "word": "régénérants.",
-            "start": 9.08,
-            "end": 9.739999999999998,
-            "durationInFrames": 40,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bc9"
-            }
-          }
-        ],
-        "text": "grâce à sa formule enrichie en actifs régénérants.",
-        "start": 7.119999999999999,
-        "end": 9.739999999999998,
-        "durationInFrames": 158,
-        "audioIndex": 1,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "hide",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "A person is applying a clear liquid, likely a serum or facial oil, to their face using a dropper bottle. The dropper is held near the person's eye area, and the liquid is being dispensed onto the skin. The images show a gradual application of the product, with a visible amount of liquid on the skin in the final frame.",
-              "_id": {
-                "$oid": "6846223c74ded6f5731c4bcb"
+                "$oid": "68ea5df6e79aac449a37f468"
               }
             }
           ],
           "video": {
-            "id": "10041978",
+            "id": "9292325",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 10146774,
-            "width": 1080,
-            "height": 1920,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/6446058/6446058-hd_1080_1920_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/6446058/pictures/preview-0.jpeg",
-              "https://images.pexels.com/videos/6446058/pictures/preview-1.jpeg",
-              "https://images.pexels.com/videos/6446058/pictures/preview-3.jpeg",
-              "https://images.pexels.com/videos/6446058/pictures/preview-4.jpeg",
-              "https://images.pexels.com/videos/6446058/pictures/preview-6.jpeg",
-              "https://images.pexels.com/videos/6446058/pictures/preview-7.jpeg",
-              "https://images.pexels.com/videos/6446058/pictures/preview-9.jpeg",
-              "https://images.pexels.com/videos/6446058/pictures/preview-10.jpeg",
-              "https://images.pexels.com/videos/6446058/pictures/preview-12.jpeg",
-              "https://images.pexels.com/videos/6446058/pictures/preview-13.jpeg"
-            ],
-            "durationInSeconds": 20
-          },
-          "image": {
-            "id": "6446058",
-            "link": "https://images.pexels.com/videos/6446058/afro-bright-room-cosmetic-roller-cream-6446058.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 1080,
-            "height": 1920
-          },
-          "_id": {
-            "$oid": "68e5b3fa5f57dd435e7ed7ef"
-          },
-          "createdAt": {
-            "$date": "2025-10-07T19:10:40.994Z"
-          },
-          "updatedAt": {
-            "$date": "2025-10-07T19:10:40.994Z"
-          }
-        },
-        "_id": {
-          "$oid": "6846223c74ded6f5731c4bc1"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Elle",
-            "start": 9.739999999999998,
-            "end": 9.879999999999999,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bcd"
-            }
-          },
-          {
-            "word": "pénètre",
-            "start": 9.879999999999999,
-            "end": 10.36,
-            "durationInFrames": 29,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bce"
-            }
-          },
-          {
-            "word": "en",
-            "start": 10.36,
-            "end": 10.499999999999998,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bcf"
-            }
-          },
-          {
-            "word": "profondeur,",
-            "start": 10.499999999999998,
-            "end": 11.62,
-            "durationInFrames": 67,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bd0"
-            }
-          }
-        ],
-        "text": "Elle pénètre en profondeur,",
-        "start": 9.739999999999998,
-        "end": 11.62,
-        "durationInFrames": 112,
-        "audioIndex": 2,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "hide",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "Close-up view of a woman applying a cream or lotion to her face. The woman appears to be middle-aged or older, with visible wrinkles and age spots on her skin. The images show a gradual application of the product, starting with the hands near the face and then moving to cover more of the face. The lighting is soft and natural, suggesting a bathroom or similar indoor setting.",
-              "_id": {
-                "$oid": "6846223c74ded6f5731c4bd6"
-              }
-            }
-          ],
-          "video": {
-            "id": "11220861",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 7328100,
-            "width": 1080,
-            "height": 2048,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/10222557/10222557-hd_1080_2048_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/10222557/pictures/preview-0.jpeg",
-              "https://images.pexels.com/videos/10222557/pictures/preview-2.jpeg",
-              "https://images.pexels.com/videos/10222557/pictures/preview-4.jpeg",
-              "https://images.pexels.com/videos/10222557/pictures/preview-6.jpeg",
-              "https://images.pexels.com/videos/10222557/pictures/preview-8.jpeg",
-              "https://images.pexels.com/videos/10222557/pictures/preview-10.jpeg",
-              "https://images.pexels.com/videos/10222557/pictures/preview-12.jpeg"
-            ],
-            "durationInSeconds": 15
-          },
-          "image": {
-            "id": "10222557",
-            "link": "https://images.pexels.com/videos/10222557/pexels-photo-10222557.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 4096
-          },
-          "_id": {
-            "$oid": "68e5b3fa5f57dd435e7ed7f6"
-          },
-          "createdAt": {
-            "$date": "2025-10-07T19:10:40.994Z"
-          },
-          "updatedAt": {
-            "$date": "2025-10-07T19:10:40.994Z"
-          }
-        },
-        "_id": {
-          "$oid": "6846223c74ded6f5731c4bcc"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "stimule",
-            "start": 11.62,
-            "end": 11.86,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bd1"
-            }
-          },
-          {
-            "word": "le",
-            "start": 11.86,
-            "end": 12.02,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bd2"
-            }
-          },
-          {
-            "word": "renouvellement",
-            "start": 12.02,
-            "end": 12.62,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bd3"
-            }
-          },
-          {
-            "word": "cellulaire",
-            "start": 12.62,
-            "end": 13.219999999999999,
-            "durationInFrames": 36,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bd4"
-            }
-          },
-          {
-            "word": "et",
-            "start": 13.219999999999999,
-            "end": 13.399999999999999,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bd8"
-            }
-          },
-          {
-            "word": "combat",
-            "start": 13.399999999999999,
-            "end": 13.7,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bd9"
-            }
-          },
-          {
-            "word": "les",
-            "start": 13.7,
-            "end": 13.84,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bda"
-            }
-          },
-          {
-            "word": "signes",
-            "start": 13.84,
-            "end": 14.16,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bdb"
-            }
-          },
-          {
-            "word": "de",
-            "start": 14.16,
-            "end": 14.379999999999999,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bdc"
-            }
-          },
-          {
-            "word": "fatigue.",
-            "start": 14.379999999999999,
-            "end": 15.36,
-            "durationInFrames": 59,
-            "_id": {
-              "$oid": "6846223c74ded6f5731c4bdd"
-            }
-          }
-        ],
-        "text": "stimule le renouvellement cellulaire et combat les signes de fatigue.",
-        "start": 11.62,
-        "end": 15.36,
-        "durationInFrames": 224,
-        "audioIndex": 2,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "full",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "A woman with light brown hair, light skin, and light pink lipstick is shown from the mid-chest up against a light-blue background.  She is smiling and gently touching her face with her hands.  There are no visible changes or movements in the first four seconds.",
-              "_id": {
-                "$oid": "6846223c74ded6f5731c4bdf"
-              }
-            }
-          ],
-          "video": {
-            "id": "9326333",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 6504681,
+            "size": 20797762,
             "width": 1920,
             "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/3762913/3762913-hd_1920_1080_25fps.mp4",
+            "link": "https://videos.pexels.com/video-files/3129957/3129957-hd_1920_1080_25fps.mp4",
             "frames": [
-              "https://images.pexels.com/videos/3762913/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/3762913/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/3762913/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/3762913/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/3762913/pictures/preview-12.jpg"
+              "https://images.pexels.com/videos/3129957/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-1.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-4.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-12.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-13.jpg"
             ],
-            "durationInSeconds": 10
+            "durationInSeconds": 30
           },
           "image": {
-            "id": "3762913",
-            "link": "https://images.pexels.com/videos/3762913/pexels-photo-3762913.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "id": "3129957",
+            "link": "https://images.pexels.com/videos/3129957/free-video-3129957.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
             "width": 3840,
             "height": 2160
           },
           "_id": {
-            "$oid": "68e5b3fa5f57dd435e7ed803"
-          },
-          "createdAt": {
-            "$date": "2025-10-07T19:10:40.995Z"
-          },
-          "updatedAt": {
-            "$date": "2025-10-07T19:10:40.995Z"
+            "$oid": "68ea77760876fb2d2a39fb61"
           }
         },
         "_id": {
-          "$oid": "6846223c74ded6f5731c4bd7"
+          "$oid": "68ea5df6e79aac449a37f45c"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Ces",
+            "start": 2.46,
+            "end": 2.64,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f65c"
+            }
+          },
+          {
+            "word": "nouveaux",
+            "start": 2.64,
+            "end": 2.9,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f65d"
+            }
+          },
+          {
+            "word": "modèles",
+            "start": 2.9,
+            "end": 3.2,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f65e"
+            }
+          },
+          {
+            "word": "d'Avatar",
+            "start": 3.2,
+            "end": 3.66,
+            "durationInFrames": 28,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f65f"
+            }
+          },
+          {
+            "word": "repoussant",
+            "start": 3.66,
+            "end": 4.16,
+            "durationInFrames": 30,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f660"
+            }
+          },
+          {
+            "word": "les",
+            "start": 4.16,
+            "end": 4.28,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f661"
+            }
+          },
+          {
+            "word": "limites",
+            "start": 4.28,
+            "end": 4.66,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f662"
+            }
+          },
+          {
+            "word": "du",
+            "start": 4.66,
+            "end": 4.859999999999999,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f663"
+            }
+          },
+          {
+            "word": "réalisme",
+            "start": 4.859999999999999,
+            "end": 5.26,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f664"
+            }
+          },
+          {
+            "word": "numérique",
+            "start": 5.26,
+            "end": 5.7,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f665"
+            }
+          }
+        ],
+        "text": "Ces nouveaux modèles d'Avatar repoussant les limites du réalisme numérique",
+        "start": 2.46,
+        "end": 5.7,
+        "durationInFrames": 194,
+        "audioIndex": 1,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A close-up of a person's face with purple hair, showing a calm expression, with slight movements across four frames.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f475"
+              }
+            }
+          ],
+          "video": {
+            "id": "10595084",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 18558726,
+            "width": 2048,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7849214/7849214-hd_2048_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/7849214/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-1.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-4.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-12.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-13.jpg"
+            ],
+            "durationInSeconds": 43
+          },
+          "image": {
+            "id": "7849214",
+            "link": "https://images.pexels.com/videos/7849214/pexels-photo-7849214.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fb6e"
+          }
+        },
+        "_id": {
+          "$oid": "68ea770e780a479168d0f65b"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "avec",
+            "start": 5.7,
+            "end": 5.9,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f669"
+            }
+          },
+          {
+            "word": "une",
+            "start": 5.9,
+            "end": 6.1,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f66a"
+            }
+          },
+          {
+            "word": "qualité",
+            "start": 6.1,
+            "end": 6.38,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f66b"
+            }
+          },
+          {
+            "word": "visuelle",
+            "start": 6.38,
+            "end": 6.9,
+            "durationInFrames": 31,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f66c"
+            }
+          },
+          {
+            "word": "époustouflante.",
+            "start": 6.9,
+            "end": 7.7,
+            "durationInFrames": 48,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f66d"
+            }
+          }
+        ],
+        "text": "avec une qualité visuelle époustouflante.",
+        "start": 5.7,
+        "end": 7.7,
+        "durationInFrames": 120,
+        "audioIndex": 1,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A close-up of a woman's face, showing her eyes, nose, and mouth, with slight movements and changes in hair position across the four frames.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f47e"
+              }
+            }
+          ],
+          "video": {
+            "id": "10284066",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 18912042,
+            "width": 2048,
+            "height": 988,
+            "fps": 29.97,
+            "link": "https://videos.pexels.com/video-files/7038590/7038590-hd_2048_988_30fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/7038590/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-1.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-4.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-12.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-13.jpg"
+            ],
+            "durationInSeconds": 26
+          },
+          "image": {
+            "id": "7038590",
+            "link": "https://images.pexels.com/videos/7038590/pexels-photo-7038590.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4481,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fb76"
+          }
+        },
+        "_id": {
+          "$oid": "68ea770e780a479168d0f668"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Chaque",
+            "start": 7.7,
+            "end": 7.96,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f480"
+            }
+          },
+          {
+            "word": "détail,",
+            "start": 7.96,
+            "end": 8.36,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f481"
+            }
+          },
+          {
+            "word": "de",
+            "start": 8.36,
+            "end": 8.48,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f482"
+            }
+          },
+          {
+            "word": "la",
+            "start": 8.48,
+            "end": 8.600000000000001,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f483"
+            }
+          },
+          {
+            "word": "texture",
+            "start": 8.600000000000001,
+            "end": 8.899999999999999,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f484"
+            }
+          },
+          {
+            "word": "de",
+            "start": 8.899999999999999,
+            "end": 9.079999999999998,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f485"
+            }
+          },
+          {
+            "word": "peau",
+            "start": 9.079999999999998,
+            "end": 9.34,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f486"
+            }
+          },
+          {
+            "word": "aux",
+            "start": 9.34,
+            "end": 9.48,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f487"
+            }
+          },
+          {
+            "word": "expressions",
+            "start": 9.48,
+            "end": 9.899999999999999,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f488"
+            }
+          },
+          {
+            "word": "faciales,",
+            "start": 9.899999999999999,
+            "end": 10.52,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f489"
+            }
+          },
+          {
+            "word": "est",
+            "start": 10.52,
+            "end": 10.579999999999998,
+            "durationInFrames": 4,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f48a"
+            }
+          },
+          {
+            "word": "rendu",
+            "start": 10.579999999999998,
+            "end": 10.84,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f48b"
+            }
+          }
+        ],
+        "text": "Chaque détail, de la texture de peau aux expressions faciales, est rendu",
+        "start": 7.7,
+        "end": 10.84,
+        "durationInFrames": 189,
+        "audioIndex": 2,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "full",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "Close-up of a person's face with light reflections creating a dotted pattern on their skin, with slight movements across the first four seconds.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f48d"
+              }
+            }
+          ],
+          "video": {
+            "id": "10670647",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 5723941,
+            "width": 1080,
+            "height": 1920,
+            "fps": 30,
+            "link": "https://videos.pexels.com/video-files/8056004/8056004-hd_1080_1920_30fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/8056004/pictures/preview-0.jpeg",
+              "https://images.pexels.com/videos/8056004/pictures/preview-3.jpeg",
+              "https://images.pexels.com/videos/8056004/pictures/preview-6.jpeg",
+              "https://images.pexels.com/videos/8056004/pictures/preview-9.jpeg",
+              "https://images.pexels.com/videos/8056004/pictures/preview-12.jpeg"
+            ],
+            "durationInSeconds": 9
+          },
+          "image": {
+            "id": "8056004",
+            "link": "https://images.pexels.com/videos/8056004/alone-candy-child-chocolate-8056004.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fb85"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f47f"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "avec",
+            "start": 10.84,
+            "end": 10.98,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f48f"
+            }
+          },
+          {
+            "word": "une",
+            "start": 10.98,
+            "end": 11.16,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f490"
+            }
+          },
+          {
+            "word": "précision",
+            "start": 11.16,
+            "end": 11.600000000000001,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f491"
+            }
+          },
+          {
+            "word": "incroyable.",
+            "start": 11.600000000000001,
+            "end": 12.18,
+            "durationInFrames": 35,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f492"
+            }
+          }
+        ],
+        "text": "avec une précision incroyable.",
+        "start": 10.84,
+        "end": 12.18,
+        "durationInFrames": 80,
+        "audioIndex": 2,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A close-up of a young person's face, focusing on the eyes, with slight changes in eye direction and lighting across four frames.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f494"
+              }
+            }
+          ],
+          "video": {
+            "id": "11070799",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 15143372,
+            "width": 2048,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/9154746/9154746-hd_2048_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/9154746/pictures/preview-0.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-1.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-3.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-4.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-6.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-7.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-9.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-10.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-12.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-13.jpeg"
+            ],
+            "durationInSeconds": 40
+          },
+          "image": {
+            "id": "9154746",
+            "link": "https://images.pexels.com/videos/9154746/closeup-eyes-face-male-9154746.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fb8c"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f48e"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "La",
+            "start": 12.18,
+            "end": 12.3,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f496"
+            }
+          },
+          {
+            "word": "technologie",
+            "start": 12.3,
+            "end": 12.84,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f497"
+            }
+          },
+          {
+            "word": "utilisée",
+            "start": 12.84,
+            "end": 13.34,
+            "durationInFrames": 30,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f498"
+            }
+          },
+          {
+            "word": "permet",
+            "start": 13.34,
+            "end": 13.580000000000002,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f499"
+            }
+          },
+          {
+            "word": "une",
+            "start": 13.580000000000002,
+            "end": 13.719999999999999,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f49a"
+            }
+          },
+          {
+            "word": "personnalisation",
+            "start": 13.719999999999999,
+            "end": 14.420000000000002,
+            "durationInFrames": 42,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f49b"
+            }
+          },
+          {
+            "word": "poussée,",
+            "start": 14.420000000000002,
+            "end": 15.100000000000001,
+            "durationInFrames": 41,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f49c"
+            }
+          },
+          {
+            "word": "offrant",
+            "start": 15.100000000000001,
+            "end": 15.259999999999998,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f49d"
+            }
+          }
+        ],
+        "text": "La technologie utilisée permet une personnalisation poussée, offrant",
+        "start": 12.18,
+        "end": 15.259999999999998,
+        "durationInFrames": 184,
+        "audioIndex": 3,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "half",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A woman is sitting at a table in a busy office or cafe, looking at a tablet device. Several people around her are reaching towards the tablet, with one person pointing at the screen. The scene appears to be a collaborative or instructional moment.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f49f"
+              }
+            }
+          ],
+          "video": {
+            "id": "10324923",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 5879586,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7165697/7165697-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/7165697/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/7165697/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/7165697/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/7165697/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/7165697/pictures/preview-12.jpg"
+            ],
+            "durationInSeconds": 9
+          },
+          "image": {
+            "id": "7165697",
+            "link": "https://images.pexels.com/videos/7165697/adult-business-coffee-collaboration-7165697.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fb97"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f495"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "des",
+            "start": 15.259999999999998,
+            "end": 15.399999999999999,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a1"
+            }
+          },
+          {
+            "word": "avatars",
+            "start": 15.399999999999999,
+            "end": 15.84,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a2"
+            }
+          },
+          {
+            "word": "qui",
+            "start": 15.84,
+            "end": 16,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a3"
+            }
+          },
+          {
+            "word": "semblent",
+            "start": 16,
+            "end": 16.28,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a4"
+            }
+          },
+          {
+            "word": "vraiment",
+            "start": 16.28,
+            "end": 16.7,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a5"
+            }
+          },
+          {
+            "word": "vivants.",
+            "start": 16.7,
+            "end": 17.08,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a6"
+            }
+          }
+        ],
+        "text": "des avatars qui semblent vraiment vivants.",
+        "start": 15.259999999999998,
+        "end": 17.08,
+        "durationInFrames": 109,
+        "audioIndex": 3,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "Two individuals are wearing virtual reality headsets, with one in a black headset and the other in a white headset, both immersed in a virtual environment.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f4a8"
+              }
+            }
+          ],
+          "video": {
+            "id": "10945147",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 4901037,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/8762940/8762940-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/8762940/pictures/preview-0.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-1.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-3.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-4.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-6.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-7.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-9.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-10.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-12.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-13.jpeg"
+            ],
+            "durationInSeconds": 28
+          },
+          "image": {
+            "id": "8762940",
+            "link": "https://images.pexels.com/videos/8762940/biology-bionic-chemistry-concept-8762940.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fba0"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f4a0"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Ces",
+            "start": 17.08,
+            "end": 17.22,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4aa"
+            }
+          },
+          {
+            "word": "créations",
+            "start": 17.22,
+            "end": 17.659999999999997,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ab"
+            }
+          },
+          {
+            "word": "révolutionnaires",
+            "start": 17.659999999999997,
+            "end": 18.38,
+            "durationInFrames": 43,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ac"
+            }
+          },
+          {
+            "word": "transforment",
+            "start": 18.38,
+            "end": 19.04,
+            "durationInFrames": 40,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ad"
+            }
+          },
+          {
+            "word": "notre",
+            "start": 19.04,
+            "end": 19.38,
+            "durationInFrames": 20,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ae"
+            }
+          },
+          {
+            "word": "façon",
+            "start": 19.38,
+            "end": 19.7,
+            "durationInFrames": 19,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4af"
+            }
+          },
+          {
+            "word": "d'interagir",
+            "start": 19.7,
+            "end": 20.339999999999996,
+            "durationInFrames": 38,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b0"
+            }
+          }
+        ],
+        "text": "Ces créations révolutionnaires transforment notre façon d'interagir",
+        "start": 17.08,
+        "end": 20.339999999999996,
+        "durationInFrames": 194,
+        "audioIndex": 4,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "full",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A person wearing a virtual reality headset is seen making hand gestures, with a focus on their hands and the headset in a colorful, illuminated environment.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f4b2"
+              }
+            }
+          ],
+          "video": {
+            "id": "9365306",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 3774494,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/4354035/4354035-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/4354035/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/4354035/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/4354035/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/4354035/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/4354035/pictures/preview-12.jpg"
+            ],
+            "durationInSeconds": 6
+          },
+          "image": {
+            "id": "4354035",
+            "link": "https://images.pexels.com/videos/4354035/pexels-photo-4354035.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbaa"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f4a9"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "dans",
+            "start": 20.339999999999996,
+            "end": 20.479999999999997,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b4"
+            }
+          },
+          {
+            "word": "les",
+            "start": 20.479999999999997,
+            "end": 20.639999999999997,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b5"
+            }
+          },
+          {
+            "word": "espaces",
+            "start": 20.639999999999997,
+            "end": 21.259999999999998,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b6"
+            }
+          },
+          {
+            "word": "virtuels,",
+            "start": 21.259999999999998,
+            "end": 22.02,
+            "durationInFrames": 46,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b7"
+            }
+          },
+          {
+            "word": "rendant",
+            "start": 22.02,
+            "end": 22.18,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b8"
+            }
+          },
+          {
+            "word": "l'expérience",
+            "start": 22.18,
+            "end": 22.7,
+            "durationInFrames": 31,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b9"
+            }
+          },
+          {
+            "word": "plus",
+            "start": 22.7,
+            "end": 22.939999999999998,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ba"
+            }
+          },
+          {
+            "word": "immersive",
+            "start": 22.939999999999998,
+            "end": 23.339999999999996,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4bb"
+            }
+          },
+          {
+            "word": "que",
+            "start": 23.339999999999996,
+            "end": 23.56,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4bc"
+            }
+          },
+          {
+            "word": "jamais.",
+            "start": 23.56,
+            "end": 24.299999999999997,
+            "durationInFrames": 44,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4bd"
+            }
+          }
+        ],
+        "text": "dans les espaces virtuels, rendant l'expérience plus immersiveque jamais.",
+        "start": 20.339999999999996,
+        "end": 24.299999999999997,
+        "durationInFrames": 237,
+        "audioIndex": 4,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A woman wearing a virtual reality headset is seen raising her hand and then extending her arm, with a blue textured background throughout the first four seconds.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f4bf"
+              }
+            }
+          ],
+          "video": {
+            "id": "10466529",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 4432591,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7547581/7547581-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/7547581/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/7547581/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/7547581/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/7547581/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/7547581/pictures/preview-12.jpg"
+            ],
+            "durationInSeconds": 7
+          },
+          "image": {
+            "id": "7547581",
+            "link": "https://images.pexels.com/videos/7547581/pexels-photo-7547581.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbb7"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f4b3"
         }
       }
     ],
     "elements": []
   },
+  "extractedMedia": [],
   "createdAt": {
-    "$date": "2025-10-07T19:10:40.996Z"
+    "$date": "2025-10-11T13:36:16.188Z"
   },
   "updatedAt": {
-    "$date": "2025-10-08T00:44:42.331Z"
+    "$date": "2025-10-11T15:27:50.003Z"
   },
-  "__v": 0
+  "__v": 0,
+  "isNews": false,
+  "style": "Inspirational",
+  "title": "Avatars réalistes",
+  "costToGenerate": 0.09976490416666667,
+  "settings": {
+    "avatarHeightRatio": 62.668963961192134
+  }
 }

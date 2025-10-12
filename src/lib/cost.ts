@@ -1,5 +1,6 @@
 import { KlingGenerationMode } from "./fal";
 import { generateAvatarRenderList } from './avatar-render';
+import { IVideo } from "../types/video";
 
 interface TokenUsage {
   completionTokens: number;
@@ -114,8 +115,11 @@ export function calculateAvatarCreditsForUser(
 }
 
 // Calcule la durée totale où l'avatar est visible
-export function calculateTotalAvatarDuration(video: any): number {
-  const avatarRenders = generateAvatarRenderList(video);
+export function calculateTotalAvatarDuration(video: IVideo): number {
+  const avatarRenders = generateAvatarRenderList(video); 
+  console.log('video', video?.video?.audio?.voices);
+  console.log('sequences', video?.video?.sequences);
+  console.log('avatarRenders', avatarRenders);
   return avatarRenders.reduce((sum: number, render: any) => sum + render.durationInSeconds, 0);
 }
 
