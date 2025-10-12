@@ -6,7 +6,7 @@
   "state": {
     "type": "done"
   },
-  "runId": "run_cmco3jby0had128oecc5158yj",
+  "runId": "run_cmgmbjlljay1s2yoru02q3l7q",
   "history": [
     {
       "step": "CREATE",
@@ -14,1767 +14,695 @@
         "$oid": "6751efc06fa24b6bfc7c6582"
       },
       "date": {
-        "$date": "2025-07-04T00:48:50.169Z"
+        "$date": "2025-10-11T13:36:16.181Z"
       },
       "_id": {
-        "$oid": "686724f291f7bab767984dd6"
+        "$oid": "68ea5d50e79aac449a37f08b"
       }
     }
   ],
   "video": {
     "audio": {
+      "music": {
+        "url": "https://music.hoox.video/Point%20Being%20-%20Go%20By%20Ocean%20_%20Ryan%20McCaffrey.mp3",
+        "volume": 0.07,
+        "name": "Point Being",
+        "genre": "Inspirational"
+      },
       "voices": [
         {
-          "url": "https://media.hoox.video/9f7086e1-08a0-43f5-9e7b-86834745edd6.mp3",
+          "url": "https://media.hoox.video/e873795c-b19c-46e4-8881-450b668b32fb.mp3",
           "index": 0,
-          "start": 0.04,
-          "end": 1.48,
-          "durationInFrames": 86,
-          "voiceId": "yl2ZDV1MzN4HbQJbMihG",
+          "start": 0,
+          "end": 2.46,
+          "durationInFrames": 148,
+          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
           "startOffset": 0,
+          "emotionEnhancement": false,
           "_id": {
-            "$oid": "686724fe91f7bab767985528"
+            "$oid": "68ea5df6e79aac449a37f4c4"
           }
         },
         {
-          "url": "https://media.hoox.video/18848914-7482-4b21-bb5b-8cbda5d824ae.mp3",
+          "url": "https://media.hoox.video/fec569d2-22a0-4102-85dd-5bfea6c03342.mp3",
           "index": 1,
-          "start": 1.48,
-          "end": 5.68,
-          "durationInFrames": 252,
-          "voiceId": "yl2ZDV1MzN4HbQJbMihG",
+          "start": 2.46,
+          "end": 8.66,
+          "durationInFrames": 314,
+          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
           "startOffset": 0,
+          "emotionEnhancement": false,
           "_id": {
-            "$oid": "686724fe91f7bab767985529"
+            "$oid": "68ea5df6e79aac449a37f4c5"
           }
         },
         {
-          "url": "https://media.hoox.video/a3eb295c-187b-42dc-9ffa-c9e6f2499ebc.mp3",
+          "url": "https://media.hoox.video/4104c1c6-f2c4-407f-bc1a-360c0cb058b1.mp3",
           "index": 2,
-          "start": 5.68,
-          "end": 16.66,
-          "durationInFrames": 659,
-          "voiceId": "yl2ZDV1MzN4HbQJbMihG",
+          "start": 8.66,
+          "end": 13.14,
+          "durationInFrames": 269,
+          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
           "startOffset": 0,
+          "emotionEnhancement": false,
           "_id": {
-            "$oid": "686724fe91f7bab76798552a"
+            "$oid": "68ea5df6e79aac449a37f4c6"
           }
         },
         {
-          "url": "https://media.hoox.video/1ac2e8a9-3550-4c06-acf4-9c1806a2e5ef.mp3",
+          "url": "https://media.hoox.video/47637204-909f-45a7-a76f-4dc1cb9c1c6b.mp3",
           "index": 3,
-          "start": 16.66,
-          "end": 20.94,
-          "durationInFrames": 258,
-          "voiceId": "yl2ZDV1MzN4HbQJbMihG",
-          "startOffset": 0,
-          "_id": {
-            "$oid": "686724fe91f7bab76798552b"
-          }
-        },
-        {
-          "url": "https://media.hoox.video/7b299d70-26b0-4c16-833e-4cb230ef375e.mp3",
-          "index": 4,
-          "start": 20.94,
-          "end": 25.82,
+          "start": 13.14,
+          "end": 18.04,
           "durationInFrames": 293,
-          "voiceId": "yl2ZDV1MzN4HbQJbMihG",
+          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
           "startOffset": 0,
+          "emotionEnhancement": false,
           "_id": {
-            "$oid": "686724fe91f7bab76798552c"
+            "$oid": "68ea5df6e79aac449a37f4c7"
           }
         },
         {
-          "url": "https://media.hoox.video/3464350b-9bbc-471e-ac30-e5c7e3be6640.mp3",
-          "index": 5,
-          "start": 25.82,
-          "end": 29.1,
-          "durationInFrames": 195,
-          "voiceId": "yl2ZDV1MzN4HbQJbMihG",
+          "url": "https://media.hoox.video/aa95e591-dee3-4963-b039-4071b13cf286.mp3",
+          "index": 4,
+          "start": 18.04,
+          "end": 25.259999999999998,
+          "durationInFrames": 431,
+          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
           "startOffset": 0,
+          "emotionEnhancement": false,
           "_id": {
-            "$oid": "686724fe91f7bab76798552d"
-          }
-        },
-        {
-          "url": "https://media.hoox.video/b0de4f56-154c-4792-9915-4d77955e115a.mp3",
-          "index": 6,
-          "start": 29.1,
-          "end": 30.58,
-          "durationInFrames": 90,
-          "voiceId": "yl2ZDV1MzN4HbQJbMihG",
-          "startOffset": 0,
-          "_id": {
-            "$oid": "686724fe91f7bab76798552e"
+            "$oid": "68ea5df6e79aac449a37f4c8"
           }
         }
       ],
       "volume": 1
     },
     "subtitle": {
-      "name": "Modern",
+      "name": "Daniel",
       "style": {
-        "template": "modern",
+        "template": "daniel",
         "fontFamily": "Arial",
-        "fontWeight": "800",
+        "fontWeight": "700",
         "fontSize": 80,
         "color": "#ffffff",
         "isItalic": false,
         "isPunctuation": true,
         "isUppercase": false,
         "mode": "twoLines",
-        "position": 50,
-        "animation": {
-          "appear": "blur"
-        },
-        "secondLine": {
-          "isActive": true,
-          "fontFamily": "Fraunces",
-          "fontWeight": "800",
-          "fontSize": 80,
-          "color": "#fee601",
-          "isItalic": false,
-          "isPunctuation": true,
-          "isUppercase": false,
-          "dynamicSize": true
-        },
+        "position": 54,
         "shadow": {
           "isActive": true,
-          "size": 3,
+          "size": 1,
           "color": "#000000"
         }
       }
     },
     "metadata": {
-      "audio_duration": 30.58
+      "audio_duration": 24.299999999999997
+    },
+    "avatar": {
+      "settings": {
+        "position": 48.23327111493994,
+        "verticalPosition": 21.812606513235394
+      },
+      "thumbnail": "https://d3u0tzju9qaucj.cloudfront.net/7b55a4e4-3941-49da-a645-29967bd96af2/53548ead-627e-4e5a-8f91-a43c72a6df6b.png",
+      "renders": [
+        {
+          "audioIndex": 1,
+          "startInFrames": 148,
+          "durationInSeconds": 5.24,
+          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-1-148-1760196467390.mp4",
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbbd"
+          }
+        },
+        {
+          "audioIndex": 2,
+          "startInFrames": 635,
+          "durationInSeconds": 1.6000000000000014,
+          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-2-635-1760196467366.mp4",
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbbe"
+          }
+        },
+        {
+          "audioIndex": 3,
+          "startInFrames": 731,
+          "durationInSeconds": 4.899999999999999,
+          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-3-731-1760196467391.mp4",
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbbf"
+          }
+        },
+        {
+          "audioIndex": 4,
+          "startInFrames": 1180,
+          "durationInSeconds": 4.599999999999998,
+          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-4-1180-1760196467391.mp4",
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbc0"
+          }
+        }
+      ]
     },
     "keywords": [
-      "workout clothes",
-      "gym sale",
-      "sportswear",
-      "summer fitness",
-      "activewear",
-      "shopping",
-      "fashion",
-      "exercise",
-      "discount",
-      "athleisure"
+      "digital avatar",
+      "realism",
+      "visual quality",
+      "skin texture",
+      "facial expressions",
+      "personalization",
+      "virtual space",
+      "immersion",
+      "technology",
+      "interaction"
     ],
-    "transitions": [
-      {
-        "indexSequenceBefore": 0,
-        "durationInFrames": 53,
-        "video": "https://assets.hoox.video/Film_Burns_35.mp4",
-        "thumbnail": "https://assets.hoox.video/Film_Burns_35-thumbnail.png",
-        "sound": "https://assets.hoox.video/Hard%20Swipe.wav",
-        "volume": 0.15,
-        "fullAt": 25,
-        "category": "Burnt Film",
-        "mode": "lighten",
-        "_id": {
-          "$oid": "686724fe91f7bab767985522"
-        }
-      },
-      {
-        "indexSequenceBefore": 2,
-        "durationInFrames": 20,
-        "video": "https://assets.hoox.video/37%20Burnt%20Film.mp4",
-        "thumbnail": "https://assets.hoox.video/37%20Burnt%20Film-thumbnail.png",
-        "sound": "https://assets.hoox.video/Hard%20Swipe.wav",
-        "volume": 0.15,
-        "fullAt": 10,
-        "category": "Burnt Film",
-        "mode": "hard-light",
-        "_id": {
-          "$oid": "686724fe91f7bab767985523"
-        }
-      },
-      {
-        "indexSequenceBefore": 5,
-        "durationInFrames": 90,
-        "video": "https://assets.hoox.video/Film_Burns_14.mp4",
-        "thumbnail": "https://assets.hoox.video/Film_Burns_14-thumbnail.png",
-        "sound": "https://assets.hoox.video/Fast%20Swipe.wav",
-        "volume": 0.15,
-        "fullAt": 41,
-        "category": "Burnt Film",
-        "mode": "lighten",
-        "_id": {
-          "$oid": "686724fe91f7bab767985524"
-        }
-      },
-      {
-        "indexSequenceBefore": 7,
-        "durationInFrames": 20,
-        "video": "https://assets.hoox.video/37%20Burnt%20Film.mp4",
-        "thumbnail": "https://assets.hoox.video/37%20Burnt%20Film-thumbnail.png",
-        "sound": "https://assets.hoox.video/Right.wav",
-        "volume": 0.15,
-        "fullAt": 10,
-        "category": "Burnt Film",
-        "mode": "hard-light",
-        "_id": {
-          "$oid": "686724fe91f7bab767985525"
-        }
-      },
-      {
-        "indexSequenceBefore": 9,
-        "durationInFrames": 98,
-        "video": "https://assets.hoox.video/Film%20Burn%20Red%20Burn.mp4",
-        "thumbnail": "https://assets.hoox.video/film-burn-red-thumbnail.png",
-        "sound": "https://assets.hoox.video/Fast%20Swipe.wav",
-        "volume": 0.15,
-        "fullAt": 14,
-        "category": "Burnt Film",
-        "mode": "lighten",
-        "_id": {
-          "$oid": "686724fe91f7bab767985526"
-        }
-      },
-      {
-        "indexSequenceBefore": 10,
-        "durationInFrames": 20,
-        "video": "https://assets.hoox.video/31%20Burnt%20Film.mp4",
-        "thumbnail": "https://assets.hoox.video/31%20Burnt%20Film-thumbnail.png",
-        "sound": "https://assets.hoox.video/Fast%20Swipe%20Right.wav",
-        "volume": 0.15,
-        "fullAt": 10,
-        "category": "Burnt Film",
-        "mode": "hard-light",
-        "_id": {
-          "$oid": "686724fe91f7bab767985527"
-        }
-      }
-    ],
-    "thumbnail": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-25y8be5225/renders/xmz8a8dpru/out.jpeg",
+    "transitions": [],
+    "thumbnail": "",
     "format": "vertical",
     "sequences": [
       {
         "words": [
           {
-            "word": "Workout",
-            "start": 0.04,
-            "end": 0.42,
-            "durationInFrames": 23,
+            "word": "Vous",
+            "start": 0,
+            "end": 0.14,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "686724fe91f7bab767985496"
+              "$oid": "68ea5df6e79aac449a37f45d"
             }
           },
           {
-            "word": "clothes",
-            "start": 0.42,
-            "end": 0.64,
+            "word": "n'allez",
+            "start": 0.14,
+            "end": 0.36,
             "durationInFrames": 13,
             "_id": {
-              "$oid": "686724fe91f7bab767985497"
+              "$oid": "68ea5df6e79aac449a37f45e"
             }
           },
           {
-            "word": "at",
-            "start": 0.64,
-            "end": 0.88,
-            "durationInFrames": 14,
+            "word": "pas",
+            "start": 0.36,
+            "end": 0.5,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "686724fe91f7bab767985498"
+              "$oid": "68ea5df6e79aac449a37f45f"
             }
           },
           {
-            "word": "half",
-            "start": 0.88,
+            "word": "croire",
+            "start": 0.5,
+            "end": 0.76,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f460"
+            }
+          },
+          {
+            "word": "ce",
+            "start": 0.76,
+            "end": 0.94,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f461"
+            }
+          },
+          {
+            "word": "que",
+            "start": 0.94,
             "end": 1.1,
-            "durationInFrames": 13,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "686724fe91f7bab767985499"
+              "$oid": "68ea5df6e79aac449a37f462"
             }
           },
           {
-            "word": "price?",
+            "word": "Hoox",
             "start": 1.1,
-            "end": 1.48,
-            "durationInFrames": 23,
+            "end": 1.32,
+            "durationInFrames": 13,
             "_id": {
-              "$oid": "686724fe91f7bab76798549a"
+              "$oid": "68ea5df6e79aac449a37f463"
+            }
+          },
+          {
+            "word": "vient",
+            "start": 1.32,
+            "end": 1.52,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f464"
+            }
+          },
+          {
+            "word": "de",
+            "start": 1.52,
+            "end": 1.68,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f465"
+            }
+          },
+          {
+            "word": "créer.",
+            "start": 1.68,
+            "end": 2.46,
+            "durationInFrames": 47,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f466"
             }
           }
         ],
-        "text": "Workout clothes at half price?",
-        "start": 0.04,
-        "end": 1.48,
-        "durationInFrames": 86,
+        "text": "Vous n'allez pas croire ce que Hoox vient de créer.",
+        "start": 0,
+        "end": 2.46,
+        "durationInFrames": 148,
         "audioIndex": 0,
         "media": {
-          "type": "image",
+          "type": "video",
           "usage": "media",
           "show": "full",
           "startAt": 0,
-          "name": "220713_VITAL_Neutrals_MB8916_ZH_1080x.jpg",
           "generationStatus": "completed",
           "description": [
             {
               "start": 0,
-              "text": "The image depicts a woman wearing a brown long-sleeve crop top and matching shorts, posing with her left hand on her hip and her right arm raised. The shorts have a white logo on the right side, and she has a tattoo on her right leg. The background features a wall composed of light-brown wooden panels arranged in a grid pattern with white grout.",
+              "text": "The video shows a digital representation of Earth from different angles, with illuminated continents and connecting lines, suggesting a theme of global connectivity or technology.",
               "_id": {
-                "$oid": "6869a52c385f940beb3037cd"
+                "$oid": "68ea5df6e79aac449a37f468"
               }
             }
           ],
           "video": {
-            "frames": []
+            "id": "9292325",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 20797762,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/3129957/3129957-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/3129957/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-1.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-4.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-12.jpg",
+              "https://images.pexels.com/videos/3129957/pictures/preview-13.jpg"
+            ],
+            "durationInSeconds": 30
           },
           "image": {
-            "id": "ea9fb4f4-621c-409d-89c5-7e40a31b6687",
-            "link": "https://media.hoox.video/ea9fb4f4-621c-409d-89c5-7e40a31b6687.jpg",
-            "width": 1080,
-            "height": 1288,
-            "size": 1086580
+            "id": "3129957",
+            "link": "https://images.pexels.com/videos/3129957/free-video-3129957.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
           },
           "_id": {
-            "$oid": "6869a55e385f940beb304be6"
-          },
-          "createdAt": {
-            "$date": "2025-07-05T22:20:28.318Z"
-          },
-          "updatedAt": {
-            "$date": "2025-07-05T22:20:28.318Z"
+            "$oid": "68ea77760876fb2d2a39fb61"
           }
         },
         "_id": {
-          "$oid": "686724fe91f7bab767985495"
+          "$oid": "68ea5df6e79aac449a37f45c"
         }
       },
       {
         "words": [
           {
-            "word": "Jim",
-            "start": 1.48,
-            "end": 1.74,
+            "word": "Ces",
+            "start": 2.46,
+            "end": 2.64,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f65c"
+            }
+          },
+          {
+            "word": "nouveaux",
+            "start": 2.64,
+            "end": 2.9,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "686724fe91f7bab76798549e"
+              "$oid": "68ea770e780a479168d0f65d"
             }
           },
           {
-            "word": "Shark's",
-            "start": 1.74,
-            "end": 2.02,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "686724fe91f7bab76798549f"
-            }
-          },
-          {
-            "word": "massive",
-            "start": 2.02,
-            "end": 2.44,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854a0"
-            }
-          },
-          {
-            "word": "sale",
-            "start": 2.44,
-            "end": 2.86,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854a1"
-            }
-          },
-          {
-            "word": "is",
-            "start": 2.86,
-            "end": 3.08,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854a2"
-            }
-          },
-          {
-            "word": "here",
-            "start": 3.08,
-            "end": 3.24,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854a3"
-            }
-          },
-          {
-            "word": "with",
-            "start": 3.24,
-            "end": 3.44,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854a4"
-            }
-          },
-          {
-            "word": "up",
-            "start": 3.44,
-            "end": 3.56,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854a5"
-            }
-          },
-          {
-            "word": "to",
-            "start": 3.56,
-            "end": 3.66,
-            "durationInFrames": 6,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854a6"
-            }
-          },
-          {
-            "word": "50%",
-            "start": 3.66,
-            "end": 4.3,
-            "durationInFrames": 38,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854a7"
-            }
-          },
-          {
-            "word": "off",
-            "start": 4.3,
-            "end": 4.6,
+            "word": "modèles",
+            "start": 2.9,
+            "end": 3.2,
             "durationInFrames": 18,
             "_id": {
-              "$oid": "686724fe91f7bab7679854a8"
+              "$oid": "68ea770e780a479168d0f65e"
             }
-          }
-        ],
-        "text": "Jim Shark's massive sale is here with up to 50% off",
-        "start": 1.48,
-        "end": 4.6,
-        "durationInFrames": 187,
-        "audioIndex": 1,
-        "media": {
-          "type": "image",
-          "usage": "media",
-          "show": "full",
-          "startAt": 0,
-          "name": "Image 1080x1350 (1).jpg",
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "The image showcases a collection of Gymshark products arranged on a reflective red surface in front of red lockers. The items include a blue yoga mat, a cream-colored beanie, a blue shaker bottle, a blue sports bra, a pair of black shorts, and a pair of white socks. A red gift box is positioned behind the products, adorned with a red ribbon and bow featuring the 'GYMSHARK LIFTING' logo. The background consists of red curtains and lockers, with the products' reflections visible on the shiny red surface.",
-              "_id": {
-                "$oid": "6869996e385f940beb2fcd4a"
-              }
-            }
-          ],
-          "video": {
-            "frames": []
           },
-          "image": {
-            "id": "9dd4e51e-d230-40f7-8a0c-e41114f5c0fc",
-            "link": "https://media.hoox.video/9dd4e51e-d230-40f7-8a0c-e41114f5c0fc.jpg",
-            "width": 1080,
-            "height": 1350,
-            "size": 543198
-          },
-          "_id": {
-            "$oid": "6869a55e385f940beb304bf4"
-          },
-          "createdAt": {
-            "$date": "2025-07-05T21:30:22.234Z"
-          },
-          "updatedAt": {
-            "$date": "2025-07-05T21:30:22.234Z"
-          }
-        },
-        "_id": {
-          "$oid": "686724fe91f7bab76798549d"
-        }
-      },
-      {
-        "words": [
           {
-            "word": "everything!",
-            "start": 4.6,
-            "end": 5.68,
-            "durationInFrames": 65,
+            "word": "d'Avatar",
+            "start": 3.2,
+            "end": 3.66,
+            "durationInFrames": 28,
             "_id": {
-              "$oid": "686724fe91f7bab7679854ac"
-            }
-          }
-        ],
-        "text": "everything!",
-        "start": 4.6,
-        "end": 5.68,
-        "durationInFrames": 65,
-        "audioIndex": 1,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "full",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "A miniature shopping cart, with red handles and metal frame, is positioned against a light purple background. The cart holds a stack of US dollar bills. The images show no movement or change in the scene over the four seconds.",
-              "_id": {
-                "$oid": "686724fe91f7bab7679854ae"
-              }
-            }
-          ],
-          "video": {
-            "id": "9857587",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 3000084,
-            "width": 1080,
-            "height": 1920,
-            "fps": 23.97599983215332,
-            "link": "https://videos.pexels.com/video-files/5926067/5926067-hd_1080_1920_24fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/5926067/pictures/preview-0.jpeg",
-              "https://images.pexels.com/videos/5926067/pictures/preview-3.jpeg",
-              "https://images.pexels.com/videos/5926067/pictures/preview-6.jpeg",
-              "https://images.pexels.com/videos/5926067/pictures/preview-9.jpeg",
-              "https://images.pexels.com/videos/5926067/pictures/preview-12.jpeg"
-            ],
-            "durationInSeconds": 10
-          },
-          "image": {
-            "id": "5926067",
-            "link": "https://images.pexels.com/videos/5926067/pexels-photo-5926067.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
-          },
-          "_id": {
-            "$oid": "6869a55e385f940beb304bf8"
-          }
-        },
-        "_id": {
-          "$oid": "686724fe91f7bab7679854ab"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Grab",
-            "start": 5.68,
-            "end": 6.02,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854b0"
+              "$oid": "68ea770e780a479168d0f65f"
             }
           },
           {
-            "word": "the",
-            "start": 6.02,
-            "end": 6.18,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854b1"
-            }
-          },
-          {
-            "word": "Arrival",
-            "start": 6.18,
-            "end": 6.54,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854b2"
-            }
-          },
-          {
-            "word": "V-Neck",
-            "start": 6.54,
-            "end": 7.04,
+            "word": "repoussant",
+            "start": 3.66,
+            "end": 4.16,
             "durationInFrames": 30,
-            "zoom": "zoom-in",
             "_id": {
-              "$oid": "686724fe91f7bab7679854b3"
+              "$oid": "68ea770e780a479168d0f660"
             }
           },
           {
-            "word": "for",
-            "start": 7.04,
-            "end": 7.22,
-            "durationInFrames": 11,
+            "word": "les",
+            "start": 4.16,
+            "end": 4.28,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "686724fe91f7bab7679854b4"
+              "$oid": "68ea770e780a479168d0f661"
             }
           },
           {
-            "word": "just $14",
-            "start": 7.22,
-            "end": 8.04,
-            "durationInFrames": 49,
+            "word": "limites",
+            "start": 4.28,
+            "end": 4.66,
+            "durationInFrames": 23,
             "_id": {
-              "$oid": "686724fe91f7bab7679854b5"
+              "$oid": "68ea770e780a479168d0f662"
             }
           },
           {
-            "word": "instead",
-            "start": 8.04,
-            "end": 8.459999999999999,
-            "durationInFrames": 25,
+            "word": "du",
+            "start": 4.66,
+            "end": 4.859999999999999,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "686724fe91f7bab7679854b6"
+              "$oid": "68ea770e780a479168d0f663"
             }
           },
           {
-            "word": "of $20,",
-            "start": 8.459999999999999,
-            "end": 9.719999999999999,
-            "durationInFrames": 76,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854b7"
-            }
-          }
-        ],
-        "text": "Grab the Arrival V-Neck for just $14 instead of $20,",
-        "start": 5.68,
-        "end": 9.719999999999999,
-        "durationInFrames": 243,
-        "audioIndex": 2,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "full",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "Two women are looking at a laptop screen displaying clothing items. The laptop is open on a table, and the women are seated close together, viewing the screen. The images show a clothing website or online store, with various garments displayed on the screen. There are no significant changes or movements in the first four seconds of the video.",
-              "_id": {
-                "$oid": "686724fe91f7bab7679854b9"
-              }
-            }
-          ],
-          "video": {
-            "id": "9734928",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 3079439,
-            "width": 1920,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/5585946/5585946-hd_1920_1080_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/5585946/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/5585946/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/5585946/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/5585946/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/5585946/pictures/preview-12.jpg"
-            ],
-            "durationInSeconds": 5
-          },
-          "image": {
-            "id": "5585946",
-            "link": "https://images.pexels.com/videos/5585946/girls-online-online-shopping-shopping-5585946.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 1920,
-            "height": 1080
-          },
-          "_id": {
-            "$oid": "6869a55e385f940beb304c03"
-          }
-        },
-        "_id": {
-          "$oid": "686724fe91f7bab7679854af"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Essential",
-            "start": 9.719999999999999,
-            "end": 10.04,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854bb"
-            }
-          },
-          {
-            "word": "Oversized",
-            "start": 10.04,
-            "end": 10.66,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854bc"
-            }
-          },
-          {
-            "word": "for $19.60",
-            "start": 10.66,
-            "end": 11.64,
-            "durationInFrames": 59,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854bd"
-            }
-          },
-          {
-            "word": "instead",
-            "start": 11.64,
-            "end": 11.96,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854be"
-            }
-          },
-          {
-            "word": "of $20,",
-            "start": 11.96,
-            "end": 13.219999999999999,
-            "durationInFrames": 76,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854bf"
-            }
-          }
-        ],
-        "text": "Essential Oversized for $19.60 instead of $20,",
-        "start": 9.719999999999999,
-        "end": 13.219999999999999,
-        "durationInFrames": 210,
-        "audioIndex": 2,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "full",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "The first four seconds of the video show a rack of clothing hanging on a clothes rail. Various items of clothing, including shirts, tops, and scarves, are visible in different colors and patterns.  A woman is then seen walking past the clothing rack, looking at the clothes. The woman is wearing a teal-colored, sleeveless top with a criss-cross design.",
-              "_id": {
-                "$oid": "686724fe91f7bab7679854c1"
-              }
-            }
-          ],
-          "video": {
-            "id": "9251739",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 10143490,
-            "width": 1920,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/853800/853800-hd_1920_1080_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/853800/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/853800/pictures/preview-1.jpg",
-              "https://images.pexels.com/videos/853800/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/853800/pictures/preview-5.jpg",
-              "https://images.pexels.com/videos/853800/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/853800/pictures/preview-8.jpg",
-              "https://images.pexels.com/videos/853800/pictures/preview-10.jpg",
-              "https://images.pexels.com/videos/853800/pictures/preview-11.jpg",
-              "https://images.pexels.com/videos/853800/pictures/preview-13.jpg"
-            ],
-            "durationInSeconds": 19
-          },
-          "image": {
-            "id": "853800",
-            "link": "https://images.pexels.com/videos/853800/free-video-853800.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 1920,
-            "height": 1080
-          },
-          "_id": {
-            "$oid": "6869a55e385f940beb304c0b"
-          }
-        },
-        "_id": {
-          "$oid": "686724fe91f7bab7679854ba"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "and",
-            "start": 13.219999999999999,
-            "end": 13.239999999999998,
-            "durationInFrames": 1,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854c3"
-            }
-          },
-          {
-            "word": "Varsity",
-            "start": 13.239999999999998,
-            "end": 13.64,
+            "word": "réalisme",
+            "start": 4.859999999999999,
+            "end": 5.26,
             "durationInFrames": 24,
             "_id": {
-              "$oid": "686724fe91f7bab7679854c4"
+              "$oid": "68ea770e780a479168d0f664"
             }
           },
           {
-            "word": "Mesh",
-            "start": 13.64,
-            "end": 14.02,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854c5"
-            }
-          },
-          {
-            "word": "Shorts",
-            "start": 14.02,
-            "end": 14.44,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854c6"
-            }
-          },
-          {
-            "word": "for",
-            "start": 14.44,
-            "end": 14.68,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854c7"
-            }
-          },
-          {
-            "word": "only $24",
-            "start": 14.68,
-            "end": 15.44,
-            "durationInFrames": 46,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854c8"
-            }
-          },
-          {
-            "word": "instead",
-            "start": 15.44,
-            "end": 16.119999999999997,
-            "durationInFrames": 41,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854c9"
-            }
-          },
-          {
-            "word": "of $40.",
-            "start": 16.119999999999997,
-            "end": 16.66,
-            "durationInFrames": 32,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854ca"
-            }
-          }
-        ],
-        "text": "and Varsity Mesh Shorts for only $24 instead of $40.",
-        "start": 13.219999999999999,
-        "end": 16.66,
-        "durationInFrames": 206,
-        "audioIndex": 2,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "full",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "A woman in teal-colored athletic wear, a crop top and shorts, is standing in front of a mirror. The images show no significant movement or change in the woman's position or expression during the first four seconds of the video.",
-              "_id": {
-                "$oid": "686724fe91f7bab7679854cc"
-              }
-            }
-          ],
-          "video": {
-            "id": "10823581",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 5691621,
-            "width": 1080,
-            "height": 2048,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/8431551/8431551-hd_1080_2048_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/8431551/pictures/preview-0.jpeg",
-              "https://images.pexels.com/videos/8431551/pictures/preview-2.jpeg",
-              "https://images.pexels.com/videos/8431551/pictures/preview-5.jpeg",
-              "https://images.pexels.com/videos/8431551/pictures/preview-7.jpeg",
-              "https://images.pexels.com/videos/8431551/pictures/preview-10.jpeg",
-              "https://images.pexels.com/videos/8431551/pictures/preview-12.jpeg"
-            ],
-            "durationInSeconds": 13
-          },
-          "image": {
-            "id": "8431551",
-            "link": "https://images.pexels.com/videos/8431551/pexels-photo-8431551.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 4096
-          },
-          "_id": {
-            "$oid": "6869a55e385f940beb304c16"
-          }
-        },
-        "_id": {
-          "$oid": "686724fe91f7bab7679854c2"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Now",
-            "start": 16.66,
-            "end": 16.86,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854ce"
-            }
-          },
-          {
-            "word": "is",
-            "start": 16.86,
-            "end": 17.080000000000002,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854cf"
-            }
-          },
-          {
-            "word": "the",
-            "start": 17.080000000000002,
-            "end": 17.2,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d0"
-            }
-          },
-          {
-            "word": "perfect",
-            "start": 17.2,
-            "end": 17.52,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d1"
-            }
-          },
-          {
-            "word": "time",
-            "start": 17.52,
-            "end": 17.82,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d2"
-            }
-          },
-          {
-            "word": "to",
-            "start": 17.82,
-            "end": 17.96,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d3"
-            }
-          },
-          {
-            "word": "update",
-            "start": 17.96,
-            "end": 18.2,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d4"
-            }
-          },
-          {
-            "word": "your",
-            "start": 18.2,
-            "end": 18.38,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d5"
-            }
-          },
-          {
-            "word": "sports",
-            "start": 18.38,
-            "end": 18.740000000000002,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d6"
-            }
-          },
-          {
-            "word": "wardrobe",
-            "start": 18.740000000000002,
-            "end": 19.1,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d7"
-            }
-          },
-          {
-            "word": "and",
-            "start": 19.1,
-            "end": 19.36,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d8"
-            }
-          },
-          {
-            "word": "start",
-            "start": 19.36,
-            "end": 19.66,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854d9"
-            }
-          }
-        ],
-        "text": "Now is the perfect time to update your sports wardrobe and start",
-        "start": 16.66,
-        "end": 19.66,
-        "durationInFrames": 180,
-        "audioIndex": 3,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "full",
-          "startAt": 31,
-          "name": "Instagram Video Download (2).mp4",
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "duration": 3,
-              "text": "The woman puts on a pair of black wristbands, she is standing in front of a gym equipment, wearing blue sportswear. She is wearing headphones and is looking down.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ade"
-              }
-            },
-            {
-              "start": 3,
-              "duration": 5,
-              "text": "The woman is doing shoulder exercises with a pair of dumbbells. She is wearing a blue bra and shorts.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3adf"
-              }
-            },
-            {
-              "start": 9,
-              "duration": 9,
-              "text": "The woman is doing a pull-up exercise. She is wearing a blue bra and shorts.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae0"
-              }
-            },
-            {
-              "start": 18,
-              "duration": 3,
-              "text": "The woman puts her headphones on. She is standing in front of gym equipment and looking at the camera. She is wearing a blue bra and shorts. The camera is zoomed into her face.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae1"
-              }
-            },
-            {
-              "start": 21,
-              "duration": 5,
-              "text": "The woman is doing a bench press exercise, she is wearing a blue bra and shorts.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae2"
-              }
-            },
-            {
-              "start": 26,
-              "duration": 5,
-              "text": "The woman does another shoulder exercises with a pair of dumbbells. She is standing in front of gym equipment and looking around.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae3"
-              }
-            },
-            {
-              "start": 31,
-              "duration": 9,
-              "text": "The woman is standing in the middle of the gym, she is wearing a blue bra and shorts and looking at the camera. She is wearing headphones and smiling.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae4"
-              }
-            }
-          ],
-          "video": {
-            "id": "cf600357-b15f-4763-a107-1c6db4313157",
-            "file_type": "video/mp4",
-            "size": 7007126,
-            "width": 720,
-            "height": 1280,
-            "link": "https://media.hoox.video/cf600357-b15f-4763-a107-1c6db4313157.mp4",
-            "frames": []
-          },
-          "image": {
-            "id": "29372e16-da89-465c-a49b-a00b36ff8e3d",
-            "link": "https://media.hoox.video/29372e16-da89-465c-a49b-a00b36ff8e3d.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6869a55e385f940beb304c25"
-          },
-          "createdAt": {
-            "$date": "2025-02-27T15:11:49.013Z"
-          },
-          "updatedAt": {
-            "$date": "2025-02-27T15:11:49.013Z"
-          }
-        },
-        "_id": {
-          "$oid": "686724fe91f7bab7679854cd"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "the",
-            "start": 19.66,
-            "end": 19.86,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854e3"
-            }
-          },
-          {
-            "word": "summer",
-            "start": 19.86,
-            "end": 20.12,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854e4"
-            }
-          },
-          {
-            "word": "in",
-            "start": 20.12,
-            "end": 20.32,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854e5"
-            }
-          },
-          {
-            "word": "great",
-            "start": 20.32,
-            "end": 20.58,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854e6"
-            }
-          },
-          {
-            "word": "shape.",
-            "start": 20.58,
-            "end": 20.94,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854e7"
-            }
-          }
-        ],
-        "text": "the summer in great shape.",
-        "start": 19.66,
-        "end": 20.94,
-        "durationInFrames": 78,
-        "audioIndex": 3,
-        "media": {
-          "type": "image",
-          "usage": "media",
-          "show": "full",
-          "startAt": 2,
-          "name": "image.jpg",
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "duration": 10000000,
-              "text": "A woman in black workout clothes poses in a studio. She stands with her hands on her hips and looks to the side.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3acd"
-              }
-            },
-            {
-              "start": 2,
-              "duration": 10000000,
-              "text": "The woman looks forward and smiles.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ace"
-              }
-            },
-            {
-              "start": 4,
-              "duration": 10000000,
-              "text": "The woman puts her left hand in her hip, adjusting her clothes slightly.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3acf"
-              }
-            },
-            {
-              "start": 6,
-              "duration": 10000000,
-              "text": "The woman looks slightly up and smiles.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ad0"
-              }
-            }
-          ],
-          "video": {
-            "frames": []
-          },
-          "image": {
-            "id": "68cc5f26-c91e-46f7-9d5e-66be4ab2f4aa",
-            "link": "https://media.hoox.video/68cc5f26-c91e-46f7-9d5e-66be4ab2f4aa.jpg",
-            "width": 1080,
-            "height": 1352
-          },
-          "_id": {
-            "$oid": "6869a55e385f940beb304c33"
-          },
-          "createdAt": {
-            "$date": "2025-02-27T15:11:49.012Z"
-          },
-          "updatedAt": {
-            "$date": "2025-02-27T15:11:49.012Z"
-          }
-        },
-        "_id": {
-          "$oid": "686724fe91f7bab7679854e2"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "These",
-            "start": 20.94,
-            "end": 21.14,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854ee"
-            }
-          },
-          {
-            "word": "comfortable,",
-            "start": 21.14,
-            "end": 21.700000000000003,
-            "durationInFrames": 34,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854ef"
-            }
-          },
-          {
-            "word": "stylish",
-            "start": 21.700000000000003,
-            "end": 22.14,
+            "word": "numérique",
+            "start": 5.26,
+            "end": 5.7,
             "durationInFrames": 26,
             "_id": {
-              "$oid": "686724fe91f7bab7679854f0"
-            }
-          },
-          {
-            "word": "pieces",
-            "start": 22.14,
-            "end": 22.48,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854f1"
-            }
-          },
-          {
-            "word": "are",
-            "start": 22.48,
-            "end": 22.700000000000003,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854f2"
-            }
-          },
-          {
-            "word": "perfect",
-            "start": 22.700000000000003,
-            "end": 23.080000000000002,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854f3"
-            }
-          },
-          {
-            "word": "for",
-            "start": 23.080000000000002,
-            "end": 23.340000000000003,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854f4"
-            }
-          },
-          {
-            "word": "crushing",
-            "start": 23.340000000000003,
-            "end": 23.68,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854f5"
-            }
-          },
-          {
-            "word": "summer",
-            "start": 23.68,
-            "end": 24.040000000000003,
-            "durationInFrames": 22,
-            "_id": {
-              "$oid": "686724fe91f7bab7679854f6"
+              "$oid": "68ea770e780a479168d0f665"
             }
           }
         ],
-        "text": "These comfortable, stylish pieces are perfect for crushing summer",
-        "start": 20.94,
-        "end": 24.040000000000003,
-        "durationInFrames": 186,
-        "audioIndex": 4,
+        "text": "Ces nouveaux modèles d'Avatar repoussant les limites du réalisme numérique",
+        "start": 2.46,
+        "end": 5.7,
+        "durationInFrames": 194,
+        "audioIndex": 1,
         "media": {
           "type": "video",
           "usage": "media",
-          "show": "full",
-          "startAt": 3,
-          "name": "Instagram Video Download (2).mp4",
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "duration": 3,
-              "text": "The woman puts on a pair of black wristbands, she is standing in front of a gym equipment, wearing blue sportswear. She is wearing headphones and is looking down.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ade"
-              }
-            },
-            {
-              "start": 3,
-              "duration": 5,
-              "text": "The woman is doing shoulder exercises with a pair of dumbbells. She is wearing a blue bra and shorts.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3adf"
-              }
-            },
-            {
-              "start": 9,
-              "duration": 9,
-              "text": "The woman is doing a pull-up exercise. She is wearing a blue bra and shorts.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae0"
-              }
-            },
-            {
-              "start": 18,
-              "duration": 3,
-              "text": "The woman puts her headphones on. She is standing in front of gym equipment and looking at the camera. She is wearing a blue bra and shorts. The camera is zoomed into her face.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae1"
-              }
-            },
-            {
-              "start": 21,
-              "duration": 5,
-              "text": "The woman is doing a bench press exercise, she is wearing a blue bra and shorts.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae2"
-              }
-            },
-            {
-              "start": 26,
-              "duration": 5,
-              "text": "The woman does another shoulder exercises with a pair of dumbbells. She is standing in front of gym equipment and looking around.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae3"
-              }
-            },
-            {
-              "start": 31,
-              "duration": 9,
-              "text": "The woman is standing in the middle of the gym, she is wearing a blue bra and shorts and looking at the camera. She is wearing headphones and smiling.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ae4"
-              }
-            }
-          ],
-          "video": {
-            "id": "cf600357-b15f-4763-a107-1c6db4313157",
-            "file_type": "video/mp4",
-            "size": 7007126,
-            "width": 720,
-            "height": 1280,
-            "link": "https://media.hoox.video/cf600357-b15f-4763-a107-1c6db4313157.mp4",
-            "frames": []
-          },
-          "image": {
-            "id": "29372e16-da89-465c-a49b-a00b36ff8e3d",
-            "link": "https://media.hoox.video/29372e16-da89-465c-a49b-a00b36ff8e3d.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6869a55e385f940beb304c42"
-          },
-          "createdAt": {
-            "$date": "2025-02-27T15:11:49.013Z"
-          },
-          "updatedAt": {
-            "$date": "2025-02-27T15:11:49.013Z"
-          }
-        },
-        "_id": {
-          "$oid": "686724fe91f7bab7679854ed"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "workouts",
-            "start": 24.040000000000003,
-            "end": 24.520000000000003,
-            "durationInFrames": 29,
-            "_id": {
-              "$oid": "686724fe91f7bab767985500"
-            }
-          },
-          {
-            "word": "and",
-            "start": 24.520000000000003,
-            "end": 24.700000000000003,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "686724fe91f7bab767985501"
-            }
-          },
-          {
-            "word": "looking",
-            "start": 24.700000000000003,
-            "end": 24.96,
-            "durationInFrames": 16,
-            "_id": {
-              "$oid": "686724fe91f7bab767985502"
-            }
-          },
-          {
-            "word": "great",
-            "start": 24.96,
-            "end": 25.28,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "686724fe91f7bab767985503"
-            }
-          },
-          {
-            "word": "doing",
-            "start": 25.28,
-            "end": 25.580000000000002,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "686724fe91f7bab767985504"
-            }
-          },
-          {
-            "word": "it.",
-            "start": 25.580000000000002,
-            "end": 25.82,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "686724fe91f7bab767985505"
-            }
-          }
-        ],
-        "text": "workouts and looking great doing it.",
-        "start": 24.040000000000003,
-        "end": 25.82,
-        "durationInFrames": 107,
-        "audioIndex": 4,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "full",
-          "startAt": 9,
-          "name": "Instagram Video Download.mp4",
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "duration": 6,
-              "text": "A woman is posing in a gym, looking at the camera and flexing her muscles.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ad7"
-              }
-            },
-            {
-              "start": 6,
-              "duration": 3,
-              "text": "The woman puts chalk on her hands.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ad8"
-              }
-            },
-            {
-              "start": 9,
-              "duration": 4,
-              "text": "The woman is lifting weights on a barbell.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ad9"
-              }
-            },
-            {
-              "start": 13,
-              "duration": 5,
-              "text": "The woman is working out on a lat pulldown machine.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3ada"
-              }
-            },
-            {
-              "start": 18,
-              "duration": 5,
-              "text": "The woman is working out on a lat pulldown machine.",
-              "_id": {
-                "$oid": "67c080b404aae94c641b3adb"
-              }
-            }
-          ],
-          "video": {
-            "id": "52c3096a-d791-4c27-8c99-e166bd68b1da",
-            "file_type": "video/mp4",
-            "size": 3236592,
-            "width": 720,
-            "height": 1280,
-            "link": "https://media.hoox.video/52c3096a-d791-4c27-8c99-e166bd68b1da.mp4",
-            "frames": []
-          },
-          "image": {
-            "id": "69c36a45-8507-4e9e-b049-ebeade4ccd0e",
-            "link": "https://media.hoox.video/69c36a45-8507-4e9e-b049-ebeade4ccd0e.jpg",
-            "width": 720,
-            "height": 1280
-          },
-          "_id": {
-            "$oid": "6869a55e385f940beb304c51"
-          },
-          "createdAt": {
-            "$date": "2025-02-27T15:11:49.013Z"
-          },
-          "updatedAt": {
-            "$date": "2025-02-27T15:11:49.013Z"
-          }
-        },
-        "_id": {
-          "$oid": "686724fe91f7bab7679854ff"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Don't",
-            "start": 25.82,
-            "end": 26.1,
-            "durationInFrames": 17,
-            "_id": {
-              "$oid": "686724fe91f7bab76798550d"
-            }
-          },
-          {
-            "word": "wait,",
-            "start": 26.1,
-            "end": 26.44,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "686724fe91f7bab76798550e"
-            }
-          },
-          {
-            "word": "stock",
-            "start": 26.44,
-            "end": 26.740000000000002,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "686724fe91f7bab76798550f"
-            }
-          },
-          {
-            "word": "is",
-            "start": 26.740000000000002,
-            "end": 26.98,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "686724fe91f7bab767985510"
-            }
-          },
-          {
-            "word": "selling",
-            "start": 26.98,
-            "end": 27.2,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "686724fe91f7bab767985511"
-            }
-          },
-          {
-            "word": "fast",
-            "start": 27.2,
-            "end": 27.62,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "686724fe91f7bab767985512"
-            }
-          },
-          {
-            "word": "and",
-            "start": 27.62,
-            "end": 27.76,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "686724fe91f7bab767985513"
-            }
-          },
-          {
-            "word": "these",
-            "start": 27.76,
-            "end": 27.94,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "686724fe91f7bab767985514"
-            }
-          },
-          {
-            "word": "deals",
-            "start": 27.94,
-            "end": 28.18,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "686724fe91f7bab767985515"
-            }
-          },
-          {
-            "word": "won't",
-            "start": 28.18,
-            "end": 28.42,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "686724fe91f7bab767985516"
-            }
-          },
-          {
-            "word": "last.",
-            "start": 28.42,
-            "end": 29.1,
-            "durationInFrames": 41,
-            "_id": {
-              "$oid": "686724fe91f7bab767985517"
-            }
-          }
-        ],
-        "text": "Don't wait, stock is selling fast and these deals won't last.",
-        "start": 25.82,
-        "end": 29.1,
-        "durationInFrames": 195,
-        "audioIndex": 5,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "full",
+          "show": "hide",
           "startAt": 0,
           "generationStatus": "completed",
           "description": [
             {
               "start": 0,
-              "text": "A person in a light gray sweatshirt is shown placing items, likely clothing, into several white paper shopping bags.  The items appear to be folded or draped within the bags.  The bags are stacked and the person's hands are visible as they adjust and arrange the items inside the bags.  The scene is set in a room with a light-colored interior, including a light-blue chair and some decorative lighting.  The video shows the process of unpacking or organizing the shopping bags during the first four seconds.",
+              "text": "A close-up of a person's face with purple hair, showing a calm expression, with slight movements across four frames.",
               "_id": {
-                "$oid": "686724fe91f7bab767985519"
+                "$oid": "68ea5df6e79aac449a37f475"
               }
             }
           ],
           "video": {
-            "id": "9341903",
+            "id": "10595084",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 18365031,
+            "size": 18558726,
             "width": 2048,
             "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/4008527/4008527-hd_2048_1080_25fps.mp4",
+            "link": "https://videos.pexels.com/video-files/7849214/7849214-hd_2048_1080_25fps.mp4",
             "frames": [
-              "https://images.pexels.com/videos/4008527/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/4008527/pictures/preview-1.jpg",
-              "https://images.pexels.com/videos/4008527/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/4008527/pictures/preview-4.jpg",
-              "https://images.pexels.com/videos/4008527/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/4008527/pictures/preview-7.jpg",
-              "https://images.pexels.com/videos/4008527/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/4008527/pictures/preview-10.jpg",
-              "https://images.pexels.com/videos/4008527/pictures/preview-12.jpg",
-              "https://images.pexels.com/videos/4008527/pictures/preview-13.jpg"
+              "https://images.pexels.com/videos/7849214/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-1.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-4.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-12.jpg",
+              "https://images.pexels.com/videos/7849214/pictures/preview-13.jpg"
             ],
-            "durationInSeconds": 26
+            "durationInSeconds": 43
           },
           "image": {
-            "id": "4008527",
-            "link": "https://images.pexels.com/videos/4008527/pexels-photo-4008527.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "id": "7849214",
+            "link": "https://images.pexels.com/videos/7849214/pexels-photo-7849214.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
             "width": 4096,
             "height": 2160
           },
           "_id": {
-            "$oid": "6869a55e385f940beb304c63"
+            "$oid": "68ea77760876fb2d2a39fb6e"
           }
         },
         "_id": {
-          "$oid": "686724fe91f7bab76798550c"
+          "$oid": "68ea770e780a479168d0f65b"
         }
       },
       {
         "words": [
           {
-            "word": "Tell",
-            "start": 29.1,
-            "end": 29.18,
-            "durationInFrames": 5,
+            "word": "avec",
+            "start": 5.7,
+            "end": 5.9,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "686724fe91f7bab76798551b"
+              "$oid": "68ea770e780a479168d0f669"
             }
           },
           {
-            "word": "us",
-            "start": 29.18,
-            "end": 29.36,
-            "durationInFrames": 11,
+            "word": "une",
+            "start": 5.9,
+            "end": 6.1,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "686724fe91f7bab76798551c"
+              "$oid": "68ea770e780a479168d0f66a"
             }
           },
           {
-            "word": "your",
-            "start": 29.36,
-            "end": 29.44,
-            "durationInFrames": 5,
-            "_id": {
-              "$oid": "686724fe91f7bab76798551d"
-            }
-          },
-          {
-            "word": "favorite",
-            "start": 29.44,
-            "end": 29.72,
+            "word": "qualité",
+            "start": 6.1,
+            "end": 6.38,
             "durationInFrames": 17,
             "_id": {
-              "$oid": "686724fe91f7bab76798551e"
+              "$oid": "68ea770e780a479168d0f66b"
             }
           },
           {
-            "word": "pick!",
-            "start": 29.72,
-            "end": 30.58,
-            "durationInFrames": 52,
+            "word": "visuelle",
+            "start": 6.38,
+            "end": 6.9,
+            "durationInFrames": 31,
             "_id": {
-              "$oid": "686724fe91f7bab76798551f"
+              "$oid": "68ea770e780a479168d0f66c"
+            }
+          },
+          {
+            "word": "époustouflante.",
+            "start": 6.9,
+            "end": 7.7,
+            "durationInFrames": 48,
+            "_id": {
+              "$oid": "68ea770e780a479168d0f66d"
             }
           }
         ],
-        "text": "Tell us your favorite pick!",
-        "start": 29.1,
-        "end": 30.58,
-        "durationInFrames": 90,
-        "audioIndex": 6,
+        "text": "avec une qualité visuelle époustouflante.",
+        "start": 5.7,
+        "end": 7.7,
+        "durationInFrames": 120,
+        "audioIndex": 1,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A close-up of a woman's face, showing her eyes, nose, and mouth, with slight movements and changes in hair position across the four frames.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f47e"
+              }
+            }
+          ],
+          "video": {
+            "id": "10284066",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 18912042,
+            "width": 2048,
+            "height": 988,
+            "fps": 29.97,
+            "link": "https://videos.pexels.com/video-files/7038590/7038590-hd_2048_988_30fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/7038590/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-1.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-4.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-12.jpg",
+              "https://images.pexels.com/videos/7038590/pictures/preview-13.jpg"
+            ],
+            "durationInSeconds": 26
+          },
+          "image": {
+            "id": "7038590",
+            "link": "https://images.pexels.com/videos/7038590/pexels-photo-7038590.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4481,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fb76"
+          }
+        },
+        "_id": {
+          "$oid": "68ea770e780a479168d0f668"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Chaque",
+            "start": 7.7,
+            "end": 7.96,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f480"
+            }
+          },
+          {
+            "word": "détail,",
+            "start": 7.96,
+            "end": 8.36,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f481"
+            }
+          },
+          {
+            "word": "de",
+            "start": 8.36,
+            "end": 8.48,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f482"
+            }
+          },
+          {
+            "word": "la",
+            "start": 8.48,
+            "end": 8.600000000000001,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f483"
+            }
+          },
+          {
+            "word": "texture",
+            "start": 8.600000000000001,
+            "end": 8.899999999999999,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f484"
+            }
+          },
+          {
+            "word": "de",
+            "start": 8.899999999999999,
+            "end": 9.079999999999998,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f485"
+            }
+          },
+          {
+            "word": "peau",
+            "start": 9.079999999999998,
+            "end": 9.34,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f486"
+            }
+          },
+          {
+            "word": "aux",
+            "start": 9.34,
+            "end": 9.48,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f487"
+            }
+          },
+          {
+            "word": "expressions",
+            "start": 9.48,
+            "end": 9.899999999999999,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f488"
+            }
+          },
+          {
+            "word": "faciales,",
+            "start": 9.899999999999999,
+            "end": 10.52,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f489"
+            }
+          },
+          {
+            "word": "est",
+            "start": 10.52,
+            "end": 10.579999999999998,
+            "durationInFrames": 4,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f48a"
+            }
+          },
+          {
+            "word": "rendu",
+            "start": 10.579999999999998,
+            "end": 10.84,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f48b"
+            }
+          }
+        ],
+        "text": "Chaque détail, de la texture de peau aux expressions faciales, est rendu",
+        "start": 7.7,
+        "end": 10.84,
+        "durationInFrames": 189,
+        "audioIndex": 2,
         "media": {
           "type": "video",
           "usage": "media",
@@ -1784,59 +712,660 @@
           "description": [
             {
               "start": 0,
-              "text": "A woman is seated in a cafe, looking at a tablet computer.  She appears to be smiling and engaged in what she is viewing. The background shows other people in the cafe, and the interior design is modern and casual.",
+              "text": "Close-up of a person's face with light reflections creating a dotted pattern on their skin, with slight movements across the first four seconds.",
               "_id": {
-                "$oid": "686724fe91f7bab767985521"
+                "$oid": "68ea5df6e79aac449a37f48d"
               }
             }
           ],
           "video": {
-            "id": "9280921",
+            "id": "10670647",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 5389822,
-            "width": 1920,
-            "height": 1080,
-            "fps": 23.97599983215332,
-            "link": "https://videos.pexels.com/video-files/2675511/2675511-hd_1920_1080_24fps.mp4",
+            "size": 5723941,
+            "width": 1080,
+            "height": 1920,
+            "fps": 30,
+            "link": "https://videos.pexels.com/video-files/8056004/8056004-hd_1080_1920_30fps.mp4",
             "frames": [
-              "https://images.pexels.com/videos/2675511/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/2675511/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/2675511/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/2675511/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/2675511/pictures/preview-12.jpg"
+              "https://images.pexels.com/videos/8056004/pictures/preview-0.jpeg",
+              "https://images.pexels.com/videos/8056004/pictures/preview-3.jpeg",
+              "https://images.pexels.com/videos/8056004/pictures/preview-6.jpeg",
+              "https://images.pexels.com/videos/8056004/pictures/preview-9.jpeg",
+              "https://images.pexels.com/videos/8056004/pictures/preview-12.jpeg"
             ],
-            "durationInSeconds": 11
+            "durationInSeconds": 9
           },
           "image": {
-            "id": "2675511",
-            "link": "https://images.pexels.com/videos/2675511/free-video-2675511.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "id": "8056004",
+            "link": "https://images.pexels.com/videos/8056004/alone-candy-child-chocolate-8056004.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
+            "width": 2160,
+            "height": 3840
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fb85"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f47f"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "avec",
+            "start": 10.84,
+            "end": 10.98,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f48f"
+            }
+          },
+          {
+            "word": "une",
+            "start": 10.98,
+            "end": 11.16,
+            "durationInFrames": 11,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f490"
+            }
+          },
+          {
+            "word": "précision",
+            "start": 11.16,
+            "end": 11.600000000000001,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f491"
+            }
+          },
+          {
+            "word": "incroyable.",
+            "start": 11.600000000000001,
+            "end": 12.18,
+            "durationInFrames": 35,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f492"
+            }
+          }
+        ],
+        "text": "avec une précision incroyable.",
+        "start": 10.84,
+        "end": 12.18,
+        "durationInFrames": 80,
+        "audioIndex": 2,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A close-up of a young person's face, focusing on the eyes, with slight changes in eye direction and lighting across four frames.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f494"
+              }
+            }
+          ],
+          "video": {
+            "id": "11070799",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 15143372,
+            "width": 2048,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/9154746/9154746-hd_2048_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/9154746/pictures/preview-0.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-1.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-3.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-4.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-6.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-7.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-9.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-10.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-12.jpeg",
+              "https://images.pexels.com/videos/9154746/pictures/preview-13.jpeg"
+            ],
+            "durationInSeconds": 40
+          },
+          "image": {
+            "id": "9154746",
+            "link": "https://images.pexels.com/videos/9154746/closeup-eyes-face-male-9154746.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 4096,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fb8c"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f48e"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "La",
+            "start": 12.18,
+            "end": 12.3,
+            "durationInFrames": 7,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f496"
+            }
+          },
+          {
+            "word": "technologie",
+            "start": 12.3,
+            "end": 12.84,
+            "durationInFrames": 32,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f497"
+            }
+          },
+          {
+            "word": "utilisée",
+            "start": 12.84,
+            "end": 13.34,
+            "durationInFrames": 30,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f498"
+            }
+          },
+          {
+            "word": "permet",
+            "start": 13.34,
+            "end": 13.580000000000002,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f499"
+            }
+          },
+          {
+            "word": "une",
+            "start": 13.580000000000002,
+            "end": 13.719999999999999,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f49a"
+            }
+          },
+          {
+            "word": "personnalisation",
+            "start": 13.719999999999999,
+            "end": 14.420000000000002,
+            "durationInFrames": 42,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f49b"
+            }
+          },
+          {
+            "word": "poussée,",
+            "start": 14.420000000000002,
+            "end": 15.100000000000001,
+            "durationInFrames": 41,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f49c"
+            }
+          },
+          {
+            "word": "offrant",
+            "start": 15.100000000000001,
+            "end": 15.259999999999998,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f49d"
+            }
+          }
+        ],
+        "text": "La technologie utilisée permet une personnalisation poussée, offrant",
+        "start": 12.18,
+        "end": 15.259999999999998,
+        "durationInFrames": 184,
+        "audioIndex": 3,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "half",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A woman is sitting at a table in a busy office or cafe, looking at a tablet device. Several people around her are reaching towards the tablet, with one person pointing at the screen. The scene appears to be a collaborative or instructional moment.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f49f"
+              }
+            }
+          ],
+          "video": {
+            "id": "10324923",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 5879586,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7165697/7165697-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/7165697/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/7165697/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/7165697/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/7165697/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/7165697/pictures/preview-12.jpg"
+            ],
+            "durationInSeconds": 9
+          },
+          "image": {
+            "id": "7165697",
+            "link": "https://images.pexels.com/videos/7165697/adult-business-coffee-collaboration-7165697.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
             "width": 1920,
             "height": 1080
           },
           "_id": {
-            "$oid": "6869a55e385f940beb304c6b"
+            "$oid": "68ea77760876fb2d2a39fb97"
           }
         },
         "_id": {
-          "$oid": "686724fe91f7bab76798551a"
+          "$oid": "68ea5df6e79aac449a37f495"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "des",
+            "start": 15.259999999999998,
+            "end": 15.399999999999999,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a1"
+            }
+          },
+          {
+            "word": "avatars",
+            "start": 15.399999999999999,
+            "end": 15.84,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a2"
+            }
+          },
+          {
+            "word": "qui",
+            "start": 15.84,
+            "end": 16,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a3"
+            }
+          },
+          {
+            "word": "semblent",
+            "start": 16,
+            "end": 16.28,
+            "durationInFrames": 17,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a4"
+            }
+          },
+          {
+            "word": "vraiment",
+            "start": 16.28,
+            "end": 16.7,
+            "durationInFrames": 25,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a5"
+            }
+          },
+          {
+            "word": "vivants.",
+            "start": 16.7,
+            "end": 17.08,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4a6"
+            }
+          }
+        ],
+        "text": "des avatars qui semblent vraiment vivants.",
+        "start": 15.259999999999998,
+        "end": 17.08,
+        "durationInFrames": 109,
+        "audioIndex": 3,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "Two individuals are wearing virtual reality headsets, with one in a black headset and the other in a white headset, both immersed in a virtual environment.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f4a8"
+              }
+            }
+          ],
+          "video": {
+            "id": "10945147",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 4901037,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/8762940/8762940-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/8762940/pictures/preview-0.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-1.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-3.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-4.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-6.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-7.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-9.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-10.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-12.jpeg",
+              "https://images.pexels.com/videos/8762940/pictures/preview-13.jpeg"
+            ],
+            "durationInSeconds": 28
+          },
+          "image": {
+            "id": "8762940",
+            "link": "https://images.pexels.com/videos/8762940/biology-bionic-chemistry-concept-8762940.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fba0"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f4a0"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Ces",
+            "start": 17.08,
+            "end": 17.22,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4aa"
+            }
+          },
+          {
+            "word": "créations",
+            "start": 17.22,
+            "end": 17.659999999999997,
+            "durationInFrames": 26,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ab"
+            }
+          },
+          {
+            "word": "révolutionnaires",
+            "start": 17.659999999999997,
+            "end": 18.38,
+            "durationInFrames": 43,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ac"
+            }
+          },
+          {
+            "word": "transforment",
+            "start": 18.38,
+            "end": 19.04,
+            "durationInFrames": 40,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ad"
+            }
+          },
+          {
+            "word": "notre",
+            "start": 19.04,
+            "end": 19.38,
+            "durationInFrames": 20,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ae"
+            }
+          },
+          {
+            "word": "façon",
+            "start": 19.38,
+            "end": 19.7,
+            "durationInFrames": 19,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4af"
+            }
+          },
+          {
+            "word": "d'interagir",
+            "start": 19.7,
+            "end": 20.339999999999996,
+            "durationInFrames": 38,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b0"
+            }
+          }
+        ],
+        "text": "Ces créations révolutionnaires transforment notre façon d'interagir",
+        "start": 17.08,
+        "end": 20.339999999999996,
+        "durationInFrames": 194,
+        "audioIndex": 4,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "full",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A person wearing a virtual reality headset is seen making hand gestures, with a focus on their hands and the headset in a colorful, illuminated environment.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f4b2"
+              }
+            }
+          ],
+          "video": {
+            "id": "9365306",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 3774494,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/4354035/4354035-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/4354035/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/4354035/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/4354035/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/4354035/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/4354035/pictures/preview-12.jpg"
+            ],
+            "durationInSeconds": 6
+          },
+          "image": {
+            "id": "4354035",
+            "link": "https://images.pexels.com/videos/4354035/pexels-photo-4354035.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbaa"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f4a9"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "dans",
+            "start": 20.339999999999996,
+            "end": 20.479999999999997,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b4"
+            }
+          },
+          {
+            "word": "les",
+            "start": 20.479999999999997,
+            "end": 20.639999999999997,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b5"
+            }
+          },
+          {
+            "word": "espaces",
+            "start": 20.639999999999997,
+            "end": 21.259999999999998,
+            "durationInFrames": 37,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b6"
+            }
+          },
+          {
+            "word": "virtuels,",
+            "start": 21.259999999999998,
+            "end": 22.02,
+            "durationInFrames": 46,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b7"
+            }
+          },
+          {
+            "word": "rendant",
+            "start": 22.02,
+            "end": 22.18,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b8"
+            }
+          },
+          {
+            "word": "l'expérience",
+            "start": 22.18,
+            "end": 22.7,
+            "durationInFrames": 31,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4b9"
+            }
+          },
+          {
+            "word": "plus",
+            "start": 22.7,
+            "end": 22.939999999999998,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4ba"
+            }
+          },
+          {
+            "word": "immersive",
+            "start": 22.939999999999998,
+            "end": 23.339999999999996,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4bb"
+            }
+          },
+          {
+            "word": "que",
+            "start": 23.339999999999996,
+            "end": 23.56,
+            "durationInFrames": 13,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4bc"
+            }
+          },
+          {
+            "word": "jamais.",
+            "start": 23.56,
+            "end": 24.299999999999997,
+            "durationInFrames": 44,
+            "_id": {
+              "$oid": "68ea5df6e79aac449a37f4bd"
+            }
+          }
+        ],
+        "text": "dans les espaces virtuels, rendant l'expérience plus immersiveque jamais.",
+        "start": 20.339999999999996,
+        "end": 24.299999999999997,
+        "durationInFrames": 237,
+        "audioIndex": 4,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "A woman wearing a virtual reality headset is seen raising her hand and then extending her arm, with a blue textured background throughout the first four seconds.",
+              "_id": {
+                "$oid": "68ea5df6e79aac449a37f4bf"
+              }
+            }
+          ],
+          "video": {
+            "id": "10466529",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 4432591,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/7547581/7547581-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/7547581/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/7547581/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/7547581/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/7547581/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/7547581/pictures/preview-12.jpg"
+            ],
+            "durationInSeconds": 7
+          },
+          "image": {
+            "id": "7547581",
+            "link": "https://images.pexels.com/videos/7547581/pexels-photo-7547581.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 3840,
+            "height": 2160
+          },
+          "_id": {
+            "$oid": "68ea77760876fb2d2a39fbb7"
+          }
+        },
+        "_id": {
+          "$oid": "68ea5df6e79aac449a37f4b3"
         }
       }
-    ]
+    ],
+    "elements": []
   },
   "extractedMedia": [],
   "createdAt": {
-    "$date": "2025-07-04T00:48:50.418Z"
+    "$date": "2025-10-11T13:36:16.188Z"
   },
   "updatedAt": {
-    "$date": "2025-07-05T22:21:18.007Z"
+    "$date": "2025-10-11T15:27:50.003Z"
   },
   "__v": 0,
   "isNews": false,
-  "style": "Informative",
-  "title": "Gymshark Sale",
-  "costToGenerate": 0.07409509166666667,
+  "style": "Inspirational",
+  "title": "Avatars réalistes",
+  "costToGenerate": 0.09976490416666667,
   "settings": {
-    "avatarHeightRatio": 59.64966258486657
+    "avatarHeightRatio": 62.668963961192134
   }
 }

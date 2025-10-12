@@ -108,6 +108,9 @@ export const VideoElements = ({
   };
   const [naturalRatios, setNaturalRatios] = useState<{ [key: number]: number }>({});
 
+  // Memoize isPlayer check
+  const isPlayer = useMemo(() => getRemotionEnvironment().isPlayer, []);
+
   // Calculer les éléments qui se chevauchent dans le temps (memoized pour optimisation)
   const overlappingElements = useMemo(() => {
     const overlaps: { [key: number]: IElement[] } = {};
@@ -802,53 +805,61 @@ export const VideoElements = ({
     );
   };
 
+  // Memoize media elements
+  const mediaElements = useMemo(() => {
+    return elements.map((element, index) => {
+      const startFrame = Math.round(element.start * fps);
+      const endFrame = Math.round(element.end * fps);
+      const durationInFrames = (endFrame - startFrame) - 1;
+
+      return (
+        <Sequence
+          key={`media-${index}`}
+          from={startFrame}
+          durationInFrames={durationInFrames}
+          layout="none"
+        >
+          {renderElementMedia(element, index)}
+        </Sequence>
+      );
+    });
+  }, [elements, fps, renderElementMedia]);
+
+  // Memoize overlay elements
+  const overlayElements = useMemo(() => {
+    if (!isPlayer) return null;
+    
+    return elements.map((element, index) => {
+      const startFrame = Math.round(element.start * fps);
+      const endFrame = Math.round(element.end * fps);
+      const durationInFrames = (endFrame - startFrame) - 1;
+
+      return (
+        <Sequence
+          key={`overlay-${index}`}
+          from={startFrame}
+          durationInFrames={durationInFrames}
+          layout="none"
+        >
+          {renderElementOverlay(element, index)}
+        </Sequence>
+      );
+    });
+  }, [isPlayer, elements, fps, renderElementOverlay]);
+
   return (
     <AbsoluteFill>
-      {/* Conteneur avec overflow hidden pour les médias seulement */}
       <AbsoluteFill style={{ overflow: 'hidden' }}>
-        {elements.map((element, index) => {
-          const startFrame = Math.round(element.start * fps);
-          const endFrame = Math.round(element.end * fps);
-          const durationInFrames = (endFrame - startFrame) - 1;
-
-          return (
-            <Sequence
-              key={`media-${index}`}
-              from={startFrame}
-              durationInFrames={durationInFrames}
-              layout="none"
-            >
-              {/* Média uniquement */}
-              {renderElementMedia(element, index)}
-            </Sequence>
-          );
-        })}
+        {mediaElements}
       </AbsoluteFill>
 
-      {getRemotionEnvironment().isPlayer && (
+      {isPlayer && (
         <AbsoluteFill style={{ overflow: 'visible' }}>
-          {elements.map((element, index) => {
-            const startFrame = Math.round(element.start * fps);
-            const endFrame = Math.round(element.end * fps);
-            const durationInFrames = (endFrame - startFrame) - 1;
-
-            return (
-              <Sequence
-                key={`overlay-${index}`}
-                from={startFrame}
-                durationInFrames={durationInFrames}
-                layout="none"
-              >
-                {/* Overlay de sélection uniquement */}
-                {renderElementOverlay(element, index)}
-              </Sequence>
-            );
-          })}
+          {overlayElements}
         </AbsoluteFill>
       )}
 
-      {/* Menu flottant rendu au niveau supérieur */}
-      {getRemotionEnvironment().isPlayer && showMenu && selectedElementIndex !== null && elements[selectedElementIndex] && (
+      {isPlayer && showMenu && selectedElementIndex !== null && elements[selectedElementIndex] && (
         <AbsoluteFill style={{ overflow: 'visible', pointerEvents: 'none' }}>
           <div 
             ref={menuRef}
@@ -857,7 +868,7 @@ export const VideoElements = ({
               left: `${(elements[selectedElementIndex].position.x / 100) * compositionWidth}px`,
               top: `${(elements[selectedElementIndex].position.y / 100) * compositionHeight - (compositionWidth * (elements[selectedElementIndex].size / 100) * (naturalRatios[selectedElementIndex] || 1)) / 2}px`,
               transform: `translate(-50%, -100%) translateY(-${15 / Math.max(0.0001, scale)}px)`,
-              zIndex: 9, // Menu des éléments sous les sous-titres
+              zIndex: 9,
               pointerEvents: 'auto',
             }}
           >

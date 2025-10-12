@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useCallback } from "react";
 import { AbsoluteFill, Sequence, OffthreadVideo, Img, interpolate, useCurrentFrame, Loop, getRemotionEnvironment, Video } from "remotion";
 import { AvatarLook } from "../type/avatar";
 import { MediaSource } from "./MediaSource";
@@ -37,6 +37,9 @@ export const BackgroundWithAvatar = ({
 
     // Determine if we're in horizontal mode
     const isHorizontal = videoFormat === 'horizontal';
+    
+    // Check if we're in player mode (for interaction features)
+    const isPlayer = getRemotionEnvironment().isPlayer;
 
     // Get current values from props
     const currentRatio = avatarHeightRatio;
@@ -46,34 +49,32 @@ export const BackgroundWithAvatar = ({
     };
     
     // Get media positions from sequences
-    const getMediaPosition = (sequenceIndex: number) => {
+    const getMediaPosition = useCallback((sequenceIndex: number) => {
         return sequences[sequenceIndex]?.media?.position || { x: 50, y: 50 };
-    };
+    }, [sequences]);
 
-    const handleBackgroundClick = (e: React.MouseEvent) => {
+    const handleBackgroundClick = useCallback((e: React.MouseEvent) => {
         if (hasMoved || isDraggingResizeBar) return;
         
         const clickDuration = Date.now() - mouseDownTime;
-        if (clickDuration > 200) return; // Plus de 200ms = probablement un drag
+        if (clickDuration > 200) return;
         
         if (onPlayPause) {
             onPlayPause();
         }
-    };
+    }, [hasMoved, isDraggingResizeBar, mouseDownTime, onPlayPause]);
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (isDraggingResizeBar) {
             const container = e.currentTarget;
             const containerRect = container.getBoundingClientRect();
             let newRatio;
             
             if (isHorizontal) {
-                // For horizontal layout: drag left/right to resize
                 const mouseX = e.clientX - containerRect.left;
                 const containerWidth = containerRect.width;
                 newRatio = (mouseX / containerWidth) * 100;
             } else {
-                // For vertical layout: drag up/down to resize
                 const mouseY = e.clientY - containerRect.top;
                 const containerHeight = containerRect.height;
                 newRatio = ((containerHeight - mouseY) / containerHeight) * 100;
@@ -84,9 +85,9 @@ export const BackgroundWithAvatar = ({
                 onAvatarHeightRatioChange(newRatio);
             }
         }
-    };
+    }, [isDraggingResizeBar, isHorizontal, onAvatarHeightRatioChange]);
 
-    const startMediaDrag = (e: React.MouseEvent, sequenceId: number) => {
+    const startMediaDrag = useCallback((e: React.MouseEvent, sequenceId: number) => {
         e.preventDefault();
         e.stopPropagation();
         
@@ -118,9 +119,9 @@ export const BackgroundWithAvatar = ({
 
         window.addEventListener('pointermove', onPointerMove, { passive: true });
         window.addEventListener('pointerup', onPointerUp, { once: true });
-    };
+    }, [onMediaPositionChange]);
 
-    const startAvatarDrag = (e: React.MouseEvent) => {
+    const startAvatarDrag = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         
@@ -151,7 +152,7 @@ export const BackgroundWithAvatar = ({
 
         window.addEventListener('pointermove', onPointerMove, { passive: true });
         window.addEventListener('pointerup', onPointerUp, { once: true });
-    };
+    }, [onAvatarPositionChange]);
 
     const { mediaElements, showResizeBar, isCurrentMediaHidden } = useMemo(() => {
         let currentFrame = 0;
@@ -217,7 +218,7 @@ export const BackgroundWithAvatar = ({
             mediaElementsArray.push(
                 <Sequence 
                     key={index} 
-                    premountFor={120} 
+                    premountFor={60} 
                     from={currentFrame} 
                     durationInFrames={sequenceDuration}
                     style={mediaSequenceStyle}
@@ -233,7 +234,7 @@ export const BackgroundWithAvatar = ({
                                 cursor: 'move' 
                             }}
                             onMouseDown={(e) => {
-                                if (getRemotionEnvironment().isPlayer) {
+                                if (isPlayer) {
                                     e.preventDefault();
                                     startMediaDrag(e, index);
                                 }
@@ -301,8 +302,8 @@ export const BackgroundWithAvatar = ({
         };
     }, [frame, sequences]);
 
-    const avatarSequenceStyle: React.CSSProperties = {
-        position: 'absolute',
+    const avatarSequenceStyle: React.CSSProperties = useMemo(() => ({
+        position: 'absolute' as const,
         ...(isHorizontal 
             ? {
                 // Horizontal layout: avatar takes right side
@@ -319,8 +320,9 @@ export const BackgroundWithAvatar = ({
                 height: isCurrentMediaHidden ? '100%' : `${currentRatio}%`
             }
         )
-    };
-    const avatarAbsoluteFillStyle: React.CSSProperties = { zIndex: 1 };
+    }), [isHorizontal, isCurrentMediaHidden, currentRatio]);
+    
+    const avatarAbsoluteFillStyle: React.CSSProperties = useMemo(() => ({ zIndex: 1 }), []);
 
     return (
         <div 
@@ -335,7 +337,7 @@ export const BackgroundWithAvatar = ({
                 setIsDraggingResizeBar(false);
             }}
             onMouseDown={(e) => {
-                if (getRemotionEnvironment().isPlayer) {
+                if (isPlayer) {
                     setMouseDownTime(Date.now());
                     setHasMoved(false);
                 }
@@ -345,46 +347,89 @@ export const BackgroundWithAvatar = ({
             {/* Media Elements - Rendered first in JSX order */} 
             {mediaElements}
             
-            {/* Avatar Sequence - Rendered second in JSX order */} 
-            <Sequence 
-                from={0} 
-                durationInFrames={duration * 60} 
-                style={avatarSequenceStyle} // Apply style to Sequence
-            >
-                <AbsoluteFill style={avatarAbsoluteFillStyle}> {/* Style only for zIndex */}
-                    <div 
-                        ref={avatarRef}
-                        style={{ 
-                            width: '100%',
-                            height: '100%',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            cursor: 'move'
-                        }}
-                        onMouseDown={(e) => {
-                            if (getRemotionEnvironment().isPlayer) {
-                                e.preventDefault();
-                                startAvatarDrag(e);
-                            }
-                        }}
-                    >
-                        {avatar.videoUrl ? (
-                            <OffthreadVideo
-                                src={avatar.videoUrl}
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover',
-                                    objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
-                                    transform: `scale(${avatarZoomScale})`,
-                                }}
-                                muted
-                            />
-                        ) : (
-                            <Loop durationInFrames={Math.ceil(duration * 60)}>
-                                <Video
-                                    src={avatar.previewUrl}
-                                    startFrom={0}
+            {/* Avatar Sequence - Rendered second in JSX order */}
+            {avatar.renders && avatar.renders.length > 0 ? (
+                // New method: multiple renders
+                <div style={avatarSequenceStyle}>
+                    <AbsoluteFill style={avatarAbsoluteFillStyle}>
+                        <div 
+                            ref={avatarRef}
+                            style={{ 
+                                width: '100%',
+                                height: '100%',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                cursor: 'move'
+                            }}
+                            onMouseDown={(e) => {
+                                if (isPlayer) {
+                                    e.preventDefault();
+                                    startAvatarDrag(e);
+                                }
+                            }}
+                        >
+                            {avatar.renders.map((render: any, index: number) => {
+                                let renderDuration: number;
+                                if (render.durationInSeconds) {
+                                    renderDuration = Math.ceil(render.durationInSeconds * 60);
+                                } else {
+                                    const nextRender = avatar.renders![index + 1];
+                                    renderDuration = nextRender 
+                                        ? nextRender.startInFrames - render.startInFrames
+                                        : (duration * 60) - render.startInFrames;
+                                }
+
+                                return (
+                                    <Sequence
+                                        key={index}
+                                        from={render.startInFrames}
+                                        durationInFrames={renderDuration}
+                                        premountFor={60}
+                                    >
+                                        <OffthreadVideo
+                                            src={render.url}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                                objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
+                                                transform: `scale(${avatarZoomScale})`,
+                                            }}
+                                            muted
+                                        />
+                                    </Sequence>
+                                );
+                            })}
+                        </div>
+                    </AbsoluteFill>
+                </div>
+            ) : (
+                // Old method: single video/preview/image
+                <Sequence 
+                    from={0} 
+                    durationInFrames={duration * 60} 
+                    style={avatarSequenceStyle}
+                >
+                    <AbsoluteFill style={avatarAbsoluteFillStyle}>
+                        <div 
+                            ref={avatarRef}
+                            style={{ 
+                                width: '100%',
+                                height: '100%',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                cursor: 'move'
+                            }}
+                            onMouseDown={(e) => {
+                                if (isPlayer) {
+                                    e.preventDefault();
+                                    startAvatarDrag(e);
+                                }
+                            }}
+                        >
+                            {avatar.videoUrl ? (
+                                <OffthreadVideo
+                                    src={avatar.videoUrl}
                                     style={{
                                         width: '100%',
                                         height: '100%',
@@ -392,17 +437,43 @@ export const BackgroundWithAvatar = ({
                                         objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
                                         transform: `scale(${avatarZoomScale})`,
                                     }}
-                                    loop
                                     muted
                                 />
-                            </Loop>
-                        )}
-                    </div>
-                </AbsoluteFill>
-            </Sequence>
+                            ) : avatar.previewUrl ? (
+                                <Loop durationInFrames={Math.ceil(duration * 60)}>
+                                    <Video
+                                        src={avatar.previewUrl}
+                                        startFrom={0}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                            objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
+                                            transform: `scale(${avatarZoomScale})`,
+                                        }}
+                                        loop
+                                        muted
+                                    />
+                                </Loop>
+                            ) : (
+                                <Img
+                                    src={avatar.thumbnail}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                        objectPosition: `${avatarPosition.x}% ${avatarPosition.y}%`,
+                                        transform: `scale(${avatarZoomScale})`,
+                                    }}
+                                />
+                            )}
+                        </div>
+                    </AbsoluteFill>
+                </Sequence>
+            )}
             
             {/* Resize Bar */} 
-            {getRemotionEnvironment().isPlayer && isHovering && showResizeBar && (
+            {isPlayer && isHovering && showResizeBar && (
                 <div
                     style={{
                         position: 'absolute',
@@ -460,7 +531,7 @@ export const BackgroundWithAvatar = ({
             )}
 
             {/* Separator Line */} 
-            {getRemotionEnvironment().isPlayer && isHovering && showResizeBar && (
+            {isPlayer && isHovering && showResizeBar && (
                 <div
                     style={{
                         position: 'absolute',

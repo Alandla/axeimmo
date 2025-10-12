@@ -137,6 +137,14 @@ const videoSchema = new mongoose.Schema({
         thumbnail: String,
         previewUrl: String,
         videoUrl: String,
+        renders: [
+          {
+            audioIndex: Number,
+            startInFrames: Number,
+            durationInSeconds: Number,
+            url: String,
+          },
+        ],
         format: {
           type: String,
           enum: ['vertical', 'horizontal']

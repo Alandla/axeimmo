@@ -1,4 +1,6 @@
 import { KlingGenerationMode } from "./fal";
+import { generateAvatarRenderList } from './avatar-render';
+import { IVideo } from "../types/video";
 
 interface TokenUsage {
   completionTokens: number;
@@ -44,13 +46,22 @@ export function calculateMinimaxCost(text: string): number {
   return (text.length / 1000) * COST_PER_1000_CHARS;
 }
 
-export function calculateHeygenCost(durationInSeconds: number): number {
-  const COST_PER_30_SECONDS = 0.25;
-  
-  // Arrondir au multiple de 30 secondes supérieur
-  const segments = Math.ceil(durationInSeconds / 30);
-  
-  return segments * COST_PER_30_SECONDS;
+export function calculateHeygenCost(durationInSeconds: number, model: 'heygen' | 'heygen-iv' = 'heygen'): number {
+  if (model === 'heygen-iv') {
+    // Avatar IV: $0.025 per second
+    const COST_PER_SECOND = 0.025;
+    return durationInSeconds * COST_PER_SECOND;
+  } else {
+    // Original model: $0.25 per 30 seconds segment
+    const COST_PER_30_SECONDS = 0.25;
+    const segments = Math.ceil(durationInSeconds / 30);
+    return segments * COST_PER_30_SECONDS;
+  }
+}
+
+export function calculateOmniHumanCost(durationInSeconds: number): number {
+  const COST_PER_SECOND = 0.16;
+  return durationInSeconds * COST_PER_SECOND;
 }
 
 export function calculateWhisperGroqCost(durationInSeconds: number, isTurbo: boolean = false): number {
@@ -86,5 +97,29 @@ export function calculateKlingAnimationCost(mode: KlingGenerationMode, upscaleCo
   const upscaleCost = calculateUpscaleCost(upscaleCount);
   
   return animationCost + upscaleCost;
+}
+
+// Avatar model credit rates (credits per second)
+export const AVATAR_MODEL_CREDIT_RATES = {
+  'heygen': 0,
+  'heygen-iv': 0.5,
+  'omnihuman': 2.3
+} as const;
+
+// Calcule le coût avatar en crédits pour l'utilisateur (avec marge)
+export function calculateAvatarCreditsForUser(
+  durationInSeconds: number, 
+  model: 'heygen' | 'heygen-iv' | 'omnihuman'
+): number {
+  return durationInSeconds * AVATAR_MODEL_CREDIT_RATES[model];
+}
+
+// Calcule la durée totale où l'avatar est visible
+export function calculateTotalAvatarDuration(video: IVideo): number {
+  const avatarRenders = generateAvatarRenderList(video); 
+  console.log('video', video?.video?.audio?.voices);
+  console.log('sequences', video?.video?.sequences);
+  console.log('avatarRenders', avatarRenders);
+  return avatarRenders.reduce((sum: number, render: any) => sum + render.durationInSeconds, 0);
 }
 

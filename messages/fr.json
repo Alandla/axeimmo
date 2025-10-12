@@ -247,6 +247,7 @@
         "video-producer-agent": "Agent producteur de contenu vidéo",
         "community-manager-agent": "Agent community manager",
         "ai-model-ultra": "Modèle IA Ultra",
+        "ai-model-avatar-premium": "Modèle d'avatar premium réaliste",
         "url-to-video": "Création de vidéo depuis URL",
         "api-access": "Accès à l'API"
       }
@@ -283,7 +284,18 @@
       "modal-pricing-title": "Retirez le filigrane",
       "modal-pricing-description": "Passez à un plan payant pour retirer le filigrane Hoox de vos vidéos.",
       "modal-pricing-watermark-title": "Supprimez le watermark de vos vidéos",
-      "modal-pricing-watermark-description": "Passez à un plan payant pour exporter vos vidéos sans watermark et débloquer toutes les fonctionnalités premium."
+      "modal-pricing-watermark-description": "Passez à un plan payant pour exporter vos vidéos sans watermark et débloquer toutes les fonctionnalités premium.",
+      "modal-pricing-avatar-title": "Modèle d'avatar non autorisé",
+      "modal-pricing-avatar-description": "Le modèle d'avatar sélectionné nécessite un plan supérieur. Passez à un plan payant pour accéder aux modèles d'avatar premium.",
+      "avatar-model-label": "Modèle d'avatar",
+      "avatar-model-standard": "Standard",
+      "avatar-model-standard-description": "Qualité basique, gratuit",
+      "avatar-model-premium": "Premium",
+      "avatar-model-premium-description": "Hautement réaliste et dynamique",
+      "avatar-model-ultra": "Ultra",
+      "avatar-model-ultra-description": "Plus long mais réalisme augmenté",
+      "credits-per-second": "{credits} crédits/sec",
+      "cost-details-tooltip": "Base : {baseCost} crédits\nAvatar : {avatarCost} ({rate} x {duration}s)"
     },
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",
@@ -326,6 +338,7 @@
       },
       "select-avatar": "Sélectionner un avatar",
       "no-avatar": "Aucun avatar",
+      "custom-avatar": "Personnalisé",
       "confirm": "Confirmer",
       "cancel": "Annuler",
       "modal-pricing-not-enough-credits": "Pas assez de crédits",

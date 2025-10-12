@@ -179,11 +179,31 @@ export function AiChat() {
 
         if (files.some(file => file.usage === 'voice')) {
           addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
-          setCreationStep(CreationStep.AVATAR)
-          const messageAi = getRandomMessage('ai-get-audio-select-avatar');
-          addMessageAi(messageAi, MessageType.AVATAR);
-          return;
-        } else if (files.some(file => file.usage === 'avatar')) {
+          
+          // Check if we also have an avatar file (image or video)
+          const hasAvatarFile = files.some(file => file.usage === 'avatar');
+          
+          if (hasAvatarFile) {
+            // Skip avatar selection, go directly to generation
+            addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
+            addStep({ id: 5, name: Steps.ANALYZE_FOUND_MEDIA, state: StepState.PENDING, progress: 0 })
+            addStep({ id: 7, name: Steps.PLACE_BROLL, state: StepState.PENDING, progress: 0 })
+            addStep({ id: 8, name: Steps.DISPLAY_BROLL, state: StepState.PENDING, progress: 0 })
+            addStep({ id: 9, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
+            setCreationStep(CreationStep.GENERATION)
+            const messageAi = getRandomMessage('ai-get-all-start-generation');
+            addMessageAi(messageAi, MessageType.GENERATION);
+            handleStartGeneration()
+            return;
+          } else {
+            // No avatar file, show avatar selection
+            setCreationStep(CreationStep.AVATAR)
+            const messageAi = getRandomMessage('ai-get-audio-select-avatar');
+            addMessageAi(messageAi, MessageType.AVATAR);
+            return;
+          }
+        } else if (files.some(file => file.usage === 'avatar' && file.type === 'video')) {
+          // Video avatar: skip script and voice selection
           addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
           addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
           addStep({ id: 5, name: Steps.ANALYZE_FOUND_MEDIA, state: StepState.PENDING, progress: 0 })
@@ -195,6 +215,9 @@ export function AiChat() {
           addMessageAi(messageAi, MessageType.GENERATION);
           handleStartGeneration()
           return;
+        } else if (files.some(file => file.usage === 'avatar' && file.type === 'image')) {
+          // Image avatar: continue to script selection, voice will be generated
+          // Don't return here, continue to script step
         }
       } else {
         // Si nous n'avons pas de fichiers à uploader, commencer par QUEUE
@@ -435,11 +458,20 @@ export function AiChat() {
     
     addStep({ id: 2, name: Steps.VOICE_GENERATION, state: StepState.PENDING, progress: 0 })
     addStep({ id: 3, name: Steps.TRANSCRIPTION, state: StepState.PENDING, progress: 0 })
-    setCreationStep(CreationStep.AVATAR);
-    const messageUser = getRandomMessage('user-select-voice', { "name": selectedVoice?.name || '' });
-    const messageAi = getRandomMessage('ai-select-avatar');
-    addMessageUser(messageUser)
-    addMessageAi(messageAi, MessageType.AVATAR);
+    
+    // Check if avatar file is already uploaded
+    const hasAvatarFile = files.some(file => file.usage === 'avatar');
+    
+    if (hasAvatarFile) {
+      // Skip avatar selection, go directly to image animation check or generation
+      handleConfirmAvatar();
+    } else {
+      setCreationStep(CreationStep.AVATAR);
+      const messageUser = getRandomMessage('user-select-voice', { "name": selectedVoice?.name || '' });
+      const messageAi = getRandomMessage('ai-select-avatar');
+      addMessageUser(messageUser)
+      addMessageAi(messageAi, MessageType.AVATAR);
+    }
   }
 
   const handleConfirmAvatar = () => {

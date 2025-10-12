@@ -10,6 +10,13 @@ export type Avatar = {
     look_ids?: string[] // IDs des looks pour une recherche rapide
 }
 
+export type AvatarRender = {
+    audioIndex: number
+    startInFrames: number
+    durationInSeconds?: number
+    url: string
+}
+
 export type AvatarLook = {
     id?: string
     name?: string
@@ -18,6 +25,7 @@ export type AvatarLook = {
     thumbnail?: string
     previewUrl?: string
     videoUrl?: string
+    renders?: AvatarRender[]
     format?: 'vertical' | 'horizontal'
     settings?: {
         heygenType?: 'avatar' | 'talking_photo'
