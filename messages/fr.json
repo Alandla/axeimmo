@@ -247,6 +247,7 @@
         "video-producer-agent": "Agent producteur de contenu vidéo",
         "community-manager-agent": "Agent community manager",
         "ai-model-ultra": "Modèle IA Ultra",
+        "ai-model-avatar-premium": "Modèle d'avatar premium réaliste",
         "url-to-video": "Création de vidéo depuis URL",
         "api-access": "Accès à l'API"
       }
