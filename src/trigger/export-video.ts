@@ -323,10 +323,7 @@ export const exportVideoTask = task({
       } : undefined;
 
       // Intégration de l'export audio si un avatar est présent
-      const hasValidCustomAvatar = video.video?.avatar && video.video.avatar.thumbnail && !video.video.avatar.previewUrl;
-      const hasValidStandardAvatar = video.video?.avatar?.id;
-      
-      if ((hasValidStandardAvatar || hasValidCustomAvatar) && video.video?.audio?.voices && ctx.attempt.number === 1) {
+      if ((video.video?.avatar?.id || (!video.video?.avatar?.previewUrl && video.video?.avatar?.thumbnail)) && video.video?.audio?.voices && ctx.attempt.number === 1) {
         
         if (model === 'heygen-iv' || model === 'omnihuman') {
           // Use adapter pattern for multi-segment avatar models

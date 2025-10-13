@@ -92,7 +92,7 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration, transition }
                                 }}
                                 muted
                             />
-                        ) : avatar.previewUrl ? (
+                        ) : (
                             <Loop durationInFrames={Math.ceil(duration * 60)}>
                                 <Video
                                     src={avatar.previewUrl}
@@ -109,7 +109,7 @@ export const BackgroundWithAvatar = ({ sequences, avatar, duration, transition }
                                     muted
                                 />
                             </Loop>
-                        ) : null}
+                        )}
                 </AbsoluteFill>
             </Sequence>
             {mediaElements}

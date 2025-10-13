@@ -61,7 +61,7 @@ export default function ModalConfirmExport({
   const router = useRouter()
 
   // Calculate avatar duration and cost
-  const hasAvatar = video?.video?.avatar && video.video.avatar.thumbnail && !video.video.avatar.previewUrl
+  const hasAvatar = video?.video?.avatar?.thumbnail && !video?.video?.avatar?.previewUrl
   const avatarDuration = hasAvatar && video ? calculateTotalAvatarDuration(video) : 0
   const avatarCost = hasAvatar ? calculateAvatarCreditsForUser(avatarDuration, selectedAvatarModel) : 0
   const totalCost = cost + avatarCost
