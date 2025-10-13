@@ -455,7 +455,7 @@ export const BackgroundWithAvatar = ({
                                         muted
                                     />
                                 </Loop>
-                            ) : (
+                            ) : avatar.thumbnail ? (
                                 <Img
                                     src={avatar.thumbnail}
                                     style={{
@@ -466,7 +466,7 @@ export const BackgroundWithAvatar = ({
                                         transform: `scale(${avatarZoomScale})`,
                                     }}
                                 />
-                            )}
+                            ) : null}
                         </div>
                     </AbsoluteFill>
                 </Sequence>

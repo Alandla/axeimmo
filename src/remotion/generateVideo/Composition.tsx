@@ -60,6 +60,13 @@ export const VideoGenerate = ({
 		return null;
 	}
 
+	const hasValidAvatar = data.video.avatar && (
+		data.video.avatar.videoUrl || 
+		data.video.avatar.previewUrl || 
+		data.video.avatar.thumbnail ||
+		(data.video.avatar.renders && data.video.avatar.renders.length > 0)
+	);
+
 	return (
 		<>
 			{ data.video.audio.url && <Audio src={data.video.audio.url} volume={data.video.audio.volume} /> }
@@ -73,7 +80,7 @@ export const VideoGenerate = ({
 				onPositionChange={onLogoPositionChange}
 				onSizeChange={onLogoSizeChange}
 			/>}
-			{ data.video.avatar ? <BackgroundWithAvatar 
+			{ hasValidAvatar ? <BackgroundWithAvatar 
 				sequences={data.video.sequences} 
 				avatar={data.video.avatar} 
 				duration={data.video.metadata.audio_duration} 
