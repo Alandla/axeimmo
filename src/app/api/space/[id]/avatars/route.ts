@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
 import { getSpaceById } from "@/src/dao/spaceDao";
@@ -9,6 +10,8 @@ import { generateAvatarImageComfySrpo, generateAvatarImageFluxSrpo } from "@/src
 import { eventBus } from "@/src/lib/events";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import SpaceModel from "@/src/models/Space";
+import { avatarsLimit as avatarsLimitConfig } from "@/src/config/plan.config";
+import { updateAvatarThumbnailAndFirstLook } from "@/src/dao/spaceDao";
 
 // Common hint used to bias generations for podcast scenes
 const PODCAST_HINT = " Podcast scene, cinematic lighting, subject in three-quarter view (3/4, slight angle), not looking at camera, speaking to someone off-camera. In front of the subject, include a realistic broadcast microphone that clearly resembles a Shure SM7B: large dynamic capsule, yoke mount on a boom arm, cylindrical body with foam windscreen. Frame so the microphone is visible and well-lit without blocking the face.";
@@ -115,22 +118,8 @@ export async function POST(
     // Calculate limit based on plan if avatarsLimit is not set
     let limit = ((space as any).avatarsLimit as number);
     if (!limit || limit === 0) {
-      const planName = space.plan?.name;
-      switch (planName) {
-        case 'ENTREPRISE':
-          limit = 20;
-          break;
-        case 'PRO':
-          limit = 10;
-          break;
-        case 'START':
-          limit = 5;
-          break;
-        case 'FREE':
-        default:
-          limit = 0;
-          break;
-      }
+      const planName = space.plan?.name as keyof typeof avatarsLimitConfig | undefined;
+      limit = planName ? avatarsLimitConfig[planName] ?? 0 : 0;
     }
     
     if (currentAvatarCount >= limit) {
@@ -216,6 +205,11 @@ export async function POST(
 
     const newAvatar: any = {
       id: avatarId,
+      createdBy: {
+        userId: session.user.id,
+        name: (session.user as any)?.name || (session.user as any)?.firstName || '',
+        image: (session.user as any)?.image || '',
+      },
       name,
       age,
       gender,
@@ -229,40 +223,27 @@ export async function POST(
 
     // Background image generation only when no image was provided
     if (providedImageUrls.length === 0 && finalPrompt) {
-      Promise.resolve()
-        .then(async () => {
-          try {
-            const imageSize = format === 'horizontal' ? 'landscape_16_9' : (format === 'vertical' ? 'portrait_16_9' : undefined);
-            const img = style === 'ugc-realist'
-              ? await generateAvatarImageComfySrpo({ prompt: finalPrompt as string })
-              : await generateAvatarImageFluxSrpo({ prompt: finalPrompt as string, image_size: imageSize });
+      waitUntil((async () => {
+        try {
+          const imageSize = format === 'horizontal' ? 'landscape_16_9' : (format === 'vertical' ? 'portrait_16_9' : undefined);
+          const img = style === 'ugc-realist'
+            ? await generateAvatarImageComfySrpo({ prompt: finalPrompt as string })
+            : await generateAvatarImageFluxSrpo({ prompt: finalPrompt as string, image_size: imageSize });
 
-            // Save generated image to our storage (R2) and use internal URL
-            const fileName = `avatar-${avatarId}-${Date.now()}`;
-            const savedUrl = await uploadImageFromUrlToS3(img.url, "medias-users", fileName);
-            await SpaceModel.updateOne(
-              { _id: params.id },
-              {
-                $set: {
-                  "avatars.$[a].thumbnail": savedUrl,
-                  "avatars.$[a].looks.0.thumbnail": savedUrl,
-                }
-              },
-              {
-                arrayFilters: [ { "a.id": avatarId } ]
-              }
-            )
-            try {
-              eventBus.emit('avatar.updated', { spaceId: params.id, avatarId, status: 'ready' })
-            } catch {}
-          } catch (e) {
-            console.error('Error generating first avatar look image (background)', e);
-            try {
-              eventBus.emit('avatar.updated', { spaceId: params.id, avatarId, status: 'error' })
-            } catch {}
-          }
-        })
-        .catch(() => {});
+          // Save generated image to our storage (R2) and use internal URL
+          const fileName = `avatar-${avatarId}-${Date.now()}`;
+          const savedUrl = await uploadImageFromUrlToS3(img.url, "medias-users", fileName);
+          await updateAvatarThumbnailAndFirstLook(params.id, avatarId, savedUrl)
+          try {
+            eventBus.emit('avatar.updated', { spaceId: params.id, avatarId, status: 'ready' })
+          } catch {}
+        } catch (e) {
+          console.error('Error generating first avatar look image (background)', e);
+          try {
+            eventBus.emit('avatar.updated', { spaceId: params.id, avatarId, status: 'error' })
+          } catch {}
+        }
+      })());
     }
 
     return NextResponse.json({ data: newAvatar }, { status: 201 });

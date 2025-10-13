@@ -1545,39 +1545,18 @@ export default function VideoEditor() {
             <Card className="h-full">
               <div className="flex flex-col h-[calc(100vh-5rem)] mt-2 mx-2">
                 <Tabs defaultValue="sequences" className="w-full" onValueChange={setActiveTab1}>
-                    <TabsList className="w-full mb-4 gap-2 h-auto p-1">
-                        <TabsTrigger
-                            value="sequences"
-                            className="flex-1 text-left px-3 py-2 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm border data-[state=active]:border-border"
-                        >
-                            <div className="grid text-left text-sm leading-tight">
-                                <span className="truncate font-semibold flex items-center gap-2">
-                                    <ListVideo className="w-4 h-4" />
-                                    {t('sequences-tabs-title')}
-                                </span>
-                            </div>
+                    <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger value="sequences" className="flex items-center gap-2">
+                            <ListVideo className="w-4 h-4" />
+                            {t('sequences-tabs-title')}
                         </TabsTrigger>
-                        <TabsTrigger
-                            value="subtitle"
-                            className="flex-1 text-left px-3 py-2 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm border data-[state=active]:border-border"
-                        >
-                            <div className="grid text-left text-sm leading-tight">
-                                <span className="truncate font-semibold flex items-center gap-2">
-                                    <SubtitlesIcon className="w-4 h-4" />
-                                    {t('subtitles-tabs-title')}
-                                </span>
-                            </div>
+                        <TabsTrigger value="subtitle" className="flex items-center gap-2">
+                            <SubtitlesIcon className="w-4 h-4" />
+                            {t('subtitles-tabs-title')}
                         </TabsTrigger>
-                        <TabsTrigger
-                            value="audio"
-                            className="flex-1 text-left px-3 py-2 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm border data-[state=active]:border-border"
-                        >
-                            <div className="grid text-left text-sm leading-tight">
-                                <span className="truncate font-semibold flex items-center gap-2">
-                                    <Volume2 className="w-4 h-4" />
-                                    {t('audio-tabs-title')}
-                                </span>
-                            </div>
+                        <TabsTrigger value="audio" className="flex items-center gap-2">
+                            <Volume2 className="w-4 h-4" />
+                            {t('audio-tabs-title')}
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="sequences">

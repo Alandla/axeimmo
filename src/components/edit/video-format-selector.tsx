@@ -45,8 +45,7 @@ export default function VideoFormatSelector({
   onValueChange,
   disabled = false,
   light = false,
-  onOpen,
-}: VideoFormatSelectorProps & { onOpen?: () => void }) {
+}: VideoFormatSelectorProps) {
   const t = useTranslations("edit.video-format");
 
   return (
@@ -54,9 +53,6 @@ export default function VideoFormatSelector({
       value={value}
       onValueChange={onValueChange}
       disabled={disabled}
-      onOpenChange={(open) => {
-        if (open) onOpen?.();
-      }}
     >
       <SelectTrigger variant={light ? "ghost" : "default"}>
         <SelectValue placeholder="Sélectionner format...">

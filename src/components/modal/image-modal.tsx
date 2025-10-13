@@ -6,7 +6,8 @@ import {
   DialogTrigger,
 } from "@/src/components/ui/dialog"
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { getImageDimensions } from "@/src/service/upload.service"
 
 interface ImageModalProps {
   imageUrl: string
@@ -18,15 +19,15 @@ export function ImageModal({ imageUrl, title, children }: ImageModalProps) {
   const [open, setOpen] = useState(false)
   const [imageDimensions, setImageDimensions] = useState<{width: number, height: number} | null>(null)
 
-  useEffect(() => {
-    if (open && imageUrl) {
-      const img = new window.Image()
-      img.onload = () => {
-        setImageDimensions({ width: img.naturalWidth, height: img.naturalHeight })
-      }
-      img.src = imageUrl
+  const handleOpenChange = async (value: boolean) => {
+    setOpen(value)
+    if (value && imageUrl) {
+      const dimensions = await getImageDimensions(imageUrl)
+      setImageDimensions(dimensions)
+    } else {
+      setImageDimensions(null)
     }
-  }, [open, imageUrl])
+  }
 
   const getImageSize = () => {
     if (!imageDimensions) return { width: 0, height: 0 }
@@ -50,7 +51,7 @@ export function ImageModal({ imageUrl, title, children }: ImageModalProps) {
   const imageSize = getImageSize()
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>

@@ -191,7 +191,7 @@ export default function VideoPreview({
             )}
             {video?.video && (onVideoFormatChange || spaceId) && (
                 <div className="w-full mb-4">
-                    <div className={`grid gap ${spaceId ? (onAvatarChange ? 'grid-cols-3' : 'grid-cols-2') : (onAvatarChange ? 'grid-cols-2' : 'grid-cols-1')}`}>
+                    <div className={`grid gap-2 ${spaceId ? (onAvatarChange ? 'grid-cols-3' : 'grid-cols-2') : (onAvatarChange ? 'grid-cols-2' : 'grid-cols-1')}`}>
                         {spaceId && (
                             <Button
                                 variant="outline"
@@ -206,11 +206,6 @@ export default function VideoPreview({
                             <VideoFormatSelector
                                 value={video.video.format || 'vertical'}
                                 onValueChange={onVideoFormatChange}
-                                onOpen={() => {
-                                    try {
-                                        window.dispatchEvent(new CustomEvent('ratio-select-opened'))
-                                    } catch {}
-                                }}
                             />
                         )}
                         {onAvatarChange && (

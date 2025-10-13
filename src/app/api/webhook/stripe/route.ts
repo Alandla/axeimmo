@@ -5,7 +5,7 @@ import { findCheckoutSession } from "@/src/lib/stripe";
 import { createUser, getUserByEmail, getUserById } from "@/src/dao/userDao";
 import { addUserIdToContact, updateCancelReason, sendUnsubscribeEvent, updateCustomerStatus } from "@/src/lib/loops";
 import { createPrivateSpaceForUser, getSpaceById, removeCreditsToSpace, setCreditsToSpace, updateSpacePlan, setupNewSubscription } from "@/src/dao/spaceDao";
-import { plans, storageLimit } from "@/src/config/plan.config";
+import { plans, storageLimit, avatarsLimit } from "@/src/config/plan.config";
 import { IPlan, ISpace } from "@/src/types/space";
 import { SubscriptionType } from "@/src/types/enums";
 import { track } from "@/src/utils/mixpanel-server";
@@ -119,7 +119,8 @@ export async function POST(req: Request) {
           creditsMonth: plan.credits,
           storageLimit: storageLimit[plan.name],
           imageToVideoLimit: plan.imageToVideoLimit,
-          nextPhase: nextPhase
+          nextPhase: nextPhase,
+          avatarsLimit: plan.avatarsLimit,
         }
 
         // Configuration complète du nouvel abonnement en une seule opération
@@ -220,7 +221,8 @@ export async function POST(req: Request) {
             creditsMonth: plan.credits,
             storageLimit: storageLimit[plan.name],
             imageToVideoLimit: plan.imageToVideoLimit,
-            nextPhase: nextPhase
+            nextPhase: nextPhase,
+            avatarsLimit: avatarsLimit[plan.name],
           }
 
           await updateSpacePlan(spaceId, planSpace);

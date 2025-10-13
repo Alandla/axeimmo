@@ -109,13 +109,18 @@ export function AvatarCard({
     const selectedAvatarName = propSelectedAvatarName !== undefined ? propSelectedAvatarName : storeSelectedAvatarName
     const isSelected = selectedAvatarName === avatar.name;
 
-    // Récupérer les informations du créateur depuis activeSpace.members
+    // Récupérer les informations du créateur prioritairement depuis avatar.createdBy
     const getCreator = () => {
       if (isPublic) {
         return { id: '', name: 'Hoox', image: '' };
       }
-      // Pour l'instant, on utilise le premier membre disponible ou on retourne des valeurs par défaut
-      // TODO: Ajouter un système d'historique pour les avatars
+      if (avatar?.createdBy) {
+        return {
+          id: (avatar.createdBy as any)?.userId ?? '',
+          name: (avatar.createdBy as any)?.name ?? '',
+          image: (avatar.createdBy as any)?.image ?? ''
+        }
+      }
       if (activeSpace?.members && activeSpace.members.length > 0) {
         return activeSpace.members[0] || { id: '', name: '', image: '' };
       }
@@ -161,7 +166,7 @@ export function AvatarCard({
         try {
           // Optimistic UI update
           setDisplayName(trimmed);
-          await basicApiCall(`/space/${activeSpace.id}/avatars/${avatar.id}`, {
+          await basicApiCall(`/space/${activeSpace.id}/avatars/${avatar.id}/rename`, {
             name: trimmed
           });
           avatar.name = trimmed;

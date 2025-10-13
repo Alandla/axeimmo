@@ -1,5 +1,10 @@
 export type Avatar = {
     id: string
+    createdBy?: {
+        userId?: string
+        name?: string
+        image?: string
+    }
     name: string
     age: string,
     gender: 'male' | 'female'

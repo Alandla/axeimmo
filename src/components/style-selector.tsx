@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/src/components/ui/select'
+import Image from 'next/image'
 
 type AvatarStyle = 'ugc-realist' | 'studio' | 'podcast'
 
@@ -57,7 +58,7 @@ export function StyleSelector({ value, onValueChange, disabled, className, light
         {availableEntries.map(([styleKey, imageUrl]) => (
           <SelectItem key={styleKey} value={styleKey}>
             <div className="flex items-center gap-3">
-              <img
+              <Image
                 src={imageUrl}
                 alt={t(`styles.${styleKey}`)}
                 className="h-10 w-10 rounded-md object-cover border"

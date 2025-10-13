@@ -10,8 +10,9 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
   } from "@/src/components/ui/breadcrumb"
-import { Fragment, useEffect, useState } from "react"
+import { Fragment } from "react"
 import Link from "next/link";
+import { useAvatarsStore } from "../store/avatarsStore";
 
 function generateBreadcrumbs(pathname: string) {
     const paths = pathname.split('/').filter(Boolean);
@@ -28,16 +29,7 @@ export function BreadcrumbDashboard( ) {
   const searchParams = useSearchParams();
   const breadcrumbs = generateBreadcrumbs(pathname);
   const avatarId = searchParams?.get('avatar')
-  const [lastLabel, setLastLabel] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (avatarId) {
-      try {
-        const avatarName = localStorage.getItem('activeAvatarName')
-        setLastLabel(avatarName)
-      } catch {}
-    }
-  }, [avatarId])
+  const activeAvatarName = useAvatarsStore(s => s.activeAvatarName)
 
   return (
     <Breadcrumb>
@@ -58,11 +50,11 @@ export function BreadcrumbDashboard( ) {
                 </BreadcrumbItem>
             </Fragment>
             ))}
-            {lastLabel && (
+            {avatarId && activeAvatarName && (
               <>
                 <BreadcrumbSeparator/>
                 <BreadcrumbItem>
-                  <BreadcrumbPage>{lastLabel}</BreadcrumbPage>
+                  <BreadcrumbPage>{activeAvatarName}</BreadcrumbPage>
                 </BreadcrumbItem>
               </>
             )}

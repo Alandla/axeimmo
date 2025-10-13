@@ -109,11 +109,6 @@ export function AvatarLookCard({
   
   const inputRef = useRef<HTMLInputElement>(null);
   
-  // Sync display name when prop changes, avoid updating while editing
-  
-  
-  
-
   const selectedLook = propSelectedLook !== undefined ? propSelectedLook : storeSelectedLook
   const isSelected = selectedLook?.id === look.id;
 
@@ -172,7 +167,7 @@ export function AvatarLookCard({
         // Optimistic UI update
         const trimmed = editedName.trim();
         setDisplayName(trimmed);
-        await apiClient.patch(`/space/${activeSpace.id}/avatars/${avatarId}/looks/${look.id}`, {
+        await apiClient.patch(`/space/${activeSpace.id}/avatars/${avatarId}/looks/${look.id}/rename`, {
           name: editedName.trim()
         })
         setDisplayName(trimmed)

@@ -18,7 +18,8 @@ import {
   Settings2,
   Check,
   PaintbrushVertical,
-} from "lucide-react";
+} from "lucide-react"
+import Image from "next/image";
 import { Avatar, AvatarLook } from "@/src/types/avatar";
 import { basicApiCall } from "@/src/lib/api";
 import { getMediaUrlFromFileByPresignedUrl } from "@/src/service/upload.service";
@@ -31,6 +32,8 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import StyleSelector from "@/src/components/style-selector";
+import { useAvatarsStore } from '@/src/store/avatarsStore'
+import { motion } from "framer-motion"
 
 // Limited format options for avatar look generation
 type AvatarLookFormat = "vertical" | "horizontal";
@@ -62,8 +65,8 @@ type Props = {
   spaceId: string;
   onRefresh: () => Promise<void> | void;
   initialReferenceImage?: string | null;
-  shouldFocus?: boolean;
-  onFocusComplete?: () => void;
+  promptInputRef: React.RefObject<HTMLInputElement>;
+  pulseSignal?: number;
 };
 
 const Thumbnails = React.memo(function Thumbnails({
@@ -77,10 +80,12 @@ const Thumbnails = React.memo(function Thumbnails({
     <div className="flex items-center gap-2 h-10">
       {urls.map((url, idx) => (
         <div key={`${url}-${idx}`} className="relative h-10 w-10 flex-shrink-0">
-          <img
+          <Image
             src={url}
             alt="preview"
             className="h-10 w-10 object-cover rounded-md border"
+            width={40}
+            height={40}
           />
           <button
             type="button"
@@ -102,8 +107,8 @@ export function AvatarLookChatbox({
   spaceId,
   onRefresh,
   initialReferenceImage,
-  shouldFocus = false,
-  onFocusComplete,
+  promptInputRef,
+  pulseSignal = 0,
 }: Props) {
   const t = useTranslations("avatars");
   const [prompt, setPrompt] = useState("");
@@ -112,17 +117,12 @@ export function AvatarLookChatbox({
   const [isGenerating, setIsGenerating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   // Removed custom picker state, now using Select primitives for reference image selection
-  const [rect, setRect] = useState<{ left: number; width: number }>({
-    left: 0,
-    width: 0,
-  });
+  // CSS-only positioning: no rect state needed
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const promptInputRef = useRef<HTMLInputElement | null>(null);
   const [format, setFormat] = useState<AvatarLookFormat>("vertical");
   // Désactiver UGC: style par défaut 'studio' et empêcher la sélection UGC
   const [style, setStyle] = useState<AvatarLookStyle>("studio");
-  const [isFocused, setIsFocused] = useState(false);
-  const [isPulsing, setIsPulsing] = useState(false);
+  const { setAvatars, fetchAvatarsInBackground } = useAvatarsStore()
 
   const candidateImages = useMemo(() => {
     const fromLooks = (activeAvatar?.looks || [])
@@ -132,6 +132,35 @@ export function AvatarLookChatbox({
     if (unique.length > 0) return unique;
     return activeAvatar?.thumbnail ? [activeAvatar.thumbnail] : [];
   }, [activeAvatar?.id, activeAvatar?.looks, activeAvatar?.thumbnail]);
+
+  // Pré-calculer la largeur idéale pour chaque vignette à hauteur 80px (h-20)
+  const [candidateWidths, setCandidateWidths] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    if (candidateImages.length === 0) return
+    let cancelled = false
+    const load = async (url: string) =>
+      new Promise<void>((resolve) => {
+        const img = new window.Image()
+        img.onload = () => {
+          if (cancelled) return resolve()
+          const naturalWidth = img.naturalWidth || 0
+          const naturalHeight = img.naturalHeight || 1
+          const ratio = naturalWidth / naturalHeight
+          const targetHeight = 80 // px (h-20)
+          const computedWidth = Math.min(280, Math.max(80, Math.round(ratio * targetHeight)))
+          setCandidateWidths((prev) => (prev[url] ? prev : { ...prev, [url]: computedWidth }))
+          resolve()
+        }
+        img.onerror = () => resolve()
+        img.src = url
+      })
+    // Lancer en parallèle
+    Promise.all(candidateImages.map(load))
+    return () => {
+      cancelled = true
+    }
+  }, [candidateImages])
 
   useEffect(() => {
     setReferenceImage((prev) => {
@@ -146,77 +175,7 @@ export function AvatarLookChatbox({
     });
   }, [activeAvatar?.id, candidateImages, initialReferenceImage]);
 
-  // Gérer le focus du prompt input
-  useEffect(() => {
-    if (shouldFocus && !isFocused) {
-      console.log('Focus requested for chatbox');
-      setIsFocused(true);
-      
-      // Essayer plusieurs fois de focuser l'élément
-      const attemptFocus = (attempts = 0) => {
-        if (attempts > 10) {
-          console.log('Max focus attempts reached');
-          return;
-        }
-        
-        if (promptInputRef.current) {
-          console.log(`Focusing input element (attempt ${attempts + 1})`);
-          // S'assurer que l'élément est visible
-          promptInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          
-          // Forcer le focus - essayer plusieurs méthodes
-          promptInputRef.current.focus();
-          promptInputRef.current.click();
-          
-          // Vérifier si le focus a réussi
-          setTimeout(() => {
-            if (document.activeElement !== promptInputRef.current) {
-              console.log('Focus failed, retrying...');
-              attemptFocus(attempts + 1);
-            } else {
-              console.log('Input successfully focused');
-            }
-          }, 50);
-        } else {
-          console.log('Input ref not found, retrying...');
-          setTimeout(() => attemptFocus(attempts + 1), 100);
-        }
-      };
-      
-      // Démarrer les tentatives de focus
-      setTimeout(attemptFocus, 200);
-    }
-  }, [shouldFocus, isFocused]);
-
-  // Animation: petit zoom puis de-zoom rapidement sans attendre le blur
-  useEffect(() => {
-    if (!shouldFocus) return;
-    setIsPulsing(true);
-    const t = setTimeout(() => setIsPulsing(false), 250);
-    return () => clearTimeout(t);
-  }, [shouldFocus]);
-
-  // Removed popup listeners since we rely on Radix Select
-
-  // Positionnement calé sur l'anchor via ResizeObserver
-  useEffect(() => {
-    if (!anchorRef.current) return;
-    const el = anchorRef.current;
-    const update = () => {
-      const r = el.getBoundingClientRect();
-      setRect({ left: r.left, width: r.width });
-    };
-    update();
-    const obs = new ResizeObserver(update);
-    obs.observe(el);
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      obs.disconnect();
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, [anchorRef]);
+  // CSS-only positioning: no observers/listeners needed
 
   // candidateImages is defined above using looks first
 
@@ -245,7 +204,7 @@ export function AvatarLookChatbox({
     if (!prompt.trim() && style !== "podcast") return;
     setIsGenerating(true);
     try {
-      await basicApiCall(
+      const res = await basicApiCall<{ data: AvatarLook }>(
         `/space/${spaceId}/avatars/${activeAvatar.id}/looks/generate`,
         {
           description: prompt.trim() || " ", // Laisser un string non vide pour générer le podcast
@@ -254,28 +213,45 @@ export function AvatarLookChatbox({
           style,
         }
       );
+      const createdLook = (res as any)?.data as AvatarLook | undefined
+      if (createdLook) {
+        // Optimistic: insérer le look dans le store pour l'avatar courant
+        setAvatars(
+          spaceId,
+          (useAvatarsStore.getState().avatarsBySpace.get(spaceId) || []).map(a =>
+            a.id === activeAvatar.id
+              ? {
+                  ...a,
+                  looks: [...a.looks, createdLook],
+                  thumbnail: a.thumbnail || createdLook.thumbnail || a.thumbnail,
+                }
+              : a
+          )
+        )
+      }
       setPrompt("");
       setImages([]);
-      await onRefresh();
+      // Rafraîchir en arrière-plan sans bloquer l'UI
+      try { fetchAvatarsInBackground(spaceId) } catch {}
+      try { onRefresh?.() } catch {}
     } finally {
       setIsGenerating(false);
     }
   };
 
-  const popupDims = useMemo(() => {
-    const maxWidth = 576; // max-w-xl = 36rem = 576px
-    const availableWidth = rect.width || maxWidth;
-    const width = Math.min(availableWidth, maxWidth);
-    const left = rect.left + Math.max((availableWidth - width) / 2, 0);
-    return { left, width };
-  }, [rect.left, rect.width]);
+  // CSS-only positioning: compute nothing in JS
 
   return (
     <div
-      className="fixed bottom-8 z-50 max-w-xl"
-      style={{ left: popupDims.left, width: popupDims.width }}
+      className="fixed bottom-8 inset-x-0 z-50 w-full md:pl-[--sidebar-width]"
     >
-      <div className={`bg-white border rounded-xl p-2 shadow-md transition-transform duration-200 ${isPulsing ? 'scale-105' : 'scale-100'}`}>
+      <motion.div
+        key={pulseSignal}
+        initial={{ scale: 1 }}
+        animate={pulseSignal > 0 ? { scale: [1, 1.05, 1] } : { scale: 1 }}
+        transition={{ duration: 0.25, times: [0, 0.5, 1], ease: "easeOut" }}
+        className={"w-full max-w-xl mx-auto bg-white border rounded-xl p-2 shadow-md"}
+      >
         {/* Top: prompt */}
         <div className="mb-2">
           <Input
@@ -283,17 +259,13 @@ export function AvatarLookChatbox({
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onFocus={() => {
-              console.log('Input focused by user or programmatically');
+              // noop
             }}
             onBlur={() => {
-              // Appeler onFocusComplete seulement quand l'utilisateur perd le focus
-              if (shouldFocus && isFocused) {
-                onFocusComplete?.();
-                setIsFocused(false);
-              }
+              // noop
             }}
             placeholder={`${t("look-chat.placeholder-1")}`}
-            className={`w-full h-10 rounded-lg border-0 shadow-none bg-transparent focus-visible:ring-0 focus:ring-0 focus:outline-none transition-all duration-150 ${isPulsing ? 'bg-gray-50 border border-gray-200' : ''}`}
+            className={"w-full h-10 rounded-lg border-0 shadow-none bg-transparent focus-visible:ring-0 focus:ring-0 focus:outline-none transition-all duration-150"}
           />
         </div>
         {/* Bottom bar: left elements + right send */}
@@ -311,7 +283,7 @@ export function AvatarLookChatbox({
                   <SelectTrigger className="relative group h-10 w-10 p-0 overflow-hidden rounded-md border border-transparent focus:ring-0 focus:outline-none [&>svg]:hidden">
                     <SelectValue className="block h-full w-full">
                       <div className="relative h-full w-full">
-                        <img src={referenceImage} alt="ref" className="block h-full w-full object-cover" />
+                        <Image src={referenceImage} alt="ref" className="block h-full w-full object-cover" width={40} height={40} />
                         <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/40" />
                         <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <Settings2 className="h-4 w-4 text-white" />
@@ -322,13 +294,18 @@ export function AvatarLookChatbox({
                   <SelectContent side="bottom" align="start" sideOffset={4} className="p-2 w-auto max-w-[90vw] min-w-0">
                     {candidateImages.map((u) => (
                       <SelectItem key={u} value={u} className="inline-flex w-auto p-0 mr-2 mb-2">
-                        <div className="relative group/item">
-                          <img
+                        <div
+                          className="relative group/item h-20"
+                          style={{ width: `${candidateWidths[u] ?? 280}px` }}
+                        >
+                          <Image
                             src={u}
                             alt="candidate"
-                            className="h-20 w-auto max-w-[280px] object-contain rounded-md border hover:border-primary transition-colors"
+                            fill
+                            className="object-contain rounded-md transition-colors"
                             loading="lazy"
                             decoding="async"
+                            sizes="(max-width: 640px) 45vw, 280px"
                           />
                           {referenceImage === u && (
                             <>
@@ -409,13 +386,6 @@ export function AvatarLookChatbox({
               onValueChange={(value: string) =>
                 setFormat(value as AvatarLookFormat)
               }
-              onOpenChange={(open: boolean) => {
-                if (open) {
-                  try {
-                    window.dispatchEvent(new CustomEvent('ratio-select-opened'))
-                  } catch {}
-                }
-              }}
               disabled={isGenerating || isUploading}
             >
               <SelectTrigger variant="ghost" className="h-9 w-auto px-2">
@@ -464,7 +434,7 @@ export function AvatarLookChatbox({
             </Button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

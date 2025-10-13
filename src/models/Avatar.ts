@@ -6,6 +6,11 @@ const avatarSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    createdBy: {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      name: { type: String },
+      image: { type: String },
+    },
     name: {
       type: String,
       required: true,
@@ -40,8 +45,7 @@ const avatarSchema = new mongoose.Schema({
         status: { type: String, enum: ['pending', 'ready', 'error'], default: 'ready' },
         errorMessage: String,
         errorAt: Date,
-        createdAt: { type: Date },
-        format: { type: String, enum: ['vertical', 'horizontal', 'square', 'ads'] },
+        format: { type: String, enum: ['vertical', 'horizontal'] },
         settings: {
           heygenType: { type: String, enum: ['avatar', 'talking_photo'] },
           position: Number,

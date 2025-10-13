@@ -17,8 +17,8 @@ import { Textarea } from "@/src/components/ui/textarea";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore";
-import { apiClient, basicApiCall } from "@/src/lib/api";
-import AvatarImagePickerDeck from "@/src/components/AvatarImagePickerDeck";
+import { basicApiCall } from "@/src/lib/api";
+import AvatarImagePickerDeck from "@/src/components/avatar-image-picker-deck";
 import { VideoFormat, VIDEO_FORMATS } from "@/src/types/video";
 import {
   Select,
@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import type { Avatar } from "@/src/types/avatar";
+import { useAvatarsStore } from '@/src/store/avatarsStore'
 import StyleSelector from "@/src/components/style-selector";
 
 type AvatarStyle = 'ugc-realist' | 'studio' | 'podcast'
@@ -49,6 +50,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
   const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
   const [resetToken, setResetToken] = useState<number>(0);
   const { activeSpace } = useActiveSpaceStore();
+  const { fetchAvatarsInBackground, setAvatars } = useAvatarsStore()
 
   const handleStart = async () => {
     if (!activeSpace) return;
@@ -59,16 +61,24 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
 
       try {
         setIsSubmitting(true);
-        // Utiliser le client API direct pour récupérer l'avatar créé { data: Avatar }
-        const res = await apiClient.post<{ data: Avatar }>(`/space/${activeSpace.id}/avatars`, {
+        // Utiliser basicApiCall pour récupérer l'avatar créé
+        const res = await basicApiCall<Avatar>(`/space/${activeSpace.id}/avatars`, {
           prompt,
           format: videoFormat,
           style: avatarStyle,
         });
-        const created = (res as any)?.data as Avatar | undefined;
+        const created: Avatar = res;
         setIdeaText("");
         if (created) {
           if (onCreated) onCreated(created);
+          // Mettre à jour le store immédiatement (insertion sans refetch)
+          setAvatars(
+            activeSpace.id,
+            [
+              created,
+              ...((useAvatarsStore.getState().avatarsBySpace.get(activeSpace.id)) || [])
+            ]
+          )
         }
         onClose();
       } catch (e) {
@@ -83,11 +93,19 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
         const payload = selectedImageUrls.length === 1
           ? { imageUrl: selectedImageUrls[0], style: avatarStyle }
           : { imageUrls: selectedImageUrls, style: avatarStyle };
-        const res = await apiClient.post<{ data: Avatar }>(`/space/${activeSpace.id}/avatars`, payload);
-        const created = (res as any)?.data as Avatar | undefined;
+        const res = await basicApiCall<Avatar>(`/space/${activeSpace.id}/avatars`, payload);
+        const created: Avatar = res;
         setSelectedImageUrls([]);
         if (created) {
           if (onCreated) onCreated(created);
+          // Mettre à jour le store immédiatement (insertion sans refetch)
+          setAvatars(
+            activeSpace.id,
+            [
+              created,
+              ...((useAvatarsStore.getState().avatarsBySpace.get(activeSpace.id)) || [])
+            ]
+          )
         }
         onClose();
       } catch (e) {
@@ -97,8 +115,6 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
       }
     }
   };
-
-  // L'animation et l'upload sont gérés par AvatarImagePickerDeck
 
   return (
     <Dialog
@@ -190,15 +206,11 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
                   <SelectTrigger variant="ghost" className="h-8 w-auto px-2">
                     <SelectValue>
                       <div className="flex items-center gap-2">
-                        {(() => {
-                          if (videoFormat === 'vertical') {
-                            return <div className="h-4 w-2.5 border border-current rounded-sm flex-shrink-0" />
-                          }
-                          if (videoFormat === 'horizontal') {
-                            return <div className="h-2.5 w-4 border border-current rounded-sm flex-shrink-0" />
-                          }
-                          return null
-                        })()}
+                        {videoFormat === 'vertical' ? (
+                          <div className="h-4 w-2.5 border border-current rounded-sm flex-shrink-0" />
+                        ) : videoFormat === 'horizontal' ? (
+                          <div className="h-2.5 w-4 border border-current rounded-sm flex-shrink-0" />
+                        ) : null}
                         <span className="text-sm">
                           {VIDEO_FORMATS.find(f => f.value === videoFormat)?.ratio}
                         </span>

@@ -31,6 +31,7 @@ export interface IPlan {
   storageLimit?: number;
   imageToVideoLimit?: number;
   nextPhase?: Date;
+  avatarsLimit?: number;
 }
 
 export interface IMediaSpace {
