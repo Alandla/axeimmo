@@ -422,7 +422,14 @@
         "vertical": "Vertical",
         "ads": "Ads",
         "square": "Square",
-        "horizontal": "Horizontal"
+        "horizontal": "Horizontal",
+        "custom": "Custom",
+        "width": "Width",
+        "height": "Height",
+        "upgrade-modal": {
+          "title": "Custom format not available",
+          "description": "The custom format is reserved for the Enterprise plan. Upgrade to a higher plan to customize your video dimensions."
+        }
       },
       "select-avatar": "Select avatar",
       "no-avatar": "No avatar",

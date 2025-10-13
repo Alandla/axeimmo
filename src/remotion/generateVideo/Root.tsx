@@ -6,7 +6,10 @@ import result from '../../test/mockup/videoResult.json';
 const calculateMetadata = ({props}: {props: any}) => {
 	console.log(props)
 	const duration = props.data.video.metadata.audio_duration
-	const dimensions = getVideoDimensions(props.data.video.format || 'vertical');
+	const format = props.data.video.format || 'vertical';
+	const customWidth = props.data.video.width;
+	const customHeight = props.data.video.height;
+	const dimensions = getVideoDimensions(format, customWidth, customHeight);
 	return {
 	  durationInFrames: Math.ceil(duration * 60), // 60 est le fps
 	  data: props.data.video.result,

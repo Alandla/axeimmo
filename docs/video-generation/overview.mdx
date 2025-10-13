@@ -116,6 +116,24 @@ The AI will automatically analyze and place your media throughout the video base
 
 ## Advanced Features
 
+### Custom Video Formats
+
+Create videos with custom dimensions tailored to your specific needs. Beyond the standard formats (vertical, square, ads, horizontal), you can specify exact width and height dimensions.
+
+```json
+{
+  "prompt": "Create a product showcase video",
+  "voice_id": "en-US-DavisNeural",
+  "format": "custom",
+  "width": 1200,
+  "height": 1600
+}
+```
+
+<Info>
+  Custom dimensions support up to 5000px for both width and height, allowing you to create videos for any platform or display requirement.
+</Info>
+
 ### Web Search Integration
 
 Enhance your videos with real-time web content. The AI can search the internet during script writing to include current information, or find relevant images like celebrity photos, landmarks, content to enrich your video.

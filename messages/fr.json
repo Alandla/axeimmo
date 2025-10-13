@@ -334,7 +334,14 @@
         "vertical": "Vertical",
         "ads": "Publicité",
         "square": "Carré",
-        "horizontal": "Horizontal"
+        "horizontal": "Horizontal",
+        "custom": "Personnalisé",
+        "width": "Largeur",
+        "height": "Hauteur",
+        "upgrade-modal": {
+          "title": "Format personnalisé non disponible",
+          "description": "Le format personnalisé est réservé au plan Entreprise. Passez à un plan supérieur pour personnaliser vos dimensions de vidéo."
+        }
       },
       "select-avatar": "Sélectionner un avatar",
       "no-avatar": "Aucun avatar",

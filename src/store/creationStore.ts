@@ -23,6 +23,8 @@ type CreationStore = {
   animationMode: KlingGenerationMode
   emotionEnhancement: boolean
   videoFormat: VideoFormat
+  videoWidth?: number
+  videoHeight?: number
   setScript: (script: string) => void
   setFiles: (files: FileOrAssetToUpload[]) => void,
   setTotalCost: (cost: number) => void
@@ -42,6 +44,8 @@ type CreationStore = {
   setAnimationMode: (mode: KlingGenerationMode) => void
   setEmotionEnhancement: (enabled: boolean) => void
   setVideoFormat: (format: VideoFormat) => void
+  setVideoWidth: (width: number) => void
+  setVideoHeight: (height: number) => void
   reset: () => void
 }
 
@@ -61,6 +65,8 @@ export const useCreationStore = create<CreationStore>((set) => ({
   animationMode: KlingGenerationMode.STANDARD,
   emotionEnhancement: false,
   videoFormat: 'vertical',
+  videoWidth: undefined,
+  videoHeight: undefined,
   setScript: (script) => set({ script }),
   setFiles: (files) => set({ files }),
   setTotalCost: (cost) => set({ totalCost: cost }),
@@ -80,6 +86,8 @@ export const useCreationStore = create<CreationStore>((set) => ({
   setAnimationMode: (mode) => set({ animationMode: mode }),
   setEmotionEnhancement: (enabled) => set({ emotionEnhancement: enabled }),
   setVideoFormat: (format) => set({ videoFormat: format }),
+  setVideoWidth: (width) => set({ videoWidth: width }),
+  setVideoHeight: (height) => set({ videoHeight: height }),
   reset: () => set({
     script: '',
     files: [],

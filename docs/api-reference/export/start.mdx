@@ -21,8 +21,16 @@ This endpoint requires API key authentication. Export costs may apply depending 
 </ParamField>
 
 <ParamField body="format" type="string">
-  Export format override: `vertical` (9:16), `ads` (4:5) or `square` (1:1).
+  Export format override: `vertical` (9:16), `ads` (4:5), `square` (1:1), `horizontal` (16:9), or `custom`.
   If not specified, uses the original video format.
+</ParamField>
+
+<ParamField body="width" type="number">
+  Custom video width in pixels (max 5000). Only used when format is `custom`. Defaults to 1080.
+</ParamField>
+
+<ParamField body="height" type="number">
+  Custom video height in pixels (max 5000). Only used when format is `custom`. Defaults to 1920.
 </ParamField>
 
 <ParamField body="avatar_model" type="string">
@@ -134,7 +142,7 @@ console.log(data);
 
 ## Export Formats
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Vertical (9:16)" icon="mobile">
     **1080x1920**
     Perfect for TikTok, Instagram Stories, YouTube Shorts
@@ -146,6 +154,14 @@ console.log(data);
   <Card title="Square (1:1)" icon="square">
     **1080x1080**
     Ideal for Instagram posts, Facebook, LinkedIn
+  </Card>
+  <Card title="Horizontal (16:9)" icon="rectangle-wide">
+    **1920x1080**
+    Perfect for YouTube, websites, presentations
+  </Card>
+  <Card title="Custom" icon="sliders">
+    **Custom dimensions**
+    Set your own width and height (max 5000px each)
   </Card>
 </CardGroup>
 

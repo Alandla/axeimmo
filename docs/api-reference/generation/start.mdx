@@ -45,7 +45,15 @@ This endpoint requires API key authentication. Include your API key in the `Auth
 </ParamField>
 
 <ParamField body="format" type="string" default="vertical">
-  Video format: `vertical` (9:16), `square` (1:1), or `ads` (16:9).
+  Video format: `vertical` (9:16), `square` (1:1), `ads` (4:5), `horizontal` (16:9), or `custom`.
+</ParamField>
+
+<ParamField body="width" type="number">
+  Custom video width in pixels (max 5000). Only used when format is `custom`. Defaults to 1080.
+</ParamField>
+
+<ParamField body="height" type="number">
+  Custom video height in pixels (max 5000). Only used when format is `custom`. Defaults to 1920.
 </ParamField>
 
 <ParamField body="media_urls" type="array">

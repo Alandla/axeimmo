@@ -37,7 +37,7 @@ export function AiChatTab({
   inputMessage: string,
   setInputMessage: (message: string) => void
 }) {
-    const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode, extractedImagesMedia, animationMode, setAnimateImages, script, videoFormat, setVideoFormat } = useCreationStore()
+    const { files, selectedVoice, selectedLook, setFiles, isWebMode, setWebMode, extractedImagesMedia, animationMode, setAnimateImages, script, videoFormat, setVideoFormat, videoWidth, videoHeight, setVideoWidth, setVideoHeight } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
     const { showPremiumToast } = usePremiumToast()
     const [isDragging, setIsDragging] = useState(false);
@@ -254,6 +254,10 @@ export function AiChatTab({
                     <VideoFormatSelector
                       value={videoFormat}
                       onValueChange={setVideoFormat}
+                      width={videoWidth}
+                      height={videoHeight}
+                      onWidthChange={setVideoWidth}
+                      onHeightChange={setVideoHeight}
                       disabled={isDisabled || hasUsage("voice") || hasVideoAvatar()}
                       light={true}
                     />

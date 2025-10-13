@@ -28,6 +28,8 @@ export default function VideoPreview({
     onAvatarPositionChange,
     onMediaPositionChange,
     onVideoFormatChange,
+    onVideoWidthChange,
+    onVideoHeightChange,
     onAvatarChange,
     onLogoPositionChange,
     onLogoSizeChange,
@@ -56,6 +58,8 @@ export default function VideoPreview({
     onAvatarPositionChange?: (position: { x: number, y: number }) => void,
     onMediaPositionChange?: (sequenceId: number, position: { x: number, y: number }) => void,
     onVideoFormatChange?: (format: VideoFormat) => void,
+    onVideoWidthChange?: (width: number) => void,
+    onVideoHeightChange?: (height: number) => void,
     onAvatarChange?: (avatar: AvatarLook | null) => void,
     onLogoPositionChange?: (position: LogoPosition) => void,
     onLogoSizeChange?: (size: number) => void,
@@ -87,7 +91,11 @@ export default function VideoPreview({
     // Removed floating LogoPositionSelector here; it is now shown above the logo inside the canvas
 
     // Get video dimensions based on format
-    const dimensions = getVideoDimensions(video?.video?.format || 'vertical');
+    const dimensions = getVideoDimensions(
+        video?.video?.format || 'vertical',
+        video?.video?.width,
+        video?.video?.height
+    );
 
     useEffect(() => {
         if (!video?.video?.sequences) return;
@@ -206,6 +214,10 @@ export default function VideoPreview({
                             <VideoFormatSelector
                                 value={video.video.format || 'vertical'}
                                 onValueChange={onVideoFormatChange}
+                                width={video.video.width}
+                                height={video.video.height}
+                                onWidthChange={onVideoWidthChange}
+                                onHeightChange={onVideoHeightChange}
                             />
                         )}
                         {onAvatarChange && (
