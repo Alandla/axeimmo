@@ -34,7 +34,7 @@ export async function regenerateAudioForSequence(
   return res as RegenerateAudioResult;
 }
 
-export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: string, transcription: any) {
+export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: string, transcription: any, clickedSequenceIndex: number) {
   const relatedSequences = video?.video?.sequences.filter(seq => seq.audioIndex === audioIndex);
 
   if (!relatedSequences) {
@@ -68,19 +68,48 @@ export function updateVideoTimings(video: IVideo, audioIndex: number, audioUrl: 
     ? video.video.sequences[firstRelatedIndex - 1].end 
     : 0;
 
-  // Ajuster les timings des nouvelles séquences
-  updatedSequences = updatedSequences.map((seq, index, array) => ({
-    ...seq,
-    start: index === 0 ? previousEnd : seq.start + previousEnd,
-    end: seq.end + previousEnd,
-    media: relatedSequences[index]?.media,
-    audioIndex: audioIndex,
-    words: seq.words.map((word, wordIndex) => ({
-      ...word,
-      start: wordIndex === 0 && index === 0 ? previousEnd : word.start + previousEnd,
-      end: word.end + previousEnd
-    }))
-  }));
+  // Trouver l'index relatif de la séquence cliquée dans relatedSequences
+  const clickedSequence = video.video?.sequences[clickedSequenceIndex];
+  const relativeClickedIndex = relatedSequences.findIndex(seq => seq === clickedSequence);
+  
+  // Calculer combien de nouvelles séquences ont été créées
+  const oldSequenceCount = relatedSequences.length;
+  const newSequenceCount = updatedSequences.length;
+  const addedSequencesCount = newSequenceCount - oldSequenceCount;
+
+  // Ajuster les timings des nouvelles séquences et attribuer les médias
+  updatedSequences = updatedSequences.map((seq, index, array) => {
+    let media = undefined;
+    
+    // Logique d'attribution des médias
+    if (index < relativeClickedIndex) {
+      // Séquences AVANT celle cliquée → gardent leur média
+      media = relatedSequences[index]?.media;
+    } else if (index === relativeClickedIndex) {
+      // Séquence cliquée → garde son média
+      media = relatedSequences[relativeClickedIndex]?.media;
+    } else if (index > relativeClickedIndex && index <= relativeClickedIndex + addedSequencesCount) {
+      // Nouvelles séquences créées → PAS de média
+      media = undefined;
+    } else {
+      // Séquences APRÈS → gardent leur média (décalées)
+      const oldSequenceIndex = index - addedSequencesCount;
+      media = relatedSequences[oldSequenceIndex]?.media;
+    }
+
+    return {
+      ...seq,
+      start: index === 0 ? previousEnd : seq.start + previousEnd,
+      end: seq.end + previousEnd,
+      media: media,
+      audioIndex: audioIndex,
+      words: seq.words.map((word, wordIndex) => ({
+        ...word,
+        start: wordIndex === 0 && index === 0 ? previousEnd : word.start + previousEnd,
+        end: word.end + previousEnd
+      }))
+    };
+  });
 
   // Supprimer toutes les séquences relatives
   let newSequences = [...updatedVideo?.video?.sequences || []].filter(seq => seq.audioIndex !== audioIndex);
