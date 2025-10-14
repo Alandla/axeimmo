@@ -107,12 +107,12 @@ export default function VideoFormatSelector({
   };
 
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newWidth = Math.min(5000, Math.max(0, parseInt(e.target.value) || 0));
+    const newWidth = Math.min(5000, Math.max(1, parseInt(e.target.value) || 1));
     onWidthChange?.(newWidth);
   };
 
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newHeight = Math.min(5000, Math.max(0, parseInt(e.target.value) || 0));
+    const newHeight = Math.min(5000, Math.max(1, parseInt(e.target.value) || 1));
     onHeightChange?.(newHeight);
   };
 
