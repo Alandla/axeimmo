@@ -39,18 +39,10 @@ export default function Page() {
 
   const handleSignInGoogle = async () => {
     const deviceId = getDeviceId();
-    const response = await signIn('google', {
-      redirectTo: '/dashboard',
-      redirect: false,
+    await signIn('google', {
+      callbackUrl: '/dashboard',
       deviceId
     })
-    if (response?.error) {
-      toast({
-        title: t('error-title'),
-        description: t(`error-${response.error}`),
-        variant: 'destructive',
-      })
-    }
   }
 
   const handleSignInEmail = async () => {

@@ -43,7 +43,7 @@ export function FileOrAssetPreview({ item, usage, onUsageChange, onRemove }: Fil
       case 'audio':
         return ['voice'];
       case 'image':
-        return ['media'];
+        return ['avatar', 'media'];
       case 'video':
         return ['avatar', 'media'];
       default:

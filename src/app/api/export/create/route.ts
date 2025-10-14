@@ -7,6 +7,7 @@ import { ISpace } from '@/src/types/space';
 import { IVideo } from '@/src/types/video';
 import { getVideoById } from '@/src/dao/videoDao';
 import { PlanName } from '@/src/types/enums';
+import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration } from '@/src/lib/cost';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   const params = await req.json();
 
-  const { videoId, spaceId } = params;
+  const { videoId, spaceId, avatarModel } = params;
 
   try {
 
@@ -43,10 +44,20 @@ export async function POST(req: NextRequest) {
     const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
     const wasCreatedViaAPI = !createEvent?.user;
     
-    // Only API users don't pay for exports, all other users (including free plan) pay
-    const cost = wasCreatedViaAPI ? 0 : calculateCredits(video.video?.metadata.audio_duration || 30);
+    // Calculate base cost
+    const baseCost = wasCreatedViaAPI ? 0 : calculateCredits(video.video?.metadata.audio_duration || 30);
 
-    if (space.credits < cost) {
+    // Calculate avatar cost if applicable
+    let avatarCost = 0;
+    const finalAvatarModel = avatarModel || 'heygen';
+    if (video.video?.avatar && finalAvatarModel !== 'heygen') {
+      const avatarDuration = calculateTotalAvatarDuration(video);
+      avatarCost = calculateAvatarCreditsForUser(avatarDuration, finalAvatarModel);
+    }
+
+    const totalCost = baseCost + avatarCost;
+
+    if (space.credits < totalCost) {
       return NextResponse.json({ error: "not-enough-credits" }, { status: 400 });
     }
 
@@ -55,7 +66,8 @@ export async function POST(req: NextRequest) {
       spaceId,
       userId: session.user.id,
       status: 'pending',
-      creditCost: cost
+      creditCost: totalCost,
+      avatarModel: finalAvatarModel
     }
 
     const exportResult = await createExport(exportData);

@@ -45,6 +45,16 @@ const avatarSchema = new mongoose.Schema({
         status: { type: String, enum: ['pending', 'ready', 'error'], default: 'ready' },
         errorMessage: String,
         errorAt: Date,
+        renders: {
+          type: [
+            {
+              audioIndex: Number,
+              startInFrames: Number,
+              url: String,
+            },
+          ],
+          default: undefined
+        },
         format: { type: String, enum: ['vertical', 'horizontal'] },
         settings: {
           heygenType: { type: String, enum: ['avatar', 'talking_photo'] },

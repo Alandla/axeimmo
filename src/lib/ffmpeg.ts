@@ -8,8 +8,6 @@ import ffmpeg from "fluent-ffmpeg";
 import fs from "fs/promises";
 import os from "os";
 import path from "path";
-import axios from "axios";
-import { logger } from "@trigger.dev/sdk";
 
 /**
  * Extrait des frames d'une vidéo à intervalle régulier (1 frame par seconde)

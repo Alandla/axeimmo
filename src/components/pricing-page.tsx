@@ -1,6 +1,6 @@
 'use client'
 
-import { Star, Heart, Diamond, Gem, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Save, BookOpen, Film, Layers, ArrowRight, Database, Globe, Sparkles, Link2, Plug } from 'lucide-react'
+import { Star, Heart, Diamond, Gem, Loader2, PhoneCall, Users, Clock, Music, Mic, User, Video, Layout, Palette, Save, BookOpen, Film, Layers, ArrowRight, Database, Globe, Sparkles, Link2, Plug, UserCheck, Sparkle } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/src/components/ui/card'
 import { Button } from '@/src/components/ui/button'
 import { useTranslations } from 'next-intl'
@@ -67,8 +67,8 @@ export const features = [
       {
         name: "voices-library",
         start: "20",
-        pro: "+100",
-        enterprise: "+120",
+        pro: "+110",
+        enterprise: "+130",
         soon: false,
         tooltip: "Choose from our collection of ultra-realistic AI voice-overs in multiple languages and accents for your video narration.",
         icon: <Mic className="h-4 w-4 mt-0.5 flex-shrink-0" />,
@@ -118,6 +118,15 @@ export const features = [
         enterprise: true,
         soon: false,
         icon: <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
+      {
+        name: "ai-model-avatar-premium",
+        start: true,
+        pro: true,
+        enterprise: true,
+        soon: false,
+        tooltip: "Access to our premium avatar AI model for realistic and dynamic results.",
+        icon: <Sparkle className="h-4 w-4 mt-0.5 flex-shrink-0" />,
       },
       {
         name: "ai-model-ultra",

@@ -98,3 +98,82 @@ export async function getVideoDetails(videoId: string) {
 
   return response.data;
 }
+
+/**
+ * Upload une image sur Heygen et récupère l'image_key
+ * @param imageUrl - L'URL de l'image à uploader
+ * @returns L'image_key de l'image uploadée
+ */
+export async function uploadImageToHeygen(imageUrl: string): Promise<string> {
+  // Download image from URL
+  const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+  const imageBuffer = Buffer.from(imageResponse.data);
+  
+  // Detect content type from response or URL
+  let contentType = imageResponse.headers['content-type'] || 'image/jpeg';
+  
+  // If content type is not available, try to detect from URL extension
+  if (!contentType.startsWith('image/')) {
+    const urlLower = imageUrl.toLowerCase();
+    if (urlLower.endsWith('.png')) {
+      contentType = 'image/png';
+    } else if (urlLower.endsWith('.jpg') || urlLower.endsWith('.jpeg')) {
+      contentType = 'image/jpeg';
+    } else if (urlLower.endsWith('.webp')) {
+      contentType = 'image/webp';
+    } else {
+      // Default to jpeg
+      contentType = 'image/jpeg';
+    }
+  }
+  
+  // Upload to Heygen
+  const response = await axios.post(
+    'https://upload.heygen.com/v1/asset',
+    imageBuffer,
+    {
+      headers: {
+        'X-Api-Key': process.env.HEYGEN_API_KEY,
+        'Content-Type': contentType,
+      },
+    }
+  );
+
+  return response.data.data.image_key;
+}
+
+/**
+ * Génère une vidéo avatar avec le modèle Avatar IV
+ * @param imageKey - La clé de l'image uploadée sur Heygen
+ * @param audioUrl - L'URL du fichier audio
+ * @param videoFormat - Le format de la vidéo (vertical, horizontal)
+ * @param title - Le titre de la vidéo
+ * @returns La réponse de l'API contenant l'ID de la vidéo générée
+ */
+export async function generateAvatarIVVideo(
+  imageKey: string,
+  audioUrl: string,
+  videoFormat: VideoFormat = 'vertical',
+  title: string = 'Avatar IV Video'
+) {
+  const videoOrientation = videoFormat === 'vertical' ? 'portrait' : 'landscape';
+
+  const response = await axios.post(
+    'https://api.heygen.com/v2/video/av4/generate',
+    {
+      video_title: title,
+      video_orientation: videoOrientation,
+      fit: 'cover',
+      image_key: imageKey,
+      audio_url: audioUrl
+    },
+    {
+      headers: {
+        'X-Api-Key': process.env.HEYGEN_API_KEY,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  return response.data;
+}

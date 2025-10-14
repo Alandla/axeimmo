@@ -13,6 +13,12 @@ export type Avatar = {
 }
 
 export type AvatarStyle = 'ugc-realist' | 'studio' | 'podcast'
+export type AvatarRender = {
+    audioIndex: number
+    startInFrames: number
+    durationInSeconds?: number
+    url: string
+}
 
 export type AvatarLook = {
     id?: string
@@ -23,6 +29,7 @@ export type AvatarLook = {
     previewUrl?: string
     videoUrl?: string
     createdBy?: string
+    renders?: AvatarRender[]
     format?: 'vertical' | 'horizontal'
     status?: 'pending' | 'ready' | 'error'
     errorMessage?: string

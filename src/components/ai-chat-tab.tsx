@@ -100,6 +100,10 @@ export function AiChatTab({
       return files.some(file => file.usage === usage);
     };
 
+    const hasVideoAvatar = () => {
+      return files.some(file => file.usage === "avatar" && file.type === "video");
+    };
+
     const handleFileUsageChange = (fileIndex: number, newUsage: "voice" | "avatar" | "media" | "element") => {
       setFiles(files.map((file, index) => 
         index === fileIndex ? { ...file, usage: newUsage } : file
@@ -217,7 +221,7 @@ export function AiChatTab({
                     !isDisabled && setInputMessage(e.target.value);
                     !isDisabled && adjustTextareaHeight(e);
                   }}
-                  disabled={isDisabled || files.some(file => file.usage === "voice" || file.usage === "avatar")}
+                  disabled={isDisabled || files.some(file => file.usage === "voice" || hasVideoAvatar())}
                   onInput={!isDisabled ? adjustTextareaHeight : undefined}
                   className={`w-full mb-2 border-none shadow-none focus:ring-0 resize-none ${isDragging ? 'opacity-50' : ''}`}
                   rows={1}
@@ -242,7 +246,7 @@ export function AiChatTab({
                     <SelectDuration 
                       value={videoDuration} 
                       onChange={setVideoDuration} 
-                      disabled={isDisabled || hasUsage("voice") || hasUsage("avatar")}
+                      disabled={isDisabled || hasUsage("voice") || hasVideoAvatar()}
                     />
                     <div className="flex h-7 items-center">
                       <div className="w-px h-4 bg-border mx-1"></div>
@@ -250,7 +254,7 @@ export function AiChatTab({
                     <VideoFormatSelector
                       value={videoFormat}
                       onValueChange={setVideoFormat}
-                      disabled={isDisabled || hasUsage("voice") || hasUsage("avatar")}
+                      disabled={isDisabled || hasUsage("voice") || hasVideoAvatar()}
                       light={true}
                     />
                     <input
@@ -302,7 +306,7 @@ export function AiChatTab({
                             onClick={() => !isDisabled && handleSendMessage(inputMessage, videoDuration?.value || 30)} 
                             disabled={
                               isDisabled ||
-                              !(hasUsage("voice") || hasUsage("avatar")) && 
+                              !(hasUsage("voice") || hasVideoAvatar()) && 
                               (!inputMessage.trim() || !videoDuration)
                             }
                           >
@@ -310,7 +314,7 @@ export function AiChatTab({
                           </Button>
                         </div>
                       </TooltipTrigger>
-                      {(!(hasUsage("voice") || hasUsage("avatar")) && (!inputMessage.trim() || !videoDuration)) && 
+                      {(!(hasUsage("voice") || hasVideoAvatar()) && (!inputMessage.trim() || !videoDuration)) && 
                         <TooltipContent>
                           {t('select-to-start.title')} {!inputMessage.trim() ? t('select-to-start.need-prompt') : ''}{(!inputMessage.trim() && !videoDuration) ? t('select-to-start.and') : ''}{!videoDuration ? t('select-to-start.need-duration') : ''}.
                         </TooltipContent>

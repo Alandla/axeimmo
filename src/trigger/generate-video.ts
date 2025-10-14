@@ -483,7 +483,7 @@ export const generateVideoTask = task({
         index: 0,
         audioUrl: voiceFile.audio?.link || "",
       })
-    } else if (!avatarFile) {
+    } else if (!avatarFile || (avatarFile && avatarFile.type === 'image')) {
       logger.log(`[VOICE] Generate voice...`)
 
       await metadata.replace({
@@ -684,7 +684,9 @@ export const generateVideoTask = task({
       // Trier les phrases par index
       sentences.sort((a, b) => a.index - b.index);
       
-    } else if (avatarFile) {
+    } else if (avatarFile && avatarFile.type === 'video') {
+      // Video avatar: use video's audio
+      logger.log(`[VOICE] Using video avatar's audio`)
       sentences.push({
         index: 0,
         audioUrl: avatarFile.video?.link || "",
@@ -1712,7 +1714,11 @@ export const generateVideoTask = task({
     */
 
     let avatar;
-    if (avatarFile) {
+    if (avatarFile && avatarFile.type === 'image') {
+      avatar = {
+        thumbnail: avatarFile.image?.link || ""
+      }
+    } else if (avatarFile && avatarFile.type === 'video') {
       avatar = {
         videoUrl: avatarFile.video?.link || ""
       }
