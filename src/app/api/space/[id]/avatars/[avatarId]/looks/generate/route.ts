@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import type { AvatarStyle } from "@/src/types/avatar";
 import { waitUntil } from "@vercel/functions";
 import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
@@ -42,7 +43,7 @@ export async function POST(
     const description: string | undefined = body?.description;
     const format: VideoFormat | undefined =
       typeof body?.format === 'string' ? (body.format as VideoFormat) : undefined;
-    const style: 'ugc-realist' | 'studio' | 'podcast' | undefined = body?.style;
+    const style: AvatarStyle | undefined = body?.style;
     const providedImages: string[] = Array.isArray(body?.images)
       ? body.images.filter((u: any) => typeof u === "string" && !!u)
       : [];
@@ -69,7 +70,8 @@ export async function POST(
       thumbnail: "",
       previewUrl: "",
       videoUrl: "",
-      format: (format && ["vertical","ads","square","horizontal"].includes(format)) ? format : "vertical",
+      createdBy: session.user.id,
+      format: (format && ["vertical","ads"].includes(format)) ? format : "vertical",
       settings: {},
       status: 'pending',
       createdAt: now,

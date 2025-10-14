@@ -12,8 +12,7 @@ import {
   SelectValue,
 } from '@/src/components/ui/select'
 import Image from 'next/image'
-
-type AvatarStyle = 'ugc-realist' | 'studio' | 'podcast'
+import type { AvatarStyle } from '@/src/types/avatar'
 
 interface StyleSelectorProps {
   value: AvatarStyle

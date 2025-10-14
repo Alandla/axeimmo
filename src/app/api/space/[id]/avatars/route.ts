@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import type { AvatarStyle } from "@/src/types/avatar";
+import type { VideoFormat } from "@/src/types/video";
 import { waitUntil } from "@vercel/functions";
 import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
@@ -12,6 +14,7 @@ import { eventBus } from "@/src/lib/events";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import SpaceModel from "@/src/models/Space";
 import { avatarsLimit as avatarsLimitConfig } from "@/src/config/plan.config";
+import { PlanName } from "@/src/types/enums";
 import { updateAvatarThumbnailAndFirstLook } from "@/src/dao/spaceDao";
 
 // Common hint used to bias generations for podcast scenes
@@ -111,26 +114,27 @@ export async function POST(
       return NextResponse.json({ error: "Space not found" }, { status: 404 });
     }
 
-    // Enforce avatar creation limit (space-level)
+    // Enforce avatar creation limit (space-level) except for Enterprise which is unlimited
     const existingAvatars = ((space as any).avatars as any[]) || [];
     const currentAvatarCount = existingAvatars.length;
-    console.log('limit: ', (space as any).avatarsLimit);
     
-    // Calculate limit based on plan if avatarsLimit is not set
-    let limit = ((space as any).avatarsLimit as number);
-    if (!limit || limit === 0) {
-      const planName = space.plan?.name as keyof typeof avatarsLimitConfig | undefined;
-      limit = planName ? avatarsLimitConfig[planName] ?? 0 : 0;
-    }
-    
-    if (currentAvatarCount >= limit) {
-      return NextResponse.json({ error: "Avatar limit reached" }, { status: 403 });
+    const planNameForSpace = space.plan?.name as PlanName | undefined;
+    if (planNameForSpace !== PlanName.ENTREPRISE) {
+      // Calculate limit based on plan if avatarsLimit is not set
+      let limit = ((space as any).avatarsLimit as number);
+      if (!limit || limit === 0) {
+        const planKey = space.plan?.name as keyof typeof avatarsLimitConfig | undefined;
+        limit = planKey ? avatarsLimitConfig[planKey] ?? 0 : 0;
+      }
+      if (currentAvatarCount >= limit) {
+        return NextResponse.json({ error: "Avatar limit reached" }, { status: 403 });
+      }
     }
 
     const body = await req.json().catch(() => ({}));
     const basePrompt: string | undefined = body?.prompt;
-    const style: 'ugc-realist' | 'studio' | 'podcast' | undefined = body?.style;
-    const format: 'vertical' | 'horizontal' | 'square' | 'ads' | undefined = body?.format;
+    const style: AvatarStyle | undefined = body?.style;
+    const format: VideoFormat | undefined = body?.format;
     const imageUrl: string | undefined = body?.imageUrl;
     const imageUrls: string[] = Array.isArray(body?.imageUrls)
       ? (body.imageUrls as string[]).filter((u) => typeof u === "string" && u.length > 0)
@@ -180,6 +184,8 @@ export async function POST(
       finalPrompt = improved.enhancedPrompt || sourcePrompt;
     }
 
+    const creatorUserId = session.user!.id as string
+
     const looks = (providedImageUrls.length > 0)
       ? providedImageUrls.map((url: string, idx: number) => ({
           id: nanoid(),
@@ -189,6 +195,7 @@ export async function POST(
           thumbnail: url,
           previewUrl: "",
           videoUrl: "",
+          createdBy: creatorUserId,
           format: "vertical",
           settings: {},
         }))
@@ -200,17 +207,14 @@ export async function POST(
           thumbnail: "",
           previewUrl: "",
           videoUrl: "",
+          createdBy: creatorUserId,
           format: "vertical",
           settings: {},
         }];
 
     const newAvatar: any = {
       id: avatarId,
-      createdBy: {
-        userId: session.user.id,
-        name: (session.user as any)?.name || (session.user as any)?.firstName || '',
-        image: (session.user as any)?.image || '',
-      },
+      createdBy: creatorUserId,
       name,
       age,
       gender,

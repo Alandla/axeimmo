@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
-import { getSpaceById } from "@/src/dao/spaceDao";
+import { addLookToAvatar } from "@/src/dao/spaceDao";
 import { nanoid } from "nanoid";
 
 export async function POST(
@@ -23,11 +23,6 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const space: any = await getSpaceById(params.id);
-    if (!space) {
-      return NextResponse.json({ error: "Space not found" }, { status: 404 });
-    }
-
     const body = await req.json().catch(() => ({}));
     const imageUrl: string | undefined = body?.imageUrl;
     
@@ -36,11 +31,6 @@ export async function POST(
         { error: "imageUrl is required" },
         { status: 400 }
       );
-    }
-
-    const avatar = space.avatars?.find((a: any) => a.id === params.avatarId);
-    if (!avatar) {
-      return NextResponse.json({ error: "Avatar not found" }, { status: 404 });
     }
 
     // Créer un nouveau look avec l'image fournie
@@ -53,19 +43,13 @@ export async function POST(
       thumbnail: imageUrl,
       previewUrl: "",
       videoUrl: "",
+      createdBy: session.user.id,
       format: body?.format === "horizontal" ? "horizontal" : "vertical",
       settings: {},
     };
 
-    avatar.looks = avatar.looks || [];
-    avatar.looks.push(look as any);
-
-    // Mettre à jour la thumbnail de l'avatar si elle n'existe pas
-    if (!avatar.thumbnail) {
-      avatar.thumbnail = imageUrl;
-    }
-
-    await space.save();
+    // Mise à jour atomique pour éviter l'hydratation complète de `space`
+    await addLookToAvatar(params.id, params.avatarId, look);
 
     return NextResponse.json({ data: look }, { status: 201 });
   } catch (error) {

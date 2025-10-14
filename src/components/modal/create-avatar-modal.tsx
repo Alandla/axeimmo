@@ -30,8 +30,7 @@ import {
 import type { Avatar } from "@/src/types/avatar";
 import { useAvatarsStore } from '@/src/store/avatarsStore'
 import StyleSelector from "@/src/components/style-selector";
-
-type AvatarStyle = 'ugc-realist' | 'studio' | 'podcast'
+import type { AvatarStyle } from "@/src/types/avatar";
 
 interface CreateAvatarModalProps {
   isOpen: boolean;
@@ -50,7 +49,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
   const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
   const [resetToken, setResetToken] = useState<number>(0);
   const { activeSpace } = useActiveSpaceStore();
-  const { fetchAvatarsInBackground, setAvatars } = useAvatarsStore()
+  const { fetchAvatarsInBackground, setAvatars, avatarsBySpace } = useAvatarsStore()
 
   const handleStart = async () => {
     if (!activeSpace) return;
@@ -62,23 +61,16 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
       try {
         setIsSubmitting(true);
         // Utiliser basicApiCall pour récupérer l'avatar créé
-        const res = await basicApiCall<Avatar>(`/space/${activeSpace.id}/avatars/soul`, {
+        const created: Avatar = await basicApiCall<Avatar>(`/space/${activeSpace.id}/avatars/soul`, {
           prompt,
           format: videoFormat,
           style: avatarStyle,
         });
-        const created: Avatar = res;
         setIdeaText("");
         if (created) {
           if (onCreated) onCreated(created);
           // Mettre à jour le store immédiatement (insertion sans refetch)
-          setAvatars(
-            activeSpace.id,
-            [
-              created,
-              ...((useAvatarsStore.getState().avatarsBySpace.get(activeSpace.id)) || [])
-            ]
-          )
+          setAvatars(activeSpace.id, [created, ...(avatarsBySpace.get(activeSpace.id) || [])])
         }
         onClose();
       } catch (e) {
@@ -99,13 +91,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
         if (created) {
           if (onCreated) onCreated(created);
           // Mettre à jour le store immédiatement (insertion sans refetch)
-          setAvatars(
-            activeSpace.id,
-            [
-              created,
-              ...((useAvatarsStore.getState().avatarsBySpace.get(activeSpace.id)) || [])
-            ]
-          )
+          setAvatars(activeSpace.id, [created, ...(avatarsBySpace.get(activeSpace.id) || [])])
         }
         onClose();
       } catch (e) {

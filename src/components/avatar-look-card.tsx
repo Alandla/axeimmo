@@ -26,7 +26,7 @@ import {
 import { Avatar as UIAvatar, AvatarFallback } from './ui/avatar'
 import { AvatarImage } from '@radix-ui/react-avatar'
 import { cn } from '../lib/utils'
-import { apiClient } from '../lib/api'
+import { basicApiPatchCall } from '../lib/api'
 import { useToast } from '../hooks/use-toast'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { useLookToDeleteStore } from '../store/lookToDelete'
@@ -112,13 +112,15 @@ export function AvatarLookCard({
   const selectedLook = propSelectedLook !== undefined ? propSelectedLook : storeSelectedLook
   const isSelected = selectedLook?.id === look.id;
 
-  // Récupérer les informations du créateur depuis activeSpace.members
+  // Resolve creator from activeSpace.members using look.createdBy userId
   const getCreator = () => {
     if (isPublic) {
       return { id: '', name: 'Hoox', image: '' };
     }
-    // Pour l'instant, on utilise le premier membre disponible ou on retourne des valeurs par défaut
-    // TODO: Ajouter un système d'historique pour les looks
+    if (look?.createdBy && activeSpace?.members) {
+      const found = activeSpace.members.find(m => m.id === look.createdBy);
+      if (found) return found;
+    }
     if (activeSpace?.members && activeSpace.members.length > 0) {
       return activeSpace.members[0] || { id: '', name: '', image: '' };
     }
@@ -167,7 +169,7 @@ export function AvatarLookCard({
         // Optimistic UI update
         const trimmed = editedName.trim();
         setDisplayName(trimmed);
-        await apiClient.patch(`/space/${activeSpace.id}/avatars/${avatarId}/looks/${look.id}/rename`, {
+        await basicApiPatchCall(`/space/${activeSpace.id}/avatars/${avatarId}/looks/${look.id}/rename`, {
           name: editedName.trim()
         })
         setDisplayName(trimmed)
@@ -276,8 +278,7 @@ export function AvatarLookCard({
                     <span className="truncate font-semibold">{creator.name || 'API'}</span>
                     {!isPublic && (
                       <span className="truncate text-xs">
-                        {/* TODO: Ajouter une propriété createdAt au type AvatarLook */}
-                        {new Date().toLocaleDateString()}
+                        {look.createdAt ? new Date(look.createdAt).toLocaleDateString() : ''}
                       </span>
                     )}
                   </div>

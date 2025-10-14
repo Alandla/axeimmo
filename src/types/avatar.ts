@@ -1,10 +1,6 @@
 export type Avatar = {
     id: string
-    createdBy?: {
-        userId?: string
-        name?: string
-        image?: string
-    }
+    createdBy?: string
     name: string
     age: string,
     gender: 'male' | 'female'
@@ -16,6 +12,8 @@ export type Avatar = {
     createdAt?: string
 }
 
+export type AvatarStyle = 'ugc-realist' | 'studio' | 'podcast'
+
 export type AvatarLook = {
     id?: string
     name?: string
@@ -24,6 +22,7 @@ export type AvatarLook = {
     thumbnail?: string
     previewUrl?: string
     videoUrl?: string
+    createdBy?: string
     format?: 'vertical' | 'horizontal'
     status?: 'pending' | 'ready' | 'error'
     errorMessage?: string

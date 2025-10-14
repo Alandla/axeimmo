@@ -20,7 +20,7 @@ import {
   PaintbrushVertical,
 } from "lucide-react"
 import Image from "next/image";
-import { Avatar, AvatarLook } from "@/src/types/avatar";
+import { Avatar, AvatarLook, AvatarStyle } from "@/src/types/avatar";
 import { basicApiCall } from "@/src/lib/api";
 import { getMediaUrlFromFileByPresignedUrl } from "@/src/service/upload.service";
 import { VideoFormat, VIDEO_FORMATS } from "@/src/types/video";
@@ -37,7 +37,7 @@ import { motion } from "framer-motion"
 
 // Limited format options for avatar look generation
 type AvatarLookFormat = "vertical" | "horizontal";
-type AvatarLookStyle = "ugc-realist" | "studio" | "podcast";
+type AvatarLookStyle = AvatarStyle;
 
 const AVATAR_LOOK_FORMATS = VIDEO_FORMATS.filter(
   (format) => format.value === "vertical" || format.value === "horizontal"
@@ -122,7 +122,7 @@ export function AvatarLookChatbox({
   const [format, setFormat] = useState<AvatarLookFormat>("vertical");
   // Désactiver UGC: style par défaut 'studio' et empêcher la sélection UGC
   const [style, setStyle] = useState<AvatarLookStyle>("studio");
-  const { setAvatars, fetchAvatarsInBackground } = useAvatarsStore()
+  const { setAvatars, fetchAvatarsInBackground, avatarsBySpace } = useAvatarsStore()
 
   const candidateImages = useMemo(() => {
     const fromLooks = (activeAvatar?.looks || [])
@@ -218,7 +218,7 @@ export function AvatarLookChatbox({
         // Optimistic: insérer le look dans le store pour l'avatar courant
         setAvatars(
           spaceId,
-          (useAvatarsStore.getState().avatarsBySpace.get(spaceId) || []).map(a =>
+          (avatarsBySpace.get(spaceId) || []).map(a =>
             a.id === activeAvatar.id
               ? {
                   ...a,

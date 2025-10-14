@@ -14,22 +14,31 @@ import { Fragment } from "react"
 import Link from "next/link";
 import { useAvatarsStore } from "../store/avatarsStore";
 
-function generateBreadcrumbs(pathname: string) {
+function generateBreadcrumbs(pathname: string, searchParams?: URLSearchParams, activeAvatarName?: string) {
     const paths = pathname.split('/').filter(Boolean);
-    const filteredPaths = paths;
-    return filteredPaths.map((path, index) => {
+    // If path contains "enhance", stop at "enhance" and don't show following segments
+    const enhanceIndex = paths.indexOf('enhance');
+    const filteredPaths = enhanceIndex !== -1 ? paths.slice(0, enhanceIndex + 1) : paths;
+    const crumbs = filteredPaths.map((path, index) => {
       const href = '/' + filteredPaths.slice(0, index + 1).join('/');
-      return { href, label: path.charAt(0).toUpperCase() + path.slice(1) };
+      return { href, label: path.charAt(0).toUpperCase() + path.slice(1), translate: true } as { href: string; label: string; translate?: boolean };
     });
+
+    const hasAvatarParam = !!searchParams?.get('avatar');
+    if (hasAvatarParam && activeAvatarName) {
+      const hrefWithParams = searchParams?.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
+      crumbs.push({ href: hrefWithParams, label: activeAvatarName, translate: false });
+    }
+
+    return crumbs;
 }
 
 export function BreadcrumbDashboard( ) {
   const t = useTranslations('breadcrumbs')
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const breadcrumbs = generateBreadcrumbs(pathname);
-  const avatarId = searchParams?.get('avatar')
   const activeAvatarName = useAvatarsStore(s => s.activeAvatarName)
+  const breadcrumbs = generateBreadcrumbs(pathname, searchParams, activeAvatarName ?? undefined);
 
   return (
     <Breadcrumb>
@@ -39,25 +48,17 @@ export function BreadcrumbDashboard( ) {
                 {index > 0 && <BreadcrumbSeparator/>}
                 <BreadcrumbItem>
                 {index === breadcrumbs.length - 1 ? (
-                    <BreadcrumbPage>{t(crumb.label)}</BreadcrumbPage>
+                    <BreadcrumbPage>{crumb.translate === false ? crumb.label : t(crumb.label)}</BreadcrumbPage>
                 ) : (
                     <BreadcrumbLink href={crumb.href} asChild>
                         <Link href={crumb.href}>
-                            {t(crumb.label)}
+                            {crumb.translate === false ? crumb.label : t(crumb.label)}
                         </Link>
                     </BreadcrumbLink>
                 )}
                 </BreadcrumbItem>
             </Fragment>
             ))}
-            {avatarId && activeAvatarName && (
-              <>
-                <BreadcrumbSeparator/>
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{activeAvatarName}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </>
-            )}
         </BreadcrumbList>
     </Breadcrumb>
   )

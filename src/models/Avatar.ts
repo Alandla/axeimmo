@@ -7,9 +7,8 @@ const avatarSchema = new mongoose.Schema({
       required: true,
     },
     createdBy: {
-      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      name: { type: String },
-      image: { type: String },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
     name: {
       type: String,
@@ -42,6 +41,7 @@ const avatarSchema = new mongoose.Schema({
         thumbnail: String,
         previewUrl: String,
         videoUrl: String,
+        createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         status: { type: String, enum: ['pending', 'ready', 'error'], default: 'ready' },
         errorMessage: String,
         errorAt: Date,

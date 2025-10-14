@@ -254,6 +254,7 @@
     "max-duration": "Maximum duration of",
     "minute": "minute",
     "soon": "Soon",
+    "no-limit": "No limit",
     "avatars-limit": "Up to {limit} custom avatars",
     "premium-toast": {
       "title": "Premium plan required",
@@ -328,6 +329,8 @@
       "max-video-duration": "Maximum video duration",
       "music-library": "Music library",
       "voices-library": "Voices library",
+      "avatars-unlimited": "Unlimited custom avatars",
+      "avatars-limit": "Custom avatars limit",
       "avatars-library": "Avatars library",
       "digital-clone": "Digital clone",
       "save-templates": "Save templates",
@@ -800,6 +803,7 @@
     "limit-reached-description": "Upgrade your plan to create more avatars.",
     "look-error": "Generation failed. Please try again.",
     "left-counter": "{remaining}/{limit} left",
+    "left-counter-unlimited": "Unlimited",
     "look-chat": {
       "placeholder-1": "Add my product in the hand",
       "add-elements": "Add elements",

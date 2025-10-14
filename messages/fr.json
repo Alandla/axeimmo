@@ -167,6 +167,7 @@
     "max-duration": "Durée maximale de",
     "minute": "minute",
     "soon": "Bientôt",
+    "no-limit": "Illimité",
     "avatars-limit": "Jusqu'à {limit} avatars personnalisés",
     "premium-toast": {
       "title": "Plan payant requis",
@@ -240,6 +241,8 @@
       "max-video-duration": "Durée maximale de vidéo",
       "music-library": "Bibliothèque musicale",
       "voices-library": "Bibliothèque de voix",
+      "avatars-unlimited": "Avatars personnalisés illimités",
+      "avatars-limit": "Limite d'avatars personnalisés",
       "avatars-library": "Bibliothèque d'avatars",
       "digital-clone": "Clone numérique",
       "save-templates": "Sauvegarde de modèles",
@@ -712,6 +715,7 @@
     "limit-reached-description": "Passez à un plan supérieur pour créer plus d'avatars.",
     "look-error": "Échec de génération. Réessayez.",
     "left-counter": "{remaining}/{limit} restants",
+    "left-counter-unlimited": "Illimité",
     "look-chat": {
       "placeholder-1": "Ajouter mon produit dans la main",
       "add-elements": "Ajouter des éléments",

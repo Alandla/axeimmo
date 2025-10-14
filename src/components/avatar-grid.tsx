@@ -3,20 +3,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/src/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/src/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select";
 import { Button } from "@/src/components/ui/button";
-import {
-  IconGenderFemale,
-  IconGenderMale,
-  IconGenderMaleFemale,
-  VoiceCard,
-} from "./voice-card";
+import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } from "./voice-card";
 import { Badge } from "@/src/components/ui/badge";
 import { Check, UserRoundX, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -98,9 +87,7 @@ function NoAvatarCard({
       {/* Bande d'information en bas */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-white font-semibold text-lg">
-            {t("no-avatar-name")}
-          </h3>
+          <h3 className="text-white font-semibold text-lg">{t("no-avatar-name")}</h3>
         </div>
       </div>
     </Card>
@@ -149,24 +136,15 @@ export function AvatarGridComponent({
   const searchParams = useSearchParams();
 
   // Déterminer si on est en mode contrôlé
-  const isControlled =
-    controlledSelectedLook !== undefined || onLookChange !== undefined;
+  const isControlled = controlledSelectedLook !== undefined || onLookChange !== undefined;
 
   // Store hooks (utilisés seulement en mode non-contrôlé)
   const storeState = useCreationStore();
-  const {
-    selectedVoice,
-    setSelectedLook: setStoreSelectedLook,
-    selectedLook: storeSelectedLook,
-  } = storeState;
+  const { selectedVoice, setSelectedLook: setStoreSelectedLook, selectedLook: storeSelectedLook } = storeState;
 
   // Valeurs effectives (contrôlées ou du store)
-  const selectedLook = isControlled
-    ? controlledSelectedLook
-    : storeSelectedLook;
-  const selectedAvatarName = isControlled
-    ? controlledSelectedAvatarName
-    : storeState.selectedAvatarName;
+  const selectedLook = isControlled ? controlledSelectedLook : storeSelectedLook;
+  const selectedAvatarName = isControlled ? controlledSelectedAvatarName : storeState.selectedAvatarName;
 
   // Fonctions de mise à jour
   const setSelectedLook = (look: AvatarLook | null) => {
@@ -177,6 +155,8 @@ export function AvatarGridComponent({
     }
   };
 
+  const { setActiveAvatarName } = useAvatarsStore();
+
   const setSelectedAvatarName = (name: string | null) => {
     if (isControlled && onAvatarNameChange) {
       onAvatarNameChange(name);
@@ -186,19 +166,15 @@ export function AvatarGridComponent({
   };
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGender, setSelectedGender] = useState<string>(
-    selectedVoice?.gender || "all"
-  );
+  const [selectedGender, setSelectedGender] = useState<string>(selectedVoice?.gender || "all");
   const [currentPage, setCurrentPage] = useState(1);
   const avatarsPerPage = mode === "large" ? 12 : 6;
-  const [visiblePublicCount, setVisiblePublicCount] =
-    useState<number>(avatarsPerPage);
+  const [visiblePublicCount, setVisiblePublicCount] = useState<number>(avatarsPerPage);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null);
   const [publicAvatars, setPublicAvatars] = useState<Avatar[]>(avatarsConfig);
   const [spaceAvatars, setSpaceAvatars] = useState<Avatar[]>([]);
-  const [isLoadingSpaceAvatars, setIsLoadingSpaceAvatars] =
-    useState<boolean>(true);
+  const [isLoadingSpaceAvatars, setIsLoadingSpaceAvatars] = useState<boolean>(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isUploadingLook, setIsUploadingLook] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -206,10 +182,8 @@ export function AvatarGridComponent({
     left: 0,
     width: 0,
   });
-  const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] =
-    useState(false);
-  const [isModalConfirmDeleteLookOpen, setIsModalConfirmDeleteLookOpen] =
-    useState(false);
+  const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] = useState(false);
+  const [isModalConfirmDeleteLookOpen, setIsModalConfirmDeleteLookOpen] = useState(false);
   const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false);
   const [editingLook, setEditingLook] = useState<AvatarLook | null>(null);
   const [shouldFocusChatbox, setShouldFocusChatbox] = useState(false);
@@ -226,10 +200,10 @@ export function AvatarGridComponent({
     const params = new URLSearchParams(searchParams?.toString() || "");
     if (avatar) {
       params.set("avatar", avatar.id);
-      try { useAvatarsStore.getState().setActiveAvatarName(avatar.name) } catch {}
+      setActiveAvatarName(avatar.name);
     } else {
       params.delete("avatar");
-      try { useAvatarsStore.getState().setActiveAvatarName(null) } catch {}
+      setActiveAvatarName(null);
     }
     const query = params.toString();
     router.replace(query ? `${pathname}?${query}` : `${pathname}`, {
@@ -255,24 +229,19 @@ export function AvatarGridComponent({
   // reference handled in AvatarLookChatbox
 
   const { activeSpace, lastUsedParameters } = useActiveSpaceStore();
-  const {
-    avatarsBySpace,
-    getCachedAvatars,
-    fetchAvatars,
-    fetchAvatarsInBackground,
-    setAvatars,
-    startSse,
-    stopSse,
-  } = useAvatarsStore();
+  const { avatarsBySpace, getCachedAvatars, fetchAvatars, fetchAvatarsInBackground, setAvatars, startSse, stopSse } =
+    useAvatarsStore();
 
   // Récupérer les informations du créateur de l'avatar
   const getAvatarCreator = () => {
-    if (!activeAvatar || !activeSpace?.members) {
+    if (!activeAvatar) {
       return { id: "", name: "API", image: "" };
     }
-    // Pour l'instant, on utilise le premier membre disponible ou on retourne des valeurs par défaut
-    // TODO: Ajouter un système d'historique pour les avatars
-    if (activeSpace.members.length > 0) {
+    if (activeAvatar.createdBy && activeSpace?.members) {
+      const found = activeSpace.members.find((m) => m.id === activeAvatar.createdBy);
+      if (found) return found;
+    }
+    if (activeSpace?.members && activeSpace.members.length > 0) {
       return activeSpace.members[0] || { id: "", name: "API", image: "" };
     }
     return { id: "", name: "API", image: "" };
@@ -314,12 +283,9 @@ export function AvatarGridComponent({
     setIsEditingAvatarName(false);
     if (editedAvatarName !== activeAvatar.name && editedAvatarName.trim()) {
       try {
-        await basicApiCall(
-          `/space/${activeSpace.id}/avatars/${activeAvatar.id}/rename`,
-          {
-            name: editedAvatarName.trim(),
-          }
-        );
+        await basicApiCall(`/space/${activeSpace.id}/avatars/${activeAvatar.id}/rename`, {
+          name: editedAvatarName.trim(),
+        });
 
         // Mettre à jour l'avatar local
         const updatedAvatar = {
@@ -330,23 +296,14 @@ export function AvatarGridComponent({
 
         // Mettre à jour dans la liste des avatars de l'espace
         setSpaceAvatars((prev) =>
-          prev.map((avatar) =>
-            avatar.id === activeAvatar.id
-              ? { ...avatar, name: editedAvatarName.trim() }
-              : avatar
-          )
+          prev.map((avatar) => (avatar.id === activeAvatar.id ? { ...avatar, name: editedAvatarName.trim() } : avatar))
         );
         // Sync store
         setAvatars(
           activeSpace.id,
-          useAvatarsStore
-            .getState()
-            .avatarsBySpace.get(activeSpace.id)
-            ?.map((a) =>
-              a.id === activeAvatar.id
-                ? ({ ...a, name: editedAvatarName.trim() } as Avatar)
-                : a
-            ) || []
+          avatarsBySpace
+            .get(activeSpace.id)
+            ?.map((a) => (a.id === activeAvatar.id ? ({ ...a, name: editedAvatarName.trim() } as Avatar) : a)) || []
         );
 
         toast({
@@ -374,18 +331,14 @@ export function AvatarGridComponent({
       if (!activeSpace?.id) return;
 
       try {
-        await basicApiDeleteCall(
-          `/space/${activeSpace.id}/avatars/${avatar.id}/delete`
-        );
+        await basicApiDeleteCall(`/space/${activeSpace.id}/avatars/${avatar.id}/delete`);
 
         // Retirer l'avatar de la liste des avatars de l'espace
         setSpaceAvatars((prev) => prev.filter((a) => a.id !== avatar.id));
         // Sync store
         setAvatars(
           activeSpace.id,
-          (
-            useAvatarsStore.getState().avatarsBySpace.get(activeSpace.id) || []
-          ).filter((a) => a.id !== avatar.id)
+          (avatarsBySpace.get(activeSpace.id) || []).filter((a) => a.id !== avatar.id)
         );
 
         // Si l'avatar supprimé était l'avatar actif, le désélectionner
@@ -417,9 +370,7 @@ export function AvatarGridComponent({
       if (!activeSpace?.id || !activeAvatar?.id || !look.id) return;
 
       try {
-        await basicApiDeleteCall(
-          `/space/${activeSpace.id}/avatars/${activeAvatar.id}/looks/${look.id}/delete`
-        );
+        await basicApiDeleteCall(`/space/${activeSpace.id}/avatars/${activeAvatar.id}/looks/${look.id}/delete`);
 
         // Retirer le look de l'avatar local
         const updatedAvatar = {
@@ -429,17 +380,11 @@ export function AvatarGridComponent({
         setActiveAvatar(updatedAvatar);
 
         // Mettre à jour dans la liste des avatars de l'espace
-        setSpaceAvatars((prev) =>
-          prev.map((avatar) =>
-            avatar.id === activeAvatar.id ? updatedAvatar : avatar
-          )
-        );
+        setSpaceAvatars((prev) => prev.map((avatar) => (avatar.id === activeAvatar.id ? updatedAvatar : avatar)));
         // Sync store
         setAvatars(
           activeSpace.id,
-          (
-            useAvatarsStore.getState().avatarsBySpace.get(activeSpace.id) || []
-          ).map((a) => (a.id === activeAvatar.id ? updatedAvatar : a))
+          (avatarsBySpace.get(activeSpace.id) || []).map((a) => (a.id === activeAvatar.id ? updatedAvatar : a))
         );
 
         // Si le look supprimé était sélectionné, le désélectionner
@@ -473,7 +418,7 @@ export function AvatarGridComponent({
         setTimeout(() => attemptFocus(attempts + 1), 100);
         return;
       }
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
       el.focus();
       el.click();
       setTimeout(() => {
@@ -483,23 +428,21 @@ export function AvatarGridComponent({
     setTimeout(() => attemptFocus(0), 200);
   }, []);
 
-  const handleEditLook = useCallback((look: AvatarLook) => {
-    setEditingLook(look);
-    setShouldFocusChatbox(true);
-    focusChatboxPrompt();
-    setPulseCounter((c) => c + 1);
-  }, [focusChatboxPrompt]);
-
+  const handleEditLook = useCallback(
+    (look: AvatarLook) => {
+      setEditingLook(look);
+      setShouldFocusChatbox(true);
+      focusChatboxPrompt();
+      setPulseCounter((c) => c + 1);
+    },
+    [focusChatboxPrompt]
+  );
 
   // Polling pour rafraîchir tant que des thumbnails manquent
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
 
   // Obtenir tous les tags uniques (espace + publics)
-  const allTags = Array.from(
-    new Set(
-      [...spaceAvatars, ...publicAvatars].flatMap((avatar) => avatar.tags)
-    )
-  );
+  const allTags = Array.from(new Set([...spaceAvatars, ...publicAvatars].flatMap((avatar) => avatar.tags)));
 
   // Fonction pour trier les avatars avec les derniers utilisés en premier
   const sortAvatarsByLastUsed = (avatarsToSort: Avatar[]) => {
@@ -507,12 +450,8 @@ export function AvatarGridComponent({
 
     return [...avatarsToSort].sort((a, b) => {
       // Vérifier si l'avatar a un look dans les derniers utilisés
-      const aHasLastUsedLook = a.looks.some(
-        (look) => look.id && lastUsedParameters.avatars.includes(look.id)
-      );
-      const bHasLastUsedLook = b.looks.some(
-        (look) => look.id && lastUsedParameters.avatars.includes(look.id)
-      );
+      const aHasLastUsedLook = a.looks.some((look) => look.id && lastUsedParameters.avatars.includes(look.id));
+      const bHasLastUsedLook = b.looks.some((look) => look.id && lastUsedParameters.avatars.includes(look.id));
 
       if (aHasLastUsedLook && !bHasLastUsedLook) return -1;
       if (!aHasLastUsedLook && bHasLastUsedLook) return 1;
@@ -521,21 +460,13 @@ export function AvatarGridComponent({
       if (aHasLastUsedLook && bHasLastUsedLook) {
         const aMinIndex = Math.min(
           ...a.looks
-            .filter(
-              (look) => look.id && lastUsedParameters.avatars.includes(look.id)
-            )
-            .map((look) =>
-              look.id ? lastUsedParameters.avatars.indexOf(look.id) : Infinity
-            )
+            .filter((look) => look.id && lastUsedParameters.avatars.includes(look.id))
+            .map((look) => (look.id ? lastUsedParameters.avatars.indexOf(look.id) : Infinity))
         );
         const bMinIndex = Math.min(
           ...b.looks
-            .filter(
-              (look) => look.id && lastUsedParameters.avatars.includes(look.id)
-            )
-            .map((look) =>
-              look.id ? lastUsedParameters.avatars.indexOf(look.id) : Infinity
-            )
+            .filter((look) => look.id && lastUsedParameters.avatars.includes(look.id))
+            .map((look) => (look.id ? lastUsedParameters.avatars.indexOf(look.id) : Infinity))
         );
         return aMinIndex - bMinIndex;
       }
@@ -566,30 +497,20 @@ export function AvatarGridComponent({
     });
   };
 
-  const fetchSpaceAvatars = async (
-    lastUsed?: String | undefined,
-    forceRefresh: boolean = false
-  ) => {
+  const fetchSpaceAvatars = async (lastUsed?: String | undefined, forceRefresh: boolean = false) => {
     if (activeSpace?.id) {
       try {
         setIsLoadingSpaceAvatars(true);
         // Utiliser le store pour le flux principal
-        const spaceAvatarsFetched: Avatar[] = await fetchAvatars(
-          activeSpace.id,
-          forceRefresh
-        );
+        const spaceAvatarsFetched: Avatar[] = await fetchAvatars(activeSpace.id, forceRefresh);
         setSpaceAvatars(spaceAvatarsFetched || []);
         // Mettre à jour l'activeAvatar pour refléter les dernières thumbnails/looks
         if (activeAvatar?.id && spaceAvatarsFetched) {
-          const refreshedActive = spaceAvatarsFetched.find(
-            (a) => a.id === activeAvatar.id
-          );
+          const refreshedActive = spaceAvatarsFetched.find((a) => a.id === activeAvatar.id);
           if (refreshedActive) setActiveAvatar(refreshedActive);
         }
         if (lastUsed && spaceAvatarsFetched) {
-          const avatar = spaceAvatarsFetched.find(
-            (avatar) => avatar.id === lastUsed
-          );
+          const avatar = spaceAvatarsFetched.find((avatar) => avatar.id === lastUsed);
           if (avatar) {
             const look = avatar.looks.find((l) => l.id === lastUsed);
             if (look) {
@@ -600,9 +521,7 @@ export function AvatarGridComponent({
         // Sync initial active avatar from URL after fetch
         const avatarFromUrl = searchParams?.get("avatar");
         if (avatarFromUrl) {
-          const foundSpace = spaceAvatarsFetched?.find(
-            (a) => a.id === avatarFromUrl
-          );
+          const foundSpace = spaceAvatarsFetched?.find((a) => a.id === avatarFromUrl);
           const foundPublic = avatarsConfig.find((a) => a.id === avatarFromUrl);
           const toActivate = foundSpace || foundPublic || null;
           if (toActivate) {
@@ -619,11 +538,9 @@ export function AvatarGridComponent({
     let lastUsed: String | undefined;
     if (lastUsedParameters) {
       const mostFrequent = getMostFrequentString(lastUsedParameters.avatars);
-      if (mostFrequent && mostFrequent === "999") {
+      if (mostFrequent && mostFrequent !== "999") {
         lastUsed = mostFrequent;
-        const avatar = avatarsConfig.find((avatar) =>
-          avatar.looks.some((look) => look.id === lastUsed)
-        );
+        const avatar = avatarsConfig.find((avatar) => avatar.looks.some((look) => look.id === lastUsed));
         if (avatar) {
           const look = avatar.looks.find((l) => l.id === lastUsed);
           if (look) {
@@ -644,9 +561,7 @@ export function AvatarGridComponent({
       fetchAvatarsInBackground(activeSpace.id)
         .then((fresh) => {
           // mettre à jour local si toujours même espace
-          if (
-            useActiveSpaceStore.getState().activeSpace?.id === activeSpace.id
-          ) {
+          if (useActiveSpaceStore.getState().activeSpace?.id === activeSpace.id) {
             setSpaceAvatars(fresh);
           }
         })
@@ -663,6 +578,18 @@ export function AvatarGridComponent({
     }
   }, [activeSpace?.id]);
 
+  // Clear active avatar when URL no longer contains the avatar param (e.g., via breadcrumb navigation)
+  useEffect(() => {
+    const avatarFromUrl = searchParams?.get("avatar");
+    if (!avatarFromUrl && activeAvatar) {
+      setActiveAvatar(null);
+      setSelectedLook(null);
+      setSelectedAvatarName(null);
+      setActiveAvatarName(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   // Handle initial activation from URL when already have public avatars (no space)
   useEffect(() => {
     if (spaceAvatars.length === 0) {
@@ -678,29 +605,22 @@ export function AvatarGridComponent({
   // Abonnement SSE via store + fallback polling si thumbnails manquent
   useEffect(() => {
     const hasMissingThumbnails = spaceAvatars.some(
-      (a) =>
-        !a.thumbnail || a.looks.some((l) => !l.thumbnail || l.thumbnail === "")
+      (a) => !a.thumbnail || a.looks.some((l) => !l.thumbnail || l.thumbnail === "")
     );
 
     const startPolling = () => {
       if (pollingRef.current || !activeSpace?.id) return;
       pollingRef.current = setInterval(async () => {
         try {
-          const latest: Avatar[] = await fetchAvatarsInBackground(
-            activeSpace.id as string
-          );
+          const latest: Avatar[] = await fetchAvatarsInBackground(activeSpace.id as string);
           setSpaceAvatars(latest);
           // Mettre à jour activeAvatar si présent
           if (activeAvatar?.id) {
-            const refreshedActive = latest.find(
-              (a) => a.id === activeAvatar.id
-            );
+            const refreshedActive = latest.find((a) => a.id === activeAvatar.id);
             if (refreshedActive) setActiveAvatar(refreshedActive);
           }
           const stillMissing = latest.some(
-            (a) =>
-              !a.thumbnail ||
-              a.looks.some((l) => !l.thumbnail || l.thumbnail === "")
+            (a) => !a.thumbnail || a.looks.some((l) => !l.thumbnail || l.thumbnail === "")
           );
           if (!stillMissing && pollingRef.current) {
             clearInterval(pollingRef.current);
@@ -735,15 +655,9 @@ export function AvatarGridComponent({
   // Filtrer les avatars publics
   const filteredPublicAvatars = sortAvatarsByLastUsed(
     publicAvatars.filter((avatar) => {
-      const matchesSearch = avatar.name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-      const matchesGender =
-        selectedGender === "all" ? true : avatar.gender === selectedGender;
-      const matchesTags =
-        selectedTags.length === 0
-          ? true
-          : selectedTags.every((tag) => avatar.tags.includes(tag));
+      const matchesSearch = avatar.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesGender = selectedGender === "all" ? true : avatar.gender === selectedGender;
+      const matchesTags = selectedTags.length === 0 ? true : selectedTags.every((tag) => avatar.tags.includes(tag));
       return matchesSearch && matchesGender && matchesTags;
     })
   );
@@ -751,39 +665,27 @@ export function AvatarGridComponent({
   // Filtrer les avatars de l'espace
   const filteredSpaceAvatars = sortAvatarsByLastUsed(
     spaceAvatars.filter((avatar) => {
-      const matchesSearch = avatar.name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-      const matchesGender =
-        selectedGender === "all" ? true : avatar.gender === selectedGender;
-      const matchesTags =
-        selectedTags.length === 0
-          ? true
-          : selectedTags.every((tag) => avatar.tags.includes(tag));
+      const matchesSearch = avatar.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesGender = selectedGender === "all" ? true : avatar.gender === selectedGender;
+      const matchesTags = selectedTags.length === 0 ? true : selectedTags.every((tag) => avatar.tags.includes(tag));
       return matchesSearch && matchesGender && matchesTags;
     })
   );
 
   // Pagination pour avatars publics (variant select) ou infinite scroll (variant create)
-  const showNoAvatarCard =
-    variant === "select" && !activeAvatar && currentPage === 1 && showNoAvatar;
+  const showNoAvatarCard = variant === "select" && !activeAvatar && currentPage === 1 && showNoAvatar;
 
   // Pour le variant select, utiliser la pagination classique
   const currentAvatars =
     variant === "select"
-      ? filteredPublicAvatars.slice(
-          (currentPage - 1) * avatarsPerPage,
-          currentPage * avatarsPerPage
-        )
+      ? filteredPublicAvatars.slice((currentPage - 1) * avatarsPerPage, currentPage * avatarsPerPage)
       : filteredPublicAvatars.slice(0, visiblePublicCount);
 
   const totalPages = Math.ceil(filteredPublicAvatars.length / avatarsPerPage);
 
   // Pour la première page du variant select, inclure éventuellement la carte "No avatar"
   const avatarsToShow =
-    variant === "select" && showNoAvatarCard
-      ? currentAvatars.slice(0, avatarsPerPage - 1)
-      : currentAvatars;
+    variant === "select" && showNoAvatarCard ? currentAvatars.slice(0, avatarsPerPage - 1) : currentAvatars;
 
   // Calculs pour la pagination des looks
   const filteredLooks = activeAvatar
@@ -801,19 +703,14 @@ export function AvatarGridComponent({
   const totalLookPages = Math.ceil(filteredLooks.length / looksPerPage);
 
   const toggleTag = (tag: string) => {
-    const newTags = selectedTags.includes(tag)
-      ? selectedTags.filter((t) => t !== tag)
-      : [...selectedTags, tag];
+    const newTags = selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag];
     setSelectedTags(newTags);
     handleFilters(filteredPublicAvatars);
   };
 
   // Mettre à jour les gestionnaires d'événements des filtres
   const handleFilters = (filteredResults: Avatar[]) => {
-    if (
-      currentPage !== 1 &&
-      currentPage * avatarsPerPage > filteredResults.length
-    ) {
+    if (currentPage !== 1 && currentPage * avatarsPerPage > filteredResults.length) {
       setCurrentPage(1);
     }
     // Reset visible public count when filters change in create variant
@@ -827,15 +724,9 @@ export function AvatarGridComponent({
     setSearchQuery(query);
     const newFilteredAvatars = sortAvatarsByLastUsed(
       publicAvatars.filter((avatar) => {
-        const matchesSearch = avatar.name
-          .toLowerCase()
-          .includes(query.toLowerCase());
-        const matchesGender =
-          selectedGender === "all" ? true : avatar.gender === selectedGender;
-        const matchesTags =
-          selectedTags.length === 0
-            ? true
-            : selectedTags.every((tag) => avatar.tags.includes(tag));
+        const matchesSearch = avatar.name.toLowerCase().includes(query.toLowerCase());
+        const matchesGender = selectedGender === "all" ? true : avatar.gender === selectedGender;
+        const matchesTags = selectedTags.length === 0 ? true : selectedTags.every((tag) => avatar.tags.includes(tag));
         return matchesSearch && matchesGender && matchesTags;
       })
     );
@@ -843,16 +734,9 @@ export function AvatarGridComponent({
   };
 
   // Pour le variant create, garder la logique infinite scroll
-  const totalPublicWithNoAvatar =
-    variant === "create"
-      ? filteredPublicAvatars.length + (showNoAvatarCard ? 1 : 0)
-      : 0;
-  const effectivePublicCount =
-    variant === "create"
-      ? Math.min(visiblePublicCount, totalPublicWithNoAvatar)
-      : 0;
-  const hasMorePublic =
-    variant === "create" && effectivePublicCount < totalPublicWithNoAvatar;
+  const totalPublicWithNoAvatar = variant === "create" ? filteredPublicAvatars.length + (showNoAvatarCard ? 1 : 0) : 0;
+  const effectivePublicCount = variant === "create" ? Math.min(visiblePublicCount, totalPublicWithNoAvatar) : 0;
+  const hasMorePublic = variant === "create" && effectivePublicCount < totalPublicWithNoAvatar;
   const loadMorePublic = () => {
     if (variant === "create") {
       setVisiblePublicCount((c) => c + avatarsPerPage);
@@ -963,24 +847,17 @@ export function AvatarGridComponent({
         const updatedAvatar: Avatar = {
           ...activeAvatar,
           looks: [...activeAvatar.looks, createdLook],
-          thumbnail:
-            activeAvatar.thumbnail ||
-            createdLook.thumbnail ||
-            activeAvatar.thumbnail,
+          thumbnail: activeAvatar.thumbnail || createdLook.thumbnail || activeAvatar.thumbnail,
         };
         setActiveAvatar(updatedAvatar);
 
         // Mettre à jour la liste des avatars de l'espace
-        setSpaceAvatars((prev) =>
-          prev.map((a) => (a.id === updatedAvatar.id ? updatedAvatar : a))
-        );
+        setSpaceAvatars((prev) => prev.map((a) => (a.id === updatedAvatar.id ? updatedAvatar : a)));
 
         // Synchroniser le store
         setAvatars(
           activeSpace.id,
-          (
-            useAvatarsStore.getState().avatarsBySpace.get(activeSpace.id) || []
-          ).map((a) => (a.id === updatedAvatar.id ? updatedAvatar : a))
+          (avatarsBySpace.get(activeSpace.id) || []).map((a) => (a.id === updatedAvatar.id ? updatedAvatar : a))
         );
 
         // Rafraîchir en arrière-plan sans bloquer l'UI (même logique que handleGenerate)
@@ -988,9 +865,7 @@ export function AvatarGridComponent({
           const latest = await fetchAvatarsInBackground(activeSpace.id);
           setSpaceAvatars(latest);
           if (activeAvatar?.id) {
-            const refreshedActive = latest.find(
-              (a) => a.id === activeAvatar.id
-            );
+            const refreshedActive = latest.find((a) => a.id === activeAvatar.id);
             if (refreshedActive) setActiveAvatar(refreshedActive);
           }
         } catch {}
@@ -1053,15 +928,8 @@ export function AvatarGridComponent({
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>{t("created-by")}</span>
               <UIAvatar className="h-5 w-5">
-                {avatarCreator.image && (
-                  <AvatarImage
-                    src={avatarCreator.image}
-                    alt={avatarCreator.name ?? ""}
-                  />
-                )}
-                <AvatarFallback className="text-xs">
-                  {avatarCreator.name?.charAt(0) ?? "A"}
-                </AvatarFallback>
+                {avatarCreator.image && <AvatarImage src={avatarCreator.image} alt={avatarCreator.name ?? ""} />}
+                <AvatarFallback className="text-xs">{avatarCreator.name?.charAt(0) ?? "A"}</AvatarFallback>
               </UIAvatar>
               <span className="font-medium">{avatarCreator.name}</span>
             </div>
@@ -1092,23 +960,17 @@ export function AvatarGridComponent({
                     {selectedGender === "all" ? (
                       <div className="flex items-center">
                         <IconGenderMaleFemale className="w-4 h-4" />
-                        <span className="hidden sm:inline ml-1">
-                          {tCommon("all-m")}
-                        </span>
+                        <span className="hidden sm:inline ml-1">{tCommon("all-m")}</span>
                       </div>
                     ) : selectedGender === "male" ? (
                       <div className="flex items-center">
                         <IconGenderMale className="w-4 h-4 text-blue-500" />
-                        <span className="hidden sm:inline ml-1">
-                          {t("gender.male")}
-                        </span>
+                        <span className="hidden sm:inline ml-1">{t("gender.male")}</span>
                       </div>
                     ) : (
                       <div className="flex items-center">
                         <IconGenderFemale className="w-4 h-4 text-pink-500" />
-                        <span className="hidden sm:inline ml-1">
-                          {t("gender.female")}
-                        </span>
+                        <span className="hidden sm:inline ml-1">{t("gender.female")}</span>
                       </div>
                     )}
                   </SelectValue>
@@ -1148,9 +1010,7 @@ export function AvatarGridComponent({
                 className="cursor-pointer whitespace-nowrap"
                 onClick={() => toggleTag(tag)}
               >
-                {selectedTags.includes(tag) && (
-                  <Check className="w-3 h-3 mr-1" />
-                )}
+                {selectedTags.includes(tag) && <Check className="w-3 h-3 mr-1" />}
                 {t(`tags.${tag}`)}
               </Badge>
             ))
@@ -1161,9 +1021,7 @@ export function AvatarGridComponent({
                 className="cursor-pointer whitespace-nowrap"
                 onClick={() => toggleTag(tag)}
               >
-                {selectedTags.includes(tag) && (
-                  <Check className="w-3 h-3 mr-1" />
-                )}
+                {selectedTags.includes(tag) && <Check className="w-3 h-3 mr-1" />}
                 {t(`tags.${tag}`)}
               </Badge>
             ))}
@@ -1180,14 +1038,9 @@ export function AvatarGridComponent({
           // Afficher les looks de l'avatar sélectionné
           <>
             {/* Carte pour créer un nouveau look (uniquement pour les avatars de l'espace) */}
-            {variant === "create" &&
-              spaceAvatars.some((a) => a.id === activeAvatar.id) && (
-                <AddLookCard
-                  onFileUpload={handleFileUpload}
-                  onFileDrop={handleFileDrop}
-                  isUploading={isUploadingLook}
-                />
-              )}
+            {variant === "create" && spaceAvatars.some((a) => a.id === activeAvatar.id) && (
+              <AddLookCard onFileUpload={handleFileUpload} onFileDrop={handleFileDrop} isUploading={isUploadingLook} />
+            )}
 
             {/* Looks existants */}
             {(currentLooks as AvatarLook[]).length > 0 ? (
@@ -1197,18 +1050,10 @@ export function AvatarGridComponent({
                   look={look}
                   avatarName={activeAvatar.name}
                   avatarId={activeAvatar.id}
-                  isLastUsed={
-                    look.id
-                      ? lastUsedParameters?.avatars?.includes(look.id)
-                      : false
-                  }
+                  isLastUsed={look.id ? lastUsedParameters?.avatars?.includes(look.id) : false}
                   selectedLook={selectedLook}
-                  onLookChange={
-                    variant === "create" ? () => {} : setSelectedLook
-                  }
-                  onAvatarNameChange={
-                    variant === "create" ? () => {} : setSelectedAvatarName
-                  }
+                  onLookChange={variant === "create" ? () => {} : setSelectedLook}
+                  onAvatarNameChange={variant === "create" ? () => {} : setSelectedAvatarName}
                   setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteLookOpen}
                   isPublic={!spaceAvatars.some((a) => a.id === activeAvatar.id)}
                   canEdit={variant === "create"}
@@ -1216,25 +1061,17 @@ export function AvatarGridComponent({
                     // Update activeAvatar
                     const updatedAvatar = {
                       ...activeAvatar,
-                      looks: activeAvatar.looks.map((l) =>
-                        l.id === lookId ? { ...l, name: newName } : l
-                      ),
+                      looks: activeAvatar.looks.map((l) => (l.id === lookId ? { ...l, name: newName } : l)),
                     };
                     setActiveAvatar(updatedAvatar);
                     // Update in spaceAvatars
-                    setSpaceAvatars((prev) =>
-                      prev.map((a) =>
-                        a.id === activeAvatar.id ? updatedAvatar : a
-                      )
-                    );
+                    setSpaceAvatars((prev) => prev.map((a) => (a.id === activeAvatar.id ? updatedAvatar : a)));
                   }}
                   onEditLook={variant === "create" ? handleEditLook : undefined}
                 />
               ))
             ) : (
-              <div className="col-span-full text-center py-8 text-muted-foreground">
-                {t("no-looks-found")}
-              </div>
+              <div className="col-span-full text-center py-8 text-muted-foreground">{t("no-looks-found")}</div>
             )}
           </>
         ) : (
@@ -1248,15 +1085,15 @@ export function AvatarGridComponent({
                 <Card
                   className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-primary/20"
                   onClick={() => {
+                    // Enterprise: always allow
+                    if (activeSpace?.planName === PlanName.ENTREPRISE) {
+                      setShowCreateModal(true);
+                      return;
+                    }
                     const limit = ((): number => {
-                      if (
-                        typeof activeSpace?.avatarsLimit === "number" &&
-                        activeSpace.avatarsLimit > 0
-                      )
+                      if (typeof activeSpace?.avatarsLimit === "number" && activeSpace.avatarsLimit > 0)
                         return activeSpace.avatarsLimit;
                       switch (activeSpace?.planName) {
-                        case PlanName.ENTREPRISE:
-                          return 20;
                         case PlanName.PRO:
                           return 10;
                         case PlanName.START:
@@ -1277,9 +1114,7 @@ export function AvatarGridComponent({
                   {/* Contenu principal centré */}
                   <div className="w-full aspect-[3/4] relative bg-white flex flex-col items-center justify-center p-4">
                     <Plus className="h-12 w-12 text-gray-400 mb-3" />
-                    <p className="text-sm text-gray-600 text-center font-medium">
-                      {t("create-new-name")}
-                    </p>
+                    <p className="text-sm text-gray-600 text-center font-medium">{t("create-new-name")}</p>
                   </div>
 
                   {/* Compteur en bas */}
@@ -1287,15 +1122,13 @@ export function AvatarGridComponent({
                     <div className="text-center">
                       <span className="text-xs text-gray-600">
                         {(() => {
+                          if (activeSpace?.planName === PlanName.ENTREPRISE) {
+                            return t("left-counter-unlimited");
+                          }
                           const limit = ((): number => {
-                            if (
-                              typeof activeSpace?.avatarsLimit === "number" &&
-                              activeSpace.avatarsLimit > 0
-                            )
+                            if (typeof activeSpace?.avatarsLimit === "number" && activeSpace.avatarsLimit > 0)
                               return activeSpace.avatarsLimit;
                             switch (activeSpace?.planName) {
-                              case PlanName.ENTREPRISE:
-                                return 20;
                               case PlanName.PRO:
                                 return 10;
                               case PlanName.START:
@@ -1315,9 +1148,7 @@ export function AvatarGridComponent({
               )}
               {isLoadingSpaceAvatars &&
                 filteredSpaceAvatars.length === 0 &&
-                Array.from({ length: 4 }).map((_, idx) => (
-                  <AvatarSkeletonCard key={`skeleton-${idx}`} />
-                ))}
+                Array.from({ length: 4 }).map((_, idx) => <AvatarSkeletonCard key={`skeleton-${idx}`} />)}
               {filteredSpaceAvatars.length > 0 &&
                 filteredSpaceAvatars.map((avatar: Avatar) => (
                   <AvatarCard
@@ -1327,11 +1158,7 @@ export function AvatarGridComponent({
                       setActiveAvatar(avatar);
                       updateUrlParamsForAvatar(avatar);
                     }}
-                    isLastUsed={avatar.looks.some(
-                      (look) =>
-                        look.id &&
-                        lastUsedParameters?.avatars?.includes(look.id)
-                    )}
+                    isLastUsed={avatar.looks.some((look) => look.id && lastUsedParameters?.avatars?.includes(look.id))}
                     selectedAvatarName={selectedAvatarName}
                     setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteOpen}
                     onSeeLooks={(avatar) => {
@@ -1362,10 +1189,7 @@ export function AvatarGridComponent({
                   setActiveAvatar(avatar);
                   updateUrlParamsForAvatar(avatar);
                 }}
-                isLastUsed={avatar.looks.some(
-                  (look) =>
-                    look.id && lastUsedParameters?.avatars?.includes(look.id)
-                )}
+                isLastUsed={avatar.looks.some((look) => look.id && lastUsedParameters?.avatars?.includes(look.id))}
                 selectedAvatarName={selectedAvatarName}
                 setIsModalConfirmDeleteOpen={setIsModalConfirmDeleteOpen}
                 onSeeLooks={(avatar) => {
@@ -1382,14 +1206,10 @@ export function AvatarGridComponent({
                   onLoadMore={loadMorePublic}
                   hasMore={hasMorePublic}
                   loader={
-                    <div className="text-center py-4 text-muted-foreground">
-                      {tCommon("infinite-scroll.loading")}
-                    </div>
+                    <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.loading")}</div>
                   }
                   endMessage={
-                    <div className="text-center py-4 text-muted-foreground">
-                      {tCommon("infinite-scroll.end")}
-                    </div>
+                    <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.end")}</div>
                   }
                 />
               </div>
@@ -1409,19 +1229,11 @@ export function AvatarGridComponent({
           setCurrentLookPage(1);
           // Mettre à jour localement et dans le store sans refetch
           setSpaceAvatars((prev) => [avatar, ...prev]);
-          setAvatars(activeSpace?.id as string, [
-            avatar,
-            ...(useAvatarsStore
-              .getState()
-              .avatarsBySpace.get(activeSpace?.id as string) || []),
-          ]);
+          setAvatars(activeSpace?.id as string, [avatar, ...(avatarsBySpace.get(activeSpace?.id as string) || [])]);
         }}
       />
 
-      <UnlockAvatarCreationModal
-        isOpen={isUnlockModalOpen}
-        setIsOpen={setIsUnlockModalOpen}
-      />
+      <UnlockAvatarCreationModal isOpen={isUnlockModalOpen} setIsOpen={setIsUnlockModalOpen} />
 
       {activeAvatar
         ? // Pagination des looks
@@ -1450,9 +1262,7 @@ export function AvatarGridComponent({
                 {getLookPageNumbers().showStartEllipsis && (
                   <>
                     <PaginationItem>
-                      <PaginationLink onClick={() => handleLookPageChange(1)}>
-                        1
-                      </PaginationLink>
+                      <PaginationLink onClick={() => handleLookPageChange(1)}>1</PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
                       <PaginationEllipsis />
@@ -1477,9 +1287,7 @@ export function AvatarGridComponent({
                       <PaginationEllipsis />
                     </PaginationItem>
                     <PaginationItem>
-                      <PaginationLink
-                        onClick={() => handleLookPageChange(totalLookPages)}
-                      >
+                      <PaginationLink onClick={() => handleLookPageChange(totalLookPages)}>
                         {totalLookPages}
                       </PaginationLink>
                     </PaginationItem>
@@ -1492,8 +1300,7 @@ export function AvatarGridComponent({
                     onClick={() => handleLookPageChange(currentLookPage + 1)}
                     className={cn(
                       "cursor-pointer sm:hidden",
-                      currentLookPage === totalPages &&
-                        "pointer-events-none opacity-50"
+                      currentLookPage === totalPages && "pointer-events-none opacity-50"
                     )}
                   />
                   <PaginationNext
@@ -1501,8 +1308,7 @@ export function AvatarGridComponent({
                     onClick={() => handleLookPageChange(currentLookPage + 1)}
                     className={cn(
                       "cursor-pointer hidden sm:flex",
-                      currentLookPage === totalPages &&
-                        "pointer-events-none opacity-50"
+                      currentLookPage === totalPages && "pointer-events-none opacity-50"
                     )}
                   />
                 </PaginationItem>
@@ -1519,27 +1325,19 @@ export function AvatarGridComponent({
               <PaginationPrevious
                 showText={false}
                 onClick={() => handlePageChange(currentPage - 1)}
-                className={cn(
-                  "cursor-pointer sm:hidden",
-                  currentPage === 1 && "pointer-events-none opacity-50"
-                )}
+                className={cn("cursor-pointer sm:hidden", currentPage === 1 && "pointer-events-none opacity-50")}
               />
               <PaginationPrevious
                 showText={true}
                 onClick={() => handlePageChange(currentPage - 1)}
-                className={cn(
-                  "cursor-pointer hidden sm:flex",
-                  currentPage === 1 && "pointer-events-none opacity-50"
-                )}
+                className={cn("cursor-pointer hidden sm:flex", currentPage === 1 && "pointer-events-none opacity-50")}
               />
             </PaginationItem>
 
             {getPageNumbers().showStartEllipsis && (
               <>
                 <PaginationItem>
-                  <PaginationLink onClick={() => handlePageChange(1)}>
-                    1
-                  </PaginationLink>
+                  <PaginationLink onClick={() => handlePageChange(1)}>1</PaginationLink>
                 </PaginationItem>
                 <PaginationItem>
                   <PaginationEllipsis />
@@ -1549,10 +1347,7 @@ export function AvatarGridComponent({
 
             {getPageNumbers().numbers.map((pageNumber) => (
               <PaginationItem key={pageNumber}>
-                <PaginationLink
-                  isActive={currentPage === pageNumber}
-                  onClick={() => handlePageChange(pageNumber)}
-                >
+                <PaginationLink isActive={currentPage === pageNumber} onClick={() => handlePageChange(pageNumber)}>
                   {pageNumber}
                 </PaginationLink>
               </PaginationItem>
@@ -1564,9 +1359,7 @@ export function AvatarGridComponent({
                   <PaginationEllipsis />
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink onClick={() => handlePageChange(totalPages)}>
-                    {totalPages}
-                  </PaginationLink>
+                  <PaginationLink onClick={() => handlePageChange(totalPages)}>{totalPages}</PaginationLink>
                 </PaginationItem>
               </>
             )}
@@ -1593,29 +1386,25 @@ export function AvatarGridComponent({
         </Pagination>
       )}
 
-      {variant === "create" &&
-        activeAvatar &&
-        spaceAvatars.some((a) => a.id === activeAvatar.id) && (
-          <AvatarLookChatbox
-            anchorRef={containerRef}
-            activeAvatar={activeAvatar}
-            spaceId={activeSpace?.id as string}
-            onRefresh={async () => {
-              if (!activeSpace?.id) return;
-              const latest = await fetchAvatarsInBackground(activeSpace.id);
-              setSpaceAvatars(latest);
-              if (activeAvatar?.id) {
-                const refreshedActive = latest.find(
-                  (a) => a.id === activeAvatar.id
-                );
-                if (refreshedActive) setActiveAvatar(refreshedActive);
-              }
-            }}
-            initialReferenceImage={editingLook?.thumbnail || null}
-            promptInputRef={promptInputRef}
-            pulseSignal={pulseCounter}
-          />
-        )}
+      {variant === "create" && activeAvatar && spaceAvatars.some((a) => a.id === activeAvatar.id) && (
+        <AvatarLookChatbox
+          anchorRef={containerRef}
+          activeAvatar={activeAvatar}
+          spaceId={activeSpace?.id as string}
+          onRefresh={async () => {
+            if (!activeSpace?.id) return;
+            const latest = await fetchAvatarsInBackground(activeSpace.id);
+            setSpaceAvatars(latest);
+            if (activeAvatar?.id) {
+              const refreshedActive = latest.find((a) => a.id === activeAvatar.id);
+              if (refreshedActive) setActiveAvatar(refreshedActive);
+            }
+          }}
+          initialReferenceImage={editingLook?.thumbnail || null}
+          promptInputRef={promptInputRef}
+          pulseSignal={pulseCounter}
+        />
+      )}
 
       <ModalConfirmDeleteAvatar
         isOpen={isModalConfirmDeleteOpen}

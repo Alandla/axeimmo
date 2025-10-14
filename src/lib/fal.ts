@@ -62,7 +62,7 @@ export interface FalQueueResult {
 export interface AvatarImageRequest {
   prompt: string;
   // Select model by style: 'ugc-realist' -> comfy/Hoox/srpo, others -> fal-ai/flux/srpo
-  style?: 'ugc-realist' | 'studio' | 'podcast';
+  style?: import('@/src/types/avatar').AvatarStyle;
 }
 
 export interface AvatarImageResponse {

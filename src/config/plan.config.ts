@@ -21,7 +21,7 @@ export const avatarsLimit = {
   [PlanName.FREE]: 0,
   [PlanName.START]: 5,
   [PlanName.PRO]: 10,
-  [PlanName.ENTREPRISE]: 20,
+  [PlanName.ENTREPRISE]: 999,
 }
 
 export const plans: Plan[] = [
@@ -90,6 +90,6 @@ export const plans: Plan[] = [
     maxVideoDuration: 5,
     storageLimit: storageLimit[PlanName.ENTREPRISE],
     imageToVideoLimit: 999, // Illimité
-    avatarsLimit: avatarsLimit[PlanName.ENTREPRISE],
+    avatarsLimit: avatarsLimit[PlanName.ENTREPRISE], // Illimité
   }
 ]

@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
 import {
   Dialog,
   DialogContent,
@@ -16,9 +17,6 @@ interface UnlockAvatarCreationModalProps {
 export default function UnlockAvatarCreationModal({ isOpen, setIsOpen }: UnlockAvatarCreationModalProps) {
   const t = useTranslations('avatars')
 
-  const goToPricing = () => {
-    window.open('/dashboard/pricing', '_blank')
-  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -48,8 +46,10 @@ export default function UnlockAvatarCreationModal({ isOpen, setIsOpen }: UnlockA
               <Button variant="outline" className="w-full h-12 text-base" onClick={() => setIsOpen(false)}>
                 {t('unlock.see-in-action')}
               </Button>
-              <Button className="w-full h-12 text-base" onClick={goToPricing}>
-                {t('unlock.upgrade')}
+              <Button asChild className="w-full h-12 text-base">
+                <Link href="/dashboard/pricing" target="_blank" rel="noopener noreferrer">
+                  {t('unlock.upgrade')}
+                </Link>
               </Button>
             </div>
           </div>

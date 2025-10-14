@@ -109,17 +109,14 @@ export function AvatarCard({
     const selectedAvatarName = propSelectedAvatarName !== undefined ? propSelectedAvatarName : storeSelectedAvatarName
     const isSelected = selectedAvatarName === avatar.name;
 
-    // Récupérer les informations du créateur prioritairement depuis avatar.createdBy
+    // Resolve creator from activeSpace.members using createdBy userId
     const getCreator = () => {
       if (isPublic) {
         return { id: '', name: 'Hoox', image: '' };
       }
-      if (avatar?.createdBy) {
-        return {
-          id: (avatar.createdBy as any)?.userId ?? '',
-          name: (avatar.createdBy as any)?.name ?? '',
-          image: (avatar.createdBy as any)?.image ?? ''
-        }
+      if (avatar?.createdBy && activeSpace?.members) {
+        const found = activeSpace.members.find(m => m.id === avatar.createdBy);
+        if (found) return found;
       }
       if (activeSpace?.members && activeSpace.members.length > 0) {
         return activeSpace.members[0] || { id: '', name: '', image: '' };
