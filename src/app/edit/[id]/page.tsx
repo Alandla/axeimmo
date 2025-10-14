@@ -1228,6 +1228,22 @@ export default function VideoEditor() {
     });
   };
 
+  const handleVideoDimensionChange = (dimension: 'width' | 'height', value: number) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video) return prevVideo;
+      
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          [dimension]: value
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
   const handleAvatarChange = (avatar: AvatarLook | null) => {
     setVideo(prevVideo => {
       if (!prevVideo?.video) return prevVideo;
@@ -1663,6 +1679,8 @@ export default function VideoEditor() {
                         onAvatarPositionChange={handleAvatarPositionChange}
                         onMediaPositionChange={handleMediaPositionChange}
                         onVideoFormatChange={handleVideoFormatChange}
+                        onVideoWidthChange={(w) => handleVideoDimensionChange('width', w)}
+                        onVideoHeightChange={(h) => handleVideoDimensionChange('height', h)}
                         onAvatarChange={handleAvatarChange}
                         onLogoPositionChange={handleLogoPositionChange}
                         onLogoSizeChange={handleLogoSizeChange}
@@ -1705,6 +1723,8 @@ export default function VideoEditor() {
                 onAvatarPositionChange={handleAvatarPositionChange}
                 onMediaPositionChange={handleMediaPositionChange}
                 onVideoFormatChange={handleVideoFormatChange}
+                onVideoWidthChange={(w) => handleVideoDimensionChange('width', w)}
+                onVideoHeightChange={(h) => handleVideoDimensionChange('height', h)}
                 onAvatarChange={handleAvatarChange}
                 onLogoPositionChange={handleLogoPositionChange}
                 onLogoSizeChange={handleLogoSizeChange}

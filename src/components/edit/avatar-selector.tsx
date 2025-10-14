@@ -24,10 +24,10 @@ export default function AvatarSelector({
       onClick={onAvatarSelect}
       disabled={disabled}
       className={cn(
-        "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+        "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 overflow-hidden"
       )}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
         <User className="h-4 w-4 flex-shrink-0" />
         <span className="truncate">
           {selectedAvatar 
@@ -36,7 +36,7 @@ export default function AvatarSelector({
           }
         </span>
       </div>
-      <CaretSortIcon className="h-4 w-4 opacity-50" />
+      <CaretSortIcon className="h-4 w-4 opacity-50 flex-shrink-0" />
     </button>
   );
 } 

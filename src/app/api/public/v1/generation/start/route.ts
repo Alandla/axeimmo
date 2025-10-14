@@ -19,7 +19,9 @@ interface GenerateVideoRequest {
   voice_url?: string;
   avatar_id?: string;
   avatar_url?: string;
-  format?: 'vertical' | 'square' | 'ads';
+  format?: 'vertical' | 'square' | 'ads' | 'custom';
+  width?: number;
+  height?: number;
   media_urls?: string[];
   web_search?: {
     script?: boolean;
@@ -243,6 +245,11 @@ export async function POST(req: NextRequest) {
     const canAnimateImages = space.plan?.name === PlanName.PRO || space.plan?.name === PlanName.ENTREPRISE;
     const shouldAnimateImages = (params.animate_image || false) && canAnimateImages;
     
+    // Gestion des dimensions custom
+    const videoFormat = params.format || 'vertical';
+    const videoWidth = videoFormat === 'custom' ? (params.width || 1080) : undefined;
+    const videoHeight = videoFormat === 'custom' ? (params.height || 1920) : undefined;
+    
     const options = {
       files,
       script: finalScript,
@@ -253,7 +260,9 @@ export async function POST(req: NextRequest) {
       webSearch: params.web_search?.images || false,
       animateImages: shouldAnimateImages,
       animationMode: (params.animate_mode as KlingGenerationMode) || KlingGenerationMode.STANDARD,
-      format: params.format || 'vertical',
+      format: videoFormat,
+      width: videoWidth,
+      height: videoHeight,
       webhookUrl: params.webhook_url,
       useSpaceMedia: params.use_space_media !== false,
       saveMediaToSpace: params.save_media_to_space !== false,
@@ -347,12 +356,33 @@ function validateGenerationRequest(params: GenerateVideoRequest): ApiErrorDetail
   }
 
   // Validation du format
-  if (params.format && !['vertical', 'square', 'ads'].includes(params.format)) {
+  if (params.format && !['vertical', 'square', 'ads', 'custom'].includes(params.format)) {
     errors.push({
       code: API_ERROR_CODES.INVALID_FORMAT,
-      message: "Format must be one of: 'vertical', 'square', 'ads'",
+      message: "Format must be one of: 'vertical', 'square', 'ads', 'custom'",
       field: "format"
     });
+  }
+
+  // Validation des dimensions custom
+  if (params.width !== undefined) {
+    if (typeof params.width !== 'number' || params.width < 1 || params.width > 5000) {
+      errors.push({
+        code: API_ERROR_CODES.INVALID_VALUE,
+        message: 'Width must be a number between 1 and 5000',
+        field: 'width'
+      });
+    }
+  }
+
+  if (params.height !== undefined) {
+    if (typeof params.height !== 'number' || params.height < 1 || params.height > 5000) {
+      errors.push({
+        code: API_ERROR_CODES.INVALID_VALUE,
+        message: 'Height must be a number between 1 and 5000',
+        field: 'height'
+      });
+    }
   }
 
   // Validation animate_mode

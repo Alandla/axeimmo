@@ -1,5 +1,5 @@
 // Types de format vidéo
-export type VideoFormat = 'vertical' | 'ads' | 'square' | 'horizontal';
+export type VideoFormat = 'vertical' | 'ads' | 'square' | 'horizontal' | 'custom';
 
 // Structure pour les options de format vidéo
 interface VideoFormatOption {
@@ -15,7 +15,8 @@ const VIDEO_FORMATS: VideoFormatOption[] = [
   { value: 'vertical', ratio: '9:16', width: 1080, height: 1920, effectiveHeight: 1750 },
   { value: 'ads', ratio: '4:5', width: 1080, height: 1350, effectiveHeight: 1230 }, // 1350 * (1750/1920)
   { value: 'square', ratio: '1:1', width: 1080, height: 1080, effectiveHeight: 985 }, // 1080 * (1750/1920)
-  { value: 'horizontal', ratio: '16:9', width: 1920, height: 1080, effectiveHeight: 985 } // 1080 * (1750/1920)
+  { value: 'horizontal', ratio: '16:9', width: 1920, height: 1080, effectiveHeight: 985 }, // 1080 * (1750/1920)
+  { value: 'custom', ratio: 'Custom', width: 1080, height: 1920, effectiveHeight: 1750 }
 ];
 
 /**
@@ -23,7 +24,10 @@ const VIDEO_FORMATS: VideoFormatOption[] = [
  * @param format Format de la vidéo (vertical, ads, square)
  * @returns Objet contenant la largeur et la hauteur
  */
-export const getVideoDimensions = (format: VideoFormat = 'vertical'): { width: number; height: number } => {
+export const getVideoDimensions = (format: VideoFormat = 'vertical', customWidth?: number, customHeight?: number): { width: number; height: number } => {
+  if (format === 'custom' && customWidth && customHeight) {
+    return { width: customWidth, height: customHeight };
+  }
   const formatConfig = VIDEO_FORMATS.find(f => f.value === format);
   return formatConfig ? { width: formatConfig.width, height: formatConfig.height } : { width: 1080, height: 1920 };
 };
@@ -32,9 +36,16 @@ export const getVideoDimensions = (format: VideoFormat = 'vertical'): { width: n
  * Calcule la position verticale des sous-titres en fonction du format vidéo
  * @param position Position en pourcentage (0-100)
  * @param format Format de la vidéo
+ * @param customHeight Hauteur personnalisée (optionnelle, utilisée uniquement pour format custom)
  * @returns Position en pixels basée sur la hauteur effective
  */
-export const calculateSubtitlePosition = (position: number, format: VideoFormat = 'vertical'): number => {
+export const calculateSubtitlePosition = (position: number, format: VideoFormat = 'vertical', customHeight?: number): number => {
+  if (format === 'custom' && customHeight) {
+    // Pour custom, on applique le même ratio que vertical (1750/1920 ≈ 0.9115)
+    const effectiveHeight = customHeight * 0.9115;
+    return (position / 100) * effectiveHeight;
+  }
+  
   const formatConfig = VIDEO_FORMATS.find(f => f.value === format);
   const effectiveHeight = formatConfig ? formatConfig.effectiveHeight : 1750;
   return (position / 100) * effectiveHeight;

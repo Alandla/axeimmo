@@ -4,11 +4,12 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import googleFonts from "../../config/googleFonts.config";
 import { VideoFormat, calculateSubtitlePosition } from "../../utils/videoDimensions";
 
-export const SubtitleDaniel = ({ subtitleSequence, start, style, videoFormat, onPositionChange, onPlayPause }: { 
+export const SubtitleDaniel = ({ subtitleSequence, start, style, videoFormat, customHeight, onPositionChange, onPlayPause }: { 
     subtitleSequence: any, 
     start: number, 
     style: any, 
     videoFormat?: VideoFormat,
+    customHeight?: number,
     onPositionChange?: (position: number) => void,
     onPlayPause?: () => void 
 }) => {
@@ -155,7 +156,7 @@ export const SubtitleDaniel = ({ subtitleSequence, start, style, videoFormat, on
     const shadowColor = style.shadow.color ? style.shadow.color : 'black';
 
     // Utiliser la fonction calculateSubtitlePosition pour obtenir la position en fonction du format
-    const verticalPosition = calculateSubtitlePosition(style.position || 50, videoFormat || 'vertical');
+    const verticalPosition = calculateSubtitlePosition(style.position || 50, videoFormat || 'vertical', customHeight);
 
     const shadowSizes = [
         'none',

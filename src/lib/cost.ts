@@ -123,3 +123,28 @@ export function calculateTotalAvatarDuration(video: IVideo): number {
   return avatarRenders.reduce((sum: number, render: any) => sum + render.durationInSeconds, 0);
 }
 
+// Vérifie si la vidéo a une résolution supérieure à 1080p
+export function isHighResolution(width: number, height: number): boolean {
+  return width > 1920 || height > 1080;
+}
+
+// Calcule le coût supplémentaire pour les vidéos en haute résolution (> 1080p)
+// Coût: 2.5 crédits par 30 secondes de vidéo avec buffer de 10 secondes
+// Note: Ne s'applique que pour les formats custom
+export function calculateHighResolutionCostCredits(
+  durationInSeconds: number,
+  width: number,
+  height: number
+): number {
+  if (!isHighResolution(width, height)) {
+    return 0;
+  }
+  
+  const COST_PER_30_SECONDS = 2.5;
+  // Round up to the nearest 10 seconds
+  const roundedDuration = Math.ceil(durationInSeconds / 10) * 10;
+  // Calculate segments with 10s buffer
+  const segments = Math.max(1, Math.ceil((roundedDuration - 10) / 30));
+  return segments * COST_PER_30_SECONDS;
+}
+
