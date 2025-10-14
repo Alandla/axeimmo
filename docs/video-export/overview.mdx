@@ -73,7 +73,24 @@ You can export videos in different formats optimized for various platforms:
   </Card>
 </CardGroup>
 
-## Avatar Quality Models
+## Export Costs
+
+### High Resolution Surcharge
+
+Videos exported at resolutions exceeding 1080p (width > 1920px OR height > 1080px) incur an additional cost:
+
+<Card title="High Resolution Cost" icon="expand">
+  **+2.5 credits per 30 seconds**
+  
+  Applies when exporting at resolutions above 1080p (e.g., 4K, custom high-res formats).
+  This surcharge is added to the base export cost.
+</Card>
+
+<Warning>
+The high resolution surcharge applies to **all videos** (both API-generated and dashboard-created) when exporting at resolutions exceeding 1080p.
+</Warning>
+
+### Avatar Quality Models
 
 When your video includes an avatar, you can choose from three quality models with different performance and cost characteristics:
 
@@ -116,13 +133,25 @@ When your video includes an avatar, you can choose from three quality models wit
 Avatar costs are calculated based on **avatar visibility duration**, not total video duration. Only the segments where the avatar is visible are charged.
 </Note>
 
-### Cost Calculation Example
+### Cost Calculation Examples
 
-For a 2-minute video with 45 seconds of avatar visibility using the Premium model:
+**Example 1**: A 60-second API video at standard resolution with 40 seconds of Premium avatar:
+- Base export cost: 0 credits (API video - included)
+- High-res cost: 0 credits (≤1080p)
+- Avatar cost: 40s × 0.5 = 20 credits
+- **Total cost**: 20 credits
 
-- Base export cost: 10 credits (for 2-minute video)
-- Avatar cost: 45 seconds × 0.5 credits/sec = 22.5 credits
-- **Total cost**: 32.5 credits
+**Example 2**: A 60-second API video exported at 3840x2160 (4K):
+- Base export cost: 0 credits (API video - included)
+- High-res cost: 2 × 2.5 = 5 credits
+- Avatar cost: 0 credits (no avatar)
+- **Total cost**: 5 credits
+
+**Example 3**: A 90-second dashboard video at 4K with 60 seconds of Premium avatar:
+- Base export cost: 3 × 5 = 15 credits
+- High-res cost: 3 × 2.5 = 7.5 credits
+- Avatar cost: 60s × 0.5 = 30 credits
+- **Total cost**: 52.5 credits
 
 ## Use Cases
 

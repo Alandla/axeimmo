@@ -383,7 +383,9 @@
       "avatar-model-ultra": "Ultra",
       "avatar-model-ultra-description": "Longer but enhanced realism",
       "credits-per-second": "{credits} credits/sec",
-      "cost-details-tooltip": "Base: {baseCost} credits\nAvatar: {avatarCost} ({rate} x {duration}s)"
+      "base-cost": "Base",
+      "avatar-cost-tooltip": "Avatar: {avatarCost} credits ({rate} x {duration}s)",
+      "high-res-cost-tooltip": "High resolution: {highResCost} credits (2.5 x every 30s)"
     },
     "edit": {
       "loading-video-data": "Loading video data...",

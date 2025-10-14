@@ -7,7 +7,7 @@ import { ISpace } from '@/src/types/space';
 import { IVideo } from '@/src/types/video';
 import { getVideoById } from '@/src/dao/videoDao';
 import { PlanName } from '@/src/types/enums';
-import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration } from '@/src/lib/cost';
+import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration, calculateHighResolutionCostCredits } from '@/src/lib/cost';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -55,7 +55,19 @@ export async function POST(req: NextRequest) {
       avatarCost = calculateAvatarCreditsForUser(avatarDuration, finalAvatarModel);
     }
 
-    const totalCost = baseCost + avatarCost;
+    // Calculate high resolution cost (only for custom format)
+    const videoDuration = video.video?.metadata?.audio_duration || 30;
+    let highResCost = 0;
+    
+    if (video.video?.format === 'custom' && video.video?.width && video.video?.height) {
+      highResCost = calculateHighResolutionCostCredits(
+        videoDuration,
+        video.video.width,
+        video.video.height
+      );
+    }
+
+    const totalCost = baseCost + avatarCost + highResCost;
 
     if (space.credits < totalCost) {
       return NextResponse.json({ error: "not-enough-credits" }, { status: 400 });
@@ -80,11 +92,11 @@ export async function POST(req: NextRequest) {
 }
 
 const calculateCredits = (videoDurationInSeconds: number) => {
-  // Round up to the nearest 15 seconds
-  const roundedDuration = Math.ceil(videoDurationInSeconds / 15) * 15;
+  // Round up to the nearest 10 seconds
+  const roundedDuration = Math.ceil(videoDurationInSeconds / 10) * 10;
   
-  // Calculate the number of credits based on the rounded duration
-  const creditsNeeded = Math.max(0.5, Math.ceil((roundedDuration - 15) / 30) * 0.5);
+  // Calculate the number of credits based on the rounded duration with 10s buffer
+  const creditsNeeded = Math.max(0.5, Math.ceil((roundedDuration - 10) / 30) * 0.5);
   
   return creditsNeeded * 10;
 }

@@ -119,7 +119,7 @@ export default function VideoFormatSelector({
   return (
     <>
       <Select value={value} onValueChange={handleValueChange} disabled={disabled} open={open} onOpenChange={handleOpenChange}>
-        <SelectTrigger variant={light ? "ghost" : "default"}>
+        <SelectTrigger variant={light ? "ghost" : "default"} className={light ? "" : "bg-background"}>
           <SelectValue placeholder="Sélectionner format...">
             <div className="flex items-center gap-2">
               {getFormatIcon(value)}
@@ -179,7 +179,7 @@ export default function VideoFormatSelector({
                         max="5000"
                         value={width || 1080}
                         onChange={handleWidthChange}
-                        className="h-7 text-sm w-18"
+                        className="h-7 text-sm w-18 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         onFocus={() => setIsInteractingWithInputs(true)}
                         onBlur={() => setIsInteractingWithInputs(false)}
                         onMouseDown={(e) => e.stopPropagation()}
@@ -192,7 +192,7 @@ export default function VideoFormatSelector({
                         max="5000"
                         value={height || 1920}
                         onChange={handleHeightChange}
-                        className="h-7 text-sm w-18"
+                        className="h-7 text-sm w-18 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         onFocus={() => setIsInteractingWithInputs(true)}
                         onBlur={() => setIsInteractingWithInputs(false)}
                         onMouseDown={(e) => e.stopPropagation()}

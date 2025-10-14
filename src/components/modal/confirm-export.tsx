@@ -17,7 +17,7 @@ import { getSpaceById } from '@/src/service/space.service'
 import { useRouter } from 'next/navigation'
 import { AvatarModelSelector, AvatarModel, isAvatarModelAllowed, getRequiredPlanForModel } from '@/src/components/ui/avatar-model-selector'
 import { IVideo } from '@/src/types/video'
-import { calculateTotalAvatarDuration, calculateAvatarCreditsForUser, AVATAR_MODEL_CREDIT_RATES } from '@/src/lib/cost'
+import { calculateTotalAvatarDuration, calculateAvatarCreditsForUser, calculateHighResolutionCostCredits, AVATAR_MODEL_CREDIT_RATES } from '@/src/lib/cost'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
 import { Label } from '@radix-ui/react-dropdown-menu'
 import ModalPricing from './modal-pricing'
@@ -64,7 +64,21 @@ export default function ModalConfirmExport({
   const hasAvatar = video?.video?.avatar?.thumbnail && !video?.video?.avatar?.previewUrl
   const avatarDuration = hasAvatar && video ? calculateTotalAvatarDuration(video) : 0
   const avatarCost = hasAvatar ? calculateAvatarCreditsForUser(avatarDuration, selectedAvatarModel) : 0
-  const totalCost = cost + avatarCost
+  
+  // Calculate high resolution cost (only for custom format)
+  const videoFormat = video?.video?.format
+  const videoDuration = video?.video?.metadata?.audio_duration || 30
+  let highResCost = 0
+  
+  if (videoFormat === 'custom' && video?.video?.width && video?.video?.height) {
+    highResCost = calculateHighResolutionCostCredits(
+      videoDuration,
+      video.video.width,
+      video.video.height
+    )
+  }
+  
+  const totalCost = cost + avatarCost + highResCost
 
   const handleConfirm = async () => {
     // Check if the selected model is allowed for the current plan
@@ -130,19 +144,28 @@ export default function ModalConfirmExport({
               <p className="inline-flex items-center gap-1">
                 <span className="font-bold text-primary">{t('cost')}:</span>
                 <span className="text-gray-500">{formatCredits(totalCost)} credits</span>
-                {avatarCost > 0 && (
+                {(avatarCost > 0 || highResCost > 0) && (
                   <TooltipProvider>
                     <Tooltip delayDuration={0}>
                       <TooltipTrigger asChild>
                         <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs whitespace-pre-line">
-                        <p>{t('cost-details-tooltip', {
-                          baseCost: formatCredits(cost),
-                          avatarCost: formatCredits(avatarCost),
-                          rate: AVATAR_MODEL_CREDIT_RATES[selectedAvatarModel],
-                          duration: Math.round(avatarDuration)
-                        })}</p>
+                        <div className="space-y-1">
+                          <p>{t('base-cost')}: {formatCredits(cost)} credits</p>
+                          {avatarCost > 0 && (
+                            <p>{t('avatar-cost-tooltip', {
+                              avatarCost: formatCredits(avatarCost),
+                              rate: AVATAR_MODEL_CREDIT_RATES[selectedAvatarModel],
+                              duration: Math.round(avatarDuration)
+                            })}</p>
+                          )}
+                          {highResCost > 0 && (
+                            <p>{t('high-res-cost-tooltip', {
+                              highResCost: formatCredits(highResCost)
+                            })}</p>
+                          )}
+                        </div>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>

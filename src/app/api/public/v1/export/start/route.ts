@@ -6,7 +6,7 @@ import { createExport } from '@/src/dao/exportDao'
 import { tasks } from '@trigger.dev/sdk/v3'
 import { calculateGenerationCredits } from '@/src/lib/video-estimation'
 import { objectIdToString } from '@/src/lib/utils'
-import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration } from '@/src/lib/cost'
+import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration, calculateHighResolutionCostCredits } from '@/src/lib/cost'
 
 interface ExportVideoRequest {
   video_id: string;
@@ -147,7 +147,22 @@ export async function POST(req: NextRequest) {
       avatarCost = calculateAvatarCreditsForUser(avatarDuration, internalModel);
     }
 
-    const totalCost = baseCost + avatarCost;
+    // Calculate high resolution cost (only for custom format)
+    const finalFormat = params.format || video.video?.format;
+    let highResCost = 0;
+    
+    if (finalFormat === 'custom') {
+      const finalWidth = params.width || video.video?.width || 1080;
+      const finalHeight = params.height || video.video?.height || 1920;
+      
+      highResCost = calculateHighResolutionCostCredits(
+        duration,
+        finalWidth,
+        finalHeight
+      );
+    }
+
+    const totalCost = baseCost + avatarCost + highResCost;
 
     // Check credits if cost > 0
     if (totalCost > 0 && space.credits < totalCost) {

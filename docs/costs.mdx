@@ -109,7 +109,119 @@ Script generation has a separate, predictable cost structure:
 
 ## Export Costs
 
-API-generated videos include first export is free, included in the generation price.
+Export costs vary based on how the video was created, resolution, and avatar model:
+
+### Base Export Cost
+
+<CardGroup cols={2}>
+  <Card title="API Videos" icon="code">
+    **Included Free**
+    
+    First export is included in generation cost
+  </Card>
+  
+  <Card title="Dashboard Videos" icon="browser">
+    **5 credits per 30s**
+    
+    Standard export cost for dashboard-created videos
+  </Card>
+</CardGroup>
+
+### High Resolution Surcharge
+
+Videos exported at resolutions exceeding 1080p (width > 1920px OR height > 1080px) incur an additional cost:
+
+<Card title="4K & Higher" icon="expand">
+  **+2.5 credits per 30s**
+  
+  - Applies to custom formats above 1080p
+  - Added to base export cost
+  - Charged for all video types (API and dashboard)
+</Card>
+
+### Avatar Quality Models
+
+When your video includes an avatar, you can choose from three quality models with different performance and cost characteristics:
+
+<CardGroup cols={3}>
+  <Card title="Standard" icon="zap">
+    **Free**
+    
+    Basic avatar quality that works well for most use cases. No additional credits required.
+    
+    **Best for:**
+    - Quick exports
+    - Budget-conscious projects
+    - Testing and prototyping
+  </Card>
+  
+  <Card title="Premium" icon="gem">
+    **0.5 credits/sec**
+    
+    Highly realistic and dynamic avatar rendering with enhanced facial expressions and movements.
+    
+    **Best for:**
+    - Professional content
+    - Marketing videos
+    - High-quality presentations
+  </Card>
+  
+  <Card title="Ultra" icon="crown">
+    **2.3 credits/sec**
+    
+    Enhanced realism with the highest quality output. Longer processing time for superior results.
+    
+    **Best for:**
+    - Premium content
+    - Flagship campaigns
+    - Maximum quality requirements
+  </Card>
+</CardGroup>
+
+<Note>
+Avatar costs are calculated based on **avatar visibility duration**, not total video duration. Only the segments where the avatar is visible are charged.
+</Note>
+
+<Info>
+Total export cost = Base cost + High resolution cost + Avatar cost
+</Info>
+
+### Export Cost Examples
+
+<Tabs>
+  <Tab title="Basic API Video">
+    **60-second API video, standard resolution**
+    
+    ```
+    Base export: 0 credits (included)
+    High-res cost: 0 credits (≤1080p)
+    Avatar cost: 0 credits (no avatar)
+    Total: 0 credits
+    ```
+  </Tab>
+  
+  <Tab title="4K Export">
+    **60-second API video at 3840x2160**
+    
+    ```
+    Base export: 0 credits (included)
+    High-res cost: 5 credits (2 × 2.5)
+    Avatar cost: 0 credits (no avatar)
+    Total: 5 credits
+    ```
+  </Tab>
+  
+  <Tab title="Premium with Avatar">
+    **90-second dashboard video, 4K, 60s Premium avatar**
+    
+    ```
+    Base export: 15 credits (3 × 5)
+    High-res cost: 7.5 credits (3 × 2.5)
+    Avatar cost: 30 credits (60s × 0.5)
+    Total: 52.5 credits
+    ```
+  </Tab>
+</Tabs>
 
 ### Recommended First Steps
 
