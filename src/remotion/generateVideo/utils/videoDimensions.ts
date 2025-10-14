@@ -36,9 +36,16 @@ export const getVideoDimensions = (format: VideoFormat = 'vertical', customWidth
  * Calcule la position verticale des sous-titres en fonction du format vidéo
  * @param position Position en pourcentage (0-100)
  * @param format Format de la vidéo
+ * @param customHeight Hauteur personnalisée (optionnelle, utilisée uniquement pour format custom)
  * @returns Position en pixels basée sur la hauteur effective
  */
-export const calculateSubtitlePosition = (position: number, format: VideoFormat = 'vertical'): number => {
+export const calculateSubtitlePosition = (position: number, format: VideoFormat = 'vertical', customHeight?: number): number => {
+  if (format === 'custom' && customHeight) {
+    // Pour custom, on applique le même ratio que vertical (1750/1920 ≈ 0.9115)
+    const effectiveHeight = customHeight * 0.9115;
+    return (position / 100) * effectiveHeight;
+  }
+  
   const formatConfig = VIDEO_FORMATS.find(f => f.value === format);
   const effectiveHeight = formatConfig ? formatConfig.effectiveHeight : 1750;
   return (position / 100) * effectiveHeight;
