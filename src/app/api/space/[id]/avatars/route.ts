@@ -7,6 +7,7 @@ import { ISpace } from "@/src/types/space";
 import { nanoid } from "nanoid";
 import { extractAvatarIdentityFromPrompt, improveAvatarPrompt } from "@/src/lib/workflowai";
 import { generateAvatarImageComfySrpo, generateAvatarImageFluxSrpo } from "@/src/lib/fal";
+import { generateSoulImageSimple } from "@/src/lib/higgsfield";
 import { eventBus } from "@/src/lib/events";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import SpaceModel from "@/src/models/Space";
@@ -226,9 +227,14 @@ export async function POST(
       waitUntil((async () => {
         try {
           const imageSize = format === 'horizontal' ? 'landscape_16_9' : (format === 'vertical' ? 'portrait_16_9' : undefined);
-          const img = style === 'ugc-realist'
-            ? await generateAvatarImageComfySrpo({ prompt: finalPrompt as string })
-            : await generateAvatarImageFluxSrpo({ prompt: finalPrompt as string, image_size: imageSize });
+          let img: any;
+          
+          if (style === 'ugc-realist') {
+            const soulResult = await generateSoulImageSimple(finalPrompt as string, (format as 'vertical' | 'horizontal') || 'vertical');
+            img = { url: soulResult.url };
+          } else {
+            img = await generateAvatarImageFluxSrpo({ prompt: finalPrompt as string, image_size: imageSize });
+          }
 
           // Save generated image to our storage (R2) and use internal URL
           const fileName = `avatar-${avatarId}-${Date.now()}`;

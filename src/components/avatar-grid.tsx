@@ -490,10 +490,6 @@ export function AvatarGridComponent({
     setPulseCounter((c) => c + 1);
   }, [focusChatboxPrompt]);
 
-  // Fonction pour gérer la fin du focus du chatbox
-  const handleFocusComplete = useCallback(() => {
-    setShouldFocusChatbox(false);
-  }, []);
 
   // Polling pour rafraîchir tant que des thumbnails manquent
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
@@ -1006,6 +1002,8 @@ export function AvatarGridComponent({
     }
   };
 
+  const isChatboxVisible = variant === "create" && !!activeAvatar && spaceAvatars.some((a) => a.id === activeAvatar.id);
+
   return (
     <div className="space-y-4" ref={containerRef}>
       <AnimatePresence mode="wait">
@@ -1176,7 +1174,7 @@ export function AvatarGridComponent({
           variant === "create"
             ? "grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6"
             : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
-        } ${activeAvatar ? "pb-40" : ""}`}
+        }`}
       >
         {activeAvatar ? (
           // Afficher les looks de l'avatar sélectionné
@@ -1428,7 +1426,7 @@ export function AvatarGridComponent({
       {activeAvatar
         ? // Pagination des looks
           totalLookPages > 1 && (
-            <Pagination>
+            <Pagination className={isChatboxVisible ? "pb-40" : undefined}>
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious

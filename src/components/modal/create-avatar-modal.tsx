@@ -62,7 +62,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
       try {
         setIsSubmitting(true);
         // Utiliser basicApiCall pour récupérer l'avatar créé
-        const res = await basicApiCall<Avatar>(`/space/${activeSpace.id}/avatars`, {
+        const res = await basicApiCall<Avatar>(`/space/${activeSpace.id}/avatars/soul`, {
           prompt,
           format: videoFormat,
           style: avatarStyle,
