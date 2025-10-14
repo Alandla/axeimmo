@@ -79,10 +79,6 @@ This endpoint requires API key authentication. Include your API key in the `Auth
   Whether to animate static images using AI.
 </ParamField>
 
-<ParamField body="animate_mode" type="string" default="standard">
-  Animation quality: `standard` or `pro`.
-</ParamField>
-
 <ParamField body="animate_image_max" type="number">
   Maximum number of images to animate.
 </ParamField>
@@ -131,8 +127,7 @@ curl -X POST "https://app.hoox.video/api/public/v1/generation/start" \
       "script": true,
       "images": true
     },
-    "animate_image": true,
-    "animate_mode": "pro"
+    "animate_image": true
   }'
 ```
 
@@ -155,8 +150,7 @@ data = {
         "script": True,
         "images": True
     },
-    "animate_image": True,
-    "animate_mode": "pro"
+    "animate_image": True
 }
 
 response = requests.post(url, headers=headers, json=data)
@@ -180,8 +174,7 @@ const response = await fetch('https://app.hoox.video/api/public/v1/generation/st
       script: true,
       images: true
     },
-    animate_image: true,
-    animate_mode: "pro"
+    animate_image: true
   })
 });
 
@@ -239,7 +232,7 @@ Provide `voice_url` and/or `avatar_url` with custom media files.
 Generation costs depend on several factors:
 
 - **Base cost**: 5 credits every 30 seconds (with 15 seconds of buffer)
-- **Image animation**: +4 credits per image (standard) or +7 credits per image (pro mode)
+- **Image animation**: +5 credits per image
 
 ## Next Steps
 
@@ -256,4 +249,3 @@ Generation costs depend on several factors:
 - `INVALID_VOICE_ID`: Voice ID not found
 - `INVALID_AVATAR_ID`: Avatar ID not found
 - `INVALID_FORMAT`: Invalid video format
-- `INVALID_ANIMATE_MODE`: Invalid animation mode
