@@ -18,6 +18,7 @@ export const KLING_ENDPOINTS = {
 const AVATAR_IMAGE_ENDPOINTS = {
   EDIT: "fal-ai/nano-banana/edit",
   COMFY_SRPO: "comfy/Hoox/srpo-selfie-o5-no-style-4k-step",
+  COMFY_SRPO_PODCAST: "comfy/Hoox/srpo-podcast4k-steps",
   FLUX_SRPO: "fal-ai/flux/srpo",
   UPSCALE_CRISP: "fal-ai/recraft/upscale/crisp"
 } as const;
@@ -159,11 +160,11 @@ export async function generateAvatarImageComfySrpo(
 ): Promise<AvatarImageResponse> {
   const endpoint = AVATAR_IMAGE_ENDPOINTS.COMFY_SRPO;
   try {
-    // const randomSeed = Math.floor(Math.random() * 10001);
+    const randomSeed = Math.floor(Math.random() * 10001);
     const result = await fal.subscribe(endpoint, {
       input: {
         prompt: request.prompt,
-        // random_noise: randomSeed
+        random_noise: randomSeed
       },
       logs: true
     });
@@ -185,6 +186,42 @@ export async function generateAvatarImageComfySrpo(
     return { url, file_name };
   } catch (error) {
     console.error("Error generating avatar image (Comfy SRPO):", error);
+    throw error;
+  }
+}
+
+// SRPO Podcast via Comfy pipeline: response nested in data.outputs.*.images
+export async function generateAvatarImageComfySrpoPodcast(
+  request: { prompt: string }
+): Promise<AvatarImageResponse> {
+  const endpoint = AVATAR_IMAGE_ENDPOINTS.COMFY_SRPO_PODCAST;
+  try {
+    const randomSeed = Math.floor(Math.random() * 10001);
+    const result = await fal.subscribe(endpoint, {
+      input: {
+        prompt: request.prompt,
+        random_noise: randomSeed
+      },
+      logs: true
+    });
+
+    const data: any = (result as any).data;
+    const outputs = data?.outputs || {};
+    let url: string | undefined;
+    let file_name: string | undefined;
+    for (const key of Object.keys(outputs)) {
+      const images = outputs[key]?.images;
+      if (Array.isArray(images) && images.length > 0) {
+        const img = images[0];
+        url = img?.url;
+        file_name = img?.filename;
+        break;
+      }
+    }
+    if (!url) throw new Error("No image URL found in Comfy SRPO Podcast response");
+    return { url, file_name };
+  } catch (error) {
+    console.error("Error generating avatar image (Comfy SRPO Podcast):", error);
     throw error;
   }
 }

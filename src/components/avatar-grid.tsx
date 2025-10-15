@@ -229,7 +229,7 @@ export function AvatarGridComponent({
   // reference handled in AvatarLookChatbox
 
   const { activeSpace, lastUsedParameters } = useActiveSpaceStore();
-  const { avatarsBySpace, getCachedAvatars, fetchAvatars, fetchAvatarsInBackground, setAvatars, startSse, stopSse } =
+  const { avatarsBySpace, getCachedAvatars, fetchAvatars, fetchAvatarsInBackground, setAvatars, startPolling, stopPolling } =
     useAvatarsStore();
 
   // Récupérer les informations du créateur de l'avatar
@@ -438,9 +438,6 @@ export function AvatarGridComponent({
     [focusChatboxPrompt]
   );
 
-  // Polling pour rafraîchir tant que des thumbnails manquent
-  const pollingRef = useRef<NodeJS.Timeout | null>(null);
-
   // Obtenir tous les tags uniques (espace + publics)
   const allTags = Array.from(new Set([...spaceAvatars, ...publicAvatars].flatMap((avatar) => avatar.tags)));
 
@@ -602,55 +599,20 @@ export function AvatarGridComponent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [avatarsConfig.length]);
 
-  // Abonnement SSE via store + fallback polling si thumbnails manquent
+  // Démarrer le polling quand il y a des looks en attente
   useEffect(() => {
-    const hasMissingThumbnails = spaceAvatars.some(
-      (a) => !a.thumbnail || a.looks.some((l) => !l.thumbnail || l.thumbnail === "")
+    if (!activeSpace?.id) return;
+
+    const hasPendingOrMissing = spaceAvatars.some(
+      (a) => a.looks.some((l) => l.status === 'pending' || !l.thumbnail || l.thumbnail === "")
     );
 
-    const startPolling = () => {
-      if (pollingRef.current || !activeSpace?.id) return;
-      pollingRef.current = setInterval(async () => {
-        try {
-          const latest: Avatar[] = await fetchAvatarsInBackground(activeSpace.id as string);
-          setSpaceAvatars(latest);
-          // Mettre à jour activeAvatar si présent
-          if (activeAvatar?.id) {
-            const refreshedActive = latest.find((a) => a.id === activeAvatar.id);
-            if (refreshedActive) setActiveAvatar(refreshedActive);
-          }
-          const stillMissing = latest.some(
-            (a) => !a.thumbnail || a.looks.some((l) => !l.thumbnail || l.thumbnail === "")
-          );
-          if (!stillMissing && pollingRef.current) {
-            clearInterval(pollingRef.current);
-            pollingRef.current = null;
-          }
-        } catch (e) {
-          // Stop polling on error to avoid loops; user can trigger manual refresh
-          if (pollingRef.current) {
-            clearInterval(pollingRef.current);
-            pollingRef.current = null;
-          }
-        }
-      }, 10000);
-    };
-
-    // Démarrer SSE via store
-    if (activeSpace?.id) {
-      startSse(activeSpace.id);
-    } else if (hasMissingThumbnails) {
-      startPolling();
+    if (hasPendingOrMissing) {
+      startPolling(activeSpace.id);
+    } else {
+      stopPolling(activeSpace.id);
     }
-
-    return () => {
-      if (activeSpace?.id) stopSse(activeSpace.id);
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current);
-        pollingRef.current = null;
-      }
-    };
-  }, [spaceAvatars, activeSpace?.id]);
+  }, [spaceAvatars, activeSpace?.id, startPolling, stopPolling]);
 
   // Filtrer les avatars publics
   const filteredPublicAvatars = sortAvatarsByLastUsed(

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
-import { getSpaceById, updateLookInAvatar } from "@/src/dao/spaceDao";
+import { getSpaceById, addLookToAvatar } from "@/src/dao/spaceDao";
 import { upscaleImageFromUrl } from "@/src/lib/freepik";
-import { eventBus } from "@/src/lib/events";
+import { nanoid } from "nanoid";
 
 export async function POST(
   req: NextRequest,
@@ -37,62 +37,56 @@ export async function POST(
       return NextResponse.json({ error: "Avatar not found" }, { status: 404 });
     }
 
-    const look = avatar.looks?.find((l: any) => l.id === params.lookId);
-    if (!look) {
+    const originalLook = avatar.looks?.find((l: any) => l.id === params.lookId);
+    if (!originalLook) {
       return NextResponse.json({ error: "Look not found" }, { status: 404 });
     }
 
-    if (!look.thumbnail) {
+    if (!originalLook.thumbnail) {
       return NextResponse.json({ error: "No image to upscale" }, { status: 400 });
     }
+
+    // Create a new look based on the original
+    const newLookId = nanoid();
+    const lookCount = avatar.looks?.length || 0;
+    const newLook = {
+      id: newLookId,
+      name: `${originalLook.name} (Upscaled)`,
+      place: originalLook.place,
+      tags: originalLook.tags || [],
+      thumbnail: originalLook.thumbnail, // Will be updated by webhook with upscaled version
+      previewUrl: originalLook.previewUrl || "",
+      videoUrl: originalLook.videoUrl || "",
+      createdBy: session.user.id,
+      format: originalLook.format || "vertical",
+      settings: originalLook.settings || {},
+      status: 'pending',
+      createdAt: new Date()
+    };
+
+    // Add the new look to the avatar
+    await addLookToAvatar(params.id, params.avatarId, newLook);
 
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
       : "https://app.hoox.video";
-    const webhookUrl = `${baseUrl}/api/webhook/freepik/${params.id}/${params.avatarId}/${params.lookId}?x-vercel-protection-bypass=${process.env.VERCEL_AUTOMATION_BYPASS_SECRET}`;
-
-
-    await updateLookInAvatar(params.id, params.avatarId, params.lookId, {
-      status: 'pending'
-    });
-
-    try {
-      eventBus.emit('look.updated', { 
-        spaceId: params.id, 
-        avatarId: params.avatarId, 
-        lookId: params.lookId, 
-        status: 'pending' 
-      });
-    } catch {}
+    const webhookUrl = `${baseUrl}/api/webhook/freepik/${params.id}/${params.avatarId}/${newLookId}?x-vercel-protection-bypass=${process.env.VERCEL_AUTOMATION_BYPASS_SECRET}`;
 
     try {
       await upscaleImageFromUrl({
-        image_url: look.thumbnail,
+        image_url: originalLook.thumbnail,
         webhook_url: webhookUrl
       });
 
       return NextResponse.json({ 
         data: { 
           message: "Upscale started", 
-          status: "processing" 
+          status: "processing",
+          newLookId 
         } 
       });
     } catch (error: any) {
       console.error("Error starting upscale:", error);
-      
-      await updateLookInAvatar(params.id, params.avatarId, params.lookId, {
-        status: 'error',
-        errorMessage: error.message || 'Failed to start upscale'
-      });
-
-      try {
-        eventBus.emit('look.updated', { 
-          spaceId: params.id, 
-          avatarId: params.avatarId, 
-          lookId: params.lookId, 
-          status: 'error' 
-        });
-      } catch {}
 
       return NextResponse.json({ 
         error: "Failed to start upscale" 

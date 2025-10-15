@@ -8,17 +8,16 @@ import { getSpaceById } from "@/src/dao/spaceDao";
 import { ISpace } from "@/src/types/space";
 import { nanoid } from "nanoid";
 import { extractAvatarIdentityFromPrompt, improveAvatarPrompt } from "@/src/lib/workflowai";
-import { generateAvatarImageComfySrpo, generateAvatarImageFluxSrpo } from "@/src/lib/fal";
+import { generateAvatarImageComfySrpo, generateAvatarImageComfySrpoPodcast, generateAvatarImageFluxSrpo } from "@/src/lib/fal";
 import { generateSoulImageSimple } from "@/src/lib/higgsfield";
-import { eventBus } from "@/src/lib/events";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import SpaceModel from "@/src/models/Space";
 import { avatarsLimit as avatarsLimitConfig } from "@/src/config/plan.config";
 import { PlanName } from "@/src/types/enums";
-import { updateAvatarThumbnailAndFirstLook } from "@/src/dao/spaceDao";
+import { updateAvatarThumbnailAndFirstLook, updateLookInAvatar } from "@/src/dao/spaceDao";
 
 // Common hint used to bias generations for podcast scenes
-const PODCAST_HINT = " Podcast scene, cinematic lighting, subject in three-quarter view (3/4, slight angle), not looking at camera, speaking to someone off-camera. In front of the subject, include a realistic broadcast microphone that clearly resembles a Shure SM7B: large dynamic capsule, yoke mount on a boom arm, cylindrical body with foam windscreen. Frame so the microphone is visible and well-lit without blocking the face.";
+// const PODCAST_HINT = " Podcast scene, cinematic lighting, subject in three-quarter view (3/4, slight angle), not looking at camera, speaking to someone off-camera. In front of the subject, include a realistic broadcast microphone that clearly resembles a Shure SM7B: large dynamic capsule, yoke mount on a boom arm, cylindrical body with foam windscreen. Frame so the microphone is visible and well-lit without blocking the face.";
 
 export async function GET(
   req: NextRequest,
@@ -179,10 +178,9 @@ export async function POST(
     // If images are provided: one look per image; else: create an empty look to be filled by background generation
     let finalPrompt: string | undefined = undefined;
     if (providedImageUrls.length === 0 && basePrompt) {
-      // Inject podcast hint before enhancement to influence the improved prompt (allow hint-only if no basePrompt)
-      const sourcePrompt = style === 'podcast' ? `${basePrompt || ''}${PODCAST_HINT}`.trim() : basePrompt;
-      const improved = await improveAvatarPrompt(sourcePrompt).catch(() => ({ enhancedPrompt: sourcePrompt }));
-      finalPrompt = improved.enhancedPrompt || sourcePrompt;
+
+      const improved = await improveAvatarPrompt(basePrompt).catch(() => ({ enhancedPrompt: basePrompt }));
+      finalPrompt = improved.enhancedPrompt || basePrompt;
     }
 
     const creatorUserId = session.user!.id as string
@@ -199,6 +197,7 @@ export async function POST(
           createdBy: creatorUserId,
           format: "vertical",
           settings: {},
+          status: 'ready' as const,
         }))
       : [{
           id: nanoid(),
@@ -211,6 +210,7 @@ export async function POST(
           createdBy: creatorUserId,
           format: "vertical",
           settings: {},
+          status: 'pending' as const,
         }];
 
     const newAvatar: any = {
@@ -237,11 +237,19 @@ export async function POST(
           if (style === 'ugc-realist') {
             const soulResult = await generateAvatarImageComfySrpo({ prompt: finalPrompt as string });
             img = { url: soulResult.url };
+          } else if (style === 'podcast') {
+            const soulResult = await generateAvatarImageComfySrpoPodcast({ prompt: finalPrompt as string });
+            img = { url: soulResult.url };
           } else {
             img = await generateAvatarImageFluxSrpo({ prompt: finalPrompt as string, image_size: imageSize });
           }
 
-          let finalImageUrl = img.url;
+          // Save generated image to our storage (R2) immediately
+          const fileName = `avatar-${avatarId}-${Date.now()}`;
+          const savedUrl = await uploadImageFromUrlToS3(img.url, "medias-users", fileName);
+          
+          // Update thumbnail immediately with the non-upscaled version
+          await updateAvatarThumbnailAndFirstLook(params.id, avatarId, savedUrl);
 
           // Upscale if requested
           if (upscale) {
@@ -253,28 +261,22 @@ export async function POST(
               const webhookUrl = `${baseUrl}/api/webhook/freepik/${params.id}/${avatarId}/${looks[0].id}`;
               
               await upscaleImageFromUrl({
-                image_url: img.url,
+                image_url: savedUrl,
                 webhook_url: webhookUrl
               });
               
-              // Freepik always uses webhook, no immediate result
+              // Webhook will update the thumbnail with upscaled version and set status to 'ready'
             } catch (upscaleError) {
-              console.error('Error upscaling image, using original:', upscaleError);
+              console.error('Error upscaling image, keeping original:', upscaleError);
+              // If upscale fails, mark look as ready with original image              
+              await updateLookInAvatar(params.id, avatarId, looks[0].id, { status: 'ready' });
             }
+          } else {
+            // No upscale requested, mark look as ready immediately            
+            await updateLookInAvatar(params.id, avatarId, looks[0].id, { status: 'ready' });
           }
-
-          // Save generated image to our storage (R2) and use internal URL
-          const fileName = `avatar-${avatarId}-${Date.now()}`;
-          const savedUrl = await uploadImageFromUrlToS3(finalImageUrl, "medias-users", fileName);
-          await updateAvatarThumbnailAndFirstLook(params.id, avatarId, savedUrl)
-          try {
-            eventBus.emit('avatar.updated', { spaceId: params.id, avatarId, status: 'ready' })
-          } catch {}
         } catch (e) {
           console.error('Error generating first avatar look image (background)', e);
-          try {
-            eventBus.emit('avatar.updated', { spaceId: params.id, avatarId, status: 'error' })
-          } catch {}
         }
       })());
     }

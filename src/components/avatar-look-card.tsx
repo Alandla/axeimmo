@@ -32,6 +32,7 @@ import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { useLookToDeleteStore } from '../store/lookToDelete'
 import { useAvatarsStore } from '../store/avatarsStore'
 import { Avatar } from '../types/avatar'
+import { nanoid } from 'nanoid'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -101,7 +102,7 @@ export function AvatarLookCard({
   const { data: session } = useSession()
   const { toast } = useToast()
   const { setLook } = useLookToDeleteStore()
-  const { setAvatars, avatarsBySpace } = useAvatarsStore()
+  const { setAvatars, avatarsBySpace, fetchAvatarsInBackground, startPolling } = useAvatarsStore()
   const t = useTranslations('avatars')
 
   // États pour le dropdown et l'édition
@@ -199,34 +200,51 @@ export function AvatarLookCard({
     
     setIsDropdownOpen(false);
 
-    // Mise à jour optimiste du statut dans le store
+    // Generate temporary lookId for optimistic update
+    const tempLookId = nanoid();
     const currentAvatars = avatarsBySpace.get(activeSpace.id) || [];
+    
+    // Create optimistic new look BEFORE API call
+    const newLook: AvatarLook = {
+      ...look,
+      id: tempLookId,
+      name: `${look.name} (Upscaled)`,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+
     const updatedAvatars = currentAvatars.map((a: Avatar) => {
       if (a.id === avatarId) {
         return {
           ...a,
-          looks: a.looks.map((l) => 
-            l.id === look.id 
-              ? { ...l, status: 'pending' as const }
-              : l
-          )
+          looks: [...a.looks, newLook]
         };
       }
       return a;
     });
+    
+    // Apply optimistic update immediately
     setAvatars(activeSpace.id, updatedAvatars);
+
+    toast({
+      title: t('toast.upscale-started'),
+      description: t('toast.upscale-started-description'),
+      variant: "confirm",
+    });
 
     try {
       await basicApiCall(`/space/${activeSpace.id}/avatars/${avatarId}/looks/${look.id}/upscale`, {});
-      toast({
-        title: t('toast.upscale-started'),
-        description: t('toast.upscale-started-description'),
-        variant: "confirm",
-      });
+      
+      // Refresh avatars to get the real look created by the server
+      // This will replace the optimistic look with the real one
+      await fetchAvatarsInBackground(activeSpace.id);
+      
+      // Start polling to track the upscale progress
+      startPolling(activeSpace.id);
     } catch (error) {
       console.error('Error starting upscale:', error);
       
-      // Rollback en cas d'erreur
+      // Rollback: remove the optimistic look
       setAvatars(activeSpace.id, currentAvatars);
       
       toast({
@@ -235,7 +253,7 @@ export function AvatarLookCard({
         variant: "destructive",
       });
     }
-  }, [activeSpace?.id, avatarId, look.id, t, toast, avatarsBySpace, setAvatars]);
+  }, [activeSpace?.id, avatarId, look, t, toast, avatarsBySpace, setAvatars, fetchAvatarsInBackground, startPolling]);
 
   return (
     <Card 

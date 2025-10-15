@@ -747,7 +747,7 @@
         "edit": "Éditer",
         "rename": "Renommer",
         "delete": "Supprimer",
-        "upscale": "Améliorer la qualité"
+        "upscale": "Améliorer"
       },
       "toast": {
         "avatar-name-saved": "Nom d'avatar sauvegardé",
@@ -783,6 +783,8 @@
           "subtitle": "Décrivez l'avatar que vous voulez créer.",
           "placeholder": "Selfie d'un jeune homme au travail, en costume"
         },
+        "upscale-title": "Amélioration de qualité",
+        "upscale-description": "Générer en qualité améliorée, la peau sera plus détaillée, les visages seront plus réalistes, etc.",
         "start": "Lancer la génération",
         "create-avatar": "Créer l'avatar",
         "style": "Style",

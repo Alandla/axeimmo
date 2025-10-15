@@ -31,6 +31,9 @@ import type { Avatar } from "@/src/types/avatar";
 import { useAvatarsStore } from '@/src/store/avatarsStore'
 import StyleSelector from "@/src/components/style-selector";
 import type { AvatarStyle } from "@/src/types/avatar";
+import { Switch } from "@/src/components/ui/switch";
+import { Label } from "@/src/components/ui/label";
+import { Sparkles, ArrowRight, Loader2 } from "lucide-react";
 
 interface CreateAvatarModalProps {
   isOpen: boolean;
@@ -48,6 +51,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
   const [resetToken, setResetToken] = useState<number>(0);
+  const [upscaleEnabled, setUpscaleEnabled] = useState<boolean>(false);
   const { activeSpace } = useActiveSpaceStore();
   const { fetchAvatarsInBackground, setAvatars, avatarsBySpace } = useAvatarsStore()
 
@@ -65,6 +69,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           prompt,
           format: videoFormat,
           style: avatarStyle,
+          upscale: upscaleEnabled,
         });
         const created: Avatar = (rawCreated as any)?.data ?? (rawCreated as Avatar)
         setIdeaText("");
@@ -113,6 +118,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           setIdeaText("");
           setVideoFormat("vertical");
           setAvatarStyle("ugc-realist");
+          setUpscaleEnabled(false);
           setResetToken((n) => n + 1);
           onClose();
         }
@@ -130,6 +136,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           setIdeaText("");
           setVideoFormat("vertical");
           setAvatarStyle("ugc-realist");
+          setUpscaleEnabled(false);
           setResetToken((n) => n + 1);
         }}>
           <TabsList className="w-full mb-4 gap-2 h-auto p-1">
@@ -224,6 +231,26 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           </TabsContent>
         </Tabs>
 
+        {tab === "idea" && (
+          <div className="flex items-center justify-between space-x-2 p-3 bg-muted/50 rounded-lg border">
+            <div className="space-y-0.5">
+              <Label htmlFor="upscale-avatar" className="text-sm font-medium flex items-center gap-1">
+                <Sparkles className="h-3 w-3" />
+                {t("upscale-title")}
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                {t("upscale-description")}
+              </p>
+            </div>
+            <Switch
+              id="upscale-avatar"
+              checked={upscaleEnabled}
+              onCheckedChange={setUpscaleEnabled}
+              disabled={isSubmitting}
+            />
+          </div>
+        )}
+
         <div className="mt-4">
           <Button
             onClick={handleStart}
@@ -236,6 +263,11 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
             className="w-full"
           >
             {t("start")}
+            {isSubmitting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <ArrowRight className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </DialogContent>

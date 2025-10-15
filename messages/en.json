@@ -835,7 +835,7 @@
         "edit": "Edit",
         "rename": "Rename",
         "delete": "Delete",
-        "upscale": "Upscale image"
+        "upscale": "Upscale"
       },
       "toast": {
         "avatar-name-saved": "Avatar name saved",
@@ -871,6 +871,8 @@
           "subtitle": "Describe the avatar you want to create.",
           "placeholder": "Selfie of a young man at work, wearing a suit"
         },
+        "upscale-title": "Upscale",
+        "upscale-description": "Automatically generate a high-definition version of the avatar, the skin will be more detailed, the faces will be more realistic, etc.",
         "start": "Start generation",
         "create-avatar": "Create avatar",
         "style": "Style",

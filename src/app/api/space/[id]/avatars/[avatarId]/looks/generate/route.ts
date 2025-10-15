@@ -8,7 +8,6 @@ import { editAvatarImage } from "@/src/lib/fal";
 import { VIDEO_FORMATS, VideoFormat } from "@/src/types/video";
 import { extractLookIdentityInfo } from "@/src/lib/workflowai";
 import { nanoid } from "nanoid";
-import { eventBus } from "@/src/lib/events";
 // SpaceModel removed in favor of DAO methods
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 
@@ -153,18 +152,12 @@ export async function POST(
             thumbnail: savedUrl,
             status: 'ready'
           })
-          try {
-            eventBus.emit('look.updated', { spaceId: params.id, avatarId: params.avatarId, lookId, status: 'ready' })
-          } catch {}
         } catch (falErr) {
           await updateLookInAvatar(params.id, params.avatarId, lookId, {
             status: 'error',
             errorMessage: (falErr as any)?.message || 'FAL generation failed',
             errorAt: new Date(),
           })
-          try {
-            eventBus.emit('look.updated', { spaceId: params.id, avatarId: params.avatarId, lookId, status: 'error' })
-          } catch {}
           throw falErr;
         }
       } catch (e) {

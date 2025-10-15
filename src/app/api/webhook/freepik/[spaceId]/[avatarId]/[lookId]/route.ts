@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateLookInAvatar } from "@/src/dao/spaceDao";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
-import { eventBus } from "@/src/lib/events";
 import connectMongo from "@/src/lib/mongoose";
 
 export async function POST(
@@ -38,15 +37,6 @@ export async function POST(
         status: 'ready'
       });
 
-      try {
-        eventBus.emit('look.updated', { 
-          spaceId, 
-          avatarId, 
-          lookId, 
-          status: 'ready' 
-        });
-      } catch {}
-
       console.log(`Successfully upscaled and updated look ${lookId}`);
       return NextResponse.json({ received: true, success: true });
     } 
@@ -56,15 +46,6 @@ export async function POST(
         status: 'error',
         errorMessage: body?.error || 'Upscale failed'
       });
-
-      try {
-        eventBus.emit('look.updated', { 
-          spaceId, 
-          avatarId, 
-          lookId, 
-          status: 'error' 
-        });
-      } catch {}
 
       console.error(`Upscale failed for look ${lookId}:`, body.message);
       return NextResponse.json({ received: true, success: false });

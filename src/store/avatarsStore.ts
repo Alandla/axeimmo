@@ -2,8 +2,8 @@ import { create } from 'zustand'
 import { basicApiGetCall } from '../lib/api'
 import { Avatar } from '../types/avatar'
 
-// Registre SSE au niveau du module pour éviter toute interaction avec l'état zustand
-const sseBySpace = new Map<string, EventSource>();
+// Registre de polling au niveau du module pour éviter toute interaction avec l'état zustand
+const pollingBySpace = new Map<string, NodeJS.Timeout>();
 
 interface AvatarsStoreState {
   avatarsBySpace: Map<string, Avatar[]>
@@ -11,8 +11,8 @@ interface AvatarsStoreState {
   getCachedAvatars: (spaceId: string) => Avatar[] | null
   fetchAvatars: (spaceId: string, forceRefresh?: boolean) => Promise<Avatar[]>
   fetchAvatarsInBackground: (spaceId: string) => Promise<Avatar[]>
-  startSse: (spaceId: string) => void
-  stopSse: (spaceId: string) => void
+  startPolling: (spaceId: string) => void
+  stopPolling: (spaceId: string) => void
   clearSpaceCache: (spaceId: string) => void
   // UI-scoped state for avatars
   activeAvatarName: string | null
@@ -60,36 +60,66 @@ export const useAvatarsStore = create<AvatarsStoreState>((set, get) => ({
     }
   },
 
-  startSse: (spaceId: string) => {
+  startPolling: (spaceId: string) => {
     // Éviter les doublons
-    if (sseBySpace.get(spaceId)) return
-    try {
-      const evtSrc = new EventSource(`/api/space/${spaceId}/avatars/stream`)
-      evtSrc.onmessage = async (ev) => {
-        try {
-          const msg = JSON.parse(ev.data)
-          if (msg?.type === 'look.updated' || msg?.type === 'avatar.updated') {
-            await get().fetchAvatarsInBackground(spaceId)
-          }
-        } catch {}
+    if (pollingBySpace.get(spaceId)) {
+      console.log(`[Polling] Already polling for space ${spaceId}`)
+      return
+    }
+
+    const checkAndPoll = async () => {
+      try {
+        const avatars = get().avatarsBySpace.get(spaceId) || []
+        
+        // Vérifier s'il y a des looks en attente
+        const hasPendingOrMissing = avatars.some(
+          (a) => a.looks.some((l) => l.status === 'pending' || !l.thumbnail || l.thumbnail === "")
+        )
+
+        if (!hasPendingOrMissing) {
+          // Tout est prêt, arrêter le polling
+          console.log(`[Polling] All looks ready for space ${spaceId}, stopping polling`)
+          get().stopPolling(spaceId)
+          return
+        }
+
+        // Rafraîchir les avatars
+        const latest = await get().fetchAvatarsInBackground(spaceId)
+        
+        // Vérifier à nouveau après le refresh
+        const stillPending = latest.some(
+          (a) => a.looks.some((l) => l.status === 'pending' || !l.thumbnail || l.thumbnail === "")
+        )
+        
+        if (!stillPending) {
+          console.log(`[Polling] All looks ready for space ${spaceId} after refresh, stopping polling`)
+          get().stopPolling(spaceId)
+        }
+      } catch (e) {
+        console.error(`[Polling] Error during polling for space ${spaceId}:`, e)
+        // Arrêter en cas d'erreur pour éviter les boucles infinies
+        get().stopPolling(spaceId)
       }
-      evtSrc.onerror = () => {
-        try { evtSrc.close() } catch {}
-        sseBySpace.delete(spaceId)
-      }
-      sseBySpace.set(spaceId, evtSrc)
-    } catch {}
+    }
+
+    console.log(`[Polling] Starting fallback polling for space ${spaceId}`)
+    const intervalId = setInterval(checkAndPoll, 3000) // Toutes les 10 secondes
+    pollingBySpace.set(spaceId, intervalId)
   },
 
-  stopSse: (spaceId: string) => {
-    const src = sseBySpace.get(spaceId)
-    if (src) {
-      try { src.close() } catch {}
-      sseBySpace.delete(spaceId)
+  stopPolling: (spaceId: string) => {
+    const intervalId = pollingBySpace.get(spaceId)
+    if (intervalId) {
+      console.log(`[Polling] Stopping polling for space ${spaceId}`)
+      clearInterval(intervalId)
+      pollingBySpace.delete(spaceId)
     }
   },
 
   clearSpaceCache: (spaceId: string) => {
+    // Arrêter le polling avant de nettoyer
+    get().stopPolling(spaceId)
+    
     set(state => {
       const newMap = new Map(state.avatarsBySpace)
       newMap.delete(spaceId)
