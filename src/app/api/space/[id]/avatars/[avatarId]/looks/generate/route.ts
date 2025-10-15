@@ -10,6 +10,8 @@ import { extractLookIdentityInfo } from "@/src/lib/workflowai";
 import { nanoid } from "nanoid";
 // SpaceModel removed in favor of DAO methods
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
+import { removeCreditsToSpace, addCreditsToSpace } from "@/src/dao/spaceDao";
+import { AVATAR_LOOK_GENERATION_COST } from "@/src/lib/cost";
 
 // Common hint used to bias generations for podcast scenes
 const PODCAST_HINT = " Podcast scene, cinematic lighting, subject in three-quarter view (3/4, slight angle), not looking at camera, speaking to someone off-camera. In front of the subject, include a realistic broadcast microphone that clearly resembles a Shure SM7B: large dynamic capsule, yoke mount on a boom arm, cylindrical body with foam windscreen. Frame so the microphone is visible and well-lit without blocking the face.";
@@ -36,6 +38,18 @@ export async function POST(
     const space: any = await getSpaceById(params.id);
     if (!space) {
       return NextResponse.json({ error: "Space not found" }, { status: 404 });
+    }
+
+    // Check if space has enough credits
+    if (space.credits < AVATAR_LOOK_GENERATION_COST) {
+      return NextResponse.json(
+        { 
+          error: "Insufficient credits", 
+          required: AVATAR_LOOK_GENERATION_COST, 
+          available: space.credits 
+        },
+        { status: 402 }
+      );
     }
 
     const body = await req.json().catch(() => ({}));
@@ -77,6 +91,9 @@ export async function POST(
     };
     // Persist the pending look atomically to avoid race conditions
     await addLookToAvatar(params.id, params.avatarId, look);
+
+    // Deduct credits from space
+    await removeCreditsToSpace(params.id, AVATAR_LOOK_GENERATION_COST);
 
     // Immediately extract name/place/tags from user prompt, helping the model with avatar info when available
     try {
@@ -158,10 +175,25 @@ export async function POST(
             errorMessage: (falErr as any)?.message || 'FAL generation failed',
             errorAt: new Date(),
           })
+          // Refund credits to user
+          await addCreditsToSpace(params.id, AVATAR_LOOK_GENERATION_COST);
+          console.info(`Refunded ${AVATAR_LOOK_GENERATION_COST} credits to space ${params.id} due to look generation failure`);
           throw falErr;
         }
       } catch (e) {
         console.error('Error generating avatar look (background)', e);
+        // If outer catch is reached and look is not ready, refund
+        try {
+          const refreshedSpace: any = await getSpaceById(params.id);
+          const avatarRef: any = refreshedSpace?.avatars?.find((a: any) => a.id === params.avatarId);
+          const lookRef = avatarRef?.looks?.find((l: any) => l.id === lookId);
+          if (lookRef?.status !== 'ready') {
+            await addCreditsToSpace(params.id, AVATAR_LOOK_GENERATION_COST);
+            console.info(`Refunded ${AVATAR_LOOK_GENERATION_COST} credits to space ${params.id} due to look generation outer failure`);
+          }
+        } catch (refundError) {
+          console.error('Failed to refund credits:', refundError);
+        }
       }
     })());
 

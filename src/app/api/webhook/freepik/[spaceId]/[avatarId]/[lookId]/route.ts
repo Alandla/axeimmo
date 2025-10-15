@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateLookInAvatar } from "@/src/dao/spaceDao";
+import { updateLookInAvatar, addCreditsToSpace } from "@/src/dao/spaceDao";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import connectMongo from "@/src/lib/mongoose";
+import { AVATAR_LOOK_UPSCALE_COST } from "@/src/lib/cost";
 
 export async function POST(
   req: NextRequest,
@@ -41,6 +42,10 @@ export async function POST(
         errorMessage: body?.error || body?.message || 'Upscale failed',
         errorAt: new Date()
       });
+
+      // Refund credits to user
+      await addCreditsToSpace(spaceId, AVATAR_LOOK_UPSCALE_COST);
+      console.info(`Refunded ${AVATAR_LOOK_UPSCALE_COST} credits to space ${spaceId} due to upscale failure`);
 
       console.error('Upscale failed:', body?.error || body?.message);
       return NextResponse.json({ received: true, success: false });

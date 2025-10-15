@@ -720,6 +720,7 @@
         "placeholder-1": "Ajouter mon produit dans la main",
         "add-elements": "Ajouter des éléments",
         "send": "Uploader",
+        "cost-tooltip": "Coût : {cost} crédits",
         "sending": "Génération...",
         "images-added": "{count} image(s) ajoutée(s)",
         "style": "Style",
@@ -751,6 +752,8 @@
         "upscale": "Améliorer"
       },
       "toast": {
+        "error-title": "Erreur",
+        "look-generation-error": "Une erreur s'est produite lors de la génération du look. Veuillez réessayer.",
         "avatar-name-saved": "Nom d'avatar sauvegardé",
         "name-updated": "Nom mis à jour",
         "description-updated": "Le nom a été mis à jour",
@@ -788,13 +791,16 @@
         "upscale-description": "Générer en qualité améliorée, la peau sera plus détaillée, les visages seront plus réalistes, etc.",
         "start": "Lancer la génération",
         "create-avatar": "Créer l'avatar",
+        "error": "Erreur",
+        "error-creating-avatar": "Une erreur s'est produite lors de la création de l'avatar. Veuillez réessayer.",
         "style": "Style",
         "styles": {
           "selfie": "UGC",
           "studio": "Studio",
           "podcast": "Podcast",
           "srpo-car": "Voiture"
-        }
+        },
+        "credits": "crédits"
       },
   
       "sections": {

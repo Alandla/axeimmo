@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Play, History, Maximize2, MoreVertical, Pen, Trash2, Edit, Sparkles } from 'lucide-react'
+import { Check, Play, History, Maximize2, MoreVertical, Pen, Trash2, Edit, Sparkles, Scaling } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
 import { useTranslations } from 'next-intl'
@@ -33,6 +33,7 @@ import { useLookToDeleteStore } from '../store/lookToDelete'
 import { useAvatarsStore } from '../store/avatarsStore'
 import { Avatar } from '../types/avatar'
 import { nanoid } from 'nanoid'
+import { AVATAR_LOOK_UPSCALE_COST } from '../lib/cost'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -98,12 +99,16 @@ export function AvatarLookCard({
   onEditLook
 }: AvatarLookCardProps) {
   const { selectedLook: storeSelectedLook, setSelectedLook: setStoreSelectedLook, setSelectedAvatarName: setStoreSelectedAvatarName } = useCreationStore()
-  const { activeSpace } = useActiveSpaceStore()
+  const { activeSpace, decrementCredits } = useActiveSpaceStore()
   const { data: session } = useSession()
   const { toast } = useToast()
   const { setLook } = useLookToDeleteStore()
   const { setAvatars, avatarsBySpace, fetchAvatarsInBackground, startPolling } = useAvatarsStore()
   const t = useTranslations('avatars')
+  const tAssets = useTranslations('assets')
+  
+  // Check if user has enough credits for upscale
+  const hasInsufficientCreditsForUpscale = activeSpace ? activeSpace.credits < AVATAR_LOOK_UPSCALE_COST : false;
 
   // États pour le dropdown et l'édition
   const [isEditing, setIsEditing] = useState(false);
@@ -200,6 +205,16 @@ export function AvatarLookCard({
     
     setIsDropdownOpen(false);
 
+    // Check credits before starting upscale
+    if (hasInsufficientCreditsForUpscale) {
+      toast({
+        title: tAssets('insufficient-credits'),
+        description: tAssets('insufficient-credits-description'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
     // Generate temporary lookId for optimistic update
     const tempLookId = nanoid();
     const currentAvatars = avatarsBySpace.get(activeSpace.id) || [];
@@ -225,6 +240,9 @@ export function AvatarLookCard({
     
     // Apply optimistic update immediately
     setAvatars(activeSpace.id, updatedAvatars);
+
+    // Decrement credits in UI
+    decrementCredits(AVATAR_LOOK_UPSCALE_COST);
 
     toast({
       title: t('toast.upscale-started'),
@@ -374,10 +392,14 @@ export function AvatarLookCard({
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={handleUpscale}
-                  disabled={isProcessing || !look.thumbnail}
+                  disabled={isProcessing || !look.thumbnail || hasInsufficientCreditsForUpscale}
                 >
-                  <Sparkles />
+                  <Scaling />
                   {t('dropdown-menu.upscale')}
+                  <span className="ml-auto flex items-center gap-1 text-gray-400">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    {AVATAR_LOOK_UPSCALE_COST}
+                  </span>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

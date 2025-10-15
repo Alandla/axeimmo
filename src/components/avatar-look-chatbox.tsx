@@ -31,9 +31,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/src/components/ui/tooltip";
 import StyleSelector from "@/src/components/style-selector";
 import { useAvatarsStore } from '@/src/store/avatarsStore'
 import { motion } from "framer-motion"
+import { AVATAR_LOOK_GENERATION_COST } from "@/src/lib/cost"
+import { useToast } from "@/src/hooks/use-toast"
+import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
 
 // Limited format options for avatar look generation
 type AvatarLookFormat = "vertical" | "horizontal";
@@ -111,6 +120,7 @@ export function AvatarLookChatbox({
   pulseSignal = 0,
 }: Props) {
   const t = useTranslations("avatars");
+  const tAssets = useTranslations("assets");
   const [prompt, setPrompt] = useState("");
   const [images, setImages] = useState<string[]>([]);
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
@@ -123,6 +133,11 @@ export function AvatarLookChatbox({
   // Désactiver UGC: style par défaut 'studio' et empêcher la sélection UGC
   const [style, setStyle] = useState<AvatarLookStyle>("studio");
   const { setAvatars, fetchAvatarsInBackground, avatarsBySpace } = useAvatarsStore()
+  const { toast } = useToast();
+  const { activeSpace, decrementCredits } = useActiveSpaceStore();
+
+  // Check if user has enough credits
+  const hasInsufficientCredits = activeSpace ? activeSpace.credits < AVATAR_LOOK_GENERATION_COST : false;
 
   const candidateImages = useMemo(() => {
     const fromLooks = (activeAvatar?.looks || [])
@@ -202,6 +217,17 @@ export function AvatarLookChatbox({
 
   const handleGenerate = async () => {
     if (!prompt.trim() && style !== "podcast") return;
+    
+    // Check credits before starting
+    if (hasInsufficientCredits) {
+      toast({
+        title: tAssets("insufficient-credits"),
+        description: tAssets("insufficient-credits-description"),
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsGenerating(true);
     try {
       const res = await basicApiCall<{ data: AvatarLook }>(
@@ -231,9 +257,27 @@ export function AvatarLookChatbox({
       }
       setPrompt("");
       setImages([]);
+      // Decrement credits in UI
+      decrementCredits(AVATAR_LOOK_GENERATION_COST);
       // Rafraîchir en arrière-plan sans bloquer l'UI
       try { fetchAvatarsInBackground(spaceId) } catch {}
       try { onRefresh?.() } catch {}
+    } catch (e: any) {
+      console.error("Error generating look:", e);
+      // Handle 402 error (insufficient credits)
+      if (e?.response?.status === 402 || e?.status === 402) {
+        toast({
+          title: tAssets("insufficient-credits"),
+          description: tAssets("insufficient-credits-description"),
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: t("toast.error-title"),
+          description: t("toast.look-generation-error"),
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -379,7 +423,7 @@ export function AvatarLookChatbox({
                 setStyle(s);
               }}
               disabled={isGenerating || isUploading}
-              hiddenStyles={['selfie']}
+              hiddenStyles={['selfie', 'srpo-car']}
             />
             <Select
               value={format}
@@ -415,23 +459,33 @@ export function AvatarLookChatbox({
                 ))}
               </SelectContent>
             </Select>
-            <Button
-              size="icon"
-              className="h-10 w-10 rounded-lg"
-              disabled={
-                isGenerating ||
-                isUploading ||
-                (!prompt.trim() && style !== "podcast")
-              }
-              onClick={handleGenerate}
-              aria-label={t("look-chat.send") as string}
-            >
-              {isGenerating || isUploading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
-            </Button>
+            <TooltipProvider>
+              <Tooltip delayDuration={250}>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="icon"
+                    className="h-10 w-10 rounded-lg"
+                    disabled={
+                      isGenerating ||
+                      isUploading ||
+                      (!prompt.trim() && style !== "podcast") ||
+                      hasInsufficientCredits
+                    }
+                    onClick={handleGenerate}
+                    aria-label={t("look-chat.send") as string}
+                  >
+                    {isGenerating || isUploading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Send className="h-4 w-4" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t("look-chat.cost-tooltip", { cost: AVATAR_LOOK_GENERATION_COST })}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       </motion.div>

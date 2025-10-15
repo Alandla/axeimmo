@@ -33,7 +33,9 @@ import StyleSelector from "@/src/components/style-selector";
 import type { AvatarStyle } from "@/src/types/avatar";
 import { Switch } from "@/src/components/ui/switch";
 import { Label } from "@/src/components/ui/label";
-import { Sparkles, ArrowRight, Loader2 } from "lucide-react";
+import { Scaling, ArrowRight, Loader2, Sparkles, AlertCircle } from "lucide-react";
+import { AVATAR_CREATION_COST, AVATAR_LOOK_UPSCALE_COST } from "@/src/lib/cost";
+import { useToast } from "@/src/hooks/use-toast";
 
 interface CreateAvatarModalProps {
   isOpen: boolean;
@@ -43,6 +45,7 @@ interface CreateAvatarModalProps {
 
 export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarModalProps) {
   const t = useTranslations("avatars.create");
+  const tAssets = useTranslations("assets");
   const [tab, setTab] = useState<"pictures" | "idea">("pictures");
   const [ideaText, setIdeaText] = useState<string>("");
   // Limiter aux deux formats utilisés pour la génération d'avatars: vertical (9:16) et horizontal (16:9)
@@ -52,8 +55,15 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
   const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
   const [resetToken, setResetToken] = useState<number>(0);
   const [upscaleEnabled, setUpscaleEnabled] = useState<boolean>(false);
-  const { activeSpace } = useActiveSpaceStore();
+  const { activeSpace, decrementCredits } = useActiveSpaceStore();
   const { fetchAvatarsInBackground, setAvatars, avatarsBySpace } = useAvatarsStore()
+  const { toast } = useToast();
+
+  // Calculate required cost and check if user has enough credits
+  const requiredCost = tab === "idea" 
+    ? (upscaleEnabled ? AVATAR_CREATION_COST + AVATAR_LOOK_UPSCALE_COST : AVATAR_CREATION_COST)
+    : 0; // From pictures is free
+  const hasInsufficientCredits = tab === "idea" && activeSpace ? activeSpace.credits < requiredCost : false;
 
   const handleStart = async () => {
     if (!activeSpace) return;
@@ -61,6 +71,16 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
     if (tab === "idea") {
       const prompt = ideaText.trim();
       if (!prompt) return;
+
+      // Check credits before starting
+      if (hasInsufficientCredits) {
+        toast({
+          title: tAssets("insufficient-credits"),
+          description: tAssets("insufficient-credits-description"),
+          variant: "destructive",
+        });
+        return;
+      }
 
       try {
         setIsSubmitting(true);
@@ -78,9 +98,25 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           // Mettre à jour le store immédiatement (insertion sans refetch)
           setAvatars(activeSpace.id, [created, ...(avatarsBySpace.get(activeSpace.id) || [])])
         }
+        // Decrement credits in UI
+        decrementCredits(requiredCost);
         onClose();
-      } catch (e) {
+      } catch (e: any) {
         console.error("Error creating avatar:", e);
+        // Handle 402 error (insufficient credits)
+        if (e?.response?.status === 402 || e?.status === 402) {
+          toast({
+            title: tAssets("insufficient-credits"),
+            description: tAssets("insufficient-credits-description"),
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: t("error"),
+            description: t("error-creating-avatar"),
+            variant: "destructive",
+          });
+        }
       } finally {
         setIsSubmitting(false);
       }
@@ -100,8 +136,13 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           setAvatars(activeSpace.id, [created, ...(avatarsBySpace.get(activeSpace.id) || [])])
         }
         onClose();
-      } catch (e) {
+      } catch (e: any) {
         console.error("Error creating avatar from image:", e);
+        toast({
+          title: t("error"),
+          description: t("error-creating-avatar"),
+          variant: "destructive",
+        });
       } finally {
         setIsSubmitting(false);
       }
@@ -236,7 +277,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           <div className="flex items-center justify-between space-x-2 p-3 bg-muted/50 rounded-lg border">
             <div className="space-y-0.5">
               <Label htmlFor="upscale-avatar" className="text-sm font-medium flex items-center gap-1">
-                <Sparkles className="h-3 w-3" />
+                <Scaling className="h-3 w-3" />
                 {t("upscale-title")}
               </Label>
               <p className="text-sm text-muted-foreground">
@@ -253,12 +294,30 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
         )}
 
         <div className="mt-4">
+          {tab === "idea" && (
+            <>
+              <div className="flex justify-end mb-2">
+                <span className="text-sm text-gray-400 flex items-center gap-1">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  {upscaleEnabled ? (AVATAR_CREATION_COST + AVATAR_LOOK_UPSCALE_COST) : AVATAR_CREATION_COST} {t("credits")}
+                </span>
+              </div>
+              {hasInsufficientCredits && (
+                <div className="mb-3 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                  <p className="text-sm text-destructive flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4" />
+                    {tAssets("insufficient-credits-description")}
+                  </p>
+                </div>
+              )}
+            </>
+          )}
           <Button
             onClick={handleStart}
             disabled={
               isSubmitting ||
               !activeSpace ||
-              (tab === "idea" && !ideaText.trim()) ||
+              (tab === "idea" && (!ideaText.trim() || hasInsufficientCredits)) ||
               (tab === "pictures" && selectedImageUrls.length === 0)
             }
             className="w-full"

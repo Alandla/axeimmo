@@ -14,8 +14,9 @@ import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import SpaceModel from "@/src/models/Space";
 import { avatarsLimit as avatarsLimitConfig } from "@/src/config/plan.config";
 import { PlanName } from "@/src/types/enums";
-import { updateAvatarThumbnailAndFirstLook, updateLookInAvatar } from "@/src/dao/spaceDao";
+import { updateAvatarThumbnailAndFirstLook, updateLookInAvatar, removeCreditsToSpace, addCreditsToSpace } from "@/src/dao/spaceDao";
 import { upscaleImageFromUrl } from "@/src/lib/freepik";
+import { AVATAR_CREATION_COST, AVATAR_LOOK_UPSCALE_COST } from "@/src/lib/cost";
 
 // Common hint used to bias generations for podcast scenes
 // const PODCAST_HINT = " Podcast scene, cinematic lighting, subject in three-quarter view (3/4, slight angle), not looking at camera, speaking to someone off-camera. In front of the subject, include a realistic broadcast microphone that clearly resembles a Shure SM7B: large dynamic capsule, yoke mount on a boom arm, cylindrical body with foam windscreen. Frame so the microphone is visible and well-lit without blocking the face.";
@@ -114,6 +115,24 @@ export async function POST(
       return NextResponse.json({ error: "Space not found" }, { status: 404 });
     }
 
+    const body = await req.json().catch(() => ({}));
+    const upscale: boolean = body?.upscale ?? false;
+
+    // Calculate total cost based on upscale option
+    const totalCost = upscale ? AVATAR_CREATION_COST + AVATAR_LOOK_UPSCALE_COST : AVATAR_CREATION_COST;
+
+    // Check if space has enough credits
+    if (space.credits < totalCost) {
+      return NextResponse.json(
+        { 
+          error: "Insufficient credits", 
+          required: totalCost, 
+          available: space.credits 
+        },
+        { status: 402 }
+      );
+    }
+
     // Enforce avatar creation limit (space-level) except for Enterprise which is unlimited
     const existingAvatars = ((space as any).avatars as any[]) || [];
     const currentAvatarCount = existingAvatars.length;
@@ -131,12 +150,10 @@ export async function POST(
       }
     }
 
-    const body = await req.json().catch(() => ({}));
     const basePrompt: string | undefined = body?.prompt;
     const style: AvatarStyle | undefined = body?.style;
     const format: VideoFormat | undefined = body?.format;
     const imageUrl: string | undefined = body?.imageUrl;
-    const upscale: boolean = body?.upscale ?? false;
     const imageUrls: string[] = Array.isArray(body?.imageUrls)
       ? (body.imageUrls as string[]).filter((u) => typeof u === "string" && u.length > 0)
       : [];
@@ -230,6 +247,9 @@ export async function POST(
     (space as any).avatars.push(newAvatar);
     await (space as any).save();
 
+    // Deduct credits from space
+    await removeCreditsToSpace(params.id, totalCost);
+
     // Background image generation only when no image was provided
     if (providedImageUrls.length === 0 && finalPrompt) {
       const firstLookId = looks[0].id;
@@ -283,8 +303,11 @@ export async function POST(
               errorMessage: e?.message || 'Unknown error during generation',
               errorAt: new Date()
             });
+            // Refund credits to user
+            await addCreditsToSpace(params.id, totalCost);
+            console.info(`Refunded ${totalCost} credits to space ${params.id} due to avatar creation failure`);
           } catch (updateError) {
-            console.error('Failed to update look error status:', updateError);
+            console.error('Failed to update look error status or refund credits:', updateError);
           }
         }
       })());

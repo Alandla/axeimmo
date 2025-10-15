@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
-import { getSpaceById, addLookToAvatar } from "@/src/dao/spaceDao";
+import { getSpaceById, addLookToAvatar, removeCreditsToSpace, addCreditsToSpace } from "@/src/dao/spaceDao";
 import { upscaleImageFromUrl } from "@/src/lib/freepik";
 import { nanoid } from "nanoid";
+import { AVATAR_LOOK_UPSCALE_COST } from "@/src/lib/cost";
 
 export async function POST(
   req: NextRequest,
@@ -30,6 +31,18 @@ export async function POST(
     const space: any = await getSpaceById(params.id);
     if (!space) {
       return NextResponse.json({ error: "Space not found" }, { status: 404 });
+    }
+
+    // Check if space has enough credits
+    if (space.credits < AVATAR_LOOK_UPSCALE_COST) {
+      return NextResponse.json(
+        { 
+          error: "Insufficient credits", 
+          required: AVATAR_LOOK_UPSCALE_COST, 
+          available: space.credits 
+        },
+        { status: 402 }
+      );
     }
 
     const avatar = space.avatars?.find((a: any) => a.id === params.avatarId);
@@ -67,6 +80,9 @@ export async function POST(
     // Add the new look to the avatar
     await addLookToAvatar(params.id, params.avatarId, newLook);
 
+    // Deduct credits from space
+    await removeCreditsToSpace(params.id, AVATAR_LOOK_UPSCALE_COST);
+
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
       : "https://app.hoox.video";
@@ -87,6 +103,14 @@ export async function POST(
       });
     } catch (error: any) {
       console.error("Error starting upscale:", error);
+
+      // Refund credits since upscale couldn't even start
+      try {
+        await addCreditsToSpace(params.id, AVATAR_LOOK_UPSCALE_COST);
+        console.info(`Refunded ${AVATAR_LOOK_UPSCALE_COST} credits to space ${params.id} - upscale failed to start`);
+      } catch (refundError) {
+        console.error("Failed to refund credits:", refundError);
+      }
 
       return NextResponse.json({ 
         error: "Failed to start upscale" 

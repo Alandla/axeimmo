@@ -808,6 +808,7 @@
         "placeholder-1": "Add my product in the hand",
         "add-elements": "Add elements",
         "send": "Upload",
+        "cost-tooltip": "Cost: {cost} credits",
         "sending": "Generating...",
         "images-added": "{count} image(s) added",
         "style": "Style",
@@ -839,6 +840,8 @@
         "upscale": "Upscale"
       },
       "toast": {
+        "error-title": "Error",
+        "look-generation-error": "An error occurred while generating the look. Please try again.",
         "avatar-name-saved": "Avatar name saved",
         "name-updated": "Name updated",
         "description-updated": "The name has been updated",
@@ -876,13 +879,17 @@
         "upscale-description": "Automatically generate a high-definition version of the avatar, the skin will be more detailed, the faces will be more realistic, etc.",
         "start": "Start generation",
         "create-avatar": "Create avatar",
+        "error": "Error",
+        "error-creating-avatar": "An error occurred while creating the avatar. Please try again.",
+        "credits": "credits",
         "style": "Style",
         "styles": {
           "selfie": "UGC",
           "studio": "Studio",
           "podcast": "Podcast",
           "srpo-car": "Car"
-        }
+        },
+        "credits": "credits"
       },
 
       "sections": {
