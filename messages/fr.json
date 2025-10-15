@@ -746,7 +746,8 @@
         "see-looks": "Voir les looks",
         "edit": "Éditer",
         "rename": "Renommer",
-        "delete": "Supprimer"
+        "delete": "Supprimer",
+        "upscale": "Améliorer la qualité"
       },
       "toast": {
         "avatar-name-saved": "Nom d'avatar sauvegardé",
@@ -763,8 +764,13 @@
         "look-delete-error": "Une erreur est survenue lors de la suppression du look",
         "title-error": "Plan payant requis",
         "description-premium-error": "Cet avatar n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder.",
-        "error": "Erreur"
+        "error": "Erreur",
+        "error-title": "Erreur",
+        "upscale-started": "Amélioration de la qualité lancée",
+        "upscale-started-description": "L'amélioration de la qualité de l'image est en cours. Cela peut prendre quelques instants.",
+        "upscale-error": "Une erreur est survenue lors de l'amélioration de la qualité"
       },
+      "upscaling-in-progress": "Amélioration en cours...",
       "create": {
         "title": "Créer un avatar",
         "from-pictures": {

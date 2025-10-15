@@ -834,7 +834,8 @@
         "see-looks": "See looks",
         "edit": "Edit",
         "rename": "Rename",
-        "delete": "Delete"
+        "delete": "Delete",
+        "upscale": "Upscale image"
       },
       "toast": {
         "avatar-name-saved": "Avatar name saved",
@@ -851,8 +852,13 @@
         "look-delete-error": "An error occurred while deleting the look",
         "error": "Error",
         "title-error": "Paid plan required",
-        "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it."
+        "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it.",
+        "error-title": "Error",
+        "upscale-started": "Image upscaling started",
+        "upscale-started-description": "The image quality enhancement is in progress. This may take a few moments.",
+        "upscale-error": "An error occurred while upscaling the image"
       },
+      "upscaling-in-progress": "Upscaling quality...",
       "create": {
         "title": "Create avatar",
         "from-pictures": {

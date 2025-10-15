@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Play, History, Maximize2, MoreVertical, Pen, Trash2, Edit } from 'lucide-react'
+import { Check, Play, History, Maximize2, MoreVertical, Pen, Trash2, Edit, Sparkles } from 'lucide-react'
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
 import { useTranslations } from 'next-intl'
@@ -26,10 +26,12 @@ import {
 import { Avatar as UIAvatar, AvatarFallback } from './ui/avatar'
 import { AvatarImage } from '@radix-ui/react-avatar'
 import { cn } from '../lib/utils'
-import { basicApiPatchCall } from '../lib/api'
+import { basicApiPatchCall, basicApiCall } from '../lib/api'
 import { useToast } from '../hooks/use-toast'
 import { useActiveSpaceStore } from '../store/activeSpaceStore'
 import { useLookToDeleteStore } from '../store/lookToDelete'
+import { useAvatarsStore } from '../store/avatarsStore'
+import { Avatar } from '../types/avatar'
 
 export const IconGenderMaleFemale: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -99,6 +101,7 @@ export function AvatarLookCard({
   const { data: session } = useSession()
   const { toast } = useToast()
   const { setLook } = useLookToDeleteStore()
+  const { setAvatars, avatarsBySpace } = useAvatarsStore()
   const t = useTranslations('avatars')
 
   // États pour le dropdown et l'édition
@@ -111,6 +114,7 @@ export function AvatarLookCard({
   
   const selectedLook = propSelectedLook !== undefined ? propSelectedLook : storeSelectedLook
   const isSelected = selectedLook?.id === look.id;
+  const isProcessing = look.status === 'pending';
 
   // Resolve creator from activeSpace.members using look.createdBy userId
   const getCreator = () => {
@@ -130,7 +134,7 @@ export function AvatarLookCard({
   const creator = getCreator();
 
   const handleClick = () => {
-    if (!look.thumbnail || look.status === 'error') return;
+    if (!look.thumbnail || look.status === 'error' || isProcessing) return;
     if (onLookChange) {
       onLookChange(look)
     } else {
@@ -188,6 +192,50 @@ export function AvatarLookCard({
       }
     }
   }, [editedName, look, t, toast, activeSpace?.id, avatarId, onLookRenamed]);
+
+  const handleUpscale = useCallback(async (e: any) => {
+    e.stopPropagation();
+    if (!activeSpace?.id || !avatarId || !look.id) return;
+    
+    setIsDropdownOpen(false);
+
+    // Mise à jour optimiste du statut dans le store
+    const currentAvatars = avatarsBySpace.get(activeSpace.id) || [];
+    const updatedAvatars = currentAvatars.map((a: Avatar) => {
+      if (a.id === avatarId) {
+        return {
+          ...a,
+          looks: a.looks.map((l) => 
+            l.id === look.id 
+              ? { ...l, status: 'pending' as const }
+              : l
+          )
+        };
+      }
+      return a;
+    });
+    setAvatars(activeSpace.id, updatedAvatars);
+
+    try {
+      await basicApiCall(`/space/${activeSpace.id}/avatars/${avatarId}/looks/${look.id}/upscale`, {});
+      toast({
+        title: t('toast.upscale-started'),
+        description: t('toast.upscale-started-description'),
+        variant: "confirm",
+      });
+    } catch (error) {
+      console.error('Error starting upscale:', error);
+      
+      // Rollback en cas d'erreur
+      setAvatars(activeSpace.id, currentAvatars);
+      
+      toast({
+        title: t('toast.error-title'),
+        description: t('toast.upscale-error'),
+        variant: "destructive",
+      });
+    }
+  }, [activeSpace?.id, avatarId, look.id, t, toast, avatarsBySpace, setAvatars]);
 
   return (
     <Card 
@@ -306,6 +354,13 @@ export function AvatarLookCard({
                   <Pen />
                   {t('dropdown-menu.rename')}
                 </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={handleUpscale}
+                  disabled={isProcessing || !look.thumbnail}
+                >
+                  <Sparkles />
+                  {t('dropdown-menu.upscale')}
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -330,13 +385,23 @@ export function AvatarLookCard({
       {/* Image principale */}
       <div className="w-full aspect-[3/4] relative">
         {look.thumbnail ? (
-          <Image 
-            src={look.thumbnail} 
-            alt={look.name || ''}
-            className="w-full h-full object-cover"
-            width={1280}
-            height={720}
-          />
+          <>
+            <Image 
+              src={look.thumbnail} 
+              alt={look.name || ''}
+              className="w-full h-full object-cover"
+              width={1280}
+              height={720}
+            />
+            {isProcessing && (
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]">
+                {/* Effet de shimmer animé pour l'upscale */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
             <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />

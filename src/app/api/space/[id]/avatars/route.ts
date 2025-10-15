@@ -136,6 +136,7 @@ export async function POST(
     const style: AvatarStyle | undefined = body?.style;
     const format: VideoFormat | undefined = body?.format;
     const imageUrl: string | undefined = body?.imageUrl;
+    const upscale: boolean = body?.upscale ?? false;
     const imageUrls: string[] = Array.isArray(body?.imageUrls)
       ? (body.imageUrls as string[]).filter((u) => typeof u === "string" && u.length > 0)
       : [];
@@ -240,9 +241,29 @@ export async function POST(
             img = await generateAvatarImageFluxSrpo({ prompt: finalPrompt as string, image_size: imageSize });
           }
 
+          let finalImageUrl = img.url;
+
+          // Upscale if requested
+          if (upscale) {
+            try {
+              const { upscaleImageFromUrl } = await import('@/src/lib/freepik');
+              const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.hoox.video";
+              const webhookUrl = `${baseUrl}/api/webhook/freepik?spaceId=${params.id}&avatarId=${avatarId}&lookId=${looks[0].id}`;
+              
+              await upscaleImageFromUrl({
+                image_url: img.url,
+                webhook_url: webhookUrl
+              });
+              
+              // Freepik always uses webhook, no immediate result
+            } catch (upscaleError) {
+              console.error('Error upscaling image, using original:', upscaleError);
+            }
+          }
+
           // Save generated image to our storage (R2) and use internal URL
           const fileName = `avatar-${avatarId}-${Date.now()}`;
-          const savedUrl = await uploadImageFromUrlToS3(img.url, "medias-users", fileName);
+          const savedUrl = await uploadImageFromUrlToS3(finalImageUrl, "medias-users", fileName);
           await updateAvatarThumbnailAndFirstLook(params.id, avatarId, savedUrl)
           try {
             eventBus.emit('avatar.updated', { spaceId: params.id, avatarId, status: 'ready' })
