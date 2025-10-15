@@ -33,6 +33,8 @@ interface GenerateVideoRequest {
   webhook_url?: string;
   use_space_media?: boolean;
   save_media_to_space?: boolean;
+  emotion_enhancement?: boolean;
+  use_veo3?: boolean;
 }
 
 interface ApiErrorDetail {
@@ -260,6 +262,8 @@ export async function POST(req: NextRequest) {
       webSearch: params.web_search?.images || false,
       animateImages: shouldAnimateImages,
       animationMode: (params.animate_mode as KlingGenerationMode) || KlingGenerationMode.STANDARD,
+      emotionEnhancement: params.emotion_enhancement || false,
+      useVeo3: params.use_veo3 || false,
       format: videoFormat,
       width: videoWidth,
       height: videoHeight,

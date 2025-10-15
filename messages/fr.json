@@ -721,6 +721,8 @@
       "no-avatar-name": "Pas d'avatar",
       "no-avatar-description": "Mode voix seulement",
       "no-looks-found": "Aucun look trouvé pour les filtres sélectionnés",
+      "veo3-description-prefix": "Utiliser",
+      "veo3-description-suffix": "pour la génération d'avatar",
       "toast": {
         "title-error": "Plan payant requis",
         "description-premium-error": "Cet avatar n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder."
@@ -843,7 +845,8 @@
       "ANIMATE_IMAGES": "Animation des images",
       "DISPLAY_BROLL": "Placement de l'avatar",
       "REDIRECTING": "Sauvegarde et redirection vers l'éditeur",
-      "error-message": "Erreur, veuillez contacter le support."
+      "error-message": "Erreur, veuillez contacter le support.",
+      "veo3-warning": "Il est normal que la vidéo n'ait pas de son ni de mouvement sur l'avatar, dans l'éditeur. Il faudra exporter la vidéo pour voir le résultat final."
     },
     "space": {
       "privateSpaceName": "Mon espace privé",

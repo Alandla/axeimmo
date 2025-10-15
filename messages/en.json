@@ -809,6 +809,8 @@
       "no-avatar-name": "No avatar",
       "no-avatar-description": "Voice only mode",
       "no-looks-found": "No looks found for the selected filters",
+      "veo3-description-prefix": "Use",
+      "veo3-description-suffix": "for avatar generation",
       "toast": {
         "title-error": "Paid plan required",
         "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it."
@@ -930,7 +932,8 @@
       "ANIMATE_IMAGES": "Animating images",
       "DISPLAY_BROLL": "Avatar placement",
       "REDIRECTING": "Saving and redirecting to editor",
-      "error-message": "Error, please contact support."
+      "error-message": "Error, please contact support.",
+      "veo3-warning": "It's normal if the video has no sound or avatar movement in the editor. You need to export the video to see the final result."
     },
     "space": {
       "privateSpaceName": "My Private Space",

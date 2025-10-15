@@ -35,7 +35,7 @@ const separateFilesAndAssets = (items: FileOrAssetToUpload[]) => {
 // Create hooks for components to use
 export const useGenerationProcess = () => {
   const startGeneration = async (userId: string, spaceId: string) => {
-    const { files, script, selectedVoice, selectedLook, setSteps, setLastStep, isWebMode, extractedImagesMedia, animateImages, animationMode, emotionEnhancement, videoFormat, reset } = useCreationStore.getState()
+    const { files, script, selectedVoice, selectedLook, setSteps, setLastStep, isWebMode, extractedImagesMedia, animateImages, animationMode, emotionEnhancement, useVeo3, videoFormat, reset } = useCreationStore.getState()
     
     const updateStepProgress = (stepName: string, progress: number) => {
       const currentSteps = useCreationStore.getState().steps
@@ -82,6 +82,7 @@ export const useGenerationProcess = () => {
       animateImages: animateImages,
       animationMode: animationMode,
       emotionEnhancement: emotionEnhancement,
+      useVeo3: useVeo3,
       format: videoFormat
     }
 

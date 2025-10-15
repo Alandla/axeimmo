@@ -48,6 +48,7 @@ interface GenerateVideoPayload {
   animateImages: boolean
   animationMode: KlingGenerationMode
   emotionEnhancement: boolean
+  useVeo3: boolean
   format?: 'vertical' | 'square' | 'ads' | 'horizontal' // Format optionnel pour la vidéo
   webhookUrl?: string
   useSpaceMedia?: boolean // Par défaut true - utiliser les médias du space

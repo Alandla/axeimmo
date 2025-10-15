@@ -22,6 +22,7 @@ type CreationStore = {
   animateImages: boolean
   animationMode: KlingGenerationMode
   emotionEnhancement: boolean
+  useVeo3: boolean
   videoFormat: VideoFormat
   videoWidth?: number
   videoHeight?: number
@@ -43,6 +44,7 @@ type CreationStore = {
   setAnimateImages: (animate: boolean) => void
   setAnimationMode: (mode: KlingGenerationMode) => void
   setEmotionEnhancement: (enabled: boolean) => void
+  setUseVeo3: (enabled: boolean) => void
   setVideoFormat: (format: VideoFormat) => void
   setVideoWidth: (width: number) => void
   setVideoHeight: (height: number) => void
@@ -64,6 +66,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   animateImages: false,
   animationMode: KlingGenerationMode.STANDARD,
   emotionEnhancement: false,
+  useVeo3: false,
   videoFormat: 'vertical',
   videoWidth: undefined,
   videoHeight: undefined,
@@ -85,6 +88,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   setAnimateImages: (animate) => set({ animateImages: animate }),
   setAnimationMode: (mode) => set({ animationMode: mode }),
   setEmotionEnhancement: (enabled) => set({ emotionEnhancement: enabled }),
+  setUseVeo3: (enabled) => set({ useVeo3: enabled }),
   setVideoFormat: (format) => set({ videoFormat: format }),
   setVideoWidth: (width) => set({ videoWidth: width }),
   setVideoHeight: (height) => set({ videoHeight: height }),
@@ -102,6 +106,8 @@ export const useCreationStore = create<CreationStore>((set) => ({
     extractedImagesMedia: [],
     animateImages: false,
     animationMode: KlingGenerationMode.STANDARD,
+    emotionEnhancement: false,
+    useVeo3: false,
   }),
 }))
 
