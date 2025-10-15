@@ -17,7 +17,7 @@ export const KLING_ENDPOINTS = {
 } as const;
 const AVATAR_IMAGE_ENDPOINTS = {
   EDIT: "fal-ai/nano-banana/edit",
-  COMFY_SRPO: "comfy/Hoox/srpo",
+  COMFY_SRPO: "comfy/Hoox/srpo-selfie-o5-no-style-4k-step",
   FLUX_SRPO: "fal-ai/flux/srpo",
   UPSCALE_CRISP: "fal-ai/recraft/upscale/crisp"
 } as const;
@@ -61,8 +61,6 @@ export interface FalQueueResult {
 // Simple avatar image generation via Fal.ai (endpoint configurable)
 export interface AvatarImageRequest {
   prompt: string;
-  // Select model by style: 'ugc-realist' -> comfy/Hoox/srpo, others -> fal-ai/flux/srpo
-  style?: import('@/src/types/avatar').AvatarStyle;
 }
 
 export interface AvatarImageResponse {
@@ -222,19 +220,6 @@ export async function generateAvatarImageFluxSrpo(
     throw error;
   }
 }
-
-// Back-compat wrapper routing by style
-// Back-compat wrapper routing by style (kept for potential external imports)
-export async function generateAvatarImage(
-  request: AvatarImageRequest
-): Promise<AvatarImageResponse> {
-  const style = request.style || 'ugc-realist';
-  if (style === 'ugc-realist') {
-    return generateAvatarImageComfySrpo({ prompt: request.prompt });
-  }
-  return generateAvatarImageFluxSrpo({ prompt: request.prompt });
-}
-
 
 // OmniHuman types and constants
 export const OMNIHUMAN_ENDPOINT = "fal-ai/bytedance/omnihuman/v1.5";

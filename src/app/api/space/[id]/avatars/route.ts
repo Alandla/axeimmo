@@ -234,7 +234,7 @@ export async function POST(
           let img: any;
           
           if (style === 'ugc-realist') {
-            const soulResult = await generateSoulImageSimple(finalPrompt as string, (format as 'vertical' | 'horizontal') || 'vertical');
+            const soulResult = await generateAvatarImageComfySrpo({ prompt: finalPrompt as string });
             img = { url: soulResult.url };
           } else {
             img = await generateAvatarImageFluxSrpo({ prompt: finalPrompt as string, image_size: imageSize });
