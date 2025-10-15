@@ -262,7 +262,7 @@ export async function POST(
               
               baseUrl = baseUrl.replace(/\/$/, '');
               
-              const webhookUrl = `${baseUrl}/api/webhook/freepik/${params.id}/${avatarId}/${firstLookId}`;
+              const webhookUrl = `${baseUrl}/api/webhook/freepik/${params.id}/${avatarId}/${firstLookId}?x-vercel-protection-bypass=${process.env.VERCEL_AUTOMATION_BYPASS_SECRET}`;
               
               await upscaleImageFromUrl({
                 image_url: savedUrl,
