@@ -42,16 +42,18 @@ export const useAvatarsStore = create<AvatarsStoreState>((set, get) => ({
     const cached = state.avatarsBySpace.get(spaceId)
     if (!forceRefresh && cached) return cached
 
-    const avatars = await basicApiGetCall<Avatar[]>(`/space/${spaceId}/avatars`)
-    get().setAvatars(spaceId, avatars || [])
-    return avatars || []
+    const raw = await basicApiGetCall<Avatar[] | { data: Avatar[] }>(`/space/${spaceId}/avatars`)
+    const avatars = (raw as any)?.data ?? raw
+    get().setAvatars(spaceId, (avatars as Avatar[]) || [])
+    return (avatars as Avatar[]) || []
   },
 
   fetchAvatarsInBackground: async (spaceId: string) => {
     try {
-      const avatars = await basicApiGetCall<Avatar[]>(`/space/${spaceId}/avatars`)
-      get().setAvatars(spaceId, avatars || [])
-      return avatars || []
+      const raw = await basicApiGetCall<Avatar[] | { data: Avatar[] }>(`/space/${spaceId}/avatars`)
+      const avatars = (raw as any)?.data ?? raw
+      get().setAvatars(spaceId, (avatars as Avatar[]) || [])
+      return (avatars as Avatar[]) || []
     } catch (e) {
       const state = get()
       return state.avatarsBySpace.get(spaceId) || []

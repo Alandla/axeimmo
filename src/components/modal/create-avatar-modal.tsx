@@ -61,11 +61,12 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
       try {
         setIsSubmitting(true);
         // Utiliser basicApiCall pour récupérer l'avatar créé
-        const created: Avatar = await basicApiCall<Avatar>(`/space/${activeSpace.id}/avatars/soul`, {
+        const rawCreated = await basicApiCall<Avatar | { data: Avatar }>(`/space/${activeSpace.id}/avatars/`, {
           prompt,
           format: videoFormat,
           style: avatarStyle,
         });
+        const created: Avatar = (rawCreated as any)?.data ?? (rawCreated as Avatar)
         setIdeaText("");
         if (created) {
           if (onCreated) onCreated(created);
@@ -85,8 +86,8 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
         const payload = selectedImageUrls.length === 1
           ? { imageUrl: selectedImageUrls[0], style: avatarStyle }
           : { imageUrls: selectedImageUrls, style: avatarStyle };
-        const res = await basicApiCall<Avatar>(`/space/${activeSpace.id}/avatars`, payload);
-        const created: Avatar = res;
+        const res = await basicApiCall<Avatar | { data: Avatar }>(`/space/${activeSpace.id}/avatars`, payload);
+        const created: Avatar = (res as any)?.data ?? (res as Avatar);
         setSelectedImageUrls([]);
         if (created) {
           if (onCreated) onCreated(created);

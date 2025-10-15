@@ -18,8 +18,8 @@ let client: HiggsfieldClient | null = null;
 function getClient(): HiggsfieldClient {
   if (!client) {
     client = new HiggsfieldClient({
-      apiKey: process.env.HF_API_KEY,
-      apiSecret: process.env.HF_SECRET,
+      apiKey: process.env.HIGGSFIELD_API_KEY,
+      apiSecret: process.env.HIGGSFIELD_SECRET_KEY,
       timeout: 120000, // 2 minutes
       maxRetries: 3,
       retryBackoff: 1000,
