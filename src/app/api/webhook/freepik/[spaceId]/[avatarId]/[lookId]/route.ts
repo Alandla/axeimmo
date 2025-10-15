@@ -7,18 +7,13 @@ export async function POST(
   req: NextRequest,
   { params }: { params: { spaceId: string; avatarId: string; lookId: string } }
 ) {
-  console.log("POST /api/webhook/freepik/[spaceId]/[avatarId]/[lookId] - Received upscale result");
-
   try {
     await connectMongo();
 
     const body = await req.json();
-    console.log("Freepik webhook payload:", JSON.stringify(body, null, 2));
-
     const { spaceId, avatarId, lookId } = params;
     
     if (!spaceId || !avatarId || !lookId) {
-      console.error("Missing path parameters in webhook URL");
       return NextResponse.json({ error: "Missing path parameters" }, { status: 400 });
     }
 
@@ -37,17 +32,17 @@ export async function POST(
         status: 'ready'
       });
 
-      console.log(`Successfully upscaled and updated look ${lookId}`);
       return NextResponse.json({ received: true, success: true });
     } 
     
     if (status === "ERROR" || status === "FAILED") {
       await updateLookInAvatar(spaceId, avatarId, lookId, {
         status: 'error',
-        errorMessage: body?.error || 'Upscale failed'
+        errorMessage: body?.error || body?.message || 'Upscale failed',
+        errorAt: new Date()
       });
 
-      console.error(`Upscale failed for look ${lookId}:`, body.message);
+      console.error('Upscale failed:', body?.error || body?.message);
       return NextResponse.json({ received: true, success: false });
     }
 

@@ -501,7 +501,6 @@ export const updateLookInAvatar = async (
 ) => {
   try {
     return await executeWithRetry(async () => {
-      // Flatten updates to target the nested look fields
       const setObject: Record<string, any> = {};
       Object.entries(updates).forEach(([k, v]) => {
         setObject[`avatars.$[a].looks.$[l].${k}`] = v;

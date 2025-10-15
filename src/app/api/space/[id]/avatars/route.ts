@@ -15,6 +15,7 @@ import SpaceModel from "@/src/models/Space";
 import { avatarsLimit as avatarsLimitConfig } from "@/src/config/plan.config";
 import { PlanName } from "@/src/types/enums";
 import { updateAvatarThumbnailAndFirstLook, updateLookInAvatar } from "@/src/dao/spaceDao";
+import { upscaleImageFromUrl } from "@/src/lib/freepik";
 
 // Common hint used to bias generations for podcast scenes
 // const PODCAST_HINT = " Podcast scene, cinematic lighting, subject in three-quarter view (3/4, slight angle), not looking at camera, speaking to someone off-camera. In front of the subject, include a realistic broadcast microphone that clearly resembles a Shure SM7B: large dynamic capsule, yoke mount on a boom arm, cylindrical body with foam windscreen. Frame so the microphone is visible and well-lit without blocking the face.";
@@ -195,6 +196,7 @@ export async function POST(
           previewUrl: "",
           videoUrl: "",
           createdBy: creatorUserId,
+          createdAt: new Date(),
           format: "vertical",
           settings: {},
           status: 'ready' as const,
@@ -208,6 +210,7 @@ export async function POST(
           previewUrl: "",
           videoUrl: "",
           createdBy: creatorUserId,
+          createdAt: new Date(),
           format: "vertical",
           settings: {},
           status: 'pending' as const,
@@ -229,6 +232,8 @@ export async function POST(
 
     // Background image generation only when no image was provided
     if (providedImageUrls.length === 0 && finalPrompt) {
+      const firstLookId = looks[0].id;
+      
       waitUntil((async () => {
         try {
           const imageSize = format === 'horizontal' ? 'landscape_16_9' : (format === 'vertical' ? 'portrait_16_9' : undefined);
@@ -238,39 +243,49 @@ export async function POST(
             image_size: imageSize 
           });
 
-          // Save generated image to our storage (R2) immediately
           const fileName = `avatar-${avatarId}-${Date.now()}`;
           const savedUrl = await uploadImageFromUrlToS3(img.url, "medias-users", fileName);
           
-          // Update thumbnail immediately with the non-upscaled version
           await updateAvatarThumbnailAndFirstLook(params.id, avatarId, savedUrl);
 
-          // Upscale if requested
           if (upscale) {
             try {
-              const { upscaleImageFromUrl } = await import('@/src/lib/freepik');
-              const baseUrl = process.env.VERCEL_URL 
-                ? `https://${process.env.VERCEL_URL}` 
-                : "https://app.hoox.video";
-              const webhookUrl = `${baseUrl}/api/webhook/freepik/${params.id}/${avatarId}/${looks[0].id}`;
+              let baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL;
+              
+              if (!baseUrl && process.env.VERCEL_URL) {
+                baseUrl = `https://${process.env.VERCEL_URL}`;
+              }
+              
+              if (!baseUrl) {
+                baseUrl = "https://app.hoox.video";
+              }
+              
+              baseUrl = baseUrl.replace(/\/$/, '');
+              
+              const webhookUrl = `${baseUrl}/api/webhook/freepik/${params.id}/${avatarId}/${firstLookId}`;
               
               await upscaleImageFromUrl({
                 image_url: savedUrl,
                 webhook_url: webhookUrl
               });
-              
-              // Webhook will update the thumbnail with upscaled version and set status to 'ready'
-            } catch (upscaleError) {
+            } catch (upscaleError: any) {
               console.error('Error upscaling image, keeping original:', upscaleError);
-              // If upscale fails, mark look as ready with original image              
-              await updateLookInAvatar(params.id, avatarId, looks[0].id, { status: 'ready' });
+              await updateLookInAvatar(params.id, avatarId, firstLookId, { status: 'ready' });
             }
           } else {
-            // No upscale requested, mark look as ready immediately            
-            await updateLookInAvatar(params.id, avatarId, looks[0].id, { status: 'ready' });
+            await updateLookInAvatar(params.id, avatarId, firstLookId, { status: 'ready' });
           }
-        } catch (e) {
+        } catch (e: any) {
           console.error('Error generating first avatar look image (background)', e);
+          try {
+            await updateLookInAvatar(params.id, avatarId, firstLookId, { 
+              status: 'error',
+              errorMessage: e?.message || 'Unknown error during generation',
+              errorAt: new Date()
+            });
+          } catch (updateError) {
+            console.error('Failed to update look error status:', updateError);
+          }
         }
       })());
     }

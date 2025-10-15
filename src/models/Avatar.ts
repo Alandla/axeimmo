@@ -45,6 +45,7 @@ const avatarSchema = new mongoose.Schema({
         status: { type: String, enum: ['pending', 'ready', 'error'], default: 'ready' },
         errorMessage: String,
         errorAt: Date,
+        createdAt: { type: Date, default: Date.now },
         renders: {
           type: [
             {

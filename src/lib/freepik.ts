@@ -91,7 +91,7 @@ export async function upscaleImageFromUrl(request: FreepikUpscaleFromUrlRequest)
       webhook_url: request.webhook_url,
     });
   } catch (error: any) {
-    console.error("Error fetching or upscaling image from URL:", error.message);
+    console.error("Error fetching or upscaling image from URL:", error?.response?.data || error?.message || error);
     throw error;
   }
 }

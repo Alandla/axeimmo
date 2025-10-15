@@ -191,6 +191,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
                   onValueChange={setAvatarStyle}
                   disabled={isSubmitting}
                   light
+                  hiddenStyles={['studio']}
                 />
                 <Select 
                   value={videoFormat}
