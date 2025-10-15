@@ -46,8 +46,10 @@ export async function POST(
       return NextResponse.json({ error: "No image to upscale" }, { status: 400 });
     }
 
-    const baseUrl = process.env.VERCEL_URL || "app.hoox.video";
-    const webhookUrl = `https://${baseUrl}/api/webhook/freepik?spaceId=${params.id}&avatarId=${params.avatarId}&lookId=${params.lookId}`;
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : "https://app.hoox.video";
+    const webhookUrl = `${baseUrl}/api/webhook/freepik/${params.id}/${params.avatarId}/${params.lookId}`;
 
     await updateLookInAvatar(params.id, params.avatarId, params.lookId, {
       status: 'pending'

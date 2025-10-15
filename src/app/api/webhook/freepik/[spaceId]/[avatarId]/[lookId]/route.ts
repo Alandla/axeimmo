@@ -4,8 +4,11 @@ import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import { eventBus } from "@/src/lib/events";
 import connectMongo from "@/src/lib/mongoose";
 
-export async function POST(req: NextRequest) {
-  console.log("POST /api/webhook/freepik - Received upscale result");
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { spaceId: string; avatarId: string; lookId: string } }
+) {
+  console.log("POST /api/webhook/freepik/[spaceId]/[avatarId]/[lookId] - Received upscale result");
 
   try {
     await connectMongo();
@@ -13,17 +16,13 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     console.log("Freepik webhook payload:", JSON.stringify(body, null, 2));
 
-    const { searchParams } = new URL(req.url);
-    const spaceId = searchParams.get('spaceId');
-    const avatarId = searchParams.get('avatarId');
-    const lookId = searchParams.get('lookId');
+    const { spaceId, avatarId, lookId } = params;
     
     if (!spaceId || !avatarId || !lookId) {
-      console.error("Missing query parameters in webhook URL");
-      return NextResponse.json({ error: "Missing query parameters" }, { status: 400 });
+      console.error("Missing path parameters in webhook URL");
+      return NextResponse.json({ error: "Missing path parameters" }, { status: 400 });
     }
 
-    // Webhook payload is the same as GET response but WITHOUT the 'data' field
     const status = body?.status;
     const generatedImages = body?.generated;
     const imageUrl = Array.isArray(generatedImages) && generatedImages.length > 0 
@@ -80,4 +79,5 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
 
