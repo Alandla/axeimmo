@@ -23,8 +23,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing query parameters" }, { status: 400 });
     }
 
-    const status = body?.data?.status;
-    const generatedImages = body?.data?.generated;
+    // Webhook payload is the same as GET response but WITHOUT the 'data' field
+    const status = body?.status;
+    const generatedImages = body?.generated;
     const imageUrl = Array.isArray(generatedImages) && generatedImages.length > 0 
       ? generatedImages[0] 
       : null;
@@ -54,7 +55,7 @@ export async function POST(req: NextRequest) {
     if (status === "ERROR" || status === "FAILED") {
       await updateLookInAvatar(spaceId, avatarId, lookId, {
         status: 'error',
-        errorMessage: body?.data?.error || 'Upscale failed'
+        errorMessage: body?.error || 'Upscale failed'
       });
 
       try {
