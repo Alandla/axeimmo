@@ -118,10 +118,11 @@ export const formatSubtitles = (
 	return subtitles;
 };
 
-export const SubtitlesBold = ({ subtitleSequences, style, videoFormat, onStyleChange, onPlayPause }: { 
+export const SubtitlesBold = ({ subtitleSequences, style, videoFormat, customHeight, onStyleChange, onPlayPause }: { 
 	subtitleSequences: any, 
 	style: any, 
 	videoFormat?: VideoFormat,
+	customHeight?: number,
 	onStyleChange?: (newStyle: any) => void,
 	onPlayPause?: () => void 
 }) => {
@@ -157,6 +158,7 @@ export const SubtitlesBold = ({ subtitleSequences, style, videoFormat, onStyleCh
                             start={currentFrame} 
                             style={style}
                             videoFormat={videoFormat}
+                            customHeight={customHeight}
                             onPositionChange={onStyleChange ? handlePositionChange : undefined}
                             onPlayPause={onPlayPause}
                         />

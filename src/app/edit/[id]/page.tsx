@@ -502,7 +502,7 @@ export default function VideoEditor() {
       //const audioUrl = "https://media.hoox.video/843f1d10-4866-4a0b-954e-7de347d826ba.mp3"
       //const transcription = transcriptionMockup
 
-      let updatedVideo = updateVideoTimings(video, audioIndex, audioUrl, transcription);
+      let updatedVideo = updateVideoTimings(video, audioIndex, audioUrl, transcription, sequenceIndex);
 
       updateVideo(updatedVideo);
       
@@ -1228,6 +1228,22 @@ export default function VideoEditor() {
     });
   };
 
+  const handleVideoDimensionChange = (dimension: 'width' | 'height', value: number) => {
+    setVideo(prevVideo => {
+      if (!prevVideo?.video) return prevVideo;
+      
+      const newVideo = {
+        ...prevVideo,
+        video: {
+          ...prevVideo.video,
+          [dimension]: value
+        }
+      };
+      setIsDirty(true);
+      return newVideo;
+    });
+  };
+
   const handleAvatarChange = (avatar: AvatarLook | null) => {
     setVideo(prevVideo => {
       if (!prevVideo?.video) return prevVideo;
@@ -1663,6 +1679,8 @@ export default function VideoEditor() {
                         onAvatarPositionChange={handleAvatarPositionChange}
                         onMediaPositionChange={handleMediaPositionChange}
                         onVideoFormatChange={handleVideoFormatChange}
+                        onVideoWidthChange={(w) => handleVideoDimensionChange('width', w)}
+                        onVideoHeightChange={(h) => handleVideoDimensionChange('height', h)}
                         onAvatarChange={handleAvatarChange}
                         onLogoPositionChange={handleLogoPositionChange}
                         onLogoSizeChange={handleLogoSizeChange}
@@ -1705,6 +1723,8 @@ export default function VideoEditor() {
                 onAvatarPositionChange={handleAvatarPositionChange}
                 onMediaPositionChange={handleMediaPositionChange}
                 onVideoFormatChange={handleVideoFormatChange}
+                onVideoWidthChange={(w) => handleVideoDimensionChange('width', w)}
+                onVideoHeightChange={(h) => handleVideoDimensionChange('height', h)}
                 onAvatarChange={handleAvatarChange}
                 onLogoPositionChange={handleLogoPositionChange}
                 onLogoSizeChange={handleLogoSizeChange}

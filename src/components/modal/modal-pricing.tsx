@@ -203,7 +203,7 @@ export default function ModalPricing({
         </div>
 
         {/* Contenu scrollable */}
-        <div className="flex-1 overflow-y-auto md:overflow-y-hidden">
+        <div className="flex-1 overflow-y-auto">
             <div 
               ref={scrollContainerRef}
               className="flex pt-6 gap-4 overflow-x-auto overflow-y-visible pb-4 mb-6 px-4 md:px-8 scrollbar-hide"

@@ -6,11 +6,13 @@ import { createExport } from '@/src/dao/exportDao'
 import { tasks } from '@trigger.dev/sdk/v3'
 import { calculateGenerationCredits } from '@/src/lib/video-estimation'
 import { objectIdToString } from '@/src/lib/utils'
-import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration } from '@/src/lib/cost'
+import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration, calculateHighResolutionCostCredits } from '@/src/lib/cost'
 
 interface ExportVideoRequest {
   video_id: string;
-  format?: 'vertical' | 'square' | 'ads';
+  format?: 'vertical' | 'square' | 'ads' | 'custom';
+  width?: number;
+  height?: number;
   webhook_url?: string;
   avatar_model?: 'standard' | 'premium' | 'ultra';
 }
@@ -47,14 +49,39 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    if (params.format && !['vertical', 'square', 'ads'].includes(params.format)) {
+    if (params.format && !['vertical', 'square', 'ads', 'custom'].includes(params.format)) {
       return NextResponse.json({
         error: "Invalid format",
-        details: [{ code: API_ERROR_CODES.INVALID_FORMAT, message: "Format must be one of: 'vertical', 'square', 'ads'", field: "format" }]
+        details: [{ code: API_ERROR_CODES.INVALID_FORMAT, message: "Format must be one of: 'vertical', 'square', 'ads', 'custom'", field: "format" }]
       }, { 
         status: 400,
         headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
       });
+    }
+
+    // Validation des dimensions custom
+    if (params.width !== undefined) {
+      if (typeof params.width !== 'number' || params.width < 1 || params.width > 5000) {
+        return NextResponse.json({
+          error: "Invalid width",
+          details: [{ code: API_ERROR_CODES.INVALID_VALUE, message: "Width must be a number between 1 and 5000", field: "width" }]
+        }, { 
+          status: 400,
+          headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
+        });
+      }
+    }
+
+    if (params.height !== undefined) {
+      if (typeof params.height !== 'number' || params.height < 1 || params.height > 5000) {
+        return NextResponse.json({
+          error: "Invalid height",
+          details: [{ code: API_ERROR_CODES.INVALID_VALUE, message: "Height must be a number between 1 and 5000", field: "height" }]
+        }, { 
+          status: 400,
+          headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
+        });
+      }
     }
 
     if (params.avatar_model && !['standard', 'premium', 'ultra'].includes(params.avatar_model)) {
@@ -120,7 +147,22 @@ export async function POST(req: NextRequest) {
       avatarCost = calculateAvatarCreditsForUser(avatarDuration, internalModel);
     }
 
-    const totalCost = baseCost + avatarCost;
+    // Calculate high resolution cost (only for custom format)
+    const finalFormat = params.format || video.video?.format;
+    let highResCost = 0;
+    
+    if (finalFormat === 'custom') {
+      const finalWidth = params.width || video.video?.width || 1080;
+      const finalHeight = params.height || video.video?.height || 1920;
+      
+      highResCost = calculateHighResolutionCostCredits(
+        duration,
+        finalWidth,
+        finalHeight
+      );
+    }
+
+    const totalCost = baseCost + avatarCost + highResCost;
 
     // Check credits if cost > 0
     if (totalCost > 0 && space.credits < totalCost) {
@@ -139,6 +181,12 @@ export async function POST(req: NextRequest) {
     // Mettre à jour le format si spécifié
     if (params.format && video.video) {
       video.video.format = params.format;
+      
+      // Mettre à jour width/height si format custom
+      if (params.format === 'custom') {
+        video.video.width = params.width || 1080;
+        video.video.height = params.height || 1920;
+      }
     }
 
     // Créer l'export

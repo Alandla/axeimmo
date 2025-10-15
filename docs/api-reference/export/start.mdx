@@ -21,8 +21,16 @@ This endpoint requires API key authentication. Export costs may apply depending 
 </ParamField>
 
 <ParamField body="format" type="string">
-  Export format override: `vertical` (9:16), `ads` (4:5) or `square` (1:1).
+  Export format override: `vertical` (9:16), `ads` (4:5), `square` (1:1), `horizontal` (16:9), or `custom`.
   If not specified, uses the original video format.
+</ParamField>
+
+<ParamField body="width" type="number">
+  Custom video width in pixels (max 5000). Only used when format is `custom`. Defaults to 1080.
+</ParamField>
+
+<ParamField body="height" type="number">
+  Custom video height in pixels (max 5000). Only used when format is `custom`. Defaults to 1920.
 </ParamField>
 
 <ParamField body="avatar_model" type="string">
@@ -134,7 +142,7 @@ console.log(data);
 
 ## Export Formats
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Vertical (9:16)" icon="mobile">
     **1080x1920**
     Perfect for TikTok, Instagram Stories, YouTube Shorts
@@ -147,16 +155,34 @@ console.log(data);
     **1080x1080**
     Ideal for Instagram posts, Facebook, LinkedIn
   </Card>
+  <Card title="Horizontal (16:9)" icon="rectangle-wide">
+    **1920x1080**
+    Perfect for YouTube, websites, presentations
+  </Card>
+  <Card title="Custom" icon="sliders">
+    **Custom dimensions**
+    Set your own width and height (max 5000px each)
+  </Card>
 </CardGroup>
 
 ## Credit Costs
 
-Export costs depend on how the video was created and which avatar model you choose:
+Export costs depend on how the video was created, resolution, and which avatar model you choose:
 
 ### Base Export Cost
 
 - **API-generated videos**: **0 credits** for base export (included in generation)
 - **Dashboard-created videos**: 5 credits per 30 seconds
+
+### High Resolution Cost
+
+Additional charges apply for videos with resolution exceeding 1080p (width > 1920px OR height > 1080px):
+
+- **High resolution surcharge**: **2.5 credits per 30 seconds** of video
+
+<Warning>
+This surcharge applies to both API-generated and dashboard-created videos when exporting at high resolutions.
+</Warning>
 
 ### Avatar Model Costs
 
@@ -180,13 +206,24 @@ Avatar costs apply only when your video includes an avatar and are calculated ba
 </CardGroup>
 
 <Info>
-Avatar costs are charged separately from base export costs. Total cost = Base export cost + Avatar cost.
+All costs are calculated separately. Total cost = Base export cost + High resolution cost + Avatar cost.
 </Info>
 
-**Example**: A 60-second video with 40 seconds of avatar visibility using the Premium model:
+**Example 1**: A 60-second API video with 40 seconds of avatar visibility using the Premium model:
 - Base export (API video): 0 credits
 - Avatar cost: 40s × 0.5 = 20 credits
 - **Total**: 20 credits
+
+**Example 2**: A 60-second API video exported at 3840x2160 (4K):
+- Base export (API video): 0 credits
+- High resolution cost: 2 × 2.5 = 5 credits (60s = 2 segments of 30s)
+- **Total**: 5 credits
+
+**Example 3**: A 90-second dashboard video at 4K with 60 seconds of Premium avatar:
+- Base export: 3 × 5 = 15 credits (90s = 3 segments of 30s)
+- High resolution cost: 3 × 2.5 = 7.5 credits
+- Avatar cost: 60s × 0.5 = 30 credits
+- **Total**: 52.5 credits
 
 ## Prerequisites
 

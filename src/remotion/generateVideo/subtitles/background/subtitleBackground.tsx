@@ -4,11 +4,12 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import googleFonts from "../../config/googleFonts.config";
 import { VideoFormat, calculateSubtitlePosition } from "../../utils/videoDimensions";
 
-export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat, onPositionChange, onPlayPause }: { 
+export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat, customHeight, onPositionChange, onPlayPause }: { 
     subtitleSequence: any, 
     start: number, 
     style: any, 
     videoFormat?: VideoFormat,
+    customHeight?: number,
     onPositionChange?: (position: number) => void,
     onPlayPause?: () => void 
 }) => {
@@ -210,7 +211,7 @@ export const SubtitleBackground = ({ subtitleSequence, start, style, videoFormat
 
     const { scale, opacity, blurValue } = getAnimationValues();
 
-    const verticalPosition = calculateSubtitlePosition(style.position || 50, videoFormat || 'vertical');
+    const verticalPosition = calculateSubtitlePosition(style.position || 50, videoFormat || 'vertical', customHeight);
 
     const getStroke3D = (isWordActive: boolean) => {
         let threeDEffect = '';

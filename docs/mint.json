@@ -65,8 +65,7 @@
     {
       "group": "Webhooks",
       "pages": [
-        "webhooks/overview",
-        "webhooks/events"
+        "webhooks/overview"
       ]
     },
     {

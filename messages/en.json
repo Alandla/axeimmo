@@ -377,7 +377,20 @@
       "modal-pricing-title": "Remove the watermark",
       "modal-pricing-description": "Upgrade to a paid plan to remove the Hoox watermark from your videos.",
       "modal-pricing-watermark-title": "Remove watermarks from your videos",
-      "modal-pricing-watermark-description": "Upgrade to a paid plan to export your videos without watermark and unlock all premium features."
+      "modal-pricing-watermark-description": "Upgrade to a paid plan to export your videos without watermark and unlock all premium features.",
+      "modal-pricing-avatar-title": "Avatar model not allowed",
+      "modal-pricing-avatar-description": "The selected avatar model requires a higher plan. Upgrade to a paid plan to access premium avatar models.",
+      "avatar-model-label": "Avatar model",
+      "avatar-model-standard": "Standard",
+      "avatar-model-standard-description": "Basic quality, free",
+      "avatar-model-premium": "Premium",
+      "avatar-model-premium-description": "Highly realistic and dynamic",
+      "avatar-model-ultra": "Ultra",
+      "avatar-model-ultra-description": "Longer but enhanced realism",
+      "credits-per-second": "{credits} credits/sec",
+      "base-cost": "Base",
+      "avatar-cost-tooltip": "Avatar: {avatarCost} credits ({rate} x {duration}s)",
+      "high-res-cost-tooltip": "High resolution: {highResCost} credits (2.5 x every 30s)"
     },
     "edit": {
       "loading-video-data": "Loading video data...",
@@ -416,7 +429,14 @@
         "vertical": "Vertical",
         "ads": "Ads",
         "square": "Square",
-        "horizontal": "Horizontal"
+        "horizontal": "Horizontal",
+        "custom": "Custom",
+        "width": "Width",
+        "height": "Height",
+        "upgrade-modal": {
+          "title": "Custom format not available",
+          "description": "The custom format is reserved for the Enterprise plan. Upgrade to a higher plan to customize your video dimensions."
+        }
       },
       "select-avatar": "Select avatar",
       "no-avatar": "No avatar",
