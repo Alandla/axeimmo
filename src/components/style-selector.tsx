@@ -13,6 +13,7 @@ import {
 } from '@/src/components/ui/select'
 import Image from 'next/image'
 import type { AvatarStyle } from '@/src/types/avatar'
+import { AVATAR_STYLES } from '@/src/config/avatarStyles.config'
 
 interface StyleSelectorProps {
   value: AvatarStyle
@@ -23,17 +24,11 @@ interface StyleSelectorProps {
   hiddenStyles?: AvatarStyle[]
 }
 
-const STYLE_PREVIEWS: Record<AvatarStyle, string> = {
-  'ugc-realist': '/img/style-previews/ugc.png',
-  'studio': '/img/style-previews/studio.png',
-  'podcast': '/img/style-previews/podcast.png',
-}
-
 export function StyleSelector({ value, onValueChange, disabled, className, light = false, hiddenStyles = [] }: StyleSelectorProps) {
   const t = useTranslations('avatars.look-chat')
 
-  const availableEntries = (Object.entries(STYLE_PREVIEWS) as [AvatarStyle, string][]) 
-    .filter(([styleKey]) => !hiddenStyles.includes(styleKey))
+  const availableStyles = Object.values(AVATAR_STYLES)
+    .filter(style => !hiddenStyles.includes(style.key))
 
   return (
     <Select
@@ -54,19 +49,19 @@ export function StyleSelector({ value, onValueChange, disabled, className, light
         </SelectValue>
       </SelectTrigger>
       <SelectContent className="min-w-[14rem]">
-        {availableEntries.map(([styleKey, imageUrl]) => (
-          <SelectItem key={styleKey} value={styleKey}>
+        {availableStyles.map((style) => (
+          <SelectItem key={style.key} value={style.key}>
             <div className="flex items-center gap-3">
               <Image
-                src={imageUrl}
-                alt={t(`styles.${styleKey}`)}
+                src={style.previewImage}
+                alt={t(`styles.${style.key}`)}
                 className="h-10 w-10 rounded-md object-cover border"
                 width={40}
                 height={40}
                 loading="lazy"
                 decoding="async"
               />
-              <span className="text-sm">{t(`styles.${styleKey}`)}</span>
+              <span className="text-sm">{t(`styles.${style.key}`)}</span>
             </div>
           </SelectItem>
         ))}

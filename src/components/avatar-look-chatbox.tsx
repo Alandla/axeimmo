@@ -375,11 +375,11 @@ export function AvatarLookChatbox({
             <StyleSelector
               value={style}
               onValueChange={(s) => {
-                if (s === 'ugc-realist') return;
+                if (s === 'selfie') return;
                 setStyle(s);
               }}
               disabled={isGenerating || isUploading}
-              hiddenStyles={['ugc-realist']}
+              hiddenStyles={['selfie']}
             />
             <Select
               value={format}

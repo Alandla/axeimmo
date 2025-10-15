@@ -812,9 +812,10 @@
         "images-added": "{count} image(s) added",
         "style": "Style",
         "styles": {
-          "ugc-realist": "UGC",
+          "selfie": "Selfie",
           "studio": "Studio",
-          "podcast": "Podcast"
+          "podcast": "Podcast",
+          "srpo-car": "Car"
         }
       },
       "search": "Search an avatar..",
@@ -877,9 +878,10 @@
         "create-avatar": "Create avatar",
         "style": "Style",
         "styles": {
-          "ugc-realist": "UGC",
+          "selfie": "UGC",
           "studio": "Studio",
-          "podcast": "Podcast"
+          "podcast": "Podcast",
+          "srpo-car": "Car"
         }
       },
 

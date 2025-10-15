@@ -1,4 +1,5 @@
 import { fal } from "@fal-ai/client";
+import { AVATAR_STYLES, type AvatarStyleKey } from '@/src/config/avatarStyles.config';
 
 // Fal.ai client configuration
 fal.config({
@@ -15,11 +16,9 @@ export const KLING_ENDPOINTS = {
   [KlingGenerationMode.STANDARD]: "fal-ai/kling-video/v2.5-turbo/pro/image-to-video",
   [KlingGenerationMode.PRO]: "fal-ai/kling-video/v2.1/pro/image-to-video"
 } as const;
+
 const AVATAR_IMAGE_ENDPOINTS = {
   EDIT: "fal-ai/nano-banana/edit",
-  COMFY_SRPO: "comfy/Hoox/srpo-selfie-o5-no-style-4k-step",
-  COMFY_SRPO_PODCAST: "comfy/Hoox/srpo-podcast4k-steps",
-  FLUX_SRPO: "fal-ai/flux/srpo",
   UPSCALE_CRISP: "fal-ai/recraft/upscale/crisp"
 } as const;
 
@@ -154,11 +153,12 @@ export async function editAvatarImage(
   }
 }
 
-// SRPO via Comfy pipeline: response nested in data.outputs.*.images
-export async function generateAvatarImageComfySrpo(
-  request: { prompt: string }
+// Generic Comfy SRPO generation function
+async function generateAvatarImageComfyGeneric(
+  endpoint: string,
+  request: { prompt: string },
+  errorContext: string
 ): Promise<AvatarImageResponse> {
-  const endpoint = AVATAR_IMAGE_ENDPOINTS.COMFY_SRPO;
   try {
     const randomSeed = Math.floor(Math.random() * 10001);
     const result = await fal.subscribe(endpoint, {
@@ -182,57 +182,57 @@ export async function generateAvatarImageComfySrpo(
         break;
       }
     }
-    if (!url) throw new Error("No image URL found in Comfy SRPO response");
+    if (!url) throw new Error(`No image URL found in ${errorContext} response`);
     return { url, file_name };
   } catch (error) {
-    console.error("Error generating avatar image (Comfy SRPO):", error);
+    console.error(`Error generating avatar image (${errorContext}):`, error);
     throw error;
   }
+}
+
+// SRPO via Comfy pipeline: response nested in data.outputs.*.images
+export async function generateAvatarImageComfySrpo(
+  request: { prompt: string }
+): Promise<AvatarImageResponse> {
+  const styleConfig = AVATAR_STYLES['selfie'];
+  return generateAvatarImageComfyGeneric(
+    styleConfig.falEndpoint!,
+    request,
+    'Comfy SRPO Selfie'
+  );
 }
 
 // SRPO Podcast via Comfy pipeline: response nested in data.outputs.*.images
 export async function generateAvatarImageComfySrpoPodcast(
   request: { prompt: string }
 ): Promise<AvatarImageResponse> {
-  const endpoint = AVATAR_IMAGE_ENDPOINTS.COMFY_SRPO_PODCAST;
-  try {
-    const randomSeed = Math.floor(Math.random() * 10001);
-    const result = await fal.subscribe(endpoint, {
-      input: {
-        prompt: request.prompt,
-        random_noise: randomSeed
-      },
-      logs: true
-    });
+  const styleConfig = AVATAR_STYLES['podcast'];
+  return generateAvatarImageComfyGeneric(
+    styleConfig.falEndpoint!,
+    request,
+    'Comfy SRPO Podcast'
+  );
+}
 
-    const data: any = (result as any).data;
-    const outputs = data?.outputs || {};
-    let url: string | undefined;
-    let file_name: string | undefined;
-    for (const key of Object.keys(outputs)) {
-      const images = outputs[key]?.images;
-      if (Array.isArray(images) && images.length > 0) {
-        const img = images[0];
-        url = img?.url;
-        file_name = img?.filename;
-        break;
-      }
-    }
-    if (!url) throw new Error("No image URL found in Comfy SRPO Podcast response");
-    return { url, file_name };
-  } catch (error) {
-    console.error("Error generating avatar image (Comfy SRPO Podcast):", error);
-    throw error;
-  }
+// SRPO Car via Comfy pipeline: response nested in data.outputs.*.images
+export async function generateAvatarImageComfySrpoCar(
+  request: { prompt: string }
+): Promise<AvatarImageResponse> {
+  const styleConfig = AVATAR_STYLES['srpo-car'];
+  return generateAvatarImageComfyGeneric(
+    styleConfig.falEndpoint!,
+    request,
+    'Comfy SRPO Car'
+  );
 }
 
 // SRPO via Flux: response at data.images[{ url, width, height, content_type }]
 export async function generateAvatarImageFluxSrpo(
   request: { prompt: string; image_size?: 'portrait_16_9' | 'landscape_16_9' }
 ): Promise<AvatarImageResponse> {
-  const endpoint = AVATAR_IMAGE_ENDPOINTS.FLUX_SRPO;
+  const styleConfig = AVATAR_STYLES['studio'];
   try {
-    const result = await fal.subscribe(endpoint, {
+    const result = await fal.subscribe(styleConfig.falEndpoint!, {
       input: {
         prompt: request.prompt,
         ...(request.image_size ? { image_size: request.image_size } : {})
@@ -255,6 +255,27 @@ export async function generateAvatarImageFluxSrpo(
   } catch (error) {
     console.error("Error generating avatar image (Flux SRPO):", error);
     throw error;
+  }
+}
+
+// Main function to generate avatar image by style
+export async function generateAvatarImageByStyle(
+  styleKey: AvatarStyleKey,
+  request: { prompt: string; image_size?: 'portrait_16_9' | 'landscape_16_9' }
+): Promise<AvatarImageResponse> {
+  const styleConfig = AVATAR_STYLES[styleKey];
+  
+  switch (styleConfig.generationMethod) {
+    case 'comfy-srpo':
+      return generateAvatarImageComfySrpo(request);
+    case 'comfy-srpo-podcast':
+      return generateAvatarImageComfySrpoPodcast(request);
+    case 'comfy-srpo-car':
+      return generateAvatarImageComfySrpoCar(request);
+    case 'flux-srpo':
+      return generateAvatarImageFluxSrpo(request);
+    default:
+      throw new Error(`Unknown generation method for style: ${styleKey}`);
   }
 }
 

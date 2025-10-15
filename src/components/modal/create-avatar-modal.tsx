@@ -47,7 +47,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
   const [ideaText, setIdeaText] = useState<string>("");
   // Limiter aux deux formats utilisés pour la génération d'avatars: vertical (9:16) et horizontal (16:9)
   const [videoFormat, setVideoFormat] = useState<Extract<VideoFormat, 'vertical' | 'horizontal'>>("vertical");
-  const [avatarStyle, setAvatarStyle] = useState<AvatarStyle>("ugc-realist");
+  const [avatarStyle, setAvatarStyle] = useState<AvatarStyle>("selfie");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
   const [resetToken, setResetToken] = useState<number>(0);
@@ -117,7 +117,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           setSelectedImageUrls([]);
           setIdeaText("");
           setVideoFormat("vertical");
-          setAvatarStyle("ugc-realist");
+          setAvatarStyle("selfie");
           setUpscaleEnabled(false);
           setResetToken((n) => n + 1);
           onClose();
@@ -135,7 +135,7 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
           setSelectedImageUrls([]);
           setIdeaText("");
           setVideoFormat("vertical");
-          setAvatarStyle("ugc-realist");
+          setAvatarStyle("selfie");
           setUpscaleEnabled(false);
           setResetToken((n) => n + 1);
         }}>

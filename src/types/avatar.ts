@@ -1,3 +1,5 @@
+import type { AvatarStyleKey } from '@/src/config/avatarStyles.config'
+
 export type Avatar = {
     id: string
     createdBy?: string
@@ -12,7 +14,7 @@ export type Avatar = {
     createdAt?: string
 }
 
-export type AvatarStyle = 'ugc-realist' | 'studio' | 'podcast'
+export type AvatarStyle = AvatarStyleKey
 export type AvatarRender = {
     audioIndex: number
     startInFrames: number

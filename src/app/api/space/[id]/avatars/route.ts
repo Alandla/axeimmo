@@ -8,7 +8,7 @@ import { getSpaceById } from "@/src/dao/spaceDao";
 import { ISpace } from "@/src/types/space";
 import { nanoid } from "nanoid";
 import { extractAvatarIdentityFromPrompt, improveAvatarPrompt } from "@/src/lib/workflowai";
-import { generateAvatarImageComfySrpo, generateAvatarImageComfySrpoPodcast, generateAvatarImageFluxSrpo } from "@/src/lib/fal";
+import { generateAvatarImageByStyle } from "@/src/lib/fal";
 import { generateSoulImageSimple } from "@/src/lib/higgsfield";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import SpaceModel from "@/src/models/Space";
@@ -179,7 +179,7 @@ export async function POST(
     let finalPrompt: string | undefined = undefined;
     if (providedImageUrls.length === 0 && basePrompt) {
 
-      const improved = await improveAvatarPrompt(basePrompt).catch(() => ({ enhancedPrompt: basePrompt }));
+      const improved = await improveAvatarPrompt(basePrompt, style).catch(() => ({ enhancedPrompt: basePrompt }));
       finalPrompt = improved.enhancedPrompt || basePrompt;
     }
 
@@ -232,17 +232,11 @@ export async function POST(
       waitUntil((async () => {
         try {
           const imageSize = format === 'horizontal' ? 'landscape_16_9' : (format === 'vertical' ? 'portrait_16_9' : undefined);
-          let img: any;
           
-          if (style === 'ugc-realist') {
-            const soulResult = await generateAvatarImageComfySrpo({ prompt: finalPrompt as string });
-            img = { url: soulResult.url };
-          } else if (style === 'podcast') {
-            const soulResult = await generateAvatarImageComfySrpoPodcast({ prompt: finalPrompt as string });
-            img = { url: soulResult.url };
-          } else {
-            img = await generateAvatarImageFluxSrpo({ prompt: finalPrompt as string, image_size: imageSize });
-          }
+          const img = await generateAvatarImageByStyle(style || 'selfie', { 
+            prompt: finalPrompt as string, 
+            image_size: imageSize 
+          });
 
           // Save generated image to our storage (R2) immediately
           const fileName = `avatar-${avatarId}-${Date.now()}`;

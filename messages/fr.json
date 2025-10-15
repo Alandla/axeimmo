@@ -724,9 +724,10 @@
         "images-added": "{count} image(s) ajoutée(s)",
         "style": "Style",
         "styles": {
-          "ugc-realist": "UGC",
+          "selfie": "Selfie",
           "studio": "Studio",
-          "podcast": "Podcast"
+          "podcast": "Podcast",
+          "srpo-car": "Voiture"
         }
       },
       "search": "Rechercher un avatar..",
@@ -789,9 +790,10 @@
         "create-avatar": "Créer l'avatar",
         "style": "Style",
         "styles": {
-          "ugc-realist": "UGC",
+          "selfie": "UGC",
           "studio": "Studio",
-          "podcast": "Podcast"
+          "podcast": "Podcast",
+          "srpo-car": "Voiture"
         }
       },
   

@@ -302,6 +302,7 @@ const imageAnalysis = workflowAI.agent<ImageAnalysisInput, ImageAnalysisOutput>(
 // Avatar prompt enhancement (configurable)
 export interface AvatarPromptEnhancementInput {
   basic_prompt?: string
+  style?: string
 }
 
 export interface AvatarPromptEnhancementOutput {
@@ -310,7 +311,7 @@ export interface AvatarPromptEnhancementOutput {
 
 const avatarPromptEnhancement = workflowAI.agent<AvatarPromptEnhancementInput, AvatarPromptEnhancementOutput>({
   id: "text-to-image-prompt-enhancement",
-  schemaId: 1,
+  schemaId: 3,
   version: 'dev',
   useCache: 'never'
 })
@@ -782,13 +783,15 @@ export async function textVoiceEnhancementRun(
  * Améliore un prompt d'avatar en utilisant WorkflowAI
  */
 export async function improveAvatarPrompt(
-  basicPrompt: string
+  basicPrompt: string,
+  style?: string
 ): Promise<{
   cost: number,
   enhancedPrompt: string
 }> {
   const input: AvatarPromptEnhancementInput = {
-    basic_prompt: basicPrompt
+    basic_prompt: basicPrompt,
+    style: style
   }
 
   try {
