@@ -43,6 +43,7 @@ import { motion } from "framer-motion"
 import { AVATAR_LOOK_GENERATION_COST } from "@/src/lib/cost"
 import { useToast } from "@/src/hooks/use-toast"
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
+import { Textarea } from "./ui/textarea";
 
 // Limited format options for avatar look generation
 type AvatarLookFormat = "vertical" | "horizontal";
@@ -298,18 +299,13 @@ export function AvatarLookChatbox({
       >
         {/* Top: prompt */}
         <div className="mb-2">
-          <Input
+          <Textarea
             ref={promptInputRef}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            onFocus={() => {
-              // noop
-            }}
-            onBlur={() => {
-              // noop
-            }}
             placeholder={`${t("look-chat.placeholder-1")}`}
-            className={"w-full h-10 rounded-lg border-0 shadow-none bg-transparent focus-visible:ring-0 focus:ring-0 focus:outline-none transition-all duration-150"}
+           className="w-full pt-2 resize-none overflow-hidden border-0 shadow-none"
+           variant="no-focus-border"
           />
         </div>
         {/* Bottom bar: left elements + right send */}
@@ -327,7 +323,7 @@ export function AvatarLookChatbox({
                   <SelectTrigger className="relative group h-10 w-10 p-0 overflow-hidden rounded-md border border-transparent focus:ring-0 focus:outline-none [&>svg]:hidden">
                     <SelectValue className="block h-full w-full">
                       <div className="relative h-full w-full">
-                        <Image src={referenceImage} alt="ref" className="block h-full w-full object-cover" width={40} height={40} />
+                        <Image src={referenceImage} alt="ref" className="block h-full w-full object-contain" width={40} height={40} />
                         <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/40" />
                         <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <Settings2 className="h-4 w-4 text-white" />
@@ -346,7 +342,7 @@ export function AvatarLookChatbox({
                             src={u}
                             alt="candidate"
                             fill
-                            className="object-contain rounded-md transition-colors"
+                            className="object-cover rounded-md transition-colors"
                             loading="lazy"
                             decoding="async"
                             sizes="(max-width: 640px) 45vw, 280px"

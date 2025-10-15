@@ -769,7 +769,6 @@
         "title-error": "Plan payant requis",
         "description-premium-error": "Cet avatar n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder.",
         "error": "Erreur",
-        "error-title": "Erreur",
         "upscale-started": "Amélioration de la qualité lancée",
         "upscale-started-description": "L'amélioration de la qualité de l'image est en cours. Cela peut prendre quelques instants.",
         "upscale-error": "Une erreur est survenue lors de l'amélioration de la qualité"
@@ -788,14 +787,14 @@
           "placeholder": "Selfie d'un jeune homme au travail, en costume"
         },
         "upscale-title": "Amélioration de qualité",
-        "upscale-description": "Générer en qualité améliorée, la peau sera plus détaillée, les visages seront plus réalistes, etc.",
+        "upscale-description": "Générer une version de l'avatar plus détaillée offrant une version ultra réaliste.",
         "start": "Lancer la génération",
         "create-avatar": "Créer l'avatar",
         "error": "Erreur",
         "error-creating-avatar": "Une erreur s'est produite lors de la création de l'avatar. Veuillez réessayer.",
         "style": "Style",
         "styles": {
-          "selfie": "UGC",
+          "selfie": "Selfie",
           "studio": "Studio",
           "podcast": "Podcast",
           "srpo-car": "Voiture"

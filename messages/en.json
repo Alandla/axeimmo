@@ -857,7 +857,7 @@
         "error": "Error",
         "title-error": "Paid plan required",
         "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it.",
-        "error-title": "Error",
+
         "upscale-started": "Image upscaling started",
         "upscale-started-description": "The image quality enhancement is in progress. This may take a few moments.",
         "upscale-error": "An error occurred while upscaling the image"
@@ -876,7 +876,7 @@
           "placeholder": "Selfie of a young man at work, wearing a suit"
         },
         "upscale-title": "Upscale",
-        "upscale-description": "Automatically generate a high-definition version of the avatar, the skin will be more detailed, the faces will be more realistic, etc.",
+        "upscale-description": "Generate a detailed version of the avatar offering a ultra realistic version.",
         "start": "Start generation",
         "create-avatar": "Create avatar",
         "error": "Error",
@@ -884,12 +884,11 @@
         "credits": "credits",
         "style": "Style",
         "styles": {
-          "selfie": "UGC",
+          "selfie": "Selfie",
           "studio": "Studio",
           "podcast": "Podcast",
           "srpo-car": "Car"
-        },
-        "credits": "credits"
+        }
       },
 
       "sections": {

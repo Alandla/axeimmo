@@ -218,13 +218,13 @@ export function CreateAvatarModal({ isOpen, onClose, onCreated }: CreateAvatarMo
             />
           </TabsContent>
 
-          <TabsContent value="idea" className="space-y-4 h-[280px]">
-            <div className="relative h-[280px]">
+          <TabsContent value="idea" className="space-y-4 h-[169px]">
+            <div className="relative h-[150px]">
               <Textarea
                 value={ideaText}
                 onChange={(e) => setIdeaText(e.target.value)}
                 placeholder={t("from-idea.placeholder")}
-                className="h-full resize-none pr-2 pb-14"
+                className="h-full resize-none pr-2"
               />
               <div className="absolute right-0 bottom-0 p-2 flex items-center gap-2">
                 <StyleSelector
