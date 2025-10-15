@@ -247,8 +247,8 @@ export async function POST(
           if (upscale) {
             try {
               const { upscaleImageFromUrl } = await import('@/src/lib/freepik');
-              const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.hoox.video";
-              const webhookUrl = `${baseUrl}/api/webhook/freepik?spaceId=${params.id}&avatarId=${avatarId}&lookId=${looks[0].id}`;
+              const baseUrl = process.env.VERCEL_URL || "app.hoox.video";
+              const webhookUrl = `https://${baseUrl}/api/webhook/freepik?spaceId=${params.id}&avatarId=${avatarId}&lookId=${looks[0].id}`;
               
               await upscaleImageFromUrl({
                 image_url: img.url,
