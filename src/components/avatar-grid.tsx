@@ -1363,7 +1363,7 @@ export function AvatarGridComponent({
             }
           }}
           initialReferenceImage={editingLook?.thumbnail || null}
-          promptInputRef={promptInputRef}
+          promptInputRef={promptInputRef as React.RefObject<HTMLTextAreaElement>}
           pulseSignal={pulseCounter}
         />
       )}
