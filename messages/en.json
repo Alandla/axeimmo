@@ -375,6 +375,8 @@
       "modal-pricing-watermark-description": "Upgrade to a paid plan to export your videos without watermark and unlock all premium features.",
       "modal-pricing-avatar-title": "Avatar model not allowed",
       "modal-pricing-avatar-description": "The selected avatar model requires a higher plan. Upgrade to a paid plan to access premium avatar models.",
+      "modal-pricing-veo3-title": "Veo 3 requires Start plan",
+      "modal-pricing-veo3-description": "Veo 3 is only available from the Start plan. Upgrade to access this advanced video generation model.",
       "avatar-model-label": "Avatar model",
       "avatar-model-standard": "Standard",
       "avatar-model-standard-description": "Basic quality, free",
@@ -382,10 +384,16 @@
       "avatar-model-premium-description": "Highly realistic and dynamic",
       "avatar-model-ultra": "Ultra",
       "avatar-model-ultra-description": "Longer but enhanced realism",
+      "veo-model-label": "Veo 3 model",
+      "veo-model-fast": "Fast",
+      "veo-model-fast-description": "Faster generation, duration rounded to 8s",
+      "veo-model-standard": "Standard",
+      "veo-model-standard-description": "Higher quality, precise billing",
       "credits-per-second": "{credits} credits/sec",
       "base-cost": "Base",
       "avatar-cost-tooltip": "Avatar: {avatarCost} credits ({rate} x {duration}s)",
-      "high-res-cost-tooltip": "High resolution: {highResCost} credits (2.5 x every 30s)"
+      "high-res-cost-tooltip": "High resolution: {highResCost} credits (2.5 x every 30s)",
+      "veo3-cost-tooltip": "Veo 3: {veo3Cost} credits ({rate} x {billingDuration}s)"
     },
     "edit": {
       "loading-video-data": "Loading video data...",
@@ -933,7 +941,7 @@
       "DISPLAY_BROLL": "Avatar placement",
       "REDIRECTING": "Saving and redirecting to editor",
       "error-message": "Error, please contact support.",
-      "veo3-warning": "It's normal if the video has no sound or avatar movement in the editor. You need to export the video to see the final result."
+      "veo3-warning": "With Veo 3.1 it's normal if the video has no sound or avatar movement in the editor. You need to export the video to see the final result."
     },
     "space": {
       "privateSpaceName": "My Private Space",

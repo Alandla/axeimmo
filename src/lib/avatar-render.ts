@@ -192,3 +192,59 @@ export const generateAvatarRenderList = (video: IVideo): AvatarRenderData[] => {
   return avatarRenders;
 };
 
+export interface Veo3RenderData {
+  audioIndex: number
+  text: string
+  avatarUrl: string
+  voiceId: string
+}
+
+// Generate list of renders needed for Veo3 models
+export const generateVeo3RenderList = (video: IVideo): Veo3RenderData[] => {
+  if (!video.video?.sequences || !video.video?.audio?.voices || !video.video?.avatar?.thumbnail) {
+    return [];
+  }
+
+  const sequences = video.video.sequences;
+  const voices = video.video.audio.voices;
+  const avatarUrl = video.video.avatar.thumbnail;
+
+  // Group sequences by audioIndex
+  const sequencesByAudioIndex = new Map<number, string[]>();
+  
+  for (const sequence of sequences) {
+    const audioIndex = sequence.audioIndex;
+    if (!sequencesByAudioIndex.has(audioIndex)) {
+      sequencesByAudioIndex.set(audioIndex, []);
+    }
+    sequencesByAudioIndex.get(audioIndex)!.push(sequence.text);
+  }
+
+  // Create Veo3 render list
+  const veo3Renders: Veo3RenderData[] = [];
+  
+  for (const [audioIndex, texts] of Array.from(sequencesByAudioIndex.entries())) {
+    // Find corresponding voice
+    const voice = voices.find(v => v.index === audioIndex);
+    if (!voice?.voiceId) {
+      console.warn(`No voiceId found for audioIndex ${audioIndex}`);
+      continue;
+    }
+
+    // Combine texts with space
+    const combinedText = texts.join(' ');
+
+    veo3Renders.push({
+      audioIndex,
+      text: combinedText,
+      avatarUrl,
+      voiceId: voice.voiceId
+    });
+  }
+
+  // Sort by audioIndex to ensure correct order
+  veo3Renders.sort((a, b) => a.audioIndex - b.audioIndex);
+
+  return veo3Renders;
+};
+

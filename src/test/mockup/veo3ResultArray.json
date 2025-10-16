@@ -1,0 +1,243 @@
+[
+  {
+    "audioUrl": "https://media.hoox.video/09b2eb69-8197-4a01-86f3-65918b8a7ab0.mp3",
+    "videoUrl": "https://v3b.fal.media/files/b/panda/RJJ8C0-b04oj7749qiOcK_output.mp4",
+    "audioIndex": 0,
+    "transcription": {
+      "end": 7.56,
+      "text": " Je n'arrive pas à croire ce que je viens de trouver ! Cette nouvelle salle de sport à deux pas de chez moi est incroyable.",
+      "start": 0.36,
+      "language": "French",
+      "words": [
+        {
+          "end": 0.38,
+          "word": "Je",
+          "start": 0.36
+        },
+        {
+          "end": 0.76,
+          "word": "n'arrive",
+          "start": 0.38
+        },
+        {
+          "end": 0.94,
+          "word": "pas",
+          "start": 0.76
+        },
+        {
+          "end": 1.1,
+          "word": "à",
+          "start": 0.94
+        },
+        {
+          "end": 1.5,
+          "word": "croire",
+          "start": 1.1
+        },
+        {
+          "end": 1.66,
+          "word": "ce",
+          "start": 1.5
+        },
+        {
+          "end": 1.8,
+          "word": "que",
+          "start": 1.66
+        },
+        {
+          "end": 1.96,
+          "word": "je",
+          "start": 1.8
+        },
+        {
+          "end": 2.12,
+          "word": "viens",
+          "start": 1.96
+        },
+        {
+          "end": 2.24,
+          "word": "de",
+          "start": 2.12
+        },
+        {
+          "end": 2.8,
+          "word": "trouver !",
+          "start": 2.24
+        },
+        {
+          "end": 3.28,
+          "word": "Cette",
+          "start": 3.12
+        },
+        {
+          "end": 3.66,
+          "word": "nouvelle",
+          "start": 3.28
+        },
+        {
+          "end": 4,
+          "word": "salle",
+          "start": 3.66
+        },
+        {
+          "end": 4.14,
+          "word": "de",
+          "start": 4
+        },
+        {
+          "end": 4.52,
+          "word": "sport",
+          "start": 4.14
+        },
+        {
+          "end": 4.74,
+          "word": "à",
+          "start": 4.52
+        },
+        {
+          "end": 5.1,
+          "word": "deux",
+          "start": 4.74
+        },
+        {
+          "end": 5.26,
+          "word": "pas",
+          "start": 5.1
+        },
+        {
+          "end": 5.42,
+          "word": "de",
+          "start": 5.26
+        },
+        {
+          "end": 5.56,
+          "word": "chez",
+          "start": 5.42
+        },
+        {
+          "end": 5.8,
+          "word": "moi",
+          "start": 5.56
+        },
+        {
+          "end": 6.38,
+          "word": "est",
+          "start": 5.8
+        },
+        {
+          "end": 7.56,
+          "word": "incroyable.",
+          "start": 6.38
+        }
+      ]
+    }
+  },
+  {
+    "audioUrl": "https://media.hoox.video/8bd3770e-5efd-43f8-adfa-be23def4a243.mp3",
+    "videoUrl": "https://v3b.fal.media/files/b/monkey/tyU6Zm-hxfISyy_ccJkao_output.mp4",
+    "audioIndex": 1,
+    "transcription": {
+      "end": 7.7,
+      "text": " L'équipement est flambant neuf, avec des machines que je n'avais jamais vues ailleurs. On est sur Tiron, God's Up!",
+      "start": 0.36,
+      "language": "French",
+      "words": [
+        {
+          "end": 0.94,
+          "word": "L'équipement",
+          "start": 0.36
+        },
+        {
+          "end": 1.3,
+          "word": "est",
+          "start": 0.94
+        },
+        {
+          "end": 2.04,
+          "word": "flambant",
+          "start": 1.3
+        },
+        {
+          "end": 2.5,
+          "word": "neuf,",
+          "start": 2.04
+        },
+        {
+          "end": 3.16,
+          "word": "avec",
+          "start": 2.5
+        },
+        {
+          "end": 3.32,
+          "word": "des",
+          "start": 3.16
+        },
+        {
+          "end": 3.64,
+          "word": "machines",
+          "start": 3.32
+        },
+        {
+          "end": 3.86,
+          "word": "que",
+          "start": 3.64
+        },
+        {
+          "end": 3.98,
+          "word": "je",
+          "start": 3.86
+        },
+        {
+          "end": 4.14,
+          "word": "n'avais",
+          "start": 3.98
+        },
+        {
+          "end": 4.5,
+          "word": "jamais",
+          "start": 4.14
+        },
+        {
+          "end": 4.74,
+          "word": "vues",
+          "start": 4.5
+        },
+        {
+          "end": 5.38,
+          "word": "ailleurs.",
+          "start": 4.74
+        },
+        {
+          "end": 5.98,
+          "word": "On",
+          "start": 5.84
+        },
+        {
+          "end": 6.12,
+          "word": "est",
+          "start": 5.98
+        },
+        {
+          "end": 6.28,
+          "word": "sur",
+          "start": 6.12
+        },
+        {
+          "end": 6.64,
+          "word": "Tiron,",
+          "start": 6.28
+        },
+        {
+          "end": 7.06,
+          "word": "God's",
+          "start": 6.64
+        },
+        {
+          "end": 7.7,
+          "word": "Up!",
+          "start": 7.06
+        }
+      ]
+    }
+  }
+]

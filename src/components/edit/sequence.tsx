@@ -51,6 +51,7 @@ interface SequenceProps {
   canMergeWithPrevious?: boolean;
   canMergeWithNext?: boolean;
   onWordZoomChange?: (sequenceIndex: number, wordIndex: number, zoom: ZoomType | undefined) => void;
+  useVeo3?: boolean;
 }
 
 export default function Sequence({ 
@@ -76,6 +77,7 @@ export default function Sequence({
   canMergeWithPrevious = false,
   canMergeWithNext = false,
   onWordZoomChange = () => {},
+  useVeo3 = false,
 }: SequenceProps) {
 
     const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -434,7 +436,7 @@ export default function Sequence({
                         )}
 
                         <div className="flex items-center gap-2">
-                            {sequence.needsAudioRegeneration && (
+                            {!useVeo3 && sequence.needsAudioRegeneration && (
                                 <Badge variant="warning" onClick={() => onRegenerateAudio(index)}>
                                     <AlertTriangle className="w-3 h-3 mr-1" />
                                     {t('regeneration-needed')}
@@ -451,13 +453,15 @@ export default function Sequence({
                                     align="end"
                                     sideOffset={4}
                                 >
-                                    <DropdownMenuItem 
-                                        onClick={() => onRegenerateAudio(index)}
-                                        className="cursor-pointer"
-                                    >
-                                        <RefreshCw size={16} />
-                                        {t('button-regenerate')}
-                                    </DropdownMenuItem>
+                                    {!useVeo3 && (
+                                        <DropdownMenuItem 
+                                            onClick={() => onRegenerateAudio(index)}
+                                            className="cursor-pointer"
+                                        >
+                                            <RefreshCw size={16} />
+                                            {t('button-regenerate')}
+                                        </DropdownMenuItem>
+                                    )}
                                     {isMobile && (
                                         <DropdownMenuItem 
                                             onClick={handleImageClick}
@@ -467,7 +471,7 @@ export default function Sequence({
                                             {t('edit')}
                                         </DropdownMenuItem>
                                     )}
-                                    <DropdownMenuSeparator />
+                                    {(!useVeo3 || isMobile) && <DropdownMenuSeparator />}
                                     <DropdownMenuItem
                                         onClick={() => onDeleteSequence(index)}
                                         className={cn(

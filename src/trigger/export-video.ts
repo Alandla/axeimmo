@@ -3,12 +3,12 @@ import { updateExport } from "../dao/exportDao";
 import { getVideoById, updateVideo } from "../dao/videoDao";
 import { getProgress, renderVideo, renderAudio } from "../lib/render";
 import { uploadImageFromUrlToS3, uploadVideoFromUrlToS3, uploadToS3Audio } from "../lib/r2";
-import { IVideo } from "../types/video";
+import { IVideo, ISequence } from "../types/video";
 import { addCreditsToSpace, removeCreditsToSpace, updateSpaceLastUsed, getSpaceById } from "../dao/spaceDao";
 import { IExport } from "../types/export";
 import { generateAvatarVideo, getVideoDetails, uploadImageToHeygen, generateAvatarIVVideo } from "../lib/heygen";
-import { calculateHeygenCost, calculateOmniHumanCost } from "../lib/cost";
-import { startOmniHumanVideoGeneration, checkOmniHumanRequestStatus, getOmniHumanRequestResult } from "../lib/fal";
+import { calculateHeygenCost, calculateOmniHumanCost, calculateVeo3Cost, calculateElevenLabsCost } from "../lib/cost";
+import { startOmniHumanVideoGeneration, checkOmniHumanRequestStatus, getOmniHumanRequestResult, Veo3GenerationMode, startVeo3VideoGeneration, checkVeo3RequestStatus, getVeo3RequestResult } from "../lib/fal";
 import { addVideoExportedContact, sendExportedVideoEmail } from "../lib/loops";
 import UserModel from "../models/User";
 import { MixpanelEvent } from "../types/events";
@@ -20,8 +20,16 @@ import { Readable } from "node:stream";
 import os from "os";
 import path from "path";
 import { randomUUID } from "crypto";
-import { generateAvatarRenderList, AvatarRenderData } from "../lib/avatar-render";
-
+import { generateAvatarRenderList, AvatarRenderData, generateVeo3RenderList } from "../lib/avatar-render";
+import { voiceChangerFromVideo } from "../lib/elevenlabs";
+import { getTranscription } from "../lib/transcription";
+import { 
+  getVeo3AspectRatio, 
+  recreateSequencesFromVeo3Results,
+  createAvatarRendersFromSequences,
+  createVoicesFromResults
+} from "../lib/veo3";
+import veo3ResultArrayMock from "../test/mockup/veo3ResultArray.json";
 interface RenderStatus {
   status: string;
   progress?: number;
@@ -47,6 +55,13 @@ interface AvatarModelAdapter {
   checkStatus: (requestId: string) => Promise<{ status: 'completed' | 'failed' | 'processing', videoUrl?: string, error?: any }>
   calculateCost: (durationInSeconds: number) => number
   getFileNamePrefix: () => string
+}
+
+interface Veo3Result {
+  audioIndex: number
+  audioUrl: string
+  videoUrl: string
+  transcription: any
 }
 
 // Adapter for Heygen-IV model
@@ -274,11 +289,203 @@ async function generateAvatarVideosWithModel(
   return { renders: finalAvatarRenders, cost };
 }
 
+// Generate Veo3 avatar videos and return results array
+async function generateVeo3Results(
+  veo3Renders: any[],
+  veo3Mode: Veo3GenerationMode,
+  aspectRatio: "9:16" | "16:9"
+): Promise<{ resultsArray: Veo3Result[], transcriptionCost: number, voiceChangerCost: number }> {
+  logger.log('Starting all Veo3 video generations...');
+  
+  // Start all video generations in parallel
+  const veo3RequestIds = await Promise.all(
+    veo3Renders.map(async (render) => {
+      try {
+        const { request_id } = await startVeo3VideoGeneration({
+          prompt: `A person talk to the camera, and say "${render.text}". No background music.`,
+          image_url: render.avatarUrl,
+          generate_audio: true,
+          aspect_ratio: aspectRatio
+        }, veo3Mode, true);
+        logger.log(`Veo3 generation started for audioIndex ${render.audioIndex}`, { request_id });
+        return { ...render, requestId: request_id };
+      } catch (error) {
+        logger.error(`Error starting Veo3 generation for audioIndex ${render.audioIndex}`, { error });
+        throw error;
+      }
+    })
+  );
+
+  console.log("veo3RequestIds", veo3RequestIds);
+  
+  // Object to store results as they complete
+  const veo3Results = new Map<number, { videoUrl: string; audioUrl: string; transcription: any }>();
+  let transcriptionCost = 0;
+  let voiceChangerCost = 0;
+  
+  // Polling with processing as soon as a video is ready
+  const pendingRequests = new Set(veo3RequestIds.map(r => r.requestId));
+  const processingPromises = new Map<string, Promise<void>>();
+  let attempts = 0;
+  const maxAttempts = 200;
+  let lastProgressSent = -1;
+  
+  while (pendingRequests.size > 0 && attempts < maxAttempts) {
+    attempts++;
+    
+    // Check all statuses in parallel
+    const statusChecks = await Promise.all(
+      Array.from(pendingRequests).map(async (requestId) => {
+        try {
+          const status = await checkVeo3RequestStatus(requestId, veo3Mode);
+          return { requestId, status };
+        } catch (error) {
+          logger.error(`Error checking Veo3 status for ${requestId}`, { error });
+          return { requestId, status: { status: 'FAILED' as const, error } };
+        }
+      })
+    );
+    
+    // Process completed videos - launch processing in parallel (non-blocking)
+    for (const { requestId, status } of statusChecks) {
+      if (status.status === 'COMPLETED') {
+        const render = veo3RequestIds.find(r => r.requestId === requestId);
+        if (!render) continue;
+        
+        // Remove from pending immediately
+        pendingRequests.delete(requestId);
+        
+        // Launch processing asynchronously (don't wait)
+        const processingPromise = (async () => {
+          try {
+            // Get the result
+            const result = await getVeo3RequestResult(requestId, veo3Mode);
+            const videoUrl = result.data?.video?.url;
+            
+            if (!videoUrl) {
+              throw new Error(`No video URL for audioIndex ${render.audioIndex}`);
+            }
+            
+            logger.log(`Veo3 video completed for audioIndex ${render.audioIndex}`, { videoUrl });
+            
+            // Convert video audio with voice-changer
+            logger.log(`Converting video audio to voice for audioIndex ${render.audioIndex}...`);
+            const convertedAudio = await voiceChangerFromVideo(videoUrl, render.voiceId);
+            
+            // Calculate voice changer cost (ElevenLabs without turbo)
+            voiceChangerCost += calculateElevenLabsCost(render.text, false);
+            
+            // Upload audio to R2
+            const audioUrl = await uploadToS3Audio(convertedAudio, 'medias-users');
+            logger.log(`Converted audio uploaded for audioIndex ${render.audioIndex}`, { audioUrl });
+            
+            // Transcribe the audio
+            logger.log(`Transcribing audio for audioIndex ${render.audioIndex}...`);
+            const transcriptionResult = await getTranscription(audioUrl, render.text);
+            
+            if (!transcriptionResult) {
+              throw new Error(`Transcription failed for audioIndex ${render.audioIndex}`);
+            }
+            
+            logger.log(`Transcription completed for audioIndex ${render.audioIndex}`, {
+              text: transcriptionResult.text,
+              wordCount: transcriptionResult.raw?.words?.length
+            });
+
+            transcriptionCost += transcriptionResult.cost;
+            
+            const words = transcriptionResult.raw.words;
+            veo3Results.set(render.audioIndex, {
+              videoUrl,
+              audioUrl,
+              transcription: {
+                text: transcriptionResult.text,
+                language: transcriptionResult.raw.language,
+                start: words.length > 0 ? words[0].start : 0,
+                end: words.length > 0 ? words[words.length - 1].end : 0,
+                words: words
+              }
+            });
+            
+            logger.log(`Veo3 render ${render.audioIndex} fully processed`);
+          } catch (error) {
+            logger.error(`Error processing completed Veo3 video for audioIndex ${render.audioIndex}`, { error });
+            throw error;
+          } finally {
+            // Remove from processing map when done
+            processingPromises.delete(requestId);
+          }
+        })();
+        
+        processingPromises.set(requestId, processingPromise);
+        
+      } else if ((status as any).status === 'FAILED') {
+        logger.error(`Veo3 generation failed for ${requestId}`, { error: (status as any).error });
+        pendingRequests.delete(requestId);
+        throw new Error(`Veo3 video generation failed: ${(status as any).error}`);
+      }
+    }
+    
+    // Update progress metadata
+    const completedCount = veo3Results.size;
+    const totalCount = veo3RequestIds.length;
+    
+    let currentProgress: number;
+    if (completedCount === 0) {
+      currentProgress = Math.min(attempts, 99);
+    } else {
+      const realProgress = Math.round((completedCount / totalCount) * 100);
+      const waitProgress = attempts;
+      currentProgress = Math.max(realProgress, waitProgress);
+    }
+    
+    if (currentProgress !== lastProgressSent) {
+      await metadata.replace({
+        status: 'processing',
+        step: 'avatar',
+        progress: currentProgress
+      });
+      lastProgressSent = currentProgress;
+    }
+    
+    if (pendingRequests.size > 0) {
+      await wait.for({ seconds: 6 });
+    }
+  }
+  
+  // Wait for all processing to complete
+  if (processingPromises.size > 0) {
+    logger.log(`Waiting for ${processingPromises.size} video processing tasks to complete...`);
+    await Promise.all(Array.from(processingPromises.values()));
+    logger.log('All processing tasks completed');
+  }
+  
+  // Check that everything completed
+  if (pendingRequests.size > 0) {
+    throw new Error(`Timeout: ${pendingRequests.size} Veo3 video(s) did not complete after ${maxAttempts * 6} seconds`);
+  }
+  
+  logger.log('All Veo3 videos completed and processed', {
+    resultCount: veo3Results.size,
+    audioIndexes: Array.from(veo3Results.keys())
+  });
+  
+  // Convert results Map to array
+  const resultsArray = Array.from(veo3Results.entries()).map(([audioIndex, data]) => ({
+    audioIndex,
+    audioUrl: data.audioUrl,
+    videoUrl: data.videoUrl,
+    transcription: data.transcription
+  }));
+  
+  return { resultsArray, transcriptionCost, voiceChangerCost };
+}
+
 export const exportVideoTask = task({
   id: "export-video",
   maxDuration: 600,
   retry: {
-    maxAttempts: 2,
+    maxAttempts: 1,
   },
   run: async (payload: ExportVideoPayload, { ctx }) => {
     try {
@@ -349,6 +556,162 @@ export const exportVideoTask = task({
               logger.log("Avatar renders saved to video", { renders: video.video.avatar.renders });
             }
           }
+        } else if (model === 'veo-3' || model === 'veo-3-fast') {
+          logger.log(`Using ${model} model - generating Veo3 avatar videos with integrated audio...`);
+          
+          // 1. Generate Veo3 render list
+          const veo3Mode = model === 'veo-3-fast' ? Veo3GenerationMode.FAST : Veo3GenerationMode.STANDARD;
+          const veo3Renders = generateVeo3RenderList(video);
+          logger.log(`Generated ${veo3Renders.length} Veo3 renders`, { veo3Renders });
+
+          const format = video.video?.avatar?.format ? video.video?.avatar?.format : video.video?.format || 'vertical';
+
+          const aspectRatio = getVeo3AspectRatio(format, video.video?.width, video.video?.height);
+          logger.log(`Determined aspect ratio for Veo3: ${aspectRatio}`);
+
+          let resultsArray: Veo3Result[];
+          let veo3VoiceChangerCost = 0;
+          let veo3TranscriptionCost = 0;
+          
+          if (ctx.environment.type === "PRODUCTION") {
+            resultsArray = veo3ResultArrayMock;
+          } else if (veo3Renders.length > 0) {
+            const { resultsArray: generatedResults, transcriptionCost, voiceChangerCost } = await generateVeo3Results(
+              veo3Renders,
+              veo3Mode,
+              aspectRatio
+            );
+            resultsArray = generatedResults;
+            veo3TranscriptionCost = transcriptionCost;
+            veo3VoiceChangerCost = voiceChangerCost;
+            
+            logger.log('[VEO3_UPDATE] Starting video update with Veo3 results...');
+          } else {
+            resultsArray = [];
+          }
+            
+          logger.log('[VEO3_UPDATE] Results array', { resultsArray });
+          
+          // Get original sequences grouped by audioIndex
+          const originalSequencesByAudioIndex = new Map<number, ISequence[]>();
+          if (video.video && video.video.sequences) {
+            video.video.sequences.forEach((seq: ISequence) => {
+              if (!originalSequencesByAudioIndex.has(seq.audioIndex)) {
+                originalSequencesByAudioIndex.set(seq.audioIndex, []);
+              }
+              originalSequencesByAudioIndex.get(seq.audioIndex)!.push(seq);
+            });
+          }
+          
+          logger.log('[VEO3_UPDATE] Original sequences grouped by audioIndex', {
+            groupCount: originalSequencesByAudioIndex.size,
+            groups: Array.from(originalSequencesByAudioIndex.entries()).map(([audioIndex, seqs]) => ({
+              audioIndex,
+              sequenceCount: seqs.length
+            }))
+          });
+          
+          // Recreate sequences from Veo3 results
+          const newSequences = recreateSequencesFromVeo3Results(
+            resultsArray,
+            originalSequencesByAudioIndex,
+            logger
+          );
+          
+          // Group sequences by audioIndex to get actual duration
+          const sequencesByAudioIndex = new Map<number, ISequence[]>();
+          newSequences.forEach(seq => {
+            if (!sequencesByAudioIndex.has(seq.audioIndex)) {
+              sequencesByAudioIndex.set(seq.audioIndex, []);
+            }
+            sequencesByAudioIndex.get(seq.audioIndex)!.push(seq);
+          });
+          
+          // Create voiceId map for voices creation
+          const voiceIdByAudioIndex = new Map<number, string>();
+          veo3Renders.forEach(render => {
+            if (render.voiceId) {
+              voiceIdByAudioIndex.set(render.audioIndex, render.voiceId);
+            }
+          });
+          
+          // Create avatar renders with actual durations
+          const avatarRenders = createAvatarRendersFromSequences(
+            resultsArray,
+            sequencesByAudioIndex,
+            logger
+          );
+          
+          // Create voices with actual durations
+          const voices = createVoicesFromResults(
+            resultsArray,
+            sequencesByAudioIndex,
+            voiceIdByAudioIndex,
+            logger
+          );
+          
+          // Update video metadata with actual duration
+          const totalDuration = voices.length > 0 ? voices[voices.length - 1].end : 0;
+          
+          logger.log('[VEO3_UPDATE] Updating video with new data', {
+            sequenceCount: newSequences.length,
+            avatarRenderCount: avatarRenders.length,
+            voiceCount: voices.length,
+            totalDuration
+          });
+          
+          // Update video object
+          if (video.video) {
+            video.video.sequences = newSequences;
+            
+            if (video.video.avatar) {
+              video.video.avatar.renders = avatarRenders;
+            }
+            
+            if (video.video.audio) {
+              video.video.audio.voices = voices;
+            }
+            
+            if (video.video.metadata) {
+              video.video.metadata.audio_duration = totalDuration;
+            }
+          }
+          
+          logger.log('[VEO3_UPDATE] Video updated successfully', {
+            sequences: video.video?.sequences?.length,
+            avatarRenders: video.video?.avatar?.renders?.length,
+            voices: video.video?.audio?.voices?.length,
+            duration: video.video?.metadata?.audio_duration
+          });
+          
+          // Calculate costs
+          // Avatar cost = number of videos * cost per video
+          avatarCost = calculateVeo3Cost(resultsArray.length, model as 'veo-3' | 'veo-3-fast');
+          
+          video.costToGenerate = (video.costToGenerate || 0) + veo3VoiceChangerCost + veo3TranscriptionCost;
+          
+          logger.log('[VEO3_UPDATE] Costs calculated', {
+            avatarCost,
+            voiceChangerCost: veo3VoiceChangerCost,
+            transcriptionCost: veo3TranscriptionCost,
+            totalCostToGenerate: video.costToGenerate
+          });
+          
+          // Log final result before saving
+          logger.log('[VEO3_UPDATE] Final video structure ready for save', {
+            sequences: video.video?.sequences?.length,
+            avatarRenders: video.video?.avatar?.renders?.length,
+            voices: video.video?.audio?.voices?.length,
+            duration: video.video?.metadata?.audio_duration
+          });
+          
+          // Save the video to database
+          logger.log('[VEO3_UPDATE] Saving video to database...');
+          await updateVideo(video);
+          logger.log('[VEO3_UPDATE] ✅ Video saved successfully to database', { videoId: video.id });
+          
+          // Continue with the export process
+          logger.log('[VEO3_UPDATE] ✅ Veo3 processing complete - continuing with render...');
         } else {
           // Original model: generate one complete avatar video
           logger.log("Using heygen model - combining audios...");

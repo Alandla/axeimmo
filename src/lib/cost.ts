@@ -103,13 +103,15 @@ export function calculateKlingAnimationCost(mode: KlingGenerationMode, upscaleCo
 export const AVATAR_MODEL_CREDIT_RATES = {
   'heygen': 0,
   'heygen-iv': 0.5,
-  'omnihuman': 2.3
+  'omnihuman': 2.3,
+  'veo-3-fast': 2.3,
+  'veo-3': 5
 } as const;
 
 // Calcule le coût avatar en crédits pour l'utilisateur (avec marge)
 export function calculateAvatarCreditsForUser(
   durationInSeconds: number, 
-  model: 'heygen' | 'heygen-iv' | 'omnihuman'
+  model: 'heygen' | 'heygen-iv' | 'omnihuman' | 'veo-3' | 'veo-3-fast'
 ): number {
   return durationInSeconds * AVATAR_MODEL_CREDIT_RATES[model];
 }
@@ -121,6 +123,27 @@ export function calculateTotalAvatarDuration(video: IVideo): number {
   console.log('sequences', video?.video?.sequences);
   console.log('avatarRenders', avatarRenders);
   return avatarRenders.reduce((sum: number, render: any) => sum + render.durationInSeconds, 0);
+}
+
+// Calculate the number of unique veo3 videos needed based on unique audioIndex
+export function calculateVeo3VideoCount(video: IVideo): number {
+  if (!video.video?.sequences) {
+    return 0;
+  }
+  
+  const uniqueAudioIndexes = new Set<number>();
+  for (const sequence of video.video.sequences) {
+    uniqueAudioIndexes.add(sequence.audioIndex);
+  }
+  
+  return uniqueAudioIndexes.size;
+}
+
+// Calculate veo3 avatar duration for billing
+// Each video is billed at 8 seconds
+export function calculateVeo3Duration(video: IVideo): number {
+  const videoCount = calculateVeo3VideoCount(video);
+  return videoCount * 8;
 }
 
 // Vérifie si la vidéo a une résolution supérieure à 1080p
@@ -147,4 +170,19 @@ export function calculateHighResolutionCostCredits(
   const segments = Math.max(1, Math.ceil((roundedDuration - 10) / 30));
   return segments * COST_PER_30_SECONDS;
 }
+
+// Veo3 cost per video (real cost for our stats, not user credits)
+export const VEO3_GENERATION_COSTS = {
+  'veo-3-fast': 1.2,
+  'veo-3': 3.2
+} as const;
+
+// Calculate Veo3 avatar generation cost (real cost)
+export function calculateVeo3Cost(
+  videoCount: number,
+  model: 'veo-3' | 'veo-3-fast'
+): number {
+  return videoCount * VEO3_GENERATION_COSTS[model];
+}
+
 

@@ -287,6 +287,8 @@
       "modal-pricing-watermark-description": "Passez à un plan payant pour exporter vos vidéos sans watermark et débloquer toutes les fonctionnalités premium.",
       "modal-pricing-avatar-title": "Modèle d'avatar non autorisé",
       "modal-pricing-avatar-description": "Le modèle d'avatar sélectionné nécessite un plan supérieur. Passez à un plan payant pour accéder aux modèles d'avatar premium.",
+      "modal-pricing-veo3-title": "Veo 3 nécessite le plan Start",
+      "modal-pricing-veo3-description": "Veo 3 est disponible uniquement à partir du plan Start. Passez à un plan supérieur pour accéder à ce modèle de génération vidéo avancé.",
       "avatar-model-label": "Modèle d'avatar",
       "avatar-model-standard": "Standard",
       "avatar-model-standard-description": "Qualité basique, gratuit",
@@ -294,10 +296,16 @@
       "avatar-model-premium-description": "Hautement réaliste et dynamique",
       "avatar-model-ultra": "Ultra",
       "avatar-model-ultra-description": "Plus long mais réalisme augmenté",
+      "veo-model-label": "Modèle Veo 3",
+      "veo-model-fast": "Rapide",
+      "veo-model-fast-description": "Génération plus rapide, durée arrondie à 8s",
+      "veo-model-standard": "Standard",
+      "veo-model-standard-description": "Qualité supérieure, facturation précise",
       "credits-per-second": "{credits} crédits/sec",
       "base-cost": "Base",
       "avatar-cost-tooltip": "Avatar : {avatarCost} crédits ({rate} x {duration}s)",
-      "high-res-cost-tooltip": "Haute résolution : {highResCost} crédits (2,5 x chaque 30s)"
+      "high-res-cost-tooltip": "Haute résolution : {highResCost} crédits (2,5 x chaque 30s)",
+      "veo3-cost-tooltip": "Veo 3 : {veo3Cost} crédits ({rate} x {billingDuration}s)"
     },
     "edit": {
       "loading-video-data": "Chargement des données de la vidéo...",
@@ -846,7 +854,7 @@
       "DISPLAY_BROLL": "Placement de l'avatar",
       "REDIRECTING": "Sauvegarde et redirection vers l'éditeur",
       "error-message": "Erreur, veuillez contacter le support.",
-      "veo3-warning": "Il est normal que la vidéo n'ait pas de son ni de mouvement sur l'avatar, dans l'éditeur. Il faudra exporter la vidéo pour voir le résultat final."
+      "veo3-warning": "Avec Veo 3.1 il est normal que la vidéo n'ait pas de son ni de mouvement sur l'avatar, dans l'éditeur. Il faudra exporter la vidéo pour voir le résultat final."
     },
     "space": {
       "privateSpaceName": "Mon espace privé",

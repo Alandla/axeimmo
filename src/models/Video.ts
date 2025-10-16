@@ -13,6 +13,7 @@ const videoSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
     },
+    useVeo3: Boolean,
     state: {
       type: {
         type: String,

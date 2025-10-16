@@ -32,29 +32,29 @@
       },
       "voices": [
         {
-          "url": "https://media.hoox.video/09b2eb69-8197-4a01-86f3-65918b8a7ab0.mp3",
+          "url": "",
           "index": 0,
           "start": 0,
-          "end": 7.199999999999999,
-          "durationInFrames": 432,
+          "end": 6,
+          "durationInFrames": 360,
           "voiceId": "pVsdIxxCbRrbiwOhiRwg",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68f057300b1b7c03b4aa6b78"
+            "$oid": "68f02ebf22d6d18ff3e92602"
           }
         },
         {
-          "url": "https://media.hoox.video/8bd3770e-5efd-43f8-adfa-be23def4a243.mp3",
+          "url": "",
           "index": 1,
-          "start": 7.199999999999999,
-          "end": 12.679999999999998,
-          "durationInFrames": 329,
+          "start": 6,
+          "end": 12,
+          "durationInFrames": 360,
           "voiceId": "pVsdIxxCbRrbiwOhiRwg",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68f057300b1b7c03b4aa6b79"
+            "$oid": "68f02ebf22d6d18ff3e92603"
           }
         }
       ],
@@ -95,7 +95,7 @@
       }
     },
     "metadata": {
-      "audio_duration": 12.679999999999998,
+      "audio_duration": 12,
       "language": "English"
     },
     "avatar": {
@@ -104,27 +104,7 @@
       "thumbnail": "https://media.hoox.video/avatar-IestXvDhFGXu3z9P4zTNP-1760534486125.jpg",
       "previewUrl": "",
       "videoUrl": "",
-      "format": "vertical",
-      "renders": [
-        {
-          "audioIndex": 0,
-          "startInFrames": 0,
-          "durationInSeconds": 7.199999999999999,
-          "url": "https://v3b.fal.media/files/b/panda/RJJ8C0-b04oj7749qiOcK_output.mp4",
-          "_id": {
-            "$oid": "68f057300b1b7c03b4aa6b76"
-          }
-        },
-        {
-          "audioIndex": 1,
-          "startInFrames": 432,
-          "durationInSeconds": 5.479999999999999,
-          "url": "https://v3b.fal.media/files/b/monkey/tyU6Zm-hxfISyy_ccJkao_output.mp4",
-          "_id": {
-            "$oid": "68f057300b1b7c03b4aa6b77"
-          }
-        }
-      ]
+      "format": "vertical"
     },
     "keywords": [
       "gym",
@@ -146,108 +126,108 @@
         "words": [
           {
             "word": "Je",
-            "start": 0.36,
-            "end": 0.38,
-            "durationInFrames": 1,
+            "start": 0,
+            "end": 0.25,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b31"
+              "$oid": "68f02ebf22d6d18ff3e92595"
             }
           },
           {
             "word": "n'arrive",
-            "start": 0.38,
-            "end": 0.76,
-            "durationInFrames": 23,
+            "start": 0.25,
+            "end": 0.5,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b32"
+              "$oid": "68f02ebf22d6d18ff3e92596"
             }
           },
           {
             "word": "pas",
-            "start": 0.76,
-            "end": 0.94,
-            "durationInFrames": 11,
+            "start": 0.5,
+            "end": 0.75,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b33"
+              "$oid": "68f02ebf22d6d18ff3e92597"
             }
           },
           {
             "word": "à",
-            "start": 0.94,
-            "end": 1.1,
-            "durationInFrames": 10,
+            "start": 0.75,
+            "end": 1,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b34"
+              "$oid": "68f02ebf22d6d18ff3e92598"
             }
           },
           {
             "word": "croire",
-            "start": 1.1,
-            "end": 1.5,
-            "durationInFrames": 24,
+            "start": 1,
+            "end": 1.25,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b35"
+              "$oid": "68f02ebf22d6d18ff3e92599"
             }
           },
           {
             "word": "ce",
-            "start": 1.5,
-            "end": 1.66,
-            "durationInFrames": 10,
+            "start": 1.25,
+            "end": 1.5,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b36"
+              "$oid": "68f02ebf22d6d18ff3e9259a"
             }
           },
           {
             "word": "que",
-            "start": 1.66,
-            "end": 1.8,
-            "durationInFrames": 8,
+            "start": 1.5,
+            "end": 1.75,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b37"
+              "$oid": "68f02ebf22d6d18ff3e9259b"
             }
           },
           {
             "word": "je",
-            "start": 1.8,
-            "end": 1.96,
-            "durationInFrames": 10,
+            "start": 1.75,
+            "end": 2,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b38"
+              "$oid": "68f02ebf22d6d18ff3e9259c"
             }
           },
           {
             "word": "viens",
-            "start": 1.96,
-            "end": 2.12,
-            "durationInFrames": 10,
+            "start": 2,
+            "end": 2.25,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b39"
+              "$oid": "68f02ebf22d6d18ff3e9259d"
             }
           },
           {
             "word": "de",
-            "start": 2.12,
-            "end": 2.24,
-            "durationInFrames": 7,
+            "start": 2.25,
+            "end": 2.5,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b3a"
+              "$oid": "68f02ebf22d6d18ff3e9259e"
             }
           },
           {
-            "word": "trouver !",
-            "start": 2.24,
-            "end": 3.12,
-            "durationInFrames": 53,
+            "word": "trouver!",
+            "start": 2.5,
+            "end": 3,
+            "durationInFrames": 30,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b3b"
+              "$oid": "68f02ebf22d6d18ff3e9259f"
             }
           }
         ],
-        "text": "Je n'arrive pas à croire ce que je viens de trouver !",
-        "start": 0.36,
-        "end": 3.12,
-        "durationInFrames": 167,
+        "text": "Je n'arrive pas à croire ce que je viens de trouver!",
+        "start": 0,
+        "end": 3,
+        "durationInFrames": 180,
         "audioIndex": 0,
         "media": {
           "type": "image",
@@ -276,7 +256,7 @@
             "height": 1350
           },
           "_id": {
-            "$oid": "68f057300b1b7c03b4aa6b3c"
+            "$oid": "68f02f424422d1590dbf4ed2"
           },
           "createdAt": {
             "$date": "2025-02-27T15:11:49.013Z"
@@ -286,61 +266,61 @@
           }
         },
         "_id": {
-          "$oid": "68f057300b1b7c03b4aa6b30"
+          "$oid": "68f02ebf22d6d18ff3e92594"
         }
       },
       {
         "words": [
           {
             "word": "Cette",
-            "start": 3.12,
-            "end": 3.28,
-            "durationInFrames": 10,
+            "start": 3,
+            "end": 3.230769230769231,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b3f"
+              "$oid": "68f02ebf22d6d18ff3e925a4"
             }
           },
           {
             "word": "nouvelle",
-            "start": 3.28,
-            "end": 3.66,
-            "durationInFrames": 23,
+            "start": 3.230769230769231,
+            "end": 3.4615384615384617,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b40"
+              "$oid": "68f02ebf22d6d18ff3e925a5"
             }
           },
           {
             "word": "salle",
-            "start": 3.66,
-            "end": 4,
-            "durationInFrames": 20,
+            "start": 3.4615384615384617,
+            "end": 3.6923076923076925,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b41"
+              "$oid": "68f02ebf22d6d18ff3e925a6"
             }
           },
           {
             "word": "de",
-            "start": 4,
-            "end": 4.14,
-            "durationInFrames": 8,
+            "start": 3.6923076923076925,
+            "end": 3.9230769230769234,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b42"
+              "$oid": "68f02ebf22d6d18ff3e925a7"
             }
           },
           {
             "word": "sport",
-            "start": 4.14,
-            "end": 4.52,
-            "durationInFrames": 23,
+            "start": 3.9230769230769234,
+            "end": 4.153846153846154,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b43"
+              "$oid": "68f02ebf22d6d18ff3e925a8"
             }
           }
         ],
         "text": "Cette nouvelle salle de sport",
-        "start": 3.12,
-        "end": 4.52,
-        "durationInFrames": 84,
+        "start": 3,
+        "end": 4.153846153846154,
+        "durationInFrames": 68,
         "audioIndex": 0,
         "media": {
           "type": "video",
@@ -427,7 +407,7 @@
             "durationInSeconds": 12
           },
           "_id": {
-            "$oid": "68f057300b1b7c03b4aa6b44"
+            "$oid": "68f02f424422d1590dbf4eda"
           },
           "createdAt": {
             "$date": "2025-02-27T15:11:49.013Z"
@@ -437,88 +417,88 @@
           }
         },
         "_id": {
-          "$oid": "68f057300b1b7c03b4aa6b3e"
+          "$oid": "68f02ebf22d6d18ff3e925a3"
         }
       },
       {
         "words": [
           {
             "word": "à",
-            "start": 4.52,
-            "end": 4.74,
-            "durationInFrames": 13,
+            "start": 4.153846153846154,
+            "end": 4.384615384615385,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b4d"
+              "$oid": "68f02ebf22d6d18ff3e925a9"
             }
           },
           {
             "word": "deux",
-            "start": 4.74,
-            "end": 5.1,
-            "durationInFrames": 22,
+            "start": 4.384615384615385,
+            "end": 4.615384615384616,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b4e"
+              "$oid": "68f02ebf22d6d18ff3e925aa"
             }
           },
           {
             "word": "pas",
-            "start": 5.1,
-            "end": 5.26,
-            "durationInFrames": 10,
+            "start": 4.615384615384615,
+            "end": 4.846153846153846,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b4f"
+              "$oid": "68f02ebf22d6d18ff3e925ab"
             }
           },
           {
             "word": "de",
-            "start": 5.26,
-            "end": 5.42,
-            "durationInFrames": 10,
+            "start": 4.846153846153847,
+            "end": 5.0769230769230775,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b50"
+              "$oid": "68f02ebf22d6d18ff3e925ac"
             }
           },
           {
             "word": "chez",
-            "start": 5.42,
-            "end": 5.56,
-            "durationInFrames": 8,
+            "start": 5.076923076923077,
+            "end": 5.3076923076923075,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b51"
+              "$oid": "68f02ebf22d6d18ff3e925ad"
             }
           },
           {
             "word": "moi",
-            "start": 5.56,
-            "end": 5.8,
+            "start": 5.307692307692308,
+            "end": 5.538461538461539,
             "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b52"
+              "$oid": "68f02ebf22d6d18ff3e925ae"
             }
           },
           {
             "word": "est",
-            "start": 5.8,
-            "end": 6.38,
-            "durationInFrames": 35,
+            "start": 5.538461538461538,
+            "end": 5.769230769230769,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b53"
+              "$oid": "68f02ebf22d6d18ff3e925af"
             }
           },
           {
             "word": "incroyable.",
-            "start": 6.38,
-            "end": 7.56,
-            "durationInFrames": 71,
+            "start": 5.769230769230769,
+            "end": 6,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b54"
+              "$oid": "68f02ebf22d6d18ff3e925b0"
             }
           }
         ],
         "text": "à deux pas de chez moi est incroyable.",
-        "start": 4.52,
-        "end": 7.56,
-        "durationInFrames": 183,
+        "start": 4.153846153846154,
+        "end": 6.000000000000001,
+        "durationInFrames": 112,
         "audioIndex": 0,
         "media": {
           "type": "video",
@@ -605,7 +585,7 @@
             "durationInSeconds": 12
           },
           "_id": {
-            "$oid": "68f057300b1b7c03b4aa6b55"
+            "$oid": "68f02f424422d1590dbf4eeb"
           },
           "createdAt": {
             "$date": "2025-02-27T15:11:49.013Z"
@@ -615,106 +595,106 @@
           }
         },
         "_id": {
-          "$oid": "68f057300b1b7c03b4aa6b4c"
+          "$oid": "68f02f424422d1590dbf4ee2"
         }
       },
       {
         "words": [
           {
             "word": "L'équipement",
-            "start": 7.92,
-            "end": 8.5,
-            "durationInFrames": 35,
+            "start": 6,
+            "end": 6.3,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b5e"
+              "$oid": "68f02ebf22d6d18ff3e925ba"
             }
           },
           {
             "word": "est",
-            "start": 8.5,
-            "end": 8.86,
-            "durationInFrames": 22,
+            "start": 6.3,
+            "end": 6.6,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b5f"
+              "$oid": "68f02ebf22d6d18ff3e925bb"
             }
           },
           {
             "word": "flambant",
-            "start": 8.86,
-            "end": 9.6,
-            "durationInFrames": 44,
+            "start": 6.6,
+            "end": 6.8999999999999995,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b60"
+              "$oid": "68f02ebf22d6d18ff3e925bc"
             }
           },
           {
             "word": "neuf,",
-            "start": 9.6,
-            "end": 10.059999999999999,
-            "durationInFrames": 28,
+            "start": 6.9,
+            "end": 7.2,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b61"
+              "$oid": "68f02ebf22d6d18ff3e925bd"
             }
           },
           {
             "word": "avec",
-            "start": 10.059999999999999,
-            "end": 10.719999999999999,
-            "durationInFrames": 40,
+            "start": 7.2,
+            "end": 7.5,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b62"
+              "$oid": "68f02ebf22d6d18ff3e925be"
             }
           },
           {
             "word": "des",
-            "start": 10.719999999999999,
-            "end": 10.879999999999999,
-            "durationInFrames": 10,
+            "start": 7.5,
+            "end": 7.8,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b63"
+              "$oid": "68f02ebf22d6d18ff3e925bf"
             }
           },
           {
             "word": "machines",
-            "start": 10.879999999999999,
-            "end": 11.2,
-            "durationInFrames": 19,
+            "start": 7.8,
+            "end": 8.1,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b64"
+              "$oid": "68f02ebf22d6d18ff3e925c0"
             }
           },
           {
             "word": "que",
-            "start": 11.2,
-            "end": 11.42,
-            "durationInFrames": 13,
+            "start": 8.1,
+            "end": 8.4,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b65"
+              "$oid": "68f02ebf22d6d18ff3e925c1"
             }
           },
           {
             "word": "je",
-            "start": 11.42,
-            "end": 11.54,
-            "durationInFrames": 7,
+            "start": 8.4,
+            "end": 8.700000000000001,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b66"
+              "$oid": "68f02ebf22d6d18ff3e925c2"
             }
           },
           {
             "word": "n'avais",
-            "start": 11.54,
-            "end": 11.7,
-            "durationInFrames": 10,
+            "start": 8.7,
+            "end": 9,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b67"
+              "$oid": "68f02ebf22d6d18ff3e925c3"
             }
           }
         ],
         "text": "L'équipement est flambant neuf, avec des machines que je n'avais",
-        "start": 7.92,
-        "end": 11.7,
-        "durationInFrames": 228,
+        "start": 6,
+        "end": 9,
+        "durationInFrames": 180,
         "audioIndex": 1,
         "media": {
           "type": "image",
@@ -743,7 +723,7 @@
             "height": 1350
           },
           "_id": {
-            "$oid": "68f057300b1b7c03b4aa6b68"
+            "$oid": "68f02f424422d1590dbf4efe"
           },
           "createdAt": {
             "$date": "2025-02-27T15:11:49.013Z"
@@ -753,43 +733,43 @@
           }
         },
         "_id": {
-          "$oid": "68f057300b1b7c03b4aa6b5d"
+          "$oid": "68f02ebf22d6d18ff3e925b9"
         }
       },
       {
         "words": [
           {
             "word": "jamais",
-            "start": 11.7,
-            "end": 12.059999999999999,
-            "durationInFrames": 22,
+            "start": 9,
+            "end": 10,
+            "durationInFrames": 60,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b6b"
+              "$oid": "68f02ebf22d6d18ff3e925c7"
             }
           },
           {
             "word": "vues",
-            "start": 12.059999999999999,
-            "end": 12.3,
-            "durationInFrames": 14,
+            "start": 10,
+            "end": 11,
+            "durationInFrames": 60,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b6c"
+              "$oid": "68f02ebf22d6d18ff3e925c8"
             }
           },
           {
             "word": "ailleurs.",
-            "start": 12.3,
-            "end": 13.399999999999999,
-            "durationInFrames": 66,
+            "start": 11,
+            "end": 12,
+            "durationInFrames": 60,
             "_id": {
-              "$oid": "68f057300b1b7c03b4aa6b6d"
+              "$oid": "68f02ebf22d6d18ff3e925c9"
             }
           }
         ],
         "text": "jamais vues ailleurs.",
-        "start": 11.7,
-        "end": 13.399999999999999,
-        "durationInFrames": 102,
+        "start": 9,
+        "end": 12,
+        "durationInFrames": 180,
         "audioIndex": 1,
         "media": {
           "type": "video",
@@ -872,7 +852,7 @@
             "height": 1280
           },
           "_id": {
-            "$oid": "68f057300b1b7c03b4aa6b6e"
+            "$oid": "68f02f424422d1590dbf4f04"
           },
           "createdAt": {
             "$date": "2025-02-27T15:11:49.013Z"
@@ -882,7 +862,7 @@
           }
         },
         "_id": {
-          "$oid": "68f057300b1b7c03b4aa6b6a"
+          "$oid": "68f02ebf22d6d18ff3e925c6"
         }
       }
     ],
@@ -893,7 +873,7 @@
     "$date": "2025-10-15T23:30:46.114Z"
   },
   "updatedAt": {
-    "$date": "2025-10-16T02:23:44.634Z"
+    "$date": "2025-10-15T23:33:22.196Z"
   },
   "__v": 0,
   "isNews": false,

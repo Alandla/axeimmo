@@ -35,6 +35,7 @@ interface SequencesProps {
     handleMergeWordWithPrevious?: (sequenceIndex: number, wordIndex: number) => void;
     handleMergeWordWithNext?: (sequenceIndex: number, wordIndex: number) => void;
     onWordZoomChange?: (sequenceIndex: number, wordIndex: number, zoom: ZoomType | undefined) => void;
+    useVeo3?: boolean;
 }
 
 export default function Sequences({ 
@@ -61,6 +62,7 @@ export default function Sequences({
     handleMergeWordWithPrevious,
     handleMergeWordWithNext,
     onWordZoomChange,
+    useVeo3,
 }: SequencesProps) {
     const t = useTranslations('edit.sequence');
 
@@ -128,6 +130,7 @@ export default function Sequences({
                             canMergeWithPrevious={canMergeWithPrevious}
                             canMergeWithNext={canMergeWithNext}
                             onWordZoomChange={onWordZoomChange}
+                            useVeo3={useVeo3}
                         />
                         {transitions.map((transition, transitionIndex) => 
                             transition.indexSequenceBefore === index && (

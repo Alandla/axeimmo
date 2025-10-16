@@ -7,7 +7,7 @@ import { ISpace } from '@/src/types/space';
 import { IVideo } from '@/src/types/video';
 import { getVideoById } from '@/src/dao/videoDao';
 import { PlanName } from '@/src/types/enums';
-import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration, calculateHighResolutionCostCredits } from '@/src/lib/cost';
+import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration, calculateHighResolutionCostCredits, calculateVeo3Duration } from '@/src/lib/cost';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -47,16 +47,20 @@ export async function POST(req: NextRequest) {
     // Calculate base cost
     const baseCost = wasCreatedViaAPI ? 0 : calculateCredits(video.video?.metadata.audio_duration || 30);
 
-    // Calculate avatar cost if applicable
-    let avatarCost = 0;
+    // Calculate avatar cost (includes veo3)
     const finalAvatarModel = avatarModel || 'heygen';
-    if (video.video?.avatar && finalAvatarModel !== 'heygen') {
-      const avatarDuration = calculateTotalAvatarDuration(video);
-      avatarCost = calculateAvatarCreditsForUser(avatarDuration, finalAvatarModel);
+    const isVeo3Model = finalAvatarModel === 'veo-3' || finalAvatarModel === 'veo-3-fast';
+    const videoDuration = video.video?.metadata?.audio_duration || 30;
+
+    let billingDuration = 0;
+    if (isVeo3Model) {
+      billingDuration = calculateVeo3Duration(video);
+    } else if (video.video?.avatar && finalAvatarModel !== 'heygen') {
+      billingDuration = calculateTotalAvatarDuration(video);
     }
 
-    // Calculate high resolution cost (only for custom format)
-    const videoDuration = video.video?.metadata?.audio_duration || 30;
+    const avatarCost = calculateAvatarCreditsForUser(billingDuration, finalAvatarModel);
+
     let highResCost = 0;
     
     if (video.video?.format === 'custom' && video.video?.width && video.video?.height) {
@@ -79,7 +83,7 @@ export async function POST(req: NextRequest) {
       userId: session.user.id,
       status: 'pending',
       creditCost: totalCost,
-      avatarModel: finalAvatarModel
+      avatarModel: finalAvatarModel as 'heygen' | 'heygen-iv' | 'omnihuman' | 'veo-3' | 'veo-3-fast'
     }
 
     const exportResult = await createExport(exportData);
