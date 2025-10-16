@@ -7,6 +7,8 @@ export interface AvatarStyleConfig {
   previewImage: string
   generationMethod: AvatarStyleGenerationMethod
   falEndpoint?: string
+  loraUrl?: string
+  falEndpointHorizontal?: string
 }
 
 export const AVATAR_STYLES: Record<AvatarStyleKey, AvatarStyleConfig> = {
@@ -14,7 +16,9 @@ export const AVATAR_STYLES: Record<AvatarStyleKey, AvatarStyleConfig> = {
     key: 'selfie',
     previewImage: '/img/style-previews/ugc.png',
     generationMethod: 'comfy-srpo',
-    falEndpoint: 'comfy/Hoox/srpo-selfie-o5-no-style-4k-step'
+    falEndpoint: 'comfy/Hoox/srpo-lora-as-input',
+    falEndpointHorizontal: 'comfy/Hoox/srpo-lora-as-input-horizontal',
+    loraUrl: 'https://v3b.fal.media/files/b/penguin/F9OYhy9pgx5pr2muQf0pF_pytorch_lora_weights.safetensors'
   },
   'studio': {
     key: 'studio',
@@ -26,13 +30,17 @@ export const AVATAR_STYLES: Record<AvatarStyleKey, AvatarStyleConfig> = {
     key: 'podcast',
     previewImage: '/img/style-previews/podcast.png',
     generationMethod: 'comfy-srpo-podcast',
-    falEndpoint: 'comfy/Hoox/srpo-podcast4k-steps'
+    falEndpoint: 'comfy/Hoox/srpo-lora-as-input',
+    falEndpointHorizontal: 'comfy/Hoox/srpo-lora-as-input-horizontal',
+    loraUrl: 'https://v3b.fal.media/files/b/monkey/A8oAzNaOAFeepy1vcSb7p_pytorch_lora_weights.safetensors'
   },
   'srpo-car': {
     key: 'srpo-car',
     previewImage: '/img/style-previews/car.png',
     generationMethod: 'comfy-srpo-car',
-    falEndpoint: 'comfy/Hoox/srpo-car'
+    falEndpoint: 'comfy/Hoox/srpo-lora-as-input',
+    falEndpointHorizontal: 'comfy/Hoox/srpo-lora-as-input-horizontal',
+    loraUrl: 'https://v3b.fal.media/files/b/kangaroo/KDPcdaZMAZUb7SILyLcwe_pytorch_lora_weights.safetensors'
   }
 } as const
 

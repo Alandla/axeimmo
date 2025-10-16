@@ -156,7 +156,7 @@ export async function editAvatarImage(
 // Generic Comfy SRPO generation function
 async function generateAvatarImageComfyGeneric(
   endpoint: string,
-  request: { prompt: string },
+  request: { prompt: string; lora_url?: string },
   errorContext: string
 ): Promise<AvatarImageResponse> {
   try {
@@ -164,7 +164,8 @@ async function generateAvatarImageComfyGeneric(
     const result = await fal.subscribe(endpoint, {
       input: {
         prompt: request.prompt,
-        random_noise: randomSeed
+        random_noise: randomSeed,
+        ...(request.lora_url ? { lora_url: request.lora_url } : {})
       },
       logs: true
     });
@@ -197,7 +198,7 @@ export async function generateAvatarImageComfySrpo(
   const styleConfig = AVATAR_STYLES['selfie'];
   return generateAvatarImageComfyGeneric(
     styleConfig.falEndpoint!,
-    request,
+    { ...request, lora_url: styleConfig.loraUrl },
     'Comfy SRPO Selfie'
   );
 }
@@ -209,7 +210,7 @@ export async function generateAvatarImageComfySrpoPodcast(
   const styleConfig = AVATAR_STYLES['podcast'];
   return generateAvatarImageComfyGeneric(
     styleConfig.falEndpoint!,
-    request,
+    { ...request, lora_url: styleConfig.loraUrl },
     'Comfy SRPO Podcast'
   );
 }
@@ -221,7 +222,7 @@ export async function generateAvatarImageComfySrpoCar(
   const styleConfig = AVATAR_STYLES['srpo-car'];
   return generateAvatarImageComfyGeneric(
     styleConfig.falEndpoint!,
-    request,
+    { ...request, lora_url: styleConfig.loraUrl },
     'Comfy SRPO Car'
   );
 }
@@ -264,13 +265,22 @@ export async function generateAvatarImageByStyle(
   request: { prompt: string; image_size?: 'portrait_16_9' | 'landscape_16_9' }
 ): Promise<AvatarImageResponse> {
   const styleConfig = AVATAR_STYLES[styleKey];
-  
+
   switch (styleConfig.generationMethod) {
     case 'comfy-srpo':
+      if (request.image_size === 'landscape_16_9' && styleConfig.falEndpointHorizontal) {
+        return generateAvatarImageComfyGeneric(styleConfig.falEndpointHorizontal, { prompt: request.prompt, lora_url: styleConfig.loraUrl }, 'Comfy SRPO Selfie (Horizontal)');
+      }
       return generateAvatarImageComfySrpo(request);
     case 'comfy-srpo-podcast':
+      if (request.image_size === 'landscape_16_9' && styleConfig.falEndpointHorizontal) {
+        return generateAvatarImageComfyGeneric(styleConfig.falEndpointHorizontal, { prompt: request.prompt, lora_url: styleConfig.loraUrl }, 'Comfy SRPO Podcast (Horizontal)');
+      }
       return generateAvatarImageComfySrpoPodcast(request);
     case 'comfy-srpo-car':
+      if (request.image_size === 'landscape_16_9' && styleConfig.falEndpointHorizontal) {
+        return generateAvatarImageComfyGeneric(styleConfig.falEndpointHorizontal, { prompt: request.prompt, lora_url: styleConfig.loraUrl }, 'Comfy SRPO Car (Horizontal)');
+      }
       return generateAvatarImageComfySrpoCar(request);
     case 'flux-srpo':
       return generateAvatarImageFluxSrpo(request);

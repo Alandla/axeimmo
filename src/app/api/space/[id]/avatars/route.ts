@@ -257,10 +257,9 @@ export async function POST(
       waitUntil((async () => {
         try {
           const imageSize = format === 'horizontal' ? 'landscape_16_9' : (format === 'vertical' ? 'portrait_16_9' : undefined);
-          
           const img = await generateAvatarImageByStyle(style || 'selfie', { 
             prompt: finalPrompt as string, 
-            image_size: imageSize 
+            image_size: imageSize
           });
 
           const fileName = `avatar-${avatarId}-${Date.now()}`;
