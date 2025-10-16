@@ -99,6 +99,11 @@ export function calculateKlingAnimationCost(mode: KlingGenerationMode, upscaleCo
   return animationCost + upscaleCost;
 }
 
+// Avatar generation costs (in credits)
+export const AVATAR_CREATION_COST = 0.8;
+export const AVATAR_LOOK_GENERATION_COST = 0.8;
+export const AVATAR_LOOK_UPSCALE_COST = 1.5;
+
 // Avatar model credit rates (credits per second)
 export const AVATAR_MODEL_CREDIT_RATES = {
   'heygen': 0,

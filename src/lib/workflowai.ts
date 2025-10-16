@@ -299,6 +299,61 @@ const imageAnalysis = workflowAI.agent<ImageAnalysisInput, ImageAnalysisOutput>(
   useCache: "auto"
 })
 
+// Avatar prompt enhancement (configurable)
+export interface AvatarPromptEnhancementInput {
+  basic_prompt?: string
+  style?: string
+}
+
+export interface AvatarPromptEnhancementOutput {
+  enhanced_prompt?: string
+}
+
+const avatarPromptEnhancement = workflowAI.agent<AvatarPromptEnhancementInput, AvatarPromptEnhancementOutput>({
+  id: "text-to-image-prompt-enhancement",
+  schemaId: 3,
+  version: 'dev',
+  useCache: 'never'
+})
+
+// Avatar identity extraction (name, gender, age, tags) from a free-form prompt
+export interface AvatarIdentityExtractionInput {
+  prompt?: string
+}
+
+export interface AvatarIdentityExtractionOutput {
+  name?: string
+  gender?: ("male" | "female" | "unknown")
+  age?: string
+  tags?: string[]
+  place?: string
+}
+
+const avatarIdentityExtraction = workflowAI.agent<AvatarIdentityExtractionInput, AvatarIdentityExtractionOutput>({
+  id: "avatar-prompt-extraction",
+  schemaId: 2,
+  version: 'dev',
+  useCache: 'never'
+})
+
+// Image prompt information extraction (name, place, tags)
+export interface LookIdentityExtractionInput {
+  prompt?: string
+}
+
+export interface LookIdentityExtractionOutput {
+  name?: string
+  place?: string
+  tags?: string[]
+}
+
+const lookIdentityExtraction = workflowAI.agent<LookIdentityExtractionInput, LookIdentityExtractionOutput>({
+  id: "image-prompt-information-extraction",
+  schemaId: 2,
+  version: 'dev',
+  useCache: 'never'
+})
+
 // Run Your AI agent
 export async function videoScriptKeywordExtractionRun(scriptContent: string): Promise<{
   cost: number,
@@ -721,5 +776,98 @@ export async function textVoiceEnhancementRun(
   } catch (error) {
     console.error('Failed to run text voice enhancement:', error);
     throw error;
+  }
+}
+
+/**
+ * Améliore un prompt d'avatar en utilisant WorkflowAI
+ */
+export async function improveAvatarPrompt(
+  basicPrompt: string,
+  style?: string
+): Promise<{
+  cost: number,
+  enhancedPrompt: string
+}> {
+  const input: AvatarPromptEnhancementInput = {
+    basic_prompt: basicPrompt,
+    style: style
+  }
+
+  try {
+    const response = await avatarPromptEnhancement(input) as WorkflowAIResponse<AvatarPromptEnhancementOutput>
+    return {
+      cost: response.data.cost_usd,
+      enhancedPrompt: response.output.enhanced_prompt || basicPrompt
+    }
+  } catch (error) {
+    console.error('Failed to improve avatar prompt:', error)
+    throw error
+  }
+}
+
+/**
+ * Extrait l'identité d'un avatar (name, gender, age, tags) depuis un prompt libre
+ */
+export async function extractAvatarIdentityFromPrompt(
+  prompt: string
+): Promise<{
+  cost: number,
+  name?: string,
+  gender?: 'male' | 'female',
+  age?: string,
+  tags?: string[]
+  place?: string
+}> {
+  const input: AvatarIdentityExtractionInput = { prompt }
+
+  try {
+    const response = await avatarIdentityExtraction(input) as WorkflowAIResponse<AvatarIdentityExtractionOutput>
+    // Normalisation minimale
+    const rawGender = (response.output.gender || 'unknown').toLowerCase()
+    const gender = rawGender === 'male' || rawGender === 'm' ? 'male' : rawGender === 'female' || rawGender === 'f' ? 'female' : undefined
+
+    return {
+      cost: response.data.cost_usd,
+      name: response.output.name,
+      gender,
+      age: response.output.age,
+      tags: Array.isArray(response.output.tags) ? response.output.tags.filter(Boolean) as string[] : undefined,
+      place: response.output.place
+    }
+  } catch (error) {
+    console.error('Failed to extract avatar identity:', error)
+    // En cas d'échec, retourner des valeurs neutres pour ne pas bloquer la création
+    return {
+      cost: 0,
+      tags: []
+    }
+  }
+}
+
+/**
+ * Extrait name, place et tags depuis un prompt d'image amélioré
+ */
+export async function extractLookIdentityInfo(
+  prompt: string
+): Promise<{
+  cost: number,
+  name?: string,
+  place?: string,
+  tags?: string[]
+}> {
+  const input: LookIdentityExtractionInput = { prompt }
+
+  try {
+    const response = await lookIdentityExtraction(input) as WorkflowAIResponse<LookIdentityExtractionOutput>
+    return {
+      cost: response.data.cost_usd,
+      name: response.output.name,
+      place: response.output.place,
+      tags: Array.isArray(response.output.tags) ? response.output.tags.filter(Boolean) as string[] : undefined
+    }
+  } catch (error) {
+    console.error('Failed to extract image prompt info:', error)
+    return { cost: 0 }
   }
 }

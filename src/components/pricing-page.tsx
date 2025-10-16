@@ -74,6 +74,22 @@ export const features = [
         icon: <Mic className="h-4 w-4 mt-0.5 flex-shrink-0" />,
       },
       {
+        name: "avatars-limit",
+        start: "5",
+        pro: "10",
+        enterprise: false,
+        soon: false,
+        icon: <User className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
+      {
+        name: "avatars-unlimited",
+        start: false,
+        pro: false,
+        enterprise: true,
+        soon: false,
+        icon: <User className="h-4 w-4 mt-0.5 flex-shrink-0" />,
+      },
+      {
         name: "avatars-library",
         start: "88",
         pro: "+150",
@@ -488,7 +504,12 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
                                   {feature.icon}
                                   <div className="flex-1">
                                     <div className="flex items-center gap-1 text-sm">
-                                      <span>{tPricing(`feature.${feature.name}`)}{value !== true && value !== false && ` (${value})`}</span>
+                                      <span>
+                                        {tPricing(`feature.${feature.name}`)}
+                                        {value !== true && value !== false && (
+                                          <> ({value === 'no-limit' ? tPricing('no-limit') : value})</>
+                                        )}
+                                      </span>
                                       {feature.soon && (
                                         <span className="text-xs px-1.5 py-0.5 bg-amber-100 text-amber-600 rounded-full ml-1">
                                           {tPricing('soon')}

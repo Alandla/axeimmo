@@ -16,6 +16,14 @@ export const storageLimit = {
   [PlanName.ENTREPRISE]: 150 * 1024 * 1024 * 1024, // 150 GO
 }
 
+// Définition des limites d'avatars par plan
+export const avatarsLimit = {
+  [PlanName.FREE]: 0,
+  [PlanName.START]: 5,
+  [PlanName.PRO]: 10,
+  [PlanName.ENTREPRISE]: 999,
+}
+
 export const plans: Plan[] = [
   {
     name: PlanName.START,
@@ -37,6 +45,7 @@ export const plans: Plan[] = [
     maxVideoDuration: 1,
     storageLimit: storageLimit[PlanName.START],
     imageToVideoLimit: 0,
+    avatarsLimit: avatarsLimit[PlanName.START],
   },
   {
     name: PlanName.PRO,
@@ -59,6 +68,7 @@ export const plans: Plan[] = [
     popular: true,
     storageLimit: storageLimit[PlanName.PRO],
     imageToVideoLimit: 30,
+    avatarsLimit: avatarsLimit[PlanName.PRO],
   },
   {
     name: PlanName.ENTREPRISE,
@@ -80,5 +90,6 @@ export const plans: Plan[] = [
     maxVideoDuration: 5,
     storageLimit: storageLimit[PlanName.ENTREPRISE],
     imageToVideoLimit: 999, // Illimité
+    avatarsLimit: avatarsLimit[PlanName.ENTREPRISE], // Illimité
   }
 ]

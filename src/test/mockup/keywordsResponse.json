@@ -1,62 +1,11 @@
 [
-  {
-    "id": 1,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Blank paper",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Script page",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Document",
-        "precision": "EASY"
-      }
-    ]
-  },
-  {
-    "id": 2,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Multiple lines of text",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Text scrolling",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Writing",
-        "precision": "EASY"
-      }
-    ]
-  },
-  {
-    "id": 3,
-    "keywords": [
-      {
-        "search": "stock",
-        "keyword": "Computer interface",
-        "precision": "HARD"
-      },
-      {
-        "search": "stock",
-        "keyword": "Software screen",
-        "precision": "NORMAL"
-      },
-      {
-        "search": "stock",
-        "keyword": "Technology",
-        "precision": "EASY"
-      }
-    ]
-  }
+  "Blank paper",
+  "Script page",
+  "Document",
+  "Multiple lines of text",
+  "Text scrolling",
+  "Writing",
+  "Computer interface",
+  "Software screen",
+  "Technology"
 ]

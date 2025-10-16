@@ -1,5 +1,8 @@
+import type { AvatarStyleKey } from '@/src/config/avatarStyles.config'
+
 export type Avatar = {
     id: string
+    createdBy?: string
     name: string
     age: string,
     gender: 'male' | 'female'
@@ -8,8 +11,10 @@ export type Avatar = {
     premium?: boolean
     looks: AvatarLook[]
     look_ids?: string[] // IDs des looks pour une recherche rapide
+    createdAt?: string
 }
 
+export type AvatarStyle = AvatarStyleKey
 export type AvatarRender = {
     audioIndex: number
     startInFrames: number
@@ -25,8 +30,13 @@ export type AvatarLook = {
     thumbnail?: string
     previewUrl?: string
     videoUrl?: string
+    createdBy?: string
     renders?: AvatarRender[]
     format?: 'vertical' | 'horizontal'
+    status?: 'pending' | 'ready' | 'error'
+    errorMessage?: string
+    errorAt?: string
+    createdAt?: string
     settings?: {
         heygenType?: 'avatar' | 'talking_photo'
 		position?: number  // Position horizontale (en pourcentage)
