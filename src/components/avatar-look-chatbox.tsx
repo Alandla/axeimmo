@@ -75,7 +75,7 @@ type Props = {
   spaceId: string;
   onRefresh: () => Promise<void> | void;
   initialReferenceImage?: string | null;
-  promptInputRef: React.RefObject<HTMLInputElement>;
+  promptInputRef: React.RefObject<HTMLTextAreaElement>;
   pulseSignal?: number;
 };
 
