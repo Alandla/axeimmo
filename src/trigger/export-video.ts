@@ -302,7 +302,7 @@ async function generateVeo3Results(
     veo3Renders.map(async (render) => {
       try {
         const { request_id } = await startVeo3VideoGeneration({
-          prompt: `A person talk to the camera, and say in french (parisian accent) "${render.text}". No background music.`,
+          prompt: `A person talk to the camera, and say "${render.text}". No background music.`,
           image_url: render.avatarUrl,
           generate_audio: true,
           aspect_ratio: aspectRatio
