@@ -179,10 +179,6 @@ export function AvatarGridComponent({
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isUploadingLook, setIsUploadingLook] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [barRect, setBarRect] = useState<{ left: number; width: number }>({
-    left: 0,
-    width: 0,
-  });
   const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] = useState(false);
   const [isModalConfirmDeleteLookOpen, setIsModalConfirmDeleteLookOpen] = useState(false);
   const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false);
@@ -212,20 +208,7 @@ export function AvatarGridComponent({
     });
   };
 
-  useEffect(() => {
-    const updateRect = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setBarRect({ left: rect.left, width: rect.width });
-    };
-    updateRect();
-    window.addEventListener("resize", updateRect);
-    window.addEventListener("scroll", updateRect, { passive: true });
-    return () => {
-      window.removeEventListener("resize", updateRect);
-      window.removeEventListener("scroll", updateRect);
-    };
-  }, []);
+  // Removed unused barRect effect; containerRef is still used as anchor for the chatbox
 
   // reference handled in AvatarLookChatbox
 
@@ -621,6 +604,9 @@ export function AvatarGridComponent({
       setActiveAvatar(null);
       setSelectedLook(null);
       setSelectedAvatarName(null);
+      if (typeof (storeState as any).setSelectedAvatarId === 'function') {
+        (storeState as any).setSelectedAvatarId(null);
+      }
       setActiveAvatarName(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -893,7 +879,7 @@ export function AvatarGridComponent({
   const isChatboxVisible = variant === "create" && !!activeAvatar && spaceAvatars.some((a) => a.id === activeAvatar.id);
 
   return (
-    <div className="space-y-4" ref={containerRef}>
+    <div className={cn("space-y-4", isChatboxVisible ? "pb-40" : "pb-6")} ref={containerRef}>
       <AnimatePresence mode="wait">
         {activeAvatar ? (
           <motion.div
@@ -1271,7 +1257,7 @@ export function AvatarGridComponent({
       {activeAvatar
         ? // Pagination des looks
           totalLookPages > 1 && (
-            <Pagination className={isChatboxVisible ? "pb-40" : undefined}>
+            <Pagination>
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious

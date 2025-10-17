@@ -804,6 +804,12 @@
         "upscale-error": "Une erreur est survenue lors de l'amélioration de la qualité"
       },
       "upscaling-in-progress": "Amélioration en cours...",
+      "processing": {
+        "generation": "Génération",
+        "upscale": "Upscale",
+        "estimate-generation": "La génération peut prendre entre 15 et 30 s",
+        "estimate-upscale": "L'amélioration peut prendre entre 5 et 10 s"
+      },
       "create": {
         "title": "Créer un avatar",
         "from-pictures": {

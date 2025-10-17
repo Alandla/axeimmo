@@ -893,6 +893,12 @@
         "upscale-error": "An error occurred while upscaling the image"
       },
       "upscaling-in-progress": "Upscaling quality...",
+      "processing": {
+        "generation": "Generation",
+        "upscale": "Upscale",
+        "estimate-generation": "Generation may take between 15 and 30 s",
+        "estimate-upscale": "Upscaling may take between 5 and 10 s"
+      },
       "create": {
         "title": "Create avatar",
         "from-pictures": {

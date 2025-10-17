@@ -8,7 +8,6 @@ import React, {
   useState,
 } from "react";
 import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
 import { useTranslations } from "next-intl";
 import {
   Loader2,
@@ -136,6 +135,7 @@ export function AvatarLookChatbox({
   const { setAvatars, fetchAvatarsInBackground, avatarsBySpace } = useAvatarsStore()
   const { toast } = useToast();
   const { activeSpace, decrementCredits } = useActiveSpaceStore();
+  const [isDragOver, setIsDragOver] = useState(false);
 
   // Check if user has enough credits
   const hasInsufficientCredits = activeSpace ? activeSpace.credits < AVATAR_LOOK_GENERATION_COST : false;
@@ -149,34 +149,6 @@ export function AvatarLookChatbox({
     return activeAvatar?.thumbnail ? [activeAvatar.thumbnail] : [];
   }, [activeAvatar?.id, activeAvatar?.looks, activeAvatar?.thumbnail]);
 
-  // Pré-calculer la largeur idéale pour chaque vignette à hauteur 80px (h-20)
-  const [candidateWidths, setCandidateWidths] = useState<Record<string, number>>({})
-
-  useEffect(() => {
-    if (candidateImages.length === 0) return
-    let cancelled = false
-    const load = async (url: string) =>
-      new Promise<void>((resolve) => {
-        const img = new window.Image()
-        img.onload = () => {
-          if (cancelled) return resolve()
-          const naturalWidth = img.naturalWidth || 0
-          const naturalHeight = img.naturalHeight || 1
-          const ratio = naturalWidth / naturalHeight
-          const targetHeight = 80 // px (h-20)
-          const computedWidth = Math.min(280, Math.max(80, Math.round(ratio * targetHeight)))
-          setCandidateWidths((prev) => (prev[url] ? prev : { ...prev, [url]: computedWidth }))
-          resolve()
-        }
-        img.onerror = () => resolve()
-        img.src = url
-      })
-    // Lancer en parallèle
-    Promise.all(candidateImages.map(load))
-    return () => {
-      cancelled = true
-    }
-  }, [candidateImages])
 
   useEffect(() => {
     setReferenceImage((prev) => {
@@ -190,10 +162,6 @@ export function AvatarLookChatbox({
       return candidateImages[0] ?? null;
     });
   }, [activeAvatar?.id, candidateImages, initialReferenceImage]);
-
-  // CSS-only positioning: no observers/listeners needed
-
-  // candidateImages is defined above using looks first
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -284,25 +252,63 @@ export function AvatarLookChatbox({
     }
   };
 
-  // CSS-only positioning: compute nothing in JS
-
   return (
     <div
       className="fixed bottom-8 inset-x-0 z-50 w-full md:pl-[--sidebar-width]"
+      onDragOver={(e) => {
+        const types = Array.from(e.dataTransfer.types || []);
+        const hasFiles = types.includes('Files');
+        const hasUrls = types.some((t) => t === 'text/uri-list' || t === 'text/plain');
+        if (hasFiles || hasUrls) {
+          e.preventDefault();
+          setIsDragOver(true);
+        }
+      }}
+      onDragEnter={(e) => {
+        const types = Array.from(e.dataTransfer?.types || []);
+        if (types.includes('Files') || types.includes('text/uri-list') || types.includes('text/plain')) {
+          setIsDragOver(true);
+        }
+      }}
+      onDragLeave={() => setIsDragOver(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files.length > 0) {
+          handleFiles(dt.files);
+        } else {
+          const url = dt.getData('text/uri-list') || dt.getData('text/plain');
+          if (url) setReferenceImage(url);
+        }
+        setIsDragOver(false);
+      }}
     >
       <motion.div
         key={pulseSignal}
         initial={{ scale: 1 }}
         animate={pulseSignal > 0 ? { scale: [1, 1.05, 1] } : { scale: 1 }}
         transition={{ duration: 0.25, times: [0, 0.5, 1], ease: "easeOut" }}
-        className={"w-full max-w-xl mx-auto bg-white border rounded-xl p-2 shadow-md"}
+        className={`w-full max-w-xl mx-auto bg-white border rounded-xl p-2 shadow-md ${isDragOver ? 'ring-2 ring-primary' : ''}`}
       >
         {/* Top: prompt */}
-        <div className="mb-2">
+        <div className="">
           <Textarea
             ref={promptInputRef}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (
+                  !isGenerating &&
+                  !isUploading &&
+                  (prompt.trim() || style === 'podcast') &&
+                  !hasInsufficientCredits
+                ) {
+                  handleGenerate();
+                }
+              }
+            }}
             placeholder={`${t("look-chat.placeholder-1")}`}
            className="w-full pt-2 resize-none overflow-hidden border-0 shadow-none"
            variant="no-focus-border"
@@ -320,9 +326,9 @@ export function AvatarLookChatbox({
                   onValueChange={(v) => setReferenceImage(v)}
                   disabled={isGenerating || isUploading}
                 >
-                  <SelectTrigger className="relative group h-10 w-10 p-0 overflow-hidden rounded-md border border-transparent focus:ring-0 focus:outline-none [&>svg]:hidden">
+                  <SelectTrigger className="relative group h-10 w-10 p-0 overflow-hidden rounded-md border border-transparent focus:ring-0 focus:outline-none [&>svg]:hidden cursor-pointer">
                     <SelectValue className="block h-full w-full">
-                      <div className="relative h-full w-full">
+                      <div className="relative h-full w-full cursor-pointer">
                         <Image src={referenceImage} alt="ref" className="block h-full w-full object-contain" width={40} height={40} />
                         <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/40" />
                         <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -332,32 +338,31 @@ export function AvatarLookChatbox({
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent side="bottom" align="start" sideOffset={4} className="p-2 w-auto max-w-[90vw] min-w-0">
-                    {candidateImages.map((u) => (
-                      <SelectItem key={u} value={u} className="inline-flex w-auto p-0 mr-2 mb-2">
-                        <div
-                          className="relative group/item h-20"
-                          style={{ width: `${candidateWidths[u] ?? 280}px` }}
-                        >
-                          <Image
-                            src={u}
-                            alt="candidate"
-                            fill
-                            className="object-cover rounded-md transition-colors"
-                            loading="lazy"
-                            decoding="async"
-                            sizes="(max-width: 640px) 45vw, 280px"
-                          />
-                          {referenceImage === u && (
-                            <>
-                              <span className="absolute inset-0 bg-black/50 rounded-md" />
-                              <span className="absolute inset-0 flex items-center justify-center">
-                                <Check className="h-5 w-5 text-white" />
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      </SelectItem>
-                    ))}
+                    <div className="flex flex-wrap gap-2">
+                      {candidateImages.map((u) => (
+                        <SelectItem key={u} value={u} className="inline-flex w-auto p-0 cursor-pointer">
+                          <div className="relative group/item h-20 w-20 cursor-pointer">
+                            <Image
+                              src={u}
+                              alt="candidate"
+                              fill
+                              className="object-cover rounded-md transition-colors cursor-pointer"
+                              loading="lazy"
+                              decoding="async"
+                              sizes="80px"
+                            />
+                            {referenceImage === u && (
+                              <>
+                                <span className="absolute inset-0 bg-black/50 rounded-md" />
+                                <span className="absolute inset-0 flex items-center justify-center">
+                                  <Check className="h-5 w-5 text-white" />
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </div>
                   </SelectContent>
                 </Select>
               )}

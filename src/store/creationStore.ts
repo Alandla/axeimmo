@@ -13,6 +13,7 @@ type CreationStore = {
   totalCost: number
   creationStep: CreationStep
   selectedLook: AvatarLook | null
+  selectedAvatarId: String | null
   selectedAvatarName: String | null
   selectedVoice: Voice | null
   steps: Step[]
@@ -32,6 +33,7 @@ type CreationStore = {
   addToTotalCost: (cost: number) => void
   setCreationStep: (step: CreationStep) => void
   setSelectedVoice: (voice: Voice | null) => void
+  setSelectedAvatarId: (id: String | null) => void
   setSelectedAvatarName: (id: String | null) => void
   setSelectedLook: (avatar: AvatarLook | null) => void
   addStep: (step: Step) => void
@@ -58,6 +60,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   creationStep: CreationStep.START,
   selectedVoice: null,
   selectedLook: null,
+  selectedAvatarId: null,
   selectedAvatarName: null,
   steps: [],
   lastStep: null,
@@ -77,6 +80,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
   setCreationStep: (step) => set({ creationStep: step }),
   setSelectedVoice: (voice) => set({ selectedVoice: voice }),
   setSelectedLook: (avatar) => set({ selectedLook: avatar }),
+  setSelectedAvatarId: (id) => set({ selectedAvatarId: id }),
   setSelectedAvatarName: (name) => set({ selectedAvatarName: name }),
   addStep: (step) => set((state) => ({ steps: [...state.steps, step] })),
   setSteps: (steps) => set({ steps }),
@@ -99,6 +103,7 @@ export const useCreationStore = create<CreationStore>((set) => ({
     creationStep: CreationStep.START,
     selectedVoice: null,
     selectedLook: null,
+    selectedAvatarId: null,
     selectedAvatarName: null,
     steps: [],
     lastStep: null,

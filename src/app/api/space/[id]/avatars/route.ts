@@ -9,7 +9,6 @@ import { ISpace } from "@/src/types/space";
 import { nanoid } from "nanoid";
 import { extractAvatarIdentityFromPrompt, improveAvatarPrompt } from "@/src/lib/workflowai";
 import { generateAvatarImageByStyle } from "@/src/lib/fal";
-import { generateSoulImageSimple } from "@/src/lib/higgsfield";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import SpaceModel from "@/src/models/Space";
 import { avatarsLimit as avatarsLimitConfig } from "@/src/config/plan.config";
@@ -244,11 +243,21 @@ export async function POST(
       looks: looks,
     };
 
-    (space as any).avatars.push(newAvatar);
-    await (space as any).save();
-
-    // Deduct credits from space
+    // Deduct credits first to avoid free avatar if persistence fails
     await removeCreditsToSpace(params.id, totalCost);
+
+    // Persist avatar; on failure, refund and abort
+    try {
+      (space as any).avatars.push(newAvatar);
+      await (space as any).save();
+    } catch (persistError) {
+      await addCreditsToSpace(params.id, totalCost);
+      console.error('Failed to persist new avatar, refunded credits:', persistError);
+      return NextResponse.json(
+        { error: "Failed to persist avatar" },
+        { status: 500 }
+      );
+    }
 
     // Background image generation only when no image was provided
     if (providedImageUrls.length === 0 && finalPrompt) {

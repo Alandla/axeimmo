@@ -53,7 +53,7 @@ export async function upscaleImage(request: FreepikUpscaleRequest): Promise<Free
       image: request.image,
       scale_factor: "2x",
       optimized_for: OptimizedFor.SOFT_PORTRAITS,
-      hdr: 7,
+      hdr: 5,
     };
 
     if (request.webhook_url) {
