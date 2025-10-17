@@ -30,6 +30,7 @@ export const useActiveSpaceStore = create<ActiveSpaceStore>((set) => ({
       storageLimit: space.plan.storageLimit,
       imageToVideoLimit: space.plan.imageToVideoLimit,
       imageToVideoUsed: space.imageToVideoUsed,
+      avatarsLimit: (space as any).avatarsLimit || 0,
     }
   }),
   setLastUsedParameters: (lastUsedParameters) => set({ lastUsedParameters }),
@@ -44,6 +45,6 @@ export const useActiveSpaceStore = create<ActiveSpaceStore>((set) => ({
       ...state.activeSpace,
       imageToVideoUsed: (state.activeSpace.imageToVideoUsed || 0) + 1
     } : null
-  }))
+  })),
 }))
 

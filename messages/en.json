@@ -26,7 +26,8 @@
       "Pricing": "Pricing",
       "Assets": "Assets",
       "Enhance": "Enhance",
-      "Settings": "Settings"
+      "Settings": "Settings",
+      "Avatars": "Avatars"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -102,7 +103,8 @@
         "title": "Dashboard",
         "home": "Home",
         "videos": "Videos",
-        "assets": "Assets"
+        "assets": "Assets",
+        "avatars": "Avatars"
       },
       "community": {
         "title": "Community",
@@ -131,7 +133,7 @@
       "general": {
         "title": "General",
         "description": "Basic space information"
-      },      
+      },
       "brand-kit": {
         "title": "Brand Kit",
         "description": "Customize your space brand kit",
@@ -252,6 +254,8 @@
       "max-duration": "Maximum duration of",
       "minute": "minute",
       "soon": "Soon",
+      "no-limit": "No limit",
+      "avatars-limit": "Up to {limit} custom avatars",
       "premium-toast": {
         "title": "Premium plan required",
         "description": "This feature requires a paid plan. You need the {plan} plan to access it.",
@@ -325,6 +329,8 @@
         "max-video-duration": "Maximum video duration",
         "music-library": "Music library",
         "voices-library": "Voices library",
+        "avatars-unlimited": "Unlimited custom avatars",
+        "avatars-limit": "Custom avatars limit",
         "avatars-library": "Avatars library",
         "digital-clone": "Digital clone",
         "save-templates": "Save templates",
@@ -335,7 +341,6 @@
         "video-producer-agent": "Video Content Producer Agent",
         "community-manager-agent": "Community Manager Agent",
         "ai-model-ultra": "AI Model Ultra",
-        "ai-model-avatar-premium": "AI Model Premium for Avatars",
         "url-to-video": "URL to video generation",
         "api-access": "API Access"
       }
@@ -443,7 +448,6 @@
       },
       "select-avatar": "Select avatar",
       "no-avatar": "No avatar",
-      "custom-avatar": "Custom",
       "confirm": "Confirm",
       "cancel": "Cancel",
       "modal-pricing-not-enough-credits": "Not enough credits",
@@ -677,15 +681,15 @@
       }
     },
     "upload-dropdown": {
-        "upload-files": "Upload from device",
-        "select-assets": "Choose from library"
+      "upload-files": "Upload from device",
+      "select-assets": "Choose from library"
     },
     "asset-selection": {
-        "title": "Select assets",
-        "no-assets": "No assets available",
-        "no-assets-description": "You have no completed assets available for selection.",
-        "cancel": "Cancel",
-        "confirm": "Confirm"
+      "title": "Select assets",
+      "no-assets": "No assets available",
+      "no-assets-description": "You have no completed assets available for selection.",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
     },
     "ai": {
       "hello": "Hello, ",
@@ -812,17 +816,116 @@
       }
     },
     "avatars": {
+      "unlock-title": "Unlock avatar creation",
+      "unlock-description": "Create your own avatar, add your product and clone new angles.",
+      "unlock": {
+        "features": {
+          "1": "Create your own avatar only with prompt",
+          "2": "Add your product, logo or create new angles in second",
+          "3": "Clone any person with only a few pictures"
+        },
+        "see-in-action": "See in action",
+        "upgrade": "Upgrade"
+      },
+      "limit-reached": "Avatar limit reached",
+      "limit-reached-description": "Upgrade your plan to create more avatars.",
+      "look-error": "Generation failed. Please try again.",
+      "left-counter": "{remaining}/{limit} left",
+      "left-counter-unlimited": "Unlimited",
+      "look-chat": {
+        "placeholder-1": "Add my product in the hand",
+        "add-elements": "Add elements",
+        "send": "Upload",
+        "cost-tooltip": "Cost: {cost} credits",
+        "sending": "Generating...",
+        "images-added": "{count} image(s) added",
+        "style": "Style",
+        "styles": {
+          "selfie": "Selfie",
+          "studio": "Studio",
+          "podcast": "Podcast",
+          "srpo-car": "Car"
+        }
+      },
       "search": "Search an avatar..",
       "preview": "Preview",
       "no-avatar-name": "No avatar",
       "no-avatar-description": "Voice only mode",
-      "no-looks-found": "No looks found for the selected filters",
+      "create-new-name": "Create a new avatar",
+      "create-new-description": "Start from scratch",
+      "create-new-look": "Create a new look",
+      "create-new-look-name": "New look",
+      "add-picture": "Add picture",
+      "drop-image-here": "Drop image here",
+      "click-to-edit": "Click to edit name",
+      "created-by": "Created by",
+      "more-options": "More options",
+      "dropdown-menu": {
+        "see-looks": "See looks",
+        "edit": "Edit",
+        "rename": "Rename",
+        "delete": "Delete",
+        "upscale": "Upscale"
+      },
       "veo3-description-prefix": "Use",
       "veo3-description-suffix": "for avatar generation",
       "toast": {
+        "error-title": "Error",
+        "look-generation-error": "An error occurred while generating the look. Please try again.",
+        "avatar-name-saved": "Avatar name saved",
+        "name-updated": "Name updated",
+        "description-updated": "The name has been updated",
+        "error-message": "An error occurred while updating the name",
+        "avatar-name-saved-description": "The avatar name has been updated successfully",
+        "avatar-name-error": "An error occurred while updating the avatar name",
+        "avatar-deleted": "Avatar deleted",
+        "avatar-deleted-description": "The avatar has been deleted successfully",
+        "avatar-delete-error": "An error occurred while deleting the avatar",
+        "look-deleted": "Look deleted",
+        "look-deleted-description": "The look has been deleted successfully",
+        "look-delete-error": "An error occurred while deleting the look",
+        "error": "Error",
         "title-error": "Paid plan required",
-        "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it."
+        "description-premium-error": "This avatar is only available in paid plans. You need the {plan} plan to access it.",
+
+        "upscale-started": "Image upscaling started",
+        "upscale-started-description": "The image quality enhancement is in progress. This may take a few moments.",
+        "upscale-error": "An error occurred while upscaling the image"
       },
+      "upscaling-in-progress": "Upscaling quality...",
+      "create": {
+        "title": "Create avatar",
+        "from-pictures": {
+          "title": "From pictures",
+          "subtitle": "Use any picture as avatar.",
+          "drop-hint": "Drop your pictures here"
+        },
+        "from-idea": {
+          "title": "From idea",
+          "subtitle": "Describe the avatar you want to create.",
+          "placeholder": "Selfie of a young man at work, wearing a suit"
+        },
+        "upscale-title": "Upscale",
+        "upscale-description": "Generate a detailed version of the avatar offering a ultra realistic version.",
+        "start": "Start generation",
+        "create-avatar": "Create avatar",
+        "error": "Error",
+        "error-creating-avatar": "An error occurred while creating the avatar. Please try again.",
+        "credits": "credits",
+        "style": "Style",
+        "styles": {
+          "selfie": "Selfie",
+          "studio": "Studio",
+          "podcast": "Podcast",
+          "srpo-car": "Car"
+        }
+      },
+
+      "sections": {
+        "yours": "Your avatars",
+        "public": "Public avatars"
+      },
+      "no-looks-found": "No looks found for the selected filters",
       "tags": {
         "professional": "Professional",
         "cossy": "Cossy",
@@ -971,36 +1074,36 @@
     },
     "ai-chat": {
       "thinking": {
-          "0": "Thinking...",
-          "1": "Generating script...",
-          "2": "Processing...",
-          "3": "Analyzing data...",
-          "4": "Working on it...",
-          "5": "Formulating response...",
-          "6": "Compiling information...",
-          "7": "Evaluating...",
-          "8": "In progress...",
-          "9": "Processing request...",
-          "10": "Examining...",
-          "11": "Cooking up something good...",
-          "12": "Counting virtual sheep...",
-          "13": "Making digital magic...",
-          "14": "Putting on my thinking cap...",
-          "15": "Daydreaming in binary...",
-          "16": "Consulting the algorithm oracle...",
-          "17": "Warming up my circuits...",
-          "18": "Preparing to dazzle...",
-          "19": "Thinking...",
-          "20": "Generating script...",
-          "21": "Processing...",
-          "22": "Analyzing data...",
-          "23": "Working on it...",
-          "24": "Formulating response...",
-          "25": "Compiling information...",
-          "26": "Evaluating...",
-          "27": "In progress...",
-          "28": "Processing request...",
-          "29": "Examining..."
+        "0": "Thinking...",
+        "1": "Generating script...",
+        "2": "Processing...",
+        "3": "Analyzing data...",
+        "4": "Working on it...",
+        "5": "Formulating response...",
+        "6": "Compiling information...",
+        "7": "Evaluating...",
+        "8": "In progress...",
+        "9": "Processing request...",
+        "10": "Examining...",
+        "11": "Cooking up something good...",
+        "12": "Counting virtual sheep...",
+        "13": "Making digital magic...",
+        "14": "Putting on my thinking cap...",
+        "15": "Daydreaming in binary...",
+        "16": "Consulting the algorithm oracle...",
+        "17": "Warming up my circuits...",
+        "18": "Preparing to dazzle...",
+        "19": "Thinking...",
+        "20": "Generating script...",
+        "21": "Processing...",
+        "22": "Analyzing data...",
+        "23": "Working on it...",
+        "24": "Formulating response...",
+        "25": "Compiling information...",
+        "26": "Evaluating...",
+        "27": "In progress...",
+        "28": "Processing request...",
+        "29": "Examining..."
       },
       "user-valid-script": {
         "0": "Use this script for the video, we can move on to the next step.",
@@ -1920,5 +2023,9 @@
         "title": "23. Applicable law and competent jurisdictions",
         "content": "The \"General Conditions\" are governed by **French law**.\n\nFor professional Clients, in case of dispute between the Client and HOOX, and failing amicable agreement within 2 months following first notification, it will be subject to exclusive jurisdiction of **Paris courts (France)**, except contrary mandatory provisions."
       }
+    },
+    "infinite-scroll": {
+      "loading": "Loading...",
+      "end": "No more items"
     }
-  }
+}

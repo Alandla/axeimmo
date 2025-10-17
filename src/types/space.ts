@@ -31,6 +31,7 @@ export interface IPlan {
   storageLimit?: number;
   imageToVideoLimit?: number;
   nextPhase?: Date;
+  avatarsLimit?: number;
 }
 
 export interface IMediaSpace {
@@ -69,6 +70,7 @@ export interface SimpleSpace {
   storageLimit?: number;
   imageToVideoLimit?: number;
   imageToVideoUsed?: number;
+  avatarsLimit?: number;
   members?: {
     id: string;
     name: string;
@@ -103,4 +105,5 @@ export interface ISpace {
   usedStorageBytes: number;
   imageToVideoUsed: number;
   logo: Logo;
+  avatarsLimit?: number;
 }

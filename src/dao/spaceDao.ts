@@ -5,6 +5,7 @@ import { MemberRole, PlanName, SubscriptionType } from "../types/enums";
 import { addSpaceToUser } from "./userDao";
 import { IMedia } from "../types/video";
 import { IMediaSpace, IPlan, ISpace } from "../types/space";
+import { avatarsLimit as avatarsLimitConfig, storageLimit as storageLimitConfig } from "../config/plan.config";
 
 export const createPrivateSpaceForUser = async (userId: string, userName?: string | null) => {
   return executeWithRetry(async () => {
@@ -20,6 +21,7 @@ export const createPrivateSpaceForUser = async (userId: string, userName?: strin
       },
       credits: 10,
       usedStorageBytes: 0,
+      avatarsLimit: 0,
     });
 
     await space.save();
@@ -216,7 +218,7 @@ export const getUserSpaces = async (userId: string) => {
 
       const spaces = await SpaceModel.find(
         { _id: { $in: user.spaces } },
-        'name plan credits members videoIdeas details usedStorageBytes imageToVideoUsed logo'
+        'name plan credits members videoIdeas details usedStorageBytes imageToVideoUsed logo avatarsLimit'
       );
 
       return spaces.map((space) => {
@@ -236,6 +238,7 @@ export const getUserSpaces = async (userId: string) => {
           storageLimit: space.plan.storageLimit,
           imageToVideoLimit: space.plan.imageToVideoLimit,
           imageToVideoUsed: space.imageToVideoUsed || 0,
+          avatarsLimit: (space as any).avatarsLimit ?? 0,
           members: space.members.map((member: any) => ({
             id: member.userId.toString()
           }))
@@ -407,7 +410,8 @@ export const updateSpace = async (spaceId: string, updateData: Partial<ISpace>) 
         usedStorageBytes: updatedSpace.usedStorageBytes,
         storageLimit: updatedSpace.plan.storageLimit,
         imageToVideoLimit: updatedSpace.plan.imageToVideoLimit,
-        imageToVideoUsed: updatedSpace.imageToVideoUsed || 0
+        imageToVideoUsed: updatedSpace.imageToVideoUsed || 0,
+        avatarsLimit: (updatedSpace as any).avatarsLimit || 0
       };
     });
   } catch (error) {
@@ -443,17 +447,116 @@ export const setupNewSubscription = async (spaceId: string, plan: IPlan, credits
           $set: { 
             plan,
             credits,
-            imageToVideoUsed: 0
+            imageToVideoUsed: 0,
+            avatarsLimit: plan.avatarsLimit
           }
         },
         { new: true }
       );
-      
+
       if (!space) throw new Error("Space not found");
       return space;
     });
   } catch (error) {
     console.error("Error while setting up new subscription: ", error);
+    throw error;
+  }
+};
+
+// Looks (avatars)
+export const addLookToAvatar = async (
+  spaceId: string,
+  avatarId: string,
+  look: any
+) => {
+  try {
+    return await executeWithRetry(async () => {
+      const res = await SpaceModel.updateOne(
+        { _id: spaceId },
+        {
+          $push: { "avatars.$[a].looks": look }
+        },
+        {
+          arrayFilters: [{ "a.id": avatarId }]
+        }
+      );
+
+      if ((res as any).modifiedCount === 0) {
+        throw new Error("Avatar not found or look not added");
+      }
+
+      return look;
+    });
+  } catch (error) {
+    console.error("Error while adding look to avatar: ", error);
+    throw error;
+  }
+};
+
+export const updateLookInAvatar = async (
+  spaceId: string,
+  avatarId: string,
+  lookId: string,
+  updates: Record<string, any>
+) => {
+  try {
+    return await executeWithRetry(async () => {
+      const setObject: Record<string, any> = {};
+      Object.entries(updates).forEach(([k, v]) => {
+        setObject[`avatars.$[a].looks.$[l].${k}`] = v;
+      });
+
+      const res = await SpaceModel.updateOne(
+        { _id: spaceId },
+        { $set: setObject },
+        {
+          arrayFilters: [
+            { "a.id": avatarId },
+            { "l.id": lookId }
+          ]
+        }
+      );
+
+      if ((res as any).modifiedCount === 0) {
+        throw new Error("Look not found or not updated");
+      }
+
+      return true;
+    });
+  } catch (error) {
+    console.error("Error while updating look in avatar: ", error);
+    throw error;
+  }
+};
+
+export const updateAvatarThumbnailAndFirstLook = async (
+  spaceId: string,
+  avatarId: string,
+  thumbnailUrl: string
+) => {
+  try {
+    return await executeWithRetry(async () => {
+      const res = await SpaceModel.updateOne(
+        { _id: spaceId },
+        {
+          $set: {
+            "avatars.$[a].thumbnail": thumbnailUrl,
+            "avatars.$[a].looks.0.thumbnail": thumbnailUrl,
+          }
+        },
+        {
+          arrayFilters: [{ "a.id": avatarId }]
+        }
+      );
+
+      if ((res as any).modifiedCount === 0) {
+        throw new Error("Avatar not found or not updated");
+      }
+
+      return true;
+    });
+  } catch (error) {
+    console.error("Error while updating avatar thumbnail and first look: ", error);
     throw error;
   }
 };

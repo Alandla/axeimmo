@@ -169,6 +169,10 @@ const spaceSchema = new mongoose.Schema(
       formats: [],
       config: {}
     },
+    avatarsLimit: {
+      type: Number,
+      default: 0,
+    },
     usedStorageBytes: {
       type: Number,
       default: 0,

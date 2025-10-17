@@ -35,7 +35,8 @@
       "Pricing": "Tarifs",
       "Assets": "Médias",
       "Enhance": "Améliorer",
-      "Settings": "Paramètres"
+      "Settings": "Paramètres",
+      "Avatars": "Avatars"
     },
     "dashboard": {
       "title": "Tableau de bord",
@@ -111,7 +112,8 @@
         "title": "Tableau de bord",
         "home": "Accueil",
         "videos": "Vidéos",
-        "assets": "Médias"
+        "assets": "Médias",
+        "avatars": "Avatars"
       },
       "community": {
         "title": "Communauté",
@@ -165,6 +167,8 @@
       "max-duration": "Durée maximale de",
       "minute": "minute",
       "soon": "Bientôt",
+      "no-limit": "Illimité",
+      "avatars-limit": "Jusqu'à {limit} avatars personnalisés",
       "premium-toast": {
         "title": "Plan payant requis",
         "description": "Cette fonctionnalité nécessite un plan payant. Vous avez besoin du plan {plan} pour y accéder."
@@ -237,6 +241,8 @@
         "max-video-duration": "Durée maximale de vidéo",
         "music-library": "Bibliothèque musicale",
         "voices-library": "Bibliothèque de voix",
+        "avatars-unlimited": "Avatars personnalisés illimités",
+        "avatars-limit": "Limite d'avatars personnalisés",
         "avatars-library": "Bibliothèque d'avatars",
         "digital-clone": "Clone numérique",
         "save-templates": "Sauvegarde de modèles",
@@ -247,7 +253,6 @@
         "video-producer-agent": "Agent producteur de contenu vidéo",
         "community-manager-agent": "Agent community manager",
         "ai-model-ultra": "Modèle IA Ultra",
-        "ai-model-avatar-premium": "Modèle d'avatar premium réaliste",
         "url-to-video": "Création de vidéo depuis URL",
         "api-access": "Accès à l'API"
       }
@@ -355,7 +360,6 @@
       },
       "select-avatar": "Sélectionner un avatar",
       "no-avatar": "Aucun avatar",
-      "custom-avatar": "Personnalisé",
       "confirm": "Confirmer",
       "cancel": "Annuler",
       "modal-pricing-not-enough-credits": "Pas assez de crédits",
@@ -589,15 +593,15 @@
       }
     },
     "upload-dropdown": {
-        "upload-files": "Depuis l'appareil",
-        "select-assets": "Depuis la bibliothèque"
+      "upload-files": "Depuis l'appareil",
+      "select-assets": "Depuis la bibliothèque"
     },
     "asset-selection": {
-        "title": "Sélectionner des médias",
-        "no-assets": "Aucun média disponible",
-        "no-assets-description": "Vous n'avez aucun média terminé disponible pour la sélection.",
-        "cancel": "Annuler",
-        "confirm": "Confirmer"
+      "title": "Sélectionner des médias",
+      "no-assets": "Aucun média disponible",
+      "no-assets-description": "Vous n'avez aucun média terminé disponible pour la sélection.",
+      "cancel": "Annuler",
+      "confirm": "Confirmer"
     },
     "ai": {
       "hello": "Salut, ",
@@ -724,17 +728,115 @@
       }
     },
     "avatars": {
+      "unlock-title": "Débloquer la création d'avatar",
+      "unlock-description": "Crée ton avatar, ajoute ton produit et génère de nouveaux angles.",
+      "unlock": {
+        "features": {
+          "1": "Crée ton avatar uniquement avec un prompt",
+          "2": "Ajoute ton produit, ton logo ou crée de nouveaux angles en secondes",
+          "3": "Clone n'importe quelle personne avec seulement quelques photos"
+        },
+        "see-in-action": "Voir en action",
+        "upgrade": "Upgrade"
+      },
+      "limit-reached": "Limite d'avatars atteinte",
+      "limit-reached-description": "Passez à un plan supérieur pour créer plus d'avatars.",
+      "look-error": "Échec de génération. Réessayez.",
+      "left-counter": "{remaining}/{limit} restants",
+      "left-counter-unlimited": "Illimité",
+      "look-chat": {
+        "placeholder-1": "Ajouter mon produit dans la main",
+        "add-elements": "Ajouter des éléments",
+        "send": "Uploader",
+        "cost-tooltip": "Coût : {cost} crédits",
+        "sending": "Génération...",
+        "images-added": "{count} image(s) ajoutée(s)",
+        "style": "Style",
+        "styles": {
+          "selfie": "Selfie",
+          "studio": "Studio",
+          "podcast": "Podcast",
+          "srpo-car": "Voiture"
+        }
+      },
       "search": "Rechercher un avatar..",
       "preview": "Prévisualiser",
       "no-avatar-name": "Pas d'avatar",
       "no-avatar-description": "Mode voix seulement",
-      "no-looks-found": "Aucun look trouvé pour les filtres sélectionnés",
+      "create-new-name": "Créer un nouvel avatar",
+      "create-new-description": "Démarrer depuis zéro",
+      "create-new-look": "Créer un nouveau look",
+      "create-new-look-name": "Nouveau look",
+      "add-picture": "Ajouter une image",
+      "drop-image-here": "Déposez l'image ici",
+      "click-to-edit": "Cliquer pour modifier le nom",
+      "created-by": "Créé par",
+      "more-options": "Plus d'options",
+      "dropdown-menu": {
+        "see-looks": "Voir les looks",
+        "edit": "Éditer",
+        "rename": "Renommer",
+        "delete": "Supprimer",
+        "upscale": "Améliorer"
+      },
       "veo3-description-prefix": "Utiliser",
       "veo3-description-suffix": "pour la génération d'avatar",
       "toast": {
+        "error-title": "Erreur",
+        "look-generation-error": "Une erreur s'est produite lors de la génération du look. Veuillez réessayer.",
+        "avatar-name-saved": "Nom d'avatar sauvegardé",
+        "name-updated": "Nom mis à jour",
+        "description-updated": "Le nom a été mis à jour",
+        "error-message": "Une erreur est survenue lors de la mise à jour du nom",
+        "avatar-name-saved-description": "Le nom de l'avatar a été mis à jour avec succès",
+        "avatar-name-error": "Une erreur est survenue lors de la mise à jour du nom de l'avatar",
+        "avatar-deleted": "Avatar supprimé",
+        "avatar-deleted-description": "L'avatar a été supprimé avec succès",
+        "avatar-delete-error": "Une erreur est survenue lors de la suppression de l'avatar",
+        "look-deleted": "Look supprimé",
+        "look-deleted-description": "Le look a été supprimé avec succès",
+        "look-delete-error": "Une erreur est survenue lors de la suppression du look",
         "title-error": "Plan payant requis",
-        "description-premium-error": "Cet avatar n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder."
+        "description-premium-error": "Cet avatar n'est disponible que dans les plans payants. Vous avez besoin du plan {plan} pour y accéder.",
+        "error": "Erreur",
+        "upscale-started": "Amélioration de la qualité lancée",
+        "upscale-started-description": "L'amélioration de la qualité de l'image est en cours. Cela peut prendre quelques instants.",
+        "upscale-error": "Une erreur est survenue lors de l'amélioration de la qualité"
       },
+      "upscaling-in-progress": "Amélioration en cours...",
+      "create": {
+        "title": "Créer un avatar",
+        "from-pictures": {
+          "title": "Depuis des photos",
+          "subtitle": "Utilisez n'importe quelle photo comme avatar.",
+          "drop-hint": "Déposez vos photos ici"
+        },
+        "from-idea": {
+          "title": "Depuis une idée",
+          "subtitle": "Décrivez l'avatar que vous voulez créer.",
+          "placeholder": "Selfie d'un jeune homme au travail, en costume"
+        },
+        "upscale-title": "Amélioration de qualité",
+        "upscale-description": "Générer une version de l'avatar plus détaillée offrant une version ultra réaliste.",
+        "start": "Lancer la génération",
+        "create-avatar": "Créer l'avatar",
+        "error": "Erreur",
+        "error-creating-avatar": "Une erreur s'est produite lors de la création de l'avatar. Veuillez réessayer.",
+        "style": "Style",
+        "styles": {
+          "selfie": "Selfie",
+          "studio": "Studio",
+          "podcast": "Podcast",
+          "srpo-car": "Voiture"
+        },
+        "credits": "crédits"
+      },
+  
+      "sections": {
+        "yours": "Vos avatars",
+        "public": "Avatars publics"
+      },
+      "no-looks-found": "Aucun look trouvé pour les filtres sélectionnés",
       "tags": {
         "professional": "Professionnel",
         "cossy": "Cossy",
@@ -1919,5 +2021,9 @@
         "title": "23. Loi applicable et juridictions compétentes",
         "content": "Les \"Conditions Générales\" sont régies par la **loi française**.\n\nPour les Clients professionnels, en cas de litige opposant le Client et HOOX, et à défaut d'accord amiable dans les 2 mois suivant la première notification, celui-ci sera soumis à la compétence exclusive des **tribunaux de Paris (France)**, sauf dispositions impératives contraires."
       }
+    },
+    "infinite-scroll": {
+      "loading": "Chargement...",
+      "end": "Fin de la liste"
     }
   }
