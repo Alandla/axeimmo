@@ -184,6 +184,12 @@ export function AvatarLookChatbox({
     setImages((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
+  const adjustTextareaHeight = (event: React.FormEvent<HTMLTextAreaElement>) => {
+    const target = event.target as HTMLTextAreaElement;
+    target.style.height = 'auto';
+    target.style.height = `${target.scrollHeight}px`;
+  };
+
   const handleGenerate = async () => {
     if (!prompt.trim() && style !== "podcast") return;
     
@@ -226,6 +232,10 @@ export function AvatarLookChatbox({
       }
       setPrompt("");
       setImages([]);
+      // Reset textarea height
+      if (promptInputRef.current) {
+        promptInputRef.current.style.height = 'auto';
+      }
       // Decrement credits in UI
       decrementCredits(AVATAR_LOOK_GENERATION_COST);
       // Rafraîchir en arrière-plan sans bloquer l'UI
@@ -291,11 +301,16 @@ export function AvatarLookChatbox({
         className={`w-full max-w-xl mx-auto bg-white border rounded-xl p-2 shadow-md ${isDragOver ? 'ring-2 ring-primary' : ''}`}
       >
         {/* Top: prompt */}
-        <div className="">
+        <div className="mb-2">
           <Textarea
+            id="avatar-look-prompt-textarea"
             ref={promptInputRef}
             value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
+            onChange={(e) => {
+              setPrompt(e.target.value);
+              adjustTextareaHeight(e);
+            }}
+            onInput={adjustTextareaHeight}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -310,8 +325,9 @@ export function AvatarLookChatbox({
               }
             }}
             placeholder={`${t("look-chat.placeholder-1")}`}
-           className="w-full pt-2 resize-none overflow-hidden border-0 shadow-none"
-           variant="no-focus-border"
+            className="w-full resize-none overflow-hidden border-0 shadow-none focus:ring-0"
+            variant="no-focus-border"
+            rows={1}
           />
         </div>
         {/* Bottom bar: left elements + right send */}

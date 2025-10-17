@@ -209,7 +209,6 @@ export async function POST(
         }
       } catch (e) {
         console.error('Error generating avatar look (background)', e);
-        // No refund here: all specific failure paths above handle refund + status
       }
     })());
 

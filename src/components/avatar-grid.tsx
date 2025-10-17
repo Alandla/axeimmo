@@ -209,10 +209,6 @@ export function AvatarGridComponent({
     });
   };
 
-  // Removed unused barRect effect; containerRef is still used as anchor for the chatbox
-
-  // reference handled in AvatarLookChatbox
-
   const { activeSpace, lastUsedParameters } = useActiveSpaceStore();
   const { avatarsBySpace, getCachedAvatars, fetchAvatars, fetchAvatarsInBackground, setAvatars, startPolling, stopPolling } =
     useAvatarsStore();
@@ -233,8 +229,6 @@ export function AvatarGridComponent({
   };
 
   const avatarCreator = getAvatarCreator();
-
-  // Looks: no pagination, display all
 
   // Sync local spaceAvatars with store updates (e.g., SSE refresh)
   useEffect(() => {
@@ -1081,9 +1075,6 @@ export function AvatarGridComponent({
                   loader={
                     <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.loading")}</div>
                   }
-                  endMessage={
-                    <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.end")}</div>
-                  }
                 />
               </div>
             )}
@@ -1221,9 +1212,6 @@ export function AvatarGridComponent({
                   hasMore={hasMorePublic}
                   loader={
                     <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.loading")}</div>
-                  }
-                  endMessage={
-                    <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.end")}</div>
                   }
                 />
               </div>

@@ -2,7 +2,7 @@ import { Check, Paperclip, Send, Globe, X, ExternalLink } from "lucide-react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import SelectDuration, { DurationOption } from "./ui/select/select-duration";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CreationStep, PlanName } from "../types/enums";
 import { useTranslations } from "next-intl";
 import { useCreationStore } from "../store/creationStore";
@@ -65,16 +65,13 @@ export function AiChatTab({
       target.style.height = `${target.scrollHeight}px`;
     }
 
-    useEffect(() => {
-      const textarea = document.getElementById('ai-chat-textarea') as HTMLTextAreaElement;
-      if (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-      }
-    }, [inputMessage]);
-
     const handleSendMessage = (message: string, duration: number) => {
         setInputMessage('')
+        // Reset textarea height
+        const textarea = document.getElementById('ai-chat-textarea') as HTMLTextAreaElement;
+        if (textarea) {
+          textarea.style.height = 'auto';
+        }
         sendMessage(message, duration)
     }
 

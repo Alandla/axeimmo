@@ -10,7 +10,6 @@ interface InfiniteScrollProps {
   rootMargin?: string
   threshold?: number
   loader?: React.ReactNode
-  endMessage?: React.ReactNode
   className?: string
 }
 
@@ -22,7 +21,6 @@ export function InfiniteScroll({
   rootMargin = '200px',
   threshold = 0,
   loader,
-  endMessage,
   className,
 }: InfiniteScrollProps) {
   const sentinelRef = useRef<HTMLDivElement | null>(null)
@@ -49,7 +47,6 @@ export function InfiniteScroll({
     <div className={className}>
       <div ref={sentinelRef} />
       {isLoading && loader}
-      {!hasMore && !isLoading && endMessage}
     </div>
   )
 }

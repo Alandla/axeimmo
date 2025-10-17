@@ -3,8 +3,7 @@
       "all-f": "All",
       "all-m": "All",
       "infinite-scroll": {
-        "loading": "Loading...",
-        "end": "No more looks"
+        "loading": "Loading..."
       }
     },
     "login": {
@@ -900,8 +899,8 @@
       "processing": {
         "generation": "Generation",
         "upscale": "Upscale",
-        "estimate-generation": "Generation may take between 15 and 30 s",
-        "estimate-upscale": "Upscaling may take between 5 and 10 s"
+        "estimate-generation": "Can take 15 - 30s",
+        "estimate-upscale": "Can take 5 - 10s"
       },
       "create": {
         "title": "Create avatar",
@@ -2033,9 +2032,5 @@
         "title": "23. Applicable law and competent jurisdictions",
         "content": "The \"General Conditions\" are governed by **French law**.\n\nFor professional Clients, in case of dispute between the Client and HOOX, and failing amicable agreement within 2 months following first notification, it will be subject to exclusive jurisdiction of **Paris courts (France)**, except contrary mandatory provisions."
       }
-    },
-    "infinite-scroll": {
-      "loading": "Loading...",
-      "end": "No more items"
     }
 }

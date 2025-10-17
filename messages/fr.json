@@ -3,8 +3,7 @@
       "all-f": "Toutes",
       "all-m": "Tous",
       "infinite-scroll": {
-        "loading": "Chargement...",
-        "end": "Fin des looks"
+        "loading": "Chargement..."
       }
     },
     "modals": {
@@ -811,8 +810,8 @@
       "processing": {
         "generation": "Génération",
         "upscale": "Upscale",
-        "estimate-generation": "La génération peut prendre entre 15 et 30 s",
-        "estimate-upscale": "L'amélioration peut prendre entre 5 et 10 s"
+        "estimate-generation": "Peut prendre 15 à 30s",
+        "estimate-upscale": "Peut prendre 5 à 10s"
       },
       "create": {
         "title": "Créer un avatar",
@@ -2031,9 +2030,5 @@
         "title": "23. Loi applicable et juridictions compétentes",
         "content": "Les \"Conditions Générales\" sont régies par la **loi française**.\n\nPour les Clients professionnels, en cas de litige opposant le Client et HOOX, et à défaut d'accord amiable dans les 2 mois suivant la première notification, celui-ci sera soumis à la compétence exclusive des **tribunaux de Paris (France)**, sauf dispositions impératives contraires."
       }
-    },
-    "infinite-scroll": {
-      "loading": "Chargement...",
-      "end": "Fin de la liste"
     }
   }
