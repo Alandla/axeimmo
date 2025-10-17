@@ -251,10 +251,7 @@ export const generateVeo3RenderList = (video: IVideo): Veo3RenderResult => {
   }
 
   // Now apply the 150 character logic on these grouped phrases
-  const TARGET_LENGTH = 150;
-  const MARGIN = 15;
-  const MIN_LENGTH = TARGET_LENGTH - MARGIN; // 135
-  const MAX_LENGTH = TARGET_LENGTH + MARGIN; // 165
+  const MAX_LENGTH = 150;
 
   const veo3Renders: Veo3RenderData[] = [];
   const audioIndexMapping = new Map<number, number>(); // originalAudioIndex -> newAudioIndex
@@ -273,7 +270,7 @@ export const generateVeo3RenderList = (video: IVideo): Veo3RenderResult => {
     const potentialText = currentText + textToAdd;
 
     // Check if adding this text would exceed MAX_LENGTH
-    if (potentialText.length > MAX_LENGTH && currentText.length >= MIN_LENGTH) {
+    if (potentialText.length > MAX_LENGTH && currentText.length > 0) {
       // Save current render with incremental audioIndex
       const newAudioIndex = veo3Renders.length;
       if (firstVoiceId) {
