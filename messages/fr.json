@@ -1,7 +1,11 @@
 {
     "common": {
       "all-f": "Toutes",
-      "all-m": "Tous"
+      "all-m": "Tous",
+      "infinite-scroll": {
+        "loading": "Chargement...",
+        "end": "Fin des looks"
+      }
     },
     "modals": {
       "confirm-delete": {

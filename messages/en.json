@@ -1,7 +1,11 @@
 {
     "common": {
       "all-f": "All",
-      "all-m": "All"
+      "all-m": "All",
+      "infinite-scroll": {
+        "loading": "Loading...",
+        "end": "No more looks"
+      }
     },
     "login": {
       "title": "Log in to your account",

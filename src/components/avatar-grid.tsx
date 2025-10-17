@@ -30,7 +30,6 @@ import {
 } from "@/src/components/ui/pagination";
 import { cn, getMostFrequentString } from "@/src/lib/utils";
 import { useActiveSpaceStore } from "../store/activeSpaceStore";
-import { getSpaceAvatars } from "../service/space.service";
 import { useAvatarsStore } from "../store/avatarsStore";
 import { HorizontalScrollList } from "./ui/horizontal-scroll-list";
 import { Card, CardContent } from "@/src/components/ui/card";
@@ -171,6 +170,8 @@ export function AvatarGridComponent({
   const [currentPage, setCurrentPage] = useState(1);
   const avatarsPerPage = mode === "large" ? 12 : 6;
   const [visiblePublicCount, setVisiblePublicCount] = useState<number>(avatarsPerPage);
+  const looksPerChunk = mode === "large" ? 12 : 6;
+  const [visibleLooksCount, setVisibleLooksCount] = useState<number>(looksPerChunk);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null);
   const [publicAvatars, setPublicAvatars] = useState<Avatar[]>(avatarsConfig);
@@ -233,9 +234,7 @@ export function AvatarGridComponent({
 
   const avatarCreator = getAvatarCreator();
 
-  // Ajouter l'état pour la pagination des looks
-  const [currentLookPage, setCurrentLookPage] = useState(1);
-  const looksPerPage = mode === "large" ? 12 : 6;
+  // Looks: no pagination, display all
 
   // Sync local spaceAvatars with store updates (e.g., SSE refresh)
   useEffect(() => {
@@ -495,7 +494,6 @@ export function AvatarGridComponent({
         
         if (!hasCompatibleLooks) {
           setActiveAvatar(null);
-          setCurrentLookPage(1);
         }
       }
       
@@ -680,7 +678,7 @@ export function AvatarGridComponent({
   const avatarsToShow =
     variant === "select" && showNoAvatarCard ? currentAvatars.slice(0, avatarsPerPage - 1) : currentAvatars;
 
-  // Calculs pour la pagination des looks
+  // Filtrage des looks (sans pagination)
   const filteredLooks = activeAvatar ? sortLooksByLastUsed(activeAvatar.looks.filter(look => {
     const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => look.tags?.includes(tag) || false)
     
@@ -690,10 +688,7 @@ export function AvatarGridComponent({
     return matchesTags && matchesVeo3Filter
   })) : []
 
-  const indexOfLastLook = currentLookPage * looksPerPage;
-  const indexOfFirstLook = indexOfLastLook - looksPerPage;
-  const currentLooks = filteredLooks.slice(indexOfFirstLook, indexOfLastLook);
-  const totalLookPages = Math.ceil(filteredLooks.length / looksPerPage);
+  const currentLooks = filteredLooks.slice(0, visibleLooksCount);
 
   const toggleTag = (tag: string) => {
     const newTags = selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag];
@@ -742,29 +737,19 @@ export function AvatarGridComponent({
     }
   };
 
-  // Fonctions de pagination pour les looks
-  const getLookPageNumbers = () => {
-    const pageNumbers = [];
-    const totalPagesToShow = 5;
-    const halfWay = Math.floor(totalPagesToShow / 2);
-
-    let startPage = Math.max(currentLookPage - halfWay, 1);
-    let endPage = Math.min(startPage + totalPagesToShow - 1, totalLookPages);
-
-    if (endPage - startPage + 1 < totalPagesToShow) {
-      startPage = Math.max(endPage - totalPagesToShow + 1, 1);
+  // Infinite scroll pour les looks
+  const hasMoreLooks = activeAvatar ? visibleLooksCount < filteredLooks.length : false;
+  const loadMoreLooks = () => {
+    if (activeAvatar) {
+      setVisibleLooksCount((c) => c + looksPerChunk);
     }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(i);
-    }
-
-    return {
-      numbers: pageNumbers,
-      showStartEllipsis: startPage > 1,
-      showEndEllipsis: endPage < totalLookPages,
-    };
   };
+
+  // Reset du compteur des looks lors des changements de contexte
+  useEffect(() => {
+    setVisibleLooksCount(looksPerChunk);
+  }, [activeAvatar?.id, selectedTags.join("|"), useVeo3, looksPerChunk]);
+
 
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -789,11 +774,6 @@ export function AvatarGridComponent({
     };
   };
 
-  const handleLookPageChange = (page: number) => {
-    if (page >= 1 && page <= totalLookPages) {
-      setCurrentLookPage(page);
-    }
-  };
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -894,7 +874,6 @@ export function AvatarGridComponent({
               variant="ghost"
               onClick={() => {
                 setActiveAvatar(null);
-                setCurrentLookPage(1);
                 updateUrlParamsForAvatar(null);
               }}
             >
@@ -1092,6 +1071,22 @@ export function AvatarGridComponent({
             ) : (
               <div className="col-span-full text-center py-8 text-muted-foreground">{t("no-looks-found")}</div>
             )}
+
+            {/* Infinite scroll pour les looks */}
+            {activeAvatar && (
+              <div className="col-span-full">
+                <InfiniteScroll
+                  onLoadMore={loadMoreLooks}
+                  hasMore={hasMoreLooks}
+                  loader={
+                    <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.loading")}</div>
+                  }
+                  endMessage={
+                    <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.end")}</div>
+                  }
+                />
+              </div>
+            )}
           </>
         ) : (
           // Afficher d'abord la section des avatars du space, puis la section des avatars publics
@@ -1245,7 +1240,6 @@ export function AvatarGridComponent({
         onCreated={(avatar) => {
           // Sélectionner automatiquement l'avatar nouvellement créé et ouvrir ses looks
           setActiveAvatar(avatar);
-          setCurrentLookPage(1);
           // Mettre à jour localement et dans le store sans refetch
           setSpaceAvatars((prev) => [avatar, ...prev]);
           setAvatars(activeSpace?.id as string, [avatar, ...(avatarsBySpace.get(activeSpace?.id as string) || [])]);
@@ -1254,87 +1248,7 @@ export function AvatarGridComponent({
 
       <UnlockAvatarCreationModal isOpen={isUnlockModalOpen} setIsOpen={setIsUnlockModalOpen} />
 
-      {activeAvatar
-        ? // Pagination des looks
-          totalLookPages > 1 && (
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    showText={false}
-                    onClick={() => handleLookPageChange(currentLookPage - 1)}
-                    className={cn(
-                      "cursor-pointer sm:hidden",
-                      currentLookPage === 1 && "pointer-events-none opacity-50"
-                    )}
-                  />
-                  <PaginationPrevious
-                    showText={true}
-                    onClick={() => handleLookPageChange(currentLookPage - 1)}
-                    className={cn(
-                      "cursor-pointer hidden sm:flex",
-                      currentLookPage === 1 && "pointer-events-none opacity-50"
-                    )}
-                  />
-                </PaginationItem>
-
-                {getLookPageNumbers().showStartEllipsis && (
-                  <>
-                    <PaginationItem>
-                      <PaginationLink onClick={() => handleLookPageChange(1)}>1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                  </>
-                )}
-
-                {getLookPageNumbers().numbers.map((pageNumber) => (
-                  <PaginationItem key={pageNumber}>
-                    <PaginationLink
-                      isActive={currentLookPage === pageNumber}
-                      onClick={() => handleLookPageChange(pageNumber)}
-                    >
-                      {pageNumber}
-                    </PaginationLink>
-                  </PaginationItem>
-                ))}
-
-                {getLookPageNumbers().showEndEllipsis && (
-                  <>
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink onClick={() => handleLookPageChange(totalLookPages)}>
-                        {totalLookPages}
-                      </PaginationLink>
-                    </PaginationItem>
-                  </>
-                )}
-
-                <PaginationItem>
-                  <PaginationNext
-                    showText={false}
-                    onClick={() => handleLookPageChange(currentLookPage + 1)}
-                    className={cn(
-                      "cursor-pointer sm:hidden",
-                      currentLookPage === totalPages && "pointer-events-none opacity-50"
-                    )}
-                  />
-                  <PaginationNext
-                    showText={true}
-                    onClick={() => handleLookPageChange(currentLookPage + 1)}
-                    className={cn(
-                      "cursor-pointer hidden sm:flex",
-                      currentLookPage === totalPages && "pointer-events-none opacity-50"
-                    )}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          )
-        : null}
+      {activeAvatar ? null : null}
 
       {variant === "select" && !activeAvatar && totalPages > 1 && (
         // Pagination des avatars publics
