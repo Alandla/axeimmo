@@ -108,7 +108,6 @@ export async function uploadImageToHeygen(imageUrl: string): Promise<string> {
   // Download image from URL
   const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
   const imageBuffer = Buffer.from(imageResponse.data);
-  
   // Detect content type from response or URL
   let contentType = imageResponse.headers['content-type'] || 'image/jpeg';
   
@@ -127,19 +126,50 @@ export async function uploadImageToHeygen(imageUrl: string): Promise<string> {
     }
   }
   
-  // Upload to Heygen
-  const response = await axios.post(
-    'https://upload.heygen.com/v1/asset',
-    imageBuffer,
-    {
-      headers: {
-        'X-Api-Key': process.env.HEYGEN_API_KEY,
-        'Content-Type': contentType,
-      },
-    }
-  );
+  try {
+    // Upload to Heygen
+    const response = await axios.post(
+      'https://upload.heygen.com/v1/asset',
+      imageBuffer,
+      {
+        headers: {
+          'X-Api-Key': process.env.HEYGEN_API_KEY,
+          'Content-Type': contentType,
+        },
+      }
+    );
 
-  return response.data.data.image_key;
+    return response.data.data.image_key;
+  } catch (error: any) {
+    // Check if it's a content type mismatch error
+    if (error.response?.data?.code === 400543) {
+      const errorMessage = error.response.data.message;
+      // Extract expected content type from error message
+      const match = errorMessage.match(/!=\s*([^\s]+)/);
+      
+      if (match && match[1]) {
+        const expectedContentType = match[1];
+        console.log(`Retrying upload with correct content type: ${expectedContentType}`);
+        
+        // Retry with the correct content type
+        const retryResponse = await axios.post(
+          'https://upload.heygen.com/v1/asset',
+          imageBuffer,
+          {
+            headers: {
+              'X-Api-Key': process.env.HEYGEN_API_KEY,
+              'Content-Type': expectedContentType,
+            },
+          }
+        );
+
+        return retryResponse.data.data.image_key;
+      }
+    }
+    
+    // Re-throw the error if it's not a content type mismatch or retry failed
+    throw error;
+  }
 }
 
 /**
