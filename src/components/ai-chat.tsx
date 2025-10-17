@@ -718,7 +718,9 @@ export function AiChat() {
                     </>
                   )}
                   {message.type === MessageType.AVATAR && (
-                    <AvatarGridComponent />
+                    <div className='mt-4'>
+                      <AvatarGridComponent />
+                    </div>
                   )}
                   {message.type === MessageType.VOICE && (
                     <VoicesGridComponent />

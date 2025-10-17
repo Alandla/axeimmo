@@ -1040,29 +1040,31 @@ export function AvatarGridComponent({
             ))}
       </HorizontalScrollList>
 
-      <div className="flex items-center justify-between mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
-        <div className="flex items-center gap-3">
-          <Badge className="bg-green-50 text-green-600">
-            New
-          </Badge>
-          <span className="text-sm">
-            {t('veo3-description-prefix')} <span className="font-bold">Veo 3.1</span> {t('veo3-description-suffix')}
-          </span>
+      {variant === "select" && (
+        <div className="flex items-center justify-between mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+          <div className="flex items-center gap-3">
+            <Badge className="bg-green-50 text-green-600">
+              New
+            </Badge>
+            <span className="text-sm">
+              {t('veo3-description-prefix')} <span className="font-bold">Veo 3.1</span> {t('veo3-description-suffix')}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              id="avatar-veo3-toggle"
+              checked={useVeo3}
+              onCheckedChange={handleVeo3Toggle}
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Switch
-            id="avatar-veo3-toggle"
-            checked={useVeo3}
-            onCheckedChange={handleVeo3Toggle}
-          />
-        </div>
-      </div>
+      )}
 
       <div
         className={`grid gap-4 ${
           variant === "create"
             ? "grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6"
-            : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+            : "grid-cols-2 sm:grid-cols-3"
         }`}
       >
         {activeAvatar ? (
