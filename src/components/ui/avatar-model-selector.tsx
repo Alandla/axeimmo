@@ -9,11 +9,11 @@ import { Zap, Gem, Crown } from 'lucide-react'
 import { AVATAR_MODEL_CREDIT_RATES } from '@/src/lib/cost'
 import { useEffect } from 'react'
 
-export type AvatarModel = 'heygen' | 'heygen-iv' | 'omnihuman';
+export type AvatarModel = 'heygen' | 'heygen-iv' | 'omnihuman' | 'veo-3' | 'veo-3-fast';
 
 export function isAvatarModelAllowed(model: AvatarModel, planName: PlanName | null): boolean {
   if (model === 'heygen') return true; // Standard is always allowed
-  if (model === 'heygen-iv') {
+  if (model === 'heygen-iv' || model === 'veo-3' || model === 'veo-3-fast') {
     return planName === PlanName.START || planName === PlanName.PRO || planName === PlanName.ENTREPRISE;
   }
   if (model === 'omnihuman') {
@@ -24,7 +24,7 @@ export function isAvatarModelAllowed(model: AvatarModel, planName: PlanName | nu
 
 export function getRequiredPlanForModel(model: AvatarModel): PlanName | null {
   if (model === 'heygen') return null; // No specific plan required
-  if (model === 'heygen-iv') return PlanName.START;
+  if (model === 'heygen-iv' || model === 'veo-3' || model === 'veo-3-fast') return PlanName.START;
   if (model === 'omnihuman') return PlanName.ENTREPRISE;
   return null;
 }

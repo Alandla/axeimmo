@@ -111,6 +111,7 @@ export interface IVideo {
   spaceId: string; // MongoDB ObjectId as string
   costToGenerate?: number;
   archived?: boolean;
+  useVeo3?: boolean;
   state: {
     type: 'pending' | 'generating' | 'done' | 'exporting' | 'error';
     message?: string;

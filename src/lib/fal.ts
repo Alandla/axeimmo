@@ -22,6 +22,16 @@ const AVATAR_IMAGE_ENDPOINTS = {
   UPSCALE_CRISP: "fal-ai/recraft/upscale/crisp"
 } as const;
 
+export enum Veo3GenerationMode {
+  STANDARD = 'standard',
+  FAST = 'fast'
+}
+
+export const VEO3_ENDPOINTS = {
+  [Veo3GenerationMode.STANDARD]: "fal-ai/veo3.1/image-to-video",
+  [Veo3GenerationMode.FAST]: "fal-ai/veo3.1/fast/image-to-video"
+} as const;
+
 export interface KlingRequest {
   prompt: string;
   image_url: string;
@@ -41,6 +51,21 @@ export interface KlingResponse {
   seed: number;
   has_nsfw_concepts: boolean;
   prompt: string;
+}
+
+export interface Veo3Request {
+  prompt: string;
+  image_url: string;
+  duration?: "8s";
+  aspect_ratio?: "9:16" | "16:9";
+  generate_audio?: boolean;
+  resolution?: "720p" | "1080p";
+}
+
+export interface Veo3Response {
+  video: {
+    url: string;
+  };
 }
 
 export interface FalQueueStatus {
@@ -571,6 +596,91 @@ export async function getOmniHumanRequestResult(
     };
   } catch (error) {
     console.error('Error getting OmniHuman request result:', error);
+    throw error;
+  }
+}
+
+/**
+ * Start Veo3 video generation
+ */
+export async function startVeo3VideoGeneration(
+  request: Veo3Request,
+  mode: Veo3GenerationMode = Veo3GenerationMode.FAST,
+  mock: Boolean = false
+): Promise<{ request_id: string }> {
+  if (mock) {
+    console.log(`[TEST MODE] Simulating Veo3 video generation with mode: ${mode}`);
+    return { request_id: 'a80bc54f-2147-42a7-b5d4-4b429b8d5bf9' };
+  }
+
+  try {
+    const endpoint = VEO3_ENDPOINTS[mode];
+
+    const result = await fal.queue.submit(endpoint, {
+      input: {
+        prompt: request.prompt,
+        image_url: request.image_url,
+        duration: request.duration || "8s",
+        aspect_ratio: request.aspect_ratio || "9:16",
+        generate_audio: request.generate_audio || true,
+        resolution: request.resolution || "720p"
+      }
+    });
+
+    console.log(`Veo3 video generation started with mode: ${mode}, request_id: ${result.request_id}`);
+    return { request_id: result.request_id };
+  } catch (error) {
+    console.error(`Error starting Veo3 video generation (${mode}):`, error);
+    throw error;
+  }
+}
+
+/**
+ * Check Veo3 request status
+ */
+export async function checkVeo3RequestStatus(
+  requestId: string,
+  mode: Veo3GenerationMode = Veo3GenerationMode.FAST
+): Promise<FalQueueStatus> {
+  try {
+    const endpoint = VEO3_ENDPOINTS[mode];
+
+    const status = await fal.queue.status(endpoint, {
+      requestId: requestId,
+      logs: true,
+    });
+
+    return {
+      status: status.status as "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED",
+      response_url: status.response_url,
+      queue_position: (status as any).queue_position,
+      logs: (status as any).logs
+    };
+  } catch (error) {
+    console.error('Error checking Veo3 request status:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get Veo3 request result
+ */
+export async function getVeo3RequestResult(
+  requestId: string,
+  mode: Veo3GenerationMode = Veo3GenerationMode.FAST
+): Promise<{ data?: Veo3Response }> {
+  try {
+    const endpoint = VEO3_ENDPOINTS[mode];
+
+    const result = await fal.queue.result(endpoint, {
+      requestId: requestId
+    });
+
+    return {
+      data: result.data as Veo3Response
+    };
+  } catch (error) {
+    console.error('Error getting Veo3 request result:', error);
     throw error;
   }
 } 

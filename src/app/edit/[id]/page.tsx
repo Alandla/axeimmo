@@ -46,6 +46,7 @@ import { useActiveSpaceStore } from '@/src/store/activeSpaceStore'
 import { LogoPosition } from '@/src/types/space'
 import { useBrowserDetection } from '@/src/hooks/use-browser-detection'
 import { calculateGenerationCredits } from '@/src/lib/video-estimation'
+import { AvatarModel } from '@/src/components/ui/avatar-model-selector'
 
 export default function VideoEditor() {
   const { id } = useParams()
@@ -332,7 +333,7 @@ export default function VideoEditor() {
     }
   };
 
-  const onExportVideo = async (avatarModel?: 'heygen' | 'heygen-iv' | 'omnihuman') => {
+  const onExportVideo = async (avatarModel?: AvatarModel) => {
 
     try {
       await basicApiCall('/video/save', { video })
@@ -1613,6 +1614,7 @@ export default function VideoEditor() {
                         handleMergeWordWithPrevious={handleMergeWordWithPrevious}
                         handleMergeWordWithNext={handleMergeWordWithNext}
                         onWordZoomChange={handleWordZoomChange}
+                        useVeo3={video?.useVeo3}
                       />
                     </TabsContent>
                     <TabsContent value="subtitle">
@@ -1786,6 +1788,7 @@ export default function VideoEditor() {
                   handleMergeWordWithPrevious={handleMergeWordWithPrevious}
                   handleMergeWordWithNext={handleMergeWordWithNext}
                   onWordZoomChange={handleWordZoomChange}
+                  useVeo3={video?.useVeo3}
                 />
               </ScrollArea>
             </TabsContent>

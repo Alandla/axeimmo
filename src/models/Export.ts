@@ -67,7 +67,7 @@ const exportSchema = new mongoose.Schema(
     avatarModel: {
       type: String,
       required: false,
-      enum: ['heygen', 'heygen-iv', 'omnihuman'],
+      enum: ['heygen', 'heygen-iv', 'omnihuman', 'veo-3', 'veo-3-fast'],
     },
   },
   {

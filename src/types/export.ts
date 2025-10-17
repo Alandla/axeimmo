@@ -14,7 +14,7 @@ export interface IExport {
   costTotal?: number;
   errorMessage?: string;
   webhookUrl?: string;
-  avatarModel?: 'heygen' | 'heygen-iv' | 'omnihuman';
+  avatarModel?: 'heygen' | 'heygen-iv' | 'omnihuman' | 'veo-3' | 'veo-3-fast';
   createdAt?: Date;
   updatedAt?: Date;
 }

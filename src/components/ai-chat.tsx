@@ -54,7 +54,7 @@ interface Message {
 
 
 export function AiChat() {
-  const { setScript, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, isWebMode, setExtractedImagesMedia, extractedImagesMedia, setVideoFormat, reset } = useCreationStore()
+  const { setScript, addToTotalCost, selectedLook, selectedVoice, files, addStep, resetSteps, steps, setSteps, isWebMode, setExtractedImagesMedia, extractedImagesMedia, setVideoFormat, animateImages, reset, useVeo3 } = useCreationStore()
   const { activeSpace, setLastUsedParameters } = useActiveSpaceStore()
   const { fetchTotalVideoCount } = useVideosStore()
   const router = useRouter()
@@ -86,8 +86,8 @@ export function AiChat() {
         const videoId = handleRunUpdate(run, generationSpaceId);
         
         if (videoId && run.status === "COMPLETED") {
-          reset()
           router.push(`/edit/${videoId}`);
+          reset()
         }
       } catch (error) {
         console.error('Generation error:', error);
@@ -450,8 +450,7 @@ export function AiChat() {
   }
 
   const handleConfirmVoice = () => {
-    // Ajout de l'étape QUEUE avant les autres étapes si elle n'existe pas déjà
-    const hasQueueStep = useCreationStore.getState().steps.some(step => step.name === Steps.QUEUE);
+    const hasQueueStep = steps.some(step => step.name === Steps.QUEUE);
     if (!hasQueueStep) {
       addStep({ id: 1, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
     }
@@ -514,9 +513,17 @@ export function AiChat() {
     const messageUser = messageUser1 + ' ' + messageUser2;
 
     // Ajout de l'étape QUEUE avant les autres étapes
-    const hasQueueStep = useCreationStore.getState().steps.some(step => step.name === Steps.QUEUE);
+    const hasQueueStep = steps.some(step => step.name === Steps.QUEUE);
     if (!hasQueueStep) {
       addStep({ id: 1, name: Steps.QUEUE, state: StepState.PENDING, progress: 0 })
+    }
+    
+    // Si Veo3 est activé et qu'on a un avatar sélectionné, retirer les steps VOICE_GENERATION et TRANSCRIPTION
+    if (useVeo3 && selectedLook) {
+      const filteredSteps = steps.filter(step => 
+        step.name !== Steps.VOICE_GENERATION && step.name !== Steps.TRANSCRIPTION
+      );
+      setSteps(filteredSteps);
     }
     
     addStep({ id: 4, name: Steps.SEARCH_MEDIA, state: StepState.PENDING, progress: 0 })
@@ -528,7 +535,7 @@ export function AiChat() {
     const hasExtractedImages = extractedImagesMedia.length > 0;
     const hasAnyImages = hasUploadedImages || hasExtractedImages;
     
-    if (hasAnyImages && useCreationStore.getState().animateImages) {
+    if (hasAnyImages && animateImages) {
       addStep({ id: 9, name: Steps.ANIMATE_IMAGES, state: StepState.PENDING, progress: 0 })
       addStep({ id: 10, name: Steps.REDIRECTING, state: StepState.PENDING, progress: 0 })
     } else {
@@ -711,7 +718,9 @@ export function AiChat() {
                     </>
                   )}
                   {message.type === MessageType.AVATAR && (
-                    <AvatarGridComponent />
+                    <div className='mt-4'>
+                      <AvatarGridComponent />
+                    </div>
                   )}
                   {message.type === MessageType.VOICE && (
                     <VoicesGridComponent />

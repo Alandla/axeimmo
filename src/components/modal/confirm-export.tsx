@@ -16,8 +16,9 @@ import { useTranslations } from 'next-intl'
 import { getSpaceById } from '@/src/service/space.service'
 import { useRouter } from 'next/navigation'
 import { AvatarModelSelector, AvatarModel, isAvatarModelAllowed, getRequiredPlanForModel } from '@/src/components/ui/avatar-model-selector'
+import { Veo3ModelSelector } from '@/src/components/ui/veo-model-selector'
 import { IVideo } from '@/src/types/video'
-import { calculateTotalAvatarDuration, calculateAvatarCreditsForUser, calculateHighResolutionCostCredits, AVATAR_MODEL_CREDIT_RATES } from '@/src/lib/cost'
+import { calculateTotalAvatarDuration, calculateAvatarCreditsForUser, calculateHighResolutionCostCredits, AVATAR_MODEL_CREDIT_RATES, calculateVeo3Duration } from '@/src/lib/cost'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/src/components/ui/tooltip"
 import { Label } from '@radix-ui/react-dropdown-menu'
 import ModalPricing from './modal-pricing'
@@ -33,7 +34,7 @@ interface ModalConfirmExportProps {
   initialCredits?: number
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  onExportVideo: (avatarModel?: AvatarModel) => Promise<string | undefined>
+  onExportVideo: (model?: AvatarModel) => Promise<string | undefined>
   showWatermark: boolean
   onOpenPricing?: () => void
   video?: IVideo
@@ -57,17 +58,27 @@ export default function ModalConfirmExport({
   const [selectedAvatarModel, setSelectedAvatarModel] = useState<AvatarModel>('heygen')
   const [showPricingModal, setShowPricingModal] = useState(false)
   const [pricingRecommendedPlan, setPricingRecommendedPlan] = useState<PlanName>(PlanName.PRO)
+  const [pricingModalType, setPricingModalType] = useState<'avatar' | 'veo3'>('avatar')
   const t = useTranslations('export-modal')
   const router = useRouter()
 
+
   // Calculate avatar duration and cost
   const hasAvatar = video?.video?.avatar?.thumbnail && !video?.video?.avatar?.previewUrl
-  const avatarDuration = hasAvatar && video ? calculateTotalAvatarDuration(video) : 0
-  const avatarCost = hasAvatar ? calculateAvatarCreditsForUser(avatarDuration, selectedAvatarModel) : 0
+  const isVeo3Model = selectedAvatarModel === 'veo-3' || selectedAvatarModel === 'veo-3-fast'
+  const videoDuration = video?.video?.metadata?.audio_duration || 30
+  
+  // For Veo3, calculate duration based on video count * 8; for avatars, use only the duration when avatar is visible
+  const avatarDuration = isVeo3Model && video
+    ? calculateVeo3Duration(video)
+    : (hasAvatar && video ? calculateTotalAvatarDuration(video) : 0)
+  
+  const avatarCost = hasAvatar || isVeo3Model 
+    ? calculateAvatarCreditsForUser(avatarDuration, selectedAvatarModel) 
+    : 0
   
   // Calculate high resolution cost (only for custom format)
   const videoFormat = video?.video?.format
-  const videoDuration = video?.video?.metadata?.audio_duration || 30
   let highResCost = 0
   
   if (videoFormat === 'custom' && video?.video?.width && video?.video?.height) {
@@ -81,13 +92,17 @@ export default function ModalConfirmExport({
   const totalCost = cost + avatarCost + highResCost
 
   const handleConfirm = async () => {
-    // Check if the selected model is allowed for the current plan
     const currentPlanName = planName as PlanName | null
+    
+    // Check if the selected model is allowed for the current plan
     if (!isAvatarModelAllowed(selectedAvatarModel, currentPlanName)) {
       const requiredPlan = getRequiredPlanForModel(selectedAvatarModel)
       if (requiredPlan) {
+        // Set the right modal type based on model
+        setPricingModalType(isVeo3Model ? 'veo3' : 'avatar')
         setPricingRecommendedPlan(requiredPlan)
         setShowPricingModal(true)
+        setIsOpen(false)
         return
       }
     }
@@ -103,6 +118,9 @@ export default function ModalConfirmExport({
   }
 
   useEffect(() => {
+    if (!isOpen) return
+    setSelectedAvatarModel(video?.useVeo3 ? 'veo-3-fast' : 'heygen')
+
     if (initialCredits !== undefined) {
       setCredits(initialCredits)
     }
@@ -118,10 +136,10 @@ export default function ModalConfirmExport({
       }
     }
 
-    if (spaceId && isOpen) {
+    if (spaceId) {
       fetchSpace()
     }
-  }, [isOpen, spaceId, initialCredits])
+  }, [isOpen, spaceId, initialCredits, video?.useVeo3])
 
   return (
     <>
@@ -177,12 +195,20 @@ export default function ModalConfirmExport({
               </p>
             </div>
 
-            {hasAvatar && video && (
+            {video?.useVeo3 ? (
+              <div className="mt-4">
+                <Label className="text-sm font-bold mb-2">{t('veo-model-label')} :</Label>
+                <Veo3ModelSelector
+                  value={selectedAvatarModel}
+                  onValueChange={(value) => setSelectedAvatarModel(value)}
+                />
+              </div>
+            ) : hasAvatar && video && (
               <div className="mt-4">
                 <Label className="text-sm font-bold mb-2">{t('avatar-model-label')} :</Label>
                 <AvatarModelSelector
                   value={selectedAvatarModel}
-                  onValueChange={(value) => setSelectedAvatarModel(value as AvatarModel)}
+                  onValueChange={(value) => setSelectedAvatarModel(value)}
                   planName={planName as any}
                   avatarDuration={avatarDuration}
                   showStandard={!!video?.video?.avatar?.previewUrl}
@@ -228,8 +254,8 @@ export default function ModalConfirmExport({
       </Dialog>
 
       <ModalPricing
-        title={t('modal-pricing-avatar-title')}
-        description={t('modal-pricing-avatar-description')}
+        title={t(pricingModalType === 'veo3' ? 'modal-pricing-veo3-title' : 'modal-pricing-avatar-title')}
+        description={t(pricingModalType === 'veo3' ? 'modal-pricing-veo3-description' : 'modal-pricing-avatar-description')}
         isOpen={showPricingModal}
         setIsOpen={setShowPricingModal}
         recommendedPlan={pricingRecommendedPlan}

@@ -2,11 +2,12 @@
 
 import { useCreationStore } from '../store/creationStore'
 import { Steps, StepState } from '../types/step'
-import { Check, Clock, Loader2, Upload, Mic, FileText, Search, X, Sparkle, UserRoundSearch, FileSearch2, ReplaceAll, Play } from 'lucide-react'
+import { Check, Clock, Loader2, Upload, Mic, FileText, Search, X, Sparkle, UserRoundSearch, FileSearch2, ReplaceAll, Play, AlertTriangle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Alert, AlertDescription } from "@/src/components/ui/alert"
 
 export function GenerationProgress() {
-  const { steps } = useCreationStore()
+  const { steps, useVeo3, selectedLook } = useCreationStore()
   const t = useTranslations('generation')
 
   const getPendingIcon = (stepName: Steps) => {
@@ -35,11 +36,20 @@ export function GenerationProgress() {
   };
 
   return (
-    <ul className="space-y-4 mt-4">
-      {steps
-        .sort((a, b) => a.id - b.id)
-        .map((step) => (
-        <li key={step.id} className="flex items-center space-x-4">
+    <>
+      {useVeo3 && selectedLook && (
+        <Alert variant="warning" className="mt-4">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            {t('veo3-warning')}
+          </AlertDescription>
+        </Alert>
+      )}
+      <ul className="space-y-4 mt-4">
+        {steps
+          .sort((a, b) => a.id - b.id)
+          .map((step) => (
+          <li key={step.id} className="flex items-center space-x-4">
           <div
             className={`rounded-full p-1 ${
               step.state === StepState.COMPLETED
@@ -85,6 +95,7 @@ export function GenerationProgress() {
           <span className="text-sm text-gray-500">{step.progress}%</span>
         </li>
       ))}
-    </ul>
+      </ul>
+    </>
   )
 }

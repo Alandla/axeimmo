@@ -192,3 +192,140 @@ export const generateAvatarRenderList = (video: IVideo): AvatarRenderData[] => {
   return avatarRenders;
 };
 
+export interface Veo3RenderData {
+  audioIndex: number
+  text: string
+  avatarUrl: string
+  voiceId: string
+}
+
+export interface Veo3RenderResult {
+  veo3Renders: Veo3RenderData[]
+  updatedSequences: any[]
+}
+
+// Generate list of renders needed for Veo3 models
+export const generateVeo3RenderList = (video: IVideo): Veo3RenderResult => {
+  if (!video.video?.sequences || !video.video?.audio?.voices || !video.video?.avatar?.thumbnail) {
+    return {
+      veo3Renders: [],
+      updatedSequences: []
+    };
+  }
+
+  const sequences = video.video.sequences;
+  const voices = video.video.audio.voices;
+  const avatarUrl = video.video.avatar.thumbnail;
+
+  // First, group sequences by audioIndex and combine their texts
+  interface GroupedPhrase {
+    text: string;
+    voiceId: string;
+    originalAudioIndex: number;
+  }
+
+  const groupedPhrases: GroupedPhrase[] = [];
+  const sequencesByAudioIndex = new Map<number, string[]>();
+  
+  for (const sequence of sequences) {
+    const audioIndex = sequence.audioIndex;
+    if (!sequencesByAudioIndex.has(audioIndex)) {
+      sequencesByAudioIndex.set(audioIndex, []);
+    }
+    sequencesByAudioIndex.get(audioIndex)!.push(sequence.text);
+  }
+
+  // Create grouped phrases with their voiceId and original audioIndex
+  for (const [audioIndex, texts] of Array.from(sequencesByAudioIndex.entries())) {
+    const voice = voices.find(v => v.index === audioIndex);
+    if (!voice?.voiceId) {
+      console.warn(`No voiceId found for audioIndex ${audioIndex}`);
+      continue;
+    }
+
+    groupedPhrases.push({
+      text: texts.join(' '),
+      voiceId: voice.voiceId,
+      originalAudioIndex: audioIndex
+    });
+  }
+
+  // Now apply the 150 character logic on these grouped phrases
+  const TARGET_LENGTH = 150;
+  const MARGIN = 15;
+  const MIN_LENGTH = TARGET_LENGTH - MARGIN; // 135
+  const MAX_LENGTH = TARGET_LENGTH + MARGIN; // 165
+
+  const veo3Renders: Veo3RenderData[] = [];
+  const audioIndexMapping = new Map<number, number>(); // originalAudioIndex -> newAudioIndex
+  let currentText = '';
+  let firstVoiceId: string | null = null;
+  let currentOriginalIndexes: number[] = [];
+
+  for (const phrase of groupedPhrases) {
+    // If this is the first phrase of a new render, save voiceId
+    if (firstVoiceId === null) {
+      firstVoiceId = phrase.voiceId;
+    }
+
+    // Add the phrase text
+    const textToAdd = currentText ? ` ${phrase.text}` : phrase.text;
+    const potentialText = currentText + textToAdd;
+
+    // Check if adding this text would exceed MAX_LENGTH
+    if (potentialText.length > MAX_LENGTH && currentText.length >= MIN_LENGTH) {
+      // Save current render with incremental audioIndex
+      const newAudioIndex = veo3Renders.length;
+      if (firstVoiceId) {
+        veo3Renders.push({
+          audioIndex: newAudioIndex,
+          text: currentText.trim(),
+          avatarUrl,
+          voiceId: firstVoiceId
+        });
+        
+        // Map all original audioIndexes to this new audioIndex
+        for (const originalIndex of currentOriginalIndexes) {
+          audioIndexMapping.set(originalIndex, newAudioIndex);
+        }
+      }
+      
+      // Start new render with current phrase
+      currentText = phrase.text;
+      firstVoiceId = phrase.voiceId;
+      currentOriginalIndexes = [phrase.originalAudioIndex];
+    } else {
+      // Add to current render
+      currentText = potentialText;
+      currentOriginalIndexes.push(phrase.originalAudioIndex);
+    }
+  }
+
+  // Save last render if exists
+  if (currentText.trim() && firstVoiceId) {
+    const newAudioIndex = veo3Renders.length;
+    veo3Renders.push({
+      audioIndex: newAudioIndex,
+      text: currentText.trim(),
+      avatarUrl,
+      voiceId: firstVoiceId
+    });
+    
+    // Map all original audioIndexes to this new audioIndex
+    for (const originalIndex of currentOriginalIndexes) {
+      audioIndexMapping.set(originalIndex, newAudioIndex);
+    }
+  }
+
+  // Update sequences with new audioIndex
+  const updatedSequences = sequences.map(sequence => ({
+    ...sequence,
+    audioIndex: audioIndexMapping.get(sequence.audioIndex) ?? sequence.audioIndex
+  }));
+
+  return {
+    veo3Renders,
+    updatedSequences
+  };
+};
+

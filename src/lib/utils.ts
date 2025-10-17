@@ -44,3 +44,19 @@ export function objectIdToString(id: any): string {
 
   return String(id);
 }
+
+/**
+ * Remove emojis from text
+ */
+export function removeEmojis(text: string): string {
+  return text
+    .replace(/[\u2600-\u26FF]/g, '') // Miscellaneous Symbols
+    .replace(/[\u2700-\u27BF]/g, '') // Dingbats
+    .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '') // Surrogate pairs (emojis)
+    .replace(/[\u2194-\u2199\u21A9-\u21AA]/g, '') // Arrows
+    .replace(/[\u231A-\u231B\u23E9-\u23EC\u23F0\u23F3]/g, '') // Clock and media symbols
+    .replace(/[\u25FD-\u25FE]/g, '') // Squares
+    .replace(/[\u2B50\u2B55]/g, '') // Stars and circles
+    .replace(/✅/g, '') // Check mark
+    .replace(/💬/g, ''); // Speech balloon
+}

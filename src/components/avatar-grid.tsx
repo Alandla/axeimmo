@@ -8,6 +8,7 @@ import { Button } from "@/src/components/ui/button";
 import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } from "./voice-card";
 import { Badge } from "@/src/components/ui/badge";
 import { Check, UserRoundX, Plus } from "lucide-react";
+import { Switch } from "@/src/components/ui/switch"
 import { useTranslations } from "next-intl";
 import { useToast } from "@/src/hooks/use-toast";
 import { basicApiCall, basicApiDeleteCall } from "@/src/lib/api";
@@ -140,7 +141,7 @@ export function AvatarGridComponent({
 
   // Store hooks (utilisés seulement en mode non-contrôlé)
   const storeState = useCreationStore();
-  const { selectedVoice, setSelectedLook: setStoreSelectedLook, selectedLook: storeSelectedLook } = storeState;
+  const { selectedVoice, setSelectedLook: setStoreSelectedLook, selectedLook: storeSelectedLook, useVeo3, setUseVeo3 } = storeState;
 
   // Valeurs effectives (contrôlées ou du store)
   const selectedLook = isControlled ? controlledSelectedLook : storeSelectedLook;
@@ -494,6 +495,44 @@ export function AvatarGridComponent({
     });
   };
 
+  // Gérer le toggle de Veo3
+  const handleVeo3Toggle = (enabled: boolean) => {
+    setUseVeo3(enabled);
+    
+    if (enabled) {
+      // 1. Désélectionner l'avatar si il a un previewUrl
+      if (selectedLook && selectedLook.previewUrl) {
+        setSelectedLook(null);
+        setSelectedAvatarName(null);
+      }
+      
+      // 2. Revenir à la liste des avatars si on est dans un look pas compatible
+      if (activeAvatar) {
+        const hasCompatibleLooks = activeAvatar.looks.some(look => !look.previewUrl);
+        
+        if (!hasCompatibleLooks) {
+          setActiveAvatar(null);
+          setCurrentLookPage(1);
+        }
+      }
+      
+      // 3. Revenir à la page 1 si la page actuelle dépasse le nombre de pages après filtrage
+      const filteredCount = publicAvatars.filter(avatar => {
+        const matchesSearch = avatar.name.toLowerCase().includes(searchQuery.toLowerCase())
+        const matchesGender = selectedGender === 'all' ? true : avatar.gender === selectedGender
+        const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => avatar.tags.includes(tag))
+        const matchesVeo3Filter = !avatar.looks.some(look => look.previewUrl)
+        
+        return matchesSearch && matchesGender && matchesTags && matchesVeo3Filter
+      }).length;
+      
+      const totalPagesAfterFilter = Math.ceil(filteredCount / avatarsPerPage);
+      if (currentPage > totalPagesAfterFilter && totalPagesAfterFilter > 0) {
+        setCurrentPage(1);
+      }
+    }
+  };
+
   const fetchSpaceAvatars = async (lastUsed?: String | undefined, forceRefresh: boolean = false) => {
     if (activeSpace?.id) {
       try {
@@ -620,7 +659,13 @@ export function AvatarGridComponent({
       const matchesSearch = avatar.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesGender = selectedGender === "all" ? true : avatar.gender === selectedGender;
       const matchesTags = selectedTags.length === 0 ? true : selectedTags.every((tag) => avatar.tags.includes(tag));
-      return matchesSearch && matchesGender && matchesTags;
+      
+    // Si Veo3 est activé, exclure les avatars qui ont au moins un look avec previewUrl
+    const matchesVeo3Filter = useVeo3 
+      ? !avatar.looks.some(look => look.previewUrl)
+      : true
+    
+    return matchesSearch && matchesGender && matchesTags && matchesVeo3Filter;
     })
   );
 
@@ -650,14 +695,14 @@ export function AvatarGridComponent({
     variant === "select" && showNoAvatarCard ? currentAvatars.slice(0, avatarsPerPage - 1) : currentAvatars;
 
   // Calculs pour la pagination des looks
-  const filteredLooks = activeAvatar
-    ? sortLooksByLastUsed(
-        activeAvatar.looks.filter((look) => {
-          if (selectedTags.length === 0) return true;
-          return selectedTags.every((tag) => look.tags?.includes(tag) || false);
-        })
-      )
-    : [];
+  const filteredLooks = activeAvatar ? sortLooksByLastUsed(activeAvatar.looks.filter(look => {
+    const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => look.tags?.includes(tag) || false)
+    
+    // Si Veo3 est activé, exclure les looks avec previewUrl
+    const matchesVeo3Filter = useVeo3 ? !look.previewUrl : true
+    
+    return matchesTags && matchesVeo3Filter
+  })) : []
 
   const indexOfLastLook = currentLookPage * looksPerPage;
   const indexOfFirstLook = indexOfLastLook - looksPerPage;
@@ -689,7 +734,13 @@ export function AvatarGridComponent({
         const matchesSearch = avatar.name.toLowerCase().includes(query.toLowerCase());
         const matchesGender = selectedGender === "all" ? true : avatar.gender === selectedGender;
         const matchesTags = selectedTags.length === 0 ? true : selectedTags.every((tag) => avatar.tags.includes(tag));
-        return matchesSearch && matchesGender && matchesTags;
+        
+      // Si Veo3 est activé, exclure les avatars qui ont au moins un look avec previewUrl
+      const matchesVeo3Filter = useVeo3 
+        ? !avatar.looks.some(look => look.previewUrl)
+        : true
+      
+      return matchesSearch && matchesGender && matchesTags && matchesVeo3Filter;
       })
     );
     handleFilters(newFilteredAvatars);
@@ -989,11 +1040,31 @@ export function AvatarGridComponent({
             ))}
       </HorizontalScrollList>
 
+      {variant === "select" && (
+        <div className="flex items-center justify-between mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+          <div className="flex items-center gap-3">
+            <Badge className="bg-green-50 text-green-600">
+              New
+            </Badge>
+            <span className="text-sm">
+              {t('veo3-description-prefix')} <span className="font-bold">Veo 3.1</span> {t('veo3-description-suffix')}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              id="avatar-veo3-toggle"
+              checked={useVeo3}
+              onCheckedChange={handleVeo3Toggle}
+            />
+          </div>
+        </div>
+      )}
+
       <div
         className={`grid gap-4 ${
           variant === "create"
             ? "grid-cols-2 lg:grid-cols-5 2xl:grid-cols-6"
-            : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+            : "grid-cols-2 sm:grid-cols-3"
         }`}
       >
         {activeAvatar ? (

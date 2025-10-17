@@ -26,9 +26,11 @@ import { Genre } from "../types/music";
 import { addMediasToSpace, updateSpaceLastUsed, getSpaceById, removeCreditsToSpace, incrementImageToVideoUsage } from "../dao/spaceDao";
 import { IMediaSpace, ISpace } from "../types/space";
 import { addVideoCountContact, sendCreatedVideoEvent } from "../lib/loops";
-import { getMostFrequentString } from "../lib/utils";
+import { getMostFrequentString, removeEmojis } from "../lib/utils";
+import { createVeo3Sentences, createVeo3SequencesFromSentences } from "../lib/veo3";
 import { MixpanelEvent } from "../types/events";
 import { track } from "../utils/mixpanel-server";
+import { splitScriptIntoSentences } from "../utils/text";
 import { videoScriptKeywordExtractionRun, generateVideoDescription, selectBRollsForSequences, selectBRollDisplayModes, matchMediaWithSequences, mediaRecommendationFilterRun, videoScriptImageSearchRun, imageAnalysisRun, videoZoomInsertionRun, textVoiceEnhancementRun } from "../lib/workflowai";
 import { generateKlingAnimation } from "../service/kling-animation.service";
 import { PlanName } from "../types/enums";
@@ -48,12 +50,14 @@ interface GenerateVideoPayload {
   animateImages: boolean
   animationMode: KlingGenerationMode
   emotionEnhancement: boolean
+  useVeo3: boolean
   format?: 'vertical' | 'square' | 'ads' | 'horizontal' // Format optionnel pour la vidéo
   webhookUrl?: string
   useSpaceMedia?: boolean // Par défaut true - utiliser les médias du space
   saveMediaToSpace?: boolean // Par défaut true - sauvegarder les médias dans le space
   deductCredits?: boolean // Par défaut false - déduire les crédits du space (true pour API, false pour application)
 }
+
 
 export const generateVideoTask = task({
   id: "generate-video",
@@ -93,6 +97,7 @@ export const generateVideoTask = task({
 
     let video : IVideo = {
       spaceId: payload.spaceId,
+      useVeo3: payload.useVeo3 ? true : undefined,
       state: {
         type: 'generating',
       },
@@ -463,7 +468,30 @@ export const generateVideoTask = task({
     logger.log(`[VOICE] Start voice generation...`)
     let sentences: ISentence[] = [];
 
-    if (isDevelopment) {
+    if (payload.useVeo3) {
+      logger.log(`[VEO3] Creating sentences with simulated timings...`)
+      
+      await metadata.replace({
+        name: Steps.VOICE_GENERATION,
+        progress: 0
+      })
+
+      // Create sentences with fake transcriptions
+      sentences = createVeo3Sentences({
+        script: payload.script,
+        maxSentenceLength: 150,
+        sentenceDuration: 8,
+        fps: 60
+      });
+
+      logger.log(`[VEO3] Generated ${sentences.length} sentences with fake transcriptions`)
+
+      await metadata.replace({
+        name: Steps.VOICE_GENERATION,
+        progress: 100
+      })
+
+    } else if (isDevelopment) {
       await metadata.replace({
         name: Steps.VOICE_GENERATION,
         progress: 0
@@ -491,32 +519,7 @@ export const generateVideoTask = task({
         progress: 0
       })
 
-      // Remove emojis before processing sentences to avoid interference with sentence splitting
-      const removeEmojis = (text: string): string => {
-        // Remove common emoji ranges and symbols
-        return text
-          .replace(/[\u2600-\u26FF]/g, '') // Miscellaneous Symbols
-          .replace(/[\u2700-\u27BF]/g, '') // Dingbats
-          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '') // Surrogate pairs (emojis)
-          .replace(/[\u2194-\u2199\u21A9-\u21AA]/g, '') // Arrows
-          .replace(/[\u231A-\u231B\u23E9-\u23EC\u23F0\u23F3]/g, '') // Clock and media symbols
-          .replace(/[\u25FD-\u25FE]/g, '') // Squares
-          .replace(/[\u2B50\u2B55]/g, '') // Stars and circles
-          .replace(/✅/g, '') // Check mark
-          .replace(/💬/g, ''); // Speech balloon
-      };
-
       let processedScript = removeEmojis(payload.script);
-
-      // Helper function to split and process script into sentences
-      const splitScriptIntoSentences = (script: string): string[] => {
-        return script
-          .replace(/\.\.\./g, '___ELLIPSIS___') // Temporarily replace ellipsis
-          .split(/(?<=[.!?])\s+(?=[A-Z])/g)
-          .map(sentence => sentence.trim())
-          .filter(sentence => sentence.length > 0)
-          .map(sentence => sentence.replace(/___ELLIPSIS___/g, '...')); // Restore ellipsis
-      };
 
       // Split the original script first
       const processedSentencesCut = splitScriptIntoSentences(processedScript);
@@ -707,14 +710,16 @@ export const generateVideoTask = task({
     /   Get transcription
     /
     */
-    logger.log(`[TRANSCRIPTION] Start transcription...`)
+    
+    if (!payload.useVeo3) {
+      logger.log(`[TRANSCRIPTION] Start transcription...`)
 
-    await metadata.replace({
-      name: Steps.TRANSCRIPTION,
-      progress: 0
-    })
+      await metadata.replace({
+        name: Steps.TRANSCRIPTION,
+        progress: 0
+      })
 
-    if (!isDevelopment) {
+      if (!isDevelopment) {
       try {
         const totalSentences = sentences.length;
         let transcribedCount = 0;
@@ -764,14 +769,17 @@ export const generateVideoTask = task({
       } catch (error) {
         logger.error('Error in transcription process', { errorMessage: error instanceof Error ? error.message : String(error) });
       }
+      }
+
+      await metadata.replace({
+        name: Steps.TRANSCRIPTION,
+        progress: 100
+      })
+
+      logger.log(`[TRANSCRIPTION] Transcription done`)
+    } else {
+      logger.log(`[VEO3] Skipping transcription - using simulated timings`)
     }
-
-    await metadata.replace({
-      name: Steps.TRANSCRIPTION,
-      progress: 100
-    })
-
-    logger.log(`[TRANSCRIPTION] Transcription done`)
 
     /*
     /
@@ -782,7 +790,37 @@ export const generateVideoTask = task({
 
     logger.info('Sentences with transcription', { sentences })
 
-    let { sequences, rawSequences, videoMetadata } = splitSentences(sentences);
+    let sequences: ISequence[];
+    let rawSequences: ISequence[];
+    let videoMetadata: { audio_duration: number; language: string };
+    
+    if (payload.useVeo3) {
+      // For Veo3, create sequences from sentences with fake transcriptions
+      logger.log(`[VEO3] Creating sequences from sentences...`);
+      
+      sequences = createVeo3SequencesFromSentences({
+        sentences,
+        maxSequenceLength: 65,
+        minSequenceLength: 20,
+        sequenceDuration: 3,
+        fps: 60
+      });
+      
+      rawSequences = sequences;
+      
+      videoMetadata = {
+        audio_duration: sequences.length > 0 ? sequences[sequences.length - 1].end : 0,
+        language: 'unknown'
+      };
+      
+      logger.log(`[VEO3] Created ${sequences.length} sequences from ${sentences.length} sentences`);
+    } else {
+      const result = splitSentences(sentences);
+      sequences = result.sequences;
+      rawSequences = result.rawSequences;
+      videoMetadata = result.videoMetadata;
+    }
+    
     const lightTranscription = createLightTranscription(sequences);
     const voices = extractVoiceSegments(sequences, sentences, payload.voice ? payload.voice.id : undefined, payload.emotionEnhancement);
 

@@ -3,10 +3,11 @@
     "$oid": "6751efc06fa24b6bfc7c6583"
   },
   "archived": false,
+  "useVeo3": true,
   "state": {
     "type": "done"
   },
-  "runId": "run_cmgmbjlljay1s2yoru02q3l7q",
+  "runId": "run_cmgu72mrnhxf72yn3la19if1o",
   "history": [
     {
       "step": "CREATE",
@@ -14,85 +15,98 @@
         "$oid": "6751efc06fa24b6bfc7c6582"
       },
       "date": {
-        "$date": "2025-10-11T13:36:16.181Z"
+        "$date": "2025-10-17T01:53:20.397Z"
       },
       "_id": {
-        "$oid": "68ea5d50e79aac449a37f08b"
+        "$oid": "68f1a19007181c7326c13e26"
       }
     }
   ],
   "video": {
     "audio": {
       "music": {
-        "url": "https://music.hoox.video/Point%20Being%20-%20Go%20By%20Ocean%20_%20Ryan%20McCaffrey.mp3",
+        "url": "https://music.hoox.video/weeknds-122592.mp3",
         "volume": 0.07,
-        "name": "Point Being",
-        "genre": "Inspirational"
+        "name": "Weeknds",
+        "genre": "Informative"
       },
       "voices": [
         {
-          "url": "https://media.hoox.video/e873795c-b19c-46e4-8881-450b668b32fb.mp3",
+          "url": "",
           "index": 0,
           "start": 0,
-          "end": 2.46,
-          "durationInFrames": 148,
-          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
+          "end": 6,
+          "durationInFrames": 360,
+          "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68ea5df6e79aac449a37f4c4"
+            "$oid": "68f1a1a707181c7326c14675"
           }
         },
         {
-          "url": "https://media.hoox.video/fec569d2-22a0-4102-85dd-5bfea6c03342.mp3",
+          "url": "",
           "index": 1,
-          "start": 2.46,
-          "end": 8.66,
-          "durationInFrames": 314,
-          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
+          "start": 6,
+          "end": 12,
+          "durationInFrames": 360,
+          "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68ea5df6e79aac449a37f4c5"
+            "$oid": "68f1a1a707181c7326c14676"
           }
         },
         {
-          "url": "https://media.hoox.video/4104c1c6-f2c4-407f-bc1a-360c0cb058b1.mp3",
+          "url": "",
           "index": 2,
-          "start": 8.66,
-          "end": 13.14,
-          "durationInFrames": 269,
-          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
+          "start": 12,
+          "end": 18,
+          "durationInFrames": 360,
+          "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68ea5df6e79aac449a37f4c6"
+            "$oid": "68f1a1a707181c7326c14677"
           }
         },
         {
-          "url": "https://media.hoox.video/47637204-909f-45a7-a76f-4dc1cb9c1c6b.mp3",
+          "url": "",
           "index": 3,
-          "start": 13.14,
-          "end": 18.04,
-          "durationInFrames": 293,
-          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
+          "start": 18,
+          "end": 21,
+          "durationInFrames": 180,
+          "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68ea5df6e79aac449a37f4c7"
+            "$oid": "68f1a1a707181c7326c14678"
           }
         },
         {
-          "url": "https://media.hoox.video/aa95e591-dee3-4963-b039-4071b13cf286.mp3",
+          "url": "",
           "index": 4,
-          "start": 18.04,
-          "end": 25.259999999999998,
-          "durationInFrames": 431,
-          "voiceId": "5OnMHwgTFgvPVwE8jP6B",
+          "start": 21,
+          "end": 27,
+          "durationInFrames": 360,
+          "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68ea5df6e79aac449a37f4c8"
+            "$oid": "68f1a1a707181c7326c14679"
+          }
+        },
+        {
+          "url": "",
+          "index": 5,
+          "start": 27,
+          "end": 30.5,
+          "durationInFrames": 210,
+          "voiceId": "6vTyAgAT8PncODBcLjRf",
+          "startOffset": 0,
+          "emotionEnhancement": false,
+          "_id": {
+            "$oid": "68f1a1a707181c7326c1467a"
           }
         }
       ],
@@ -104,13 +118,13 @@
         "template": "daniel",
         "fontFamily": "Arial",
         "fontWeight": "700",
-        "fontSize": 80,
+        "fontSize": 60,
         "color": "#ffffff",
         "isItalic": false,
         "isPunctuation": true,
         "isUppercase": false,
         "mode": "twoLines",
-        "position": 54,
+        "position": 56,
         "shadow": {
           "isActive": true,
           "size": 1,
@@ -119,317 +133,285 @@
       }
     },
     "metadata": {
-      "audio_duration": 24.299999999999997
+      "audio_duration": 30.5,
+      "language": "unknown"
     },
     "avatar": {
+      "id": "dmJI-dVrGoCPXIGhhPv6h",
+      "name": "First Look",
+      "thumbnail": "https://media.hoox.video/avatar-look-dmJI-dVrGoCPXIGhhPv6h-upscaled-1760663405982.jpg",
+      "previewUrl": "",
+      "videoUrl": "",
+      "format": "vertical",
       "settings": {
-        "position": 48.23327111493994,
-        "verticalPosition": 21.812606513235394
-      },
-      "thumbnail": "https://d3u0tzju9qaucj.cloudfront.net/7b55a4e4-3941-49da-a645-29967bd96af2/53548ead-627e-4e5a-8f91-a43c72a6df6b.png",
-      "renders": [
-        {
-          "audioIndex": 1,
-          "startInFrames": 148,
-          "durationInSeconds": 5.24,
-          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-1-148-1760196467390.mp4",
-          "_id": {
-            "$oid": "68ea77760876fb2d2a39fbbd"
-          }
-        },
-        {
-          "audioIndex": 2,
-          "startInFrames": 635,
-          "durationInSeconds": 1.6000000000000014,
-          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-2-635-1760196467366.mp4",
-          "_id": {
-            "$oid": "68ea77760876fb2d2a39fbbe"
-          }
-        },
-        {
-          "audioIndex": 3,
-          "startInFrames": 731,
-          "durationInSeconds": 4.899999999999999,
-          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-3-731-1760196467391.mp4",
-          "_id": {
-            "$oid": "68ea77760876fb2d2a39fbbf"
-          }
-        },
-        {
-          "audioIndex": 4,
-          "startInFrames": 1180,
-          "durationInSeconds": 4.599999999999998,
-          "url": "https://media.hoox.video/avatar-iv-68ea5d50e79aac449a37f08a-4-1180-1760196467391.mp4",
-          "_id": {
-            "$oid": "68ea77760876fb2d2a39fbc0"
-          }
-        }
-      ]
+        "position": 22.95664996114199,
+        "verticalPosition": 39.37693435883772
+      }
     },
     "keywords": [
+      "avatar creation",
       "digital avatar",
-      "realism",
-      "visual quality",
-      "skin texture",
-      "facial expressions",
-      "personalization",
-      "virtual space",
-      "immersion",
+      "user interface",
+      "product placement",
+      "video editing",
+      "realistic avatar",
+      "social media",
       "technology",
-      "interaction"
+      "creative process",
+      "virtual character"
     ],
-    "transitions": [],
+    "transitions": [
+      {
+        "indexSequenceBefore": 1,
+        "durationInFrames": 24,
+        "video": "https://assets.hoox.video/Film_Burns_23.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_23-thumbnail.png",
+        "sound": "https://assets.hoox.video/Hard.wav",
+        "volume": 0.15,
+        "fullAt": 11,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "68f1a1a707181c7326c14670"
+        }
+      },
+      {
+        "indexSequenceBefore": 4,
+        "durationInFrames": 77,
+        "video": "https://assets.hoox.video/Film_Burns_18.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_18-thumbnail.png",
+        "sound": "https://assets.hoox.video/Fast%20Swipe.wav",
+        "volume": 0.15,
+        "fullAt": 47,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "68f1a1a707181c7326c14671"
+        }
+      },
+      {
+        "indexSequenceBefore": 6,
+        "durationInFrames": 46,
+        "video": "https://assets.hoox.video/Film_Burns_08.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_08-thumbnail.png",
+        "sound": "https://assets.hoox.video/Fast%20Swipe%20Right.wav",
+        "volume": 0.15,
+        "fullAt": 11,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "68f1a1a707181c7326c14672"
+        }
+      },
+      {
+        "indexSequenceBefore": 9,
+        "durationInFrames": 46,
+        "video": "https://assets.hoox.video/Film_Burns_08.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_08-thumbnail.png",
+        "sound": "https://assets.hoox.video/Fast%20Swipe.wav",
+        "volume": 0.15,
+        "fullAt": 11,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "68f1a1a707181c7326c14674"
+        }
+      }
+    ],
     "thumbnail": "",
     "format": "vertical",
     "sequences": [
       {
         "words": [
           {
-            "word": "Vous",
+            "word": "Tu",
             "start": 0,
-            "end": 0.14,
-            "durationInFrames": 8,
+            "end": 0.3,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f45d"
+              "$oid": "68f1a1a707181c7326c145f7"
             }
           },
           {
-            "word": "n'allez",
-            "start": 0.14,
-            "end": 0.36,
-            "durationInFrames": 13,
+            "word": "peux",
+            "start": 0.3,
+            "end": 0.6,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f45e"
+              "$oid": "68f1a1a707181c7326c145f8"
             }
           },
           {
-            "word": "pas",
-            "start": 0.36,
-            "end": 0.5,
-            "durationInFrames": 8,
+            "word": "maintenant",
+            "start": 0.6,
+            "end": 0.8999999999999999,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f45f"
+              "$oid": "68f1a1a707181c7326c145f9"
             }
           },
           {
-            "word": "croire",
-            "start": 0.5,
-            "end": 0.76,
-            "durationInFrames": 16,
+            "word": "créer",
+            "start": 0.8999999999999999,
+            "end": 1.2,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f460"
+              "$oid": "68f1a1a707181c7326c145fa"
             }
           },
           {
-            "word": "ce",
-            "start": 0.76,
-            "end": 0.94,
-            "durationInFrames": 11,
+            "word": "des",
+            "start": 1.2,
+            "end": 1.5,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f461"
+              "$oid": "68f1a1a707181c7326c145fb"
             }
           },
           {
-            "word": "que",
-            "start": 0.94,
-            "end": 1.1,
-            "durationInFrames": 10,
+            "word": "UGC",
+            "start": 1.5,
+            "end": 1.8,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f462"
+              "$oid": "68f1a1a707181c7326c145fc"
             }
           },
           {
-            "word": "Hoox",
-            "start": 1.1,
-            "end": 1.32,
-            "durationInFrames": 13,
+            "word": "super",
+            "start": 1.7999999999999998,
+            "end": 2.0999999999999996,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f463"
+              "$oid": "68f1a1a707181c7326c145fd"
             }
           },
           {
-            "word": "vient",
-            "start": 1.32,
-            "end": 1.52,
-            "durationInFrames": 12,
+            "word": "réalistes",
+            "start": 2.1,
+            "end": 2.4,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f464"
+              "$oid": "68f1a1a707181c7326c145fe"
             }
           },
           {
-            "word": "de",
-            "start": 1.52,
-            "end": 1.68,
-            "durationInFrames": 10,
+            "word": "comme",
+            "start": 2.4,
+            "end": 2.6999999999999997,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f465"
+              "$oid": "68f1a1a707181c7326c145ff"
             }
           },
           {
-            "word": "créer.",
-            "start": 1.68,
-            "end": 2.46,
-            "durationInFrames": 47,
+            "word": "moi",
+            "start": 2.6999999999999997,
+            "end": 2.9999999999999996,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f466"
+              "$oid": "68f1a1a707181c7326c14600"
             }
           }
         ],
-        "text": "Vous n'allez pas croire ce que Hoox vient de créer.",
+        "text": "Tu peux maintenant créer des UGC super réalistes comme moi",
         "start": 0,
-        "end": 2.46,
-        "durationInFrames": 148,
+        "end": 3,
+        "durationInFrames": 180,
         "audioIndex": 0,
         "media": {
           "type": "video",
           "usage": "media",
-          "show": "full",
-          "startAt": 0,
+          "show": "hide",
+          "startAt": 1,
+          "name": "create-an-avatar.mp4",
           "generationStatus": "completed",
           "description": [
             {
-              "start": 0,
-              "text": "The video shows a digital representation of Earth from different angles, with illuminated continents and connecting lines, suggesting a theme of global connectivity or technology.",
+              "start": 1,
+              "duration": 4,
+              "text": "A user types \"A woman in the kitchen, holding a water glass\" into the prompt field of the \"Create avatar\" modal.",
               "_id": {
-                "$oid": "68ea5df6e79aac449a37f468"
+                "$oid": "68f1a1a707181c7326c14602"
+              }
+            },
+            {
+              "start": 5,
+              "duration": 5,
+              "text": "A user reviews options in the \"Create avatar\" modal, hovering over the \"Selfie\" button, then activating the \"Upscale\" toggle, and finally positioning the cursor over the \"Start generation\" button.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c14603"
+              }
+            },
+            {
+              "start": 10,
+              "duration": 4,
+              "text": "The \"Start generation\" button in the \"Create avatar\" modal displays a loading animation after being clicked, indicating the avatar generation process is underway.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c14604"
               }
             }
           ],
           "video": {
-            "id": "9292325",
-            "quality": "hd",
+            "id": "7762dccf-0cfa-48ea-ac90-1e7e35a83016",
             "file_type": "video/mp4",
-            "size": 20797762,
+            "size": 3009788,
             "width": 1920,
             "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/3129957/3129957-hd_1920_1080_25fps.mp4",
+            "link": "https://media.hoox.video/7762dccf-0cfa-48ea-ac90-1e7e35a83016.mp4",
             "frames": [
-              "https://images.pexels.com/videos/3129957/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/3129957/pictures/preview-1.jpg",
-              "https://images.pexels.com/videos/3129957/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/3129957/pictures/preview-4.jpg",
-              "https://images.pexels.com/videos/3129957/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/3129957/pictures/preview-7.jpg",
-              "https://images.pexels.com/videos/3129957/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/3129957/pictures/preview-10.jpg",
-              "https://images.pexels.com/videos/3129957/pictures/preview-12.jpg",
-              "https://images.pexels.com/videos/3129957/pictures/preview-13.jpg"
+              "https://media.hoox.video/frames_a84fcffb-0bac-45f9-aeec-2fc401cf8a3d_unknown.jpg",
+              "https://media.hoox.video/frames_5c54b283-af9f-4bd5-9e9c-5edd08ac81a5_unknown.jpg",
+              "https://media.hoox.video/frames_8299e8da-7e0a-4cac-94fe-9eb978052d75_unknown.jpg",
+              "https://media.hoox.video/frames_9c6222d5-30b6-4e2d-9411-603d625bedf4_unknown.jpg",
+              "https://media.hoox.video/frames_b7959369-144c-4180-9a92-7c4d9a8ef381_unknown.jpg",
+              "https://media.hoox.video/frames_b77097d0-f328-4a0a-baab-2a298b205cc6_unknown.jpg"
             ],
-            "durationInSeconds": 30
-          },
-          "image": {
-            "id": "3129957",
-            "link": "https://images.pexels.com/videos/3129957/free-video-3129957.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
+            "durationInSeconds": 13.200000000000001
           },
           "_id": {
-            "$oid": "68ea77760876fb2d2a39fb61"
+            "$oid": "68f1a285f6877a62465d30b2"
           }
         },
         "_id": {
-          "$oid": "68ea5df6e79aac449a37f45c"
+          "$oid": "68f1a1a707181c7326c145f6"
         }
       },
       {
         "words": [
           {
-            "word": "Ces",
-            "start": 2.46,
-            "end": 2.64,
-            "durationInFrames": 10,
+            "word": "directement",
+            "start": 3,
+            "end": 4,
+            "durationInFrames": 60,
             "_id": {
-              "$oid": "68ea770e780a479168d0f65c"
+              "$oid": "68f1a1a707181c7326c14606"
             }
           },
           {
-            "word": "nouveaux",
-            "start": 2.64,
-            "end": 2.9,
-            "durationInFrames": 16,
+            "word": "dans",
+            "start": 4,
+            "end": 5,
+            "durationInFrames": 60,
             "_id": {
-              "$oid": "68ea770e780a479168d0f65d"
+              "$oid": "68f1a1a707181c7326c14607"
             }
           },
           {
-            "word": "modèles",
-            "start": 2.9,
-            "end": 3.2,
-            "durationInFrames": 18,
+            "word": "Hoox.",
+            "start": 5,
+            "end": 6,
+            "durationInFrames": 60,
             "_id": {
-              "$oid": "68ea770e780a479168d0f65e"
-            }
-          },
-          {
-            "word": "d'Avatar",
-            "start": 3.2,
-            "end": 3.66,
-            "durationInFrames": 28,
-            "_id": {
-              "$oid": "68ea770e780a479168d0f65f"
-            }
-          },
-          {
-            "word": "repoussant",
-            "start": 3.66,
-            "end": 4.16,
-            "durationInFrames": 30,
-            "_id": {
-              "$oid": "68ea770e780a479168d0f660"
-            }
-          },
-          {
-            "word": "les",
-            "start": 4.16,
-            "end": 4.28,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "68ea770e780a479168d0f661"
-            }
-          },
-          {
-            "word": "limites",
-            "start": 4.28,
-            "end": 4.66,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "68ea770e780a479168d0f662"
-            }
-          },
-          {
-            "word": "du",
-            "start": 4.66,
-            "end": 4.859999999999999,
-            "durationInFrames": 12,
-            "_id": {
-              "$oid": "68ea770e780a479168d0f663"
-            }
-          },
-          {
-            "word": "réalisme",
-            "start": 4.859999999999999,
-            "end": 5.26,
-            "durationInFrames": 24,
-            "_id": {
-              "$oid": "68ea770e780a479168d0f664"
-            }
-          },
-          {
-            "word": "numérique",
-            "start": 5.26,
-            "end": 5.7,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "68ea770e780a479168d0f665"
+              "$oid": "68f1a1a707181c7326c14608"
             }
           }
         ],
-        "text": "Ces nouveaux modèles d'Avatar repoussant les limites du réalisme numérique",
-        "start": 2.46,
-        "end": 5.7,
-        "durationInFrames": 194,
-        "audioIndex": 1,
+        "text": "directement dans Hoox.",
+        "start": 3,
+        "end": 6,
+        "durationInFrames": 180,
+        "audioIndex": 0,
         "media": {
           "type": "video",
           "usage": "media",
@@ -439,869 +421,984 @@
           "description": [
             {
               "start": 0,
-              "text": "A close-up of a person's face with purple hair, showing a calm expression, with slight movements across four frames.",
+              "text": "The video begins with a close-up view of a person's torso and arms, adorned with a brightly colored, intricate mandala-like projection. The central pattern features concentric rings of pink, orange, and yellow, surrounded by green petal-like shapes. Abstract, blurry green light effects form the background and appear to emanate from the sides. Over the first four seconds, the person's arms are observed to move subtly, shifting their position outwards and slightly away from the body, while the central projection remains consistent and vibrant.",
               "_id": {
-                "$oid": "68ea5df6e79aac449a37f475"
+                "$oid": "68f1a1a707181c7326c1460a"
               }
             }
           ],
           "video": {
-            "id": "10595084",
+            "id": "2575452",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 18558726,
-            "width": 2048,
+            "size": 12838395,
+            "width": 1920,
             "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7849214/7849214-hd_2048_1080_25fps.mp4",
+            "link": "https://videos.pexels.com/video-files/6893163/6893163-hd_1920_1080_25fps.mp4",
             "frames": [
-              "https://images.pexels.com/videos/7849214/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/7849214/pictures/preview-1.jpg",
-              "https://images.pexels.com/videos/7849214/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/7849214/pictures/preview-4.jpg",
-              "https://images.pexels.com/videos/7849214/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/7849214/pictures/preview-7.jpg",
-              "https://images.pexels.com/videos/7849214/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/7849214/pictures/preview-10.jpg",
-              "https://images.pexels.com/videos/7849214/pictures/preview-12.jpg",
-              "https://images.pexels.com/videos/7849214/pictures/preview-13.jpg"
+              "https://images.pexels.com/videos/6893163/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/6893163/pictures/preview-1.jpg",
+              "https://images.pexels.com/videos/6893163/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/6893163/pictures/preview-4.jpg",
+              "https://images.pexels.com/videos/6893163/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/6893163/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/6893163/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/6893163/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/6893163/pictures/preview-12.jpg",
+              "https://images.pexels.com/videos/6893163/pictures/preview-13.jpg"
             ],
-            "durationInSeconds": 43
+            "durationInSeconds": 21
           },
           "image": {
-            "id": "7849214",
-            "link": "https://images.pexels.com/videos/7849214/pexels-photo-7849214.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
+            "id": "6893163",
+            "link": "https://images.pexels.com/videos/6893163/pexels-photo-6893163.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
           },
           "_id": {
-            "$oid": "68ea77760876fb2d2a39fb6e"
+            "$oid": "68f1a285f6877a62465d30ba"
           }
         },
         "_id": {
-          "$oid": "68ea770e780a479168d0f65b"
+          "$oid": "68f1a1a707181c7326c14605"
         }
       },
       {
         "words": [
           {
-            "word": "avec",
-            "start": 5.7,
-            "end": 5.9,
-            "durationInFrames": 12,
+            "word": "Crée",
+            "start": 6,
+            "end": 6.25,
+            "durationInFrames": 15,
             "_id": {
-              "$oid": "68ea770e780a479168d0f669"
+              "$oid": "68f1a1a707181c7326c1460c"
+            }
+          },
+          {
+            "word": "un",
+            "start": 6.25,
+            "end": 6.5,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1460d"
+            }
+          },
+          {
+            "word": "nouvel",
+            "start": 6.5,
+            "end": 6.75,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1460e"
+            }
+          },
+          {
+            "word": "avatar",
+            "start": 6.75,
+            "end": 7,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1460f"
+            }
+          },
+          {
+            "word": "avec",
+            "start": 7,
+            "end": 7.25,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14610"
+            }
+          },
+          {
+            "word": "un",
+            "start": 7.25,
+            "end": 7.5,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14611"
+            }
+          },
+          {
+            "word": "simple",
+            "start": 7.5,
+            "end": 7.75,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14612"
+            }
+          },
+          {
+            "word": "prompt",
+            "start": 7.75,
+            "end": 8,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14613"
+            }
+          }
+        ],
+        "text": "Crée un nouvel avatar avec un simple prompt",
+        "start": 6,
+        "end": 8,
+        "durationInFrames": 120,
+        "audioIndex": 1,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "half",
+          "startAt": 0,
+          "name": "create-an-avatar.mp4",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 1,
+              "duration": 4,
+              "text": "A user types \"A woman in the kitchen, holding a water glass\" into the prompt field of the \"Create avatar\" modal.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c14619"
+              }
+            },
+            {
+              "start": 5,
+              "duration": 5,
+              "text": "A user reviews options in the \"Create avatar\" modal, hovering over the \"Selfie\" button, then activating the \"Upscale\" toggle, and finally positioning the cursor over the \"Start generation\" button.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c1461a"
+              }
+            },
+            {
+              "start": 10,
+              "duration": 4,
+              "text": "The \"Start generation\" button in the \"Create avatar\" modal displays a loading animation after being clicked, indicating the avatar generation process is underway.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c1461b"
+              }
+            }
+          ],
+          "position": {
+            "x": 49.50042960319251,
+            "y": 22.221709433265644
+          },
+          "video": {
+            "id": "7762dccf-0cfa-48ea-ac90-1e7e35a83016",
+            "file_type": "video/mp4",
+            "size": 3009788,
+            "width": 1920,
+            "height": 1080,
+            "link": "https://media.hoox.video/7762dccf-0cfa-48ea-ac90-1e7e35a83016.mp4",
+            "frames": [
+              "https://media.hoox.video/frames_a84fcffb-0bac-45f9-aeec-2fc401cf8a3d_unknown.jpg",
+              "https://media.hoox.video/frames_5c54b283-af9f-4bd5-9e9c-5edd08ac81a5_unknown.jpg",
+              "https://media.hoox.video/frames_8299e8da-7e0a-4cac-94fe-9eb978052d75_unknown.jpg",
+              "https://media.hoox.video/frames_9c6222d5-30b6-4e2d-9411-603d625bedf4_unknown.jpg",
+              "https://media.hoox.video/frames_b7959369-144c-4180-9a92-7c4d9a8ef381_unknown.jpg",
+              "https://media.hoox.video/frames_b77097d0-f328-4a0a-baab-2a298b205cc6_unknown.jpg"
+            ],
+            "durationInSeconds": 13.200000000000001
+          },
+          "_id": {
+            "$oid": "68f1a285f6877a62465d30c5"
+          }
+        },
+        "_id": {
+          "$oid": "68f1a1a707181c7326c1460b"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "et",
+            "start": 8,
+            "end": 8.25,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14614"
+            }
+          },
+          {
+            "word": "je",
+            "start": 8.25,
+            "end": 8.5,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14615"
+            }
+          },
+          {
+            "word": "te",
+            "start": 8.5,
+            "end": 8.75,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14616"
+            }
+          },
+          {
+            "word": "conseille",
+            "start": 8.75,
+            "end": 9,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14617"
+            }
+          },
+          {
+            "word": "d'activé",
+            "start": 9,
+            "end": 9.5,
+            "durationInFrames": 30,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1461d"
+            }
+          },
+          {
+            "word": "l'upscale",
+            "start": 9.5,
+            "end": 10,
+            "durationInFrames": 30,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1461e"
+            }
+          }
+        ],
+        "text": "et je te conseille d'activé l'upscale",
+        "start": 8,
+        "end": 10,
+        "durationInFrames": 120,
+        "audioIndex": 1,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "full",
+          "startAt": 5.9,
+          "name": "create-an-avatar.mp4",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 1,
+              "duration": 4,
+              "text": "A user types \"A woman in the kitchen, holding a water glass\" into the prompt field of the \"Create avatar\" modal.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c14619"
+              }
+            },
+            {
+              "start": 5,
+              "duration": 5,
+              "text": "A user reviews options in the \"Create avatar\" modal, hovering over the \"Selfie\" button, then activating the \"Upscale\" toggle, and finally positioning the cursor over the \"Start generation\" button.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c1461a"
+              }
+            },
+            {
+              "start": 10,
+              "duration": 4,
+              "text": "The \"Start generation\" button in the \"Create avatar\" modal displays a loading animation after being clicked, indicating the avatar generation process is underway.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c1461b"
+              }
+            }
+          ],
+          "position": {
+            "x": 56.607456635147244,
+            "y": 61.235206038602755
+          },
+          "video": {
+            "id": "7762dccf-0cfa-48ea-ac90-1e7e35a83016",
+            "file_type": "video/mp4",
+            "size": 3009788,
+            "width": 1920,
+            "height": 1080,
+            "link": "https://media.hoox.video/7762dccf-0cfa-48ea-ac90-1e7e35a83016.mp4",
+            "frames": [
+              "https://media.hoox.video/frames_a84fcffb-0bac-45f9-aeec-2fc401cf8a3d_unknown.jpg",
+              "https://media.hoox.video/frames_5c54b283-af9f-4bd5-9e9c-5edd08ac81a5_unknown.jpg",
+              "https://media.hoox.video/frames_8299e8da-7e0a-4cac-94fe-9eb978052d75_unknown.jpg",
+              "https://media.hoox.video/frames_9c6222d5-30b6-4e2d-9411-603d625bedf4_unknown.jpg",
+              "https://media.hoox.video/frames_b7959369-144c-4180-9a92-7c4d9a8ef381_unknown.jpg",
+              "https://media.hoox.video/frames_b77097d0-f328-4a0a-baab-2a298b205cc6_unknown.jpg"
+            ],
+            "durationInSeconds": 13.200000000000001
+          },
+          "_id": {
+            "$oid": "68f1a285f6877a62465d30d0"
+          }
+        },
+        "_id": {
+          "$oid": "68f1a285f6877a62465d30c9"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "pour",
+            "start": 10,
+            "end": 10.5,
+            "durationInFrames": 30,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1461f"
             }
           },
           {
             "word": "une",
-            "start": 5.9,
-            "end": 6.1,
-            "durationInFrames": 12,
+            "start": 10.5,
+            "end": 11,
+            "durationInFrames": 30,
             "_id": {
-              "$oid": "68ea770e780a479168d0f66a"
+              "$oid": "68f1a1a707181c7326c14620"
             }
           },
           {
-            "word": "qualité",
-            "start": 6.1,
-            "end": 6.38,
-            "durationInFrames": 17,
+            "word": "meilleure",
+            "start": 11,
+            "end": 11.5,
+            "durationInFrames": 30,
             "_id": {
-              "$oid": "68ea770e780a479168d0f66b"
+              "$oid": "68f1a1a707181c7326c14621"
             }
           },
           {
-            "word": "visuelle",
-            "start": 6.38,
-            "end": 6.9,
-            "durationInFrames": 31,
+            "word": "qualité.",
+            "start": 11.5,
+            "end": 12,
+            "durationInFrames": 30,
             "_id": {
-              "$oid": "68ea770e780a479168d0f66c"
-            }
-          },
-          {
-            "word": "époustouflante.",
-            "start": 6.9,
-            "end": 7.7,
-            "durationInFrames": 48,
-            "_id": {
-              "$oid": "68ea770e780a479168d0f66d"
+              "$oid": "68f1a1a707181c7326c14622"
             }
           }
         ],
-        "text": "avec une qualité visuelle époustouflante.",
-        "start": 5.7,
-        "end": 7.7,
+        "text": "pour une meilleure qualité.",
+        "start": 10,
+        "end": 12,
         "durationInFrames": 120,
         "audioIndex": 1,
         "media": {
           "type": "video",
           "usage": "media",
           "show": "hide",
-          "startAt": 0,
+          "startAt": 5,
+          "name": "create-an-avatar.mp4",
           "generationStatus": "completed",
           "description": [
             {
-              "start": 0,
-              "text": "A close-up of a woman's face, showing her eyes, nose, and mouth, with slight movements and changes in hair position across the four frames.",
+              "start": 1,
+              "duration": 4,
+              "text": "A user types \"A woman in the kitchen, holding a water glass\" into the prompt field of the \"Create avatar\" modal.",
               "_id": {
-                "$oid": "68ea5df6e79aac449a37f47e"
+                "$oid": "68f1a1a707181c7326c14624"
+              }
+            },
+            {
+              "start": 5,
+              "duration": 5,
+              "text": "A user reviews options in the \"Create avatar\" modal, hovering over the \"Selfie\" button, then activating the \"Upscale\" toggle, and finally positioning the cursor over the \"Start generation\" button.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c14625"
+              }
+            },
+            {
+              "start": 10,
+              "duration": 4,
+              "text": "The \"Start generation\" button in the \"Create avatar\" modal displays a loading animation after being clicked, indicating the avatar generation process is underway.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c14626"
               }
             }
           ],
           "video": {
-            "id": "10284066",
-            "quality": "hd",
+            "id": "7762dccf-0cfa-48ea-ac90-1e7e35a83016",
             "file_type": "video/mp4",
-            "size": 18912042,
-            "width": 2048,
-            "height": 988,
-            "fps": 29.97,
-            "link": "https://videos.pexels.com/video-files/7038590/7038590-hd_2048_988_30fps.mp4",
+            "size": 3009788,
+            "width": 1920,
+            "height": 1080,
+            "link": "https://media.hoox.video/7762dccf-0cfa-48ea-ac90-1e7e35a83016.mp4",
             "frames": [
-              "https://images.pexels.com/videos/7038590/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/7038590/pictures/preview-1.jpg",
-              "https://images.pexels.com/videos/7038590/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/7038590/pictures/preview-4.jpg",
-              "https://images.pexels.com/videos/7038590/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/7038590/pictures/preview-7.jpg",
-              "https://images.pexels.com/videos/7038590/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/7038590/pictures/preview-10.jpg",
-              "https://images.pexels.com/videos/7038590/pictures/preview-12.jpg",
-              "https://images.pexels.com/videos/7038590/pictures/preview-13.jpg"
+              "https://media.hoox.video/frames_a84fcffb-0bac-45f9-aeec-2fc401cf8a3d_unknown.jpg",
+              "https://media.hoox.video/frames_5c54b283-af9f-4bd5-9e9c-5edd08ac81a5_unknown.jpg",
+              "https://media.hoox.video/frames_8299e8da-7e0a-4cac-94fe-9eb978052d75_unknown.jpg",
+              "https://media.hoox.video/frames_9c6222d5-30b6-4e2d-9411-603d625bedf4_unknown.jpg",
+              "https://media.hoox.video/frames_b7959369-144c-4180-9a92-7c4d9a8ef381_unknown.jpg",
+              "https://media.hoox.video/frames_b77097d0-f328-4a0a-baab-2a298b205cc6_unknown.jpg"
             ],
-            "durationInSeconds": 26
-          },
-          "image": {
-            "id": "7038590",
-            "link": "https://images.pexels.com/videos/7038590/pexels-photo-7038590.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4481,
-            "height": 2160
+            "durationInSeconds": 13.200000000000001
           },
           "_id": {
-            "$oid": "68ea77760876fb2d2a39fb76"
+            "$oid": "68f1a285f6877a62465d30d9"
           }
         },
         "_id": {
-          "$oid": "68ea770e780a479168d0f668"
+          "$oid": "68f1a1a707181c7326c1461c"
         }
       },
       {
         "words": [
           {
-            "word": "Chaque",
-            "start": 7.7,
-            "end": 7.96,
+            "word": "Tu",
+            "start": 12,
+            "end": 12.272727272727273,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f480"
+              "$oid": "68f1a1a707181c7326c14628"
             }
           },
           {
-            "word": "détail,",
-            "start": 7.96,
-            "end": 8.36,
-            "durationInFrames": 24,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f481"
-            }
-          },
-          {
-            "word": "de",
-            "start": 8.36,
-            "end": 8.48,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f482"
-            }
-          },
-          {
-            "word": "la",
-            "start": 8.48,
-            "end": 8.600000000000001,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f483"
-            }
-          },
-          {
-            "word": "texture",
-            "start": 8.600000000000001,
-            "end": 8.899999999999999,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f484"
-            }
-          },
-          {
-            "word": "de",
-            "start": 8.899999999999999,
-            "end": 9.079999999999998,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f485"
-            }
-          },
-          {
-            "word": "peau",
-            "start": 9.079999999999998,
-            "end": 9.34,
+            "word": "peux",
+            "start": 12.272727272727273,
+            "end": 12.545454545454547,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f486"
+              "$oid": "68f1a1a707181c7326c14629"
             }
           },
           {
-            "word": "aux",
-            "start": 9.34,
-            "end": 9.48,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f487"
-            }
-          },
-          {
-            "word": "expressions",
-            "start": 9.48,
-            "end": 9.899999999999999,
-            "durationInFrames": 25,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f488"
-            }
-          },
-          {
-            "word": "faciales,",
-            "start": 9.899999999999999,
-            "end": 10.52,
-            "durationInFrames": 37,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f489"
-            }
-          },
-          {
-            "word": "est",
-            "start": 10.52,
-            "end": 10.579999999999998,
-            "durationInFrames": 4,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f48a"
-            }
-          },
-          {
-            "word": "rendu",
-            "start": 10.579999999999998,
-            "end": 10.84,
+            "word": "ensuite",
+            "start": 12.545454545454545,
+            "end": 12.818181818181818,
             "durationInFrames": 16,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f48b"
+              "$oid": "68f1a1a707181c7326c1462a"
+            }
+          },
+          {
+            "word": "le",
+            "start": 12.818181818181818,
+            "end": 13.090909090909092,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1462b"
+            }
+          },
+          {
+            "word": "modifier,",
+            "start": 13.09090909090909,
+            "end": 13.363636363636363,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1462c"
+            }
+          },
+          {
+            "word": "par",
+            "start": 13.363636363636363,
+            "end": 13.636363636363637,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1462d"
+            }
+          },
+          {
+            "word": "exemple",
+            "start": 13.636363636363637,
+            "end": 13.90909090909091,
+            "durationInFrames": 16,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1462e"
             }
           }
         ],
-        "text": "Chaque détail, de la texture de peau aux expressions faciales, est rendu",
-        "start": 7.7,
-        "end": 10.84,
-        "durationInFrames": 189,
+        "text": "Tu peux ensuite le modifier, par exemple",
+        "start": 12,
+        "end": 13.909090909090908,
+        "durationInFrames": 116,
         "audioIndex": 2,
         "media": {
           "type": "video",
           "usage": "media",
           "show": "full",
           "startAt": 0,
+          "name": "edit-avatar.mp4",
           "generationStatus": "completed",
           "description": [
             {
               "start": 0,
-              "text": "Close-up of a person's face with light reflections creating a dotted pattern on their skin, with slight movements across the first four seconds.",
+              "duration": 6,
+              "text": "A user interacts with a web interface, where a mouse cursor moves to a text input field and types the sentence \"The girl is holding the product from the second picture\" to describe an image of a woman displayed on the screen. The interface shows a 'HOOK' application with various menu options.",
               "_id": {
-                "$oid": "68ea5df6e79aac449a37f48d"
+                "$oid": "68f1a1a707181c7326c14634"
               }
             }
           ],
+          "position": {
+            "x": 34.14228640060897,
+            "y": 27.60701905523763
+          },
           "video": {
-            "id": "10670647",
-            "quality": "hd",
+            "id": "717e957d-9478-442e-96f1-16e9641f33b0",
             "file_type": "video/mp4",
-            "size": 5723941,
-            "width": 1080,
-            "height": 1920,
-            "fps": 30,
-            "link": "https://videos.pexels.com/video-files/8056004/8056004-hd_1080_1920_30fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/8056004/pictures/preview-0.jpeg",
-              "https://images.pexels.com/videos/8056004/pictures/preview-3.jpeg",
-              "https://images.pexels.com/videos/8056004/pictures/preview-6.jpeg",
-              "https://images.pexels.com/videos/8056004/pictures/preview-9.jpeg",
-              "https://images.pexels.com/videos/8056004/pictures/preview-12.jpeg"
-            ],
-            "durationInSeconds": 9
-          },
-          "image": {
-            "id": "8056004",
-            "link": "https://images.pexels.com/videos/8056004/alone-candy-child-chocolate-8056004.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=630",
-            "width": 2160,
-            "height": 3840
-          },
-          "_id": {
-            "$oid": "68ea77760876fb2d2a39fb85"
-          }
-        },
-        "_id": {
-          "$oid": "68ea5df6e79aac449a37f47f"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "avec",
-            "start": 10.84,
-            "end": 10.98,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f48f"
-            }
-          },
-          {
-            "word": "une",
-            "start": 10.98,
-            "end": 11.16,
-            "durationInFrames": 11,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f490"
-            }
-          },
-          {
-            "word": "précision",
-            "start": 11.16,
-            "end": 11.600000000000001,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f491"
-            }
-          },
-          {
-            "word": "incroyable.",
-            "start": 11.600000000000001,
-            "end": 12.18,
-            "durationInFrames": 35,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f492"
-            }
-          }
-        ],
-        "text": "avec une précision incroyable.",
-        "start": 10.84,
-        "end": 12.18,
-        "durationInFrames": 80,
-        "audioIndex": 2,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "hide",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "A close-up of a young person's face, focusing on the eyes, with slight changes in eye direction and lighting across four frames.",
-              "_id": {
-                "$oid": "68ea5df6e79aac449a37f494"
-              }
-            }
-          ],
-          "video": {
-            "id": "11070799",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 15143372,
-            "width": 2048,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/9154746/9154746-hd_2048_1080_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/9154746/pictures/preview-0.jpeg",
-              "https://images.pexels.com/videos/9154746/pictures/preview-1.jpeg",
-              "https://images.pexels.com/videos/9154746/pictures/preview-3.jpeg",
-              "https://images.pexels.com/videos/9154746/pictures/preview-4.jpeg",
-              "https://images.pexels.com/videos/9154746/pictures/preview-6.jpeg",
-              "https://images.pexels.com/videos/9154746/pictures/preview-7.jpeg",
-              "https://images.pexels.com/videos/9154746/pictures/preview-9.jpeg",
-              "https://images.pexels.com/videos/9154746/pictures/preview-10.jpeg",
-              "https://images.pexels.com/videos/9154746/pictures/preview-12.jpeg",
-              "https://images.pexels.com/videos/9154746/pictures/preview-13.jpeg"
-            ],
-            "durationInSeconds": 40
-          },
-          "image": {
-            "id": "9154746",
-            "link": "https://images.pexels.com/videos/9154746/closeup-eyes-face-male-9154746.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 4096,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "68ea77760876fb2d2a39fb8c"
-          }
-        },
-        "_id": {
-          "$oid": "68ea5df6e79aac449a37f48e"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "La",
-            "start": 12.18,
-            "end": 12.3,
-            "durationInFrames": 7,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f496"
-            }
-          },
-          {
-            "word": "technologie",
-            "start": 12.3,
-            "end": 12.84,
-            "durationInFrames": 32,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f497"
-            }
-          },
-          {
-            "word": "utilisée",
-            "start": 12.84,
-            "end": 13.34,
-            "durationInFrames": 30,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f498"
-            }
-          },
-          {
-            "word": "permet",
-            "start": 13.34,
-            "end": 13.580000000000002,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f499"
-            }
-          },
-          {
-            "word": "une",
-            "start": 13.580000000000002,
-            "end": 13.719999999999999,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f49a"
-            }
-          },
-          {
-            "word": "personnalisation",
-            "start": 13.719999999999999,
-            "end": 14.420000000000002,
-            "durationInFrames": 42,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f49b"
-            }
-          },
-          {
-            "word": "poussée,",
-            "start": 14.420000000000002,
-            "end": 15.100000000000001,
-            "durationInFrames": 41,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f49c"
-            }
-          },
-          {
-            "word": "offrant",
-            "start": 15.100000000000001,
-            "end": 15.259999999999998,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f49d"
-            }
-          }
-        ],
-        "text": "La technologie utilisée permet une personnalisation poussée, offrant",
-        "start": 12.18,
-        "end": 15.259999999999998,
-        "durationInFrames": 184,
-        "audioIndex": 3,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "half",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "A woman is sitting at a table in a busy office or cafe, looking at a tablet device. Several people around her are reaching towards the tablet, with one person pointing at the screen. The scene appears to be a collaborative or instructional moment.",
-              "_id": {
-                "$oid": "68ea5df6e79aac449a37f49f"
-              }
-            }
-          ],
-          "video": {
-            "id": "10324923",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 5879586,
+            "size": 775984,
             "width": 1920,
             "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7165697/7165697-hd_1920_1080_25fps.mp4",
+            "link": "https://media.hoox.video/717e957d-9478-442e-96f1-16e9641f33b0.mp4",
             "frames": [
-              "https://images.pexels.com/videos/7165697/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/7165697/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/7165697/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/7165697/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/7165697/pictures/preview-12.jpg"
+              "https://media.hoox.video/frames_2ba88dab-6b54-4ea8-aa1b-e71ba6189a18_unknown.jpg",
+              "https://media.hoox.video/frames_01741999-ca54-4703-be91-d8321a6d9db4_unknown.jpg",
+              "https://media.hoox.video/frames_ef1dbdb5-ded5-4864-8899-205d144fd376_unknown.jpg",
+              "https://media.hoox.video/frames_e0cd6a63-7591-4b97-ae94-d036a440e07c_unknown.jpg",
+              "https://media.hoox.video/frames_dd42e512-1230-4752-9c0a-1f919e2b272b_unknown.jpg"
             ],
-            "durationInSeconds": 9
-          },
-          "image": {
-            "id": "7165697",
-            "link": "https://images.pexels.com/videos/7165697/adult-business-coffee-collaboration-7165697.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 1920,
-            "height": 1080
+            "durationInSeconds": 5.25
           },
           "_id": {
-            "$oid": "68ea77760876fb2d2a39fb97"
+            "$oid": "68f1a285f6877a62465d30e5"
           }
         },
         "_id": {
-          "$oid": "68ea5df6e79aac449a37f495"
+          "$oid": "68f1a1a707181c7326c14627"
         }
       },
       {
         "words": [
           {
-            "word": "des",
-            "start": 15.259999999999998,
-            "end": 15.399999999999999,
-            "durationInFrames": 8,
+            "word": "en",
+            "start": 13.909090909090908,
+            "end": 14.181818181818182,
+            "durationInFrames": 16,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f4a1"
+              "$oid": "68f1a1a707181c7326c1462f"
             }
           },
           {
-            "word": "avatars",
-            "start": 15.399999999999999,
-            "end": 15.84,
-            "durationInFrames": 26,
+            "word": "lui",
+            "start": 14.181818181818182,
+            "end": 14.454545454545455,
+            "durationInFrames": 16,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f4a2"
+              "$oid": "68f1a1a707181c7326c14630"
             }
           },
           {
-            "word": "qui",
-            "start": 15.84,
-            "end": 16,
-            "durationInFrames": 10,
+            "word": "ajoutant",
+            "start": 14.454545454545453,
+            "end": 14.727272727272727,
+            "durationInFrames": 16,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f4a3"
+              "$oid": "68f1a1a707181c7326c14631"
             }
           },
           {
-            "word": "semblent",
-            "start": 16,
-            "end": 16.28,
-            "durationInFrames": 17,
+            "word": "un",
+            "start": 14.727272727272727,
+            "end": 15,
+            "durationInFrames": 16,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f4a4"
+              "$oid": "68f1a1a707181c7326c14632"
             }
           },
           {
-            "word": "vraiment",
-            "start": 16.28,
-            "end": 16.7,
-            "durationInFrames": 25,
+            "word": "produit",
+            "start": 15,
+            "end": 15.75,
+            "durationInFrames": 45,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f4a5"
+              "$oid": "68f1a1a707181c7326c14636"
             }
           },
-          {
-            "word": "vivants.",
-            "start": 16.7,
-            "end": 17.08,
-            "durationInFrames": 23,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4a6"
-            }
-          }
-        ],
-        "text": "des avatars qui semblent vraiment vivants.",
-        "start": 15.259999999999998,
-        "end": 17.08,
-        "durationInFrames": 109,
-        "audioIndex": 3,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "hide",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "Two individuals are wearing virtual reality headsets, with one in a black headset and the other in a white headset, both immersed in a virtual environment.",
-              "_id": {
-                "$oid": "68ea5df6e79aac449a37f4a8"
-              }
-            }
-          ],
-          "video": {
-            "id": "10945147",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 4901037,
-            "width": 1920,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/8762940/8762940-hd_1920_1080_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/8762940/pictures/preview-0.jpeg",
-              "https://images.pexels.com/videos/8762940/pictures/preview-1.jpeg",
-              "https://images.pexels.com/videos/8762940/pictures/preview-3.jpeg",
-              "https://images.pexels.com/videos/8762940/pictures/preview-4.jpeg",
-              "https://images.pexels.com/videos/8762940/pictures/preview-6.jpeg",
-              "https://images.pexels.com/videos/8762940/pictures/preview-7.jpeg",
-              "https://images.pexels.com/videos/8762940/pictures/preview-9.jpeg",
-              "https://images.pexels.com/videos/8762940/pictures/preview-10.jpeg",
-              "https://images.pexels.com/videos/8762940/pictures/preview-12.jpeg",
-              "https://images.pexels.com/videos/8762940/pictures/preview-13.jpeg"
-            ],
-            "durationInSeconds": 28
-          },
-          "image": {
-            "id": "8762940",
-            "link": "https://images.pexels.com/videos/8762940/biology-bionic-chemistry-concept-8762940.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "68ea77760876fb2d2a39fba0"
-          }
-        },
-        "_id": {
-          "$oid": "68ea5df6e79aac449a37f4a0"
-        }
-      },
-      {
-        "words": [
-          {
-            "word": "Ces",
-            "start": 17.08,
-            "end": 17.22,
-            "durationInFrames": 8,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4aa"
-            }
-          },
-          {
-            "word": "créations",
-            "start": 17.22,
-            "end": 17.659999999999997,
-            "durationInFrames": 26,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4ab"
-            }
-          },
-          {
-            "word": "révolutionnaires",
-            "start": 17.659999999999997,
-            "end": 18.38,
-            "durationInFrames": 43,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4ac"
-            }
-          },
-          {
-            "word": "transforment",
-            "start": 18.38,
-            "end": 19.04,
-            "durationInFrames": 40,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4ad"
-            }
-          },
-          {
-            "word": "notre",
-            "start": 19.04,
-            "end": 19.38,
-            "durationInFrames": 20,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4ae"
-            }
-          },
-          {
-            "word": "façon",
-            "start": 19.38,
-            "end": 19.7,
-            "durationInFrames": 19,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4af"
-            }
-          },
-          {
-            "word": "d'interagir",
-            "start": 19.7,
-            "end": 20.339999999999996,
-            "durationInFrames": 38,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4b0"
-            }
-          }
-        ],
-        "text": "Ces créations révolutionnaires transforment notre façon d'interagir",
-        "start": 17.08,
-        "end": 20.339999999999996,
-        "durationInFrames": 194,
-        "audioIndex": 4,
-        "media": {
-          "type": "video",
-          "usage": "media",
-          "show": "full",
-          "startAt": 0,
-          "generationStatus": "completed",
-          "description": [
-            {
-              "start": 0,
-              "text": "A person wearing a virtual reality headset is seen making hand gestures, with a focus on their hands and the headset in a colorful, illuminated environment.",
-              "_id": {
-                "$oid": "68ea5df6e79aac449a37f4b2"
-              }
-            }
-          ],
-          "video": {
-            "id": "9365306",
-            "quality": "hd",
-            "file_type": "video/mp4",
-            "size": 3774494,
-            "width": 1920,
-            "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/4354035/4354035-hd_1920_1080_25fps.mp4",
-            "frames": [
-              "https://images.pexels.com/videos/4354035/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/4354035/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/4354035/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/4354035/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/4354035/pictures/preview-12.jpg"
-            ],
-            "durationInSeconds": 6
-          },
-          "image": {
-            "id": "4354035",
-            "link": "https://images.pexels.com/videos/4354035/pexels-photo-4354035.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
-          },
-          "_id": {
-            "$oid": "68ea77760876fb2d2a39fbaa"
-          }
-        },
-        "_id": {
-          "$oid": "68ea5df6e79aac449a37f4a9"
-        }
-      },
-      {
-        "words": [
           {
             "word": "dans",
-            "start": 20.339999999999996,
-            "end": 20.479999999999997,
-            "durationInFrames": 8,
+            "start": 15.75,
+            "end": 16.5,
+            "durationInFrames": 45,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f4b4"
+              "$oid": "68f1a1a707181c7326c14637"
             }
           },
           {
             "word": "les",
-            "start": 20.479999999999997,
-            "end": 20.639999999999997,
-            "durationInFrames": 10,
+            "start": 16.5,
+            "end": 17.25,
+            "durationInFrames": 45,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f4b5"
+              "$oid": "68f1a1a707181c7326c14638"
             }
           },
           {
-            "word": "espaces",
-            "start": 20.639999999999997,
-            "end": 21.259999999999998,
-            "durationInFrames": 37,
+            "word": "mains.",
+            "start": 17.25,
+            "end": 18,
+            "durationInFrames": 45,
             "_id": {
-              "$oid": "68ea5df6e79aac449a37f4b6"
-            }
-          },
-          {
-            "word": "virtuels,",
-            "start": 21.259999999999998,
-            "end": 22.02,
-            "durationInFrames": 46,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4b7"
-            }
-          },
-          {
-            "word": "rendant",
-            "start": 22.02,
-            "end": 22.18,
-            "durationInFrames": 10,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4b8"
-            }
-          },
-          {
-            "word": "l'expérience",
-            "start": 22.18,
-            "end": 22.7,
-            "durationInFrames": 31,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4b9"
-            }
-          },
-          {
-            "word": "plus",
-            "start": 22.7,
-            "end": 22.939999999999998,
-            "durationInFrames": 14,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4ba"
-            }
-          },
-          {
-            "word": "immersive",
-            "start": 22.939999999999998,
-            "end": 23.339999999999996,
-            "durationInFrames": 24,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4bb"
-            }
-          },
-          {
-            "word": "que",
-            "start": 23.339999999999996,
-            "end": 23.56,
-            "durationInFrames": 13,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4bc"
-            }
-          },
-          {
-            "word": "jamais.",
-            "start": 23.56,
-            "end": 24.299999999999997,
-            "durationInFrames": 44,
-            "_id": {
-              "$oid": "68ea5df6e79aac449a37f4bd"
+              "$oid": "68f1a1a707181c7326c14639"
             }
           }
         ],
-        "text": "dans les espaces virtuels, rendant l'expérience plus immersiveque jamais.",
-        "start": 20.339999999999996,
-        "end": 24.299999999999997,
-        "durationInFrames": 237,
+        "text": "en lui ajoutant un produit dans les mains.",
+        "start": 13.909090909090908,
+        "end": 18,
+        "durationInFrames": 244,
+        "audioIndex": 2,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "name": "edit-avatar.mp4",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "duration": 6,
+              "text": "A user interacts with a web interface, where a mouse cursor moves to a text input field and types the sentence \"The girl is holding the product from the second picture\" to describe an image of a woman displayed on the screen. The interface shows a 'HOOK' application with various menu options.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c1463b"
+              }
+            }
+          ],
+          "video": {
+            "id": "717e957d-9478-442e-96f1-16e9641f33b0",
+            "file_type": "video/mp4",
+            "size": 775984,
+            "width": 1920,
+            "height": 1080,
+            "link": "https://media.hoox.video/717e957d-9478-442e-96f1-16e9641f33b0.mp4",
+            "frames": [
+              "https://media.hoox.video/frames_2ba88dab-6b54-4ea8-aa1b-e71ba6189a18_unknown.jpg",
+              "https://media.hoox.video/frames_01741999-ca54-4703-be91-d8321a6d9db4_unknown.jpg",
+              "https://media.hoox.video/frames_ef1dbdb5-ded5-4864-8899-205d144fd376_unknown.jpg",
+              "https://media.hoox.video/frames_e0cd6a63-7591-4b97-ae94-d036a440e07c_unknown.jpg",
+              "https://media.hoox.video/frames_dd42e512-1230-4752-9c0a-1f919e2b272b_unknown.jpg"
+            ],
+            "durationInSeconds": 5.25
+          },
+          "_id": {
+            "$oid": "68f1a285f6877a62465d30f0"
+          }
+        },
+        "_id": {
+          "$oid": "68f1a1a707181c7326c14635"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Ensuite,",
+            "start": 18,
+            "end": 18.25,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1463d"
+            }
+          },
+          {
+            "word": "crée",
+            "start": 18.25,
+            "end": 18.5,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1463e"
+            }
+          },
+          {
+            "word": "ta",
+            "start": 18.5,
+            "end": 18.75,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1463f"
+            }
+          },
+          {
+            "word": "vidéo",
+            "start": 18.75,
+            "end": 19,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14640"
+            }
+          },
+          {
+            "word": "comme",
+            "start": 19,
+            "end": 19.25,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14641"
+            }
+          },
+          {
+            "word": "tu",
+            "start": 19.25,
+            "end": 19.5,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14642"
+            }
+          },
+          {
+            "word": "as",
+            "start": 19.5,
+            "end": 19.75,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14643"
+            }
+          },
+          {
+            "word": "l'habitude",
+            "start": 19.75,
+            "end": 20,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14644"
+            }
+          },
+          {
+            "word": "et",
+            "start": 20,
+            "end": 20.25,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14645"
+            }
+          },
+          {
+            "word": "sélectionne",
+            "start": 20.25,
+            "end": 20.5,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14646"
+            }
+          },
+          {
+            "word": "ton",
+            "start": 20.5,
+            "end": 20.75,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14647"
+            }
+          },
+          {
+            "word": "avatar.",
+            "start": 20.75,
+            "end": 21,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14648"
+            }
+          }
+        ],
+        "text": "Ensuite, crée ta vidéo comme tu as l'habitude et sélectionne ton avatar.",
+        "start": 18,
+        "end": 21,
+        "durationInFrames": 180,
+        "audioIndex": 3,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 1,
+          "name": "select-avatar-veo-3.mp4",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 1,
+              "duration": 3,
+              "text": "A user interacts with a web interface displaying a selected avatar named 'Kaelen'. The cursor moves to and activates a toggle switch labeled 'Use Mia 3.1 for avatar generation'.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c1464a"
+              }
+            }
+          ],
+          "video": {
+            "id": "0890819c-8226-437b-918d-813338817d39",
+            "file_type": "video/mp4",
+            "size": 895896,
+            "width": 1920,
+            "height": 1080,
+            "link": "https://media.hoox.video/0890819c-8226-437b-918d-813338817d39.mp4",
+            "frames": [
+              "https://media.hoox.video/frames_a4d04477-3bd5-4807-9212-a464ef6ac5c6_unknown.jpg",
+              "https://media.hoox.video/frames_e384f73a-7bce-4656-a429-268ae16643de_unknown.jpg",
+              "https://media.hoox.video/frames_8224fe93-22e7-4781-906c-a24a076501f6_unknown.jpg",
+              "https://media.hoox.video/frames_e62da06e-3a63-4656-9cec-c89c49526856_unknown.jpg",
+              "https://media.hoox.video/frames_25b14512-fd71-448e-87bf-0e54f1ea0d50_unknown.jpg"
+            ],
+            "durationInSeconds": 3.8166666666666664
+          },
+          "_id": {
+            "$oid": "68f1a285f6877a62465d30ff"
+          }
+        },
+        "_id": {
+          "$oid": "68f1a1a707181c7326c1463c"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Pour",
+            "start": 21,
+            "end": 21.3,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1464c"
+            }
+          },
+          {
+            "word": "des",
+            "start": 21.3,
+            "end": 21.6,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1464d"
+            }
+          },
+          {
+            "word": "résultats",
+            "start": 21.6,
+            "end": 21.900000000000002,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1464e"
+            }
+          },
+          {
+            "word": "optimaux,",
+            "start": 21.9,
+            "end": 22.2,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1464f"
+            }
+          },
+          {
+            "word": "teste",
+            "start": 22.2,
+            "end": 22.5,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14650"
+            }
+          },
+          {
+            "word": "notre",
+            "start": 22.5,
+            "end": 22.8,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14651"
+            }
+          },
+          {
+            "word": "nouveau",
+            "start": 22.8,
+            "end": 23.1,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14652"
+            }
+          },
+          {
+            "word": "modèle",
+            "start": 23.1,
+            "end": 23.400000000000002,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14653"
+            }
+          },
+          {
+            "word": "Veo",
+            "start": 23.4,
+            "end": 23.7,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14654"
+            }
+          },
+          {
+            "word": "3.1",
+            "start": 23.7,
+            "end": 24,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14655"
+            }
+          }
+        ],
+        "text": "Pour des résultats optimaux, teste notre nouveau modèle Veo 3.1",
+        "start": 21,
+        "end": 24,
+        "durationInFrames": 180,
+        "audioIndex": 4,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "half",
+          "startAt": 0.7,
+          "name": "select-avatar-veo-3.mp4",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 1,
+              "duration": 3,
+              "text": "A user interacts with a web interface displaying a selected avatar named 'Kaelen'. The cursor moves to and activates a toggle switch labeled 'Use Mia 3.1 for avatar generation'.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c14657"
+              }
+            }
+          ],
+          "video": {
+            "id": "0890819c-8226-437b-918d-813338817d39",
+            "file_type": "video/mp4",
+            "size": 895896,
+            "width": 1920,
+            "height": 1080,
+            "link": "https://media.hoox.video/0890819c-8226-437b-918d-813338817d39.mp4",
+            "frames": [
+              "https://media.hoox.video/frames_a4d04477-3bd5-4807-9212-a464ef6ac5c6_unknown.jpg",
+              "https://media.hoox.video/frames_e384f73a-7bce-4656-a429-268ae16643de_unknown.jpg",
+              "https://media.hoox.video/frames_8224fe93-22e7-4781-906c-a24a076501f6_unknown.jpg",
+              "https://media.hoox.video/frames_e62da06e-3a63-4656-9cec-c89c49526856_unknown.jpg",
+              "https://media.hoox.video/frames_25b14512-fd71-448e-87bf-0e54f1ea0d50_unknown.jpg"
+            ],
+            "durationInSeconds": 3.8166666666666664
+          },
+          "_id": {
+            "$oid": "68f1a285f6877a62465d310c"
+          }
+        },
+        "_id": {
+          "$oid": "68f1a1a707181c7326c1464b"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "qu'on",
+            "start": 24,
+            "end": 25,
+            "durationInFrames": 60,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14659"
+            }
+          },
+          {
+            "word": "vient",
+            "start": 25,
+            "end": 26,
+            "durationInFrames": 60,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1465a"
+            }
+          },
+          {
+            "word": "d'ajouter.",
+            "start": 26,
+            "end": 27,
+            "durationInFrames": 60,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1465b"
+            }
+          }
+        ],
+        "text": "qu'on vient d'ajouter.",
+        "start": 24,
+        "end": 27,
+        "durationInFrames": 180,
         "audioIndex": 4,
         "media": {
           "type": "video",
@@ -1312,42 +1409,237 @@
           "description": [
             {
               "start": 0,
-              "text": "A woman wearing a virtual reality headset is seen raising her hand and then extending her arm, with a blue textured background throughout the first four seconds.",
+              "text": "The video begins with a close-up view of a digital, stylized globe, showing continents with a grid overlay and a textured, pixelated appearance. Initially, the focus is on India and the Middle East, with a bright, glowing white line originating from a point on India and curving outwards. As the sequence progresses, the globe appears to rotate or zoom, shifting the view to prominently feature Africa. The glowing line continues its path, extending over the Indian Ocean and towards Madagascar, suggesting global connectivity or data visualization.",
               "_id": {
-                "$oid": "68ea5df6e79aac449a37f4bf"
+                "$oid": "68f1a1a707181c7326c1465d"
               }
             }
           ],
           "video": {
-            "id": "10466529",
+            "id": "9292630",
             "quality": "hd",
             "file_type": "video/mp4",
-            "size": 4432591,
+            "size": 6331160,
             "width": 1920,
             "height": 1080,
             "fps": 25,
-            "link": "https://videos.pexels.com/video-files/7547581/7547581-hd_1920_1080_25fps.mp4",
+            "link": "https://videos.pexels.com/video-files/3125427/3125427-hd_1920_1080_25fps.mp4",
             "frames": [
-              "https://images.pexels.com/videos/7547581/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/7547581/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/7547581/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/7547581/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/7547581/pictures/preview-12.jpg"
+              "https://images.pexels.com/videos/3125427/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/3125427/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/3125427/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/3125427/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/3125427/pictures/preview-12.jpg"
             ],
-            "durationInSeconds": 7
+            "durationInSeconds": 10
           },
           "image": {
-            "id": "7547581",
-            "link": "https://images.pexels.com/videos/7547581/pexels-photo-7547581.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "id": "3125427",
+            "link": "https://images.pexels.com/videos/3125427/free-video-3125427.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
             "width": 3840,
             "height": 2160
           },
           "_id": {
-            "$oid": "68ea77760876fb2d2a39fbb7"
+            "$oid": "68f1a285f6877a62465d3112"
           }
         },
         "_id": {
-          "$oid": "68ea5df6e79aac449a37f4b3"
+          "$oid": "68f1a1a707181c7326c14658"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "En",
+            "start": 27,
+            "end": 27.2,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1465f"
+            }
+          },
+          {
+            "word": "moins",
+            "start": 27.2,
+            "end": 27.4,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14660"
+            }
+          },
+          {
+            "word": "de",
+            "start": 27.4,
+            "end": 27.599999999999998,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14661"
+            }
+          },
+          {
+            "word": "5",
+            "start": 27.6,
+            "end": 27.8,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14662"
+            }
+          },
+          {
+            "word": "minutes,",
+            "start": 27.8,
+            "end": 28,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14663"
+            }
+          },
+          {
+            "word": "ton",
+            "start": 28,
+            "end": 28.2,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14664"
+            }
+          },
+          {
+            "word": "avatar",
+            "start": 28.2,
+            "end": 28.4,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14665"
+            }
+          },
+          {
+            "word": "réaliste",
+            "start": 28.4,
+            "end": 28.599999999999998,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14666"
+            }
+          },
+          {
+            "word": "est",
+            "start": 28.6,
+            "end": 28.8,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14667"
+            }
+          },
+          {
+            "word": "prêt",
+            "start": 28.8,
+            "end": 29,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14668"
+            }
+          },
+          {
+            "word": "à",
+            "start": 29,
+            "end": 29.2,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c14669"
+            }
+          },
+          {
+            "word": "conquérir",
+            "start": 29.2,
+            "end": 29.4,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1466a"
+            }
+          },
+          {
+            "word": "les",
+            "start": 29.4,
+            "end": 29.599999999999998,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1466b"
+            }
+          },
+          {
+            "word": "réseaux",
+            "start": 29.6,
+            "end": 29.8,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1466c"
+            }
+          },
+          {
+            "word": "!",
+            "start": 29.8,
+            "end": 30.5,
+            "durationInFrames": 42,
+            "_id": {
+              "$oid": "68f1a1a707181c7326c1466d"
+            }
+          }
+        ],
+        "text": "En moins de 5 minutes, ton avatar réaliste est prêt à conquérir les réseaux !",
+        "start": 27,
+        "end": 30.5,
+        "durationInFrames": 210,
+        "audioIndex": 5,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "text": "The video begins with a close-up shot of a person's hand touching a smartphone screen resting on a wooden surface. As the sequence progresses, social media icons, including Facebook, Twitter, Pinterest, and Google+, begin to appear and multiply around the phone screen, indicating interaction with or a focus on social media platforms.",
+              "_id": {
+                "$oid": "68f1a1a707181c7326c1466f"
+              }
+            }
+          ],
+          "video": {
+            "id": "9252990",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 11198192,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/854545/854545-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/854545/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/854545/pictures/preview-1.jpg",
+              "https://images.pexels.com/videos/854545/pictures/preview-3.jpg",
+              "https://images.pexels.com/videos/854545/pictures/preview-4.jpg",
+              "https://images.pexels.com/videos/854545/pictures/preview-6.jpg",
+              "https://images.pexels.com/videos/854545/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/854545/pictures/preview-9.jpg",
+              "https://images.pexels.com/videos/854545/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/854545/pictures/preview-12.jpg",
+              "https://images.pexels.com/videos/854545/pictures/preview-13.jpg"
+            ],
+            "durationInSeconds": 20
+          },
+          "image": {
+            "id": "854545",
+            "link": "https://images.pexels.com/videos/854545/free-video-854545.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+            "width": 1920,
+            "height": 1080
+          },
+          "_id": {
+            "$oid": "68f1a285f6877a62465d3124"
+          }
+        },
+        "_id": {
+          "$oid": "68f1a1a707181c7326c1465e"
         }
       }
     ],
@@ -1355,17 +1647,17 @@
   },
   "extractedMedia": [],
   "createdAt": {
-    "$date": "2025-10-11T13:36:16.188Z"
+    "$date": "2025-10-17T01:53:20.415Z"
   },
   "updatedAt": {
-    "$date": "2025-10-11T15:27:50.003Z"
+    "$date": "2025-10-17T01:57:25.128Z"
   },
   "__v": 0,
   "isNews": false,
-  "style": "Inspirational",
-  "title": "Avatars réalistes",
-  "costToGenerate": 0.09976490416666667,
+  "style": "Informative",
+  "title": "Crée ton avatar réaliste",
+  "costToGenerate": 0.025326524999999996,
   "settings": {
-    "avatarHeightRatio": 62.668963961192134
+    "avatarHeightRatio": 61.093676286587495
   }
 }

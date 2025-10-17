@@ -1,0 +1,886 @@
+{
+  "spaceId": {
+    "$oid": "6751efc06fa24b6bfc7c6583"
+  },
+  "archived": false,
+  "useVeo3": true,
+  "state": {
+    "type": "done"
+  },
+  "runId": "run_cmgsmjgdj015m2elo0bffe9n5",
+  "history": [
+    {
+      "step": "CREATE",
+      "user": {
+        "$oid": "6751efc06fa24b6bfc7c6582"
+      },
+      "date": {
+        "$date": "2025-10-15T23:30:46.103Z"
+      },
+      "_id": {
+        "$oid": "68f02ea622d6d18ff3e921c1"
+      }
+    }
+  ],
+  "video": {
+    "audio": {
+      "music": {
+        "url": "https://music.hoox.video/drift-rush-house-phonk-phonk-2024-mix-164907.mp3",
+        "volume": 0.07,
+        "name": "Drift Rush House Phonk 2024 Mix",
+        "genre": "Informative"
+      },
+      "voices": [
+        {
+          "url": "",
+          "index": 0,
+          "start": 0,
+          "end": 6,
+          "durationInFrames": 360,
+          "voiceId": "pVsdIxxCbRrbiwOhiRwg",
+          "startOffset": 0,
+          "emotionEnhancement": false,
+          "_id": {
+            "$oid": "68f02ebf22d6d18ff3e92602"
+          }
+        },
+        {
+          "url": "",
+          "index": 1,
+          "start": 6,
+          "end": 12,
+          "durationInFrames": 360,
+          "voiceId": "pVsdIxxCbRrbiwOhiRwg",
+          "startOffset": 0,
+          "emotionEnhancement": false,
+          "_id": {
+            "$oid": "68f02ebf22d6d18ff3e92603"
+          }
+        }
+      ],
+      "volume": 1
+    },
+    "subtitle": {
+      "name": "Modern",
+      "style": {
+        "template": "modern",
+        "fontFamily": "Arial",
+        "fontWeight": "700",
+        "fontSize": 80,
+        "color": "#ffffff",
+        "isItalic": false,
+        "isPunctuation": true,
+        "isUppercase": false,
+        "mode": "twoLines",
+        "position": 50,
+        "animation": {
+          "appear": "blur"
+        },
+        "secondLine": {
+          "isActive": true,
+          "fontFamily": "Fraunces",
+          "fontWeight": "800",
+          "fontSize": 80,
+          "color": "#fee601",
+          "isItalic": false,
+          "isPunctuation": true,
+          "isUppercase": false,
+          "dynamicSize": true
+        },
+        "shadow": {
+          "isActive": true,
+          "size": 3,
+          "color": "#000000"
+        }
+      }
+    },
+    "metadata": {
+      "audio_duration": 12,
+      "language": "English"
+    },
+    "avatar": {
+      "id": "a6uyuEO01kjAMmgLekrHs",
+      "name": "First Look",
+      "thumbnail": "https://media.hoox.video/avatar-IestXvDhFGXu3z9P4zTNP-1760534486125.jpg",
+      "previewUrl": "",
+      "videoUrl": "",
+      "format": "vertical"
+    },
+    "keywords": [
+      "gym",
+      "fitness equipment",
+      "exercise machines",
+      "personal trainer",
+      "welcoming atmosphere",
+      "cardio section",
+      "park view",
+      "workout",
+      "modern interior",
+      "coaching"
+    ],
+    "transitions": [],
+    "thumbnail": "",
+    "format": "vertical",
+    "sequences": [
+      {
+        "words": [
+          {
+            "word": "Je",
+            "start": 0,
+            "end": 0.25,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e92595"
+            }
+          },
+          {
+            "word": "n'arrive",
+            "start": 0.25,
+            "end": 0.5,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e92596"
+            }
+          },
+          {
+            "word": "pas",
+            "start": 0.5,
+            "end": 0.75,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e92597"
+            }
+          },
+          {
+            "word": "à",
+            "start": 0.75,
+            "end": 1,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e92598"
+            }
+          },
+          {
+            "word": "croire",
+            "start": 1,
+            "end": 1.25,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e92599"
+            }
+          },
+          {
+            "word": "ce",
+            "start": 1.25,
+            "end": 1.5,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e9259a"
+            }
+          },
+          {
+            "word": "que",
+            "start": 1.5,
+            "end": 1.75,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e9259b"
+            }
+          },
+          {
+            "word": "je",
+            "start": 1.75,
+            "end": 2,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e9259c"
+            }
+          },
+          {
+            "word": "viens",
+            "start": 2,
+            "end": 2.25,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e9259d"
+            }
+          },
+          {
+            "word": "de",
+            "start": 2.25,
+            "end": 2.5,
+            "durationInFrames": 15,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e9259e"
+            }
+          },
+          {
+            "word": "trouver!",
+            "start": 2.5,
+            "end": 3,
+            "durationInFrames": 30,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e9259f"
+            }
+          }
+        ],
+        "text": "Je n'arrive pas à croire ce que je viens de trouver!",
+        "start": 0,
+        "end": 3,
+        "durationInFrames": 180,
+        "audioIndex": 0,
+        "media": {
+          "type": "image",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "name": "Image 1080x1350.jpg",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "duration": 15,
+              "text": "The video shows various gym clothing and accessories from GymShark,  such as a black sports bra, a brown sports bra, and wristbands, a  protein shaker, a belt, and a gym weight. There is a small figurine of a woman dressed in gym clothing. The items are arranged in a visually appealing  manner.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3af3"
+              }
+            }
+          ],
+          "video": {
+            "frames": []
+          },
+          "image": {
+            "id": "66f90f96-46ea-4edf-a3a3-378c3f900526",
+            "link": "https://media.hoox.video/66f90f96-46ea-4edf-a3a3-378c3f900526.jpg",
+            "width": 1080,
+            "height": 1350
+          },
+          "_id": {
+            "$oid": "68f02f424422d1590dbf4ed2"
+          },
+          "createdAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          },
+          "updatedAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          }
+        },
+        "_id": {
+          "$oid": "68f02ebf22d6d18ff3e92594"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "Cette",
+            "start": 3,
+            "end": 3.230769230769231,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925a4"
+            }
+          },
+          {
+            "word": "nouvelle",
+            "start": 3.230769230769231,
+            "end": 3.4615384615384617,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925a5"
+            }
+          },
+          {
+            "word": "salle",
+            "start": 3.4615384615384617,
+            "end": 3.6923076923076925,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925a6"
+            }
+          },
+          {
+            "word": "de",
+            "start": 3.6923076923076925,
+            "end": 3.9230769230769234,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925a7"
+            }
+          },
+          {
+            "word": "sport",
+            "start": 3.9230769230769234,
+            "end": 4.153846153846154,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925a8"
+            }
+          }
+        ],
+        "text": "Cette nouvelle salle de sport",
+        "start": 3,
+        "end": 4.153846153846154,
+        "durationInFrames": 68,
+        "audioIndex": 0,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "full",
+          "startAt": 31,
+          "name": "Instagram Video Download (2).mp4",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "duration": 3,
+              "text": "The woman puts on a pair of black wristbands, she is standing in front of a gym equipment, wearing blue sportswear. She is wearing headphones and is looking down.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ade"
+              }
+            },
+            {
+              "start": 3,
+              "duration": 5,
+              "text": "The woman is doing shoulder exercises with a pair of dumbbells. She is wearing a blue bra and shorts.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3adf"
+              }
+            },
+            {
+              "start": 9,
+              "duration": 9,
+              "text": "The woman is doing a pull-up exercise. She is wearing a blue bra and shorts.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae0"
+              }
+            },
+            {
+              "start": 18,
+              "duration": 3,
+              "text": "The woman puts her headphones on. She is standing in front of gym equipment and looking at the camera. She is wearing a blue bra and shorts. The camera is zoomed into her face.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae1"
+              }
+            },
+            {
+              "start": 21,
+              "duration": 5,
+              "text": "The woman is doing a bench press exercise, she is wearing a blue bra and shorts.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae2"
+              }
+            },
+            {
+              "start": 26,
+              "duration": 5,
+              "text": "The woman does another shoulder exercises with a pair of dumbbells. She is standing in front of gym equipment and looking around.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae3"
+              }
+            },
+            {
+              "start": 31,
+              "duration": 9,
+              "text": "The woman is standing in the middle of the gym, she is wearing a blue bra and shorts and looking at the camera. She is wearing headphones and smiling.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae4"
+              }
+            }
+          ],
+          "video": {
+            "id": "9294315",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 6012959,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/3195530/3195530-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/3195530/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-2.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-5.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-12.jpg"
+            ],
+            "durationInSeconds": 12
+          },
+          "_id": {
+            "$oid": "68f02f424422d1590dbf4eda"
+          },
+          "createdAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          },
+          "updatedAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          }
+        },
+        "_id": {
+          "$oid": "68f02ebf22d6d18ff3e925a3"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "à",
+            "start": 4.153846153846154,
+            "end": 4.384615384615385,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925a9"
+            }
+          },
+          {
+            "word": "deux",
+            "start": 4.384615384615385,
+            "end": 4.615384615384616,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925aa"
+            }
+          },
+          {
+            "word": "pas",
+            "start": 4.615384615384615,
+            "end": 4.846153846153846,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925ab"
+            }
+          },
+          {
+            "word": "de",
+            "start": 4.846153846153847,
+            "end": 5.0769230769230775,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925ac"
+            }
+          },
+          {
+            "word": "chez",
+            "start": 5.076923076923077,
+            "end": 5.3076923076923075,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925ad"
+            }
+          },
+          {
+            "word": "moi",
+            "start": 5.307692307692308,
+            "end": 5.538461538461539,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925ae"
+            }
+          },
+          {
+            "word": "est",
+            "start": 5.538461538461538,
+            "end": 5.769230769230769,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925af"
+            }
+          },
+          {
+            "word": "incroyable.",
+            "start": 5.769230769230769,
+            "end": 6,
+            "durationInFrames": 14,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925b0"
+            }
+          }
+        ],
+        "text": "à deux pas de chez moi est incroyable.",
+        "start": 4.153846153846154,
+        "end": 6.000000000000001,
+        "durationInFrames": 112,
+        "audioIndex": 0,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 31,
+          "name": "Instagram Video Download (2).mp4",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "duration": 3,
+              "text": "The woman puts on a pair of black wristbands, she is standing in front of a gym equipment, wearing blue sportswear. She is wearing headphones and is looking down.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ade"
+              }
+            },
+            {
+              "start": 3,
+              "duration": 5,
+              "text": "The woman is doing shoulder exercises with a pair of dumbbells. She is wearing a blue bra and shorts.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3adf"
+              }
+            },
+            {
+              "start": 9,
+              "duration": 9,
+              "text": "The woman is doing a pull-up exercise. She is wearing a blue bra and shorts.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae0"
+              }
+            },
+            {
+              "start": 18,
+              "duration": 3,
+              "text": "The woman puts her headphones on. She is standing in front of gym equipment and looking at the camera. She is wearing a blue bra and shorts. The camera is zoomed into her face.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae1"
+              }
+            },
+            {
+              "start": 21,
+              "duration": 5,
+              "text": "The woman is doing a bench press exercise, she is wearing a blue bra and shorts.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae2"
+              }
+            },
+            {
+              "start": 26,
+              "duration": 5,
+              "text": "The woman does another shoulder exercises with a pair of dumbbells. She is standing in front of gym equipment and looking around.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae3"
+              }
+            },
+            {
+              "start": 31,
+              "duration": 9,
+              "text": "The woman is standing in the middle of the gym, she is wearing a blue bra and shorts and looking at the camera. She is wearing headphones and smiling.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae4"
+              }
+            }
+          ],
+          "video": {
+            "id": "9294315",
+            "quality": "hd",
+            "file_type": "video/mp4",
+            "size": 6012959,
+            "width": 1920,
+            "height": 1080,
+            "fps": 25,
+            "link": "https://videos.pexels.com/video-files/3195530/3195530-hd_1920_1080_25fps.mp4",
+            "frames": [
+              "https://images.pexels.com/videos/3195530/pictures/preview-0.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-2.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-5.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-7.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-10.jpg",
+              "https://images.pexels.com/videos/3195530/pictures/preview-12.jpg"
+            ],
+            "durationInSeconds": 12
+          },
+          "_id": {
+            "$oid": "68f02f424422d1590dbf4eeb"
+          },
+          "createdAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          },
+          "updatedAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          }
+        },
+        "_id": {
+          "$oid": "68f02f424422d1590dbf4ee2"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "L'équipement",
+            "start": 6,
+            "end": 6.3,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925ba"
+            }
+          },
+          {
+            "word": "est",
+            "start": 6.3,
+            "end": 6.6,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925bb"
+            }
+          },
+          {
+            "word": "flambant",
+            "start": 6.6,
+            "end": 6.8999999999999995,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925bc"
+            }
+          },
+          {
+            "word": "neuf,",
+            "start": 6.9,
+            "end": 7.2,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925bd"
+            }
+          },
+          {
+            "word": "avec",
+            "start": 7.2,
+            "end": 7.5,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925be"
+            }
+          },
+          {
+            "word": "des",
+            "start": 7.5,
+            "end": 7.8,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925bf"
+            }
+          },
+          {
+            "word": "machines",
+            "start": 7.8,
+            "end": 8.1,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925c0"
+            }
+          },
+          {
+            "word": "que",
+            "start": 8.1,
+            "end": 8.4,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925c1"
+            }
+          },
+          {
+            "word": "je",
+            "start": 8.4,
+            "end": 8.700000000000001,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925c2"
+            }
+          },
+          {
+            "word": "n'avais",
+            "start": 8.7,
+            "end": 9,
+            "durationInFrames": 18,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925c3"
+            }
+          }
+        ],
+        "text": "L'équipement est flambant neuf, avec des machines que je n'avais",
+        "start": 6,
+        "end": 9,
+        "durationInFrames": 180,
+        "audioIndex": 1,
+        "media": {
+          "type": "image",
+          "usage": "media",
+          "show": "hide",
+          "startAt": 0,
+          "name": "Image 1080x1350 (1).jpg",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "duration": 10,
+              "text": "The camera shows a variety of gym equipment arranged on a table.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3af9"
+              }
+            }
+          ],
+          "video": {
+            "frames": []
+          },
+          "image": {
+            "id": "298ffb71-0923-4f60-80a9-01f4d0c4f81f",
+            "link": "https://media.hoox.video/298ffb71-0923-4f60-80a9-01f4d0c4f81f.jpg",
+            "width": 1080,
+            "height": 1350
+          },
+          "_id": {
+            "$oid": "68f02f424422d1590dbf4efe"
+          },
+          "createdAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          },
+          "updatedAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          }
+        },
+        "_id": {
+          "$oid": "68f02ebf22d6d18ff3e925b9"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "jamais",
+            "start": 9,
+            "end": 10,
+            "durationInFrames": 60,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925c7"
+            }
+          },
+          {
+            "word": "vues",
+            "start": 10,
+            "end": 11,
+            "durationInFrames": 60,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925c8"
+            }
+          },
+          {
+            "word": "ailleurs.",
+            "start": 11,
+            "end": 12,
+            "durationInFrames": 60,
+            "_id": {
+              "$oid": "68f02ebf22d6d18ff3e925c9"
+            }
+          }
+        ],
+        "text": "jamais vues ailleurs.",
+        "start": 9,
+        "end": 12,
+        "durationInFrames": 180,
+        "audioIndex": 1,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "full",
+          "startAt": 2,
+          "name": "Instagram Video Download (1).mp4",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 0,
+              "duration": 2,
+              "text": "A woman is flexing her bicep against a squat rack.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae7"
+              }
+            },
+            {
+              "start": 2,
+              "duration": 4,
+              "text": "A woman is doing a barbell row exercise against a brick wall.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae8"
+              }
+            },
+            {
+              "start": 6,
+              "duration": 3,
+              "text": "A woman is doing a pull-up using an assisted band on a squat rack.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3ae9"
+              }
+            },
+            {
+              "start": 9,
+              "duration": 2,
+              "text": "A woman is getting ready to lift a barbell.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3aea"
+              }
+            },
+            {
+              "start": 11,
+              "duration": 6,
+              "text": "A woman is doing a barbell deadlift exercise in a gym.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3aeb"
+              }
+            },
+            {
+              "start": 17,
+              "duration": 11,
+              "text": "A woman is doing a lat pulldown machine exercise.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3aec"
+              }
+            },
+            {
+              "start": 30,
+              "duration": 2,
+              "text": "A woman is doing a bicep curl using dumbbells.",
+              "_id": {
+                "$oid": "67c080b404aae94c641b3aed"
+              }
+            }
+          ],
+          "video": {
+            "id": "dadb1857-c4fe-4b52-95b3-5da54011ec3d",
+            "file_type": "video/mp4",
+            "size": 7880672,
+            "width": 720,
+            "height": 1280,
+            "link": "https://media.hoox.video/dadb1857-c4fe-4b52-95b3-5da54011ec3d.mp4",
+            "frames": []
+          },
+          "image": {
+            "id": "398528b2-8b72-4458-bb1f-37ac5103fdf7",
+            "link": "https://media.hoox.video/398528b2-8b72-4458-bb1f-37ac5103fdf7.jpg",
+            "width": 720,
+            "height": 1280
+          },
+          "_id": {
+            "$oid": "68f02f424422d1590dbf4f04"
+          },
+          "createdAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          },
+          "updatedAt": {
+            "$date": "2025-02-27T15:11:49.013Z"
+          }
+        },
+        "_id": {
+          "$oid": "68f02ebf22d6d18ff3e925c6"
+        }
+      }
+    ],
+    "elements": []
+  },
+  "extractedMedia": [],
+  "createdAt": {
+    "$date": "2025-10-15T23:30:46.114Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-15T23:33:22.196Z"
+  },
+  "__v": 0,
+  "isNews": false,
+  "style": "Informative",
+  "title": "Découverte d'une salle de sport",
+  "costToGenerate": 0.027631724999999992,
+  "settings": {
+    "avatarHeightRatio": 62.668963961192134
+  }
+}
