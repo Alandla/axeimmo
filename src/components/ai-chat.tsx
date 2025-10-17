@@ -86,8 +86,8 @@ export function AiChat() {
         const videoId = handleRunUpdate(run, generationSpaceId);
         
         if (videoId && run.status === "COMPLETED") {
-          reset()
           router.push(`/edit/${videoId}`);
+          reset()
         }
       } catch (error) {
         console.error('Generation error:', error);
