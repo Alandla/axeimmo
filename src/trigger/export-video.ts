@@ -578,7 +578,7 @@ export const exportVideoTask = task({
           let veo3VoiceChangerCost = 0;
           let veo3TranscriptionCost = 0;
           
-          if (ctx.environment.type === "PRODUCTION") {
+          if (ctx.environment.type === "DEVELOPMENT") {
             resultsArray = veo3ResultArrayMock;
           } else if (veo3Renders.length > 0) {
             const { resultsArray: generatedResults, transcriptionCost, voiceChangerCost } = await generateVeo3Results(
