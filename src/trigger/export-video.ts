@@ -302,11 +302,11 @@ async function generateVeo3Results(
     veo3Renders.map(async (render) => {
       try {
         const { request_id } = await startVeo3VideoGeneration({
-          prompt: `A person talk to the camera, and say "${render.text}". No background music.`,
+          prompt: `A person talk to the camera, and say in french (parisian accent) "${render.text}". No background music.`,
           image_url: render.avatarUrl,
           generate_audio: true,
           aspect_ratio: aspectRatio
-        }, veo3Mode, true);
+        }, veo3Mode, false);
         logger.log(`Veo3 generation started for audioIndex ${render.audioIndex}`, { request_id });
         return { ...render, requestId: request_id };
       } catch (error) {
@@ -477,6 +477,8 @@ async function generateVeo3Results(
     videoUrl: data.videoUrl,
     transcription: data.transcription
   }));
+
+  resultsArray.sort((a, b) => a.audioIndex - b.audioIndex);
   
   return { resultsArray, transcriptionCost, voiceChangerCost };
 }
@@ -561,8 +563,11 @@ export const exportVideoTask = task({
           
           // 1. Generate Veo3 render list
           const veo3Mode = model === 'veo-3-fast' ? Veo3GenerationMode.FAST : Veo3GenerationMode.STANDARD;
-          const veo3Renders = generateVeo3RenderList(video);
+          const { veo3Renders, updatedSequences } = generateVeo3RenderList(video);
           logger.log(`Generated ${veo3Renders.length} Veo3 renders`, { veo3Renders });
+          
+          // Update video sequences with new audioIndex
+          video.video.sequences = updatedSequences;
 
           const format = video.video?.avatar?.format ? video.video?.avatar?.format : video.video?.format || 'vertical';
 

@@ -1,5 +1,5 @@
 import { KlingGenerationMode } from "./fal";
-import { generateAvatarRenderList } from './avatar-render';
+import { generateAvatarRenderList, generateVeo3RenderList } from './avatar-render';
 import { IVideo } from "../types/video";
 
 interface TokenUsage {
@@ -124,31 +124,15 @@ export function calculateAvatarCreditsForUser(
 // Calcule la durée totale où l'avatar est visible
 export function calculateTotalAvatarDuration(video: IVideo): number {
   const avatarRenders = generateAvatarRenderList(video); 
-  console.log('video', video?.video?.audio?.voices);
-  console.log('sequences', video?.video?.sequences);
-  console.log('avatarRenders', avatarRenders);
   return avatarRenders.reduce((sum: number, render: any) => sum + render.durationInSeconds, 0);
-}
-
-// Calculate the number of unique veo3 videos needed based on unique audioIndex
-export function calculateVeo3VideoCount(video: IVideo): number {
-  if (!video.video?.sequences) {
-    return 0;
-  }
-  
-  const uniqueAudioIndexes = new Set<number>();
-  for (const sequence of video.video.sequences) {
-    uniqueAudioIndexes.add(sequence.audioIndex);
-  }
-  
-  return uniqueAudioIndexes.size;
 }
 
 // Calculate veo3 avatar duration for billing
 // Each video is billed at 8 seconds
 export function calculateVeo3Duration(video: IVideo): number {
-  const videoCount = calculateVeo3VideoCount(video);
-  return videoCount * 8;
+  const { veo3Renders } = generateVeo3RenderList(video);
+  console.log('veo3Renders', veo3Renders);
+  return veo3Renders.length * 8;
 }
 
 // Vérifie si la vidéo a une résolution supérieure à 1080p
