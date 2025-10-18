@@ -1375,7 +1375,6 @@ export function AvatarGridComponent({
 
       {variant === "create" && activeAvatar && spaceAvatars.some((a) => a.id === activeAvatar.id) && (
         <AvatarLookChatbox
-          anchorRef={containerRef}
           activeAvatar={activeAvatar}
           spaceId={activeSpace?.id as string}
           onRefresh={async () => {

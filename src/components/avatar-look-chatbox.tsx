@@ -70,7 +70,6 @@ const getFormatIcon = (format: AvatarLookFormat) => {
 };
 
 type Props = {
-  anchorRef: React.RefObject<HTMLDivElement>;
   activeAvatar: Avatar;
   spaceId: string;
   onRefresh: () => Promise<void> | void;
@@ -112,7 +111,6 @@ const Thumbnails = React.memo(function Thumbnails({
 });
 
 export function AvatarLookChatbox({
-  anchorRef,
   activeAvatar,
   spaceId,
   onRefresh,

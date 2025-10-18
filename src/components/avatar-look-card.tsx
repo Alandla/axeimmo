@@ -100,7 +100,6 @@ export function AvatarLookCard({
 }: AvatarLookCardProps) {
   const { selectedLook: storeSelectedLook, setSelectedLook: setStoreSelectedLook, setSelectedAvatarName: setStoreSelectedAvatarName, setSelectedAvatarId } = useCreationStore() as any
   const { activeSpace, decrementCredits } = useActiveSpaceStore()
-  const { data: session } = useSession()
   const { toast } = useToast()
   const { setLook } = useLookToDeleteStore()
   const { setAvatars, avatarsBySpace, fetchAvatarsInBackground, startPolling } = useAvatarsStore()
@@ -507,46 +506,38 @@ export function AvatarLookCard({
       {/* Image principale */}
       <div className="w-full aspect-[3/4] relative">
         {look.thumbnail ? (
-          <>
-            <Image 
-              src={look.thumbnail} 
-              alt={look.name || ''}
-              className="w-full h-full object-cover select-none"
-              width={1280}
-              height={720}
-              draggable={false}
-              onDragStart={(e) => { e.preventDefault(); }}
-            />
-            {isProcessing && (
-              <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]">
-                {/* Effet de shimmer animé */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                </div>
-              </div>
-            )}
-          </>
+          <Image 
+            src={look.thumbnail} 
+            alt={look.name || ''}
+            className="w-full h-full object-cover select-none"
+            width={1280}
+            height={720}
+            draggable={false}
+            onDragStart={(e) => { e.preventDefault(); }}
+          />
         ) : (
-          <div className="w-full h-full bg-muted relative">
-            {/* Full-surface loader when no thumbnail */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
-            </div>
-            {/* Stronger shimmer for visibility */}
-            <div className="absolute inset-0 overflow-hidden">
-              <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
-            </div>
-          </div>
+          <div className="w-full h-full bg-muted" />
         )}
 
-        {/* Bandeau étape + estimation centré (évite le chevauchement avec tags/menus) */}
         {isProcessing && (
-          <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center p-3">
-            <div className="rounded-md bg-white/90 dark:bg-black/70 backdrop-blur px-3 py-2 flex flex-col items-center gap-1 text-center">
-              <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">{isUpscalePending ? t('processing.upscale') : t('processing.generation')}</span>
-              <span className="text-[10px] sm:text-xs text-gray-700 dark:text-gray-200">{isUpscalePending ? t('processing.estimate-upscale') : t('processing.estimate-generation')}</span>
+          <>
+            {/* Overlay sombre avec shimmer */}
+            <div className={`absolute inset-0 ${look.thumbnail ? 'bg-black/60' : 'bg-transparent'} backdrop-blur-[1px]`}>
+              <div className="absolute inset-0 overflow-hidden">
+                <div className={`absolute inset-0 -translate-x-full animate-[shimmer_2s_ease-in-out_infinite] bg-gradient-to-r from-transparent ${look.thumbnail ? 'via-white/30' : 'via-white/70'} to-transparent`} />
+              </div>
             </div>
-          </div>
+            
+            {/* Spinner + durée estimée */}
+            <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center">
+              <div className="flex flex-col items-center gap-3">
+                <div className={`h-8 w-8 rounded-full border-4 ${look.thumbnail ? 'border-white/30 border-t-white' : 'border-muted-foreground/30 border-t-muted-foreground'} animate-spin`} />
+                <span className={`text-sm font-medium ${look.thumbnail ? 'text-white drop-shadow-lg' : 'text-muted-foreground'}`}>
+                  {isUpscalePending ? t('processing.estimate-upscale') : t('processing.estimate-generation')}
+                </span>
+              </div>
+            </div>
+          </>
         )}
 
         {look.status === 'error' && (

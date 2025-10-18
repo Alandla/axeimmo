@@ -5,7 +5,7 @@ import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
 import { addLookToAvatar, getSpaceById, updateLookInAvatar } from "@/src/dao/spaceDao";
 import { editAvatarImage } from "@/src/lib/fal";
-import { VIDEO_FORMATS, VideoFormat } from "@/src/types/video";
+import { VideoFormat } from "@/src/types/video";
 import { extractLookIdentityInfo } from "@/src/lib/workflowai";
 import { nanoid } from "nanoid";
 // SpaceModel removed in favor of DAO methods
@@ -84,7 +84,7 @@ export async function POST(
       previewUrl: "",
       videoUrl: "",
       createdBy: session.user.id,
-      format: (format && ["vertical","ads"].includes(format)) ? format : "vertical",
+      format: (format && ["vertical","horizontal"].includes(format)) ? format : "vertical",
       settings: {},
       status: 'pending',
       createdAt: now,
@@ -177,9 +177,7 @@ export async function POST(
           return;
         }
 
-        // Mapper format -> aspect_ratio via VIDEO_FORMATS (fallback 9:16)
-        const selectedFormat = (format && ["vertical","ads","square","horizontal"].includes(format)) ? format : "vertical";
-        const aspect_ratio = (VIDEO_FORMATS.find(f => f.value === selectedFormat)?.ratio) || '9:16';
+        const aspect_ratio = format === "horizontal" ? "16:9" : "9:16";
 
         try {
           const image = await editAvatarImage({
