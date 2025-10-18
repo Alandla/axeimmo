@@ -636,6 +636,7 @@
       "skip-animation": "Passer l'animation",
       "animate-images": "Animer les images",
       "credits": "crédits",
+      "drag-files": "Déposez vos médias ici",
       "url-detected": {
         "title": "Plan Start requis pour les URLs",
         "description": "Mettez à niveau votre plan pour créer des vidéos à partir d'URLs.",
@@ -750,6 +751,7 @@
       "look-chat": {
         "placeholder-1": "Ajouter mon produit dans la main",
         "add-elements": "Ajouter des éléments",
+        "add-element": "Ajouter l'élément",
         "send": "Uploader",
         "cost-tooltip": "Coût : {cost} crédits",
         "sending": "Génération...",

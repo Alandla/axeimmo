@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/src/components/ui/button";
 import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } from "./voice-card";
 import { Badge } from "@/src/components/ui/badge";
-import { Check, UserRoundX, Plus } from "lucide-react";
+import { Check, UserRoundX, Plus, Upload } from "lucide-react";
 import { Switch } from "@/src/components/ui/switch"
 import { useTranslations } from "next-intl";
 import { useToast } from "@/src/hooks/use-toast";
@@ -179,6 +179,7 @@ export function AvatarGridComponent({
   const [isLoadingSpaceAvatars, setIsLoadingSpaceAvatars] = useState<boolean>(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isUploadingLook, setIsUploadingLook] = useState(false);
+  const [isCreateCardDragOver, setIsCreateCardDragOver] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] = useState(false);
   const [isModalConfirmDeleteLookOpen, setIsModalConfirmDeleteLookOpen] = useState(false);
@@ -1088,7 +1089,9 @@ export function AvatarGridComponent({
               </div>
               {variant === "create" && (
                 <Card
-                  className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-primary/20"
+                  className={`group relative overflow-hidden rounded-lg transition-all duration-150 border hover:cursor-pointer outline-2 outline-dashed outline-transparent ${
+                    isCreateCardDragOver ? 'border-transparent outline-muted-foreground' : ''
+                  }`}
                   onClick={() => {
                     // Enterprise: always allow
                     if (activeSpace?.planName === PlanName.ENTREPRISE) {
@@ -1115,15 +1118,78 @@ export function AvatarGridComponent({
                     }
                     setShowCreateModal(true);
                   }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsCreateCardDragOver(true);
+                  }}
+                  onDragLeave={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsCreateCardDragOver(false);
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsCreateCardDragOver(false);
+                  }}
                 >
                   {/* Contenu principal centré */}
-                  <div className="w-full aspect-[3/4] relative bg-white flex flex-col items-center justify-center p-4">
-                    <Plus className="h-12 w-12 text-gray-400 mb-3" />
-                    <p className="text-sm text-gray-600 text-center font-medium">{t("create-new-name")}</p>
+                  <div className="w-full aspect-[3/4] relative bg-white group-hover:bg-accent transition-colors duration-150 flex flex-col items-center justify-center p-4">
+                    <div className="flex flex-col items-center gap-3">
+                      <AnimatePresence mode="wait">
+                        {isCreateCardDragOver ? (
+                          <motion.div
+                            key="upload-icon"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <Upload className="h-12 w-12 text-muted-foreground" />
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="plus-icon"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <Plus className="h-12 w-12 text-muted-foreground" />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                      <AnimatePresence mode="wait">
+                        {isCreateCardDragOver ? (
+                          <motion.p
+                            key="drop-text"
+                            initial={{ y: 5, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 5, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-sm text-center font-medium text-muted-foreground"
+                          >
+                            {t("drop-image-here")}
+                          </motion.p>
+                        ) : (
+                          <motion.p
+                            key="create-text"
+                            initial={{ y: 5, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 5, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-sm text-center font-medium text-muted-foreground"
+                          >
+                            {t("create-new-name")}
+                          </motion.p>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
 
                   {/* Compteur en bas */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm p-3 border-t">
+                  <div className="absolute bottom-0 left-0 right-0 bg-white group-hover:bg-accent transition-colors duration-150 backdrop-blur-sm p-3 border-t">
                     <div className="text-center">
                       <span className="text-xs text-gray-600">
                         {(() => {

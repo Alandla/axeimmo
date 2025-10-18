@@ -17,6 +17,7 @@ import {
   Settings2,
   Check,
   PaintbrushVertical,
+  Upload,
 } from "lucide-react"
 import Image from "next/image";
 import { Avatar, AvatarLook, AvatarStyle } from "@/src/types/avatar";
@@ -38,7 +39,7 @@ import {
 } from "@/src/components/ui/tooltip";
 import StyleSelector from "@/src/components/style-selector";
 import { useAvatarsStore } from '@/src/store/avatarsStore'
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { AVATAR_LOOK_GENERATION_COST } from "@/src/lib/cost"
 import { useToast } from "@/src/hooks/use-toast"
 import { useActiveSpaceStore } from "@/src/store/activeSpaceStore"
@@ -298,8 +299,40 @@ export function AvatarLookChatbox({
         initial={{ scale: 1 }}
         animate={pulseSignal > 0 ? { scale: [1, 1.05, 1] } : { scale: 1 }}
         transition={{ duration: 0.25, times: [0, 0.5, 1], ease: "easeOut" }}
-        className={`w-full max-w-xl mx-auto bg-white border rounded-xl p-2 shadow-md ${isDragOver ? 'ring-2 ring-primary' : ''}`}
+        className={`relative w-full max-w-xl mx-auto bg-white border rounded-xl p-2 shadow-md ${
+          isDragOver ? 'outline-2 outline-dashed outline-muted-foreground outline-offset-0' : ''
+        }`}
       >
+        {/* Drag overlay */}
+        <AnimatePresence>
+          {isDragOver && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inset-0 bg-white/70 rounded-xl flex flex-col items-center justify-center gap-3 z-10 pointer-events-none"
+            >
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.2, delay: 0.05 }}
+              >
+                <Upload className="h-6 w-6 text-muted-foreground" />
+              </motion.div>
+              <motion.p
+                initial={{ y: 5, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 5, opacity: 0 }}
+                transition={{ duration: 0.2, delay: 0.1 }}
+                className="text-sm font-medium text-muted-foreground"
+              >
+                {t("look-chat.add-element")}
+              </motion.p>
+            </motion.div>
+          )}
+        </AnimatePresence>
         {/* Top: prompt */}
         <div className="mb-2">
           <Textarea

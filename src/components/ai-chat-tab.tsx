@@ -1,4 +1,4 @@
-import { Check, Paperclip, Send, Globe, X, ExternalLink } from "lucide-react";
+import { Check, Send, Globe, X, ExternalLink, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import SelectDuration, { DurationOption } from "./ui/select/select-duration";
@@ -17,6 +17,7 @@ import { usePremiumToast } from "@/src/utils/premium-toast";
 import { Alert, AlertDescription } from "./ui/alert";
 import { calculateAnimationCost } from "../lib/video-estimation";
 import VideoFormatSelector from "./edit/video-format-selector";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function AiChatTab({ 
   creationStep, 
@@ -114,17 +115,31 @@ export function AiChatTab({
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setIsDragging(false);
-        const droppedFiles = Array.from(e.dataTransfer.files);
-        handleFileUpload(filterFiles(droppedFiles));
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files.length > 0) {
+          const droppedFiles = Array.from(dt.files);
+          handleFileUpload(filterFiles(droppedFiles));
+        }
     };
 
     const handleDragOver = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
+        const types = Array.from(e.dataTransfer.types || []);
+        const hasFiles = types.includes('Files');
+        const hasUrls = types.some((t) => t === 'text/uri-list' || t === 'text/plain');
+        if (hasFiles || hasUrls) {
+          e.preventDefault();
+          setIsDragging(true);
+        }
     };
 
-    const handleDragLeave = (e: React.DragEvent) => {
-        e.preventDefault();
+    const handleDragEnter = (e: React.DragEvent) => {
+        const types = Array.from(e.dataTransfer?.types || []);
+        if (types.includes('Files') || types.includes('text/uri-list') || types.includes('text/plain')) {
+          setIsDragging(true);
+        }
+    };
+
+    const handleDragLeave = () => {
         setIsDragging(false);
     };
 
@@ -185,14 +200,45 @@ export function AiChatTab({
                 className={`relative rounded-lg`}
                 onDrop={!isDisabled ? handleDrop : undefined}
                 onDragOver={!isDisabled ? handleDragOver : undefined}
+                onDragEnter={!isDisabled ? handleDragEnter : undefined}
                 onDragLeave={!isDisabled ? handleDragLeave : undefined}
               >
-              <div className={`relative rounded-lg border p-2 ${isDragging ? 'border-dashed border-2 border-gray-300' : ''} ${isDisabled ? 'opacity-60' : ''}`}>
-                {isDragging && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-white/50 z-10">
-                    <Paperclip className="w-6 h-6 text-gray-400" />
-                  </div>
-                )}
+              <motion.div 
+                initial={{ scale: 1 }}
+                className={`relative rounded-lg border p-2 ${
+                  isDragging ? 'outline-2 outline-dashed outline-muted-foreground outline-offset-0' : ''
+                } ${isDisabled ? 'opacity-60' : ''}`}
+              >
+                {/* Drag overlay */}
+                <AnimatePresence>
+                  {isDragging && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute inset-0 bg-white/70 rounded-lg flex flex-col items-center justify-center gap-3 z-10 pointer-events-none"
+                    >
+                      <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.8, opacity: 0 }}
+                        transition={{ duration: 0.2, delay: 0.05 }}
+                      >
+                        <Upload className="h-6 w-6 text-muted-foreground" />
+                      </motion.div>
+                      <motion.p
+                        initial={{ y: 5, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 5, opacity: 0 }}
+                        transition={{ duration: 0.2, delay: 0.1 }}
+                        className="text-sm font-medium text-muted-foreground"
+                      >
+                        {t('drag-files')}
+                      </motion.p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
                 
                 {files.length > 0 && (
                   <div className="overflow-x-auto mb-2">
@@ -323,7 +369,7 @@ export function AiChatTab({
                     </Tooltip>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
             </>
           ) : creationStep === CreationStep.SCRIPT ? (
