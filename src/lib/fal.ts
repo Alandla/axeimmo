@@ -18,7 +18,7 @@ export const KLING_ENDPOINTS = {
 } as const;
 
 const AVATAR_IMAGE_ENDPOINTS = {
-  EDIT: "fal-ai/nano-banana/edit",
+  EDIT: "fal-ai/reve/remix",
   UPSCALE_CRISP: "fal-ai/recraft/upscale/crisp"
 } as const;
 
@@ -97,12 +97,13 @@ export interface AvatarImageResponse {
   height?: number;
 }
 
-// Image editing via Fal.ai nano-banana/edit
+// Image editing via Fal.ai reve/remix
 export interface EditImageRequest {
   prompt: string;
-  image_urls: string[];
-  // keep type flexible to allow future ratios like 4:5, 2:3, etc.
-  aspect_ratio?: string;
+  image_urls: string[]; // 1-4 images required
+  aspect_ratio?: "16:9" | "9:16" | "3:2" | "2:3" | "4:3" | "3:4" | "1:1";
+  num_images?: number;
+  output_format?: "png" | "jpeg" | "webp";
 }
 
 export interface EditImageResponse {
@@ -163,17 +164,21 @@ export async function editAvatarImage(
       input: {
         prompt: request.prompt,
         image_urls: request.image_urls,
-        aspect_ratio: request.aspect_ratio
+        ...(request.aspect_ratio ? { aspect_ratio: request.aspect_ratio } : {}),
+        num_images: request.num_images || 1,
+        ...(request.output_format ? { output_format: request.output_format } : {})
       },
       logs: true
     });
+
+    console.log("Reve Remix result:", result);
 
     const data: any = (result as any).data;
     const image = extractImageFromFalData(data);
     if (!image?.url) throw new Error("No image URL found in Fal response");
     return image;
   } catch (error) {
-    console.error("Error editing avatar image:", error);
+    console.error("Error editing avatar image with Reve Remix:", error);
     throw error;
   }
 }

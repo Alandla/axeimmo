@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/src/components/ui/button";
 import { IconGenderFemale, IconGenderMale, IconGenderMaleFemale, VoiceCard } from "./voice-card";
 import { Badge } from "@/src/components/ui/badge";
-import { Check, UserRoundX, Plus } from "lucide-react";
+import { Check, UserRoundX, Plus, Upload } from "lucide-react";
 import { Switch } from "@/src/components/ui/switch"
 import { useTranslations } from "next-intl";
 import { useToast } from "@/src/hooks/use-toast";
@@ -30,7 +30,6 @@ import {
 } from "@/src/components/ui/pagination";
 import { cn, getMostFrequentString } from "@/src/lib/utils";
 import { useActiveSpaceStore } from "../store/activeSpaceStore";
-import { getSpaceAvatars } from "../service/space.service";
 import { useAvatarsStore } from "../store/avatarsStore";
 import { HorizontalScrollList } from "./ui/horizontal-scroll-list";
 import { Card, CardContent } from "@/src/components/ui/card";
@@ -171,6 +170,8 @@ export function AvatarGridComponent({
   const [currentPage, setCurrentPage] = useState(1);
   const avatarsPerPage = mode === "large" ? 12 : 6;
   const [visiblePublicCount, setVisiblePublicCount] = useState<number>(avatarsPerPage);
+  const looksPerChunk = mode === "large" ? 12 : 6;
+  const [visibleLooksCount, setVisibleLooksCount] = useState<number>(looksPerChunk);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [activeAvatar, setActiveAvatar] = useState<Avatar | null>(null);
   const [publicAvatars, setPublicAvatars] = useState<Avatar[]>(avatarsConfig);
@@ -178,11 +179,8 @@ export function AvatarGridComponent({
   const [isLoadingSpaceAvatars, setIsLoadingSpaceAvatars] = useState<boolean>(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isUploadingLook, setIsUploadingLook] = useState(false);
+  const [isCreateCardDragOver, setIsCreateCardDragOver] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [barRect, setBarRect] = useState<{ left: number; width: number }>({
-    left: 0,
-    width: 0,
-  });
   const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] = useState(false);
   const [isModalConfirmDeleteLookOpen, setIsModalConfirmDeleteLookOpen] = useState(false);
   const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false);
@@ -212,23 +210,6 @@ export function AvatarGridComponent({
     });
   };
 
-  useEffect(() => {
-    const updateRect = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setBarRect({ left: rect.left, width: rect.width });
-    };
-    updateRect();
-    window.addEventListener("resize", updateRect);
-    window.addEventListener("scroll", updateRect, { passive: true });
-    return () => {
-      window.removeEventListener("resize", updateRect);
-      window.removeEventListener("scroll", updateRect);
-    };
-  }, []);
-
-  // reference handled in AvatarLookChatbox
-
   const { activeSpace, lastUsedParameters } = useActiveSpaceStore();
   const { avatarsBySpace, getCachedAvatars, fetchAvatars, fetchAvatarsInBackground, setAvatars, startPolling, stopPolling } =
     useAvatarsStore();
@@ -249,10 +230,6 @@ export function AvatarGridComponent({
   };
 
   const avatarCreator = getAvatarCreator();
-
-  // Ajouter l'état pour la pagination des looks
-  const [currentLookPage, setCurrentLookPage] = useState(1);
-  const looksPerPage = mode === "large" ? 12 : 6;
 
   // Sync local spaceAvatars with store updates (e.g., SSE refresh)
   useEffect(() => {
@@ -512,7 +489,6 @@ export function AvatarGridComponent({
         
         if (!hasCompatibleLooks) {
           setActiveAvatar(null);
-          setCurrentLookPage(1);
         }
       }
       
@@ -621,6 +597,9 @@ export function AvatarGridComponent({
       setActiveAvatar(null);
       setSelectedLook(null);
       setSelectedAvatarName(null);
+      if (typeof (storeState as any).setSelectedAvatarId === 'function') {
+        (storeState as any).setSelectedAvatarId(null);
+      }
       setActiveAvatarName(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -694,7 +673,7 @@ export function AvatarGridComponent({
   const avatarsToShow =
     variant === "select" && showNoAvatarCard ? currentAvatars.slice(0, avatarsPerPage - 1) : currentAvatars;
 
-  // Calculs pour la pagination des looks
+  // Filtrage des looks (sans pagination)
   const filteredLooks = activeAvatar ? sortLooksByLastUsed(activeAvatar.looks.filter(look => {
     const matchesTags = selectedTags.length === 0 ? true : selectedTags.every(tag => look.tags?.includes(tag) || false)
     
@@ -704,10 +683,7 @@ export function AvatarGridComponent({
     return matchesTags && matchesVeo3Filter
   })) : []
 
-  const indexOfLastLook = currentLookPage * looksPerPage;
-  const indexOfFirstLook = indexOfLastLook - looksPerPage;
-  const currentLooks = filteredLooks.slice(indexOfFirstLook, indexOfLastLook);
-  const totalLookPages = Math.ceil(filteredLooks.length / looksPerPage);
+  const currentLooks = filteredLooks.slice(0, visibleLooksCount);
 
   const toggleTag = (tag: string) => {
     const newTags = selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag];
@@ -756,29 +732,19 @@ export function AvatarGridComponent({
     }
   };
 
-  // Fonctions de pagination pour les looks
-  const getLookPageNumbers = () => {
-    const pageNumbers = [];
-    const totalPagesToShow = 5;
-    const halfWay = Math.floor(totalPagesToShow / 2);
-
-    let startPage = Math.max(currentLookPage - halfWay, 1);
-    let endPage = Math.min(startPage + totalPagesToShow - 1, totalLookPages);
-
-    if (endPage - startPage + 1 < totalPagesToShow) {
-      startPage = Math.max(endPage - totalPagesToShow + 1, 1);
+  // Infinite scroll pour les looks
+  const hasMoreLooks = activeAvatar ? visibleLooksCount < filteredLooks.length : false;
+  const loadMoreLooks = () => {
+    if (activeAvatar) {
+      setVisibleLooksCount((c) => c + looksPerChunk);
     }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(i);
-    }
-
-    return {
-      numbers: pageNumbers,
-      showStartEllipsis: startPage > 1,
-      showEndEllipsis: endPage < totalLookPages,
-    };
   };
+
+  // Reset du compteur des looks lors des changements de contexte
+  useEffect(() => {
+    setVisibleLooksCount(looksPerChunk);
+  }, [activeAvatar?.id, selectedTags.join("|"), useVeo3, looksPerChunk]);
+
 
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -803,11 +769,6 @@ export function AvatarGridComponent({
     };
   };
 
-  const handleLookPageChange = (page: number) => {
-    if (page >= 1 && page <= totalLookPages) {
-      setCurrentLookPage(page);
-    }
-  };
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -893,7 +854,7 @@ export function AvatarGridComponent({
   const isChatboxVisible = variant === "create" && !!activeAvatar && spaceAvatars.some((a) => a.id === activeAvatar.id);
 
   return (
-    <div className="space-y-4" ref={containerRef}>
+    <div className={cn("space-y-4", isChatboxVisible ? "pb-40" : "pb-6")} ref={containerRef}>
       <AnimatePresence mode="wait">
         {activeAvatar ? (
           <motion.div
@@ -908,7 +869,6 @@ export function AvatarGridComponent({
               variant="ghost"
               onClick={() => {
                 setActiveAvatar(null);
-                setCurrentLookPage(1);
                 updateUrlParamsForAvatar(null);
               }}
             >
@@ -1106,6 +1066,19 @@ export function AvatarGridComponent({
             ) : (
               <div className="col-span-full text-center py-8 text-muted-foreground">{t("no-looks-found")}</div>
             )}
+
+            {/* Infinite scroll pour les looks */}
+            {activeAvatar && (
+              <div className="col-span-full">
+                <InfiniteScroll
+                  onLoadMore={loadMoreLooks}
+                  hasMore={hasMoreLooks}
+                  loader={
+                    <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.loading")}</div>
+                  }
+                />
+              </div>
+            )}
           </>
         ) : (
           // Afficher d'abord la section des avatars du space, puis la section des avatars publics
@@ -1116,7 +1089,9 @@ export function AvatarGridComponent({
               </div>
               {variant === "create" && (
                 <Card
-                  className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-primary/20"
+                  className={`group relative overflow-hidden rounded-lg transition-all duration-150 border hover:cursor-pointer outline-2 outline-dashed outline-transparent ${
+                    isCreateCardDragOver ? 'border-transparent outline-muted-foreground' : ''
+                  }`}
                   onClick={() => {
                     // Enterprise: always allow
                     if (activeSpace?.planName === PlanName.ENTREPRISE) {
@@ -1143,15 +1118,78 @@ export function AvatarGridComponent({
                     }
                     setShowCreateModal(true);
                   }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsCreateCardDragOver(true);
+                  }}
+                  onDragLeave={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsCreateCardDragOver(false);
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsCreateCardDragOver(false);
+                  }}
                 >
                   {/* Contenu principal centré */}
-                  <div className="w-full aspect-[3/4] relative bg-white flex flex-col items-center justify-center p-4">
-                    <Plus className="h-12 w-12 text-gray-400 mb-3" />
-                    <p className="text-sm text-gray-600 text-center font-medium">{t("create-new-name")}</p>
+                  <div className="w-full aspect-[3/4] relative bg-white group-hover:bg-accent transition-colors duration-150 flex flex-col items-center justify-center p-4">
+                    <div className="flex flex-col items-center gap-3">
+                      <AnimatePresence mode="wait">
+                        {isCreateCardDragOver ? (
+                          <motion.div
+                            key="upload-icon"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <Upload className="h-12 w-12 text-muted-foreground" />
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="plus-icon"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <Plus className="h-12 w-12 text-muted-foreground" />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                      <AnimatePresence mode="wait">
+                        {isCreateCardDragOver ? (
+                          <motion.p
+                            key="drop-text"
+                            initial={{ y: 5, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 5, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-sm text-center font-medium text-muted-foreground"
+                          >
+                            {t("drop-image-here")}
+                          </motion.p>
+                        ) : (
+                          <motion.p
+                            key="create-text"
+                            initial={{ y: 5, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 5, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-sm text-center font-medium text-muted-foreground"
+                          >
+                            {t("create-new-name")}
+                          </motion.p>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
 
                   {/* Compteur en bas */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm p-3 border-t">
+                  <div className="absolute bottom-0 left-0 right-0 bg-white group-hover:bg-accent transition-colors duration-150 backdrop-blur-sm p-3 border-t">
                     <div className="text-center">
                       <span className="text-xs text-gray-600">
                         {(() => {
@@ -1241,9 +1279,6 @@ export function AvatarGridComponent({
                   loader={
                     <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.loading")}</div>
                   }
-                  endMessage={
-                    <div className="text-center py-4 text-muted-foreground">{tCommon("infinite-scroll.end")}</div>
-                  }
                 />
               </div>
             )}
@@ -1259,7 +1294,6 @@ export function AvatarGridComponent({
         onCreated={(avatar) => {
           // Sélectionner automatiquement l'avatar nouvellement créé et ouvrir ses looks
           setActiveAvatar(avatar);
-          setCurrentLookPage(1);
           // Mettre à jour localement et dans le store sans refetch
           setSpaceAvatars((prev) => [avatar, ...prev]);
           setAvatars(activeSpace?.id as string, [avatar, ...(avatarsBySpace.get(activeSpace?.id as string) || [])]);
@@ -1268,87 +1302,7 @@ export function AvatarGridComponent({
 
       <UnlockAvatarCreationModal isOpen={isUnlockModalOpen} setIsOpen={setIsUnlockModalOpen} />
 
-      {activeAvatar
-        ? // Pagination des looks
-          totalLookPages > 1 && (
-            <Pagination className={isChatboxVisible ? "pb-40" : undefined}>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    showText={false}
-                    onClick={() => handleLookPageChange(currentLookPage - 1)}
-                    className={cn(
-                      "cursor-pointer sm:hidden",
-                      currentLookPage === 1 && "pointer-events-none opacity-50"
-                    )}
-                  />
-                  <PaginationPrevious
-                    showText={true}
-                    onClick={() => handleLookPageChange(currentLookPage - 1)}
-                    className={cn(
-                      "cursor-pointer hidden sm:flex",
-                      currentLookPage === 1 && "pointer-events-none opacity-50"
-                    )}
-                  />
-                </PaginationItem>
-
-                {getLookPageNumbers().showStartEllipsis && (
-                  <>
-                    <PaginationItem>
-                      <PaginationLink onClick={() => handleLookPageChange(1)}>1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                  </>
-                )}
-
-                {getLookPageNumbers().numbers.map((pageNumber) => (
-                  <PaginationItem key={pageNumber}>
-                    <PaginationLink
-                      isActive={currentLookPage === pageNumber}
-                      onClick={() => handleLookPageChange(pageNumber)}
-                    >
-                      {pageNumber}
-                    </PaginationLink>
-                  </PaginationItem>
-                ))}
-
-                {getLookPageNumbers().showEndEllipsis && (
-                  <>
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink onClick={() => handleLookPageChange(totalLookPages)}>
-                        {totalLookPages}
-                      </PaginationLink>
-                    </PaginationItem>
-                  </>
-                )}
-
-                <PaginationItem>
-                  <PaginationNext
-                    showText={false}
-                    onClick={() => handleLookPageChange(currentLookPage + 1)}
-                    className={cn(
-                      "cursor-pointer sm:hidden",
-                      currentLookPage === totalPages && "pointer-events-none opacity-50"
-                    )}
-                  />
-                  <PaginationNext
-                    showText={true}
-                    onClick={() => handleLookPageChange(currentLookPage + 1)}
-                    className={cn(
-                      "cursor-pointer hidden sm:flex",
-                      currentLookPage === totalPages && "pointer-events-none opacity-50"
-                    )}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          )
-        : null}
+      {activeAvatar ? null : null}
 
       {variant === "select" && !activeAvatar && totalPages > 1 && (
         // Pagination des avatars publics
@@ -1421,7 +1375,6 @@ export function AvatarGridComponent({
 
       {variant === "create" && activeAvatar && spaceAvatars.some((a) => a.id === activeAvatar.id) && (
         <AvatarLookChatbox
-          anchorRef={containerRef}
           activeAvatar={activeAvatar}
           spaceId={activeSpace?.id as string}
           onRefresh={async () => {

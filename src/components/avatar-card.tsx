@@ -88,7 +88,7 @@ export function AvatarCard({
   isPublic = false,
   canEdit = false
 }: AvatarCardProps) {
-    const { selectedAvatarName: storeSelectedAvatarName } = useCreationStore()
+    const { selectedAvatarName: storeSelectedAvatarName, selectedAvatarId } = useCreationStore()
     const { activeSpace } = useActiveSpaceStore()
     const { showPremiumToast } = usePremiumToast()
     const t = useTranslations('avatars')
@@ -107,7 +107,9 @@ export function AvatarCard({
     
     // Utiliser la prop si fournie, sinon utiliser le store
     const selectedAvatarName = propSelectedAvatarName !== undefined ? propSelectedAvatarName : storeSelectedAvatarName
-    const isSelected = selectedAvatarName === avatar.name;
+    const isSelectedByName = selectedAvatarName === avatar.name;
+    const isSelectedById = selectedAvatarId === avatar.id as any;
+    const isSelected = isSelectedById || isSelectedByName;
 
     // Resolve creator from activeSpace.members using createdBy userId
     const getCreator = () => {
@@ -195,7 +197,7 @@ export function AvatarCard({
   return (
     <Card 
       key={avatar.id} 
-      className={`group relative overflow-hidden rounded-lg ${disabled ? 'cursor-not-allowed opacity-70' : (avatar.thumbnail ? 'cursor-pointer' : 'cursor-not-allowed opacity-70')} transition-all duration-150 ${isSelected ? 'ring-2 ring-primary' : ''}`}
+      className={`group relative overflow-hidden rounded-lg ${disabled ? 'cursor-not-allowed opacity-70' : (avatar.thumbnail ? 'cursor-pointer' : 'cursor-not-allowed opacity-70')} transition-all duration-150 ${isSelected && !canEdit ? 'ring-2 ring-primary' : ''}`}
       onClick={handleAvatarSelection}
       aria-disabled={disabled || !avatar.thumbnail}
     >
@@ -245,9 +247,9 @@ export function AvatarCard({
 
       {/* Icône de sélection et dropdown en haut à droite */}
       <div className="absolute top-3 right-3 z-40 flex items-center gap-2">
-        {(isSelected || isLastUsed) && (
+        {((isSelected && !canEdit) || isLastUsed) && (
           <>
-            {isSelected ? (
+            {(isSelected && !canEdit) ? (
               <div className="bg-primary text-primary-foreground rounded-full p-1">
                 <Check className="h-4 w-4" />
               </div>

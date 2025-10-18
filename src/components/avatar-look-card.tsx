@@ -98,9 +98,8 @@ export function AvatarLookCard({
   canEdit = false,
   onEditLook
 }: AvatarLookCardProps) {
-  const { selectedLook: storeSelectedLook, setSelectedLook: setStoreSelectedLook, setSelectedAvatarName: setStoreSelectedAvatarName } = useCreationStore()
+  const { selectedLook: storeSelectedLook, setSelectedLook: setStoreSelectedLook, setSelectedAvatarName: setStoreSelectedAvatarName, setSelectedAvatarId } = useCreationStore() as any
   const { activeSpace, decrementCredits } = useActiveSpaceStore()
-  const { data: session } = useSession()
   const { toast } = useToast()
   const { setLook } = useLookToDeleteStore()
   const { setAvatars, avatarsBySpace, fetchAvatarsInBackground, startPolling } = useAvatarsStore()
@@ -109,6 +108,7 @@ export function AvatarLookCard({
   
   // Check if user has enough credits for upscale
   const hasInsufficientCreditsForUpscale = activeSpace ? activeSpace.credits < AVATAR_LOOK_UPSCALE_COST : false;
+  const [isDragging, setIsDragging] = useState(false);
 
   // États pour le dropdown et l'édition
   const [isEditing, setIsEditing] = useState(false);
@@ -121,6 +121,7 @@ export function AvatarLookCard({
   const selectedLook = propSelectedLook !== undefined ? propSelectedLook : storeSelectedLook
   const isSelected = selectedLook?.id === look.id;
   const isProcessing = look.status === 'pending';
+  const isUpscalePending = isProcessing && !!look.thumbnail;
 
   // Resolve creator from activeSpace.members using look.createdBy userId
   const getCreator = () => {
@@ -151,6 +152,9 @@ export function AvatarLookCard({
       onAvatarNameChange(avatarName as string)
     } else {
       setStoreSelectedAvatarName(avatarName)
+    }
+    if (typeof setSelectedAvatarId === 'function') {
+      setSelectedAvatarId(avatarId ?? null)
     }
   }
 
@@ -275,9 +279,86 @@ export function AvatarLookCard({
 
   return (
     <Card 
-      className={`group relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 ${isSelected ? 'ring-2 ring-primary' : ''}`}
+      className={`group relative overflow-hidden rounded-lg cursor-pointer transition-all duration-150 ${isSelected && !canEdit ? 'ring-2 ring-primary' : ''} ${isDragging ? 'shadow-2xl scale-[1.02]' : ''}`}
       onClick={handleClick}
       aria-disabled={!look.thumbnail}
+      draggable={!!look.thumbnail}
+      onDragStart={(e) => {
+        if (!look.thumbnail) return;
+        try {
+          e.dataTransfer.setData('text/uri-list', look.thumbnail);
+          e.dataTransfer.setData('text/plain', look.thumbnail);
+        } catch {}
+        e.dataTransfer.effectAllowed = 'copy';
+
+        // Custom drag image for nicer preview (3:4, rounded corners, shadow)
+        try {
+          const thumbUrl = look.thumbnail;
+          const img = new window.Image();
+          img.crossOrigin = 'anonymous';
+          img.src = thumbUrl;
+
+          const CANVAS_W = 120; // 3:4 ratio
+          const CANVAS_H = 160;
+          const RADIUS = 12;
+
+          const draw = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = CANVAS_W;
+            canvas.height = CANVAS_H;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            // Shadow
+            ctx.save();
+            ctx.shadowColor = 'rgba(0,0,0,0.25)';
+            ctx.shadowBlur = 12;
+            ctx.shadowOffsetY = 6;
+
+            // Rounded rect path
+            const path = new Path2D();
+            const w = CANVAS_W, h = CANVAS_H, r = RADIUS;
+            path.moveTo(r, 0);
+            path.lineTo(w - r, 0);
+            path.quadraticCurveTo(w, 0, w, r);
+            path.lineTo(w, h - r);
+            path.quadraticCurveTo(w, h, w - r, h);
+            path.lineTo(r, h);
+            path.quadraticCurveTo(0, h, 0, h - r);
+            path.lineTo(0, r);
+            path.quadraticCurveTo(0, 0, r, 0);
+            ctx.fillStyle = '#fff';
+            ctx.fill(path);
+            ctx.restore();
+
+            // Clip to rounded rect
+            ctx.save();
+            ctx.clip(path);
+
+            // Draw image with object-fit: cover
+            const iw = img.naturalWidth || img.width;
+            const ih = img.naturalHeight || img.height;
+            const scale = Math.max(CANVAS_W / iw, CANVAS_H / ih);
+            const dw = iw * scale;
+            const dh = ih * scale;
+            const dx = (CANVAS_W - dw) / 2;
+            const dy = (CANVAS_H - dh) / 2;
+            ctx.drawImage(img, dx, dy, dw, dh);
+            ctx.restore();
+
+            try { e.dataTransfer.setDragImage(canvas, CANVAS_W / 2, CANVAS_H / 2); } catch {}
+          };
+
+          if (img.complete) {
+            draw();
+          } else {
+            img.onload = draw;
+          }
+        } catch {}
+
+        setIsDragging(true);
+      }}
+      onDragEnd={() => setIsDragging(false)}
     >
       {/* Tags superposés en haut à gauche */}
       {look.tags && look.tags.length > 0 && (
@@ -320,9 +401,9 @@ export function AvatarLookCard({
 
       {/* Icône de sélection et dropdown en haut à droite */}
       <div className="absolute top-3 right-3 z-40 flex items-center gap-2">
-        {(isSelected || isLastUsed) && (
+        {((isSelected && !canEdit) || isLastUsed) && (
           <>
-            {isSelected ? (
+            {(isSelected && !canEdit) ? (
               <div className="bg-primary text-primary-foreground rounded-full p-1">
                 <Check className="h-4 w-4" />
               </div>
@@ -425,27 +506,38 @@ export function AvatarLookCard({
       {/* Image principale */}
       <div className="w-full aspect-[3/4] relative">
         {look.thumbnail ? (
-          <>
-            <Image 
-              src={look.thumbnail} 
-              alt={look.name || ''}
-              className="w-full h-full object-cover"
-              width={1280}
-              height={720}
-            />
-            {isProcessing && (
-              <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]">
-                {/* Effet de shimmer animé pour l'upscale */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                </div>
-              </div>
-            )}
-          </>
+          <Image 
+            src={look.thumbnail} 
+            alt={look.name || ''}
+            className="w-full h-full object-cover select-none"
+            width={1280}
+            height={720}
+            draggable={false}
+            onDragStart={(e) => { e.preventDefault(); }}
+          />
         ) : (
-          <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
-            <div className="h-8 w-8 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
-          </div>
+          <div className="w-full h-full bg-muted" />
+        )}
+
+        {isProcessing && (
+          <>
+            {/* Overlay sombre avec shimmer */}
+            <div className={`absolute inset-0 ${look.thumbnail ? 'bg-black/60' : 'bg-transparent'} backdrop-blur-[1px]`}>
+              <div className="absolute inset-0 overflow-hidden">
+                <div className={`absolute inset-0 -translate-x-full animate-[shimmer_2s_ease-in-out_infinite] bg-gradient-to-r from-transparent ${look.thumbnail ? 'via-white/30' : 'via-white/70'} to-transparent`} />
+              </div>
+            </div>
+            
+            {/* Spinner + durée estimée */}
+            <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center">
+              <div className="flex flex-col items-center gap-3">
+                <div className={`h-8 w-8 rounded-full border-4 ${look.thumbnail ? 'border-white/30 border-t-white' : 'border-muted-foreground/30 border-t-muted-foreground'} animate-spin`} />
+                <span className={`text-sm font-medium ${look.thumbnail ? 'text-white drop-shadow-lg' : 'text-muted-foreground'}`}>
+                  {isUpscalePending ? t('processing.estimate-upscale') : t('processing.estimate-generation')}
+                </span>
+              </div>
+            </div>
+          </>
         )}
 
         {look.status === 'error' && (
@@ -457,7 +549,8 @@ export function AvatarLookCard({
         )}
       </div>
 
-      {/* Bande d'information en bas */}
+      {/* Bande d'information en bas (masquée si pas de thumbnail) */}
+      {look.thumbnail && (
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
         <div className="flex items-center justify-between">
           <div className="flex-1 min-w-0">
@@ -484,6 +577,7 @@ export function AvatarLookCard({
           </div>
         </div>
       </div>
+      )}
 
       {/* Bouton preview en bas à droite */}
       <div className="absolute bottom-4 right-3 z-10">

@@ -18,7 +18,6 @@
     "@aws-sdk/s3-request-presigner": "^3.686.0",
     "@browserbasehq/sdk": "^2.6.0",
     "@fal-ai/client": "^1.5.0",
-    "@higgsfield/client": "^0.1.1",
     "@hookform/resolvers": "^5.0.1",
     "@mozilla/readability": "^0.6.0",
     "@postlight/parser": "^2.2.3",

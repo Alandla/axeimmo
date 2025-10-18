@@ -1,7 +1,10 @@
 {
     "common": {
       "all-f": "All",
-      "all-m": "All"
+      "all-m": "All",
+      "infinite-scroll": {
+        "loading": "Loading..."
+      }
     },
     "login": {
       "title": "Log in to your account",
@@ -721,6 +724,7 @@
       "skip-animation": "Skip animation",
       "animate-images": "Animate images",
       "credits": "credits",
+      "drag-files": "Drop your medias here",
       "url-detected": {
         "title": "Start Plan Required for URLs",
         "description": "Upgrade to using URLs for creating videos.",
@@ -835,6 +839,7 @@
       "look-chat": {
         "placeholder-1": "Add my product in the hand",
         "add-elements": "Add elements",
+        "add-element": "Add element",
         "send": "Upload",
         "cost-tooltip": "Cost: {cost} credits",
         "sending": "Generating...",
@@ -893,6 +898,12 @@
         "upscale-error": "An error occurred while upscaling the image"
       },
       "upscaling-in-progress": "Upscaling quality...",
+      "processing": {
+        "generation": "Generation",
+        "upscale": "Upscale",
+        "estimate-generation": "Can take 15 - 30s",
+        "estimate-upscale": "Can take 5 - 10s"
+      },
       "create": {
         "title": "Create avatar",
         "from-pictures": {
@@ -2023,9 +2034,5 @@
         "title": "23. Applicable law and competent jurisdictions",
         "content": "The \"General Conditions\" are governed by **French law**.\n\nFor professional Clients, in case of dispute between the Client and HOOX, and failing amicable agreement within 2 months following first notification, it will be subject to exclusive jurisdiction of **Paris courts (France)**, except contrary mandatory provisions."
       }
-    },
-    "infinite-scroll": {
-      "loading": "Loading...",
-      "end": "No more items"
     }
 }

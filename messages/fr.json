@@ -1,7 +1,10 @@
 {
     "common": {
       "all-f": "Toutes",
-      "all-m": "Tous"
+      "all-m": "Tous",
+      "infinite-scroll": {
+        "loading": "Chargement..."
+      }
     },
     "modals": {
       "confirm-delete": {
@@ -633,6 +636,7 @@
       "skip-animation": "Passer l'animation",
       "animate-images": "Animer les images",
       "credits": "crédits",
+      "drag-files": "Déposez vos médias ici",
       "url-detected": {
         "title": "Plan Start requis pour les URLs",
         "description": "Mettez à niveau votre plan pour créer des vidéos à partir d'URLs.",
@@ -747,6 +751,7 @@
       "look-chat": {
         "placeholder-1": "Ajouter mon produit dans la main",
         "add-elements": "Ajouter des éléments",
+        "add-element": "Ajouter l'élément",
         "send": "Uploader",
         "cost-tooltip": "Coût : {cost} crédits",
         "sending": "Génération...",
@@ -804,6 +809,12 @@
         "upscale-error": "Une erreur est survenue lors de l'amélioration de la qualité"
       },
       "upscaling-in-progress": "Amélioration en cours...",
+      "processing": {
+        "generation": "Génération",
+        "upscale": "Upscale",
+        "estimate-generation": "Peut prendre 15 à 30s",
+        "estimate-upscale": "Peut prendre 5 à 10s"
+      },
       "create": {
         "title": "Créer un avatar",
         "from-pictures": {
@@ -2021,9 +2032,5 @@
         "title": "23. Loi applicable et juridictions compétentes",
         "content": "Les \"Conditions Générales\" sont régies par la **loi française**.\n\nPour les Clients professionnels, en cas de litige opposant le Client et HOOX, et à défaut d'accord amiable dans les 2 mois suivant la première notification, celui-ci sera soumis à la compétence exclusive des **tribunaux de Paris (France)**, sauf dispositions impératives contraires."
       }
-    },
-    "infinite-scroll": {
-      "loading": "Chargement...",
-      "end": "Fin de la liste"
     }
   }

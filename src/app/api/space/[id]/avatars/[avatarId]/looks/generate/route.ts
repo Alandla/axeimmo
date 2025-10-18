@@ -5,7 +5,7 @@ import { auth } from "@/src/lib/auth";
 import { isUserInSpace } from "@/src/dao/userDao";
 import { addLookToAvatar, getSpaceById, updateLookInAvatar } from "@/src/dao/spaceDao";
 import { editAvatarImage } from "@/src/lib/fal";
-import { VIDEO_FORMATS, VideoFormat } from "@/src/types/video";
+import { VideoFormat } from "@/src/types/video";
 import { extractLookIdentityInfo } from "@/src/lib/workflowai";
 import { nanoid } from "nanoid";
 // SpaceModel removed in favor of DAO methods
@@ -84,16 +84,25 @@ export async function POST(
       previewUrl: "",
       videoUrl: "",
       createdBy: session.user.id,
-      format: (format && ["vertical","ads"].includes(format)) ? format : "vertical",
+      format: (format && ["vertical","horizontal"].includes(format)) ? format : "vertical",
       settings: {},
       status: 'pending',
       createdAt: now,
     };
-    // Persist the pending look atomically to avoid race conditions
-    await addLookToAvatar(params.id, params.avatarId, look);
-
-    // Deduct credits from space
+    // Deduct credits first to avoid free look if persistence fails
     await removeCreditsToSpace(params.id, AVATAR_LOOK_GENERATION_COST);
+
+    // Persist the pending look atomically; on failure, refund and abort
+    try {
+      await addLookToAvatar(params.id, params.avatarId, look);
+    } catch (persistError) {
+      await addCreditsToSpace(params.id, AVATAR_LOOK_GENERATION_COST);
+      console.error('Failed to persist pending look, refunded credits:', persistError);
+      return NextResponse.json(
+        { error: "Failed to persist look" },
+        { status: 500 }
+      );
+    }
 
     // Immediately extract name/place/tags from user prompt, helping the model with avatar info when available
     try {
@@ -135,7 +144,16 @@ export async function POST(
       try {
         const refreshedSpace: any = await getSpaceById(params.id);
         const avatarRef: any = refreshedSpace?.avatars?.find((a: any) => a.id === params.avatarId);
-        if (!avatarRef) return;
+        if (!avatarRef) {
+          await updateLookInAvatar(params.id, params.avatarId, lookId, {
+            status: 'error',
+            errorMessage: 'Avatar reference not found during generation',
+            errorAt: new Date(),
+          });
+          await addCreditsToSpace(params.id, AVATAR_LOOK_GENERATION_COST);
+          console.info(`Refunded ${AVATAR_LOOK_GENERATION_COST} credits to space ${params.id} due to missing avatarRef`);
+          return;
+        }
 
         // Use the user's prompt; add podcast hint when needed. Allow hint-only if no description provided.
         const basePrompt = style === 'podcast'
@@ -148,11 +166,18 @@ export async function POST(
           : [avatarRef?.thumbnail]
         ).filter((v): v is string => typeof v === 'string' && v.length > 0);
         const imageUrls: string[] = Array.from(new Set(candidates));
-        if (imageUrls.length === 0) return;
+        if (imageUrls.length === 0) {
+          await updateLookInAvatar(params.id, params.avatarId, lookId, {
+            status: 'error',
+            errorMessage: 'No image sources available for generation',
+            errorAt: new Date(),
+          });
+          await addCreditsToSpace(params.id, AVATAR_LOOK_GENERATION_COST);
+          console.info(`Refunded ${AVATAR_LOOK_GENERATION_COST} credits to space ${params.id} due to no image candidates`);
+          return;
+        }
 
-        // Mapper format -> aspect_ratio via VIDEO_FORMATS (fallback 9:16)
-        const selectedFormat = (format && ["vertical","ads","square","horizontal"].includes(format)) ? format : "vertical";
-        const aspect_ratio = (VIDEO_FORMATS.find(f => f.value === selectedFormat)?.ratio) || '9:16';
+        const aspect_ratio = format === "horizontal" ? "16:9" : "9:16";
 
         try {
           const image = await editAvatarImage({
@@ -182,18 +207,6 @@ export async function POST(
         }
       } catch (e) {
         console.error('Error generating avatar look (background)', e);
-        // If outer catch is reached and look is not ready, refund
-        try {
-          const refreshedSpace: any = await getSpaceById(params.id);
-          const avatarRef: any = refreshedSpace?.avatars?.find((a: any) => a.id === params.avatarId);
-          const lookRef = avatarRef?.looks?.find((l: any) => l.id === lookId);
-          if (lookRef?.status !== 'ready') {
-            await addCreditsToSpace(params.id, AVATAR_LOOK_GENERATION_COST);
-            console.info(`Refunded ${AVATAR_LOOK_GENERATION_COST} credits to space ${params.id} due to look generation outer failure`);
-          }
-        } catch (refundError) {
-          console.error('Failed to refund credits:', refundError);
-        }
       }
     })());
 
