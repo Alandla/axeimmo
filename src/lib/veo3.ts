@@ -525,7 +525,9 @@ export function recreateSequencesFromVeo3Results(
     logger.log('[VEO3_UPDATE] Processed results with adjusted timings', { processedResults });
   }
   
-  for (const result of processedResults) {
+  for (let resultIndex = 0; resultIndex < processedResults.length; resultIndex++) {
+    const result = processedResults[resultIndex];
+    const isLastResult = resultIndex === processedResults.length - 1;
     const originalSeqs = originalSequencesByAudioIndex.get(result.audioIndex) || [];
     const targetSequenceCount = originalSeqs.length;
     
@@ -585,6 +587,28 @@ export function recreateSequencesFromVeo3Results(
           media: originalMedia
         };
         
+        // Add extra time to last sequence of last result
+        const isLastSequence = seqIndex === matchResult.matchedSequences.length - 1;
+        if (isLastResult && isLastSequence) {
+          const allOriginalWords = originalSeqs.flatMap(seq => seq.words.map(w => normalizeText(w.word)));
+          const lastOriginalWord = allOriginalWords[allOriginalWords.length - 1];
+          const lastTranscribedWord = normalizeText(sequenceWords[sequenceWords.length - 1].word);
+          const lastWordMatches = lastOriginalWord === lastTranscribedWord || lastOriginalWord?.includes(lastTranscribedWord) || lastTranscribedWord?.includes(lastOriginalWord);
+          const extraTime = lastWordMatches ? 0.6 : 0.35;
+          
+          newSequence.end += extraTime;
+          newSequence.durationInFrames = (newSequence.durationInFrames || 0) + Math.round(extraTime * 60);
+          if (newSequence.words.length > 0) {
+            const lastWord = newSequence.words[newSequence.words.length - 1];
+            lastWord.end += extraTime;
+            lastWord.durationInFrames = (lastWord.durationInFrames || 0) + Math.round(extraTime * 60);
+          }
+          
+          if (logger) {
+            logger.log(`[VEO3_UPDATE] Added ${extraTime}s to last sequence (word matched: ${lastWordMatches})`);
+          }
+        }
+        
         newSequences.push(newSequence);
         
         if (logger) {
@@ -643,6 +667,28 @@ export function recreateSequencesFromVeo3Results(
           audioIndex: result.audioIndex,
           media: originalMedia
         };
+        
+        // Add extra time to last sequence of last result
+        const isLastSequence = seqIndex === targetSequenceCount - 1;
+        if (isLastResult && isLastSequence) {
+          const allOriginalWords = originalSeqs.flatMap(seq => seq.words.map(w => normalizeText(w.word)));
+          const lastOriginalWord = allOriginalWords[allOriginalWords.length - 1];
+          const lastTranscribedWord = normalizeText(sequenceWords[sequenceWords.length - 1].word);
+          const lastWordMatches = lastOriginalWord === lastTranscribedWord || lastOriginalWord?.includes(lastTranscribedWord) || lastTranscribedWord?.includes(lastOriginalWord);
+          const extraTime = lastWordMatches ? 0.6 : 0.35;
+          
+          newSequence.end += extraTime;
+          newSequence.durationInFrames = (newSequence.durationInFrames || 0) + Math.round(extraTime * 60);
+          if (newSequence.words.length > 0) {
+            const lastWord = newSequence.words[newSequence.words.length - 1];
+            lastWord.end += extraTime;
+            lastWord.durationInFrames = (lastWord.durationInFrames || 0) + Math.round(extraTime * 60);
+          }
+          
+          if (logger) {
+            logger.log(`[VEO3_UPDATE] Added ${extraTime}s to last sequence (word matched: ${lastWordMatches})`);
+          }
+        }
         
         newSequences.push(newSequence);
         
