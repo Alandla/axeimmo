@@ -1,5 +1,6 @@
 import { fal } from "@fal-ai/client";
 import { AVATAR_STYLES, type AvatarStyleKey } from '@/src/config/avatarStyles.config';
+import { checkAndResizeImageIfNeeded, SERVICE_SIZE_LIMITS } from "../utils/image-resize";
 
 // Fal.ai client configuration
 fal.config({
@@ -518,14 +519,9 @@ export async function startOmniHumanVideoGeneration(
   }
   
   try {
-    // Vérifier et redimensionner l'image si nécessaire
-    console.log("Checking image size before OmniHuman generation...");
-    const { checkAndResizeImageIfNeeded, SERVICE_SIZE_LIMITS } = await import('@/src/utils/image-resize');
     const checkedImageUrl = await checkAndResizeImageIfNeeded(
       request.image_url, 
       SERVICE_SIZE_LIMITS.OMNIHUMAN,
-      "OmniHuman",
-      undefined, // fileSize sera détecté automatiquement
       originalImageWidth
     );
     

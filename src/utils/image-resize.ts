@@ -271,38 +271,30 @@ export async function optimizeImageForSize(
  * 
  * @param imageUrl - URL of the image to check
  * @param maxFileSize - Maximum file size in bytes
- * @param serviceName - Name of the service (for logging purposes)
- * @param fileSize - File size in bytes (optional, will be detected if not provided)
  * @param originalWidth - Original image width (optional, for progressive optimization)
+ * @param fileSize - File size in bytes (optional, will be detected if not provided)
  * @returns Promise<string> - The image URL (resized if necessary)
  */
 export async function checkAndResizeImageIfNeeded(
   imageUrl: string,
   maxFileSize: number,
-  serviceName: string,
+  originalWidth?: number,
   fileSize?: number,
-  originalWidth?: number
 ): Promise<string> {
   // If file size is not provided, try to detect it
   if (!fileSize) {
-    console.log(`File size not provided for ${serviceName}, trying to detect...`);
     try {
       const response = await fetch(imageUrl, { method: 'HEAD' });
       const contentLength = response.headers.get('content-length');
       fileSize = contentLength ? parseInt(contentLength, 10) : 0;
     } catch (error) {
-      console.log(`Could not detect file size for ${serviceName}, proceeding with original image`);
       return imageUrl;
     }
   }
   
-  console.log(`${serviceName} image size: ${fileSize} bytes (${(fileSize / 1024 / 1024).toFixed(2)} MB)`);
-  
   if (fileSize <= maxFileSize) {
-    console.log(`Image size is within ${serviceName} API limits`);
     return imageUrl;
   }
   
-  console.log(`Image too large for ${serviceName} API, trying progressive optimization with Vercel...`);
   return await optimizeImageForSize(imageUrl, maxFileSize, originalWidth);
 }

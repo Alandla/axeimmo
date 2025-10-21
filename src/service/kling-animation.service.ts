@@ -78,9 +78,8 @@ export async function generateKlingAnimation(
   const checkedImageUrl = await checkAndResizeImageIfNeeded(
     finalImageUrl, 
     SERVICE_SIZE_LIMITS.KLING,
-    "Kling",
-    finalImageFileSize, 
-    imageWidth // Pass original width for progressive optimization
+    imageWidth,
+    finalImageFileSize,
   );
   
   // Si l'image a été optimisée avec Vercel, l'uploader sur R2 pour Kling
