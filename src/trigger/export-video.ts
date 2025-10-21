@@ -115,21 +115,11 @@ const omnihumanAdapter: AvatarModelAdapter = {
   checkStatus: async (requestId: string) => {
     const status = await checkOmniHumanRequestStatus(requestId);
     if (status.status === 'COMPLETED' && status.response_url) {
-      try {
-        const result = await getOmniHumanRequestResult(requestId);
-        if (result.data?.video?.url) {
-          return { status: 'completed', videoUrl: result.data.video.url };
-        }
-        throw new Error(`No video URL in OmniHuman result for ${requestId}`);
-      } catch (error: any) {
-        // Si l'erreur indique que la requête est encore en cours, continuer à attendre
-        if (error.status === 400 && error.body?.detail === 'Request is still in progress') {
-          logger.log("OmniHuman request still in progress, continuing to wait", { requestId });
-          return { status: 'processing' };
-        }
-        // Sinon, propager l'erreur
-        throw error;
+      const result = await getOmniHumanRequestResult(requestId);
+      if (result.data?.video?.url) {
+        return { status: 'completed', videoUrl: result.data.video.url };
       }
+      throw new Error(`No video URL in OmniHuman result for ${requestId}`);
     } else if ((status as any).status === 'FAILED') {
       return { status: 'failed', error: (status as any).error };
     }

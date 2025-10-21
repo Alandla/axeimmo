@@ -504,46 +504,6 @@ export async function upscaleImage(
   }
 }
 
-/**
- * Vérifie la taille d'une image et la redimensionne si elle dépasse la limite OmniHuman (5MB)
- * @param imageUrl URL de l'image à vérifier
- * @param fileSize Taille du fichier en bytes (optionnel, sera détecté si non fourni)
- * @param originalWidth Largeur originale de l'image (optionnel)
- * @returns URL de l'image (redimensionnée si nécessaire)
- */
-async function checkAndResizeImageForOmniHuman(
-  imageUrl: string, 
-  fileSize?: number, 
-  originalWidth?: number
-): Promise<string> {
-  const OMNIHUMAN_SIZE_LIMIT = 5242880; // 5MB
-  
-  // Si on n'a pas la taille, essayer de la détecter
-  if (!fileSize) {
-    console.log("File size not provided for OmniHuman, trying to detect...");
-    try {
-      const response = await fetch(imageUrl, { method: 'HEAD' });
-      const contentLength = response.headers.get('content-length');
-      fileSize = contentLength ? parseInt(contentLength, 10) : 0;
-    } catch (error) {
-      console.log("Could not detect file size for OmniHuman, proceeding with original image");
-      return imageUrl;
-    }
-  }
-  
-  console.log(`OmniHuman image size: ${fileSize} bytes (${(fileSize / 1024 / 1024).toFixed(2)} MB)`);
-  
-  if (fileSize <= OMNIHUMAN_SIZE_LIMIT) {
-    console.log("Image size is within OmniHuman API limits");
-    return imageUrl;
-  }
-  
-  console.log("Image too large for OmniHuman API, trying progressive optimization with Vercel...");
-  
-  // Import optimizeImageForSize dynamically to avoid circular dependency
-  const { optimizeImageForSize } = await import('@/src/utils/image-resize');
-  return await optimizeImageForSize(imageUrl, OMNIHUMAN_SIZE_LIMIT, originalWidth);
-}
 
 /**
  * Start OmniHuman avatar video generation
@@ -560,8 +520,11 @@ export async function startOmniHumanVideoGeneration(
   try {
     // Vérifier et redimensionner l'image si nécessaire
     console.log("Checking image size before OmniHuman generation...");
-    const checkedImageUrl = await checkAndResizeImageForOmniHuman(
+    const { checkAndResizeImageIfNeeded, SERVICE_SIZE_LIMITS } = await import('@/src/utils/image-resize');
+    const checkedImageUrl = await checkAndResizeImageIfNeeded(
       request.image_url, 
+      SERVICE_SIZE_LIMITS.OMNIHUMAN,
+      "OmniHuman",
       undefined, // fileSize sera détecté automatiquement
       originalImageWidth
     );

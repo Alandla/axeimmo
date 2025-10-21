@@ -2,8 +2,7 @@ import { generateKlingAnimationPrompt } from "@/src/lib/workflowai";
 import { startKlingVideoGeneration, KlingGenerationMode, upscaleImage } from "@/src/lib/fal";
 import { uploadImageFromUrlToS3 } from "@/src/lib/r2";
 import { calculateKlingAnimationCost } from "@/src/lib/cost";
-import { getImageFileSize } from "@/src/utils/image-resize";
-import { optimizeImageForSize } from "@/src/utils/image-resize";
+import { checkAndResizeImageIfNeeded, SERVICE_SIZE_LIMITS } from "@/src/utils/image-resize";
 interface KlingAnimationResult {
   request_id: string;
   cost: number;
@@ -19,41 +18,6 @@ interface GenerateKlingAnimationOptions {
   upscale?: boolean;
 }
 
-/**
- * Vérifie la taille d'une image et la redimensionne si elle dépasse la limite Kling (10MB)
- * Teste progressivement les largeurs Vercel de la plus grande à la plus petite
- * @param imageUrl URL de l'image à vérifier
- * @param fileSize Taille du fichier en bytes (optionnel, sera détecté si non fourni)
- * @param originalWidth Largeur originale de l'image (optionnel)
- * @returns URL de l'image (redimensionnée si nécessaire)
- */
-async function checkAndResizeImageIfNeeded(
-  imageUrl: string, 
-  fileSize?: number, 
-  originalWidth?: number
-): Promise<string> {
-  const KLING_SIZE_LIMIT = 10485760; // 10MB
-  
-  // Si on n'a pas la taille, essayer de la détecter
-  if (!fileSize) {
-    console.log("File size not provided, trying to detect...");
-    fileSize = await getImageFileSize(imageUrl);
-    if (!fileSize) {
-      console.log("Could not detect file size, proceeding with original image");
-      return imageUrl;
-    }
-  }
-  
-  console.log(`Image size: ${fileSize} bytes (${(fileSize / 1024 / 1024).toFixed(2)} MB)`);
-  
-  if (fileSize <= KLING_SIZE_LIMIT) {
-    console.log("Image size is within Kling API limits");
-    return imageUrl;
-  }
-  
-  console.log("Image too large for Kling API, trying progressive optimization with Vercel...");
-  return await optimizeImageForSize(imageUrl, KLING_SIZE_LIMIT, originalWidth);
-}
 
 
 /**
@@ -113,6 +77,8 @@ export async function generateKlingAnimation(
   console.log("Checking image size before Kling generation...");
   const checkedImageUrl = await checkAndResizeImageIfNeeded(
     finalImageUrl, 
+    SERVICE_SIZE_LIMITS.KLING,
+    "Kling",
     finalImageFileSize, 
     imageWidth // Pass original width for progressive optimization
   );
