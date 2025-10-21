@@ -1,6 +1,7 @@
 // Initialize WorkflowAI Client
 import { WorkflowAI } from "@workflowai/workflowai"
 import { ExtractedFrame } from './ffmpeg'
+import { ensureJpegUrl } from '@/src/lib/image-conversion'
 
 const workflowAI = new WorkflowAI({
     key: process.env.WORKFLOWAI_API_KEY
@@ -703,10 +704,13 @@ export async function imageAnalysisRun(
 ): Promise<{
   cost: number
   description: string
+  safeUrl?: string
 }> {
+  // Convert AVIF to JPEG if needed to improve compatibility
+  const safeUrl = await ensureJpegUrl(imageUrl)
   const input: ImageAnalysisInput = {
     image_url: {
-      url: imageUrl
+      url: safeUrl
     }
   }
 
@@ -715,7 +719,8 @@ export async function imageAnalysisRun(
 
     return {
       cost: response.data.cost_usd,
-      description: response.output.description || ""
+      description: response.output.description || "",
+      safeUrl
     }
   } catch (error) {
     console.error('Failed to run image analysis:', error)

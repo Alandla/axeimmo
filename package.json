@@ -95,6 +95,7 @@
     "react-use-measure": "^2.1.7",
     "remotion": "4.0.327",
     "shadcn": "^2.1.6",
+    "sharp": "^0.34.4",
     "stripe": "^17.4.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",

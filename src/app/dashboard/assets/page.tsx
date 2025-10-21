@@ -40,6 +40,7 @@ export interface UploadingMedia {
 export default function AssetsPage() {
   const t = useTranslations('assets')
   const tDashboard = useTranslations('dashboard')
+  const tErrors = useTranslations('errors')
   const { data: session } = useSession()
   const { activeSpace, setActiveSpace } = useActiveSpaceStore()
   const { assetsBySpace, setAssets: setStoreAssets, fetchAssets } = useAssetsStore()
@@ -195,8 +196,10 @@ export default function AssetsPage() {
       setUploadingMedias([]);
       setIsUploadingFiles(false)
       console.error(error)
+      const raw = (error as Error)?.message || ''
+      const normalizedKey = raw.startsWith('errors.') ? raw.slice('errors.'.length) : ''
       toast({
-        title: t('toast.title-error'),
+        title: normalizedKey ? tErrors(normalizedKey as any) : t('toast.title-error'),
         description: t('toast.uploading-file-error'),
         variant: 'destructive'
       })
