@@ -311,8 +311,6 @@ export async function updateMedia(spaceId: string, mediaId: string, updates: any
   try {
     return await executeWithRetry(async () => {
 
-      const testfind = await SpaceModel.findOne({ _id: spaceId, 'medias._id': mediaId });
-
       const space = await SpaceModel.findOneAndUpdate(
         { 
           _id: spaceId, 

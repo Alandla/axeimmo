@@ -74,11 +74,18 @@ export async function analyzeMediaInBackground(mediaSpace: IMediaSpace, spaceId:
           text: imageDescription
         }];
 
-        const updatedSpaceMedia = {
+        const updatedSpaceMedia: any = {
             ...media,
             _id: media.id,
-            description: description,
-            image: media.image && finalUrl !== mediaUrl ? { ...media.image, link: finalUrl } : media.image
+            description: description
+        }
+        
+        // Only update image.link if the URL has changed
+        if (finalUrl && finalUrl !== mediaUrl) {
+          updatedSpaceMedia.image = {
+            ...media.image,
+            link: finalUrl
+          };
         }
         
         await updateMedia(spaceId, mediaId, updatedSpaceMedia);
