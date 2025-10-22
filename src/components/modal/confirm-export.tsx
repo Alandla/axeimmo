@@ -202,7 +202,7 @@ export default function ModalConfirmExport({
               </p>
             </div>
 
-            {hasAvatar && video && (
+            {hasAvatar && video && !avatarHasPreviewUrl && (
               <div className="mt-4">
                 <Label className="text-sm font-bold mb-2">
                   {t('avatar-model-label')} :
@@ -212,7 +212,7 @@ export default function ModalConfirmExport({
                   onValueChange={(value) => setSelectedAvatarModel(value)}
                   planName={planName as any}
                   avatarDuration={avatarDuration}
-                  showStandard={!avatarHasPreviewUrl}
+                  showStandard={false}
                   showVeoModels={!avatarHasPreviewUrl}
                   showNonVeoModels={!video.useVeo3}
                 />
