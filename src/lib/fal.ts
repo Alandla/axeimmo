@@ -620,7 +620,8 @@ export async function getOmniHumanRequestResult(
 export async function startVeo3VideoGeneration(
   request: Veo3Request,
   mode: Veo3GenerationMode = Veo3GenerationMode.FAST,
-  mock: Boolean = false
+  mock: Boolean = false,
+  originalImageWidth?: number
 ): Promise<{ request_id: string }> {
   if (mock) {
     console.log(`[TEST MODE] Simulating Veo3 video generation with mode: ${mode}`);
@@ -628,12 +629,18 @@ export async function startVeo3VideoGeneration(
   }
 
   try {
+    const checkedImageUrl = await checkAndResizeImageIfNeeded(
+      request.image_url, 
+      SERVICE_SIZE_LIMITS.VEO3,
+      originalImageWidth
+    );
+
     const endpoint = VEO3_ENDPOINTS[mode];
 
     const result = await fal.queue.submit(endpoint, {
       input: {
         prompt: request.prompt,
-        image_url: request.image_url,
+        image_url: checkedImageUrl,
         duration: request.duration || "8s",
         aspect_ratio: request.aspect_ratio || "9:16",
         generate_audio: request.generate_audio || true,

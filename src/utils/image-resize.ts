@@ -4,7 +4,7 @@ import axios from "axios";
 export const SERVICE_SIZE_LIMITS = {
   KLING: 10485760, // 10MB
   OMNIHUMAN: 5242880, // 5MB
-  VEO3: 10485760, // 10MB (assuming same as Kling)
+  VEO3: 8388608, // 8MB
 } as const;
 
 export interface ResizeImageOptions {
