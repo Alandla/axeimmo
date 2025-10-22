@@ -9,19 +9,19 @@ export interface AvatarStyleConfig {
 }
 
 export const AVATAR_STYLES: Record<AvatarStyleKey, AvatarStyleConfig> = {
-  'selfie': {
-    key: 'selfie',
-    previewImage: '/img/style-previews/ugc.png',
-    falEndpoint: 'comfy/Hoox/srpo-lora-as-input',
-    falEndpointHorizontal: 'comfy/Hoox/srpo-lora-as-input-horizontal',
-    loraUrl: 'https://v3b.fal.media/files/b/penguin/F9OYhy9pgx5pr2muQf0pF_pytorch_lora_weights.safetensors'
-  },
   'iphone': {
     key: 'iphone',
     previewImage: '/img/style-previews/iphone.png',
     falEndpoint: 'comfy/Hoox/srpo-lora-as-input',
     falEndpointHorizontal: 'comfy/Hoox/srpo-lora-as-input-horizontal',
     loraUrl: 'https://v3b.fal.media/files/b/penguin/0rsSCMgEHhT0O_oFJR-wR_pytorch_lora_weights.safetensors'
+  },
+  'selfie': {
+    key: 'selfie',
+    previewImage: '/img/style-previews/ugc.png',
+    falEndpoint: 'comfy/Hoox/srpo-lora-as-input',
+    falEndpointHorizontal: 'comfy/Hoox/srpo-lora-as-input-horizontal',
+    loraUrl: 'https://v3b.fal.media/files/b/penguin/F9OYhy9pgx5pr2muQf0pF_pytorch_lora_weights.safetensors'
   },
   'studio': {
     key: 'studio',
