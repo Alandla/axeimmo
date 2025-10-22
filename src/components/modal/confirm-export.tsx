@@ -212,7 +212,7 @@ export default function ModalConfirmExport({
                   onValueChange={(value) => setSelectedAvatarModel(value)}
                   planName={planName as any}
                   avatarDuration={avatarDuration}
-                  showStandard={true}
+                  showStandard={!avatarHasPreviewUrl}
                   showVeoModels={!avatarHasPreviewUrl}
                   showNonVeoModels={!video.useVeo3}
                 />
