@@ -368,16 +368,24 @@ async function generateVeo3Results(
             
             logger.log(`Veo3 video completed for audioIndex ${render.audioIndex}`, { videoUrl });
             
-            // Convert video audio with voice-changer
-            logger.log(`Converting video audio to voice for audioIndex ${render.audioIndex}...`);
-            const convertedAudio = await voiceChangerFromVideo(videoUrl, render.voiceId);
+            let audioUrl: string;
             
-            // Calculate voice changer cost (ElevenLabs without turbo)
-            voiceChangerCost += calculateElevenLabsCost(render.text, false);
-            
-            // Upload audio to R2
-            const audioUrl = await uploadToS3Audio(convertedAudio, 'medias-users');
-            logger.log(`Converted audio uploaded for audioIndex ${render.audioIndex}`, { audioUrl });
+            // Only use voice-changer if the voice is ElevenLabs
+            if (render.voiceMode === 'elevenlabs') {
+              logger.log(`Converting video audio to voice for audioIndex ${render.audioIndex}...`);
+              const convertedAudio = await voiceChangerFromVideo(videoUrl, render.voiceId);
+              
+              // Calculate voice changer cost (ElevenLabs without turbo)
+              voiceChangerCost += calculateElevenLabsCost(render.text, false);
+              
+              // Upload audio to R2
+              audioUrl = await uploadToS3Audio(convertedAudio, 'medias-users');
+              logger.log(`Converted audio uploaded for audioIndex ${render.audioIndex}`, { audioUrl });
+            } else {
+              // For non-ElevenLabs voices, use the video audio directly
+              logger.log(`Using Veo3 video audio directly for audioIndex ${render.audioIndex} (voiceMode: ${render.voiceMode})`);
+              audioUrl = videoUrl;
+            }
             
             // Transcribe the audio
             logger.log(`Transcribing audio for audioIndex ${render.audioIndex}...`);

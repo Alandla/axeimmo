@@ -197,6 +197,7 @@ export interface Veo3RenderData {
   text: string
   avatarUrl: string
   voiceId: string
+  voiceMode?: string
 }
 
 export interface Veo3RenderResult {
@@ -221,6 +222,7 @@ export const generateVeo3RenderList = (video: IVideo): Veo3RenderResult => {
   interface GroupedPhrase {
     text: string;
     voiceId: string;
+    voiceMode?: string;
     originalAudioIndex: number;
   }
 
@@ -246,6 +248,7 @@ export const generateVeo3RenderList = (video: IVideo): Veo3RenderResult => {
     groupedPhrases.push({
       text: texts.join(' '),
       voiceId: voice.voiceId,
+      voiceMode: voice.mode,
       originalAudioIndex: audioIndex
     });
   }
@@ -257,12 +260,14 @@ export const generateVeo3RenderList = (video: IVideo): Veo3RenderResult => {
   const audioIndexMapping = new Map<number, number>(); // originalAudioIndex -> newAudioIndex
   let currentText = '';
   let firstVoiceId: string | null = null;
+  let firstVoiceMode: string | undefined = undefined;
   let currentOriginalIndexes: number[] = [];
 
   for (const phrase of groupedPhrases) {
-    // If this is the first phrase of a new render, save voiceId
+    // If this is the first phrase of a new render, save voiceId and voiceMode
     if (firstVoiceId === null) {
       firstVoiceId = phrase.voiceId;
+      firstVoiceMode = phrase.voiceMode;
     }
 
     // Add the phrase text
@@ -278,7 +283,8 @@ export const generateVeo3RenderList = (video: IVideo): Veo3RenderResult => {
           audioIndex: newAudioIndex,
           text: currentText.trim(),
           avatarUrl,
-          voiceId: firstVoiceId
+          voiceId: firstVoiceId,
+          voiceMode: firstVoiceMode
         });
         
         // Map all original audioIndexes to this new audioIndex
@@ -290,6 +296,7 @@ export const generateVeo3RenderList = (video: IVideo): Veo3RenderResult => {
       // Start new render with current phrase
       currentText = phrase.text;
       firstVoiceId = phrase.voiceId;
+      firstVoiceMode = phrase.voiceMode;
       currentOriginalIndexes = [phrase.originalAudioIndex];
     } else {
       // Add to current render
@@ -305,7 +312,8 @@ export const generateVeo3RenderList = (video: IVideo): Veo3RenderResult => {
       audioIndex: newAudioIndex,
       text: currentText.trim(),
       avatarUrl,
-      voiceId: firstVoiceId
+      voiceId: firstVoiceId,
+      voiceMode: firstVoiceMode
     });
     
     // Map all original audioIndexes to this new audioIndex
