@@ -7,7 +7,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '25',
         tags: ["UGC", "casual", "outdoor"],
-        thumbnail: '/img/avatars/hoox_avatar_1.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_1.png',
         look_ids: ["hoox_avatar_1"],
         looks: [
             {
@@ -16,7 +16,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'outdoor',
                 format: 'vertical',
                 tags: ["casual", "outdoor"],
-                thumbnail: '/img/avatars/hoox_avatar_1.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_1.png'
             }
         ]
     }, 
@@ -26,7 +26,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '24',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_6.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_6.png',
         look_ids: ["hoox_avatar_6"],
         looks: [
             {
@@ -35,7 +35,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_6.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_6.png'
             }
         ]
     },
@@ -45,7 +45,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '24',
         tags: ["UGC", "casual", "outdoor"],
-        thumbnail: '/img/avatars/hoox_avatar_2.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_2.png',
         look_ids: ["hoox_avatar_2"],
         looks: [
             {
@@ -54,7 +54,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'outdoor',
                 format: 'vertical',
                 tags: ["casual", "outdoor"],
-                thumbnail: '/img/avatars/hoox_avatar_2.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_2.png'
             }
         ]
     },
@@ -64,7 +64,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '26',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_7.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_7.png',
         look_ids: ["hoox_avatar_7"],
         looks: [
             {
@@ -73,7 +73,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_7.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_7.png'
             }
         ]
     },
@@ -83,7 +83,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '31',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_8.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_8.png',
         look_ids: ["hoox_avatar_8"],
         looks: [
             {
@@ -92,7 +92,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_8.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_8.png'
             }
         ]
     },
@@ -102,7 +102,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '20',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_15.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_15.png',
         look_ids: ["hoox_avatar_15"],
         looks: [
             {
@@ -111,7 +111,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'room',
                 format: 'vertical',
                 tags: ["casual"],
-                thumbnail: '/img/avatars/hoox_avatar_15.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_15.png'
             }
         ]
     },
@@ -121,7 +121,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '22',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_9.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_9.png',
         look_ids: ["hoox_avatar_9"],
         looks: [
             {
@@ -130,7 +130,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_9.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_9.png'
             }
         ]
     },
@@ -140,7 +140,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '28',
         tags: ["UGC", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_26.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_26.png',
         look_ids: ["hoox_avatar_26"],
         looks: [
             {
@@ -149,7 +149,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_26.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_26.png'
             }
         ]
     },
@@ -159,7 +159,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '27',
         tags: ["UGC", "professional", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_10.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_10.png',
         look_ids: ["hoox_avatar_10"],
         looks: [
             {
@@ -168,7 +168,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["professional", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_10.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_10.png'
             }
         ]
     },
@@ -178,7 +178,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '60',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_19.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_19.png',
         look_ids: ["hoox_avatar_19"],
         looks: [
             {
@@ -187,7 +187,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_19.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_19.png'
             }
         ]
     },
@@ -197,7 +197,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '23',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_11.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_11.png',
         look_ids: ["hoox_avatar_11"],
         looks: [
             {
@@ -206,7 +206,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_11.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_11.png'
             }
         ]
     },
@@ -216,7 +216,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '28',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_28.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_28.png',
         look_ids: ["hoox_avatar_28"],
         looks: [
             {
@@ -225,7 +225,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_28.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_28.png'
             }
         ]
     },
@@ -235,7 +235,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '26',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_12.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_12.png',
         look_ids: ["hoox_avatar_12"],
         looks: [
             {
@@ -244,7 +244,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_12.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_12.png'
             }
         ]
     },
@@ -254,7 +254,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '24',
         tags: ["UGC", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_33.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_33.png',
         look_ids: ["hoox_avatar_33"],
         looks: [
             {
@@ -263,7 +263,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_33.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_33.png'
             }
         ]
     },
@@ -273,7 +273,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '28',
         tags: ["UGC", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_13.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_13.png',
         look_ids: ["hoox_avatar_13"],
         looks: [
             {
@@ -282,7 +282,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'room',
                 format: 'vertical',
                 tags: ["professional", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_13.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_13.png'
             }
         ]
     },
@@ -292,7 +292,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '30',
         tags: ["UGC", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_29.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_29.png',
         look_ids: ["hoox_avatar_29"],
         looks: [
             {
@@ -301,7 +301,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_29.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_29.png'
             }
         ]
     },
@@ -311,7 +311,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '25',
         tags: ["UGC", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_14.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_14.png',
         look_ids: ["hoox_avatar_14"],
         looks: [
             {
@@ -320,7 +320,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'room',
                 format: 'vertical',
                 tags: ["indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_14.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_14.png'
             }
         ]
     },
@@ -330,7 +330,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '28',
         tags: ["UGC", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_30.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_30.png',
         look_ids: ["hoox_avatar_30"],
         looks: [
             {
@@ -339,7 +339,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_30.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_30.png'
             }
         ]
     },
@@ -349,7 +349,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '32',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_20.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_20.png',
         look_ids: ["hoox_avatar_20"],
         looks: [
             {
@@ -358,7 +358,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'room',
                 format: 'vertical',
                 tags: ["casual"],
-                thumbnail: '/img/avatars/hoox_avatar_20.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_20.png'
             }
         ]
     },
@@ -368,7 +368,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '28',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_31.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_31.png',
         look_ids: ["hoox_avatar_31"],
         looks: [
             {
@@ -377,7 +377,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_31.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_31.png'
             }
         ]
     },
@@ -387,7 +387,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '35',
         tags: ["UGC", "professional", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_21.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_21.png',
         look_ids: ["hoox_avatar_21"],
         looks: [
             {
@@ -396,7 +396,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["professional", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_21.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_21.png'
             }
         ]
     },
@@ -406,7 +406,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '30',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_32.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_32.png',
         look_ids: ["hoox_avatar_32"],
         looks: [
             {
@@ -415,7 +415,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_32.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_32.png'
             }
         ]
     },
@@ -425,7 +425,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '52',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_5.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_5.png',
         look_ids: ["hoox_avatar_5"],
         looks: [
             {
@@ -434,7 +434,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_5.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_5.png'
             }
         ]
     },
@@ -444,7 +444,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '28',
         tags: ["UGC", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_22.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_22.png',
         look_ids: ["hoox_avatar_22"],
         looks: [
             {
@@ -453,7 +453,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_22.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_22.png'
             }
         ]
     },
@@ -463,7 +463,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '23',
         tags: ["UGC", "casual", "outdoor"],
-        thumbnail: '/img/avatars/hoox_avatar_3.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_3.png',
         look_ids: ["hoox_avatar_3"],
         looks: [
             {
@@ -472,7 +472,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'outdoor',
                 format: 'vertical',
                 tags: ["casual", "outdoor"],
-                thumbnail: '/img/avatars/hoox_avatar_3.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_3.png'
             }
         ]
     },
@@ -482,7 +482,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '24',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_23.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_23.png',
         look_ids: ["hoox_avatar_23"],
         looks: [
             {
@@ -491,7 +491,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_23.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_23.png'
             }
         ]
     },
@@ -501,7 +501,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '27',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_24.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_24.png',
         look_ids: ["hoox_avatar_24"],
         looks: [
             {
@@ -510,7 +510,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_24.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_24.png'
             }
         ]
     },
@@ -520,7 +520,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '22',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_25.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_25.png',
         look_ids: ["hoox_avatar_25"],
         looks: [
             {
@@ -529,7 +529,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_25.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_25.png'
             }
         ]
     },
@@ -539,7 +539,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'male',
         age: '22',
         tags: ["UGC", "professional", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_4.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_4.png',
         look_ids: ["hoox_avatar_4"],
         looks: [
             {
@@ -548,7 +548,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["professional", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_4.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_4.png'
             }
         ]
     },
@@ -558,7 +558,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '25',
         tags: ["UGC", "casual", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_16.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_16.png',
         look_ids: ["hoox_avatar_16"],
         looks: [
             {
@@ -567,7 +567,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["casual", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_16.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_16.png'
             }
         ]
     },
@@ -577,7 +577,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '35',
         tags: ["UGC", "professional", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_17.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_17.png',
         look_ids: ["hoox_avatar_17"],
         looks: [
             {
@@ -586,7 +586,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'room',
                 format: 'vertical',
                 tags: ["professional", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_17.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_17.png'
             }
         ]
     },
@@ -596,7 +596,7 @@ export const avatarsConfig: Avatar[] = [
         gender: 'female',
         age: '28',
         tags: ["UGC", "professional", "indoor"],
-        thumbnail: '/img/avatars/hoox_avatar_18.png',
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_18.png',
         look_ids: ["hoox_avatar_18"],
         looks: [
             {
@@ -605,7 +605,7 @@ export const avatarsConfig: Avatar[] = [
                 place: 'indoor',
                 format: 'vertical',
                 tags: ["professional", "indoor"],
-                thumbnail: '/img/avatars/hoox_avatar_18.png'
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_18.png'
             }
         ]
     },
