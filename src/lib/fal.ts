@@ -1,5 +1,6 @@
 import { fal } from "@fal-ai/client";
 import { AVATAR_STYLES, type AvatarStyleKey } from '@/src/config/avatarStyles.config';
+import { checkAndResizeImageIfNeeded, SERVICE_SIZE_LIMITS } from "../utils/image-resize";
 
 // Fal.ai client configuration
 fal.config({
@@ -466,11 +467,13 @@ export async function upscaleImage(
   }
 }
 
+
 /**
  * Start OmniHuman avatar video generation
  */
 export async function startOmniHumanVideoGeneration(
-  request: OmniHumanRequest
+  request: OmniHumanRequest,
+  originalImageWidth?: number
 ): Promise<{ request_id: string }> {
   if (process.env.NODE_ENV === 'development') {
     console.log('[TEST MODE] Simulating OmniHuman video generation');
@@ -478,9 +481,15 @@ export async function startOmniHumanVideoGeneration(
   }
   
   try {
+    const checkedImageUrl = await checkAndResizeImageIfNeeded(
+      request.image_url, 
+      SERVICE_SIZE_LIMITS.OMNIHUMAN,
+      originalImageWidth
+    );
+    
     const result = await fal.queue.submit(OMNIHUMAN_ENDPOINT, {
       input: {
-        image_url: request.image_url,
+        image_url: checkedImageUrl,
         audio_url: request.audio_url
       }
     });
@@ -573,7 +582,8 @@ export async function getOmniHumanRequestResult(
 export async function startVeo3VideoGeneration(
   request: Veo3Request,
   mode: Veo3GenerationMode = Veo3GenerationMode.FAST,
-  mock: Boolean = false
+  mock: Boolean = false,
+  originalImageWidth?: number
 ): Promise<{ request_id: string }> {
   if (mock) {
     console.log(`[TEST MODE] Simulating Veo3 video generation with mode: ${mode}`);
@@ -581,12 +591,18 @@ export async function startVeo3VideoGeneration(
   }
 
   try {
+    const checkedImageUrl = await checkAndResizeImageIfNeeded(
+      request.image_url, 
+      SERVICE_SIZE_LIMITS.VEO3,
+      originalImageWidth
+    );
+
     const endpoint = VEO3_ENDPOINTS[mode];
 
     const result = await fal.queue.submit(endpoint, {
       input: {
         prompt: request.prompt,
-        image_url: request.image_url,
+        image_url: checkedImageUrl,
         duration: request.duration || "8s",
         aspect_ratio: request.aspect_ratio || "9:16",
         generate_audio: request.generate_audio || true,

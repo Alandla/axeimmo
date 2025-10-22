@@ -1,5 +1,12 @@
 import axios from "axios";
 
+// Size limits for different services (in bytes)
+export const SERVICE_SIZE_LIMITS = {
+  KLING: 10485760, // 10MB
+  OMNIHUMAN: 5242880, // 5MB
+  VEO3: 8388608, // 8MB
+} as const;
+
 export interface ResizeImageOptions {
   maxFileSize?: number; // in bytes, default 10MB (Kling limit)
   quality?: number; // JPEG quality 0-1, default 0.8
@@ -256,4 +263,38 @@ export async function optimizeImageForSize(
   console.log(`Using fallback width ${fallbackWidth} for image optimization`);
   
   return fallbackUrl;
+}
+
+/**
+ * Generic function to check and resize an image if it exceeds the specified size limit
+ * This function can be used by any service (Kling, OmniHuman, etc.) that has size constraints
+ * 
+ * @param imageUrl - URL of the image to check
+ * @param maxFileSize - Maximum file size in bytes
+ * @param originalWidth - Original image width (optional, for progressive optimization)
+ * @param fileSize - File size in bytes (optional, will be detected if not provided)
+ * @returns Promise<string> - The image URL (resized if necessary)
+ */
+export async function checkAndResizeImageIfNeeded(
+  imageUrl: string,
+  maxFileSize: number,
+  originalWidth?: number,
+  fileSize?: number,
+): Promise<string> {
+  // If file size is not provided, try to detect it
+  if (!fileSize) {
+    try {
+      const response = await fetch(imageUrl, { method: 'HEAD' });
+      const contentLength = response.headers.get('content-length');
+      fileSize = contentLength ? parseInt(contentLength, 10) : 0;
+    } catch (error) {
+      return imageUrl;
+    }
+  }
+  
+  if (fileSize <= maxFileSize) {
+    return imageUrl;
+  }
+  
+  return await optimizeImageForSize(imageUrl, maxFileSize, originalWidth);
 }
