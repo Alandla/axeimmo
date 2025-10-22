@@ -2,6 +2,622 @@ import { Avatar } from "../types/avatar";
 
 export const avatarsConfig: Avatar[] = [
     {
+        id: '2349',
+        name: 'Sabrina',
+        gender: 'female',
+        age: '25',
+        tags: ["UGC", "selfie", "fitness", "indoor"],
+        thumbnail: 'https://assets.hoox.video/avatar-34.png',
+        look_ids: ["hoox_avatar_34"],
+        looks: [
+            {
+                id: 'hoox_avatar_34',
+                name: 'Sabrina Gym',
+                place: 'gym',
+                format: 'vertical',
+                tags: ["selfie", "fitness", "indoor"],
+                thumbnail: 'https://assets.hoox.video/avatar-34.png'
+            }
+        ]
+    },
+    {
+        id: '6411',
+        name: 'Alex',
+        gender: 'male',
+        age: '25',
+        tags: ["UGC", "casual", "outdoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_1.png',
+        look_ids: ["hoox_avatar_1"],
+        looks: [
+            {
+                id: 'hoox_avatar_1',
+                name: 'Alex Outdoor',
+                place: 'outdoor',
+                format: 'vertical',
+                tags: ["casual", "outdoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_1.png'
+            }
+        ]
+    }, 
+    {
+        id: '6416',
+        name: 'Sarah',
+        gender: 'female',
+        age: '24',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_6.png',
+        look_ids: ["hoox_avatar_6"],
+        looks: [
+            {
+                id: 'hoox_avatar_6',
+                name: 'Sarah Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_6.png'
+            }
+        ]
+    },
+    {
+        id: '6412',
+        name: 'Marcus',
+        gender: 'male',
+        age: '24',
+        tags: ["UGC", "casual", "outdoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_2.png',
+        look_ids: ["hoox_avatar_2"],
+        looks: [
+            {
+                id: 'hoox_avatar_2',
+                name: 'Marcus Outdoor',
+                place: 'outdoor',
+                format: 'vertical',
+                tags: ["casual", "outdoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_2.png'
+            }
+        ]
+    },
+    {
+        id: '6418',
+        name: 'Chloe',
+        gender: 'female',
+        age: '31',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_8.png',
+        look_ids: ["hoox_avatar_8"],
+        looks: [
+            {
+                id: 'hoox_avatar_8',
+                name: 'Chloe Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_8.png'
+            }
+        ]
+    },
+    {
+        id: '6425',
+        name: 'Liam',
+        gender: 'male',
+        age: '20',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_15.png',
+        look_ids: ["hoox_avatar_15"],
+        looks: [
+            {
+                id: 'hoox_avatar_15',
+                name: 'Liam Indoor',
+                place: 'room',
+                format: 'vertical',
+                tags: ["casual"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_15.png'
+            }
+        ]
+    },
+    {
+        id: '6419',
+        name: 'Léa',
+        gender: 'female',
+        age: '22',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_9.png',
+        look_ids: ["hoox_avatar_9"],
+        looks: [
+            {
+                id: 'hoox_avatar_9',
+                name: 'Léa Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_9.png'
+            },
+            {
+                id: 'hoox_avatar_7',
+                name: 'Léa Salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_7.png'
+            }
+        ]
+    },
+    {
+        id: '6436',
+        name: 'Michael',
+        gender: 'male',
+        age: '28',
+        tags: ["UGC", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_26.png',
+        look_ids: ["hoox_avatar_26"],
+        looks: [
+            {
+                id: 'hoox_avatar_26',
+                name: 'Michael Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_26.png'
+            }
+        ]
+    },
+    {
+        id: '6420',
+        name: 'Mia',
+        gender: 'female',
+        age: '27',
+        tags: ["UGC", "professional", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_10.png',
+        look_ids: ["hoox_avatar_10"],
+        looks: [
+            {
+                id: 'hoox_avatar_10',
+                name: 'Mia Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["professional", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_10.png'
+            }
+        ]
+    },
+    {
+        id: '6429',
+        name: 'John',
+        gender: 'male',
+        age: '60',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_19.png',
+        look_ids: ["hoox_avatar_19"],
+        looks: [
+            {
+                id: 'hoox_avatar_19',
+                name: 'John Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_19.png'
+            }
+        ]
+    },
+    {
+        id: '6421',
+        name: 'Emma',
+        gender: 'female',
+        age: '23',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_11.png',
+        look_ids: ["hoox_avatar_11"],
+        looks: [
+            {
+                id: 'hoox_avatar_11',
+                name: 'Emma Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_11.png'
+            }
+        ]
+    },
+    {
+        id: '6438',
+        name: 'Henry',
+        gender: 'male',
+        age: '28',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_28.png',
+        look_ids: ["hoox_avatar_28"],
+        looks: [
+            {
+                id: 'hoox_avatar_28',
+                name: 'Henry Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_28.png'
+            }
+        ]
+    },
+    {
+        id: '6422',
+        name: 'Emory',
+        gender: 'female',
+        age: '26',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_12.png',
+        look_ids: ["hoox_avatar_12"],
+        looks: [
+            {
+                id: 'hoox_avatar_12',
+                name: 'Emory Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_12.png'
+            }
+        ]
+    },
+    {
+        id: '6443',
+        name: 'Thomas',
+        gender: 'male',
+        age: '24',
+        tags: ["UGC", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_33.png',
+        look_ids: ["hoox_avatar_33"],
+        looks: [
+            {
+                id: 'hoox_avatar_33',
+                name: 'Thomas Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_33.png'
+            }
+        ]
+    },
+    {
+        id: '6423',
+        name: 'Olivia',
+        gender: 'female',
+        age: '28',
+        tags: ["UGC", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_13.png',
+        look_ids: ["hoox_avatar_13"],
+        looks: [
+            {
+                id: 'hoox_avatar_13',
+                name: 'Olivia Indoor',
+                place: 'room',
+                format: 'vertical',
+                tags: ["professional", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_13.png'
+            }
+        ]
+    },
+    {
+        id: '6439',
+        name: 'Julia',
+        gender: 'female',
+        age: '30',
+        tags: ["UGC", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_29.png',
+        look_ids: ["hoox_avatar_29"],
+        looks: [
+            {
+                id: 'hoox_avatar_29',
+                name: 'Julia Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_29.png'
+            }
+        ]
+    },
+    {
+        id: '6424',
+        name: 'Laya',
+        gender: 'female',
+        age: '25',
+        tags: ["UGC", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_14.png',
+        look_ids: ["hoox_avatar_14"],
+        looks: [
+            {
+                id: 'hoox_avatar_14',
+                name: 'Laya Indoor',
+                place: 'room',
+                format: 'vertical',
+                tags: ["indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_14.png'
+            }
+        ]
+    },
+    {
+        id: '6440',
+        name: 'Kate',
+        gender: 'female',
+        age: '28',
+        tags: ["UGC", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_30.png',
+        look_ids: ["hoox_avatar_30"],
+        looks: [
+            {
+                id: 'hoox_avatar_30',
+                name: 'Kate Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_30.png'
+            }
+        ]
+    },
+    {
+        id: '6430',
+        name: 'Julia',
+        gender: 'female',
+        age: '32',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_20.png',
+        look_ids: ["hoox_avatar_20"],
+        looks: [
+            {
+                id: 'hoox_avatar_20',
+                name: 'Julia Indoor',
+                place: 'room',
+                format: 'vertical',
+                tags: ["casual"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_20.png'
+            }
+        ]
+    },
+    {
+        id: '6441',
+        name: 'Diana',
+        gender: 'female',
+        age: '28',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_31.png',
+        look_ids: ["hoox_avatar_31"],
+        looks: [
+            {
+                id: 'hoox_avatar_31',
+                name: 'Diana Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_31.png'
+            }
+        ]
+    },
+    {
+        id: '6431',
+        name: 'Kate',
+        gender: 'female',
+        age: '35',
+        tags: ["UGC", "professional", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_21.png',
+        look_ids: ["hoox_avatar_21"],
+        looks: [
+            {
+                id: 'hoox_avatar_21',
+                name: 'Kate Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["professional", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_21.png'
+            }
+        ]
+    },
+    {
+        id: '6442',
+        name: 'Elena',
+        gender: 'female',
+        age: '30',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_32.png',
+        look_ids: ["hoox_avatar_32"],
+        looks: [
+            {
+                id: 'hoox_avatar_32',
+                name: 'Elena Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_32.png'
+            }
+        ]
+    },
+    {
+        id: '6415',
+        name: 'Marc',
+        gender: 'male',
+        age: '52',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_5.png',
+        look_ids: ["hoox_avatar_5"],
+        looks: [
+            {
+                id: 'hoox_avatar_5',
+                name: 'Marc Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_5.png'
+            }
+        ]
+    },
+    {
+        id: '6432',
+        name: 'Mila',
+        gender: 'female',
+        age: '28',
+        tags: ["UGC", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_22.png',
+        look_ids: ["hoox_avatar_22"],
+        looks: [
+            {
+                id: 'hoox_avatar_22',
+                name: 'Mila Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_22.png'
+            }
+        ]
+    },
+    {
+        id: '6413',
+        name: 'Daniel',
+        gender: 'male',
+        age: '23',
+        tags: ["UGC", "casual", "outdoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_3.png',
+        look_ids: ["hoox_avatar_3"],
+        looks: [
+            {
+                id: 'hoox_avatar_3',
+                name: 'Daniel Outdoor',
+                place: 'outdoor',
+                format: 'vertical',
+                tags: ["casual", "outdoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_3.png'
+            }
+        ]
+    },
+    {
+        id: '6433',
+        name: 'Sophie',
+        gender: 'female',
+        age: '24',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_23.png',
+        look_ids: ["hoox_avatar_23"],
+        looks: [
+            {
+                id: 'hoox_avatar_23',
+                name: 'Sophie Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_23.png'
+            }
+        ]
+    },
+    {
+        id: '6434',
+        name: 'Lola',
+        gender: 'female',
+        age: '27',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_24.png',
+        look_ids: ["hoox_avatar_24"],
+        looks: [
+            {
+                id: 'hoox_avatar_24',
+                name: 'Lola Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_24.png'
+            }
+        ]
+    },
+    {
+        id: '6435',
+        name: 'Ashley',
+        gender: 'female',
+        age: '22',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_25.png',
+        look_ids: ["hoox_avatar_25"],
+        looks: [
+            {
+                id: 'hoox_avatar_25',
+                name: 'Ashley Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_25.png'
+            }
+        ]
+    },
+    {
+        id: '6414',
+        name: 'Leo',
+        gender: 'male',
+        age: '22',
+        tags: ["UGC", "professional", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_4.png',
+        look_ids: ["hoox_avatar_4"],
+        looks: [
+            {
+                id: 'hoox_avatar_4',
+                name: 'Leo Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["professional", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_4.png'
+            }
+        ]
+    },
+    {
+        id: '6426',
+        name: 'Emily',
+        gender: 'female',
+        age: '25',
+        tags: ["UGC", "casual", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_16.png',
+        look_ids: ["hoox_avatar_16"],
+        looks: [
+            {
+                id: 'hoox_avatar_16',
+                name: 'Emily Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_16.png'
+            }
+        ]
+    },
+    {
+        id: '6427',
+        name: 'Pam',
+        gender: 'female',
+        age: '35',
+        tags: ["UGC", "professional", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_17.png',
+        look_ids: ["hoox_avatar_17"],
+        looks: [
+            {
+                id: 'hoox_avatar_17',
+                name: 'Pam Indoor',
+                place: 'room',
+                format: 'vertical',
+                tags: ["professional", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_17.png'
+            }
+        ]
+    },
+    {
+        id: '6428',
+        name: 'Raya',
+        gender: 'female',
+        age: '28',
+        tags: ["UGC", "professional", "indoor"],
+        thumbnail: 'https://assets.hoox.video/hoox_avatar_18.png',
+        look_ids: ["hoox_avatar_18"],
+        looks: [
+            {
+                id: 'hoox_avatar_18',
+                name: 'Raya Indoor',
+                place: 'indoor',
+                format: 'vertical',
+                tags: ["professional", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_18.png'
+            }
+        ]
+    },
+    {
         id: '279',
         name: 'Diana',
         gender: 'female',
@@ -4351,7 +4967,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Aubrey',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","dynamic"],
+                tags: ["standing","fitness","dynamic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/c4745b302cb848b7a9352ece1a6d1211_39400/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/c4745b302cb848b7a9352ece1a6d1211_39400/preview_video_target.mp4'
             },
@@ -4465,7 +5081,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Bojan',
                 place: 'sport',
                 format: 'horizontal',
-                tags: ["sitting","athletic","energetic"],
+                tags: ["sitting","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/cb0ae5ed511f4f38abe47351d7aa7619_39290/preview_talk_1.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/cb0ae5ed511f4f38abe47351d7aa7619_39290/preview_video_talk_1.mp4'
             },
@@ -4474,7 +5090,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Bojan',
                 place: 'sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","dynamic"],
+                tags: ["standing","fitness","dynamic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/365e65ba93b24697ab9be6b5c7535888_39290/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/365e65ba93b24697ab9be6b5c7535888_39290/preview_video_target.mp4'
             }
@@ -4678,7 +5294,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Gerardo',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/ee7686e267ba4af2a6eec2fe349ed6a1_39410/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/ee7686e267ba4af2a6eec2fe349ed6a1_39410/preview_video_target.mp4'
             },
@@ -4794,7 +5410,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Joel',
         gender: 'male',
         age: 'unknown',
-        tags: ["versatile","athletic","outdoor","approachable"],
+        tags: ["versatile","fitness","outdoor","approachable"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/812e4c922e0d4ba0b2c5a21a0dd43fb1_39100/preview_target.webp',
         look_ids: ["Joel_sitting_couch_front","Joel_standing_gym_front","Joel_standing_mountain_front"],
@@ -4813,7 +5429,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Joel',
                 place: 'mountain',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/b8a3c58ffefb4428a83030f5a9a5eed6_39100/preview_talk_4.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/b8a3c58ffefb4428a83030f5a9a5eed6_39100/preview_video_talk_4.mp4'
             },
@@ -4833,7 +5449,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Jonas',
         gender: 'male',
         age: 'unknown',
-        tags: ["athletic","energetic","professional","expressive"],
+        tags: ["fitness","energetic","professional","expressive"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/e66b500dd5034538835f52a71a6cae66_38730/preview_target.webp',
         look_ids: ["Jonas_sitting_gym_front","Jonas_standing_gym_front"],
@@ -4843,7 +5459,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Jonas',
                 place: 'gym',
                 format: 'horizontal',
-                tags: ["sitting","athletic","focused"],
+                tags: ["sitting","fitness","focused"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/e66b500dd5034538835f52a71a6cae66_38730/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/e66b500dd5034538835f52a71a6cae66_38730/preview_video_target.mp4'
             },
@@ -4852,7 +5468,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Jonas',
                 place: 'gym',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/7cda83478bc14c07965b690934292a55_38730/preview_talk_1.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/7cda83478bc14c07965b690934292a55_38730/preview_video_talk_1.mp4'
             }
@@ -4941,7 +5557,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Judita',
         gender: 'female',
         age: 'unknown',
-        tags: ["athletic","wellness","peaceful","mindful"],
+        tags: ["fitness","wellness","peaceful","mindful"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/01bf1b75c57e4c99b143b1d185beb21c_38690/preview_talk_1.webp',
         look_ids: ["Judita_standing_yoga_front","Judita_sitting_yoga_front"],
@@ -4951,7 +5567,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Judita',
                 place: 'yoga-studio',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/4d353f3140b245188cf495976e79312a_38690/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/4d353f3140b245188cf495976e79312a_38690/preview_video_target.mp4'
             },
@@ -4971,7 +5587,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Kavya',
         gender: 'female',
         age: 'unknown',
-        tags: ["versatile","athletic","professional","approachable"],
+        tags: ["versatile","fitness","professional","approachable"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/cc0dc576a0b249759f8e26fd892e1a76_39540/preview_target.webp',
         look_ids: ["Kavya_standing_indoor_front","Kavya_standing_outdoorsport_front","Kavya_sitting_sofa_front"],
@@ -4990,7 +5606,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Kavya',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/56470a9a70304e25a1f67f1b8d1d28d2_39380/preview_talk_1.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/56470a9a70304e25a1f67f1b8d1d28d2_39380/preview_video_talk_1.mp4'
             },
@@ -5154,7 +5770,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Max',
         gender: 'male',
         age: 'unknown',
-        tags: ["athletic","versatile","energetic","professional"],
+        tags: ["fitness","versatile","energetic","professional"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/5316bfe35e3a41a99af40650698e8ca4_39520/preview_target.webp',
         look_ids: ["Max_sitting_indoor_front","Max_standing_outdoorsport_front"],
@@ -5173,7 +5789,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Max',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/613d8444f5264ee8997725a087ce520c_39390/preview_talk_2.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/613d8444f5264ee8997725a087ce520c_39390/preview_video_talk_2.mp4'
             }
@@ -5442,7 +6058,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Oxana',
         gender: 'female',
         age: 'unknown',
-        tags: ["indoor","professional","athletic","wellness"],
+        tags: ["indoor","professional","fitness","wellness"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_target.webp',
         look_ids: ["Oxana_standing_gym_front","Oxana_sitting_gym_front","Oxana_standing_office_front","Oxana_sitting_office_front","Oxana_standing_sofa_front","Oxana_sitting_sofa_front","Oxana_standing_yoga_front","Oxana_sitting_yoga_front"],
@@ -5452,7 +6068,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Oxana Gym Front 2',
                 place: 'gym',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_video_target.mp4'
             },
@@ -5461,7 +6077,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Oxana Gym Front',
                 place: 'gym',
                 format: 'horizontal',
-                tags: ["sitting","athletic","focused"],
+                tags: ["sitting","fitness","focused"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/77c8e6b6c3174f1c91f9f6b4f3c07c3a_38710/preview_talk_1.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/77c8e6b6c3174f1c91f9f6b4f3c07c3a_38710/preview_video_talk_1.mp4'
             },
@@ -5730,7 +6346,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Roman',
         gender: 'male',
         age: 'unknown',
-        tags: ["outdoor","athletic","energetic","fitness"],
+        tags: ["outdoor","fitness","energetic","fitness"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_target.webp',
         look_ids: ["Roman_standing_outdoorsport_front"],
@@ -5740,7 +6356,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Roman Outdoor Sport Front',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_video_target.mp4'
             }

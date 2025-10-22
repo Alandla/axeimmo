@@ -209,7 +209,7 @@ export function AvatarImagePickerDeck({
               <div ref={cardsGroupRef} className="absolute inset-0">
                 {[
                   { idx: 0, key: 'c0', base: "left-0 top-2 -rotate-6 z-0" },
-                  { idx: 2, key: 'c1', base: "left-1/2 -translate-x-1/2 rotate-0 z-10" },
+                  { idx: 2, key: 'c1', base: "left-1/2 -translate-x-1/2 top-2 rotate-0 scale-110 z-10" },
                   { idx: 3, key: 'c2', base: "right-0 top-2 rotate-6 z-0" },
                 ].map((cfg, i) => {
                   const a = avatarsConfig[cfg.idx];

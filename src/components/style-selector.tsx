@@ -58,7 +58,6 @@ export function StyleSelector({ value, onValueChange, disabled, className, light
                 className="h-10 w-10 rounded-md object-cover border"
                 width={40}
                 height={40}
-                loading="lazy"
                 decoding="async"
               />
               <span className="text-sm">{t(`styles.${style.key}`)}</span>
