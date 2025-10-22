@@ -124,8 +124,12 @@ export default function ModalConfirmExport({
     const avatarHasPreview = video?.video?.avatar?.previewUrl
     if (!avatarHasPreview && video?.useVeo3) {
       setSelectedAvatarModel('veo-3-fast')
-    } else {
+    } else if (avatarHasPreview) {
+      // If avatar has preview, use standard model (selector won't be shown)
       setSelectedAvatarModel('heygen')
+    } else {
+      // If avatar doesn't have preview, use premium model (standard is hidden)
+      setSelectedAvatarModel('heygen-iv')
     }
 
     if (initialCredits !== undefined) {
@@ -202,7 +206,7 @@ export default function ModalConfirmExport({
               </p>
             </div>
 
-            {hasAvatar && video && !avatarHasPreviewUrl && (
+            {hasAvatar && video && !avatarHasPreviewUrl && (video?.video?.avatar?.id || !video?.video?.avatar?.videoUrl) && (
               <div className="mt-4">
                 <Label className="text-sm font-bold mb-2">
                   {t('avatar-model-label')} :

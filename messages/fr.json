@@ -363,6 +363,7 @@
       },
       "select-avatar": "Sélectionner un avatar",
       "no-avatar": "Aucun avatar",
+      "custom-avatar": "Avatar personnalisé",
       "confirm": "Confirmer",
       "cancel": "Annuler",
       "modal-pricing-not-enough-credits": "Pas assez de crédits",
