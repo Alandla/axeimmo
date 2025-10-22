@@ -3,11 +3,10 @@
     "$oid": "6751efc06fa24b6bfc7c6583"
   },
   "archived": false,
-  "useVeo3": true,
   "state": {
     "type": "done"
   },
-  "runId": "run_cmgu72mrnhxf72yn3la19if1o",
+  "runId": "run_cmgu96dnyi9ot2xoone08qmcp",
   "history": [
     {
       "step": "CREATE",
@@ -15,98 +14,98 @@
         "$oid": "6751efc06fa24b6bfc7c6582"
       },
       "date": {
-        "$date": "2025-10-17T01:53:20.397Z"
+        "$date": "2025-10-17T02:52:09.569Z"
       },
       "_id": {
-        "$oid": "68f1a19007181c7326c13e26"
+        "$oid": "68f1af59fefddceaf9163536"
       }
     }
   ],
   "video": {
     "audio": {
       "music": {
-        "url": "https://music.hoox.video/weeknds-122592.mp3",
-        "volume": 0.07,
-        "name": "Weeknds",
-        "genre": "Informative"
+        "name": "Energy Percussion",
+        "url": "https://music.hoox.video/energy-percussion-262599.mp3",
+        "genre": "Entertaining",
+        "volume": 0.05
       },
       "voices": [
         {
-          "url": "",
+          "url": "https://media.hoox.video/4454647e-b6fa-4006-b1a8-8feff3434118.mp3",
           "index": 0,
           "start": 0,
-          "end": 6,
-          "durationInFrames": 360,
+          "end": 4.72,
+          "durationInFrames": 283,
           "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68f1a1a707181c7326c14675"
+            "$oid": "68f1af6ffefddceaf9163d9b"
           }
         },
         {
-          "url": "",
+          "url": "https://media.hoox.video/393a73cf-aeaa-4bc3-b71e-c0b86d4d6b1d.mp3",
           "index": 1,
-          "start": 6,
-          "end": 12,
-          "durationInFrames": 360,
+          "start": 4.72,
+          "end": 9.959999999999999,
+          "durationInFrames": 314,
           "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68f1a1a707181c7326c14676"
+            "$oid": "68f1af6ffefddceaf9163d9c"
           }
         },
         {
-          "url": "",
+          "url": "https://media.hoox.video/e84b310f-797f-4c25-bcbc-67d62f78a431.mp3",
           "index": 2,
-          "start": 12,
-          "end": 18,
-          "durationInFrames": 360,
+          "start": 9.959999999999999,
+          "end": 14.38,
+          "durationInFrames": 265,
           "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68f1a1a707181c7326c14677"
+            "$oid": "68f1af6ffefddceaf9163d9d"
           }
         },
         {
-          "url": "",
+          "url": "https://media.hoox.video/7796b439-5250-4ce8-8f4f-0954302b78f7.mp3",
           "index": 3,
-          "start": 18,
-          "end": 21,
-          "durationInFrames": 180,
+          "start": 14.38,
+          "end": 18.64,
+          "durationInFrames": 255,
           "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68f1a1a707181c7326c14678"
+            "$oid": "68f1af6ffefddceaf9163d9e"
           }
         },
         {
-          "url": "",
+          "url": "https://media.hoox.video/29b9af74-49c5-4c65-81b0-7017484dbaca.mp3",
           "index": 4,
-          "start": 21,
-          "end": 27,
-          "durationInFrames": 360,
+          "start": 18.64,
+          "end": 22.98,
+          "durationInFrames": 260,
           "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68f1a1a707181c7326c14679"
+            "$oid": "68f1af6ffefddceaf9163d9f"
           }
         },
         {
-          "url": "",
+          "url": "https://media.hoox.video/67b28c84-4129-44f7-ace8-bd5eb732c344.mp3",
           "index": 5,
-          "start": 27,
-          "end": 30.5,
-          "durationInFrames": 210,
+          "start": 22.98,
+          "end": 27.32,
+          "durationInFrames": 259,
           "voiceId": "6vTyAgAT8PncODBcLjRf",
           "startOffset": 0,
           "emotionEnhancement": false,
           "_id": {
-            "$oid": "68f1a1a707181c7326c1467a"
+            "$oid": "68f1af6ffefddceaf9163da0"
           }
         }
       ],
@@ -121,10 +120,10 @@
         "fontSize": 60,
         "color": "#ffffff",
         "isItalic": false,
-        "isPunctuation": true,
+        "isPunctuation": false,
         "isUppercase": false,
         "mode": "twoLines",
-        "position": 56,
+        "position": 57,
         "shadow": {
           "isActive": true,
           "size": 1,
@@ -133,20 +132,84 @@
       }
     },
     "metadata": {
-      "audio_duration": 30.5,
-      "language": "unknown"
+      "audio_duration": 27.32
     },
     "avatar": {
+      "settings": {
+        "position": 19.25909972491722,
+        "verticalPosition": 40.547246194950525
+      },
       "id": "dmJI-dVrGoCPXIGhhPv6h",
       "name": "First Look",
       "thumbnail": "https://media.hoox.video/avatar-look-dmJI-dVrGoCPXIGhhPv6h-upscaled-1760663405982.jpg",
       "previewUrl": "",
       "videoUrl": "",
       "format": "vertical",
-      "settings": {
-        "position": 22.95664996114199,
-        "verticalPosition": 39.37693435883772
-      }
+      "renders": [
+        {
+          "audioIndex": 0,
+          "startInFrames": 0,
+          "durationInSeconds": 4.72,
+          "url": "https://media.hoox.video/avatar-iv-68f1af59fefddceaf9163535-0-0-1760671050051.mp4",
+          "_id": {
+            "$oid": "68f1b54bd8fdc70e2f5fb78a"
+          }
+        },
+        {
+          "audioIndex": 1,
+          "startInFrames": 283,
+          "durationInSeconds": 2.5200000000000005,
+          "url": "https://media.hoox.video/avatar-iv-68f1af59fefddceaf9163535-1-283-1760671050049.mp4",
+          "_id": {
+            "$oid": "68f1b54bd8fdc70e2f5fb78b"
+          }
+        },
+        {
+          "audioIndex": 1,
+          "startInFrames": 497,
+          "durationInSeconds": 1.6799999999999997,
+          "url": "https://media.hoox.video/avatar-iv-68f1af59fefddceaf9163535-1-497-1760671050045.mp4",
+          "_id": {
+            "$oid": "68f1b54bd8fdc70e2f5fb78c"
+          }
+        },
+        {
+          "audioIndex": 2,
+          "startInFrames": 699,
+          "durationInSeconds": 2.7200000000000006,
+          "url": "https://media.hoox.video/avatar-iv-68f1af59fefddceaf9163535-2-699-1760671050050.mp4",
+          "_id": {
+            "$oid": "68f1b54bd8fdc70e2f5fb78d"
+          }
+        },
+        {
+          "audioIndex": 3,
+          "startInFrames": 862,
+          "durationInSeconds": 4.26,
+          "url": "https://media.hoox.video/avatar-iv-68f1af59fefddceaf9163535-3-862-1760671050051.mp4",
+          "_id": {
+            "$oid": "68f1b54bd8fdc70e2f5fb78e"
+          }
+        },
+        {
+          "audioIndex": 4,
+          "startInFrames": 1117,
+          "durationInSeconds": 4.34,
+          "url": "https://media.hoox.video/avatar-iv-68f1af59fefddceaf9163535-4-1117-1760671050052.mp4",
+          "_id": {
+            "$oid": "68f1b54bd8fdc70e2f5fb78f"
+          }
+        },
+        {
+          "audioIndex": 5,
+          "startInFrames": 1377,
+          "durationInSeconds": 4.34,
+          "url": "https://media.hoox.video/avatar-iv-68f1af59fefddceaf9163535-5-1377-1760671050052.mp4",
+          "_id": {
+            "$oid": "68f1b54bd8fdc70e2f5fb790"
+          }
+        }
+      ]
     },
     "keywords": [
       "avatar creation",
@@ -163,30 +226,16 @@
     "transitions": [
       {
         "indexSequenceBefore": 1,
-        "durationInFrames": 24,
-        "video": "https://assets.hoox.video/Film_Burns_23.mp4",
-        "thumbnail": "https://assets.hoox.video/Film_Burns_23-thumbnail.png",
+        "durationInFrames": 27,
+        "video": "https://assets.hoox.video/Film_Burns_21.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_21-thumbnail.png",
         "sound": "https://assets.hoox.video/Hard.wav",
         "volume": 0.15,
         "fullAt": 11,
         "category": "Burnt Film",
         "mode": "lighten",
         "_id": {
-          "$oid": "68f1a1a707181c7326c14670"
-        }
-      },
-      {
-        "indexSequenceBefore": 4,
-        "durationInFrames": 77,
-        "video": "https://assets.hoox.video/Film_Burns_18.mp4",
-        "thumbnail": "https://assets.hoox.video/Film_Burns_18-thumbnail.png",
-        "sound": "https://assets.hoox.video/Fast%20Swipe.wav",
-        "volume": 0.15,
-        "fullAt": 47,
-        "category": "Burnt Film",
-        "mode": "lighten",
-        "_id": {
-          "$oid": "68f1a1a707181c7326c14671"
+          "$oid": "68f1af6ffefddceaf9163d96"
         }
       },
       {
@@ -194,31 +243,45 @@
         "durationInFrames": 46,
         "video": "https://assets.hoox.video/Film_Burns_08.mp4",
         "thumbnail": "https://assets.hoox.video/Film_Burns_08-thumbnail.png",
+        "sound": "https://assets.hoox.video/Hard%20Swipe.wav",
+        "volume": 0.15,
+        "fullAt": 11,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "68f1af6ffefddceaf9163d98"
+        }
+      },
+      {
+        "indexSequenceBefore": 8,
+        "durationInFrames": 56,
+        "video": "https://assets.hoox.video/Film_Burns_20.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_20-thumbnail.png",
+        "sound": "https://assets.hoox.video/Soft%20Wipe.wav",
+        "volume": 0.15,
+        "fullAt": 27,
+        "category": "Burnt Film",
+        "mode": "lighten",
+        "_id": {
+          "$oid": "68f1af6ffefddceaf9163d99"
+        }
+      },
+      {
+        "indexSequenceBefore": 10,
+        "durationInFrames": 27,
+        "video": "https://assets.hoox.video/Film_Burns_21.mp4",
+        "thumbnail": "https://assets.hoox.video/Film_Burns_21-thumbnail.png",
         "sound": "https://assets.hoox.video/Fast%20Swipe%20Right.wav",
         "volume": 0.15,
         "fullAt": 11,
         "category": "Burnt Film",
         "mode": "lighten",
         "_id": {
-          "$oid": "68f1a1a707181c7326c14672"
-        }
-      },
-      {
-        "indexSequenceBefore": 9,
-        "durationInFrames": 46,
-        "video": "https://assets.hoox.video/Film_Burns_08.mp4",
-        "thumbnail": "https://assets.hoox.video/Film_Burns_08-thumbnail.png",
-        "sound": "https://assets.hoox.video/Fast%20Swipe.wav",
-        "volume": 0.15,
-        "fullAt": 11,
-        "category": "Burnt Film",
-        "mode": "lighten",
-        "_id": {
-          "$oid": "68f1a1a707181c7326c14674"
+          "$oid": "68f1af6ffefddceaf9163d9a"
         }
       }
     ],
-    "thumbnail": "",
+    "thumbnail": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-25y8be5225/renders/cayvnw8tkq/out.jpeg",
     "format": "vertical",
     "sequences": [
       {
@@ -226,98 +289,98 @@
           {
             "word": "Tu",
             "start": 0,
-            "end": 0.3,
-            "durationInFrames": 18,
+            "end": 0.12,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "68f1a1a707181c7326c145f7"
+              "$oid": "68f1af6ffefddceaf9163d1b"
             }
           },
           {
             "word": "peux",
-            "start": 0.3,
-            "end": 0.6,
-            "durationInFrames": 18,
+            "start": 0.12,
+            "end": 0.28,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "68f1a1a707181c7326c145f8"
+              "$oid": "68f1af6ffefddceaf9163d1c"
             }
           },
           {
             "word": "maintenant",
-            "start": 0.6,
-            "end": 0.8999999999999999,
-            "durationInFrames": 18,
+            "start": 0.28,
+            "end": 0.62,
+            "durationInFrames": 20,
             "_id": {
-              "$oid": "68f1a1a707181c7326c145f9"
+              "$oid": "68f1af6ffefddceaf9163d1d"
             }
           },
           {
             "word": "créer",
-            "start": 0.8999999999999999,
-            "end": 1.2,
-            "durationInFrames": 18,
+            "start": 0.62,
+            "end": 0.9,
+            "durationInFrames": 17,
             "_id": {
-              "$oid": "68f1a1a707181c7326c145fa"
+              "$oid": "68f1af6ffefddceaf9163d1e"
             }
           },
           {
             "word": "des",
-            "start": 1.2,
-            "end": 1.5,
-            "durationInFrames": 18,
+            "start": 0.9,
+            "end": 1.1,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "68f1a1a707181c7326c145fb"
+              "$oid": "68f1af6ffefddceaf9163d1f"
             }
           },
           {
             "word": "UGC",
-            "start": 1.5,
-            "end": 1.8,
-            "durationInFrames": 18,
+            "start": 1.1,
+            "end": 1.48,
+            "durationInFrames": 23,
             "_id": {
-              "$oid": "68f1a1a707181c7326c145fc"
+              "$oid": "68f1af6ffefddceaf9163d20"
             }
           },
           {
             "word": "super",
-            "start": 1.7999999999999998,
-            "end": 2.0999999999999996,
-            "durationInFrames": 18,
+            "start": 1.48,
+            "end": 1.8,
+            "durationInFrames": 19,
             "_id": {
-              "$oid": "68f1a1a707181c7326c145fd"
+              "$oid": "68f1af6ffefddceaf9163d21"
             }
           },
           {
             "word": "réalistes",
-            "start": 2.1,
-            "end": 2.4,
-            "durationInFrames": 18,
+            "start": 1.8,
+            "end": 2.28,
+            "durationInFrames": 29,
             "_id": {
-              "$oid": "68f1a1a707181c7326c145fe"
+              "$oid": "68f1af6ffefddceaf9163d22"
             }
           },
           {
             "word": "comme",
-            "start": 2.4,
-            "end": 2.6999999999999997,
-            "durationInFrames": 18,
+            "start": 2.28,
+            "end": 2.9,
+            "durationInFrames": 37,
             "_id": {
-              "$oid": "68f1a1a707181c7326c145ff"
+              "$oid": "68f1af6ffefddceaf9163d23"
             }
           },
           {
             "word": "moi",
-            "start": 2.6999999999999997,
-            "end": 2.9999999999999996,
-            "durationInFrames": 18,
+            "start": 2.9,
+            "end": 3.16,
+            "durationInFrames": 16,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14600"
+              "$oid": "68f1af6ffefddceaf9163d24"
             }
           }
         ],
         "text": "Tu peux maintenant créer des UGC super réalistes comme moi",
         "start": 0,
-        "end": 3,
-        "durationInFrames": 180,
+        "end": 3.16,
+        "durationInFrames": 190,
         "audioIndex": 0,
         "media": {
           "type": "video",
@@ -332,7 +395,7 @@
               "duration": 4,
               "text": "A user types \"A woman in the kitchen, holding a water glass\" into the prompt field of the \"Create avatar\" modal.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14602"
+                "$oid": "68f1af6ffefddceaf9163d26"
               }
             },
             {
@@ -340,7 +403,7 @@
               "duration": 5,
               "text": "A user reviews options in the \"Create avatar\" modal, hovering over the \"Selfie\" button, then activating the \"Upscale\" toggle, and finally positioning the cursor over the \"Start generation\" button.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14603"
+                "$oid": "68f1af6ffefddceaf9163d27"
               }
             },
             {
@@ -348,69 +411,69 @@
               "duration": 4,
               "text": "The \"Start generation\" button in the \"Create avatar\" modal displays a loading animation after being clicked, indicating the avatar generation process is underway.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14604"
+                "$oid": "68f1af6ffefddceaf9163d28"
               }
             }
           ],
           "video": {
-            "id": "7762dccf-0cfa-48ea-ac90-1e7e35a83016",
+            "id": "5d83a7af-7dbd-43df-98d5-1e5892a14a2c",
             "file_type": "video/mp4",
             "size": 3009788,
             "width": 1920,
             "height": 1080,
-            "link": "https://media.hoox.video/7762dccf-0cfa-48ea-ac90-1e7e35a83016.mp4",
+            "link": "https://media.hoox.video/5d83a7af-7dbd-43df-98d5-1e5892a14a2c.mp4",
             "frames": [
-              "https://media.hoox.video/frames_a84fcffb-0bac-45f9-aeec-2fc401cf8a3d_unknown.jpg",
-              "https://media.hoox.video/frames_5c54b283-af9f-4bd5-9e9c-5edd08ac81a5_unknown.jpg",
-              "https://media.hoox.video/frames_8299e8da-7e0a-4cac-94fe-9eb978052d75_unknown.jpg",
-              "https://media.hoox.video/frames_9c6222d5-30b6-4e2d-9411-603d625bedf4_unknown.jpg",
-              "https://media.hoox.video/frames_b7959369-144c-4180-9a92-7c4d9a8ef381_unknown.jpg",
-              "https://media.hoox.video/frames_b77097d0-f328-4a0a-baab-2a298b205cc6_unknown.jpg"
+              "https://media.hoox.video/frames_9ceef797-e0a3-4565-96ae-47762b21af11_unknown.jpg",
+              "https://media.hoox.video/frames_5b938fcc-7c72-47c7-9d0c-d989638d7a54_unknown.jpg",
+              "https://media.hoox.video/frames_39fc5eb6-5b2b-42da-9d2c-962d6cf741be_unknown.jpg",
+              "https://media.hoox.video/frames_63160255-ebbc-4e0f-b952-e35aa880a68c_unknown.jpg",
+              "https://media.hoox.video/frames_003fc1f8-62de-4164-b805-f9246a387713_unknown.jpg",
+              "https://media.hoox.video/frames_d61e5bba-669f-498c-8b09-8fec919c59ab_unknown.jpg"
             ],
             "durationInSeconds": 13.200000000000001
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d30b2"
+            "$oid": "68f1b54bd8fdc70e2f5fb710"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c145f6"
+          "$oid": "68f1af6ffefddceaf9163d1a"
         }
       },
       {
         "words": [
           {
             "word": "directement",
-            "start": 3,
-            "end": 4,
-            "durationInFrames": 60,
+            "start": 3.16,
+            "end": 3.6,
+            "durationInFrames": 26,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14606"
+              "$oid": "68f1af6ffefddceaf9163d2a"
             }
           },
           {
             "word": "dans",
-            "start": 4,
-            "end": 5,
-            "durationInFrames": 60,
+            "start": 3.6,
+            "end": 3.88,
+            "durationInFrames": 17,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14607"
+              "$oid": "68f1af6ffefddceaf9163d2b"
             }
           },
           {
             "word": "Hoox.",
-            "start": 5,
-            "end": 6,
-            "durationInFrames": 60,
+            "start": 3.88,
+            "end": 4.72,
+            "durationInFrames": 50,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14608"
+              "$oid": "68f1af6ffefddceaf9163d2c"
             }
           }
         ],
         "text": "directement dans Hoox.",
-        "start": 3,
-        "end": 6,
-        "durationInFrames": 180,
+        "start": 3.16,
+        "end": 4.72,
+        "durationInFrames": 93,
         "audioIndex": 0,
         "media": {
           "type": "video",
@@ -423,7 +486,7 @@
               "start": 0,
               "text": "The video begins with a close-up view of a person's torso and arms, adorned with a brightly colored, intricate mandala-like projection. The central pattern features concentric rings of pink, orange, and yellow, surrounded by green petal-like shapes. Abstract, blurry green light effects form the background and appear to emanate from the sides. Over the first four seconds, the person's arms are observed to move subtly, shifting their position outwards and slightly away from the body, while the central projection remains consistent and vibrant.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c1460a"
+                "$oid": "68f1af6ffefddceaf9163d2e"
               }
             }
           ],
@@ -457,92 +520,92 @@
             "height": 1080
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d30ba"
+            "$oid": "68f1b54bd8fdc70e2f5fb718"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c14605"
+          "$oid": "68f1af6ffefddceaf9163d29"
         }
       },
       {
         "words": [
           {
             "word": "Crée",
-            "start": 6,
-            "end": 6.25,
-            "durationInFrames": 15,
+            "start": 4.72,
+            "end": 4.9399999999999995,
+            "durationInFrames": 13,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1460c"
+              "$oid": "68f1af6ffefddceaf9163d30"
             }
           },
           {
             "word": "un",
-            "start": 6.25,
-            "end": 6.5,
-            "durationInFrames": 15,
+            "start": 4.9399999999999995,
+            "end": 5.06,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1460d"
+              "$oid": "68f1af6ffefddceaf9163d31"
             }
           },
           {
             "word": "nouvel",
-            "start": 6.5,
-            "end": 6.75,
-            "durationInFrames": 15,
+            "start": 5.06,
+            "end": 5.319999999999999,
+            "durationInFrames": 16,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1460e"
+              "$oid": "68f1af6ffefddceaf9163d32"
             }
           },
           {
             "word": "avatar",
-            "start": 6.75,
-            "end": 7,
-            "durationInFrames": 15,
+            "start": 5.319999999999999,
+            "end": 5.779999999999999,
+            "durationInFrames": 28,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1460f"
+              "$oid": "68f1af6ffefddceaf9163d33"
             }
           },
           {
             "word": "avec",
-            "start": 7,
-            "end": 7.25,
-            "durationInFrames": 15,
+            "start": 5.779999999999999,
+            "end": 6.14,
+            "durationInFrames": 22,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14610"
+              "$oid": "68f1af6ffefddceaf9163d34"
             }
           },
           {
             "word": "un",
-            "start": 7.25,
-            "end": 7.5,
-            "durationInFrames": 15,
+            "start": 6.14,
+            "end": 6.34,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14611"
+              "$oid": "68f1af6ffefddceaf9163d35"
             }
           },
           {
             "word": "simple",
-            "start": 7.5,
-            "end": 7.75,
-            "durationInFrames": 15,
+            "start": 6.34,
+            "end": 6.68,
+            "durationInFrames": 20,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14612"
+              "$oid": "68f1af6ffefddceaf9163d36"
             }
           },
           {
             "word": "prompt",
-            "start": 7.75,
-            "end": 8,
-            "durationInFrames": 15,
+            "start": 6.68,
+            "end": 7.039999999999999,
+            "durationInFrames": 22,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14613"
+              "$oid": "68f1af6ffefddceaf9163d37"
             }
           }
         ],
         "text": "Crée un nouvel avatar avec un simple prompt",
-        "start": 6,
-        "end": 8,
-        "durationInFrames": 120,
+        "start": 4.72,
+        "end": 7.039999999999999,
+        "durationInFrames": 140,
         "audioIndex": 1,
         "media": {
           "type": "video",
@@ -557,7 +620,7 @@
               "duration": 4,
               "text": "A user types \"A woman in the kitchen, holding a water glass\" into the prompt field of the \"Create avatar\" modal.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14619"
+                "$oid": "68f1af6ffefddceaf9163d3d"
               }
             },
             {
@@ -565,7 +628,7 @@
               "duration": 5,
               "text": "A user reviews options in the \"Create avatar\" modal, hovering over the \"Selfie\" button, then activating the \"Upscale\" toggle, and finally positioning the cursor over the \"Start generation\" button.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c1461a"
+                "$oid": "68f1af6ffefddceaf9163d3e"
               }
             },
             {
@@ -573,106 +636,102 @@
               "duration": 4,
               "text": "The \"Start generation\" button in the \"Create avatar\" modal displays a loading animation after being clicked, indicating the avatar generation process is underway.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c1461b"
+                "$oid": "68f1af6ffefddceaf9163d3f"
               }
             }
           ],
-          "position": {
-            "x": 49.50042960319251,
-            "y": 22.221709433265644
-          },
           "video": {
-            "id": "7762dccf-0cfa-48ea-ac90-1e7e35a83016",
+            "id": "5d83a7af-7dbd-43df-98d5-1e5892a14a2c",
             "file_type": "video/mp4",
             "size": 3009788,
             "width": 1920,
             "height": 1080,
-            "link": "https://media.hoox.video/7762dccf-0cfa-48ea-ac90-1e7e35a83016.mp4",
+            "link": "https://media.hoox.video/5d83a7af-7dbd-43df-98d5-1e5892a14a2c.mp4",
             "frames": [
-              "https://media.hoox.video/frames_a84fcffb-0bac-45f9-aeec-2fc401cf8a3d_unknown.jpg",
-              "https://media.hoox.video/frames_5c54b283-af9f-4bd5-9e9c-5edd08ac81a5_unknown.jpg",
-              "https://media.hoox.video/frames_8299e8da-7e0a-4cac-94fe-9eb978052d75_unknown.jpg",
-              "https://media.hoox.video/frames_9c6222d5-30b6-4e2d-9411-603d625bedf4_unknown.jpg",
-              "https://media.hoox.video/frames_b7959369-144c-4180-9a92-7c4d9a8ef381_unknown.jpg",
-              "https://media.hoox.video/frames_b77097d0-f328-4a0a-baab-2a298b205cc6_unknown.jpg"
+              "https://media.hoox.video/frames_9ceef797-e0a3-4565-96ae-47762b21af11_unknown.jpg",
+              "https://media.hoox.video/frames_5b938fcc-7c72-47c7-9d0c-d989638d7a54_unknown.jpg",
+              "https://media.hoox.video/frames_39fc5eb6-5b2b-42da-9d2c-962d6cf741be_unknown.jpg",
+              "https://media.hoox.video/frames_63160255-ebbc-4e0f-b952-e35aa880a68c_unknown.jpg",
+              "https://media.hoox.video/frames_003fc1f8-62de-4164-b805-f9246a387713_unknown.jpg",
+              "https://media.hoox.video/frames_d61e5bba-669f-498c-8b09-8fec919c59ab_unknown.jpg"
             ],
             "durationInSeconds": 13.200000000000001
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d30c5"
+            "$oid": "68f1b54bd8fdc70e2f5fb723"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c1460b"
+          "$oid": "68f1af6ffefddceaf9163d2f"
         }
       },
       {
         "words": [
           {
             "word": "et",
-            "start": 8,
-            "end": 8.25,
-            "durationInFrames": 15,
+            "start": 7.039999999999999,
+            "end": 7.24,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14614"
+              "$oid": "68f1af6ffefddceaf9163d38"
             }
           },
           {
             "word": "je",
-            "start": 8.25,
-            "end": 8.5,
-            "durationInFrames": 15,
+            "start": 7.24,
+            "end": 7.359999999999999,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14615"
+              "$oid": "68f1af6ffefddceaf9163d39"
             }
           },
           {
             "word": "te",
-            "start": 8.5,
-            "end": 8.75,
-            "durationInFrames": 15,
+            "start": 7.359999999999999,
+            "end": 7.4799999999999995,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14616"
+              "$oid": "68f1af6ffefddceaf9163d3a"
             }
           },
           {
             "word": "conseille",
-            "start": 8.75,
-            "end": 9,
-            "durationInFrames": 15,
+            "start": 7.4799999999999995,
+            "end": 7.8,
+            "durationInFrames": 19,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14617"
+              "$oid": "68f1af6ffefddceaf9163d3b"
             }
           },
           {
             "word": "d'activé",
-            "start": 9,
-            "end": 9.5,
-            "durationInFrames": 30,
+            "start": 7.8,
+            "end": 8.28,
+            "durationInFrames": 29,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1461d"
+              "$oid": "68f1af6ffefddceaf9163d41"
             }
           },
           {
             "word": "l'upscale",
-            "start": 9.5,
-            "end": 10,
-            "durationInFrames": 30,
+            "start": 8.28,
+            "end": 8.68,
+            "durationInFrames": 24,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1461e"
+              "$oid": "68f1af6ffefddceaf9163d42"
             }
           }
         ],
         "text": "et je te conseille d'activé l'upscale",
-        "start": 8,
-        "end": 10,
-        "durationInFrames": 120,
+        "start": 7.039999999999999,
+        "end": 8.68,
+        "durationInFrames": 98,
         "audioIndex": 1,
         "media": {
           "type": "video",
           "usage": "media",
           "show": "full",
-          "startAt": 5.9,
+          "startAt": 6.2,
           "name": "create-an-avatar.mp4",
           "generationStatus": "completed",
           "description": [
@@ -681,7 +740,7 @@
               "duration": 4,
               "text": "A user types \"A woman in the kitchen, holding a water glass\" into the prompt field of the \"Create avatar\" modal.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14619"
+                "$oid": "68f1af6ffefddceaf9163d48"
               }
             },
             {
@@ -689,7 +748,7 @@
               "duration": 5,
               "text": "A user reviews options in the \"Create avatar\" modal, hovering over the \"Selfie\" button, then activating the \"Upscale\" toggle, and finally positioning the cursor over the \"Start generation\" button.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c1461a"
+                "$oid": "68f1af6ffefddceaf9163d49"
               }
             },
             {
@@ -697,82 +756,78 @@
               "duration": 4,
               "text": "The \"Start generation\" button in the \"Create avatar\" modal displays a loading animation after being clicked, indicating the avatar generation process is underway.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c1461b"
+                "$oid": "68f1af6ffefddceaf9163d4a"
               }
             }
           ],
-          "position": {
-            "x": 56.607456635147244,
-            "y": 61.235206038602755
-          },
           "video": {
-            "id": "7762dccf-0cfa-48ea-ac90-1e7e35a83016",
+            "id": "5d83a7af-7dbd-43df-98d5-1e5892a14a2c",
             "file_type": "video/mp4",
             "size": 3009788,
             "width": 1920,
             "height": 1080,
-            "link": "https://media.hoox.video/7762dccf-0cfa-48ea-ac90-1e7e35a83016.mp4",
+            "link": "https://media.hoox.video/5d83a7af-7dbd-43df-98d5-1e5892a14a2c.mp4",
             "frames": [
-              "https://media.hoox.video/frames_a84fcffb-0bac-45f9-aeec-2fc401cf8a3d_unknown.jpg",
-              "https://media.hoox.video/frames_5c54b283-af9f-4bd5-9e9c-5edd08ac81a5_unknown.jpg",
-              "https://media.hoox.video/frames_8299e8da-7e0a-4cac-94fe-9eb978052d75_unknown.jpg",
-              "https://media.hoox.video/frames_9c6222d5-30b6-4e2d-9411-603d625bedf4_unknown.jpg",
-              "https://media.hoox.video/frames_b7959369-144c-4180-9a92-7c4d9a8ef381_unknown.jpg",
-              "https://media.hoox.video/frames_b77097d0-f328-4a0a-baab-2a298b205cc6_unknown.jpg"
+              "https://media.hoox.video/frames_9ceef797-e0a3-4565-96ae-47762b21af11_unknown.jpg",
+              "https://media.hoox.video/frames_5b938fcc-7c72-47c7-9d0c-d989638d7a54_unknown.jpg",
+              "https://media.hoox.video/frames_39fc5eb6-5b2b-42da-9d2c-962d6cf741be_unknown.jpg",
+              "https://media.hoox.video/frames_63160255-ebbc-4e0f-b952-e35aa880a68c_unknown.jpg",
+              "https://media.hoox.video/frames_003fc1f8-62de-4164-b805-f9246a387713_unknown.jpg",
+              "https://media.hoox.video/frames_d61e5bba-669f-498c-8b09-8fec919c59ab_unknown.jpg"
             ],
             "durationInSeconds": 13.200000000000001
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d30d0"
+            "$oid": "68f1b54bd8fdc70e2f5fb72e"
           }
         },
         "_id": {
-          "$oid": "68f1a285f6877a62465d30c9"
+          "$oid": "68f1af6ffefddceaf9163d40"
         }
       },
       {
         "words": [
           {
             "word": "pour",
-            "start": 10,
-            "end": 10.5,
-            "durationInFrames": 30,
+            "start": 8.68,
+            "end": 8.92,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1461f"
+              "$oid": "68f1af6ffefddceaf9163d43"
             }
           },
           {
             "word": "une",
-            "start": 10.5,
-            "end": 11,
-            "durationInFrames": 30,
+            "start": 8.92,
+            "end": 9.02,
+            "durationInFrames": 6,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14620"
+              "$oid": "68f1af6ffefddceaf9163d44"
             }
           },
           {
             "word": "meilleure",
-            "start": 11,
-            "end": 11.5,
-            "durationInFrames": 30,
+            "start": 9.02,
+            "end": 9.36,
+            "durationInFrames": 20,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14621"
+              "$oid": "68f1af6ffefddceaf9163d45"
             }
           },
           {
             "word": "qualité.",
-            "start": 11.5,
-            "end": 12,
-            "durationInFrames": 30,
+            "start": 9.36,
+            "end": 9.959999999999999,
+            "durationInFrames": 36,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14622"
+              "$oid": "68f1af6ffefddceaf9163d46"
             }
           }
         ],
         "text": "pour une meilleure qualité.",
-        "start": 10,
-        "end": 12,
-        "durationInFrames": 120,
+        "start": 8.68,
+        "end": 9.959999999999999,
+        "durationInFrames": 76,
         "audioIndex": 1,
         "media": {
           "type": "video",
@@ -787,7 +842,7 @@
               "duration": 4,
               "text": "A user types \"A woman in the kitchen, holding a water glass\" into the prompt field of the \"Create avatar\" modal.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14624"
+                "$oid": "68f1af6ffefddceaf9163d48"
               }
             },
             {
@@ -795,7 +850,7 @@
               "duration": 5,
               "text": "A user reviews options in the \"Create avatar\" modal, hovering over the \"Selfie\" button, then activating the \"Upscale\" toggle, and finally positioning the cursor over the \"Start generation\" button.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14625"
+                "$oid": "68f1af6ffefddceaf9163d49"
               }
             },
             {
@@ -803,105 +858,105 @@
               "duration": 4,
               "text": "The \"Start generation\" button in the \"Create avatar\" modal displays a loading animation after being clicked, indicating the avatar generation process is underway.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14626"
+                "$oid": "68f1af6ffefddceaf9163d4a"
               }
             }
           ],
           "video": {
-            "id": "7762dccf-0cfa-48ea-ac90-1e7e35a83016",
+            "id": "5d83a7af-7dbd-43df-98d5-1e5892a14a2c",
             "file_type": "video/mp4",
             "size": 3009788,
             "width": 1920,
             "height": 1080,
-            "link": "https://media.hoox.video/7762dccf-0cfa-48ea-ac90-1e7e35a83016.mp4",
+            "link": "https://media.hoox.video/5d83a7af-7dbd-43df-98d5-1e5892a14a2c.mp4",
             "frames": [
-              "https://media.hoox.video/frames_a84fcffb-0bac-45f9-aeec-2fc401cf8a3d_unknown.jpg",
-              "https://media.hoox.video/frames_5c54b283-af9f-4bd5-9e9c-5edd08ac81a5_unknown.jpg",
-              "https://media.hoox.video/frames_8299e8da-7e0a-4cac-94fe-9eb978052d75_unknown.jpg",
-              "https://media.hoox.video/frames_9c6222d5-30b6-4e2d-9411-603d625bedf4_unknown.jpg",
-              "https://media.hoox.video/frames_b7959369-144c-4180-9a92-7c4d9a8ef381_unknown.jpg",
-              "https://media.hoox.video/frames_b77097d0-f328-4a0a-baab-2a298b205cc6_unknown.jpg"
+              "https://media.hoox.video/frames_9ceef797-e0a3-4565-96ae-47762b21af11_unknown.jpg",
+              "https://media.hoox.video/frames_5b938fcc-7c72-47c7-9d0c-d989638d7a54_unknown.jpg",
+              "https://media.hoox.video/frames_39fc5eb6-5b2b-42da-9d2c-962d6cf741be_unknown.jpg",
+              "https://media.hoox.video/frames_63160255-ebbc-4e0f-b952-e35aa880a68c_unknown.jpg",
+              "https://media.hoox.video/frames_003fc1f8-62de-4164-b805-f9246a387713_unknown.jpg",
+              "https://media.hoox.video/frames_d61e5bba-669f-498c-8b09-8fec919c59ab_unknown.jpg"
             ],
             "durationInSeconds": 13.200000000000001
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d30d9"
+            "$oid": "68f1b54bd8fdc70e2f5fb737"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c1461c"
+          "$oid": "68f1b15ff6877a62465df141"
         }
       },
       {
         "words": [
           {
             "word": "Tu",
-            "start": 12,
-            "end": 12.272727272727273,
-            "durationInFrames": 16,
+            "start": 9.959999999999999,
+            "end": 10.04,
+            "durationInFrames": 5,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14628"
+              "$oid": "68f1af6ffefddceaf9163d4c"
             }
           },
           {
             "word": "peux",
-            "start": 12.272727272727273,
-            "end": 12.545454545454547,
-            "durationInFrames": 16,
+            "start": 10.04,
+            "end": 10.24,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14629"
+              "$oid": "68f1af6ffefddceaf9163d4d"
             }
           },
           {
             "word": "ensuite",
-            "start": 12.545454545454545,
-            "end": 12.818181818181818,
-            "durationInFrames": 16,
+            "start": 10.24,
+            "end": 10.639999999999999,
+            "durationInFrames": 24,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1462a"
+              "$oid": "68f1af6ffefddceaf9163d4e"
             }
           },
           {
             "word": "le",
-            "start": 12.818181818181818,
-            "end": 13.090909090909092,
-            "durationInFrames": 16,
+            "start": 10.639999999999999,
+            "end": 10.82,
+            "durationInFrames": 11,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1462b"
+              "$oid": "68f1af6ffefddceaf9163d4f"
             }
           },
           {
             "word": "modifier,",
-            "start": 13.09090909090909,
-            "end": 13.363636363636363,
-            "durationInFrames": 16,
+            "start": 10.82,
+            "end": 11.34,
+            "durationInFrames": 31,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1462c"
+              "$oid": "68f1af6ffefddceaf9163d50"
             }
           },
           {
             "word": "par",
-            "start": 13.363636363636363,
-            "end": 13.636363636363637,
-            "durationInFrames": 16,
+            "start": 11.34,
+            "end": 11.66,
+            "durationInFrames": 19,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1462d"
+              "$oid": "68f1af6ffefddceaf9163d51"
             }
           },
           {
             "word": "exemple",
-            "start": 13.636363636363637,
-            "end": 13.90909090909091,
-            "durationInFrames": 16,
+            "start": 11.66,
+            "end": 11.98,
+            "durationInFrames": 19,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1462e"
+              "$oid": "68f1af6ffefddceaf9163d52"
             }
           }
         ],
         "text": "Tu peux ensuite le modifier, par exemple",
-        "start": 12,
-        "end": 13.909090909090908,
-        "durationInFrames": 116,
+        "start": 9.959999999999999,
+        "end": 11.98,
+        "durationInFrames": 121,
         "audioIndex": 2,
         "media": {
           "type": "video",
@@ -916,117 +971,117 @@
               "duration": 6,
               "text": "A user interacts with a web interface, where a mouse cursor moves to a text input field and types the sentence \"The girl is holding the product from the second picture\" to describe an image of a woman displayed on the screen. The interface shows a 'HOOK' application with various menu options.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14634"
+                "$oid": "68f1af6ffefddceaf9163d59"
               }
             }
           ],
           "position": {
-            "x": 34.14228640060897,
-            "y": 27.60701905523763
+            "x": 28.89406235969524,
+            "y": 22.842184070723846
           },
           "video": {
-            "id": "717e957d-9478-442e-96f1-16e9641f33b0",
+            "id": "49112672-c6be-4a8f-9f9e-07d3916ebb08",
             "file_type": "video/mp4",
             "size": 775984,
             "width": 1920,
             "height": 1080,
-            "link": "https://media.hoox.video/717e957d-9478-442e-96f1-16e9641f33b0.mp4",
+            "link": "https://media.hoox.video/49112672-c6be-4a8f-9f9e-07d3916ebb08.mp4",
             "frames": [
-              "https://media.hoox.video/frames_2ba88dab-6b54-4ea8-aa1b-e71ba6189a18_unknown.jpg",
-              "https://media.hoox.video/frames_01741999-ca54-4703-be91-d8321a6d9db4_unknown.jpg",
-              "https://media.hoox.video/frames_ef1dbdb5-ded5-4864-8899-205d144fd376_unknown.jpg",
-              "https://media.hoox.video/frames_e0cd6a63-7591-4b97-ae94-d036a440e07c_unknown.jpg",
-              "https://media.hoox.video/frames_dd42e512-1230-4752-9c0a-1f919e2b272b_unknown.jpg"
+              "https://media.hoox.video/frames_9639ca12-6084-4aa6-893a-a6e98678c6eb_unknown.jpg",
+              "https://media.hoox.video/frames_0a24e4fc-9855-41d0-80e8-4b4150d474f5_unknown.jpg",
+              "https://media.hoox.video/frames_114c9c71-182e-4f72-9328-c9b2913d2304_unknown.jpg",
+              "https://media.hoox.video/frames_800cdbae-033b-4f41-8199-8191f2108d1e_unknown.jpg",
+              "https://media.hoox.video/frames_f1098673-03b7-4058-b3c7-b326d1e21273_unknown.jpg"
             ],
             "durationInSeconds": 5.25
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d30e5"
+            "$oid": "68f1b54bd8fdc70e2f5fb743"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c14627"
+          "$oid": "68f1af6ffefddceaf9163d4b"
         }
       },
       {
         "words": [
           {
             "word": "en",
-            "start": 13.909090909090908,
-            "end": 14.181818181818182,
-            "durationInFrames": 16,
+            "start": 11.98,
+            "end": 12.2,
+            "durationInFrames": 13,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1462f"
+              "$oid": "68f1af6ffefddceaf9163d53"
             }
           },
           {
             "word": "lui",
-            "start": 14.181818181818182,
-            "end": 14.454545454545455,
-            "durationInFrames": 16,
+            "start": 12.2,
+            "end": 12.299999999999999,
+            "durationInFrames": 6,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14630"
+              "$oid": "68f1af6ffefddceaf9163d54"
             }
           },
           {
             "word": "ajoutant",
-            "start": 14.454545454545453,
-            "end": 14.727272727272727,
-            "durationInFrames": 16,
+            "start": 12.299999999999999,
+            "end": 12.68,
+            "durationInFrames": 23,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14631"
+              "$oid": "68f1af6ffefddceaf9163d55"
             }
           },
           {
             "word": "un",
-            "start": 14.727272727272727,
-            "end": 15,
-            "durationInFrames": 16,
+            "start": 12.68,
+            "end": 12.86,
+            "durationInFrames": 11,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14632"
+              "$oid": "68f1af6ffefddceaf9163d56"
             }
           },
           {
             "word": "produit",
-            "start": 15,
-            "end": 15.75,
-            "durationInFrames": 45,
+            "start": 12.86,
+            "end": 13.239999999999998,
+            "durationInFrames": 23,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14636"
+              "$oid": "68f1af6ffefddceaf9163d57"
             }
           },
           {
             "word": "dans",
-            "start": 15.75,
-            "end": 16.5,
-            "durationInFrames": 45,
+            "start": 13.239999999999998,
+            "end": 13.48,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14637"
+              "$oid": "68f1af6ffefddceaf9163d5b"
             }
           },
           {
             "word": "les",
-            "start": 16.5,
-            "end": 17.25,
-            "durationInFrames": 45,
+            "start": 13.48,
+            "end": 13.68,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14638"
+              "$oid": "68f1af6ffefddceaf9163d5c"
             }
           },
           {
             "word": "mains.",
-            "start": 17.25,
-            "end": 18,
-            "durationInFrames": 45,
+            "start": 13.68,
+            "end": 14.38,
+            "durationInFrames": 42,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14639"
+              "$oid": "68f1af6ffefddceaf9163d5d"
             }
           }
         ],
         "text": "en lui ajoutant un produit dans les mains.",
-        "start": 13.909090909090908,
-        "end": 18,
-        "durationInFrames": 244,
+        "start": 11.98,
+        "end": 14.38,
+        "durationInFrames": 144,
         "audioIndex": 2,
         "media": {
           "type": "video",
@@ -1041,149 +1096,113 @@
               "duration": 6,
               "text": "A user interacts with a web interface, where a mouse cursor moves to a text input field and types the sentence \"The girl is holding the product from the second picture\" to describe an image of a woman displayed on the screen. The interface shows a 'HOOK' application with various menu options.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c1463b"
+                "$oid": "68f1af6ffefddceaf9163d59"
               }
             }
           ],
           "video": {
-            "id": "717e957d-9478-442e-96f1-16e9641f33b0",
+            "id": "49112672-c6be-4a8f-9f9e-07d3916ebb08",
             "file_type": "video/mp4",
             "size": 775984,
             "width": 1920,
             "height": 1080,
-            "link": "https://media.hoox.video/717e957d-9478-442e-96f1-16e9641f33b0.mp4",
+            "link": "https://media.hoox.video/49112672-c6be-4a8f-9f9e-07d3916ebb08.mp4",
             "frames": [
-              "https://media.hoox.video/frames_2ba88dab-6b54-4ea8-aa1b-e71ba6189a18_unknown.jpg",
-              "https://media.hoox.video/frames_01741999-ca54-4703-be91-d8321a6d9db4_unknown.jpg",
-              "https://media.hoox.video/frames_ef1dbdb5-ded5-4864-8899-205d144fd376_unknown.jpg",
-              "https://media.hoox.video/frames_e0cd6a63-7591-4b97-ae94-d036a440e07c_unknown.jpg",
-              "https://media.hoox.video/frames_dd42e512-1230-4752-9c0a-1f919e2b272b_unknown.jpg"
+              "https://media.hoox.video/frames_9639ca12-6084-4aa6-893a-a6e98678c6eb_unknown.jpg",
+              "https://media.hoox.video/frames_0a24e4fc-9855-41d0-80e8-4b4150d474f5_unknown.jpg",
+              "https://media.hoox.video/frames_114c9c71-182e-4f72-9328-c9b2913d2304_unknown.jpg",
+              "https://media.hoox.video/frames_800cdbae-033b-4f41-8199-8191f2108d1e_unknown.jpg",
+              "https://media.hoox.video/frames_f1098673-03b7-4058-b3c7-b326d1e21273_unknown.jpg"
             ],
             "durationInSeconds": 5.25
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d30f0"
+            "$oid": "68f1b54bd8fdc70e2f5fb74e"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c14635"
+          "$oid": "68f1b15ff6877a62465df154"
         }
       },
       {
         "words": [
           {
             "word": "Ensuite,",
-            "start": 18,
-            "end": 18.25,
-            "durationInFrames": 15,
+            "start": 14.38,
+            "end": 15.100000000000001,
+            "durationInFrames": 43,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1463d"
+              "$oid": "68f1af6ffefddceaf9163d61"
             }
           },
           {
             "word": "crée",
-            "start": 18.25,
-            "end": 18.5,
-            "durationInFrames": 15,
+            "start": 15.100000000000001,
+            "end": 15.180000000000001,
+            "durationInFrames": 5,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1463e"
+              "$oid": "68f1af6ffefddceaf9163d62"
             }
           },
           {
             "word": "ta",
-            "start": 18.5,
-            "end": 18.75,
-            "durationInFrames": 15,
+            "start": 15.180000000000001,
+            "end": 15.3,
+            "durationInFrames": 7,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1463f"
+              "$oid": "68f1af6ffefddceaf9163d63"
             }
           },
           {
             "word": "vidéo",
-            "start": 18.75,
-            "end": 19,
-            "durationInFrames": 15,
+            "start": 15.3,
+            "end": 15.600000000000001,
+            "durationInFrames": 18,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14640"
+              "$oid": "68f1af6ffefddceaf9163d64"
             }
           },
           {
             "word": "comme",
-            "start": 19,
-            "end": 19.25,
-            "durationInFrames": 15,
+            "start": 15.600000000000001,
+            "end": 15.8,
+            "durationInFrames": 12,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14641"
+              "$oid": "68f1af6ffefddceaf9163d65"
             }
           },
           {
             "word": "tu",
-            "start": 19.25,
-            "end": 19.5,
-            "durationInFrames": 15,
+            "start": 15.8,
+            "end": 15.98,
+            "durationInFrames": 11,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14642"
+              "$oid": "68f1af6ffefddceaf9163d66"
             }
           },
           {
             "word": "as",
-            "start": 19.5,
-            "end": 19.75,
-            "durationInFrames": 15,
+            "start": 15.98,
+            "end": 16.040000000000003,
+            "durationInFrames": 4,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14643"
+              "$oid": "68f1af6ffefddceaf9163d67"
             }
           },
           {
             "word": "l'habitude",
-            "start": 19.75,
-            "end": 20,
-            "durationInFrames": 15,
+            "start": 16.040000000000003,
+            "end": 16.540000000000003,
+            "durationInFrames": 30,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14644"
-            }
-          },
-          {
-            "word": "et",
-            "start": 20,
-            "end": 20.25,
-            "durationInFrames": 15,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14645"
-            }
-          },
-          {
-            "word": "sélectionne",
-            "start": 20.25,
-            "end": 20.5,
-            "durationInFrames": 15,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14646"
-            }
-          },
-          {
-            "word": "ton",
-            "start": 20.5,
-            "end": 20.75,
-            "durationInFrames": 15,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14647"
-            }
-          },
-          {
-            "word": "avatar.",
-            "start": 20.75,
-            "end": 21,
-            "durationInFrames": 15,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14648"
+              "$oid": "68f1af6ffefddceaf9163d68"
             }
           }
         ],
-        "text": "Ensuite, crée ta vidéo comme tu as l'habitude et sélectionne ton avatar.",
-        "start": 18,
-        "end": 21,
-        "durationInFrames": 180,
+        "text": "Ensuite, crée ta vidéo comme tu as l'habitude",
+        "start": 14.38,
+        "end": 16.540000000000003,
+        "durationInFrames": 130,
         "audioIndex": 3,
         "media": {
           "type": "video",
@@ -1198,137 +1217,83 @@
               "duration": 3,
               "text": "A user interacts with a web interface displaying a selected avatar named 'Kaelen'. The cursor moves to and activates a toggle switch labeled 'Use Mia 3.1 for avatar generation'.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c1464a"
+                "$oid": "68f1af6ffefddceaf9163d6c"
               }
             }
           ],
           "video": {
-            "id": "0890819c-8226-437b-918d-813338817d39",
+            "id": "e599a30d-cf33-43a0-a82a-3bbd7fd742c3",
             "file_type": "video/mp4",
             "size": 895896,
             "width": 1920,
             "height": 1080,
-            "link": "https://media.hoox.video/0890819c-8226-437b-918d-813338817d39.mp4",
+            "link": "https://media.hoox.video/e599a30d-cf33-43a0-a82a-3bbd7fd742c3.mp4",
             "frames": [
-              "https://media.hoox.video/frames_a4d04477-3bd5-4807-9212-a464ef6ac5c6_unknown.jpg",
-              "https://media.hoox.video/frames_e384f73a-7bce-4656-a429-268ae16643de_unknown.jpg",
-              "https://media.hoox.video/frames_8224fe93-22e7-4781-906c-a24a076501f6_unknown.jpg",
-              "https://media.hoox.video/frames_e62da06e-3a63-4656-9cec-c89c49526856_unknown.jpg",
-              "https://media.hoox.video/frames_25b14512-fd71-448e-87bf-0e54f1ea0d50_unknown.jpg"
+              "https://media.hoox.video/frames_6117ea9e-e940-40cb-90b2-dce1345e9434_unknown.jpg",
+              "https://media.hoox.video/frames_097ce24b-dffd-453f-86ef-9cbb35ead8f4_unknown.jpg",
+              "https://media.hoox.video/frames_8c72f835-edb6-441f-9b15-40acec6734b6_unknown.jpg",
+              "https://media.hoox.video/frames_1dc7abd1-4c31-444e-8895-005d4f492f24_unknown.jpg",
+              "https://media.hoox.video/frames_93cbcbd3-084a-4078-88f1-7b3668e3761a_unknown.jpg"
             ],
             "durationInSeconds": 3.8166666666666664
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d30ff"
+            "$oid": "68f1b54bd8fdc70e2f5fb759"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c1463c"
+          "$oid": "68f1af6ffefddceaf9163d60"
         }
       },
       {
         "words": [
           {
-            "word": "Pour",
-            "start": 21,
-            "end": 21.3,
+            "word": "et",
+            "start": 16.540000000000003,
+            "end": 16.84,
             "durationInFrames": 18,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1464c"
+              "$oid": "68f1af6ffefddceaf9163d69"
             }
           },
           {
-            "word": "des",
-            "start": 21.3,
-            "end": 21.6,
-            "durationInFrames": 18,
+            "word": "sélectionne",
+            "start": 16.84,
+            "end": 17.380000000000003,
+            "durationInFrames": 32,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1464d"
+              "$oid": "68f1af6ffefddceaf9163d6a"
             }
           },
           {
-            "word": "résultats",
-            "start": 21.6,
-            "end": 21.900000000000002,
-            "durationInFrames": 18,
+            "word": "ton",
+            "start": 17.380000000000003,
+            "end": 17.52,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1464e"
+              "$oid": "68f1af6ffefddceaf9163d6e"
             }
           },
           {
-            "word": "optimaux,",
-            "start": 21.9,
-            "end": 22.2,
-            "durationInFrames": 18,
+            "word": "avatar.",
+            "start": 17.52,
+            "end": 18.64,
+            "durationInFrames": 67,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1464f"
-            }
-          },
-          {
-            "word": "teste",
-            "start": 22.2,
-            "end": 22.5,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14650"
-            }
-          },
-          {
-            "word": "notre",
-            "start": 22.5,
-            "end": 22.8,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14651"
-            }
-          },
-          {
-            "word": "nouveau",
-            "start": 22.8,
-            "end": 23.1,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14652"
-            }
-          },
-          {
-            "word": "modèle",
-            "start": 23.1,
-            "end": 23.400000000000002,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14653"
-            }
-          },
-          {
-            "word": "Veo",
-            "start": 23.4,
-            "end": 23.7,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14654"
-            }
-          },
-          {
-            "word": "3.1",
-            "start": 23.7,
-            "end": 24,
-            "durationInFrames": 18,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c14655"
+              "$oid": "68f1af6ffefddceaf9163d6f"
             }
           }
         ],
-        "text": "Pour des résultats optimaux, teste notre nouveau modèle Veo 3.1",
-        "start": 21,
-        "end": 24,
-        "durationInFrames": 180,
-        "audioIndex": 4,
+        "text": "et sélectionne ton avatar.",
+        "start": 16.540000000000003,
+        "end": 18.64,
+        "durationInFrames": 125,
+        "audioIndex": 3,
         "media": {
           "type": "video",
           "usage": "media",
           "show": "half",
-          "startAt": 0.7,
+          "startAt": 0,
           "name": "select-avatar-veo-3.mp4",
           "generationStatus": "completed",
           "description": [
@@ -1337,258 +1302,388 @@
               "duration": 3,
               "text": "A user interacts with a web interface displaying a selected avatar named 'Kaelen'. The cursor moves to and activates a toggle switch labeled 'Use Mia 3.1 for avatar generation'.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c14657"
+                "$oid": "68f1af6afefddceaf916391f"
               }
             }
           ],
           "video": {
-            "id": "0890819c-8226-437b-918d-813338817d39",
+            "id": "e599a30d-cf33-43a0-a82a-3bbd7fd742c3",
             "file_type": "video/mp4",
             "size": 895896,
             "width": 1920,
             "height": 1080,
-            "link": "https://media.hoox.video/0890819c-8226-437b-918d-813338817d39.mp4",
+            "link": "https://media.hoox.video/e599a30d-cf33-43a0-a82a-3bbd7fd742c3.mp4",
             "frames": [
-              "https://media.hoox.video/frames_a4d04477-3bd5-4807-9212-a464ef6ac5c6_unknown.jpg",
-              "https://media.hoox.video/frames_e384f73a-7bce-4656-a429-268ae16643de_unknown.jpg",
-              "https://media.hoox.video/frames_8224fe93-22e7-4781-906c-a24a076501f6_unknown.jpg",
-              "https://media.hoox.video/frames_e62da06e-3a63-4656-9cec-c89c49526856_unknown.jpg",
-              "https://media.hoox.video/frames_25b14512-fd71-448e-87bf-0e54f1ea0d50_unknown.jpg"
+              "https://media.hoox.video/frames_6117ea9e-e940-40cb-90b2-dce1345e9434_unknown.jpg",
+              "https://media.hoox.video/frames_097ce24b-dffd-453f-86ef-9cbb35ead8f4_unknown.jpg",
+              "https://media.hoox.video/frames_8c72f835-edb6-441f-9b15-40acec6734b6_unknown.jpg",
+              "https://media.hoox.video/frames_1dc7abd1-4c31-444e-8895-005d4f492f24_unknown.jpg",
+              "https://media.hoox.video/frames_93cbcbd3-084a-4078-88f1-7b3668e3761a_unknown.jpg"
             ],
             "durationInSeconds": 3.8166666666666664
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d310c"
+            "$oid": "68f1b54bd8fdc70e2f5fb760"
+          },
+          "createdAt": {
+            "$date": "2025-10-17T02:52:26.155Z"
+          },
+          "updatedAt": {
+            "$date": "2025-10-17T02:52:26.155Z"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c1464b"
+          "$oid": "68f1af6ffefddceaf9163d6d"
         }
       },
       {
         "words": [
           {
-            "word": "qu'on",
-            "start": 24,
-            "end": 25,
-            "durationInFrames": 60,
+            "word": "Pour",
+            "start": 18.64,
+            "end": 18.8,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14659"
+              "$oid": "68f1af6ffefddceaf9163d73"
+            }
+          },
+          {
+            "word": "des",
+            "start": 18.8,
+            "end": 18.94,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d74"
+            }
+          },
+          {
+            "word": "résultats",
+            "start": 18.94,
+            "end": 19.34,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d75"
+            }
+          },
+          {
+            "word": "optimaux,",
+            "start": 19.34,
+            "end": 20.14,
+            "durationInFrames": 48,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d76"
+            }
+          },
+          {
+            "word": "teste",
+            "start": 20.14,
+            "end": 20.3,
+            "durationInFrames": 10,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d77"
+            }
+          },
+          {
+            "word": "notre",
+            "start": 20.3,
+            "end": 20.5,
+            "durationInFrames": 12,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d78"
+            }
+          }
+        ],
+        "text": "Pour des résultats optimaux, teste notre",
+        "start": 18.64,
+        "end": 20.5,
+        "durationInFrames": 112,
+        "audioIndex": 4,
+        "media": {
+          "type": "video",
+          "usage": "media",
+          "show": "half",
+          "startAt": 1.9,
+          "name": "select-avatar-veo-3.mp4",
+          "generationStatus": "completed",
+          "description": [
+            {
+              "start": 1,
+              "duration": 3,
+              "text": "A user interacts with a web interface displaying a selected avatar named 'Kaelen'. The cursor moves to and activates a toggle switch labeled 'Use Mia 3.1 for avatar generation'.",
+              "_id": {
+                "$oid": "68f1af6ffefddceaf9163d7e"
+              }
+            }
+          ],
+          "video": {
+            "id": "e599a30d-cf33-43a0-a82a-3bbd7fd742c3",
+            "file_type": "video/mp4",
+            "size": 895896,
+            "width": 1920,
+            "height": 1080,
+            "link": "https://media.hoox.video/e599a30d-cf33-43a0-a82a-3bbd7fd742c3.mp4",
+            "frames": [
+              "https://media.hoox.video/frames_6117ea9e-e940-40cb-90b2-dce1345e9434_unknown.jpg",
+              "https://media.hoox.video/frames_097ce24b-dffd-453f-86ef-9cbb35ead8f4_unknown.jpg",
+              "https://media.hoox.video/frames_8c72f835-edb6-441f-9b15-40acec6734b6_unknown.jpg",
+              "https://media.hoox.video/frames_1dc7abd1-4c31-444e-8895-005d4f492f24_unknown.jpg",
+              "https://media.hoox.video/frames_93cbcbd3-084a-4078-88f1-7b3668e3761a_unknown.jpg"
+            ],
+            "durationInSeconds": 3.8166666666666664
+          },
+          "_id": {
+            "$oid": "68f1b54bd8fdc70e2f5fb769"
+          }
+        },
+        "_id": {
+          "$oid": "68f1af6ffefddceaf9163d72"
+        }
+      },
+      {
+        "words": [
+          {
+            "word": "nouveau",
+            "start": 20.5,
+            "end": 20.84,
+            "durationInFrames": 20,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d79"
+            }
+          },
+          {
+            "word": "modèle",
+            "start": 20.84,
+            "end": 21.240000000000002,
+            "durationInFrames": 24,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d7a"
+            }
+          },
+          {
+            "word": "Veo",
+            "start": 21.240000000000002,
+            "end": 21.62,
+            "durationInFrames": 23,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d7b"
+            }
+          },
+          {
+            "word": "3.1",
+            "start": 21.62,
+            "end": 22.32,
+            "durationInFrames": 42,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d7c"
+            }
+          },
+          {
+            "word": "qu'on",
+            "start": 22.32,
+            "end": 22.46,
+            "durationInFrames": 8,
+            "_id": {
+              "$oid": "68f1af6ffefddceaf9163d80"
             }
           },
           {
             "word": "vient",
-            "start": 25,
-            "end": 26,
-            "durationInFrames": 60,
+            "start": 22.46,
+            "end": 22.6,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1465a"
+              "$oid": "68f1af6ffefddceaf9163d81"
             }
           },
           {
             "word": "d'ajouter.",
-            "start": 26,
-            "end": 27,
-            "durationInFrames": 60,
+            "start": 22.6,
+            "end": 22.98,
+            "durationInFrames": 23,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1465b"
+              "$oid": "68f1af6ffefddceaf9163d82"
             }
           }
         ],
-        "text": "qu'on vient d'ajouter.",
-        "start": 24,
-        "end": 27,
-        "durationInFrames": 180,
+        "text": "nouveau modèle Veo 3.1 qu'on vient d'ajouter.",
+        "start": 20.5,
+        "end": 22.98,
+        "durationInFrames": 148,
         "audioIndex": 4,
         "media": {
           "type": "video",
           "usage": "media",
           "show": "hide",
-          "startAt": 0,
+          "startAt": 1,
+          "name": "select-avatar-veo-3.mp4",
           "generationStatus": "completed",
           "description": [
             {
-              "start": 0,
-              "text": "The video begins with a close-up view of a digital, stylized globe, showing continents with a grid overlay and a textured, pixelated appearance. Initially, the focus is on India and the Middle East, with a bright, glowing white line originating from a point on India and curving outwards. As the sequence progresses, the globe appears to rotate or zoom, shifting the view to prominently feature Africa. The glowing line continues its path, extending over the Indian Ocean and towards Madagascar, suggesting global connectivity or data visualization.",
+              "start": 1,
+              "duration": 3,
+              "text": "A user interacts with a web interface displaying a selected avatar named 'Kaelen'. The cursor moves to and activates a toggle switch labeled 'Use Mia 3.1 for avatar generation'.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c1465d"
+                "$oid": "68f1af6ffefddceaf9163d7e"
               }
             }
           ],
           "video": {
-            "id": "9292630",
-            "quality": "hd",
+            "id": "e599a30d-cf33-43a0-a82a-3bbd7fd742c3",
             "file_type": "video/mp4",
-            "size": 6331160,
+            "size": 895896,
             "width": 1920,
             "height": 1080,
-            "fps": 25,
-            "link": "https://videos.pexels.com/video-files/3125427/3125427-hd_1920_1080_25fps.mp4",
+            "link": "https://media.hoox.video/e599a30d-cf33-43a0-a82a-3bbd7fd742c3.mp4",
             "frames": [
-              "https://images.pexels.com/videos/3125427/pictures/preview-0.jpg",
-              "https://images.pexels.com/videos/3125427/pictures/preview-3.jpg",
-              "https://images.pexels.com/videos/3125427/pictures/preview-6.jpg",
-              "https://images.pexels.com/videos/3125427/pictures/preview-9.jpg",
-              "https://images.pexels.com/videos/3125427/pictures/preview-12.jpg"
+              "https://media.hoox.video/frames_6117ea9e-e940-40cb-90b2-dce1345e9434_unknown.jpg",
+              "https://media.hoox.video/frames_097ce24b-dffd-453f-86ef-9cbb35ead8f4_unknown.jpg",
+              "https://media.hoox.video/frames_8c72f835-edb6-441f-9b15-40acec6734b6_unknown.jpg",
+              "https://media.hoox.video/frames_1dc7abd1-4c31-444e-8895-005d4f492f24_unknown.jpg",
+              "https://media.hoox.video/frames_93cbcbd3-084a-4078-88f1-7b3668e3761a_unknown.jpg"
             ],
-            "durationInSeconds": 10
-          },
-          "image": {
-            "id": "3125427",
-            "link": "https://images.pexels.com/videos/3125427/free-video-3125427.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
-            "width": 3840,
-            "height": 2160
+            "durationInSeconds": 3.8166666666666664
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d3112"
+            "$oid": "68f1b54bd8fdc70e2f5fb773"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c14658"
+          "$oid": "68f1b15ff6877a62465df17a"
         }
       },
       {
         "words": [
           {
             "word": "En",
-            "start": 27,
-            "end": 27.2,
-            "durationInFrames": 12,
+            "start": 22.98,
+            "end": 23.12,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1465f"
+              "$oid": "68f1af6ffefddceaf9163d86"
             }
           },
           {
             "word": "moins",
-            "start": 27.2,
-            "end": 27.4,
+            "start": 23.12,
+            "end": 23.32,
             "durationInFrames": 12,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14660"
+              "$oid": "68f1af6ffefddceaf9163d87"
             }
           },
           {
             "word": "de",
-            "start": 27.4,
-            "end": 27.599999999999998,
+            "start": 23.32,
+            "end": 23.52,
             "durationInFrames": 12,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14661"
+              "$oid": "68f1af6ffefddceaf9163d88"
             }
           },
           {
             "word": "5",
-            "start": 27.6,
-            "end": 27.8,
-            "durationInFrames": 12,
+            "start": 23.52,
+            "end": 23.68,
+            "durationInFrames": 10,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14662"
+              "$oid": "68f1af6ffefddceaf9163d89"
             }
           },
           {
             "word": "minutes,",
-            "start": 27.8,
-            "end": 28,
-            "durationInFrames": 12,
+            "start": 23.68,
+            "end": 24.26,
+            "durationInFrames": 35,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14663"
+              "$oid": "68f1af6ffefddceaf9163d8a"
             }
           },
           {
             "word": "ton",
-            "start": 28,
-            "end": 28.2,
-            "durationInFrames": 12,
+            "start": 24.26,
+            "end": 24.34,
+            "durationInFrames": 5,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14664"
+              "$oid": "68f1af6ffefddceaf9163d8b"
             }
           },
           {
             "word": "avatar",
-            "start": 28.2,
-            "end": 28.4,
-            "durationInFrames": 12,
+            "start": 24.34,
+            "end": 24.740000000000002,
+            "durationInFrames": 24,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14665"
+              "$oid": "68f1af6ffefddceaf9163d8c"
             }
           },
           {
             "word": "réaliste",
-            "start": 28.4,
-            "end": 28.599999999999998,
-            "durationInFrames": 12,
+            "start": 24.740000000000002,
+            "end": 25.28,
+            "durationInFrames": 32,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14666"
+              "$oid": "68f1af6ffefddceaf9163d8d"
             }
           },
           {
             "word": "est",
-            "start": 28.6,
-            "end": 28.8,
-            "durationInFrames": 12,
+            "start": 25.28,
+            "end": 25.52,
+            "durationInFrames": 14,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14667"
+              "$oid": "68f1af6ffefddceaf9163d8e"
             }
           },
           {
             "word": "prêt",
-            "start": 28.8,
-            "end": 29,
-            "durationInFrames": 12,
+            "start": 25.52,
+            "end": 25.7,
+            "durationInFrames": 11,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14668"
+              "$oid": "68f1af6ffefddceaf9163d8f"
             }
           },
           {
             "word": "à",
-            "start": 29,
-            "end": 29.2,
-            "durationInFrames": 12,
+            "start": 25.7,
+            "end": 25.84,
+            "durationInFrames": 8,
             "_id": {
-              "$oid": "68f1a1a707181c7326c14669"
+              "$oid": "68f1af6ffefddceaf9163d90"
             }
           },
           {
             "word": "conquérir",
-            "start": 29.2,
-            "end": 29.4,
-            "durationInFrames": 12,
+            "start": 25.84,
+            "end": 26.28,
+            "durationInFrames": 26,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1466a"
+              "$oid": "68f1af6ffefddceaf9163d91"
             }
           },
           {
             "word": "les",
-            "start": 29.4,
-            "end": 29.599999999999998,
-            "durationInFrames": 12,
+            "start": 26.28,
+            "end": 26.38,
+            "durationInFrames": 6,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1466b"
+              "$oid": "68f1af6ffefddceaf9163d92"
             }
           },
           {
-            "word": "réseaux",
-            "start": 29.6,
-            "end": 29.8,
-            "durationInFrames": 12,
+            "word": "réseaux !",
+            "start": 26.38,
+            "end": 27.32,
+            "durationInFrames": 56,
             "_id": {
-              "$oid": "68f1a1a707181c7326c1466c"
-            }
-          },
-          {
-            "word": "!",
-            "start": 29.8,
-            "end": 30.5,
-            "durationInFrames": 42,
-            "_id": {
-              "$oid": "68f1a1a707181c7326c1466d"
+              "$oid": "68f1af6ffefddceaf9163d93"
             }
           }
         ],
-        "text": "En moins de 5 minutes, ton avatar réaliste est prêt à conquérir les réseaux !",
-        "start": 27,
-        "end": 30.5,
-        "durationInFrames": 210,
+        "text": "En moins de 5 minutes, ton avatar réaliste est prêt à conquérirles réseaux !",
+        "start": 22.98,
+        "end": 27.32,
+        "durationInFrames": 259,
         "audioIndex": 5,
         "media": {
           "type": "video",
@@ -1601,7 +1696,7 @@
               "start": 0,
               "text": "The video begins with a close-up shot of a person's hand touching a smartphone screen resting on a wooden surface. As the sequence progresses, social media icons, including Facebook, Twitter, Pinterest, and Google+, begin to appear and multiply around the phone screen, indicating interaction with or a focus on social media platforms.",
               "_id": {
-                "$oid": "68f1a1a707181c7326c1466f"
+                "$oid": "68f1af6ffefddceaf9163d95"
               }
             }
           ],
@@ -1635,11 +1730,11 @@
             "height": 1080
           },
           "_id": {
-            "$oid": "68f1a285f6877a62465d3124"
+            "$oid": "68f1b54bd8fdc70e2f5fb784"
           }
         },
         "_id": {
-          "$oid": "68f1a1a707181c7326c1465e"
+          "$oid": "68f1af6ffefddceaf9163d85"
         }
       }
     ],
@@ -1647,17 +1742,20 @@
   },
   "extractedMedia": [],
   "createdAt": {
-    "$date": "2025-10-17T01:53:20.415Z"
+    "$date": "2025-10-17T02:52:09.575Z"
   },
   "updatedAt": {
-    "$date": "2025-10-17T01:57:25.128Z"
+    "$date": "2025-10-21T00:12:08.455Z"
   },
   "__v": 0,
   "isNews": false,
   "style": "Informative",
   "title": "Crée ton avatar réaliste",
-  "costToGenerate": 0.025326524999999996,
+  "costToGenerate": 0.11425702083333332,
   "settings": {
     "avatarHeightRatio": 61.093676286587495
+  },
+  "folderId": {
+    "$oid": "68f6cf712952bba2079e8703"
   }
 }

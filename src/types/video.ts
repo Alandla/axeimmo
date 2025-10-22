@@ -135,6 +135,9 @@ export interface IVideo {
       voices: {
         url: string;
         voiceId?: string;
+        mode?: string;
+        language?: string;
+        accent?: string;
         index: number;
         startOffset?: number;
         start: number;

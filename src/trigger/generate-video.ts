@@ -824,7 +824,15 @@ export const generateVideoTask = task({
     }
     
     const lightTranscription = createLightTranscription(sequences);
-    const voices = extractVoiceSegments(sequences, sentences, payload.voice ? payload.voice.id : undefined, payload.emotionEnhancement);
+    const voices = extractVoiceSegments(
+      sequences, 
+      sentences, 
+      payload.voice ? payload.voice.id : undefined, 
+      payload.emotionEnhancement,
+      payload.voice ? payload.voice.mode : undefined,
+      payload.voice ? payload.voice.language : undefined,
+      payload.voice ? payload.voice.accent : undefined
+    );
 
     logger.info('Sequences', { sequences })
     logger.info('Light transcription', { lightTranscription })
@@ -2000,13 +2008,24 @@ export const generateVideoTask = task({
   },
 });
 
-function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], voiceId?: string, emotionEnhancement?: boolean): {
+function extractVoiceSegments(
+  sequences: ISequence[], 
+  sentences: ISentence[], 
+  voiceId?: string, 
+  emotionEnhancement?: boolean,
+  mode?: string,
+  language?: string,
+  accent?: string
+): {
   index: number;
   url: string;
   start: number;
   end: number;
   durationInFrames: number;
   voiceId?: string;
+  mode?: string;
+  language?: string;
+  accent?: string;
   emotionEnhancement?: boolean;
 }[] {
   const voiceSegments = new Map<number, {
@@ -2015,6 +2034,9 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
     durationInFrames: number;
     sequences: ISequence[];
     voiceId?: string;
+    mode?: string;
+    language?: string;
+    accent?: string;
     emotionEnhancement?: boolean;
   }>();
 
@@ -2027,6 +2049,9 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
         durationInFrames: sequence.durationInFrames || 0,
         sequences: [sequence],
         voiceId: voiceId || undefined,
+        mode: mode || undefined,
+        language: language || undefined,
+        accent: accent || undefined,
         emotionEnhancement: emotionEnhancement || false
       });
     } else {
@@ -2035,6 +2060,9 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
       current.durationInFrames += sequence.durationInFrames || 0;
       current.sequences.push(sequence);
       current.voiceId = voiceId || undefined;
+      current.mode = mode || undefined;
+      current.language = language || undefined;
+      current.accent = accent || undefined;
       current.emotionEnhancement = emotionEnhancement || false
     }
   });
@@ -2047,6 +2075,9 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
     end: data.end,
     durationInFrames: data.durationInFrames,
     voiceId,
+    mode,
+    language,
+    accent,
     emotionEnhancement: data.emotionEnhancement
   }));
 
@@ -2058,6 +2089,9 @@ function extractVoiceSegments(sequences: ISequence[], sentences: ISentence[], vo
     end: 0,
     durationInFrames: 0,
     voiceId,
+    mode,
+    language,
+    accent,
     emotionEnhancement: emotionEnhancement || false
   }];
 }

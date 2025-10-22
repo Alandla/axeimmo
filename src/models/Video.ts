@@ -76,6 +76,9 @@ const videoSchema = new mongoose.Schema({
           end: Number,
           durationInFrames: Number,
           voiceId: String,
+          mode: String,
+          language: String,
+          accent: String,
           startOffset: {
             type: Number,
             default: 0
