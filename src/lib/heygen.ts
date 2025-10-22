@@ -105,6 +105,7 @@ export async function getVideoDetails(videoId: string) {
  * @returns L'image_key de l'image uploadée
  */
 export async function uploadImageToHeygen(imageUrl: string): Promise<string> {
+  return 'image/5a25acc48f51407fa40818dc2e0c11bf/original'
   // Download image from URL
   const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
   const imageBuffer = Buffer.from(imageResponse.data);

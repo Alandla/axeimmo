@@ -72,6 +72,8 @@ const heygenIVAdapter: AvatarModelAdapter = {
     logger.log("Uploading avatar thumbnail to Heygen...");
     const imageKey = await uploadImageToHeygen(thumbnail);
     logger.log("Avatar thumbnail uploaded", { imageKey });
+    await wait.for({ seconds: 3 });
+    logger.log("Wait end");
     return imageKey;
   },
   generateVideo: async (imageKey: string, render: AvatarRenderData, video: IVideo, index: number) => {
@@ -180,6 +182,7 @@ async function generateAvatarVideosWithModel(
     avatarRendersWithRequestIds.map(render => [render.requestId!, render])
   );
   const completedAvatars = new Map<string, string>(); // requestId -> videoUrl
+  const retriedAvatars = new Set<number>(); // Track which avatar indices have been retried (by audioIndex)
   
   let attempts = 0;
   const maxAttempts = 200; // 200 * 6s = 1200s = 20min max
@@ -193,6 +196,7 @@ async function generateAvatarVideosWithModel(
     const statusChecks = Array.from(pendingAvatars.keys()).map(async (requestId) => {
       try {
         const status = await adapter.checkStatus(requestId);
+        logger.log("Status checked", { status });
         return { requestId, status };
       } catch (error) {
         logger.error(`Error checking status for ${adapter.modelName} avatar ${requestId}:`, { error });
@@ -207,6 +211,8 @@ async function generateAvatarVideosWithModel(
     for (const { requestId, status } of allStatuses) {
       const render = pendingAvatars.get(requestId);
       if (!render) continue;
+
+      logger.log(`Status checked for ${requestId}`, { status });
       
       if (status.status === 'completed' && status.videoUrl) {
         logger.log(`${adapter.modelName} avatar video ${requestId} completed`, { videoUrl: status.videoUrl });
@@ -214,8 +220,38 @@ async function generateAvatarVideosWithModel(
         pendingAvatars.delete(requestId);
       } else if (status.status === 'failed') {
         logger.error(`${adapter.modelName} avatar video ${requestId} failed`, { error: status.error });
-        pendingAvatars.delete(requestId);
-        throw new Error(`${adapter.modelName} avatar video generation failed: ${status.error}`);
+        
+        // Check if we haven't retried this avatar yet
+        const avatarIndex = render.audioIndex;
+        if (!retriedAvatars.has(avatarIndex)) {
+          logger.log(`Retrying ${adapter.modelName} avatar video for audioIndex ${avatarIndex}...`);
+          retriedAvatars.add(avatarIndex);
+          
+          try {
+            // Re-generate the video with the same parameters
+            const newRequestId = await adapter.generateVideo(imageResource, render, video, avatarIndex);
+            logger.log(`${adapter.modelName} avatar video ${avatarIndex} retry started`, { newRequestId });
+            
+            // Update the requestId in the pending map
+            pendingAvatars.delete(requestId);
+            const updatedRender = { ...render, requestId: newRequestId };
+            pendingAvatars.set(newRequestId, updatedRender);
+            
+            // Update the render in the main array as well
+            const renderIndex = avatarRendersWithRequestIds.findIndex(r => r.requestId === requestId);
+            if (renderIndex !== -1) {
+              avatarRendersWithRequestIds[renderIndex] = updatedRender;
+            }
+          } catch (retryError) {
+            logger.error(`Failed to retry ${adapter.modelName} avatar video ${avatarIndex}`, { retryError });
+            pendingAvatars.delete(requestId);
+            throw new Error(`${adapter.modelName} avatar video generation failed after retry: ${retryError}`);
+          }
+        } else {
+          // Already retried, throw error
+          pendingAvatars.delete(requestId);
+          throw new Error(`${adapter.modelName} avatar video generation failed after retry: ${status.error}`);
+        }
       }
     }
     
@@ -268,7 +304,7 @@ async function generateAvatarVideosWithModel(
         url: r2VideoUrl
       };
     } catch (error) {
-      logger.error(`Error uploading ${adapter.modelName} avatar ${render.audioIndex} to R2`, { error });
+      logger.error(`Error uploading ${adapter.modelName} avatar ${render.requestId} to R2`, { error });
       throw error;
     }
   });

@@ -105,11 +105,11 @@ export const calculateEstimatedCredits = (options: {
  * Calcule le coût de génération d'une vidéo basé sur la durée (migré depuis page.tsx)
  */
 export const calculateGenerationCredits = (videoDurationInSeconds: number): number => {
-  // Round up to the nearest 15 seconds
-  const roundedDuration = Math.ceil(videoDurationInSeconds / 15) * 15;
+  // Round up to the nearest 10 seconds
+  const roundedDuration = Math.ceil(videoDurationInSeconds / 10) * 10;
   
-  // Calculate the number of credits based on the rounded duration
-  const creditsNeeded = Math.max(0.5, Math.ceil((roundedDuration - 15) / 30) * 0.5);
+  // Calculate the number of credits based on the rounded duration with 10s buffer
+  const creditsNeeded = Math.max(0.5, Math.ceil((roundedDuration - 10) / 30) * 0.5);
   
   return creditsNeeded * 10;
 };

@@ -6,8 +6,8 @@ import { getSpaceById } from '@/src/dao/spaceDao';
 import { ISpace } from '@/src/types/space';
 import { IVideo } from '@/src/types/video';
 import { getVideoById } from '@/src/dao/videoDao';
-import { PlanName } from '@/src/types/enums';
 import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration, calculateHighResolutionCostCredits, calculateVeo3Duration } from '@/src/lib/cost';
+import { calculateGenerationCredits } from '@/src/lib/video-estimation';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     const wasCreatedViaAPI = !createEvent?.user;
     
     // Calculate base cost
-    const baseCost = wasCreatedViaAPI ? 0 : calculateCredits(video.video?.metadata.audio_duration || 30);
+    const baseCost = wasCreatedViaAPI ? 0 : calculateGenerationCredits(video.video?.metadata.audio_duration || 30);
 
     // Calculate avatar cost (includes veo3)
     const finalAvatarModel = avatarModel || 'heygen';
@@ -93,14 +93,4 @@ export async function POST(req: NextRequest) {
     console.error('Error creating export:', error)
     return NextResponse.json({ error: 'Error creating export' }, { status: 500 })
   }
-}
-
-const calculateCredits = (videoDurationInSeconds: number) => {
-  // Round up to the nearest 10 seconds
-  const roundedDuration = Math.ceil(videoDurationInSeconds / 10) * 10;
-  
-  // Calculate the number of credits based on the rounded duration with 10s buffer
-  const creditsNeeded = Math.max(0.5, Math.ceil((roundedDuration - 10) / 30) * 0.5);
-  
-  return creditsNeeded * 10;
 }
