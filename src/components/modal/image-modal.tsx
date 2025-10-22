@@ -77,6 +77,7 @@ export function ImageModal({ imageUrl, title, children }: ImageModalProps) {
               height={imageSize.height}
               className="object-contain"
               sizes="85vw"
+              quality={100}
             />
           </div>
         </div>

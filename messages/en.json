@@ -963,7 +963,6 @@
         "playful": "Playful",
         "natural": "Natural",
         "active": "Active",
-        "athletic": "Athletic",
         "mindful": "Mindful",
         "peaceful": "Peaceful",
         "standing": "Standing",
@@ -986,7 +985,8 @@
         "urban": "Urban",
         "nature": "Nature",
         "car": "Car",
-        "podcast": "Podcast"
+        "podcast": "Podcast",
+        "selfie": "Selfie"
       },
       "place": {
         "bedroom": "Bedroom",

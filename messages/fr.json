@@ -874,7 +874,6 @@
         "playful": "Joueur",
         "natural": "Naturel",
         "active": "Actif",
-        "athletic": "Athlétique",
         "mindful": "Méditatif",
         "peaceful": "Paisible",
         "standing": "Debout",
@@ -897,7 +896,8 @@
         "urban": "Urban",
         "nature": "Nature",
         "car": "Voiture",
-        "podcast": "Podcast"
+        "podcast": "Podcast",
+        "selfie": "Selfie"
       },
       "place": {
         "bedroom": "Chambre",
@@ -923,7 +923,7 @@
         "sport": "Sport",
         "night-scene": "Scène nocturne",
         "couch": "Canapé",
-        "gym": "Gym",
+        "gym": "Salle de sport",
         "mountain": "Montagne",
         "sofa-casual": "Canapé décontracté",
         "yoga-studio": "Studio yoga",

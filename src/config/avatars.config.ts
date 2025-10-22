@@ -2,6 +2,25 @@ import { Avatar } from "../types/avatar";
 
 export const avatarsConfig: Avatar[] = [
     {
+        id: '2349',
+        name: 'Sabrina',
+        gender: 'female',
+        age: '25',
+        tags: ["UGC", "selfie", "fitness", "indoor"],
+        thumbnail: 'https://assets.hoox.video/avatar-34.png',
+        look_ids: ["hoox_avatar_34"],
+        looks: [
+            {
+                id: 'hoox_avatar_34',
+                name: 'Sabrina Gym',
+                place: 'gym',
+                format: 'vertical',
+                tags: ["selfie", "fitness", "indoor"],
+                thumbnail: 'https://assets.hoox.video/avatar-34.png'
+            }
+        ]
+    },
+    {
         id: '6411',
         name: 'Alex',
         gender: 'male',
@@ -59,25 +78,6 @@ export const avatarsConfig: Avatar[] = [
         ]
     },
     {
-        id: '6417',
-        name: 'Sofia',
-        gender: 'female',
-        age: '26',
-        tags: ["UGC", "casual", "indoor"],
-        thumbnail: 'https://assets.hoox.video/hoox_avatar_7.png',
-        look_ids: ["hoox_avatar_7"],
-        looks: [
-            {
-                id: 'hoox_avatar_7',
-                name: 'Sofia Indoor',
-                place: 'indoor',
-                format: 'vertical',
-                tags: ["casual", "indoor"],
-                thumbnail: 'https://assets.hoox.video/hoox_avatar_7.png'
-            }
-        ]
-    },
-    {
         id: '6418',
         name: 'Chloe',
         gender: 'female',
@@ -131,6 +131,14 @@ export const avatarsConfig: Avatar[] = [
                 format: 'vertical',
                 tags: ["casual", "indoor"],
                 thumbnail: 'https://assets.hoox.video/hoox_avatar_9.png'
+            },
+            {
+                id: 'hoox_avatar_7',
+                name: 'Léa Salon',
+                place: 'salon',
+                format: 'vertical',
+                tags: ["casual", "indoor"],
+                thumbnail: 'https://assets.hoox.video/hoox_avatar_7.png'
             }
         ]
     },
@@ -4959,7 +4967,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Aubrey',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","dynamic"],
+                tags: ["standing","fitness","dynamic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/c4745b302cb848b7a9352ece1a6d1211_39400/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/c4745b302cb848b7a9352ece1a6d1211_39400/preview_video_target.mp4'
             },
@@ -5073,7 +5081,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Bojan',
                 place: 'sport',
                 format: 'horizontal',
-                tags: ["sitting","athletic","energetic"],
+                tags: ["sitting","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/cb0ae5ed511f4f38abe47351d7aa7619_39290/preview_talk_1.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/cb0ae5ed511f4f38abe47351d7aa7619_39290/preview_video_talk_1.mp4'
             },
@@ -5082,7 +5090,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Bojan',
                 place: 'sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","dynamic"],
+                tags: ["standing","fitness","dynamic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/365e65ba93b24697ab9be6b5c7535888_39290/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/365e65ba93b24697ab9be6b5c7535888_39290/preview_video_target.mp4'
             }
@@ -5286,7 +5294,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Gerardo',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/ee7686e267ba4af2a6eec2fe349ed6a1_39410/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/ee7686e267ba4af2a6eec2fe349ed6a1_39410/preview_video_target.mp4'
             },
@@ -5402,7 +5410,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Joel',
         gender: 'male',
         age: 'unknown',
-        tags: ["versatile","athletic","outdoor","approachable"],
+        tags: ["versatile","fitness","outdoor","approachable"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/812e4c922e0d4ba0b2c5a21a0dd43fb1_39100/preview_target.webp',
         look_ids: ["Joel_sitting_couch_front","Joel_standing_gym_front","Joel_standing_mountain_front"],
@@ -5421,7 +5429,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Joel',
                 place: 'mountain',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/b8a3c58ffefb4428a83030f5a9a5eed6_39100/preview_talk_4.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/b8a3c58ffefb4428a83030f5a9a5eed6_39100/preview_video_talk_4.mp4'
             },
@@ -5441,7 +5449,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Jonas',
         gender: 'male',
         age: 'unknown',
-        tags: ["athletic","energetic","professional","expressive"],
+        tags: ["fitness","energetic","professional","expressive"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/e66b500dd5034538835f52a71a6cae66_38730/preview_target.webp',
         look_ids: ["Jonas_sitting_gym_front","Jonas_standing_gym_front"],
@@ -5451,7 +5459,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Jonas',
                 place: 'gym',
                 format: 'horizontal',
-                tags: ["sitting","athletic","focused"],
+                tags: ["sitting","fitness","focused"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/e66b500dd5034538835f52a71a6cae66_38730/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/e66b500dd5034538835f52a71a6cae66_38730/preview_video_target.mp4'
             },
@@ -5460,7 +5468,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Jonas',
                 place: 'gym',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/7cda83478bc14c07965b690934292a55_38730/preview_talk_1.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/7cda83478bc14c07965b690934292a55_38730/preview_video_talk_1.mp4'
             }
@@ -5549,7 +5557,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Judita',
         gender: 'female',
         age: 'unknown',
-        tags: ["athletic","wellness","peaceful","mindful"],
+        tags: ["fitness","wellness","peaceful","mindful"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/01bf1b75c57e4c99b143b1d185beb21c_38690/preview_talk_1.webp',
         look_ids: ["Judita_standing_yoga_front","Judita_sitting_yoga_front"],
@@ -5559,7 +5567,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Judita',
                 place: 'yoga-studio',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/4d353f3140b245188cf495976e79312a_38690/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/4d353f3140b245188cf495976e79312a_38690/preview_video_target.mp4'
             },
@@ -5579,7 +5587,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Kavya',
         gender: 'female',
         age: 'unknown',
-        tags: ["versatile","athletic","professional","approachable"],
+        tags: ["versatile","fitness","professional","approachable"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/cc0dc576a0b249759f8e26fd892e1a76_39540/preview_target.webp',
         look_ids: ["Kavya_standing_indoor_front","Kavya_standing_outdoorsport_front","Kavya_sitting_sofa_front"],
@@ -5598,7 +5606,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Kavya',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/56470a9a70304e25a1f67f1b8d1d28d2_39380/preview_talk_1.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/56470a9a70304e25a1f67f1b8d1d28d2_39380/preview_video_talk_1.mp4'
             },
@@ -5762,7 +5770,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Max',
         gender: 'male',
         age: 'unknown',
-        tags: ["athletic","versatile","energetic","professional"],
+        tags: ["fitness","versatile","energetic","professional"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/5316bfe35e3a41a99af40650698e8ca4_39520/preview_target.webp',
         look_ids: ["Max_sitting_indoor_front","Max_standing_outdoorsport_front"],
@@ -5781,7 +5789,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Max',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/613d8444f5264ee8997725a087ce520c_39390/preview_talk_2.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/613d8444f5264ee8997725a087ce520c_39390/preview_video_talk_2.mp4'
             }
@@ -6050,7 +6058,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Oxana',
         gender: 'female',
         age: 'unknown',
-        tags: ["indoor","professional","athletic","wellness"],
+        tags: ["indoor","professional","fitness","wellness"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_target.webp',
         look_ids: ["Oxana_standing_gym_front","Oxana_sitting_gym_front","Oxana_standing_office_front","Oxana_sitting_office_front","Oxana_standing_sofa_front","Oxana_sitting_sofa_front","Oxana_standing_yoga_front","Oxana_sitting_yoga_front"],
@@ -6060,7 +6068,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Oxana Gym Front 2',
                 place: 'gym',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/0fe43ddff45e480fa0a8df275c0bbcf7_38710/preview_video_target.mp4'
             },
@@ -6069,7 +6077,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Oxana Gym Front',
                 place: 'gym',
                 format: 'horizontal',
-                tags: ["sitting","athletic","focused"],
+                tags: ["sitting","fitness","focused"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/77c8e6b6c3174f1c91f9f6b4f3c07c3a_38710/preview_talk_1.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/77c8e6b6c3174f1c91f9f6b4f3c07c3a_38710/preview_video_talk_1.mp4'
             },
@@ -6338,7 +6346,7 @@ export const avatarsConfig: Avatar[] = [
         name: 'Roman',
         gender: 'male',
         age: 'unknown',
-        tags: ["outdoor","athletic","energetic","fitness"],
+        tags: ["outdoor","fitness","energetic","fitness"],
         premium: true,
         thumbnail: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_target.webp',
         look_ids: ["Roman_standing_outdoorsport_front"],
@@ -6348,7 +6356,7 @@ export const avatarsConfig: Avatar[] = [
                 name: 'Roman Outdoor Sport Front',
                 place: 'outdoor-sport',
                 format: 'horizontal',
-                tags: ["standing","athletic","energetic"],
+                tags: ["standing","fitness","energetic"],
                 thumbnail: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_target.webp',
                 previewUrl: 'https://files2.heygen.ai/avatar/v3/5922b17fcffa4a038ba098501f8e085e_38420/preview_video_target.mp4'
             }
