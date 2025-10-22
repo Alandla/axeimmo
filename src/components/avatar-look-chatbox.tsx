@@ -471,7 +471,7 @@ export function AvatarLookChatbox({
                 setStyle(s);
               }}
               disabled={isGenerating || isUploading}
-              hiddenStyles={['selfie', 'srpo-car']}
+              hiddenStyles={['selfie', 'srpo-car', 'iphone']}
             />
             <Select
               value={format}
