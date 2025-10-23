@@ -5,7 +5,7 @@
     "dark": "https://assets.hoox.video/logo-blanc.png",
     "light": "https://assets.hoox.video/logo-noir.png"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "https://assets.hoox.video/favicon.png",
   "colors": {
     "primary": "#FF3270",
     "light": "#FB5688",
