@@ -34,7 +34,9 @@ This endpoint requires API key authentication. Export costs may apply depending 
 </ParamField>
 
 <ParamField body="avatar_model" type="string">
-  Avatar model: `standard`, `premium`, or `ultra`. Defaults to `standard`.
+  Avatar model quality: `standard`, `premium`, `ultra`, `veo-3-fast`, or `veo-3`. 
+  Available models for each avatar are returned in the `model_available` field when fetching avatars from the [resources endpoint](/api-reference/resources/avatars).
+  If not specified, the system automatically selects the best default model for your avatar (standrd or premium).
 </ParamField>
 
 <ParamField body="webhook_url" type="string">
@@ -186,24 +188,51 @@ This surcharge applies to both API-generated and dashboard-created videos when e
 
 ### Avatar Model Costs
 
-Avatar costs apply only when your video includes an avatar and are calculated based on avatar visibility duration:
+Avatar costs apply only when your video includes an avatar. Cost calculation varies by model type:
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Standard" icon="zap">
     **Free**
-    Basic avatar quality with no additional cost
+    
+    Basic avatar quality with no additional cost.
   </Card>
   <Card title="Premium" icon="gem">
     **0.5 credits/sec**
-    Highly realistic and dynamic avatars
+    
+    Highly realistic and dynamic avatars.
+    Billed per second of **avatar visibility**.
+    
     *Available from Start plan*
   </Card>
   <Card title="Ultra" icon="crown">
     **2.3 credits/sec**
-    Enhanced realism with longer processing time
+    
+    Enhanced realism with longer processing time.
+    Billed per second of **avatar visibility**.
+    
     *Enterprise plan only*
   </Card>
+  <Card title="Veo 3 Fast" icon="bolt">
+    **2.3 credits/sec**
+    
+    Google Veo 3 Fast model for quick generation.
+    Billed per avatar segment (each segment = 8 seconds).
+    
+    *Available from Start plan*
+  </Card>
+  <Card title="Veo 3" icon="sparkles">
+    **5 credits/sec**
+    
+    Google Veo 3 standard model for highest quality.
+    Billed per avatar segment (each segment = 8 seconds).
+    
+    *Available from Start plan*
+  </Card>
 </CardGroup>
+
+<Warning>
+**Billing difference:** Premium and Ultra models bill based on avatar visibility duration, while Veo models bill based on avatar segments (each segment is billed at 8 seconds).
+</Warning>
 
 <Info>
 All costs are calculated separately. Total cost = Base export cost + High resolution cost + Avatar cost.
@@ -211,18 +240,23 @@ All costs are calculated separately. Total cost = Base export cost + High resolu
 
 **Example 1**: A 60-second API video with 40 seconds of avatar visibility using the Premium model:
 - Base export (API video): 0 credits
-- Avatar cost: 40s × 0.5 = 20 credits
+- Avatar cost: 40s × 0.5 = 20 credits (avatar visibility duration)
 - **Total**: 20 credits
 
-**Example 2**: A 60-second API video exported at 3840x2160 (4K):
+**Example 2**: A 60-second API video with 3 avatar segments using Veo 3 Fast:
+- Base export (API video): 0 credits
+- Avatar cost: 3 segments × 8 seconds × 2.3 = 55.2 credits
+- **Total**: 55.2 credits
+
+**Example 3**: A 60-second API video exported at 3840x2160 (4K):
 - Base export (API video): 0 credits
 - High resolution cost: 2 × 2.5 = 5 credits (60s = 2 segments of 30s)
 - **Total**: 5 credits
 
-**Example 3**: A 90-second dashboard video at 4K with 60 seconds of Premium avatar:
+**Example 4**: A 90-second dashboard video at 4K with 60 seconds of Premium avatar:
 - Base export: 3 × 5 = 15 credits (90s = 3 segments of 30s)
 - High resolution cost: 3 × 2.5 = 7.5 credits
-- Avatar cost: 60s × 0.5 = 30 credits
+- Avatar cost: 60s × 0.5 = 30 credits (avatar visibility)
 - **Total**: 52.5 credits
 
 ## Prerequisites
@@ -248,4 +282,7 @@ After starting an export:
 - `UNAUTHORIZED_VIDEO`: Video doesn't belong to your space
 - `VIDEO_NOT_READY`: Video generation must be completed first
 - `INVALID_FORMAT`: Invalid export format specified
+- `INVALID_AVATAR_MODEL`: Invalid avatar model specified
+- `INCOMPATIBLE_AVATAR_MODEL`: Avatar model not compatible with this avatar
+- `INVALID_PARAMETER`: avatar_model cannot be used when video has no avatar
 - `INSUFFICIENT_CREDITS`: Not enough credits for export (dashboard videos only)

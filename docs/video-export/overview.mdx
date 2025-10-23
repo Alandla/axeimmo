@@ -92,9 +92,9 @@ The high resolution surcharge applies to **all videos** (both API-generated and 
 
 ### Avatar Quality Models
 
-When your video includes an avatar, you can choose from three quality models with different performance and cost characteristics:
+When your video includes an avatar, you can choose from five quality models with different performance and cost characteristics:
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Standard" icon="zap">
     **Free**
     
@@ -107,7 +107,7 @@ When your video includes an avatar, you can choose from three quality models wit
   </Card>
   
   <Card title="Premium" icon="gem">
-    **0.5 credits/sec**
+    **0.5 credits/sec** (avatar visibility)
     
     Highly realistic and dynamic avatar rendering with enhanced facial expressions and movements.
     
@@ -115,10 +115,12 @@ When your video includes an avatar, you can choose from three quality models wit
     - Professional content
     - Marketing videos
     - High-quality presentations
+    
+    *Available from Start plan*
   </Card>
   
   <Card title="Ultra" icon="crown">
-    **2.3 credits/sec**
+    **2.3 credits/sec** (avatar visibility)
     
     Enhanced realism with the highest quality output. Longer processing time for superior results.
     
@@ -126,31 +128,67 @@ When your video includes an avatar, you can choose from three quality models wit
     - Premium content
     - Flagship campaigns
     - Maximum quality requirements
+    
+    *Enterprise plan only*
+  </Card>
+  
+  <Card title="Veo 3 Fast" icon="google">
+    **2.3 credits/sec** (per segment)
+    
+    Google Veo 3 Fast model for quick, high-quality generation with AI-powered avatars.
+    Billed per avatar segment (each segment = 8 seconds).
+    
+    **Best for:**
+    - Fast turnaround
+    - AI-generated avatars
+    - Modern content creation
+    
+    *Available from Start plan*
+  </Card>
+  
+  <Card title="Veo 3" icon="google">
+    **5 credits/sec** (per segment)
+    
+    Google Veo 3 standard model for the highest quality AI-generated avatars. Exceptional realism.
+    Billed per avatar segment (each segment = 8 seconds).
+    
+    **Best for:**
+    - Cutting-edge quality
+    - Premium AI content
+    - Maximum realism
+    
+    *Available from Start plan*
   </Card>
 </CardGroup>
 
 <Note>
-Avatar costs are calculated based on **avatar visibility duration**, not total video duration. Only the segments where the avatar is visible are charged.
+**Model availability:** Not all avatars support all models. Check the `model_available` field when fetching avatars to see which models are supported.
 </Note>
 
 ### Cost Calculation Examples
 
-**Example 1**: A 60-second API video at standard resolution with 40 seconds of Premium avatar:
+**Example 1**: A 60-second API video at standard resolution with 40 seconds of Premium avatar visibility:
 - Base export cost: 0 credits (API video - included)
 - High-res cost: 0 credits (≤1080p)
 - Avatar cost: 40s × 0.5 = 20 credits
 - **Total cost**: 20 credits
 
-**Example 2**: A 60-second API video exported at 3840x2160 (4K):
+**Example 2**: A 60-second API video with 3 avatar segments using Veo 3 Fast:
+- Base export cost: 0 credits (API video - included)
+- High-res cost: 0 credits (≤1080p)
+- Avatar cost: 3 segments × 8 seconds × 2.3 = 55.2 credits
+- **Total cost**: 55.2 credits
+
+**Example 3**: A 60-second API video exported at 3840x2160 (4K):
 - Base export cost: 0 credits (API video - included)
 - High-res cost: 2 × 2.5 = 5 credits
 - Avatar cost: 0 credits (no avatar)
 - **Total cost**: 5 credits
 
-**Example 3**: A 90-second dashboard video at 4K with 60 seconds of Premium avatar:
+**Example 4**: A 90-second dashboard video at 4K with 60 seconds of Premium avatar visibility:
 - Base export cost: 3 × 5 = 15 credits
 - High-res cost: 3 × 2.5 = 7.5 credits
-- Avatar cost: 60s × 0.5 = 30 credits
+- Avatar cost: 60s × 0.5 = 30 credits (avatar visibility)
 - **Total cost**: 52.5 credits
 
 ## Use Cases

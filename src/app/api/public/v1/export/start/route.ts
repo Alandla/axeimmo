@@ -6,7 +6,7 @@ import { createExport } from '@/src/dao/exportDao'
 import { tasks } from '@trigger.dev/sdk/v3'
 import { calculateGenerationCredits } from '@/src/lib/video-estimation'
 import { objectIdToString } from '@/src/lib/utils'
-import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration, calculateHighResolutionCostCredits } from '@/src/lib/cost'
+import { calculateAvatarCreditsForUser, calculateTotalAvatarDuration, calculateHighResolutionCostCredits, calculateVeo3Duration } from '@/src/lib/cost'
 
 interface ExportVideoRequest {
   video_id: string;
@@ -14,13 +14,15 @@ interface ExportVideoRequest {
   width?: number;
   height?: number;
   webhook_url?: string;
-  avatar_model?: 'standard' | 'premium' | 'ultra';
+  avatar_model?: 'standard' | 'premium' | 'ultra' | 'veo-3' | 'veo-3-fast';
 }
 
-function convertAvatarModel(publicModel?: string): 'heygen' | 'heygen-iv' | 'omnihuman' {
+function convertAvatarModel(publicModel?: string): 'heygen' | 'heygen-iv' | 'omnihuman' | 'veo-3' | 'veo-3-fast' {
   switch (publicModel) {
     case 'premium': return 'heygen-iv';
     case 'ultra': return 'omnihuman';
+    case 'veo-3': return 'veo-3';
+    case 'veo-3-fast': return 'veo-3-fast';
     case 'standard':
     default: return 'heygen';
   }
@@ -84,10 +86,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    if (params.avatar_model && !['standard', 'premium', 'ultra'].includes(params.avatar_model)) {
+    if (params.avatar_model && !['standard', 'premium', 'ultra', 'veo-3', 'veo-3-fast'].includes(params.avatar_model)) {
       return NextResponse.json({
         error: "Invalid avatar model",
-        details: [{ code: "INVALID_AVATAR_MODEL", message: "avatar_model must be one of: 'standard', 'premium', 'ultra'", field: "avatar_model" }]
+        details: [{ code: "INVALID_AVATAR_MODEL", message: "avatar_model must be one of: 'standard', 'premium', 'ultra', 'veo-3', 'veo-3-fast'", field: "avatar_model" }]
       }, { 
         status: 400,
         headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
@@ -133,8 +135,84 @@ export async function POST(req: NextRequest) {
     const createEvent = video.history?.find((h: { step: string }) => h.step === 'CREATE');
     const wasCreatedViaAPI = !createEvent?.user;
     
-    // Convert the avatar model from public to internal format
-    const internalModel = convertAvatarModel(params.avatar_model);
+    // Determine avatar model based on video avatar and user input
+    let internalModel: 'heygen' | 'heygen-iv' | 'omnihuman' | 'veo-3' | 'veo-3-fast' | undefined = undefined;
+    
+    if (video.video?.avatar) {
+      const hasPreviewUrl = !!video.video.avatar.previewUrl;
+      const isVeoVideo = video.useVeo3 === true;
+      
+      if (params.avatar_model) {
+        // User specified a model - validate compatibility
+        const requestedModel = convertAvatarModel(params.avatar_model);
+        const isVeoModel = requestedModel === 'veo-3' || requestedModel === 'veo-3-fast';
+        
+        // If video is created with useVeo3, only accept Veo models
+        if (isVeoVideo && !isVeoModel) {
+          return NextResponse.json({
+            error: "Incompatible avatar model",
+            details: [{ 
+              code: "INCOMPATIBLE_AVATAR_MODEL", 
+              message: "This video was created for Veo models. Only 'veo-3' and 'veo-3-fast' are available."
+            }]
+          }, { 
+            status: 400,
+            headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
+          });
+        }
+        
+        // If video is not for Veo, check standard compatibility rules
+        if (!isVeoVideo) {
+          // Check compatibility: standard only if previewUrl exists, others only if no previewUrl
+          if (hasPreviewUrl && requestedModel !== 'heygen') {
+            return NextResponse.json({
+              error: "Incompatible avatar model",
+              details: [{ 
+                code: "INCOMPATIBLE_AVATAR_MODEL", 
+                message: "This avatar only supports 'standard' model. Premium, ultra, and Veo models are not available for this avatar."
+              }]
+            }, { 
+              status: 400,
+              headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
+            });
+          }
+          
+          if (!hasPreviewUrl && requestedModel === 'heygen') {
+            return NextResponse.json({
+              error: "Incompatible avatar model",
+              details: [{ 
+                code: "INCOMPATIBLE_AVATAR_MODEL", 
+                message: "Standard model is not available for this avatar. Use 'premium', 'ultra', 'veo-3', or 'veo-3-fast' instead."
+              }]
+            }, { 
+              status: 400,
+              headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
+            });
+          }
+        }
+        
+        internalModel = requestedModel;
+      } else {
+        // No model specified - auto-select based on video type and avatar type
+        if (isVeoVideo) {
+          internalModel = 'veo-3-fast'; // Default to fast for Veo videos
+        } else {
+          internalModel = hasPreviewUrl ? 'heygen' : 'heygen-iv';
+        }
+      }
+    } else if (params.avatar_model) {
+      // No avatar but model specified - return error
+      return NextResponse.json({
+        error: "Invalid parameter",
+        details: [{ 
+          code: "INVALID_PARAMETER", 
+          message: "avatar_model parameter cannot be used when the video does not contain an avatar"
+        }]
+      }, { 
+        status: 400,
+        headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)
+      });
+    }
     
     // Calculate base export cost
     const duration = video.video?.metadata?.audio_duration || 30;
@@ -142,9 +220,15 @@ export async function POST(req: NextRequest) {
 
     // Calculate avatar cost if applicable
     let avatarCost = 0;
-    if (video.video?.avatar && internalModel !== 'heygen') {
-      const avatarDuration = calculateTotalAvatarDuration(video);
-      avatarCost = calculateAvatarCreditsForUser(avatarDuration, internalModel);
+    if (video.video?.avatar && internalModel && internalModel !== 'heygen') {
+      // For veo models, calculate based on veo3 render segments (each billed at 8 seconds)
+      // For heygen-iv and omnihuman, use avatar visibility duration
+      const isVeo3Model = internalModel === 'veo-3' || internalModel === 'veo-3-fast';
+      const costDuration = isVeo3Model
+        ? calculateVeo3Duration(video)
+        : calculateTotalAvatarDuration(video);
+      
+      avatarCost = calculateAvatarCreditsForUser(costDuration, internalModel);
     }
 
     // Calculate high resolution cost (only for custom format)
@@ -194,7 +278,7 @@ export async function POST(req: NextRequest) {
       videoId: params.video_id,
       spaceId: space.id,
       creditCost: totalCost,
-      avatarModel: internalModel,
+      ...(internalModel && { avatarModel: internalModel }),
       status: 'pending',
       webhookUrl: params.webhook_url
     });

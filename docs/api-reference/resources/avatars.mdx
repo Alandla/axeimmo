@@ -60,6 +60,10 @@ Array of available avatar look objects:
   URL to a short video preview of the avatar in action.
 </ResponseField>
 
+<ResponseField name="model_available" type="array">
+  Array of avatar model IDs compatible with this avatar look. Possible values: `standard`, `premium`, `ultra`, `veo-3-fast`, `veo-3`.
+</ResponseField>
+
 ## Example
 
 <RequestExample>
@@ -137,7 +141,8 @@ console.log('Business avatars:', filteredData);
     "format": "vertical",
     "tags": ["business", "professional", "modern", "office"],
     "thumbnail": "https://storage.hoox.video/avatars/thumbnails/avatar_business_woman_office_1.jpg",
-    "preview": "https://storage.hoox.video/avatars/previews/avatar_business_woman_office_1.mp4"
+    "preview": "https://storage.hoox.video/avatars/previews/avatar_business_woman_office_1.mp4",
+    "model_available": ["standard"]
   },
   {
     "id": "avatar_business_man_studio_1",
@@ -147,7 +152,8 @@ console.log('Business avatars:', filteredData);
     "format": "square",
     "tags": ["business", "executive", "authoritative", "studio"],
     "thumbnail": "https://storage.hoox.video/avatars/thumbnails/avatar_business_man_studio_1.jpg",
-    "preview": "https://storage.hoox.video/avatars/previews/avatar_business_man_studio_1.mp4"
+    "preview": "https://storage.hoox.video/avatars/previews/avatar_business_man_studio_1.mp4",
+    "model_available": ["standard"]
   },
   {
     "id": "avatar_casual_woman_home_1",
@@ -157,7 +163,8 @@ console.log('Business avatars:', filteredData);
     "format": "vertical",
     "tags": ["casual", "friendly", "relatable", "home"],
     "thumbnail": "https://storage.hoox.video/avatars/thumbnails/avatar_casual_woman_home_1.jpg",
-    "preview": "https://storage.hoox.video/avatars/previews/avatar_casual_woman_home_1.mp4"
+    "preview": "https://storage.hoox.video/avatars/previews/avatar_casual_woman_home_1.mp4",
+    "model_available": ["standard"]
   },
   {
     "id": "custom_avatar_user_456",
@@ -167,7 +174,7 @@ console.log('Business avatars:', filteredData);
     "format": "vertical",
     "tags": ["custom", "brand", "professional"],
     "thumbnail": "https://storage.hoox.video/avatars/thumbnails/custom_avatar_user_456.jpg",
-    "preview": "https://storage.hoox.video/avatars/previews/custom_avatar_user_456.mp4"
+    "model_available": ["premium", "ultra", "veo-3-fast", "veo-3"]
   }
 ]
 ```

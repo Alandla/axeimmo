@@ -64,16 +64,25 @@ export async function GET(req: NextRequest) {
     }
 
     // Formater la réponse
-    const formattedLooks = filteredLooks.map(look => ({
-      id: look.id,
-      name: look.name,
-      gender: look.gender,
-      place: look.place,
-      format: look.format,
-      tags: look.tags,
-      thumbnail: look.thumbnail,
-      preview: look.previewUrl,
-    }));
+    const formattedLooks = filteredLooks.map(look => {
+      // Déterminer les modèles disponibles en fonction de la présence de previewUrl
+      // On retourne les noms publics des modèles
+      const modelAvailable = look.previewUrl 
+        ? ['standard'] // Si previewUrl existe, seul le mode standard est disponible
+        : ['premium', 'ultra', 'veo-3', 'veo-3-fast']; // Sinon, tous les autres modes sont disponibles
+      
+      return {
+        id: look.id,
+        name: look.name,
+        gender: look.gender,
+        place: look.place,
+        format: look.format,
+        tags: look.tags,
+        thumbnail: look.thumbnail,
+        preview: look.previewUrl,
+        model_available: modelAvailable,
+      };
+    });
 
     return NextResponse.json(formattedLooks, {
       headers: getRateLimitHeaders(remaining, resetTime, apiKey.rateLimitPerMinute)

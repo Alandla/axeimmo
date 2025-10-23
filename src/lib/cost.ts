@@ -131,7 +131,6 @@ export function calculateTotalAvatarDuration(video: IVideo): number {
 // Each video is billed at 8 seconds
 export function calculateVeo3Duration(video: IVideo): number {
   const { veo3Renders } = generateVeo3RenderList(video);
-  console.log('veo3Renders', veo3Renders);
   return veo3Renders.length * 8;
 }
 
