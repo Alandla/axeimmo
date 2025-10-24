@@ -97,7 +97,7 @@ export function VoiceCard({ voice, playingVoice, onPreviewVoice, isLastUsed }: {
       {(isSelected || isLastUsed) && (
         <div className="absolute top-2 right-2 transition-all duration-150">
           {isSelected ? (
-            <Check className="h-5 w-5 text-primary" />
+            <Check className="h-5 w-5 text-gray-900" />
           ) : (
             <History className="h-5 w-5 text-gray-400" />
           )}

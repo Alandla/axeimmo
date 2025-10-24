@@ -96,7 +96,7 @@ export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps)
                         className={cn(
                           "w-full flex items-center gap-3 px-3 py-2 text-left rounded-lg transition-colors",
                           activeTab === tab.id
-                            ? "bg-primary text-primary-foreground"
+                            ? "bg-primary text-black"
                             : "hover:bg-muted"
                         )}
                       >
@@ -125,7 +125,7 @@ export function SpaceSettingsDrawer({ open, onClose }: SpaceSettingsDrawerProps)
                           className={cn(
                             "flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors",
                             activeTab === tab.id
-                              ? "bg-primary text-primary-foreground"
+                              ? "bg-primary text-black"
                               : "hover:bg-muted"
                           )}
                         >

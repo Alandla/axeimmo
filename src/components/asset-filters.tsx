@@ -361,7 +361,7 @@ export function AssetFilters() {
               filters.length > 0 && "w-6"
             )}
           >
-            <Filter className="shrink-0 transition-all text-muted-foreground group-hover:text-primary" />
+            <Filter className="shrink-0 transition-all text-muted-foreground group-hover:text-gray-900" />
             {!filters.length && t('filter')}
           </Button>
         </PopoverTrigger>

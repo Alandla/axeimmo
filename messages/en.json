@@ -197,13 +197,13 @@
         "documentation-text": "Check out our",
         "documentation-link": "complete API documentation",
         "no-keys": "No API Keys",
-        "no-keys-description": "Create your first API key to start using the Hoox API.",
+        "no-keys-description": "Create your first API key to start using the Axeimmo API.",
         "api-keys": "API Keys",
-        "api-keys-description": "Manage your API keys for programmatic access to Hoox.",
+        "api-keys-description": "Manage your API keys for programmatic access to Axeimmo.",
         "create-new-key": "Create New API Key",
         "last-used-never": "Never",
         "documentation-card-title": "API Documentation",
-        "documentation-card-description": "Learn how to integrate Hoox into your applications with our comprehensive API documentation.",
+        "documentation-card-description": "Learn how to integrate Axeimmo into your applications with our comprehensive API documentation.",
         "view-documentation": "View Documentation",
         "new-key-will-be-generated": "New key will be generated",
         "key-column": "Key",
@@ -378,7 +378,7 @@
       "saving": "Saving...",
       "watermark-warning": "Warning: To remove the watermark from your video, you need to upgrade to a paid plan.",
       "modal-pricing-title": "Remove the watermark",
-      "modal-pricing-description": "Upgrade to a paid plan to remove the Hoox watermark from your videos.",
+      "modal-pricing-description": "Upgrade to a paid plan to remove the Axeimmo watermark from your videos.",
       "modal-pricing-watermark-title": "Remove watermarks from your videos",
       "modal-pricing-watermark-description": "Upgrade to a paid plan to export your videos without watermark and unlock all premium features.",
       "modal-pricing-avatar-title": "Avatar model not allowed",
@@ -1074,7 +1074,7 @@
       }
     },
     "footer": {
-      "rights": "© 2024 Hoox inc. All rights reserved",
+      "rights": "© 2024 Axeimmo inc. All rights reserved",
       "privacy": "Privacy Policy",
       "terms": "Terms & Conditions"
     },
@@ -1733,7 +1733,10 @@
     "onboarding": {
       "categories": {
         "personal-information": "Personal Information",
-        "company-information": "Company Information"
+        "company-information": "Company Information",
+        "agency-profile": "Agency Profile",
+        "brand-identity": "Brand Identity",
+        "tone-personality": "Tone & Personality"
       },
       "common": {
         "back": "Back",
@@ -1762,91 +1765,79 @@
         "optional": "(Optional)"
       },
       "step2": {
-        "title": "What's your role?",
-        "role-error": "Please select your role",
-        "roles": {
-          "owner": "Owner",
-          "marketing": "Marketing",
-          "sales": "Sales",
-          "social-media": "Social Media",
-          "communication": "Communication"
-        }
+        "title": "Your agency profile",
+        "agency-name-label": "Agency / Agent name",
+        "agency-name-placeholder": "Ex: Dupont Real Estate Agency",
+        "agency-name-error": "Agency name is required"
       },
       "step3": {
-        "title": "How did you hear about us?",
-        "channel-error": "Please select how do you find us",
-        "channels": {
-          "linkedin": "Linkedin",
-          "youtube": "Youtube",
-          "x": "X",
-          "instagram": "Instagram",
-          "tiktok": "TikTok",
-          "google": "Google",
-          "friends": "Friends",
-          "other": "Other"
+        "title": "What is your status?",
+        "status-error": "Please select your status",
+        "statuses": {
+          "agency": "Agency",
+          "mandataire": "Mandataire",
+          "reseau": "Network",
+          "independent": "Independent"
         }
       },
       "step4": {
-        "title": "Tell us about your company",
-        "companyName-label": "Company Name",
-        "companyName-error": "Company name is required",
-        "website-label": "Website (optional)",
-        "website-placeholder": "https://yourcompany.com",
-        "website-error": "Please enter a valid URL"
+        "title": "Geographic zone",
+        "geographic-zone-label": "Main geographic zone",
+        "geographic-zone-placeholder": "Ex: Paris 15th, Lyon center, etc.",
+        "geographic-zone-error": "Geographic zone is required"
       },
       "step5": {
-        "title": "Your goal with Hoox",
-        "goal-error": "Please select your goal",
-        "goals": {
-          "organic-growth": "Organic growth",
-          "ads-creation": "Ads creation",
-          "brand-awareness": "Brand Awareness",
-          "lead-generation": "Lead Generation",
-          "faceless-content": "Faceless Content"
+        "title": "Property types worked on",
+        "property-types-error": "Please select at least one property type",
+        "property-types": {
+          "prestige": "Prestige",
+          "familial": "Family",
+          "urbain": "Urban",
+          "rural": "Rural",
+          "investissement": "Investment",
+          "commercial": "Commercial"
         }
       },
       "step6": {
-        "title": "You are...",
-        "companyType-error": "Please select your company type",
-        "companyTypes": {
-          "agency": "Agency",
-          "ecommerce": "E-commerce",
-          "saas": "SaaS",
-          "content-creator": "Content Creator",
-          "non-profit": "Non-profit",
-          "other": "Other"
-        },
-        "companySize-title": "Company size",
-        "companySizes": {
-          "solo": "Solo",
-          "2-10": "2-10",
-          "11-50": "11-50",
-          "51-100": "51-100",
-          "+100": "+100"
+        "title": "Target clients",
+        "target-clients-error": "Please select at least one target client",
+        "target-clients": {
+          "familles": "Families",
+          "cadres": "Executives",
+          "investisseurs": "Investors",
+          "expatries": "Expatriates",
+          "seniors": "Seniors",
+          "etudiants": "Students"
         }
       },
       "step7": {
-        "title": "You sell...",
-        "salesType-error": "Please select what you sell",
-        "salesTypes": {
-          "products": "Products",
-          "services": "Services",
-          "software": "Software",
-          "nothing": "Nothing"
+        "title": "Preferred tone in videos",
+        "preferred-tone-error": "Please select at least one tone",
+        "tones": {
+          "expert-reassuring": "Expert and reassuring",
+          "inspiring-human": "Inspiring and human",
+          "dynamic-sales": "Dynamic and sales-oriented",
+          "pedagogic-clear": "Educational and clear",
+          "emotional-authentic": "Emotional and authentic"
         }
       },
       "step8": {
-        "title": "Tell us more about your company",
-        "fetching-website": "We are fetching your company website...",
-        "mission-label": "What is your company's mission?",
-        "mission-optional": "(Optional)",
-        "mission-placeholder": "Describe your company's mission...",
-        "target-label": "Who is your target audience?",
-        "target-optional": "(Optional)",
-        "target-placeholder": "Describe your goals...",
-        "needs-label": "What makes you want to use Hoox?",
-        "needs-optional": "(Optional)",
-        "needs-placeholder": "Describe how Hoox can help you to achieve your goals..."
+        "title": "Brand identity & personality",
+        "subtitle": "Let's personalize your videos according to your universe",
+        "core-values-title": "Core values",
+        "core-values-label": "Core values of your agency / your approach",
+        "core-values-placeholder": "Ex: transparency, excellence, listening, efficiency, human support",
+        "signature-phrase-title": "Signature phrase",
+        "signature-phrase-label": "Signature phrase / slogan (if any)",
+        "signature-phrase-placeholder": "Ex: Your trusted real estate partner"
+      },
+      "step9": {
+        "title": "Your agency logo",
+        "subtitle": "Add your agency logo to personalize your videos",
+        "upload-text": "Drag and drop your logo here or click to select it",
+        "upload-formats": "Accepted formats: JPG, PNG, SVG",
+        "choose-file": "Choose file",
+        "optional-note": "(Optional) You can add it later"
       },
       "pricing": {
         "title": "Welcome, let's have a look at our plans that best suit your needs",
@@ -1862,18 +1853,18 @@
       "back": "Back",
       "main-title": "TERMS AND CONDITIONS",
       "section1": {
-        "title": "1. Identification of HOOX",
-        "content": "**HOOX** company (\"HOOX\") is a simplified joint-stock company registered in the RCS of Créteil under n°940148216, whose registered office is at 14 avenue du Général de Gaulle 94160 SAINT-MANDE.\n\nHOOX can be contacted at the following coordinates:\n- email address: contact@hoox.video\n- phone number: 06 70 44 94 05"
+        "title": "1. Identification of Axeimmo",
+        "content": "**Axeimmo** company (\"Axeimmo\") is a simplified joint-stock company registered in the RCS of Créteil under n°940148216, whose registered office is at 14 avenue du Général de Gaulle 94160 SAINT-MANDE.\n\nAxeimmo can be contacted at the following coordinates:\n- email address: contact@Axeimmo.video\n- phone number: 06 70 44 94 05"
       },
       "section2": {
         "title": "2. Services offered",
-        "content": "HOOX offers its clients (the \"Clients\") a video creation service (the \"Services\") through the HOOX platform accessible on the website www.hoox.video (the \"Platform\")."
+        "content": "Axeimmo offers its clients (the \"Clients\") a video creation service (the \"Services\") through the Axeimmo platform accessible on the website www.Axeimmo.video (the \"Platform\")."
       },
       "section3": {
         "title": "3. Information about the Terms and Conditions",
         "table": {
           "function-title": "Function of the Terms and Conditions",
-          "function-content": "The general conditions (the \"Terms and Conditions\") constitute the **sole document** governing the contractual relationship of HOOX with the Client and define:\n- the terms of use of its Services,\n- the respective obligations of the parties.",
+          "function-content": "The general conditions (the \"Terms and Conditions\") constitute the **sole document** governing the contractual relationship of Axeimmo with the Client and define:\n- the terms of use of its Services,\n- the respective obligations of the parties.",
           "location-title": "Location of the Terms and Conditions",
           "location-content": "The Client can find them through a direct link at the bottom of the Platform page.",
           "acceptance-title": "Terms and Conditions acceptance procedures",
@@ -1886,27 +1877,27 @@
       },
       "section5": {
         "title": "5. Access and subscription procedures for the Services",
-        "content": "The Client can access the Services by going directly to the **Platform**.\n\nTo subscribe to the Services, the Client must:\n- fill out the form provided for this purpose on the Platform, or\n- be registered on one of the third-party sites indicated on the Platform, use their login credentials from the selected third-party site. They expressly authorize HOOX to access the data from their account on the relevant third-party site.\n\nThe Client must provide HOOX with all information marked as mandatory.\n\nRegistration automatically results in the opening of an account in the Client's name (the \"Account\") which allows them to access the Services using their login link identifier."
+        "content": "The Client can access the Services by going directly to the **Platform**.\n\nTo subscribe to the Services, the Client must:\n- fill out the form provided for this purpose on the Platform, or\n- be registered on one of the third-party sites indicated on the Platform, use their login credentials from the selected third-party site. They expressly authorize Axeimmo to access the data from their account on the relevant third-party site.\n\nThe Client must provide Axeimmo with all information marked as mandatory.\n\nRegistration automatically results in the opening of an account in the Client's name (the \"Account\") which allows them to access the Services using their login link identifier."
       },
       "section6": {
         "title": "6. Description of Services",
         "subsection6_1": {
           "title": "6.1. The Services",
-          "content": "Before any subscription, the Client acknowledges that they can learn about the characteristics of the Services and their constraints, particularly technical ones, on the website www.hoox.video (the \"Site\").\n\nThe Client acknowledges that the implementation of the Services requires being connected to the internet and that the quality of the Services depends on this connection, for which **HOOX is not responsible**.\n\nThe Services to which the Client has subscribed are described on the Platform.\n\nThe Platform offers the following features:\n- Automatic generation of videos from an idea, a URL, or prompts provided by the Client (the \"Videos\"),\n- Possibility for the Client to use audio content or use that of a personalized avatar,\n- Choice of Video duration according to the proposed parameters,\n- Automated editing integrating post-production elements by artificial intelligence.\n\nFor creating Videos, the Client:\n- Has access to media libraries (image banks, music, etc.) offered by third-party publishers (the \"Libraries\"),\n- can import their own multimedia files (the \"Files\").\n\nThe Client subscribes to the Services in the form of a subscription (the \"Subscription\"). Each Subscription includes a predetermined number of credits that allows the Client to use the Services on the Platform (the \"Credits\"). These Credits are consumed (i) when downloading the Video based on the content and duration of the Video and/or (ii) when using other features present on the Platform (such as generating a video based on an image).\n\n**HOOX reserves the right to offer any other Service.**\n\nAny request to modify the subscribed Services must be the subject of a new subscription."
+          "content": "Before any subscription, the Client acknowledges that they can learn about the characteristics of the Services and their constraints, particularly technical ones, on the website www.Axeimmo.video (the \"Site\").\n\nThe Client acknowledges that the implementation of the Services requires being connected to the internet and that the quality of the Services depends on this connection, for which **Axeimmo is not responsible**.\n\nThe Services to which the Client has subscribed are described on the Platform.\n\nThe Platform offers the following features:\n- Automatic generation of videos from an idea, a URL, or prompts provided by the Client (the \"Videos\"),\n- Possibility for the Client to use audio content or use that of a personalized avatar,\n- Choice of Video duration according to the proposed parameters,\n- Automated editing integrating post-production elements by artificial intelligence.\n\nFor creating Videos, the Client:\n- Has access to media libraries (image banks, music, etc.) offered by third-party publishers (the \"Libraries\"),\n- can import their own multimedia files (the \"Files\").\n\nThe Client subscribes to the Services in the form of a subscription (the \"Subscription\"). Each Subscription includes a predetermined number of credits that allows the Client to use the Services on the Platform (the \"Credits\"). These Credits are consumed (i) when downloading the Video based on the content and duration of the Video and/or (ii) when using other features present on the Platform (such as generating a video based on an image).\n\n**Axeimmo reserves the right to offer any other Service.**\n\nAny request to modify the subscribed Services must be the subject of a new subscription."
         },
         "subsection6_2": {
           "title": "6.2. Complementary services",
           "maintenance": {
             "title": "6.2.1. Maintenance",
-            "content": "The Client benefits during the duration of the Services from **maintenance**, particularly corrective and evolutionary. In this context, access to the Platform may be limited or suspended.\n\nRegarding corrective maintenance, HOOX makes its best efforts to provide the Client with corrective maintenance to correct any dysfunction or bug identified on the Platform.\n\nRegarding evolutionary maintenance, the Client benefits during the duration of the Services from evolutionary maintenance, which HOOX may perform automatically and without prior information, and which includes improvements to Platform features, the addition of new features and/or technical installations used within the Platform (aimed at introducing minor or major extensions).\n\nAccess to the Platform may also be limited or suspended for reasons of planned maintenance, which may include the aforementioned corrective and evolutionary maintenance operations."
+            "content": "The Client benefits during the duration of the Services from **maintenance**, particularly corrective and evolutionary. In this context, access to the Platform may be limited or suspended.\n\nRegarding corrective maintenance, Axeimmo makes its best efforts to provide the Client with corrective maintenance to correct any dysfunction or bug identified on the Platform.\n\nRegarding evolutionary maintenance, the Client benefits during the duration of the Services from evolutionary maintenance, which Axeimmo may perform automatically and without prior information, and which includes improvements to Platform features, the addition of new features and/or technical installations used within the Platform (aimed at introducing minor or major extensions).\n\nAccess to the Platform may also be limited or suspended for reasons of planned maintenance, which may include the aforementioned corrective and evolutionary maintenance operations."
           },
           "hosting": {
             "title": "6.2.2. Hosting",
-            "content": "HOOX ensures, under the terms of a **best efforts obligation**, the hosting of the Platform, as well as data produced and/or entered by/on the Platform, through a professional hosting provider."
+            "content": "Axeimmo ensures, under the terms of a **best efforts obligation**, the hosting of the Platform, as well as data produced and/or entered by/on the Platform, through a professional hosting provider."
           },
           "support": {
             "title": "6.2.3. Technical support",
-            "content": "In case of difficulty encountered when using the Services, the Client can contact HOOX at the coordinates mentioned in the article \"Identification of HOOX\".\n\nThe technical support service is accessible **Monday to Friday**, excluding public holidays or bank holidays, from **8 am to 6 pm**. Depending on the identified need, HOOX will estimate the response time and keep the Client informed."
+            "content": "In case of difficulty encountered when using the Services, the Client can contact Axeimmo at the coordinates mentioned in the article \"Identification of Axeimmo\".\n\nThe technical support service is accessible **Monday to Friday**, excluding public holidays or bank holidays, from **8 am to 6 pm**. Depending on the identified need, Axeimmo will estimate the response time and keep the Client informed."
           }
         }
       },
@@ -1915,23 +1906,23 @@
         "content": "The Subscription begins on the day of its subscription for an initial period of **one month or one year** depending on the offer to which they have subscribed and which will be indicated on the Platform.\n\nIt is tacitly renewed, for successive periods of the same duration as the initial period (with the initial period, the \"Periods\"), from date to date, unless the Subscription is terminated under the conditions of the article \"End of Services\".\n\nAccording to article L215-1 of the Consumer Code:\n\n\"For service contracts concluded for a fixed term with a tacit renewal clause, the professional service provider informs the consumer in writing, by registered letter or dedicated electronic mail, at the earliest three months and at the latest one month before the end of the period authorizing the rejection of renewal, of the possibility of not renewing the contract they concluded with a tacit renewal clause. This information, delivered in clear and understandable terms, mentions, in a visible box, the deadline for non-renewal.\n\nWhen this information has not been sent to them in accordance with the provisions of the first paragraph, the consumer may terminate the contract free of charge, at any time from the renewal date.\n\nAdvances made after the last renewal date or, for indefinite-term contracts, after the date of transformation of the initial fixed-term contract, are in this case refunded within thirty days from the termination date, minus amounts corresponding, up to that date, to the execution of the contract. The provisions of this article apply without prejudice to those that legally subject certain contracts to particular rules regarding consumer information.\""
       },
       "section8": {
-        "title": "8. HOOX Financial Conditions",
+        "title": "8. Axeimmo Financial Conditions",
         "subsection8_1": {
           "title": "8.1. Service Prices",
-          "content": "The prices of the Services to which the Client has subscribed as well as the prices of Credit packs (the \"Credit Packs\") that can be purchased as a supplement are indicated on the Platform.\n\nUnused Credits will be treated according to the following system:\n- During the **first 3 months** of the Subscription: **30% of unused Credits** during the relevant month are carried over to the following month.\n- From the **4th month** of the Subscription: unused Credits are neither refunded nor carried over.\n\nAny Period started is due in its entirety.\n\n**HOOX is free to offer promotional offers or price reductions.**\n\nHOOX prices may be revised at any time under the conditions of the article \"Modification of General Conditions\"."
+          "content": "The prices of the Services to which the Client has subscribed as well as the prices of Credit packs (the \"Credit Packs\") that can be purchased as a supplement are indicated on the Platform.\n\nUnused Credits will be treated according to the following system:\n- During the **first 3 months** of the Subscription: **30% of unused Credits** during the relevant month are carried over to the following month.\n- From the **4th month** of the Subscription: unused Credits are neither refunded nor carried over.\n\nAny Period started is due in its entirety.\n\n**Axeimmo is free to offer promotional offers or price reductions.**\n\nAxeimmo prices may be revised at any time under the conditions of the article \"Modification of General Conditions\"."
         },
         "subsection8_2": {
-          "title": "8.2. HOOX billing and payment procedures",
-          "content": "HOOX sends the Client an **invoice per Period** by any useful means.\n\nPayment of the Subscription is made by automatic debit upon subscription to the Subscription, then at each renewal.\n\nPayment of the Credit Packs is made by **credit card** through the secure online payment service specified on the HOOX Platform.\n\nPayment is implemented through the payment service provider indicated on the Platform.\n\nThe Client guarantees to HOOX that they have the necessary authorizations to use this payment method."
+          "title": "8.2. Axeimmo billing and payment procedures",
+          "content": "Axeimmo sends the Client an **invoice per Period** by any useful means.\n\nPayment of the Subscription is made by automatic debit upon subscription to the Subscription, then at each renewal.\n\nPayment of the Credit Packs is made by **credit card** through the secure online payment service specified on the Axeimmo Platform.\n\nPayment is implemented through the payment service provider indicated on the Platform.\n\nThe Client guarantees to Axeimmo that they have the necessary authorizations to use this payment method."
         },
         "subsection8_3": {
           "title": "8.3. Consequences in case of late or default payment",
-          "content": "In case of default or late payment, HOOX reserves the right, from the day after the due date appearing on the invoice, to:\n\n- immediately suspend the Services in progress until payment of all amounts due,\n\n- For professional Clients: charge in its favor a **late payment interest equal to 3 times the legal interest rate**, based on the amount of sums not settled at maturity and a **flat-rate compensation of 40 euros** for collection costs, without prejudice to additional compensation if the collection costs actually incurred are higher than this amount."
+          "content": "In case of default or late payment, Axeimmo reserves the right, from the day after the due date appearing on the invoice, to:\n\n- immediately suspend the Services in progress until payment of all amounts due,\n\n- For professional Clients: charge in its favor a **late payment interest equal to 3 times the legal interest rate**, based on the amount of sums not settled at maturity and a **flat-rate compensation of 40 euros** for collection costs, without prejudice to additional compensation if the collection costs actually incurred are higher than this amount."
         }
       },
       "section9": {
         "title": "9. Client's right of withdrawal",
-        "content": "The Client benefits from a **right of withdrawal**:\n- if they are a consumer,\n- if they are (i) a professional who has **5 employees or fewer**, (ii) purchases a good or service not falling within their main field of activity (i.e. does not relate closely or remotely to the Services) and that (iii) the contract is concluded \"off-premises\", namely:\n  - in a place, different from HOOX's premises, where HOOX and the Client were present together physically and simultaneously (for example: signing the quote at the Client's premises),\n  - on the Client's premises or by means of a distance communication technique, immediately after HOOX has personally and individually solicited the Client (i) in a place different from that of HOOX's premises and (ii) where HOOX and the Client were present together physically and simultaneously (for example: meeting at the Client's premises or at a trade show, delivery of a quote on this occasion, then signing by the Client on their premises (handwritten or online subscription)).\n\nThis right of withdrawal is 14 calendar days from the acceptance of the \"General Conditions\". The Client can exercise this right **free of charge** by sending to HOOX before the end of the period at the coordinates mentioned in the article \"Company Identification\":\n- the completed withdrawal form available in Annex 1,\n- or any other unambiguous declaration expressing the Client's intention to withdraw.\n\nIf the Client exercises their right of withdrawal, HOOX will refund all payments received, using the same payment method that the Client used (unless they expressly accept a different method), without undue delay and at the latest **14 calendar days** from the day HOOX was informed of the Client's intention to withdraw.\n\nIf the Client requests that the Services begin before the expiration of the withdrawal period, by checking the box for this purpose in the form, they are only liable for the price of the Services calculated pro rata for the Services provided until the day HOOX was informed of the Client's intention to withdraw."
+        "content": "The Client benefits from a **right of withdrawal**:\n- if they are a consumer,\n- if they are (i) a professional who has **5 employees or fewer**, (ii) purchases a good or service not falling within their main field of activity (i.e. does not relate closely or remotely to the Services) and that (iii) the contract is concluded \"off-premises\", namely:\n  - in a place, different from Axeimmo's premises, where Axeimmo and the Client were present together physically and simultaneously (for example: signing the quote at the Client's premises),\n  - on the Client's premises or by means of a distance communication technique, immediately after Axeimmo has personally and individually solicited the Client (i) in a place different from that of Axeimmo's premises and (ii) where Axeimmo and the Client were present together physically and simultaneously (for example: meeting at the Client's premises or at a trade show, delivery of a quote on this occasion, then signing by the Client on their premises (handwritten or online subscription)).\n\nThis right of withdrawal is 14 calendar days from the acceptance of the \"General Conditions\". The Client can exercise this right **free of charge** by sending to Axeimmo before the end of the period at the coordinates mentioned in the article \"Company Identification\":\n- the completed withdrawal form available in Annex 1,\n- or any other unambiguous declaration expressing the Client's intention to withdraw.\n\nIf the Client exercises their right of withdrawal, Axeimmo will refund all payments received, using the same payment method that the Client used (unless they expressly accept a different method), without undue delay and at the latest **14 calendar days** from the day Axeimmo was informed of the Client's intention to withdraw.\n\nIf the Client requests that the Services begin before the expiration of the withdrawal period, by checking the box for this purpose in the form, they are only liable for the price of the Services calculated pro rata for the Services provided until the day Axeimmo was informed of the Client's intention to withdraw."
       },
       "section10": {
         "title": "10. Legal guarantee of conformity",
@@ -1941,15 +1932,15 @@
         "title": "11. Intellectual Property Rights",
         "subsection11_1": {
           "title": "11.1. Intellectual property rights on the Platform",
-          "content": "The **Platform** is the property of HOOX, as well as the software, infrastructure, databases and content of all kinds (texts, images, visuals, music, logos, trademarks, etc.) that it operates.\n\nThey are protected by all intellectual property rights or database producer rights in force. The license that HOOX grants to the Client does not result in any transfer of ownership.\n\nThe Client benefits from a **SaaS mode license** that is non-exclusive, personal and non-transferable for use of the Platform for the duration provided in the article \"Duration of subscription to Services\"."
+          "content": "The **Platform** is the property of Axeimmo, as well as the software, infrastructure, databases and content of all kinds (texts, images, visuals, music, logos, trademarks, etc.) that it operates.\n\nThey are protected by all intellectual property rights or database producer rights in force. The license that Axeimmo grants to the Client does not result in any transfer of ownership.\n\nThe Client benefits from a **SaaS mode license** that is non-exclusive, personal and non-transferable for use of the Platform for the duration provided in the article \"Duration of subscription to Services\"."
         },
         "subsection11_2": {
           "title": "11.2. Intellectual property rights on Videos",
-          "content": "Subject to the Client's compliance with the usage conditions described below applicable to (i) \"Libraries\" and (ii) \"Client Content\", HOOX grants the Client a **non-exclusive, personal and non-transferable license** on \"Videos\". HOOX cannot grant the Client an exclusive license due to the use of artificial intelligence. HOOX cannot guarantee that another HOOX client will not provide a similar or identical script and will not choose the same content as the Client, thus generating a video similar or identical to the one that is the subject of this license.\n\nThe license is granted for the entire legal duration of copyright protection and for the **entire world** under the conditions and restrictions (\"Restrictions\") listed below and subject to the usage conditions of \"Libraries\" whose content may be integrated by the Client into the \"Videos\". Subject to the \"Restrictions\", the license includes:\n\na) the right to reproduce and fix the Video on any medium and by any material or immaterial process;\nb) the right to distribute, broadcast and market the Video or broadcast it free or for a fee;\nc) the right to represent and publicly display the Video, free or for a fee, in any physical or immaterial location, by any media, network and authorized means of distribution;\nd) the right to make modifications to the Video including cropping, adding music, text and subtitles, changing video format or adding the Client's name, brand and logo.\n\nThe **Restrictions** of the license are as follows:\n- The Client and users cannot use the Video for any activity, use or content that:\n  - constitutes, encourages or provides instructions to commit a criminal offense or dangerous activities that could result in serious injury, death or self-harm,\n  - spreads harmful false information, such as false information inciting hatred or prejudice, or that misleads or unduly influences products, regulations, elections or other civic processes,\n  - constitutes or is a threat of any kind, intimidates or harasses others, including publication of any content intended to mock, humiliate, embarrass, intimidate or affect a person,\n  - is obscene, pornographic or promotes sexually explicit or implicit content (for example by linking to adult or pornographic websites),\n  - hateful or offensive,\n  - contains or encourages violence or discrimination based on race, ethnicity, nationality, religion, sexual orientation, gender, gender identity, serious illness, disability or age,\n  - promotes or enables prohibited activities,\n  - violates advertising platform rules,\n  - violates regulations applicable to commercial influence or requires addition of mandatory information (for example, sponsored content).\n\n- The Client and users cannot use the Video to (i) create a competing business to HOOX and (ii) engage in misleading or false advertising.\n\nIn case of non-compliance with the conditions and/or \"Restrictions\" of the license:\n- the Client is **responsible for any damage** caused to HOOX and/or third parties in relation to this non-compliance.\n- HOOX may ask the Client to remove any Video from all media where it is used in case of a removal request made by the third party whose rights have been harmed. The Client then undertakes to remove the \"Videos\" within the timeframes requested by HOOX.\n\nNotwithstanding the above, the Client acknowledges and accepts that due to the sensitive nature of **image rights**, HOOX may ask the Client to remove all \"Videos\" from all media where they are used, in case of a removal request made by the third party whose rights have been harmed. The Client then undertakes to remove the \"Videos\" within the timeframes requested by HOOX.\n\nExcept for \"Client Content\", as defined below, for which the Client is solely responsible, **HOOX guarantees to the Client that it holds all necessary rights** for granting the license. It guarantees that the \"Video\" does not constitute an infringement of third-party rights, whatever they may be."
+          "content": "Subject to the Client's compliance with the usage conditions described below applicable to (i) \"Libraries\" and (ii) \"Client Content\", Axeimmo grants the Client a **non-exclusive, personal and non-transferable license** on \"Videos\". Axeimmo cannot grant the Client an exclusive license due to the use of artificial intelligence. Axeimmo cannot guarantee that another Axeimmo client will not provide a similar or identical script and will not choose the same content as the Client, thus generating a video similar or identical to the one that is the subject of this license.\n\nThe license is granted for the entire legal duration of copyright protection and for the **entire world** under the conditions and restrictions (\"Restrictions\") listed below and subject to the usage conditions of \"Libraries\" whose content may be integrated by the Client into the \"Videos\". Subject to the \"Restrictions\", the license includes:\n\na) the right to reproduce and fix the Video on any medium and by any material or immaterial process;\nb) the right to distribute, broadcast and market the Video or broadcast it free or for a fee;\nc) the right to represent and publicly display the Video, free or for a fee, in any physical or immaterial location, by any media, network and authorized means of distribution;\nd) the right to make modifications to the Video including cropping, adding music, text and subtitles, changing video format or adding the Client's name, brand and logo.\n\nThe **Restrictions** of the license are as follows:\n- The Client and users cannot use the Video for any activity, use or content that:\n  - constitutes, encourages or provides instructions to commit a criminal offense or dangerous activities that could result in serious injury, death or self-harm,\n  - spreads harmful false information, such as false information inciting hatred or prejudice, or that misleads or unduly influences products, regulations, elections or other civic processes,\n  - constitutes or is a threat of any kind, intimidates or harasses others, including publication of any content intended to mock, humiliate, embarrass, intimidate or affect a person,\n  - is obscene, pornographic or promotes sexually explicit or implicit content (for example by linking to adult or pornographic websites),\n  - hateful or offensive,\n  - contains or encourages violence or discrimination based on race, ethnicity, nationality, religion, sexual orientation, gender, gender identity, serious illness, disability or age,\n  - promotes or enables prohibited activities,\n  - violates advertising platform rules,\n  - violates regulations applicable to commercial influence or requires addition of mandatory information (for example, sponsored content).\n\n- The Client and users cannot use the Video to (i) create a competing business to Axeimmo and (ii) engage in misleading or false advertising.\n\nIn case of non-compliance with the conditions and/or \"Restrictions\" of the license:\n- the Client is **responsible for any damage** caused to Axeimmo and/or third parties in relation to this non-compliance.\n- Axeimmo may ask the Client to remove any Video from all media where it is used in case of a removal request made by the third party whose rights have been harmed. The Client then undertakes to remove the \"Videos\" within the timeframes requested by Axeimmo.\n\nNotwithstanding the above, the Client acknowledges and accepts that due to the sensitive nature of **image rights**, Axeimmo may ask the Client to remove all \"Videos\" from all media where they are used, in case of a removal request made by the third party whose rights have been harmed. The Client then undertakes to remove the \"Videos\" within the timeframes requested by Axeimmo.\n\nExcept for \"Client Content\", as defined below, for which the Client is solely responsible, **Axeimmo guarantees to the Client that it holds all necessary rights** for granting the license. It guarantees that the \"Video\" does not constitute an infringement of third-party rights, whatever they may be."
         },
         "subsection11_3": {
           "title": "11.3. Intellectual property rights on Client Files and content",
-          "content": "The script, \"Files\" and any element provided by the Client to be integrated into the Video (collectively \"Client Content\") remain the property of the Client and may be protected by all industrial and intellectual property rights.\n\nIn order to implement the Services described in the article \"Description of Services\", generate \"Videos\" and improve the Services, the Client grants HOOX, **free of charge**, a worldwide license to use the integrated \"Client Content\" elements, which includes:\n- The right to reproduce and fix the integrated elements.\n- The right to represent the integrated elements.\n- The right to adapt, translate, modify, arrange, transform and correct the integrated elements.\n- The right to use Client Content with third-party services, particularly for content analysis used in the Services.\n- The right to train HOOX's artificial intelligence models for the purpose of improving the Services.\n- The right to promote the Services and HOOX's activity.\n\nThe Client is prohibited from using and guarantees not to use \"Client Content\" that:\n- violates public order and good morals (pornographic, obscene, indecent, shocking or inappropriate for family audiences, defamatory, insulting, violent, racist, xenophobic or revisionist),\n- violates third-party rights (counterfeit content, violation of personality rights, etc.),\n- is harmful to third parties in any way,\n- is false, misleading or promotes illegal, fraudulent or deceptive activities,\n- is harmful to third-party computer systems.\n\nThe Client **guarantees HOOX against any violation of third-party rights**, and particularly against any claim, action, procedure or demand made by a third party against HOOX due to a violation of intellectual property rights, contracts, personality rights, or any other legal or regulatory violation.\n\nThe Client acknowledges and accepts that it is their responsibility to collect image use authorizations (and where applicable name and/or voice) of any natural person whose personality attributes are captured in the \"Client Content\" integrated by the Client into the \"Videos\".\n\nThe Client is **solely responsible** for obtaining authorizations for personality rights of people appearing in the Client's Video for the uses they wish to make as well as for uses made by HOOX as indicated above."
+          "content": "The script, \"Files\" and any element provided by the Client to be integrated into the Video (collectively \"Client Content\") remain the property of the Client and may be protected by all industrial and intellectual property rights.\n\nIn order to implement the Services described in the article \"Description of Services\", generate \"Videos\" and improve the Services, the Client grants Axeimmo, **free of charge**, a worldwide license to use the integrated \"Client Content\" elements, which includes:\n- The right to reproduce and fix the integrated elements.\n- The right to represent the integrated elements.\n- The right to adapt, translate, modify, arrange, transform and correct the integrated elements.\n- The right to use Client Content with third-party services, particularly for content analysis used in the Services.\n- The right to train Axeimmo's artificial intelligence models for the purpose of improving the Services.\n- The right to promote the Services and Axeimmo's activity.\n\nThe Client is prohibited from using and guarantees not to use \"Client Content\" that:\n- violates public order and good morals (pornographic, obscene, indecent, shocking or inappropriate for family audiences, defamatory, insulting, violent, racist, xenophobic or revisionist),\n- violates third-party rights (counterfeit content, violation of personality rights, etc.),\n- is harmful to third parties in any way,\n- is false, misleading or promotes illegal, fraudulent or deceptive activities,\n- is harmful to third-party computer systems.\n\nThe Client **guarantees Axeimmo against any violation of third-party rights**, and particularly against any claim, action, procedure or demand made by a third party against Axeimmo due to a violation of intellectual property rights, contracts, personality rights, or any other legal or regulatory violation.\n\nThe Client acknowledges and accepts that it is their responsibility to collect image use authorizations (and where applicable name and/or voice) of any natural person whose personality attributes are captured in the \"Client Content\" integrated by the Client into the \"Videos\".\n\nThe Client is **solely responsible** for obtaining authorizations for personality rights of people appearing in the Client's Video for the uses they wish to make as well as for uses made by Axeimmo as indicated above."
         },
         "subsection11_4": {
           "title": "11.4. Intellectual property rights on Libraries",
@@ -1960,72 +1951,72 @@
         "title": "12. Client Obligations and Responsibility",
         "subsection12_1": {
           "title": "12.1. Regarding information provision",
-          "content": "The Client undertakes to provide HOOX with all **necessary information** for subscription and use of the Services."
+          "content": "The Client undertakes to provide Axeimmo with all **necessary information** for subscription and use of the Services."
         },
         "subsection12_2": {
           "title": "12.2. Regarding the Client's Account",
-          "content": "The Client:\n- guarantees that the information transmitted in the form is accurate and undertakes to update it,\n- acknowledges that this information serves as proof of their identity and commits them upon validation,\n- is **responsible for maintaining confidentiality** and security of their login. Any access to the Platform using these is deemed to be performed by them.\n\nThe Client must immediately contact HOOX at the coordinates mentioned in the article \"HOOX Identification\" if they notice that their Account has been used without their knowledge. They acknowledge that HOOX will have the right to take all appropriate measures in such cases."
+          "content": "The Client:\n- guarantees that the information transmitted in the form is accurate and undertakes to update it,\n- acknowledges that this information serves as proof of their identity and commits them upon validation,\n- is **responsible for maintaining confidentiality** and security of their login. Any access to the Platform using these is deemed to be performed by them.\n\nThe Client must immediately contact Axeimmo at the coordinates mentioned in the article \"Axeimmo Identification\" if they notice that their Account has been used without their knowledge. They acknowledge that Axeimmo will have the right to take all appropriate measures in such cases."
         },
         "subsection12_3": {
           "title": "12.3. Regarding use of Services",
-          "content": "The Client is **responsible for their use of the Services** and any information they share in this context. They undertake to use the Services personally and not allow any third party to use them in their place or on their behalf.\n\nThe Client is prohibited from misusing the Services for purposes other than those for which they were designed, and particularly for:\n- exercising illegal or fraudulent activity,\n- harming public order and good morals,\n- harming third parties or their rights, in any way,\n- violating contractual, legislative or regulatory provisions,\n- exercising any activity likely to interfere with a third party's computer system, particularly to violate its integrity or security,\n- performing maneuvers aimed at promoting their services and/or sites or those of a third party,\n- helping or inciting a third party to commit one or more acts or activities listed above.\n\nThe Client is also prohibited from:\n- copying, modifying or misappropriating any element belonging to HOOX or any concept it operates within the Services,\n- adopting any behavior likely to interfere with or misappropriate HOOX's computer systems or harm its computer security measures,\n- harming HOOX's financial, commercial or moral rights and interests,\n- marketing, transferring or providing access in any way to the Services, information hosted on the Platform or any element belonging to HOOX.\n\nThe Client is **responsible for \"Client Content\"** of any nature that they distribute within the Services. In particular, the Client:\n- Declares and guarantees that they hold the necessary rights for use and exploitation of \"Client Content\" or that they have the required authorizations;\n- Assumes full responsibility for imported \"Client Content\", particularly regarding respect for copyright, image rights and any applicable regulation;\n- Acknowledges that HOOX cannot be held responsible for potential violations of third-party rights resulting from use of this \"Client Content\".\n\nThe Client is informed that videos/responses provided within the Platform are generated by an **artificial intelligence system**. Although designed to be accurate and useful, these responses:\n- are produced automatically by an advanced language model,\n- may contain occasional errors or inaccuracies,\n- reflect the model's knowledge up to its last update,\n- may evolve or be refined over time with system improvements.\n\nIt is up to the Client and users to exercise discernment in interpreting and using this information/elements generated by the artificial intelligence system.\n\n**HOOX does not guarantee** that \"Videos\" generated on the Platform correspond exactly to the Client's needs.\n\nHOOX does not want its artificial intelligence system to be used for high-risk uses and does not want to be a high-risk artificial intelligence provider. Therefore:\n- the Client is prohibited from modifying the Platform and/or using it for high-risk purposes,\n- the Client is prohibited from using it as indicated as high-risk by artificial intelligence regulation and particularly, without this list being exhaustive, is prohibited from using it (i) to make decisions affecting conditions of professional relationships, promotion or dismissal, (ii) to assign tasks or (iii) to monitor and evaluate people's performance and behavior.\n\nThe Client acknowledges that artificial intelligence (\"AI\") systems may be subject to **bias** and may potentially affect results, recommendations or decisions generated by the artificial intelligence system.\n\nIn this regard, HOOX will not be responsible for bias introduced by \"Client Content\" provided by the Client and responses generated based on information from this \"Client Content\".\n\nHOOX implements its best efforts to correct bias inherent in the design of the artificial intelligence system on which the Platform's operation is based.\n\nIn this regard, HOOX undertakes to:\n- Regularly perform queries to identify potential bias in the AI system.\n- Implement corrective measures when significant bias is detected.\n\nThe Client **guarantees HOOX** against any claim and/or action that could be exercised against it following violation of one of the Client's obligations. The Client will compensate HOOX for damage suffered and reimburse it for all sums it might have to bear as a result."
+          "content": "The Client is **responsible for their use of the Services** and any information they share in this context. They undertake to use the Services personally and not allow any third party to use them in their place or on their behalf.\n\nThe Client is prohibited from misusing the Services for purposes other than those for which they were designed, and particularly for:\n- exercising illegal or fraudulent activity,\n- harming public order and good morals,\n- harming third parties or their rights, in any way,\n- violating contractual, legislative or regulatory provisions,\n- exercising any activity likely to interfere with a third party's computer system, particularly to violate its integrity or security,\n- performing maneuvers aimed at promoting their services and/or sites or those of a third party,\n- helping or inciting a third party to commit one or more acts or activities listed above.\n\nThe Client is also prohibited from:\n- copying, modifying or misappropriating any element belonging to Axeimmo or any concept it operates within the Services,\n- adopting any behavior likely to interfere with or misappropriate Axeimmo's computer systems or harm its computer security measures,\n- harming Axeimmo's financial, commercial or moral rights and interests,\n- marketing, transferring or providing access in any way to the Services, information hosted on the Platform or any element belonging to Axeimmo.\n\nThe Client is **responsible for \"Client Content\"** of any nature that they distribute within the Services. In particular, the Client:\n- Declares and guarantees that they hold the necessary rights for use and exploitation of \"Client Content\" or that they have the required authorizations;\n- Assumes full responsibility for imported \"Client Content\", particularly regarding respect for copyright, image rights and any applicable regulation;\n- Acknowledges that Axeimmo cannot be held responsible for potential violations of third-party rights resulting from use of this \"Client Content\".\n\nThe Client is informed that videos/responses provided within the Platform are generated by an **artificial intelligence system**. Although designed to be accurate and useful, these responses:\n- are produced automatically by an advanced language model,\n- may contain occasional errors or inaccuracies,\n- reflect the model's knowledge up to its last update,\n- may evolve or be refined over time with system improvements.\n\nIt is up to the Client and users to exercise discernment in interpreting and using this information/elements generated by the artificial intelligence system.\n\n**Axeimmo does not guarantee** that \"Videos\" generated on the Platform correspond exactly to the Client's needs.\n\nAxeimmo does not want its artificial intelligence system to be used for high-risk uses and does not want to be a high-risk artificial intelligence provider. Therefore:\n- the Client is prohibited from modifying the Platform and/or using it for high-risk purposes,\n- the Client is prohibited from using it as indicated as high-risk by artificial intelligence regulation and particularly, without this list being exhaustive, is prohibited from using it (i) to make decisions affecting conditions of professional relationships, promotion or dismissal, (ii) to assign tasks or (iii) to monitor and evaluate people's performance and behavior.\n\nThe Client acknowledges that artificial intelligence (\"AI\") systems may be subject to **bias** and may potentially affect results, recommendations or decisions generated by the artificial intelligence system.\n\nIn this regard, Axeimmo will not be responsible for bias introduced by \"Client Content\" provided by the Client and responses generated based on information from this \"Client Content\".\n\nAxeimmo implements its best efforts to correct bias inherent in the design of the artificial intelligence system on which the Platform's operation is based.\n\nIn this regard, Axeimmo undertakes to:\n- Regularly perform queries to identify potential bias in the AI system.\n- Implement corrective measures when significant bias is detected.\n\nThe Client **guarantees Axeimmo** against any claim and/or action that could be exercised against it following violation of one of the Client's obligations. The Client will compensate Axeimmo for damage suffered and reimburse it for all sums it might have to bear as a result."
         }
       },
       "section13": {
-        "title": "13. HOOX Obligations and Responsibility",
-        "intro": "HOOX undertakes to provide Services with **diligence**, being specified that it is bound by a best efforts obligation.\n\nHOOX undertakes to comply with applicable regulations.",
+        "title": "13. Axeimmo Obligations and Responsibility",
+        "intro": "Axeimmo undertakes to provide Services with **diligence**, being specified that it is bound by a best efforts obligation.\n\nAxeimmo undertakes to comply with applicable regulations.",
         "subsection13_1": {
           "title": "13.1. Regarding service quality",
-          "content": "HOOX makes its best efforts to provide the Client with **quality** Services.\n\nTo this end, it regularly performs checks to verify the operation and accessibility of its Services and may thus perform maintenance under the conditions specified in the \"Maintenance\" article.\n\nHowever, HOOX is not responsible for temporary difficulties or impossibilities in accessing its Services that originate from:\n- circumstances external to its network (and particularly partial or total failure of Client servers),\n- failure of equipment, cabling, services or networks not included in its Services or not under its responsibility,\n- interruption of Services by telecom operators or internet access providers,\n- Client intervention particularly via poor configuration applied to Services,\n- force majeure case.\n\nHOOX is responsible for the operation of its servers, whose external limits are constituted by connection points.\n\nMoreover, it does not guarantee that the Services:\n- subject to constant research to improve particularly performance and progress, will be totally free from errors, defects or faults,\n- being standard and not proposed according to Client's personal constraints, will specifically meet their needs and expectations."
+          "content": "Axeimmo makes its best efforts to provide the Client with **quality** Services.\n\nTo this end, it regularly performs checks to verify the operation and accessibility of its Services and may thus perform maintenance under the conditions specified in the \"Maintenance\" article.\n\nHowever, Axeimmo is not responsible for temporary difficulties or impossibilities in accessing its Services that originate from:\n- circumstances external to its network (and particularly partial or total failure of Client servers),\n- failure of equipment, cabling, services or networks not included in its Services or not under its responsibility,\n- interruption of Services by telecom operators or internet access providers,\n- Client intervention particularly via poor configuration applied to Services,\n- force majeure case.\n\nAxeimmo is responsible for the operation of its servers, whose external limits are constituted by connection points.\n\nMoreover, it does not guarantee that the Services:\n- subject to constant research to improve particularly performance and progress, will be totally free from errors, defects or faults,\n- being standard and not proposed according to Client's personal constraints, will specifically meet their needs and expectations."
         },
         "subsection13_2": {
           "title": "13.2. Regarding Platform service level guarantee",
-          "content": "**HOOX offers no service level guarantee** for the Platform.\n\nHowever, HOOX makes its best efforts to maintain access to the Platform 24/7 except in case of planned maintenance under conditions defined in the \"Maintenance\" article or force majeure."
+          "content": "**Axeimmo offers no service level guarantee** for the Platform.\n\nHowever, Axeimmo makes its best efforts to maintain access to the Platform 24/7 except in case of planned maintenance under conditions defined in the \"Maintenance\" article or force majeure."
         },
         "subsection13_3": {
           "title": "13.3. Regarding data backup on the Platform",
-          "content": "HOOX makes its best efforts to backup all data produced and/or entered by/on the Platform.\n\nExcept in case of **proven faults** by HOOX, it is nevertheless not responsible for any data loss during maintenance operations."
+          "content": "Axeimmo makes its best efforts to backup all data produced and/or entered by/on the Platform.\n\nExcept in case of **proven faults** by Axeimmo, it is nevertheless not responsible for any data loss during maintenance operations."
         },
         "subsection13_4": {
           "title": "13.4. Regarding data storage and security",
-          "content": "HOOX provides sufficient storage capacity for Services operation.\n\nHOOX makes its best efforts to ensure **data security** by implementing infrastructure and Platform protection measures, malicious act detection and prevention, and data recovery."
+          "content": "Axeimmo provides sufficient storage capacity for Services operation.\n\nAxeimmo makes its best efforts to ensure **data security** by implementing infrastructure and Platform protection measures, malicious act detection and prevention, and data recovery."
         },
         "subsection13_5": {
           "title": "13.5. Regarding content publication",
-          "content": "HOOX acts as a **hosting provider** for \"Client Content\" that the Client puts online. Consequently, it is not responsible for this \"Client Content\".\n\nIf HOOX receives a notification concerning illicit \"Client Content\", it will act promptly to remove it or make its access impossible, and it may take measures described in the \"Sanctions for breach\" article."
+          "content": "Axeimmo acts as a **hosting provider** for \"Client Content\" that the Client puts online. Consequently, it is not responsible for this \"Client Content\".\n\nIf Axeimmo receives a notification concerning illicit \"Client Content\", it will act promptly to remove it or make its access impossible, and it may take measures described in the \"Sanctions for breach\" article."
         },
         "subsection13_6": {
           "title": "13.6. Regarding subcontracting and assignment",
-          "content": "HOOX may use **subcontractors** in executing Services, who are subject to the same obligations as its own in their intervention. It nevertheless remains solely responsible for proper execution of Services towards the Client.\n\nHOOX may substitute any person who will be subrogated in all its rights and obligations under its contractual relationship with the Client. Where appropriate, it will inform the Client of this substitution by any written means."
+          "content": "Axeimmo may use **subcontractors** in executing Services, who are subject to the same obligations as its own in their intervention. It nevertheless remains solely responsible for proper execution of Services towards the Client.\n\nAxeimmo may substitute any person who will be subrogated in all its rights and obligations under its contractual relationship with the Client. Where appropriate, it will inform the Client of this substitution by any written means."
         }
       },
       "section14": {
-        "title": "14. Limitation of HOOX's liability",
-        "content": "HOOX's liability is limited to **proven direct damages** only that the Client suffers from using the Services.\n\nFor professional Clients, except for bodily harm, death and gross negligence, and subject to having issued a claim by registered letter with acknowledgment of receipt, within one month following occurrence of damage, HOOX's liability cannot be engaged for an amount exceeding amounts it received during the 12 months preceding the liability-generating event or duration of its Services provision if this duration is shorter."
+        "title": "14. Limitation of Axeimmo's liability",
+        "content": "Axeimmo's liability is limited to **proven direct damages** only that the Client suffers from using the Services.\n\nFor professional Clients, except for bodily harm, death and gross negligence, and subject to having issued a claim by registered letter with acknowledgment of receipt, within one month following occurrence of damage, Axeimmo's liability cannot be engaged for an amount exceeding amounts it received during the 12 months preceding the liability-generating event or duration of its Services provision if this duration is shorter."
       },
       "section15": {
         "title": "15. Accepted modes of proof",
-        "content": "Proof may be established by **any means**.\n\nThe Client is informed that messages exchanged via the Platform as well as data collected on the Platform and HOOX's computer equipment constitute one of the accepted modes of proof, particularly to demonstrate the reality of Services performed and calculation of their price."
+        "content": "Proof may be established by **any means**.\n\nThe Client is informed that messages exchanged via the Platform as well as data collected on the Platform and Axeimmo's computer equipment constitute one of the accepted modes of proof, particularly to demonstrate the reality of Services performed and calculation of their price."
       },
       "section16": {
         "title": "16. Personal data processing procedures",
-        "content": "The parties undertake, each for what concerns them, to comply with all legal and regulatory obligations incumbent upon them regarding **personal data protection**, particularly law 78-17 of January 6, 1978 in its latest modified version called Computer and Freedom Law and EU regulation 2016/679 of the European Parliament and Council of April 27, 2016.\n\nTo learn more about processing carried out by HOOX, the Client is invited to read HOOX's privacy policy available on the Platform."
+        "content": "The parties undertake, each for what concerns them, to comply with all legal and regulatory obligations incumbent upon them regarding **personal data protection**, particularly law 78-17 of January 6, 1978 in its latest modified version called Computer and Freedom Law and EU regulation 2016/679 of the European Parliament and Council of April 27, 2016.\n\nTo learn more about processing carried out by Axeimmo, the Client is invited to read Axeimmo's privacy policy available on the Platform."
       },
       "section17": {
         "title": "17. Force majeure",
-        "content": "HOOX cannot be responsible for breaches or delays in executing its contractual obligations due to a **force majeure case** occurring during its relationship with the Client, as defined in 1218 of the Civil Code.\n\nIf HOOX is prevented from executing its obligations due to force majeure, it must inform the Client by registered letter with acknowledgment of receipt request. Obligations are suspended upon receipt of the letter, and must be resumed within reasonable time upon cessation of the force majeure case.\n\nHOOX nevertheless remains bound to execute obligations that are not affected by a force majeure case."
+        "content": "Axeimmo cannot be responsible for breaches or delays in executing its contractual obligations due to a **force majeure case** occurring during its relationship with the Client, as defined in 1218 of the Civil Code.\n\nIf Axeimmo is prevented from executing its obligations due to force majeure, it must inform the Client by registered letter with acknowledgment of receipt request. Obligations are suspended upon receipt of the letter, and must be resumed within reasonable time upon cessation of the force majeure case.\n\nAxeimmo nevertheless remains bound to execute obligations that are not affected by a force majeure case."
       },
       "section18": {
         "title": "18. End of Services",
-        "content": "The Subscription must be terminated at the latest (i) **2 days before** the end of the Subscription Period if the Subscription is monthly or (ii) **one month before** the end of the Subscription Period if the Subscription is annual, by:\n\n- The Client, directly and free of charge through the functionality provided for this purpose on the Platform\n- HOOX, by sending an email to the Client.\n\nAny Period started is due in its entirety."
+        "content": "The Subscription must be terminated at the latest (i) **2 days before** the end of the Subscription Period if the Subscription is monthly or (ii) **one month before** the end of the Subscription Period if the Subscription is annual, by:\n\n- The Client, directly and free of charge through the functionality provided for this purpose on the Platform\n- Axeimmo, by sending an email to the Client.\n\nAny Period started is due in its entirety."
       },
       "section19": {
         "title": "19. Sanctions for breach",
-        "content": "The following constitute **essential obligations** towards the Client (the \"Essential Obligations\"):\n- payment of price,\n- not providing erroneous, incomplete information to HOOX,\n- respecting usual rules of politeness and courtesy in exchanges with HOOX,\n- not using Services for a third party,\n- not exercising illegal, fraudulent activities or harming third parties' rights or security, breach of public order or violation of laws and regulations in force.\n\nIn case of breach of one of these \"Essential Obligations\", HOOX may:\n- suspend or delete the Client's access to Services,\n- publish on the Platform any information message that HOOX deems useful,\n- warn any competent authority, cooperate with it and provide all useful information for research and repression of illegal or illicit activities,\n- initiate any legal action.\n\nThese sanctions are **without prejudice** to any damages that HOOX could claim from the Client.\n\nIn case of breach of any obligation other than an \"Essential Obligation\", HOOX will ask the Client by any useful written means to remedy the breach within a maximum period of **15 calendar days**. Services will end at the end of this period in the absence of regularization of the breach.\n\nThe end of Services results in deletion of the Client's Account."
+        "content": "The following constitute **essential obligations** towards the Client (the \"Essential Obligations\"):\n- payment of price,\n- not providing erroneous, incomplete information to Axeimmo,\n- respecting usual rules of politeness and courtesy in exchanges with Axeimmo,\n- not using Services for a third party,\n- not exercising illegal, fraudulent activities or harming third parties' rights or security, breach of public order or violation of laws and regulations in force.\n\nIn case of breach of one of these \"Essential Obligations\", Axeimmo may:\n- suspend or delete the Client's access to Services,\n- publish on the Platform any information message that Axeimmo deems useful,\n- warn any competent authority, cooperate with it and provide all useful information for research and repression of illegal or illicit activities,\n- initiate any legal action.\n\nThese sanctions are **without prejudice** to any damages that Axeimmo could claim from the Client.\n\nIn case of breach of any obligation other than an \"Essential Obligation\", Axeimmo will ask the Client by any useful written means to remedy the breach within a maximum period of **15 calendar days**. Services will end at the end of this period in the absence of regularization of the breach.\n\nThe end of Services results in deletion of the Client's Account."
       },
       "section20": {
         "title": "20. Modification of General Conditions",
-        "content": "HOOX may modify its \"General Conditions\" at any time and will inform the Client by any written means (and particularly by email) 2 calendar days before the end of the current Subscription Period if the Subscription is monthly or one month before the end of the current Subscription Period if the Subscription is annual.\n\nThe modified \"General Conditions\" are applicable upon **renewal of the Client's Subscription**.\n\nIf the Client does not accept these modifications, they must terminate their Subscription according to the procedures provided in the article \"End of Services\".\n\nIf the Client uses the Services after the entry into force of its modified \"General Conditions\", HOOX considers that the Client has **accepted** them."
+        "content": "Axeimmo may modify its \"General Conditions\" at any time and will inform the Client by any written means (and particularly by email) 2 calendar days before the end of the current Subscription Period if the Subscription is monthly or one month before the end of the current Subscription Period if the Subscription is annual.\n\nThe modified \"General Conditions\" are applicable upon **renewal of the Client's Subscription**.\n\nIf the Client does not accept these modifications, they must terminate their Subscription according to the procedures provided in the article \"End of Services\".\n\nIf the Client uses the Services after the entry into force of its modified \"General Conditions\", Axeimmo considers that the Client has **accepted** them."
       },
       "section21": {
         "title": "21. Language",
@@ -2034,11 +2025,11 @@
 
       "section22": {
         "title": "22. Mediation",
-        "content": "In case of dispute between the Client and HOOX, the Client may resort **free of charge** to the following consumer mediator for amicable resolution:\n\n**Consumer Mediation Center of Justice Conciliators (CM2C)**\nPostal address: 14 rue Saint Jean 75017 Paris\nPhone: 01 89 47 00 14\nhttps://www.cm2c.net\n\nIf the Client is a foreign consumer but located in the European Union, they can visit the European platform for consumer law dispute resolution accessible here."
+        "content": "In case of dispute between the Client and Axeimmo, the Client may resort **free of charge** to the following consumer mediator for amicable resolution:\n\n**Consumer Mediation Center of Justice Conciliators (CM2C)**\nPostal address: 14 rue Saint Jean 75017 Paris\nPhone: 01 89 47 00 14\nhttps://www.cm2c.net\n\nIf the Client is a foreign consumer but located in the European Union, they can visit the European platform for consumer law dispute resolution accessible here."
       },
       "section23": {
         "title": "23. Applicable law and competent jurisdictions",
-        "content": "The \"General Conditions\" are governed by **French law**.\n\nFor professional Clients, in case of dispute between the Client and HOOX, and failing amicable agreement within 2 months following first notification, it will be subject to exclusive jurisdiction of **Paris courts (France)**, except contrary mandatory provisions."
+        "content": "The \"General Conditions\" are governed by **French law**.\n\nFor professional Clients, in case of dispute between the Client and Axeimmo, and failing amicable agreement within 2 months following first notification, it will be subject to exclusive jurisdiction of **Paris courts (France)**, except contrary mandatory provisions."
       }
     }
 }

@@ -43,7 +43,7 @@ export default function Music({ track, isSelected, onSelect, playingTrack, onPre
     >
       {isSelected && (
         <div className="absolute top-2 right-2 transition-all duration-150">
-          <Check className="h-5 w-5 text-primary" />
+          <Check className="h-5 w-5 text-gray-900" />
         </div>
       )}
       <CardContent className="p-4 flex flex-col h-full gap-4">

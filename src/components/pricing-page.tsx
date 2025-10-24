@@ -29,7 +29,7 @@ export const features = [
         pro: true,
         enterprise: true,
         soon: false,
-        tooltip: "Remove the Hoox watermark from all your exported videos, ensuring a professional and branded look.",
+        tooltip: "Remove the Axeimmo watermark from all your exported videos, ensuring a professional and branded look.",
         icon: <Layers className="h-4 w-4 mt-0.5 flex-shrink-0" />,
       },
       {
@@ -283,7 +283,7 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
           <Link 
             href="https://www.hoox.video/compare-plans"
             target="_blank"
-            className="inline-flex items-center text-primary hover:text-primary/80 gap-1 text-sm font-medium"
+            className="inline-flex items-center text-gray-900 hover:text-gray-700 gap-1 text-sm font-medium"
           >
             {tPricing('see-detailed-comparison')} <ArrowRight className="h-4 w-4" />
           </Link>
@@ -315,13 +315,13 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
           {/* Mobile currency selector with symbols only */}
           <div className="flex items-center gap-1 border rounded-md h-[42px]">
             <button 
-              className={`px-3 h-full rounded-l-md text-sm font-medium ${currency === "USD" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+              className={`px-3 h-full rounded-l-md text-sm font-medium ${currency === "USD" ? 'bg-primary text-black' : 'hover:bg-gray-100'}`}
               onClick={() => setCurrency("USD")}
             >
               $
             </button>
             <button 
-              className={`px-3 h-full rounded-r-md text-sm font-medium ${currency === "EUR" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+              className={`px-3 h-full rounded-r-md text-sm font-medium ${currency === "EUR" ? 'bg-primary text-black' : 'hover:bg-gray-100'}`}
               onClick={() => setCurrency("EUR")}
             >
               €
@@ -361,7 +361,7 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3 left-0 right-0 mx-auto w-fit px-3 py-1 bg-[#FB5688] text-white text-xs rounded-full">
+                  <div className="absolute -top-3 left-0 right-0 mx-auto w-fit px-3 py-1 bg-[#CDF546] text-black text-xs rounded-full">
                     {tPricing('popular')}
                   </div>
                 )}
@@ -375,9 +375,9 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
                 <CardHeader>
                   <div className="flex items-center gap-2 mb-4">
                     <div className={`p-2 rounded-lg ${plan.popular ? 'bg-white' : 'bg-primary'}`}>
-                      {plan.icon === "Star" && <Star className="h-6 w-6 text-[#FB5688]" />}
-                      {plan.icon === "Heart" && <Heart className="h-6 w-6 text-[#FB5688]" />}
-                      {plan.icon === "Gem" && <Gem className="h-6 w-6 text-[#FB5688]" />}
+                      {plan.icon === "Star" && <Star className="h-6 w-6 text-black" />}
+                      {plan.icon === "Heart" && <Heart className="h-6 w-6 text-black" />}
+                      {plan.icon === "Gem" && <Gem className="h-6 w-6 text-black" />}
                     </div>
                     <CardTitle>{tPlan(plan.name)}</CardTitle>
                   </div>
@@ -536,7 +536,7 @@ export default function PricingPage({ isSimplified = false }: { isSimplified?: b
         <Card className="max-w-2xl mx-auto">
           <CardHeader className="flex-row items-center gap-4">
             <div className="p-2 bg-gray-100 rounded-lg">
-              <Diamond className="h-6 w-6 text-[#FB5688]" />
+              <Diamond className="h-6 w-6 text-[#CDF546]" />
             </div>
             <div>
               <CardTitle>{tPricing('custom')}</CardTitle>

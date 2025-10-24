@@ -63,7 +63,7 @@ export default function Subtitle({ video, subtitle, setSubtitleStyle, canEdit = 
             onClick={() => setSubtitleStyle(subtitle)}
         >
             {isSelected && (
-                <Check className="h-4 w-4 text-primary absolute top-2 right-2 z-10" />
+                <Check className="h-4 w-4 text-gray-900 absolute top-2 right-2 z-10" />
             )}
 
             {/* Preview area - à implémenter plus tard */}

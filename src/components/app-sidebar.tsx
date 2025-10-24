@@ -109,7 +109,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <div className="w-full py-2 flex items-center justify-center">
           <Image
-            src="/img/logo_little.png"
+            src="/img/logo_little.jpeg"
             alt="Logo"
             width={120}
             height={40}

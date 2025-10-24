@@ -171,7 +171,7 @@ export default function ModalConfirmExport({
             
             <div className="text-sm text-gray-500 mt-2 space-y-1">
               <p className="inline-flex items-center gap-1">
-                <span className="font-bold text-primary">{t('cost')}:</span>
+                <span className="font-bold text-gray-900">{t('cost')}:</span>
                 <span className="text-gray-500">{formatCredits(totalCost)} credits</span>
                 {(avatarCost > 0 || highResCost > 0) && (
                   <TooltipProvider>
@@ -201,7 +201,7 @@ export default function ModalConfirmExport({
                 )}
               </p>
               <p>
-                <span className="font-bold text-primary">{t('balance')}:</span>
+                <span className="font-bold text-gray-900">{t('balance')}:</span>
                 <span className="text-gray-500 ml-1">{credits !== undefined ? formatCredits(credits) : '...'} credits</span>
               </p>
             </div>

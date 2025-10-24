@@ -10,7 +10,10 @@ import { isProfessionalUser } from '@/src/utils/professional-detection'
 
 export const STEP_CATEGORIES = {
   PERSONAL: "personal-information",
-  COMPANY: "company-information"
+  COMPANY: "company-information",
+  AGENCY: "agency-profile",
+  BRAND: "brand-identity",
+  TONE: "tone-personality"
 };
 
 export interface UserOnboardingData {
@@ -20,6 +23,7 @@ export interface UserOnboardingData {
   discoveryChannel: string
   goal: string
 }
+
 
 export interface CompanyOnboardingData {
   companyName: string
@@ -31,11 +35,20 @@ export interface CompanyOnboardingData {
   companyTarget: string
   companyNeeds: string
   videoIdeas?: string[]
+  // Champs spécifiques aux agences immobilières
+  status: string
+  geographicZone: string
+  propertyTypes: string[]
+  targetClients: string[]
+  preferredTone: string[]
+  coreValues: string
+  signaturePhrase: string
 }
 
 interface OnboardingStore {
   dataUser: UserOnboardingData
   dataCompany: CompanyOnboardingData
+  logoUrl: string
   isLoading: boolean
   hasCompleted: boolean
   currentStep: number
@@ -49,7 +62,8 @@ interface OnboardingStore {
 
   initStore: () => Promise<void>
   updateUserData: (newData: Partial<UserOnboardingData>) => void
-  updateCompanyData: (newData: Partial<CompanyOnboardingData>) => void
+  updateCompanyData: (newData: Partial<CompanyOnboardingData>) => Promise<void>
+  updateLogoUrl: (url: string) => Promise<void>
   setWebsiteValid: (isValid: boolean) => void
   fetchCompanyInfo: (website: string) => Promise<void>
   saveData: (isComplete?: boolean, userEmail?: string) => Promise<boolean>
@@ -79,12 +93,21 @@ const defaultCompanyData: CompanyOnboardingData = {
   companyMission: "",
   companyNeeds: "",
   companyTarget: "",
-  videoIdeas: []
+  videoIdeas: [],
+  // Champs spécifiques aux agences immobilières
+  status: "",
+  geographicZone: "",
+  propertyTypes: [],
+  targetClients: [],
+  preferredTone: [],
+  coreValues: "",
+  signaturePhrase: ""
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   dataUser: { ...defaultUserData },
   dataCompany: { ...defaultCompanyData },
+  logoUrl: "",
   isLoading: true,
   hasCompleted: false,
   currentStep: 1,
@@ -145,7 +168,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     });
   },
   
-  updateCompanyData: (newData) => {
+  updateCompanyData: async (newData) => {
     set(state => ({ 
       dataCompany: { ...state.dataCompany, ...newData },
       errors: {}
@@ -153,6 +176,39 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     setMixpanelUserProperties({
       ...newData,
     });
+
+    // Update space name if companyName changes
+    const { spaceId } = get();
+    if (spaceId && newData.companyName) {
+      try {
+        await basicApiCall(`/space/${spaceId}`, {
+          name: newData.companyName
+        });
+      } catch (error) {
+        console.error("Error updating space name:", error);
+      }
+    }
+  },
+  
+  updateLogoUrl: async (url) => {
+    set({ logoUrl: url });
+    
+    // Update space logo
+    const { spaceId } = get();
+    if (spaceId && url) {
+      try {
+        await basicApiCall(`/space/${spaceId}`, {
+          logo: {
+            url: url,
+            show: true,
+            size: 10, // Default size
+            position: { x: 90, y: 10 } // Default position (top right)
+          }
+        });
+      } catch (error) {
+        console.error("Error updating space logo:", error);
+      }
+    }
   },
   
   setWebsiteValid: (isValid) => {
@@ -268,7 +324,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     }
     
     const nextStep = currentStep + 1;
-    const totalSteps = 8;
+    const totalSteps = 9;
     const isComplete = nextStep > totalSteps;
     
     set({ currentStep: nextStep });
@@ -284,7 +340,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   
   // Validate current step
   validateCurrentStep: () => {
-    const { currentStep, dataUser, dataCompany, websiteValid } = get();
+    const { currentStep, dataUser, dataCompany } = get();
     const newErrors: Record<string, boolean> = {};
     
     switch (currentStep) {
@@ -292,25 +348,25 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
         if (!dataUser.firstName.trim()) newErrors.firstName = true;
         break;
       case 2:
-        if (!dataUser.role) newErrors.role = true;
+        if (!dataCompany.companyName.trim()) newErrors.companyName = true;
         break;
       case 3:
-        if (!dataUser.discoveryChannel) newErrors.discoveryChannel = true;
+        if (!dataCompany.status) newErrors.status = true;
         break;
       case 4:
-        if (!dataCompany.companyName.trim()) newErrors.companyName = true;
-        if (dataCompany.website && !websiteValid) newErrors.website = true;
+        if (!dataCompany.geographicZone.trim()) newErrors.geographicZone = true;
         break;
       case 5:
-        if (!dataUser.goal) newErrors.goal = true;
+        if (dataCompany.propertyTypes.length === 0) newErrors.propertyTypes = true;
         break;
       case 6:
-        if (!dataCompany.companyType) newErrors.companyType = true;
+        if (dataCompany.targetClients.length === 0) newErrors.targetClients = true;
         break;
       case 7:
-        if (!dataCompany.salesType) newErrors.salesType = true;
+        if (dataCompany.preferredTone.length === 0) newErrors.preferredTone = true;
         break;
       // Step 8: all fields are optional
+      // Step 9: logo is optional
     }
     
     set({ errors: newErrors });
@@ -326,33 +382,37 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     // Step 1: First name is required
     if (!user.firstName.trim()) return 1;
     
-    // Step 2: Role
-    if (!user.role) return 2;
+    // Step 2: Company name
+    if (!company.companyName.trim()) return 2;
     
-    // Step 3: Discovery
-    if (!user.discoveryChannel) return 3;
+    // Step 3: Company status
+    if (!company.status) return 3;
     
-    // Step 4: Company information
-    if (!company.companyName) return 4;
+    // Step 4: Geographic zone
+    if (!company.geographicZone.trim()) return 4;
     
-    // Step 5: Goal
-    if (!user.goal) return 5;
+    // Step 5: Property types
+    if (company.propertyTypes.length === 0) return 5;
     
-    // Step 6: Company type
-    if (!company.companyType) return 6;
+    // Step 6: Target clients
+    if (company.targetClients.length === 0) return 6;
     
-    // Step 7: Sales type
-    if (!company.salesType) return 7;
+    // Step 7: Preferred tone
+    if (company.preferredTone.length === 0) return 7;
     
     // Step 8: Company details (optional)
-    return 8;
+    // Step 9: Logo (optional)
+    return 9;
   },
   
   // Get current step category
   getStepCategory: () => {
     const { currentStep } = get();
-    if (currentStep <= 3) return STEP_CATEGORIES.PERSONAL;
-    if (currentStep <= 8) return STEP_CATEGORIES.COMPANY;
+    if (currentStep <= 1) return STEP_CATEGORIES.PERSONAL;
+    if (currentStep <= 4) return STEP_CATEGORIES.AGENCY;
+    if (currentStep <= 7) return STEP_CATEGORIES.BRAND;
+    if (currentStep <= 8) return STEP_CATEGORIES.TONE;
+    if (currentStep <= 9) return STEP_CATEGORIES.BRAND;
     return "";
   },
   

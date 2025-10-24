@@ -205,11 +205,11 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
   const renderStepIcon = () => {
     switch (step) {
       case 'avatar':
-        return <User className="w-12 h-12 text-primary animate-pulse" />;
+        return <User className="w-12 h-12 text-gray-900 animate-pulse" />;
       case 'render-audio':
-        return <Music className="w-12 h-12 text-primary animate-pulse" />;
+        return <Music className="w-12 h-12 text-gray-900 animate-pulse" />;
       default:
-        return <Video className="w-12 h-12 text-primary animate-pulse" />;
+        return <Video className="w-12 h-12 text-gray-900 animate-pulse" />;
     }
   };
 
@@ -256,7 +256,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
         <>
           <CardHeader>
             <div className="flex justify-center mb-2">
-              <CheckCircle2 className="w-16 h-16 text-primary" />
+              <CheckCircle2 className="w-16 h-16 text-gray-900" />
             </div>
             <CardTitle className="text-center">{t('title-completed')}</CardTitle>
           </CardHeader>
@@ -315,7 +315,7 @@ export default function VideoExportProgress({ exportData, video }: { exportData:
             <div className="text-center mb-8">
               <span className="text-8xl font-bold text-card-foreground tabular-nums">
                 {progress}
-                <span className="text-primary">%</span>
+                <span className="text-gray-900">%</span>
               </span>
             </div>
             <Progress value={progress} className="h-3" />

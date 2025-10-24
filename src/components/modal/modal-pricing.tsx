@@ -168,13 +168,13 @@ export default function ModalPricing({
               {/* Currency selector mobile */}
               <div className="flex items-center gap-1 border rounded-md h-[42px]">
                 <button 
-                  className={`px-3 h-full rounded-l-md text-sm font-medium ${currency === "USD" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+                  className={`px-3 h-full rounded-l-md text-sm font-medium ${currency === "USD" ? 'bg-primary text-black' : 'hover:bg-gray-100'}`}
                   onClick={() => setCurrency("USD")}
                 >
                   $
                 </button>
                 <button 
-                  className={`px-3 h-full rounded-r-md text-sm font-medium ${currency === "EUR" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+                  className={`px-3 h-full rounded-r-md text-sm font-medium ${currency === "EUR" ? 'bg-primary text-black' : 'hover:bg-gray-100'}`}
                   onClick={() => setCurrency("EUR")}
                 >
                   €
@@ -186,13 +186,13 @@ export default function ModalPricing({
             <div className="hidden md:block">
               <div className="flex items-center gap-1 border rounded-md h-[42px]">
                 <button 
-                  className={`px-3 h-full rounded-l-md text-sm font-medium ${currency === "USD" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+                  className={`px-3 h-full rounded-l-md text-sm font-medium ${currency === "USD" ? 'bg-primary text-black' : 'hover:bg-gray-100'}`}
                   onClick={() => setCurrency("USD")}
                 >
                   $
                 </button>
                 <button 
-                  className={`px-3 h-full rounded-r-md text-sm font-medium ${currency === "EUR" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+                  className={`px-3 h-full rounded-r-md text-sm font-medium ${currency === "EUR" ? 'bg-primary text-black' : 'hover:bg-gray-100'}`}
                   onClick={() => setCurrency("EUR")}
                 >
                   €
@@ -219,7 +219,7 @@ export default function ModalPricing({
                     key={plan.name}
                     className={`relative flex-shrink-0 w-[220px] h-[140px] p-4 rounded-xl border-2 cursor-pointer transition-all overflow-visible ${
                       isSelected 
-                        ? 'border-[#FB5688] bg-pink-50 shadow-lg' 
+                        ? 'border-[#CDF546] bg-pink-50 shadow-lg' 
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                     onClick={() => setSelectedPlan(plan.name)}
@@ -228,7 +228,7 @@ export default function ModalPricing({
                     <div className="absolute top-3 right-3">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                         isSelected 
-                          ? 'border-[#FB5688] bg-[#FB5688]' 
+                          ? 'border-[#CDF546] bg-[#CDF546]' 
                           : 'border-gray-300'
                       }`}>
                         {isSelected && (
@@ -248,9 +248,9 @@ export default function ModalPricing({
                     
                     {/* Nom du plan */}
                     <div className="flex items-center gap-2 mb-3">
-                      {plan.icon === "Star" && <Star className="h-4 w-4 text-[#FB5688]" />}
-                      {plan.icon === "Heart" && <Heart className="h-4 w-4 text-[#FB5688]" />}
-                      {plan.icon === "Gem" && <Gem className="h-4 w-4 text-[#FB5688]" />}
+                      {plan.icon === "Star" && <Star className="h-4 w-4 text-[#CDF546]" />}
+                      {plan.icon === "Heart" && <Heart className="h-4 w-4 text-[#CDF546]" />}
+                      {plan.icon === "Gem" && <Gem className="h-4 w-4 text-[#CDF546]" />}
                       <h3 className="font-bold text-lg text-gray-900">
                         {tPlan(plan.name)}
                       </h3>
@@ -277,7 +277,7 @@ export default function ModalPricing({
                         variant={isSelected ? "default" : "warning"} 
                         className={`text-xs ${planSavePercentage === 0 ? 'opacity-0' : ''} ${
                           isSelected 
-                            ? 'bg-[#FB5688] text-white border-[#FB5688]' 
+                            ? 'bg-[#CDF546] text-black border-[#CDF546]' 
                             : 'bg-amber-50 text-amber-800 border-amber-200'
                         }`}
                       >

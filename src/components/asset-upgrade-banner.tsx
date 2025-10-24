@@ -109,13 +109,13 @@ function PricingCard({
         
         <div className="flex items-center gap-1 border rounded-md h-[42px]">
           <button 
-            className={`px-2 h-full rounded-l-md ${currency === "USD" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+            className={`px-2 h-full rounded-l-md ${currency === "USD" ? 'bg-primary text-black' : 'hover:bg-gray-100'}`}
             onClick={() => setCurrency("USD")}
           >
             $
           </button>
           <button 
-            className={`px-2 h-full rounded-r-md ${currency === "EUR" ? 'bg-primary text-primary-foreground' : 'hover:bg-gray-100'}`}
+            className={`px-2 h-full rounded-r-md ${currency === "EUR" ? 'bg-primary text-black' : 'hover:bg-gray-100'}`}
             onClick={() => setCurrency("EUR")}
           >
             €
@@ -127,7 +127,7 @@ function PricingCard({
       <p className="text-gray-500">{t('upgrade-banner.pro-description')}</p>
       
       <div className="mt-4 flex gap-2">
-        <span className="text-4xl font-bold text-primary">{currentPrice}{getCurrencySymbol()}</span>
+        <span className="text-4xl font-bold text-gray-900">{currentPrice}{getCurrencySymbol()}</span>
         <div className="flex flex-col text-sm -space-y-1">
           <span className={`line-through ${savePercentage > 0 ? '' : 'opacity-0'}`}>{monthlyPrice}{getCurrencySymbol()}</span>
           <span className="text-gray-500">/{tPricing('month')}{isAnnual && `, ${tPricing('billed-annually')}`}</span>

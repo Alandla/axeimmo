@@ -7,13 +7,14 @@ import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import OnboardingLayout from "@/src/components/onboarding/onboarding-layout"
 import Step1PersonalInfo from "@/src/components/onboarding/steps/step1-personal-info"
-import Step2Role from "@/src/components/onboarding/steps/step2-role"
-import Step3Discovery from "@/src/components/onboarding/steps/step3-discovery"
-import Step4CompanyInfo from "@/src/components/onboarding/steps/step4-company-info"
-import Step5Goal from "@/src/components/onboarding/steps/step5-goal"
-import Step6CompanyType from "@/src/components/onboarding/steps/step6-company-type"
-import Step7CompanySales from "@/src/components/onboarding/steps/step7-company-sales"
-import Step8CompanyDetails from "@/src/components/onboarding/steps/step8-company-details"
+import Step2AgencyName from "@/src/components/onboarding/steps/step2-agency-name"
+import Step3AgencyStatus from "@/src/components/onboarding/steps/step3-agency-status"
+import Step4GeographicZone from "@/src/components/onboarding/steps/step4-geographic-zone"
+import Step5PropertyTypes from "@/src/components/onboarding/steps/step5-property-types"
+import Step6TargetClients from "@/src/components/onboarding/steps/step6-target-clients"
+import Step7PreferredTone from "@/src/components/onboarding/steps/step7-preferred-tone"
+import Step8AgencyDetails from "@/src/components/onboarding/steps/step8-agency-details"
+import Step9LogoUpload from "@/src/components/onboarding/steps/step9-logo-upload"
 import ThankYou from "@/src/components/onboarding/steps/thank-you"
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
 import { useToast } from "@/src/hooks/use-toast"
@@ -46,7 +47,7 @@ export default function OnboardingPage() {
   const [attemptedNext, setAttemptedNext] = useState(false)
   const [storeInitialized, setStoreInitialized] = useState(false);
 
-  const totalSteps = 8
+  const totalSteps = 9
   const isCompleted = currentStep > totalSteps
   
   useEffect(() => {
@@ -101,43 +102,45 @@ export default function OnboardingPage() {
         )
       case 2:
         return (
-          <Step2Role
+          <Step2AgencyName
             errors={attemptedNext ? errors : {}}
           />
         )
       case 3:
         return (
-          <Step3Discovery
+          <Step3AgencyStatus
             errors={attemptedNext ? errors : {}}
           />
         )
       case 4:
         return (
-          <Step4CompanyInfo 
+          <Step4GeographicZone 
             errors={attemptedNext ? errors : {}} 
           />
         )
       case 5:
         return (
-          <Step5Goal
+          <Step5PropertyTypes
             errors={attemptedNext ? errors : {}}
           />
         )
       case 6:
         return (
-          <Step6CompanyType 
+          <Step6TargetClients 
             errors={attemptedNext ? errors : {}} 
           />
         )
       case 7:
         return (
-          <Step7CompanySales
+          <Step7PreferredTone
             errors={attemptedNext ? errors : {}}
           />
         )
       case 8:
-        return <Step8CompanyDetails />
+        return <Step8AgencyDetails />
       case 9:
+        return <Step9LogoUpload />
+      case 10:
         return <ThankYou />
       default:
         return null

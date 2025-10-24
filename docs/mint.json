@@ -3,16 +3,16 @@
   "name": "Hoox API Documentation",
   "logo": {
     "dark": "https://assets.hoox.video/logo-blanc.png",
-    "light": "https://assets.hoox.video/logo-noir.png"
+    "light": "/logo-noir.jpeg"
   },
-  "favicon": "https://assets.hoox.video/favicon.png",
+  "favicon": "/favicon.png",
   "colors": {
     "primary": "#FF3270",
-    "light": "#FB5688",
+    "light": "#CDF546",
     "dark": "#FF3270",
     "anchors": {
-      "from": "#FB5688",
-      "to": "#FB5688"
+      "from": "#CDF546",
+      "to": "#CDF546"
     }
   },
   "topbarLinks": [

@@ -294,7 +294,7 @@ export function VoicesGridComponent() {
 
       <div className="flex items-center justify-between mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
         <div className="flex items-center gap-3">
-          <Badge variant="plan" className="bg-pink-50 text-[#FB5688]">
+          <Badge variant="plan" className="bg-pink-50 text-[#CDF546]">
             Bêta
           </Badge>
           <span className="text-sm font-medium">
