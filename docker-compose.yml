@@ -5,14 +5,14 @@ services:
     user: root
     command: mongod --noauth --bind_ip_all
     ports:
-      - "27017:27017"
+      - "27018:27018"
     volumes:
       - mongodb_data:/data/db
 
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "6380:6380"
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes --requirepass defaultpassword123
