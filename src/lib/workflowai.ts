@@ -1,11 +1,55 @@
 // Initialize WorkflowAI Client
 import { WorkflowAI } from "@workflowai/workflowai"
 import { ExtractedFrame } from './ffmpeg'
-import { ensureJpegUrl } from '@/src/lib/image-conversion'
+import { ensureJpegUrl, convertToJpeg } from '@/src/lib/image-conversion'
 
 const workflowAI = new WorkflowAI({
     key: process.env.WORKFLOWAI_API_KEY
 })
+
+/**
+ * Helper to check if an error is related to unsupported image type
+ */
+function isUnsupportedImageTypeError(error: any): boolean {
+  const errorMessage = error?.message?.toLowerCase() || error?.toString().toLowerCase() || ''
+  return errorMessage.includes('image') && 
+         (errorMessage.includes('type') || 
+          errorMessage.includes('format') || 
+          errorMessage.includes('unsupported') ||
+          errorMessage.includes('invalid'))
+}
+
+/**
+ * Executes a WorkflowAI operation with automatic retry and JPEG conversion if image type error occurs
+ * The operation function receives the current image URL as parameter
+ */
+async function executeWithImageRetry<T>(
+  operation: (url: string) => Promise<T>,
+  imageUrl: string,
+  operationName: string
+): Promise<{ result: T, convertedUrl?: string }> {
+  try {
+    const result = await operation(imageUrl)
+    return { result }
+  } catch (error) {
+    console.error(`Error in ${operationName} with original image:`, error)
+    
+    if (isUnsupportedImageTypeError(error)) {
+      console.log(`Detected unsupported image type error, converting to JPEG and retrying...`)
+      try {
+        const jpegUrl = await convertToJpeg(imageUrl)
+        console.log(`Image converted to JPEG: ${jpegUrl}, retrying ${operationName}...`)
+        const result = await operation(jpegUrl)
+        return { result, convertedUrl: jpegUrl }
+      } catch (retryError) {
+        console.error(`Error in ${operationName} even after JPEG conversion:`, retryError)
+        throw retryError
+      }
+    }
+    
+    throw error
+  }
+}
 
 // Types for the image format
 export interface Image {
@@ -420,6 +464,30 @@ export async function generateVideoDescription(imageUrls: string[]): Promise<{
     }
   } catch (error) {
     console.error('Failed to generate video description:', error);
+    
+    if (isUnsupportedImageTypeError(error)) {
+      console.log('Detected unsupported image type error, converting all images to JPEG and retrying...');
+      try {
+        const convertedUrls = await Promise.all(imageUrls.map(url => convertToJpeg(url)));
+        console.log('Images converted to JPEG, retrying generateVideoDescription...');
+        
+        const convertedImages: Image[] = convertedUrls.map(url => ({ url }));
+        const retryInput: VideoDescriptionGenerationInput = {
+          images: convertedImages
+        }
+        
+        const response = await videoDescriptionGeneration(retryInput) as WorkflowAIResponse<VideoDescriptionGenerationOutput>;
+        
+        return {
+          cost: response.data.cost_usd,
+          description: response.output.video_description || ""
+        }
+      } catch (retryError) {
+        console.error('Failed to generate video description even after JPEG conversion:', retryError);
+        throw retryError;
+      }
+    }
+    
     throw error;
   }
 }
@@ -618,25 +686,28 @@ export async function generateKlingAnimationPrompt(
   basicPrompt: string
 ): Promise<{
   cost: number,
-  enhancedPrompt: string
+  enhancedPrompt: string,
+  convertedUrl?: string
 }> {
-  const input: KlingAnimationPromptEnhancementInput = {
-    image: {
-      url: imageUrl
+  const { result, convertedUrl } = await executeWithImageRetry(
+    async (url: string) => {
+      const input: KlingAnimationPromptEnhancementInput = {
+        image: {
+          url: url
+        },
+        basic_prompt: basicPrompt
+      }
+      const response = await klingAnimationPromptEnhancement(input) as WorkflowAIResponse<KlingAnimationPromptEnhancementOutput>
+      return response
     },
-    basic_prompt: basicPrompt
-  }
-
-  try {
-    const response = await klingAnimationPromptEnhancement(input) as WorkflowAIResponse<KlingAnimationPromptEnhancementOutput>;
-    
-    return {
-      cost: response.data.cost_usd,
-      enhancedPrompt: response.output.enhanced_prompt || ""
-    }
-  } catch (error) {
-    console.error('Failed to generate Kling animation prompt:', error);
-    throw error;
+    imageUrl,
+    'generateKlingAnimationPrompt'
+  )
+  
+  return {
+    cost: result.data.cost_usd,
+    enhancedPrompt: result.output.enhanced_prompt || "",
+    convertedUrl
   }
 }
 
@@ -649,24 +720,27 @@ export async function generateImageStagingIdeas(
   imageUrl: string
 ): Promise<{
   cost: number,
-  stagingIdeas: string[]
+  stagingIdeas: string[],
+  convertedUrl?: string
 }> {
-  const input: ImageStagingIdeasInput = {
-    image: {
-      url: imageUrl
-    }
-  }
-
-  try {
-    const response = await imageStagingIdeas(input) as WorkflowAIResponse<ImageStagingIdeasOutput>;
-    
-    return {
-      cost: response.data.cost_usd,
-      stagingIdeas: response.output.staging_ideas || [],
-    }
-  } catch (error) {
-    console.error('Failed to generate image staging ideas:', error);
-    throw error;
+  const { result, convertedUrl } = await executeWithImageRetry(
+    async (url: string) => {
+      const input: ImageStagingIdeasInput = {
+        image: {
+          url: url
+        }
+      }
+      const response = await imageStagingIdeas(input) as WorkflowAIResponse<ImageStagingIdeasOutput>
+      return response
+    },
+    imageUrl,
+    'generateImageStagingIdeas'
+  )
+  
+  return {
+    cost: result.data.cost_usd,
+    stagingIdeas: result.output.staging_ideas || [],
+    convertedUrl
   }
 }
 
@@ -707,24 +781,28 @@ export async function imageAnalysisRun(
   safeUrl?: string
 }> {
   // Convert AVIF to JPEG if needed to improve compatibility
-  const safeUrl = await ensureJpegUrl(imageUrl)
-  const input: ImageAnalysisInput = {
-    image_url: {
-      url: safeUrl
-    }
-  }
+  const initialUrl = await ensureJpegUrl(imageUrl)
+  
+  const { result, convertedUrl } = await executeWithImageRetry(
+    async (url: string) => {
+      const input: ImageAnalysisInput = {
+        image_url: {
+          url: url
+        }
+      }
+      const response = await imageAnalysis(input) as WorkflowAIResponse<ImageAnalysisOutput>
+      return response
+    },
+    initialUrl,
+    'imageAnalysisRun'
+  )
 
-  try {
-    const response = await imageAnalysis(input) as WorkflowAIResponse<ImageAnalysisOutput>
+  const finalUrl = convertedUrl || initialUrl
 
-    return {
-      cost: response.data.cost_usd,
-      description: response.output.description || "",
-      safeUrl
-    }
-  } catch (error) {
-    console.error('Failed to run image analysis:', error)
-    throw error
+  return {
+    cost: result.data.cost_usd,
+    description: result.output.description || "",
+    safeUrl: finalUrl !== imageUrl ? finalUrl : undefined
   }
 }
 
