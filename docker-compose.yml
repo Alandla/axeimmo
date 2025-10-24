@@ -3,7 +3,7 @@ services:
   mongodb:
     image: mongodb/mongodb-community-server:8.0-ubuntu2204
     user: root
-    command: mongod --noauth --bind_ip_all
+    command: mongod --noauth --bind_ip_all --port 27018
     ports:
       - "27018:27018"
     volumes:
