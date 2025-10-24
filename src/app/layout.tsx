@@ -25,8 +25,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Hoox",
-  description: "Hoox application",
+  title: "Axeimmo",
+  description: "Axeimmo application",
   robots: "noindex, nofollow",
 };
 

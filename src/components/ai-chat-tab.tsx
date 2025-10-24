@@ -328,7 +328,7 @@ export function AiChatTab({
                               variant={isWebMode ? "default" : "outline"} 
                               onClick={handleWebModeClick}
                               disabled={isDisabled}
-                              className={isWebMode ? "bg-[#FB5688]/10 border border-[#FB5688] text-[#FB5688] hover:bg-[#FB5688]/20 px-2" : "px-2"}
+                              className={isWebMode ? "bg-[#CDF546]/10 border border-[#CDF546] text-[#CDF546] hover:bg-[#CDF546]/20 px-2" : "px-2"}
                             >
                               <Globe className="h-4 w-4"/>
                               Web

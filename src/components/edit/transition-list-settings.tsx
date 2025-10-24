@@ -53,7 +53,7 @@ function TransitionPreview({ transitionItem, isSelected, previewSequences, video
         onClick={onSelect}
       >
         {isSelected && (
-          <Check className="h-4 w-4 text-primary absolute top-2 right-2 z-10" />
+          <Check className="h-4 w-4 text-gray-900 absolute top-2 right-2 z-10" />
         )}
         <Player
           ref={playerRef}

@@ -36,7 +36,7 @@ const toastVariants = cva(
         confirm:
           "border border-green-600 bg-green-500 text-white",
         loading: "border bg-background text-foreground",
-        premium: "border-2 border-[#FB5688]/60 bg-background text-foreground"
+        premium: "border-2 border-[#CDF546]/60 bg-background text-foreground"
       },
     },
     defaultVariants: {

@@ -87,6 +87,14 @@ export interface ICompanyDetails {
   companyMission?: string;
   companyTarget?: string;
   companyNeeds?: string;
+  // Champs spécifiques aux agences immobilières
+  status?: string;
+  geographicZone?: string;
+  propertyTypes?: string[];
+  targetClients?: string[];
+  preferredTone?: string[];
+  coreValues?: string;
+  signaturePhrase?: string;
 }
 
 export interface ISpace {

@@ -678,7 +678,7 @@ export function AiChat() {
                     <img src="/img/logo-square.png" alt="AI Avatar" className="rounded-full" />
                   </Avatar>
                 )}
-                <div className={`rounded-lg p-3 max-w-[85vw] sm:max-w-xl whitespace-pre-wrap ${message.script && 'w-full'} shadow ${message.sender === 'user' ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
+                <div className={`rounded-lg p-3 max-w-[85vw] sm:max-w-xl whitespace-pre-wrap ${message.script && 'w-full'} shadow ${message.sender === 'user' ? 'bg-primary text-black' : 'bg-white text-gray-900'}`}>
                   {/* Utilisation du composant ToolDisplay */}
                   {message.sender === 'ai' && (
                     <ToolDisplay 

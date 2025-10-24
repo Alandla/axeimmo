@@ -3,7 +3,7 @@ import { auth } from "@/src/lib/auth"
 
 export default getRequestConfig(async () => {
   const session = await auth()
-  const locale = session?.user?.options?.lang || 'en'
+  const locale = session?.user?.options?.lang || 'fr'
  
   return {
     locale,

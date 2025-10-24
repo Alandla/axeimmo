@@ -170,7 +170,7 @@ export default function AssetCard({ mediaSpace, spaceId, setMedia, onClick, onDe
             <div className="absolute top-2 right-2 z-30">
               <div className={`w-4 h-4 shrink-0 transition-all duration-300 rounded-sm border shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring flex items-center justify-center ${
                 isSelected 
-                  ? 'bg-primary border-primary text-primary-foreground' 
+                  ? 'bg-primary border-primary text-black' 
                   : 'bg-white border'
               }`}>
                 {isSelected && <Check className="h-4 w-4 text-current" />}

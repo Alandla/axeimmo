@@ -53,7 +53,7 @@ export default function PlanPeriodToggle({
         ref={monthlyRef}
         onClick={() => onToggle(false)}
         className={`${equalWidth ? 'flex-1' : ''} ${compact ? 'px-3' : 'px-4'} py-2 rounded-lg text-sm relative z-10 transition-colors duration-300 ${
-          !isAnnual ? 'text-primary-foreground' : ''
+          !isAnnual ? 'text-black' : ''
         }`}
       >
         {tPricing('monthly')}
@@ -62,11 +62,11 @@ export default function PlanPeriodToggle({
         ref={annuallyRef}
         onClick={() => onToggle(true)}
         className={`${equalWidth ? 'flex-1' : ''} ${compact ? 'px-3' : 'px-4'} py-2 rounded-lg text-sm relative z-10 transition-colors duration-300 flex items-center justify-center ${
-          isAnnual ? 'text-primary-foreground' : ''
+          isAnnual ? 'text-black' : ''
         }`}
       >
         <span>{tPricing('annually')}</span>
-        <span className={`ml-1 text-xs ${compact ? 'px-1.5' : 'px-2'} py-0.5 rounded-full bg-[#FB5688]/10 text-[#FB5688] whitespace-nowrap`}>
+        <span className={`ml-1 text-xs ${compact ? 'px-1.5' : 'px-2'} py-0.5 rounded-full bg-[#CDF546]/10 text-[#CDF546] whitespace-nowrap`}>
           {tPricing('20-off')}
         </span>
       </button>

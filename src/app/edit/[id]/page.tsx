@@ -1523,7 +1523,7 @@ export default function VideoEditor() {
           </div>
           <Link href="/dashboard" className="hidden sm:block">
             <Image
-              src="/img/logo_little.png"
+              src="/img/logo_little.jpeg"
               alt="Logo"
               width={70}
               height={20}

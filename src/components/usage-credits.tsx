@@ -37,7 +37,7 @@ export function UsageCredits() {
               <Rocket className="w-3 h-3" />
               {t('upgrade')}
               {discount.active && (
-                <span className="text-xs bg-[#FB5688]/10 text-[#FB5688] px-2 py-0.5 rounded-full">
+                <span className="text-xs bg-[#CDF546]/10 text-[#CDF546] px-2 py-0.5 rounded-full">
                   {tPricing('20-off')}
                 </span>
               )}
@@ -61,7 +61,7 @@ export function UsageCredits() {
             <Rocket className="w-3 h-3" />
             {t('upgrade')}
             {discount.active && (
-              <span className="text-xs bg-[#FB5688]/10 text-[#FB5688] px-2 py-0.5 rounded-full">
+              <span className="text-xs bg-[#CDF546]/10 text-[#CDF546] px-2 py-0.5 rounded-full">
                 {tPricing('20-off')}
               </span>
             )}
@@ -113,7 +113,7 @@ export function UsageCredits() {
           <Rocket className="w-3 h-3" />
           {t('upgrade')}
           {discount.active && (
-            <span className="text-xs bg-[#FB5688]/10 text-[#FB5688] px-2 py-0.5 rounded-full">
+            <span className="text-xs bg-[#CDF546]/10 text-[#CDF546] px-2 py-0.5 rounded-full">
               {tPricing('20-off')}
             </span>
           )}

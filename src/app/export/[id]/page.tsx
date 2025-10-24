@@ -64,7 +64,7 @@ export default function Export() {
             <div className="absolute left-1/2 transform -translate-x-1/2 mt-20 sm:mt-0">
               <Link href="/dashboard">
                 <Image
-                  src="/img/logo_little.png"
+                  src="/img/logo_little.jpeg"
                   alt="Logo"
                   width={90}
                   height={25}

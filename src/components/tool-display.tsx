@@ -80,7 +80,7 @@ export function ToolDisplay({ toolCalls, showTools }: ToolDisplayProps) {
                 ? 'rgba(239, 68, 68, 0.1)'
                 : 'rgba(0, 0, 0, 0.05)',
               color: lastTool.status === 'completed'
-                ? '#FB5688'
+                ? '#CDF546'
                 : lastTool.status === 'error'
                 ? '#EF4444'
                 : '#000000'

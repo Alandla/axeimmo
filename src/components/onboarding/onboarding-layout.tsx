@@ -39,7 +39,7 @@ export default function OnboardingLayout({
             transition={{ duration: 0.5, delay: 0.3 }}
             key="logo-black"
           >
-            <Image src="/logo-noir.png" alt="Hoox" width={120} height={40} />
+            <Image src="/logo-noir.jpeg" alt="Axeimmo" width={120} height={40} />
           </motion.div>
       </AnimatePresence>
 
@@ -92,7 +92,7 @@ export default function OnboardingLayout({
         }}
       >
         <div className="mb-12">
-          <Image src="/logo-blanc.png" alt="Hoox" width={120} height={40} className="mb-12" />
+          <Image src="/logo-blanc.png" alt="Axeimmo" width={120} height={40} className="mb-12" />
           <div className="space-y-1">
             <h2 className="text-sm font-medium uppercase tracking-wider">{t('get-started')}</h2>
             <h1 className="text-4xl font-bold">{t('welcome')}</h1>

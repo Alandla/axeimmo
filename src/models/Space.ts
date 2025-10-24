@@ -67,7 +67,15 @@ const companyDetailsSchema = new mongoose.Schema({
   salesType: String,
   companyMission: String,
   companyTarget: String,
-  companyNeeds: String
+  companyNeeds: String,
+  // Champs spécifiques aux agences immobilières
+  status: String, // Agence/Mandataire/Réseau/Indépendant
+  geographicZone: String,
+  propertyTypes: [String],
+  targetClients: [String],
+  preferredTone: [String],
+  coreValues: String,
+  signaturePhrase: String
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
