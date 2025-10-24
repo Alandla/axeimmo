@@ -52,10 +52,10 @@ export async function extractFromUrlsCore(
 
   // Separate URLs that require BrowserBase vs Firecrawl
   const browserBaseUrls = urls.filter(url => 
-    url.includes('fairmoove.fr') || url.includes('odisseias.com')
+    url.includes('fairmoove.fr') || url.includes('odisseias.com') || url.includes('laforet.com')
   )
   const firecrawlUrls = urls.filter(url => 
-    !url.includes('fairmoove.fr') && !url.includes('odisseias.com')
+    !url.includes('fairmoove.fr') && !url.includes('odisseias.com') && !url.includes('laforet.com')
   )
 
   let combinedResults: FirecrawlScrapedResult[] = []

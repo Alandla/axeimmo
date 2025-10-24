@@ -116,15 +116,59 @@ export async function extractCleanContent(page: Page, url: string): Promise<Omit
  */
 export async function extractImagesFromPage(page: Page): Promise<ExtractedImage[]> {
   try {
+    console.log("🔍 [BrowserBase] Searching images from page...")
+    
+    // Capture browser console logs
+    page.on('console', msg => {
+      const text = msg.text();
+      if (text.includes('imgs found') || text.includes('BrowserBase')) {
+        console.log(`  [Browser Console] ${text}`);
+      }
+    });
+    
     const images = await page.evaluate(() => {
       const imgs = Array.from(document.querySelectorAll('img'));
-      console.log("imgs found : ", imgs.length)
+      console.log(`imgs found : ${imgs.length}`)
+      
+      // Helper function to extract dimensions from URL
+      const extractDimensionsFromUrl = (url: string): { width: number; height: number } => {
+        try {
+          const urlObj = new URL(url);
+          const params = urlObj.searchParams;
+          
+          // Try different common parameter names
+          const width = parseInt(params.get('w') || params.get('width') || '0');
+          const height = parseInt(params.get('h') || params.get('height') || '0');
+          
+          return { width, height };
+        } catch (e) {
+          return { width: 0, height: 0 };
+        }
+      };
+      
       return imgs.map(img => {
+        let width = img.naturalWidth || img.width || 0;
+        let height = img.naturalHeight || img.height || 0;
+        
+        // If dimensions are 0x0, try to extract from URL or HTML attributes
+        if (width === 0 || height === 0) {
+          const urlDimensions = extractDimensionsFromUrl(img.src);
+          if (urlDimensions.width > 0 && urlDimensions.height > 0) {
+            width = urlDimensions.width;
+            height = urlDimensions.height;
+            console.log(`[BrowserBase] Dimensions extracted from URL for ${img.src}: ${width}x${height}`);
+          } else {
+            // Fallback to HTML attributes
+            width = width || parseInt(img.getAttribute('width') || '0');
+            height = height || parseInt(img.getAttribute('height') || '0');
+          }
+        }
+        
         return {
           src: img.src,
           alt: img.alt || '',
-          width: img.naturalWidth || img.width,
-          height: img.naturalHeight || img.height,
+          width: width,
+          height: height,
           parentInfo: {
             tagName: img.parentElement?.tagName || '',
             className: img.parentElement?.className || '',
@@ -162,6 +206,7 @@ export async function extractImagesFromPage(page: Page): Promise<ExtractedImage[
       });
     });
 
+    console.log(`✅ [BrowserBase] ${images.length} images extracted from page`);
     return images;
   } catch (error) {
     console.error('Error in basic image extraction:', error);
@@ -170,20 +215,53 @@ export async function extractImagesFromPage(page: Page): Promise<ExtractedImage[
       // Fallback: simple image extraction
       const basicImages = await page.evaluate(() => {
         const imgs = Array.from(document.querySelectorAll('img'));
-        return imgs.map(img => ({
-          src: img.src,
-          alt: img.alt || '',
-          width: img.naturalWidth || img.width,
-          height: img.naturalHeight || img.height,
-          parentInfo: {
-            tagName: img.parentElement?.tagName || '',
-            className: img.parentElement?.className || '',
-            id: img.parentElement?.id || '',
-            isInMainContent: false
+        console.log(`[Fallback] imgs found : ${imgs.length}`)
+        
+        // Helper function to extract dimensions from URL
+        const extractDimensionsFromUrl = (url: string): { width: number; height: number } => {
+          try {
+            const urlObj = new URL(url);
+            const params = urlObj.searchParams;
+            const width = parseInt(params.get('w') || params.get('width') || '0');
+            const height = parseInt(params.get('h') || params.get('height') || '0');
+            return { width, height };
+          } catch (e) {
+            return { width: 0, height: 0 };
           }
-        })).filter(img => img.width >= 100 && img.height >= 100);
+        };
+        
+        return imgs.map(img => {
+          let width = img.naturalWidth || img.width || 0;
+          let height = img.naturalHeight || img.height || 0;
+          
+          // If dimensions are 0x0, try to extract from URL or HTML attributes
+          if (width === 0 || height === 0) {
+            const urlDimensions = extractDimensionsFromUrl(img.src);
+            if (urlDimensions.width > 0 && urlDimensions.height > 0) {
+              width = urlDimensions.width;
+              height = urlDimensions.height;
+            } else {
+              width = width || parseInt(img.getAttribute('width') || '0');
+              height = height || parseInt(img.getAttribute('height') || '0');
+            }
+          }
+          
+          return {
+            src: img.src,
+            alt: img.alt || '',
+            width: width,
+            height: height,
+            parentInfo: {
+              tagName: img.parentElement?.tagName || '',
+              className: img.parentElement?.className || '',
+              id: img.parentElement?.id || '',
+              isInMainContent: false
+            }
+          };
+        }).filter(img => img.width >= 100 && img.height >= 100);
       });
       
+      console.log(`✅ [BrowserBase Fallback] ${basicImages.length} images extracted from page`);
       return basicImages;
     } catch (fallbackError) {
       console.error('Fallback image extraction also failed:', fallbackError);
@@ -263,6 +341,19 @@ export async function odisseiasImageExtraction(page: Page): Promise<ExtractedIma
   }
 }
 
+export async function laforetImageExtraction(page: Page): Promise<ExtractedImage[]> {
+  try {
+    const imagesAfter = await extractImagesFromPage(page);
+    console.log(`Images found after interactions for laforet: ${imagesAfter.length}`);
+
+    return imagesAfter;
+
+  } catch (error) {
+    console.error('Error in laforet image extraction:', error);
+    return await extractImagesFromPage(page);
+  }
+}
+
 /**
  * Quick DOM extraction (Phase 1) - Returns content fast for script generation
  */
@@ -322,6 +413,9 @@ export async function extractBackgroundImages(
     } else if (url?.includes('odisseias.com')) {
       console.log('Using odisseias extraction method');
       extractionMethod = odisseiasImageExtraction;
+    } else if (url?.includes('laforet.com')) {
+      console.log('Using laforet extraction method');
+      extractionMethod = laforetImageExtraction;
     } else {
       console.log('Using basic extraction method');
       extractionMethod = extractImagesFromPage;
@@ -370,6 +464,8 @@ export async function extractContentWithImages(
       extractionMethod = fairmooveImageExtraction;
     } else if (url.includes('odisseias.com')) {
       extractionMethod = odisseiasImageExtraction;
+    } else if (url.includes('laforet.com')) {
+      extractionMethod = laforetImageExtraction;
     } else {
       extractionMethod = extractImagesFromPage;
     }
