@@ -37,4 +37,31 @@ export async function ensureJpegUrl(imageUrl: string): Promise<string> {
   return url
 }
 
+/**
+ * Force convert any image to JPEG format
+ * Useful when an image format is not supported by external services
+ */
+export async function convertToJpeg(imageUrl: string): Promise<string> {
+  try {
+    const res = await fetch(imageUrl)
+    if (!res.ok) {
+      throw new Error(`Failed to fetch image: ${res.statusText}`)
+    }
+
+    const arrayBuffer = await res.arrayBuffer()
+    const input = Buffer.from(arrayBuffer)
+
+    const jpegBuffer = await sharp(input).jpeg({ quality: 90 }).toBuffer()
+
+    const fileName = `converted-${Date.now()}`
+    const { url } = await uploadToS3Image(jpegBuffer, 'medias-users', fileName, 'jpg', 'image/jpeg')
+    
+    console.log(`Successfully converted image to JPEG: ${imageUrl} -> ${url}`)
+    return url
+  } catch (error) {
+    console.error('Error converting image to JPEG:', error)
+    throw error
+  }
+}
+
 

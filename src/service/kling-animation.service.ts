@@ -108,6 +108,13 @@ export async function generateKlingAnimation(
   try {
     // Premier essai avec l'URL finale (upscalée ou originale)
     promptResult = await generateKlingAnimationPrompt(finalImageUrl, context);
+    
+    // If image was converted to JPEG during analysis, update finalImageUrl
+    if (promptResult.convertedUrl) {
+      console.log("Image was converted to JPEG during prompt generation:", promptResult.convertedUrl);
+      finalImageUrl = promptResult.convertedUrl;
+      usedR2Url = promptResult.convertedUrl;
+    }
   } catch (error) {
     console.error("Error generating animation prompt with final URL:", error);
     
@@ -123,8 +130,8 @@ export async function generateKlingAnimation(
       const r2Url = await uploadImageFromUrlToS3(imageUrl, "medias-users", fileName);
       
       promptResult = await generateKlingAnimationPrompt(r2Url, context);
-      finalImageUrl = r2Url; // Utiliser l'URL R2 pour la génération Kling
-      usedR2Url = r2Url;
+      finalImageUrl = promptResult.convertedUrl || r2Url; // Utiliser l'URL convertie ou R2 pour la génération Kling
+      usedR2Url = finalImageUrl;
     } catch (retryError) {
       console.error("Error generating animation prompt even after uploading to R2:", retryError);
       throw retryError;
