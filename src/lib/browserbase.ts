@@ -96,8 +96,19 @@ export async function initializeBrowser(connectUrl: string): Promise<{ browser: 
 /**
  * Extract clean content from a URL using Readability
  */
-export async function extractCleanContent(page: Page, url: string): Promise<Omit<ExtractedContent, 'images' | 'extractionMethod'>> {
+export async function extractCleanContent(page: Page, url: string, waitForSelector?: string): Promise<Omit<ExtractedContent, 'images' | 'extractionMethod'>> {
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  
+  // Wait for specific selector if provided (e.g., for bienici.com)
+  if (waitForSelector) {
+    try {
+      console.log(`Waiting for selector: ${waitForSelector}`);
+      await page.waitForSelector(waitForSelector, { timeout: 10000 });
+      console.log(`Selector ${waitForSelector} found`);
+    } catch (error) {
+      console.warn(`Selector ${waitForSelector} not found, continuing anyway...`);
+    }
+  }
   
   const content = await page.content();
   const dom = new JSDOM(content);
@@ -354,6 +365,19 @@ export async function laforetImageExtraction(page: Page): Promise<ExtractedImage
   }
 }
 
+export async function bieniciImageExtraction(page: Page): Promise<ExtractedImage[]> {
+  try {
+    const imagesAfter = await extractImagesFromPage(page);
+    console.log(`Images found after interactions for bienici: ${imagesAfter.length}`);
+
+    return imagesAfter;
+
+  } catch (error) {
+    console.error('Error in bienici image extraction:', error);
+    return await extractImagesFromPage(page);
+  }
+}
+
 /**
  * Quick DOM extraction (Phase 1) - Returns content fast for script generation
  */
@@ -368,7 +392,14 @@ export async function extractQuickContent(
   console.log("Browser initialized")
   
   try {
-    const cleanContent = await extractCleanContent(page, url);
+    // Determine if we need to wait for a specific selector
+    let waitForSelector: string | undefined;
+    if (url.includes('bienici.com')) {
+      waitForSelector = 'section.description';
+      console.log('Detected bienici.com - will wait for section.description selector');
+    }
+    
+    const cleanContent = await extractCleanContent(page, url, waitForSelector);
     
     // Don't close browser - keep session alive for background processing
     return {
@@ -416,6 +447,9 @@ export async function extractBackgroundImages(
     } else if (url?.includes('laforet.com')) {
       console.log('Using laforet extraction method');
       extractionMethod = laforetImageExtraction;
+    } else if (url?.includes('bienici.com')) {
+      console.log('Using bienici extraction method');
+      extractionMethod = bieniciImageExtraction;
     } else {
       console.log('Using basic extraction method');
       extractionMethod = extractImagesFromPage;
@@ -454,8 +488,15 @@ export async function extractContentWithImages(
     const { browser: browserInstance, page } = await initializeBrowser(connectUrl);
     browser = browserInstance;
 
+    // Determine if we need to wait for a specific selector
+    let waitForSelector: string | undefined;
+    if (url.includes('bienici.com')) {
+      waitForSelector = 'section.description';
+      console.log('Detected bienici.com - will wait for section.description selector');
+    }
+
     // Extract clean content
-    const cleanContent = await extractCleanContent(page, url);
+    const cleanContent = await extractCleanContent(page, url, waitForSelector);
     
     // Choose extraction method based on URL
     let extractionMethod: (page: Page) => Promise<ExtractedImage[]>;
@@ -466,6 +507,8 @@ export async function extractContentWithImages(
       extractionMethod = odisseiasImageExtraction;
     } else if (url.includes('laforet.com')) {
       extractionMethod = laforetImageExtraction;
+    } else if (url.includes('bienici.com')) {
+      extractionMethod = bieniciImageExtraction;
     } else {
       extractionMethod = extractImagesFromPage;
     }

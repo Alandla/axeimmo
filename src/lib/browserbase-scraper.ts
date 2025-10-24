@@ -72,10 +72,14 @@ export const scrapeBrowserBaseUrls = async (
             // Extract image URLs from BrowserBase results
             const imageUrls = backgroundImages
               .map((img: any) => img.src)
-              .filter(Boolean);
+              .filter(Boolean) as string[];
+            
+            // Remove duplicate URLs
+            const uniqueImageUrls: string[] = Array.from(new Set(imageUrls));
+            console.log(`Images filtrées: ${imageUrls.length} -> ${uniqueImageUrls.length} (${imageUrls.length - uniqueImageUrls.length} doublons supprimés)`);
             
             // Transform and save images
-            const imagesMedia = await extractedImagesToMedia(imageUrls);
+            const imagesMedia = await extractedImagesToMedia(uniqueImageUrls);
             console.log("Images BrowserBase arrière-plan enregistrées:", imagesMedia);
             
             // Update store with current images + new background images
@@ -83,7 +87,7 @@ export const scrapeBrowserBaseUrls = async (
             const newImages = imagesMedia.filter((img: any) => !existingUrls.has(img.link));
             setExtractedImagesMedia([...extractedImagesMedia, ...newImages]);
 
-            analyzeAndFilterExtractedImages(imageUrls, (filteredImages: IMedia[]) => {
+            analyzeAndFilterExtractedImages(uniqueImageUrls, (filteredImages: IMedia[]) => {
               // Update store with current images + new filtered background images
               const existingUrls = new Set(extractedImagesMedia.map((img: IMedia) => img.image?.link).filter(Boolean));
               const newFilteredImages = filteredImages.filter((img: IMedia) => !existingUrls.has(img.image?.link));

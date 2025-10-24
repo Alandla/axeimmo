@@ -43,7 +43,7 @@ function createClientScrapingMethods(
       let totalCost = 0
       const imageExtractionPromises = content
         .filter(result => 
-          !result.url || (!result.url.includes('fairmoove.fr') && !result.url.includes('odisseias.com') && !result.url.includes('laforet.com'))
+          !result.url || (!result.url.includes('fairmoove.fr') && !result.url.includes('odisseias.com') && !result.url.includes('laforet.com') && !result.url.includes('bienici.com'))
         )
         .map(async (result) => {
           try {
